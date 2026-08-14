@@ -1,26 +1,22 @@
-import type { CSSProperties } from "react";
-
-const shell: CSSProperties = { width: "min(calc(100% - 2rem), 72rem)", marginInline: "auto" };
-
 export function Header({ productName, networkName }: { productName: string; networkName: string }) {
   return (
-    <header
-      style={{ borderBottom: "1px solid var(--color-warm-100)", background: "var(--color-white)" }}
-    >
-      <div
-        style={{
-          ...shell,
-          minHeight: "4.5rem",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "1rem",
-        }}
-      >
-        <strong>{productName}</strong>
-        <span style={{ fontSize: "0.9rem", color: "var(--color-slate-700)" }}>
-          Part of {networkName}
-        </span>
+    <header className="site-header">
+      <div className="site-header__inner">
+        <a className="brand-mark" href="/" aria-label={`${productName} home`}>
+          <span className="brand-mark__symbol" aria-hidden="true">
+            C
+          </span>
+          <span>
+            <strong>{productName}</strong>
+            <small>Independent care research</small>
+          </span>
+        </a>
+        <nav className="site-nav" aria-label="Primary navigation">
+          <a href="/shortlist">Shortlist</a>
+          <a href="/search">Find care</a>
+          <a href="/compare">Compare</a>
+        </nav>
+        <span className="network-label">{networkName}</span>
       </div>
     </header>
   );
@@ -28,18 +24,16 @@ export function Header({ productName, networkName }: { productName: string; netw
 
 export function Footer({ philosophy, networkName }: { philosophy: string; networkName: string }) {
   return (
-    <footer
-      style={{
-        background: "var(--color-evergreen-700)",
-        color: "var(--color-white)",
-        paddingBlock: "2rem",
-      }}
-    >
-      <div style={shell}>
-        <strong>{philosophy}</strong>
-        <p style={{ marginBottom: 0 }}>
-          An independent research foundation in the {networkName} network.
-        </p>
+    <footer className="site-footer">
+      <div className="site-footer__inner">
+        <div>
+          <strong className="site-footer__motto">{philosophy}</strong>
+          <p>Independent research within the {networkName} network.</p>
+        </div>
+        <div>
+          <strong>Our promise</strong>
+          <p>No paid placements. No facility lead fees. Sources and dates shown.</p>
+        </div>
       </div>
     </footer>
   );

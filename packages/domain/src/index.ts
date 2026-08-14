@@ -21,3 +21,5 @@ export interface EvidenceAssertion<T = unknown> {
 export function isAuthoritativeEvidence(assertion: EvidenceAssertion): boolean {
   return assertion.origin === "official";
 }
+
+export * from "./facilities";
