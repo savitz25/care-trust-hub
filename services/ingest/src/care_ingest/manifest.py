@@ -26,6 +26,9 @@ class ReleaseManifest:
     content_type: str
     transformation_version: str | None
     ingestion_status: IngestionStatus
+    source_modified_at: str | None = None
+    published_at: str | None = None
+    source_period: str | None = None
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True) + "\n"

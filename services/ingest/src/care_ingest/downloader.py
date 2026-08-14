@@ -81,7 +81,7 @@ def download_source(
     try:
         checksum = sha256_file(temporary_path)
         manifest = ReleaseManifest(
-            manifest_version=1,
+            manifest_version=2,
             dataset_key=source.dataset_key,
             source_organization=source.source_organization,
             cms_identifier=source.cms_identifier,
@@ -94,6 +94,9 @@ def download_source(
             content_type=distribution["content_type"],
             transformation_version=None,
             ingestion_status="downloaded",
+            source_modified_at=distribution["release_date"],
+            published_at=distribution["released"],
+            source_period=None,
         )
         return RawArchive(data_root).store(temporary_path, manifest)
     finally:

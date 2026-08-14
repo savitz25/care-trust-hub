@@ -13,7 +13,7 @@ from typing import Any
 from .archive import RawArchive
 from .manifest import ReleaseManifest
 
-TRANSFORMATION_VERSION = "provider-information-v1"
+TRANSFORMATION_VERSION = "provider-information-v2"
 # CMS publishes both numeric and letter-bearing six-character CCNs. Preserve the
 # authoritative identifier exactly; names are never used as provider identity.
 CCN_PATTERN = re.compile(r"^[0-9A-Z]{6}$")
@@ -160,6 +160,16 @@ def normalize_row(
 
     latitude = _decimal(row.get("Latitude"), "Latitude", -90, 90)
     longitude = _decimal(row.get("Longitude"), "Longitude", -180, 180)
+    participation_type = _optional_text(row.get("Provider Type"))
+    if participation_type is None:
+        participation: dict[str, bool | None] = {"medicare": None, "medicaid": None}
+    elif participation_type in {"Medicare", "Medicaid", "Medicare and Medicaid"}:
+        participation = {
+            "medicare": participation_type in {"Medicare", "Medicare and Medicaid"},
+            "medicaid": participation_type in {"Medicaid", "Medicare and Medicaid"},
+        }
+    else:
+        raise ValueError(f"unrecognized Provider Type category: {participation_type!r}")
     return {
         "provider_identity": {"issuer": "CMS", "type": "CCN", "value": ccn},
         "source_record_locator": source_record_locator(row_number, ccn),
@@ -183,7 +193,8 @@ def normalize_row(
             "certified_beds": _integer(
                 row.get("Number of Certified Beds"), "Number of Certified Beds"
             ),
-            "provider_type": _optional_text(row.get("Provider Type")),
+            "participation_type": participation_type,
+            "participation": participation,
             "first_approved_date": _optional_text(
                 row.get("Date First Approved to Provide Medicare and Medicaid Services")
             ),

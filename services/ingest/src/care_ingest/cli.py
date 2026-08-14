@@ -8,9 +8,11 @@ import logging
 import os
 from pathlib import Path
 
+from .database import load_provider_information
 from .downloader import download_source, resolve_distribution
 from .manifest import ReleaseManifest, sha256_file
 from .provider_information import ingest_provider_information
+from .quality import write_quality_report
 from .registry import get_source, load_registry
 
 PROVIDER_INFORMATION_KEY = "nursing-home-provider-information"
@@ -48,6 +50,13 @@ def build_parser() -> argparse.ArgumentParser:
         command = commands.add_parser(name, help=f"{name.title()} an archived release")
         command.add_argument("dataset_key", choices=[PROVIDER_INFORMATION_KEY])
         command.add_argument("--release", required=True)
+    load = commands.add_parser("load", help="Transactionally load a normalized release")
+    load.add_argument("dataset_key", choices=[PROVIDER_INFORMATION_KEY])
+    load.add_argument("--release", required=True)
+    load.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    report = commands.add_parser("report", help="Generate a release data-quality report")
+    report.add_argument("dataset_key", choices=[PROVIDER_INFORMATION_KEY])
+    report.add_argument("--release", required=True)
     return parser
 
 
@@ -96,6 +105,28 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "summarize":
         report = data_root / "reports" / "cms" / args.dataset_key / args.release / "summary.json"
         print(report.read_text(encoding="utf-8"), end="")
+        return 0
+    normalized = (
+        data_root / "normalized" / "cms" / args.dataset_key / args.release / "providers.jsonl"
+    )
+    if args.command == "report":
+        destination = (
+            data_root / "reports" / "cms" / args.dataset_key / args.release / "quality.json"
+        )
+        report_payload = write_quality_report(normalized, destination)
+        print(json.dumps(report_payload, indent=2, sort_keys=True))
+        return 0
+    if args.command == "load":
+        if not args.database_url:
+            parser.error("load requires CARE_DATABASE_URL or --database-url")
+        result = load_provider_information(
+            args.database_url,
+            get_source(args.dataset_key),
+            manifest,
+            source_file,
+            normalized,
+        )
+        print(result.to_json(), end="")
         return 0
     parser.error("unsupported command")
     return 2

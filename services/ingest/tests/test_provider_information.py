@@ -9,6 +9,7 @@ from care_ingest.manifest import ReleaseManifest, sha256_file
 from care_ingest.provider_information import (
     SchemaDriftError,
     ingest_provider_information,
+    normalize_row,
     source_record_locator,
     verify_schema,
 )
@@ -52,6 +53,44 @@ def test_provider_normalization_summary_and_locator(tmp_path: Path) -> None:
 
 def test_letter_bearing_cms_identifier_is_preserved() -> None:
     assert source_record_locator(2, "37E109") == "csv-row:2:ccn:37E109"
+
+
+def test_missing_participation_remains_missing() -> None:
+    row = dict.fromkeys(
+        [
+            "CMS Certification Number (CCN)",
+            "Provider Name",
+            "State",
+            "ZIP Code",
+            "Provider Type",
+        ],
+        "",
+    )
+    row.update(
+        {
+            "CMS Certification Number (CCN)": "37E109",
+            "Provider Name": "SYNTHETIC CONTRACT HOME",
+            "State": "AL",
+            "ZIP Code": "35005",
+        }
+    )
+    normalized = normalize_row(row, 2, manifest())
+    assert normalized["normalized"]["participation"] == {
+        "medicare": None,
+        "medicaid": None,
+    }
+
+
+def test_unknown_participation_category_is_rejected() -> None:
+    row = {
+        "CMS Certification Number (CCN)": "37E109",
+        "Provider Name": "SYNTHETIC CONTRACT HOME",
+        "State": "AL",
+        "ZIP Code": "35005",
+        "Provider Type": "Unexpected program",
+    }
+    with pytest.raises(ValueError, match="unrecognized Provider Type"):
+        normalize_row(row, 2, manifest())
 
 
 def test_duplicate_and_missing_ccn_are_rejected_and_preserved(tmp_path: Path) -> None:

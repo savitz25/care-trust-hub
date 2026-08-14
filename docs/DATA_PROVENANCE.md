@@ -13,3 +13,5 @@ Source dates must not be substituted for retrieval dates. Missing dates are expl
 The local archive stores exact CMS bytes under `data/raw/cms/<dataset-key>/<source-modified-date>/`, beside a JSON manifest. The normalized JSON Lines record preserves the complete raw CSV row, normalized fields, CMS CCN identity, release checksum, retrieval timestamp, transformation version, and locator `csv-row:<physical-row>:ccn:<CCN>`. Physical row includes the header as row 1 and is deterministic for the archived bytes.
 
 Rejected rows are written separately under `data/rejected/` with the raw row, physical row number, and reason. They are never counted as normalized providers. Multiple release directories coexist; no command replaces an earlier checksum for the same logical release.
+
+Provider Information field and date semantics are defined in [PROVIDER_INFORMATION_FIELDS.md](./PROVIDER_INFORMATION_FIELDS.md). CMS source modification, publication, retrieval, and record observation dates are distinct and must never be collapsed into a generic `updated_at`.

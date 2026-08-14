@@ -14,6 +14,8 @@ CMS source contracts are version-controlled JSON; release facts are runtime mani
 
 The Provider Information schema contract stops on missing identity/core columns and warns on additional columns. Raw rows remain intact beside selected normalized values. Rejected rows remain diagnostic artifacts. Consumer routes continue using synthetic fixtures until a later data-review approval.
 
+The transactional loader resolves durable providers only through issuer-scoped CMS CCNs. It writes one snapshot per provider, source release, and transformation version. Composite foreign keys require every loaded snapshot's raw object and ingest run to belong to that same immutable release.
+
 ## Identity, evidence, and time
 
 A stable internal provider UUID is separate from identifiers issued by CMS or states. `provider_identifier` includes issuer, type, value, and validity dates; aliases preserve prior names. Entity resolution proposes and audits links rather than overwriting identities.
