@@ -76,4 +76,6 @@ The database URL comes from `CARE_DATABASE_URL`; never commit credentials. Docke
 - `db` — PostgreSQL/PostGIS migrations and safe development seeds
 - `docs` — product, architecture, data, editorial, and policy decisions
 
+Managed PostgreSQL/Supabase connection, migration, load, secret-handling, and provenance-audit procedures are documented in `docs/DATABASE_OPERATIONS.md`.
+
 Copy scoped `.env.example` files to `.env.local` or the service-specific equivalent. Prefix browser-visible values with `NEXT_PUBLIC_`; secrets must remain server-only and uncommitted. Architectural decisions live in `docs/`; permanent engineering rules live in `AGENTS.md`.
