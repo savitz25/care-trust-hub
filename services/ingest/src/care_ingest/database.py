@@ -260,8 +260,10 @@ def _insert_snapshot(
           %s, %s, %s, %s, NULL, %s, %s, %s, %s, %s,
           %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
           %s, %s, %s, %s, %s, %s,
-          CASE WHEN %s IS NULL OR %s IS NULL THEN NULL
-               ELSE ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography END
+          CASE WHEN %s::double precision IS NULL OR %s::double precision IS NULL THEN NULL
+               ELSE ST_SetSRID(
+                 ST_MakePoint(%s::double precision, %s::double precision), 4326
+               )::geography END
         )
         ON CONFLICT (provider_id, source_release_id, transformation_version) DO NOTHING
         RETURNING id
