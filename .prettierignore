@@ -1,0 +1,13 @@
+node_modules
+.next
+.venv
+**/.venv/**
+.pytest_cache
+**/.pytest_cache/**
+.ruff_cache
+**/.ruff_cache/**
+__pycache__
+**/__pycache__/**
+*.tsbuildinfo
+package-lock.json
+*.sql

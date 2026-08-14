@@ -1,0 +1,16 @@
+node_modules/
+.next/
+coverage/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+!**/.env.example
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+dist/
+*.sqlite
+*.sqlite3

@@ -1,0 +1,22 @@
+{
+  "name": "ask-trust-hub-care",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "npm@11.5.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@care/web",
+    "build": "npm run build --workspace=@care/web",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "format:check": "prettier --check .",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  }
+}
