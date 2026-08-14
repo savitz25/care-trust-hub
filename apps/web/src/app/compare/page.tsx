@@ -3,6 +3,9 @@ import type { ReactNode } from "react";
 import { getComparisonObservations, syntheticFacilities, type Facility } from "@care/domain";
 import { StarValue, SyntheticDataNotice, TrendIndicator } from "@/components/evidence";
 import { PrintButton } from "@/components/print-button";
+import { isRealProviderUiEnabled } from "@/server/care/feature-flags";
+import { getProvidersByCcns } from "@/server/care/repository";
+import { RealCompare } from "./real-compare";
 
 export const metadata: Metadata = {
   title: "Compare facilities",
@@ -39,9 +42,19 @@ function Metric({
 export default async function ComparePage({
   searchParams,
 }: {
-  searchParams: Promise<{ facilities?: string }>;
+  searchParams: Promise<{ facilities?: string; real?: string }>;
 }) {
-  const requested = (await searchParams).facilities?.split(",").slice(0, 3) ?? defaultSlugs;
+  const params = await searchParams;
+  if (isRealProviderUiEnabled() && params.real) {
+    const ccns = params.real
+      .split(",")
+      .map((ccn) => ccn.trim().toUpperCase())
+      .filter((ccn) => /^[A-Z0-9]{6}$/.test(ccn))
+      .slice(0, 3);
+    const providers = await getProvidersByCcns(ccns);
+    return <RealCompare providers={providers} />;
+  }
+  const requested = params.facilities?.split(",").slice(0, 3) ?? defaultSlugs;
   const facilities = requested
     .map((slug) => syntheticFacilities.find((facility) => facility.slug === slug))
     .filter((facility): facility is Facility => Boolean(facility));

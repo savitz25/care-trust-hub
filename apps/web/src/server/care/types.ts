@@ -51,6 +51,35 @@ export interface CareProviderDetail extends CareProviderSummary {
   source: CareSourceDisclosure;
 }
 
+export interface CareProviderSearchResult extends CareProviderSummary {
+  ownershipType: string | null;
+  participationType: string | null;
+  participatesMedicare: boolean | null;
+  participatesMedicaid: boolean | null;
+  source: CareSourceDisclosure;
+  distanceMiles?: number;
+}
+
+export type CareProviderSort = "name" | "cms-overall-desc" | "distance";
+
+export interface ConsumerProviderSearch {
+  query?: string;
+  state?: string;
+  city?: string;
+  zip?: string;
+  latitude?: number;
+  longitude?: number;
+  radiusMiles?: number;
+  overallRating?: number;
+  staffingRating?: number;
+  healthInspectionRating?: number;
+  ownership?: string;
+  medicare?: boolean;
+  medicaid?: boolean;
+  sort?: CareProviderSort;
+  limit?: number;
+}
+
 export interface CareProviderHistoryMetadata {
   releaseIdentifier: string;
   sourceModifiedAt: string | null;

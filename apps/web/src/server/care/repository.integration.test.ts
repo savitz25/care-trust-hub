@@ -76,4 +76,22 @@ run("real Provider Information read model", () => {
     expect(zip.some((provider) => provider.ccn === reference!.ccn)).toBe(true);
     expect(radius.some((provider) => provider.ccn === reference!.ccn)).toBe(true);
   });
+
+  it("maps real consumer filters and comparison in bounded set-based queries", async () => {
+    const { getProvidersByCcns, searchProvidersConsumer } = await import("./repository");
+    const search = await timed("consumer_search", () =>
+      searchProvidersConsumer({ state: "AL", overallRating: 5, sort: "name", limit: 25 }),
+    );
+    const compared = await timed("real_compare", () =>
+      getProvidersByCcns(["015009", "01A193", "105001"]),
+    );
+    expect(search.length).toBeLessThanOrEqual(25);
+    expect(
+      search.every(
+        (provider) => provider.location.state === "AL" && provider.ratings.overall === 5,
+      ),
+    ).toBe(true);
+    expect(compared.map((provider) => provider.ccn)).toEqual(["015009", "01A193", "105001"]);
+    expect(JSON.stringify([search, compared])).not.toContain("raw_record");
+  });
 });

@@ -82,4 +82,39 @@ describe("server-only care repository", () => {
     expect(result[0]?.distanceMiles).toBe(2.25);
     expect(query.mock.calls[0][1]).toEqual([33.5, -86.8, 10, 5]);
   });
+
+  it("builds a bounded consumer query from approved filters only", async () => {
+    query.mockResolvedValue({ rows: [row] });
+    const { searchProvidersConsumer } = await import("./repository");
+    const results = await searchProvidersConsumer({
+      query: "01a193",
+      state: "al",
+      zip: "35004",
+      overallRating: 5,
+      staffingRating: 4,
+      healthInspectionRating: 3,
+      ownership: "non profit",
+      medicare: true,
+      medicaid: true,
+      sort: "cms-overall-desc",
+      limit: 25,
+    });
+    expect(results[0]?.ccn).toBe("01A193");
+    expect(JSON.stringify(results)).not.toContain("raw_record");
+    expect(query.mock.calls[0][1]).toEqual([
+      "01A193",
+      "%01a193%",
+      "AL",
+      "35004",
+      5,
+      4,
+      3,
+      "%non profit%",
+      true,
+      true,
+      25,
+    ]);
+    await expect(searchProvidersConsumer({ overallRating: 0 })).rejects.toThrow(RangeError);
+    await expect(searchProvidersConsumer({ sort: "distance" })).rejects.toThrow(RangeError);
+  });
 });

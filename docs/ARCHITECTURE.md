@@ -18,6 +18,8 @@ The transactional loader resolves durable providers only through issuer-scoped C
 
 Real web reads cross a separate server-only repository boundary documented in `READ_MODEL.md`. It returns approved typed projections, never raw CMS JSON, and selects current data from successfully ingested source-release semantics rather than insertion time. Public consumer routes remain synthetic until separately approved.
 
+The controlled consumer integration is selected only by the server-side `CARE_ENABLE_REAL_PROVIDER_UI` flag. With the flag off, Task 002 synthetic search, facility, and comparison experiences remain unchanged. With it on, real search and comparison use bounded repository queries and real detail routes resolve by CCN at `/facility/cms/[ccn]/[slug]`; name slugs are canonicalized but never used as identity. The static `cms` segment avoids conflicting with synthetic `/facility/[slug]` routes.
+
 ## Identity, evidence, and time
 
 A stable internal provider UUID is separate from identifiers issued by CMS or states. `provider_identifier` includes issuer, type, value, and validity dates; aliases preserve prior names. Entity resolution proposes and audits links rather than overwriting identities.

@@ -21,6 +21,8 @@ Open `http://localhost:3000`. Useful checks are `npm run format:check`, `npm run
 
 Real provider reads are confined to a server-only repository and are not connected to public consumer routes. With an approved development database, copy `apps/web/.env.example` to an ignored local environment file, configure `CARE_DATABASE_URL`, and explicitly set `CARE_ENABLE_DEVELOPMENT_DATA=true` to inspect the private `/development/providers` mapping surface. Never create a `NEXT_PUBLIC_` database variable.
 
+The controlled consumer integration additionally requires server-only `CARE_ENABLE_REAL_PROVIDER_UI=true`. It defaults off; never enable it in production without explicit launch approval. When off, the approved synthetic Experience Lab remains the consumer default.
+
 For ingestion work:
 
 ```sh

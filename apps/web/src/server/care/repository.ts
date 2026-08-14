@@ -5,7 +5,9 @@ import { CMS_PROVIDER_INFORMATION_SOURCE } from "./source-contracts";
 import type {
   CareProviderDetail,
   CareProviderHistoryMetadata,
+  CareProviderSearchResult,
   CareProviderSummary,
+  ConsumerProviderSearch,
   DevelopmentProviderSearch,
   ProviderDistanceResult,
 } from "./types";
@@ -134,6 +136,23 @@ function detail(row: ProviderRow): CareProviderDetail {
   };
 }
 
+function searchResult(row: ProviderRow, distanceMiles?: number): CareProviderSearchResult {
+  const mapped = detail(row);
+  return {
+    ccn: mapped.ccn,
+    providerName: mapped.providerName,
+    location: mapped.location,
+    certifiedBeds: mapped.certifiedBeds,
+    ratings: mapped.ratings,
+    ownershipType: mapped.ownershipType,
+    participationType: mapped.participationType,
+    participatesMedicare: mapped.participatesMedicare,
+    participatesMedicaid: mapped.participatesMedicaid,
+    source: mapped.source,
+    ...(distanceMiles === undefined ? {} : { distanceMiles }),
+  };
+}
+
 function validateCcn(ccn: string): string {
   const normalized = ccn.trim().toUpperCase();
   if (!/^[A-Z0-9]{6}$/.test(normalized))
@@ -161,6 +180,17 @@ export async function getProviderByCcn(ccn: string): Promise<CareProviderDetail 
 
 export async function getProviderCurrentSnapshot(ccn: string) {
   return getProviderByCcn(ccn);
+}
+
+export async function getProvidersByCcns(ccns: string[]): Promise<CareProviderDetail[]> {
+  const unique = [...new Set(ccns.map(validateCcn))].slice(0, 3);
+  if (unique.length === 0) return [];
+  const result = await getCareDatabasePool().query<ProviderRow>(
+    `${CURRENT_SNAPSHOT_CTE} SELECT ${APPROVED_COLUMNS} FROM current_snapshots WHERE ccn=ANY($1::text[])`,
+    [unique],
+  );
+  const mapped = new Map(result.rows.map((row) => [row.ccn, detail(row)]));
+  return unique.flatMap((ccn) => (mapped.has(ccn) ? [mapped.get(ccn)!] : []));
 }
 
 export async function getProviderSourceDisclosure(ccn: string) {
@@ -244,6 +274,115 @@ export async function searchProvidersDevelopmentOnly(criteria: DevelopmentProvid
 
 function validateCcnOrSearch(value: string): string {
   return /^[A-Z0-9]{6}$/i.test(value) ? value.toUpperCase() : "";
+}
+
+function validateRating(value: number | undefined, label: string): number | undefined {
+  if (value === undefined) return undefined;
+  if (!Number.isInteger(value) || value < 1 || value > 5) {
+    throw new RangeError(`${label} must be between 1 and 5`);
+  }
+  return value;
+}
+
+export async function searchProvidersConsumer(
+  criteria: ConsumerProviderSearch,
+): Promise<CareProviderSearchResult[]> {
+  const conditions: string[] = [];
+  const values: unknown[] = [];
+  const parameter = (value: unknown) => {
+    values.push(value);
+    return `$${values.length}`;
+  };
+  if (criteria.query?.trim()) {
+    const query = criteria.query.trim();
+    conditions.push(
+      `(ccn=${parameter(validateCcnOrSearch(query))} OR provider_name ILIKE ${parameter(escapedLike(query))} ESCAPE '\\')`,
+    );
+  }
+  if (criteria.state?.trim()) {
+    const state = criteria.state.trim().toUpperCase();
+    if (!/^[A-Z]{2}$/.test(state)) throw new RangeError("state must be a two-letter code");
+    conditions.push(`state_code=${parameter(state)}`);
+  }
+  if (criteria.city?.trim()) {
+    conditions.push(`city ILIKE ${parameter(escapedLike(criteria.city.trim()))} ESCAPE '\\'`);
+  }
+  if (criteria.zip?.trim()) {
+    const zip = criteria.zip.trim();
+    if (!/^\d{5}$/.test(zip)) throw new RangeError("ZIP must contain five digits");
+    conditions.push(`zip_code=${parameter(zip)}`);
+  }
+  const ratings: Array<[number | undefined, string, string]> = [
+    [criteria.overallRating, "overall rating", "overall_rating"],
+    [criteria.staffingRating, "staffing rating", "staffing_rating"],
+    [criteria.healthInspectionRating, "health inspection rating", "health_inspection_rating"],
+  ];
+  for (const [value, label, column] of ratings) {
+    const rating = validateRating(value, label);
+    if (rating !== undefined) conditions.push(`${column}=${parameter(rating)}`);
+  }
+  if (criteria.ownership?.trim()) {
+    conditions.push(
+      `ownership_type ILIKE ${parameter(escapedLike(criteria.ownership.trim()))} ESCAPE '\\'`,
+    );
+  }
+  if (criteria.medicare !== undefined) {
+    conditions.push(`participates_medicare=${parameter(criteria.medicare)}`);
+  }
+  if (criteria.medicaid !== undefined) {
+    conditions.push(`participates_medicaid=${parameter(criteria.medicaid)}`);
+  }
+
+  const radiusRequested =
+    criteria.latitude !== undefined ||
+    criteria.longitude !== undefined ||
+    criteria.radiusMiles !== undefined;
+  let distanceExpression: string | null = null;
+  if (radiusRequested) {
+    const { latitude, longitude, radiusMiles } = criteria;
+    if (latitude === undefined || longitude === undefined || radiusMiles === undefined) {
+      throw new RangeError("latitude, longitude, and radius are required together");
+    }
+    if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90) {
+      throw new RangeError("invalid latitude");
+    }
+    if (!Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
+      throw new RangeError("invalid longitude");
+    }
+    if (!Number.isFinite(radiusMiles) || radiusMiles <= 0 || radiusMiles > 250) {
+      throw new RangeError("radius must be between 0 and 250 miles");
+    }
+    const latitudeParameter = parameter(latitude);
+    const longitudeParameter = parameter(longitude);
+    const radiusParameter = parameter(radiusMiles);
+    distanceExpression = `ST_Distance(location, ST_SetSRID(ST_MakePoint(${longitudeParameter},${latitudeParameter}),4326)::geography)/1609.344`;
+    conditions.push("location IS NOT NULL");
+    conditions.push(
+      `ST_DWithin(location, ST_SetSRID(ST_MakePoint(${longitudeParameter},${latitudeParameter}),4326)::geography, ${radiusParameter}*1609.344)`,
+    );
+  }
+
+  const sort = criteria.sort ?? (distanceExpression ? "distance" : "name");
+  if (!new Set(["name", "cms-overall-desc", "distance"]).has(sort)) {
+    throw new RangeError("unsupported provider sort");
+  }
+  if (sort === "distance" && !distanceExpression) {
+    throw new RangeError("distance sorting requires a radius search");
+  }
+  const orderBy =
+    sort === "distance"
+      ? "distance_miles, provider_name, ccn"
+      : sort === "cms-overall-desc"
+        ? "overall_rating DESC NULLS LAST, provider_name, ccn"
+        : "provider_name, ccn";
+  const limitParameter = parameter(validateLimit(criteria.limit));
+  const result = await getCareDatabasePool().query<ProviderRow & { distance_miles?: number }>(
+    `${CURRENT_SNAPSHOT_CTE} SELECT ${APPROVED_COLUMNS}${distanceExpression ? `, ${distanceExpression} AS distance_miles` : ""}
+     FROM current_snapshots ${conditions.length ? `WHERE ${conditions.join(" AND ")}` : ""}
+     ORDER BY ${orderBy} LIMIT ${limitParameter}`,
+    values,
+  );
+  return result.rows.map((row) => searchResult(row, row.distance_miles));
 }
 
 export async function providersWithinRadius(

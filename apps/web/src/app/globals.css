@@ -1225,6 +1225,131 @@ fieldset legend span {
   background: var(--color-white);
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.real-data-notice {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  margin-block: var(--space-5);
+  border: 1px solid var(--color-jade-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  background: var(--color-jade-50);
+}
+.real-data-notice strong,
+.real-data-notice span {
+  display: block;
+}
+.real-search-layout .search-panel {
+  align-self: start;
+}
+.search-advanced {
+  border-block: 1px solid var(--color-warm-200);
+  padding-block: var(--space-3);
+}
+.search-advanced > summary {
+  min-height: 2.75rem;
+  cursor: pointer;
+  color: var(--color-evergreen-700);
+  font-weight: 750;
+}
+.search-advanced[open] > summary {
+  margin-bottom: var(--space-4);
+}
+.ccn-label {
+  color: var(--color-slate-500);
+  font-size: 0.85rem;
+  font-weight: 750;
+}
+.cms-stars {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: baseline;
+  color: var(--color-slate-800);
+  white-space: nowrap;
+}
+.cms-stars small {
+  color: var(--color-slate-500);
+  font-weight: 750;
+}
+.cms-stars--missing {
+  color: var(--color-slate-500);
+  font-size: 0.9rem;
+  white-space: normal;
+}
+.real-rating-grid,
+.real-fact-grid,
+.compare-detail-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.real-dimension-card > small {
+  display: block;
+  margin-top: var(--space-4);
+  color: var(--color-slate-500);
+}
+.real-source-disclosure a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  margin-top: var(--space-3);
+  font-weight: 750;
+}
+.factual-observations,
+.future-source-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding-left: 1.25rem;
+}
+.real-compare-stack {
+  display: grid;
+  gap: var(--space-5);
+}
+.real-compare-provider {
+  overflow: hidden;
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+.real-compare-provider > header {
+  padding: var(--space-5);
+  background: var(--color-evergreen-800);
+  color: var(--color-white);
+}
+.real-compare-provider > header a,
+.real-compare-provider > header .kicker {
+  color: var(--color-white);
+}
+.compare-detail-grid {
+  display: grid;
+  margin: 0;
+}
+.compare-detail-grid > div {
+  min-width: 0;
+  border-top: 1px solid var(--color-warm-200);
+  padding: var(--space-4);
+}
+.compare-detail-grid dt {
+  color: var(--color-slate-500);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+.compare-detail-grid dd {
+  margin: var(--space-2) 0 0;
+  overflow-wrap: anywhere;
+  font-weight: 700;
+}
+
 @media (min-width: 40rem) {
   .entry-grid,
   .mode-grid,
@@ -1243,6 +1368,11 @@ fieldset legend span {
   }
   .facility-card__metrics {
     grid-template-columns: repeat(3, 1fr);
+  }
+  .real-rating-grid,
+  .real-fact-grid,
+  .compare-detail-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
   .standout {
     grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.45fr);
@@ -1363,6 +1493,12 @@ fieldset legend span {
   .synthetic-notice {
     display: block;
   }
+  .real-data-notice {
+    display: block;
+  }
+  .real-data-notice strong {
+    margin-bottom: var(--space-2);
+  }
   .synthetic-notice strong,
   .synthetic-notice span {
     display: block;
@@ -1419,6 +1555,7 @@ fieldset legend span {
   .facility-hero__actions,
   .print-button,
   .synthetic-notice,
+  .real-data-notice,
   .source-disclosure summary {
     display: none !important;
   }

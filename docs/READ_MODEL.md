@@ -39,3 +39,11 @@ Do not replace these with a generic arbitrary-query function.
 ## Development inspection
 
 `/development/providers` and `/development/providers/[ccn]` inspect approved real-data mappings. They have no public navigation, are `noindex`, require `CARE_ENABLE_DEVELOPMENT_DATA=true`, and return `notFound()` whenever `NODE_ENV=production`. They expose neither raw rows nor unrestricted SQL.
+
+## Controlled consumer integration
+
+`CARE_ENABLE_REAL_PROVIDER_UI=true` switches only approved Provider Information-backed consumer surfaces to the real read model. It is server-only, defaults off, and must never use a `NEXT_PUBLIC_` prefix. Synthetic fixtures remain the default and are never combined with real results.
+
+Real provider URLs use `/facility/cms/[ccn]/[slug]`. The static `cms` segment keeps the route distinct from the synthetic Experience Lab's `/facility/[slug]` route. CCN is authoritative; the slug is presentation-only. A stale slug resolves by CCN and redirects to the current canonical name slug. Real search is limited to 25 records and real comparison to three providers.
+
+The Node PostgreSQL pool is reused on `globalThis` within a warm runtime and capped at five connections per runtime instance. No pool is created per route component or per metric. Before deployment, confirm the aggregate instance-to-pool limit against the managed pooler capacity.
