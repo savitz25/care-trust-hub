@@ -31,6 +31,35 @@ ruff check .
 pytest
 ```
 
+### CMS Provider Information workflow
+
+These commands use official CMS metadata and write only to ignored `data/` directories. No database is required to validate or normalize a release.
+
+```sh
+cd services/ingest
+python -m care_ingest list-sources
+python -m care_ingest inspect-source nursing-home-provider-information
+python -m care_ingest download nursing-home-provider-information
+python -m care_ingest validate nursing-home-provider-information --release YYYY-MM-DD
+python -m care_ingest ingest nursing-home-provider-information --release YYYY-MM-DD
+python -m care_ingest summarize nursing-home-provider-information --release YYYY-MM-DD
+```
+
+Set `CARE_DATA_ROOT` or pass `--data-root` to choose a different local archive. Never edit `data/raw/`; corrections belong in versioned transformations.
+
+### Local PostgreSQL/PostGIS
+
+Docker is optional for web and file-based ingestion work. If available:
+
+```sh
+docker compose up -d postgres
+psql postgresql://care:care-local-only@localhost:5432/care -f db/migrations/0001_foundation.sql
+psql postgresql://care:care-local-only@localhost:5432/care -f db/migrations/0002_cms_provider_information.sql
+docker compose down
+```
+
+The CI migration job runs both migrations against PostGIS without contacting CMS.
+
 ## Structure
 
 - `apps/web` — Next.js App Router web shell

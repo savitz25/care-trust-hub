@@ -7,3 +7,9 @@ Every material evidence item must be reproducible through this chain:
 Required fields include source organization and dataset; release identifier and source publication date when supplied; raw-object checksum and record locator; retrieval timestamp; effective/observation date; provider identifier where applicable; ingest run; transformation name and version; and assertion creation time.
 
 Source dates must not be substituted for retrieval dates. Missing dates are explicit unknowns. Transformations are versioned and reruns produce new lineage, not rewritten history. Official, facility-reported, and derived assertions carry distinct origin types. Consumer pages should show a concise citation near claims and expose detailed lineage on demand.
+
+## Provider Information implementation
+
+The local archive stores exact CMS bytes under `data/raw/cms/<dataset-key>/<source-modified-date>/`, beside a JSON manifest. The normalized JSON Lines record preserves the complete raw CSV row, normalized fields, CMS CCN identity, release checksum, retrieval timestamp, transformation version, and locator `csv-row:<physical-row>:ccn:<CCN>`. Physical row includes the header as row 1 and is deterministic for the archived bytes.
+
+Rejected rows are written separately under `data/rejected/` with the raw row, physical row number, and reason. They are never counted as normalized providers. Multiple release directories coexist; no command replaces an earlier checksum for the same logical release.

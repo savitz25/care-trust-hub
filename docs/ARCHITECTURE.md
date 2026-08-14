@@ -8,7 +8,11 @@ The Next.js App Router app is server-first. Route components fetch or orchestrat
 
 The Python service owns acquisition, checksums, validation, normalization, and adapter execution. Pipelines will promote data only after validation and will be idempotent by release. PostgreSQL is the transactional and analytical source for normalized records; PostGIS supports geographic queries. The web app never parses bulk source files.
 
-Source files will be archived immutably under a content-addressed object key. The foundation migration uses `source_dataset` to describe a source contract and `source_release` to record publication/retrieval and checksum. Later migrations will add `raw_object` pointers to exact archived bytes and `ingest_run` records for code/transformation versions and outcomes before real ingestion begins.
+Source files are archived immutably under a release key with a content checksum. The foundation migration uses `source_dataset` to describe a source contract and `source_release` to record publication/retrieval and checksum. Task 003 adds `raw_object` pointers to exact archived bytes and `ingest_run` records for code/transformation versions and outcomes.
+
+CMS source contracts are version-controlled JSON; release facts are runtime manifests. The standard-library downloader resolves only allowlisted `https://data.cms.gov` distributions, streams through a temporary file, computes SHA-256, and atomically finalizes the archive. Provider Information normalization produces ignored JSON Lines and reports; loading those records into PostgreSQL is a separate promotion boundary so validation can finish before database writes.
+
+The Provider Information schema contract stops on missing identity/core columns and warns on additional columns. Raw rows remain intact beside selected normalized values. Rejected rows remain diagnostic artifacts. Consumer routes continue using synthetic fixtures until a later data-review approval.
 
 ## Identity, evidence, and time
 

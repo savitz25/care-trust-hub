@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: care
+      POSTGRES_USER: care
+      POSTGRES_PASSWORD: care-local-only
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U care -d care"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - care-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  care-postgres-data:

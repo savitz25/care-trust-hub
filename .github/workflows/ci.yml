@@ -39,3 +39,36 @@ jobs:
       - run: ruff format --check .
       - run: ruff check .
       - run: pytest
+
+  migrations:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_DB: care
+          POSTGRES_USER: care
+          POSTGRES_PASSWORD: care-ci-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U care -d care"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      PGPASSWORD: care-ci-only
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply database migrations
+        run: |
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0001_foundation.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0002_cms_provider_information.sql
+      - name: Verify migration objects
+        run: |
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 <<'SQL'
+          SELECT PostGIS_Version();
+          SELECT to_regclass('public.source_release') IS NOT NULL AS source_release_exists;
+          SELECT to_regclass('public.raw_object') IS NOT NULL AS raw_object_exists;
+          SELECT to_regclass('public.ingest_run') IS NOT NULL AS ingest_run_exists;
+          SQL

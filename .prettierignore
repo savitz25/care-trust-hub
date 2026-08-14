@@ -11,3 +11,4 @@ __pycache__
 *.tsbuildinfo
 package-lock.json
 *.sql
+data

@@ -2,7 +2,7 @@
 
 1. **Phase 0 — Foundation:** constitution, architecture, docs, design tokens, web and ingestion scaffolds, CI.
 2. **Phase 1 — UX Prototype:** test research flows using unmistakably synthetic content; validate accessibility and crisis-mode comprehension.
-3. **Phase 2 — CMS Data Spine:** verify sources, archive immutable releases, ingest and validate an initial national dataset.
+3. **Phase 2 — CMS Data Spine:** **in progress in Task 003** — verified registry, immutable archive, and Provider Information validation/normalization implemented; database promotion and consumer use remain gated.
 4. **Phase 3 — Provider Identity / Entity Resolution:** durable identifiers, aliases, match review, and audit trails.
 5. **Phase 4 — National Nursing Home Product:** sourced search and provider profiles without proprietary scoring.
 6. **Phase 5 — History + Staffing:** effective-dated change views and PBJ-derived staffing evidence.
