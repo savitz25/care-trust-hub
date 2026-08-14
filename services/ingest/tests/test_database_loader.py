@@ -75,6 +75,13 @@ def test_idempotency_history_lineage_and_postgis(tmp_path: Path) -> None:
     assert first.provider_count == 2
     assert first.snapshot_count == 2
     assert not first.idempotent
+    assert first.phase_seconds is not None
+    assert set(first.phase_seconds) == {
+        "copy",
+        "identity_resolution",
+        "snapshot_insert",
+        "transaction_total",
+    }
     assert second.idempotent
     assert second.ingest_run_id == first.ingest_run_id
 
@@ -99,7 +106,7 @@ def test_idempotency_history_lineage_and_postgis(tmp_path: Path) -> None:
             SELECT pi.identifier_value, fs.provider_name, fs.source_record_locator,
                    fs.raw_record->>'CMS Certification Number (CCN)', ro.content_sha256,
                    sr.release_key, sd.dataset_key, ir.status,
-                   ST_SRID(fs.location::geometry)
+                   ST_SRID(fs.location::geometry), fs.attributes = fs.raw_record
             FROM facility_snapshot fs
             JOIN provider_identifier pi ON pi.provider_id = fs.provider_id
             JOIN ingest_run ir ON ir.id = fs.ingest_run_id
@@ -113,7 +120,8 @@ def test_idempotency_history_lineage_and_postgis(tmp_path: Path) -> None:
         assert len(lineage) == 2
         assert lineage[0][0] == lineage[0][3] == "015001"
         assert lineage[0][2] == "csv-row:2:ccn:015001"
-        assert lineage[0][6:] == ("nursing-home-provider-information", "succeeded", 4326)
+        assert lineage[0][6:9] == ("nursing-home-provider-information", "succeeded", 4326)
+        assert lineage[0][9] is False
         assert (
             connection.execute(
                 "SELECT count(*) FROM facility_snapshot WHERE state_code = 'AL'"

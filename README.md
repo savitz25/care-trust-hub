@@ -19,6 +19,8 @@ npm run dev
 
 Open `http://localhost:3000`. Useful checks are `npm run format:check`, `npm run lint`, `npm run typecheck`, `npm test`, and `npm run build`.
 
+Real provider reads are confined to a server-only repository and are not connected to public consumer routes. With an approved development database, copy `apps/web/.env.example` to an ignored local environment file, configure `CARE_DATABASE_URL`, and explicitly set `CARE_ENABLE_DEVELOPMENT_DATA=true` to inspect the private `/development/providers` mapping surface. Never create a `NEXT_PUBLIC_` database variable.
+
 For ingestion work:
 
 ```sh
@@ -77,5 +79,7 @@ The database URL comes from `CARE_DATABASE_URL`; never commit credentials. Docke
 - `docs` — product, architecture, data, editorial, and policy decisions
 
 Managed PostgreSQL/Supabase connection, migration, load, secret-handling, and provenance-audit procedures are documented in `docs/DATABASE_OPERATIONS.md`.
+
+The approved read boundary, freshness language, and future web-only deployment are documented in `docs/READ_MODEL.md`, `docs/DATA_FRESHNESS.md`, and `docs/VERCEL_DEPLOYMENT.md`.
 
 Copy scoped `.env.example` files to `.env.local` or the service-specific equivalent. Prefix browser-visible values with `NEXT_PUBLIC_`; secrets must remain server-only and uncommitted. Architectural decisions live in `docs/`; permanent engineering rules live in `AGENTS.md`.

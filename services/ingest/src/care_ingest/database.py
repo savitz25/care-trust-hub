@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import time
 from collections.abc import Iterator
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
@@ -32,6 +33,7 @@ class LoadResult:
     states_represented: int
     ingest_run_id: str
     idempotent: bool
+    phase_seconds: dict[str, float] | None = None
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True) + "\n"
@@ -178,32 +180,6 @@ def _raw_object(cursor: psycopg.Cursor[Any], release_id: str, manifest: ReleaseM
     return str(existing[0])
 
 
-def _provider_id(cursor: psycopg.Cursor[Any], ccn: str) -> tuple[str, bool]:
-    cursor.execute(
-        """
-        SELECT provider_id FROM provider_identifier
-        WHERE issuer = 'CMS' AND identifier_type = 'CCN'
-          AND identifier_value = %s AND valid_from IS NULL
-        FOR UPDATE
-        """,
-        (ccn,),
-    )
-    existing = cursor.fetchone()
-    if existing:
-        return str(existing[0]), False
-    cursor.execute("INSERT INTO provider (provider_type) VALUES ('nursing_home') RETURNING id")
-    provider_id = cursor.fetchone()[0]
-    cursor.execute(
-        """
-        INSERT INTO provider_identifier
-          (provider_id, issuer, identifier_type, identifier_value)
-        VALUES (%s, 'CMS', 'CCN', %s)
-        """,
-        (provider_id, ccn),
-    )
-    return str(provider_id), True
-
-
 def _validate_record_lineage(record: dict[str, Any], manifest: ReleaseManifest) -> str:
     identity = record["provider_identity"]
     if set(identity) != {"issuer", "type", "value"}:
@@ -231,20 +207,89 @@ def _validate_record_lineage(record: dict[str, Any], manifest: ReleaseManifest) 
     return ccn
 
 
-def _insert_snapshot(
+def _copy_stage(
+    cursor: psycopg.Cursor[Any], normalized_file: Path, manifest: ReleaseManifest
+) -> int:
+    cursor.execute(
+        """
+        CREATE TEMP TABLE provider_information_stage (
+          ccn text PRIMARY KEY,
+          source_record_locator text NOT NULL,
+          normalized jsonb NOT NULL,
+          raw_record jsonb NOT NULL,
+          provider_id uuid
+        ) ON COMMIT DROP
+        """
+    )
+    rows = 0
+    with cursor.copy(
+        "COPY provider_information_stage (ccn, source_record_locator, normalized, raw_record) "
+        "FROM STDIN"
+    ) as copy:
+        for record in iter_normalized_records(normalized_file):
+            ccn = _validate_record_lineage(record, manifest)
+            copy.write_row(
+                (
+                    ccn,
+                    record["source_record_locator"],
+                    Jsonb(record["normalized"]),
+                    Jsonb(record["raw"]),
+                )
+            )
+            rows += 1
+    return rows
+
+
+def _resolve_provider_identities(cursor: psycopg.Cursor[Any]) -> int:
+    cursor.execute(
+        """
+        UPDATE provider_information_stage s
+        SET provider_id = pi.provider_id
+        FROM provider_identifier pi
+        WHERE pi.issuer = 'CMS' AND pi.identifier_type = 'CCN'
+          AND pi.identifier_value = s.ccn AND pi.valid_from IS NULL
+        """
+    )
+    cursor.execute(
+        "UPDATE provider_information_stage SET provider_id = gen_random_uuid() "
+        "WHERE provider_id IS NULL"
+    )
+    providers_created = cursor.rowcount
+    cursor.execute(
+        """
+        INSERT INTO provider (id, provider_type)
+        SELECT provider_id, 'nursing_home'
+        FROM provider_information_stage s
+        WHERE NOT EXISTS (SELECT 1 FROM provider p WHERE p.id = s.provider_id)
+        """
+    )
+    if cursor.rowcount != providers_created:
+        raise RuntimeError("provider identity resolution count mismatch")
+    cursor.execute(
+        """
+        INSERT INTO provider_identifier
+          (provider_id, issuer, identifier_type, identifier_value)
+        SELECT provider_id, 'CMS', 'CCN', ccn
+        FROM provider_information_stage s
+        WHERE NOT EXISTS (
+          SELECT 1 FROM provider_identifier pi
+          WHERE pi.issuer='CMS' AND pi.identifier_type='CCN'
+            AND pi.identifier_value=s.ccn AND pi.valid_from IS NULL
+        )
+        """
+    )
+    if cursor.rowcount != providers_created:
+        raise RuntimeError("provider identifier resolution count mismatch")
+    return providers_created
+
+
+def _insert_snapshots_set_based(
     cursor: psycopg.Cursor[Any],
-    record: dict[str, Any],
-    provider_id: str,
     release_id: str,
     raw_object_id: str,
     ingest_run_id: str,
     manifest: ReleaseManifest,
-) -> bool:
-    normalized = record["normalized"]
-    ratings = normalized["ratings"]
-    participation = normalized["participation"]
-    latitude = normalized.get("latitude")
-    longitude = normalized.get("longitude")
+) -> int:
     cursor.execute(
         """
         INSERT INTO facility_snapshot (
@@ -256,54 +301,41 @@ def _insert_snapshot(
           participates_medicare, participates_medicaid, overall_rating,
           health_inspection_rating, staffing_rating, quality_measure_rating,
           source_latitude, source_longitude, location
-        ) VALUES (
-          %s, %s, %s, %s, NULL, %s, %s, %s, %s, %s,
-          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-          %s, %s, %s, %s, %s, %s,
-          CASE WHEN %s::double precision IS NULL OR %s::double precision IS NULL THEN NULL
-               ELSE ST_SetSRID(
-                 ST_MakePoint(%s::double precision, %s::double precision), 4326
-               )::geography END
         )
+        SELECT
+          s.provider_id, %s, %s, %s, NULL, %s, s.normalized, %s,
+          s.source_record_locator, s.raw_record,
+          s.normalized->>'provider_name', s.normalized->>'legal_business_name',
+          s.normalized->>'address', s.normalized->>'city', s.normalized->>'state',
+          s.normalized->>'zip_code', s.normalized->>'county', s.normalized->>'telephone',
+          s.normalized->>'ownership_type', (s.normalized->>'certified_beds')::integer,
+          s.normalized->>'participation_type',
+          (s.normalized#>>'{participation,medicare}')::boolean,
+          (s.normalized#>>'{participation,medicaid}')::boolean,
+          (s.normalized#>>'{ratings,overall}')::smallint,
+          (s.normalized#>>'{ratings,health_inspection}')::smallint,
+          (s.normalized#>>'{ratings,staffing}')::smallint,
+          (s.normalized#>>'{ratings,quality_measure}')::smallint,
+          (s.normalized->>'latitude')::double precision,
+          (s.normalized->>'longitude')::double precision,
+          CASE WHEN s.normalized->>'latitude' IS NULL OR s.normalized->>'longitude' IS NULL
+               THEN NULL
+               ELSE ST_SetSRID(ST_MakePoint(
+                 (s.normalized->>'longitude')::double precision,
+                 (s.normalized->>'latitude')::double precision
+               ), 4326)::geography END
+        FROM provider_information_stage s
         ON CONFLICT (provider_id, source_release_id, transformation_version) DO NOTHING
-        RETURNING id
         """,
         (
-            provider_id,
             release_id,
             ingest_run_id,
             raw_object_id,
             manifest.retrieval_timestamp,
-            Jsonb(normalized),
             TRANSFORMATION_VERSION,
-            record["source_record_locator"],
-            Jsonb(record["raw"]),
-            normalized["provider_name"],
-            normalized.get("legal_business_name"),
-            normalized.get("address"),
-            normalized.get("city"),
-            normalized["state"],
-            normalized.get("zip_code"),
-            normalized.get("county"),
-            normalized.get("telephone"),
-            normalized.get("ownership_type"),
-            normalized.get("certified_beds"),
-            normalized.get("participation_type"),
-            participation["medicare"],
-            participation["medicaid"],
-            ratings.get("overall"),
-            ratings.get("health_inspection"),
-            ratings.get("staffing"),
-            ratings.get("quality_measure"),
-            latitude,
-            longitude,
-            longitude,
-            latitude,
-            longitude,
-            latitude,
         ),
     )
-    return cursor.fetchone() is not None
+    return cursor.rowcount
 
 
 def load_provider_information(
@@ -314,6 +346,7 @@ def load_provider_information(
     normalized_file: Path,
 ) -> LoadResult:
     """Load one validated release atomically, or return its prior successful load."""
+    load_started = time.perf_counter()
     if sha256_file(raw_file) != manifest.sha256 or raw_file.stat().st_size != manifest.byte_size:
         raise ValueError("raw source does not match immutable release manifest")
     release_key = manifest.source_release_date or manifest.sha256
@@ -343,6 +376,7 @@ def load_provider_information(
                         states_represented=report["states_represented"],
                         ingest_run_id=str(prior[0]),
                         idempotent=True,
+                        phase_seconds={"total": round(time.perf_counter() - load_started, 3)},
                     )
                 cursor.execute(
                     """
@@ -353,35 +387,36 @@ def load_provider_information(
                     (release_id, TRANSFORMATION_VERSION),
                 )
                 ingest_run_id = str(cursor.fetchone()[0])
-                providers_created = 0
-                snapshots_created = 0
-                rows_read = 0
-                states: set[str] = set()
-                for record in iter_normalized_records(normalized_file):
-                    rows_read += 1
-                    ccn = _validate_record_lineage(record, manifest)
-                    provider_id, created = _provider_id(cursor, ccn)
-                    providers_created += int(created)
-                    states.add(record["normalized"]["state"])
-                    snapshots_created += int(
-                        _insert_snapshot(
-                            cursor,
-                            record,
-                            provider_id,
-                            release_id,
-                            raw_object_id,
-                            ingest_run_id,
-                            manifest,
-                        )
-                    )
+                phase_started = time.perf_counter()
+                rows_read = _copy_stage(cursor, normalized_file, manifest)
+                copy_seconds = time.perf_counter() - phase_started
+                phase_started = time.perf_counter()
+                providers_created = _resolve_provider_identities(cursor)
+                identity_seconds = time.perf_counter() - phase_started
+                phase_started = time.perf_counter()
+                snapshots_created = _insert_snapshots_set_based(
+                    cursor, release_id, raw_object_id, ingest_run_id, manifest
+                )
+                snapshot_seconds = time.perf_counter() - phase_started
                 if snapshots_created != rows_read:
                     raise RuntimeError("snapshot count did not match normalized input rows")
+                cursor.execute(
+                    "SELECT count(DISTINCT normalized->>'state') FROM provider_information_stage"
+                )
+                states_represented = cursor.fetchone()[0]
+                phase_seconds = {
+                    "copy": round(copy_seconds, 3),
+                    "identity_resolution": round(identity_seconds, 3),
+                    "snapshot_insert": round(snapshot_seconds, 3),
+                    "transaction_total": round(time.perf_counter() - load_started, 3),
+                }
                 report = {
                     "provider_count": rows_read,
                     "providers_created": providers_created,
                     "identifier_count": rows_read,
                     "snapshot_count": snapshots_created,
-                    "states_represented": len(states),
+                    "states_represented": states_represented,
+                    "phase_seconds": phase_seconds,
                 }
                 cursor.execute(
                     """
@@ -398,7 +433,8 @@ def load_provider_information(
                     provider_count=rows_read,
                     identifier_count=rows_read,
                     snapshot_count=snapshots_created,
-                    states_represented=len(states),
+                    states_represented=states_represented,
                     ingest_run_id=ingest_run_id,
                     idempotent=False,
+                    phase_seconds=phase_seconds,
                 )

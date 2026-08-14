@@ -6,6 +6,8 @@ PostgreSQL/PostGIS is optional for web and file-validation work. A managed Postg
 
 The ingestion CLI reads the server-side connection string only from `CARE_DATABASE_URL` or the explicit `--database-url` option. Prefer the environment variable so credentials do not enter shell history. Never use a `NEXT_PUBLIC_` variable for database credentials.
 
+The Next.js server read model uses the same canonical `CARE_DATABASE_URL` name. `CARE_DATABASE_SSL` defaults to `verify-full`; use `require` only for an encrypted managed pooler connection whose certificate chain cannot be validated in the runtime, and document that environment decision. `disable` is reserved for controlled local development.
+
 Local `.env` and `.env.local` files are ignored. The CLI intentionally does not load them automatically; export `CARE_DATABASE_URL` into the process environment through the developer shell or an approved secret manager before running database commands. Never print the variable or commit an environment file.
 
 ## Migration-controlled schema
@@ -35,6 +37,12 @@ python -m care_ingest load nursing-home-provider-information --release YYYY-MM-D
 ```
 
 Run the identical `load` command again to verify idempotency. It must return the prior successful ingest without changing providers, identifiers, releases, raw objects, or snapshots.
+
+The loader stages validated rows with PostgreSQL `COPY`, then resolves provider identities and inserts snapshots with set-based statements inside one transaction. Performance benchmarks must use an isolated database/schema and must never truncate the validated real-data schema.
+
+## Private web inspection
+
+For local mapping review, set `CARE_DATABASE_URL`, the reviewed TLS mode when needed, and `CARE_ENABLE_DEVELOPMENT_DATA=true`, then run `npm run dev`. Inspect `/development/providers`. The route is absent from navigation, noindex, limited, excludes raw records, and hard-fails with 404 in production.
 
 ## Verification and provenance
 

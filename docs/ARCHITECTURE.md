@@ -14,7 +14,9 @@ CMS source contracts are version-controlled JSON; release facts are runtime mani
 
 The Provider Information schema contract stops on missing identity/core columns and warns on additional columns. Raw rows remain intact beside selected normalized values. Rejected rows remain diagnostic artifacts. Consumer routes continue using synthetic fixtures until a later data-review approval.
 
-The transactional loader resolves durable providers only through issuer-scoped CMS CCNs. It writes one snapshot per provider, source release, and transformation version. Composite foreign keys require every loaded snapshot's raw object and ingest run to belong to that same immutable release.
+The transactional loader resolves durable providers only through issuer-scoped CMS CCNs. Validated JSON Lines stream through PostgreSQL `COPY` into a transaction-local staging table; set-based statements resolve identities and insert identifiers and snapshots. It writes one snapshot per provider, source release, and transformation version. Composite foreign keys require every loaded snapshot's raw object and ingest run to belong to that same immutable release.
+
+Real web reads cross a separate server-only repository boundary documented in `READ_MODEL.md`. It returns approved typed projections, never raw CMS JSON, and selects current data from successfully ingested source-release semantics rather than insertion time. Public consumer routes remain synthetic until separately approved.
 
 ## Identity, evidence, and time
 
