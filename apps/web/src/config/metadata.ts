@@ -1,10 +1,42 @@
 import type { Metadata } from "next";
 import { brand } from "./brand";
 
-const configuredOrigin = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const localDevelopmentOrigin = "http://localhost:3000";
+
+function parseHttpOrigin(value: string): URL | null {
+  try {
+    const url = new URL(value);
+    if ((url.protocol !== "http:" && url.protocol !== "https:") || !url.hostname) return null;
+    return url;
+  } catch {
+    return null;
+  }
+}
+
+function parseVercelOrigin(value: string | undefined): URL | null {
+  const candidate = value?.trim();
+  if (!candidate) return null;
+  return parseHttpOrigin(candidate.includes("://") ? candidate : `https://${candidate}`);
+}
+
+export function resolveSiteOrigin(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): URL {
+  const explicitOrigin = environment.NEXT_PUBLIC_SITE_URL?.trim();
+  if (explicitOrigin) {
+    const parsedExplicitOrigin = parseHttpOrigin(explicitOrigin);
+    if (parsedExplicitOrigin) return parsedExplicitOrigin;
+  }
+
+  return (
+    parseVercelOrigin(environment.VERCEL_PROJECT_PRODUCTION_URL) ??
+    parseVercelOrigin(environment.VERCEL_URL) ??
+    new URL(localDevelopmentOrigin)
+  );
+}
 
 export const siteMetadata: Metadata = {
-  metadataBase: new URL(configuredOrigin),
+  metadataBase: resolveSiteOrigin(),
   title: { default: brand.publicName, template: `%s | ${brand.publicName}` },
   description: brand.description,
   applicationName: brand.publicName,
