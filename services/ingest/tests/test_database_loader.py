@@ -332,14 +332,7 @@ def test_pbj_set_based_load_formulas_unmatched_lineage_and_idempotency(tmp_path:
     )
     summary = ingest_pbj_source(raw, manifest, tmp_path)
     assert summary.normalized_rows == 3
-    normalized = (
-        tmp_path
-        / "normalized"
-        / "cms"
-        / PBJ_NURSE_KEY
-        / "2026-07-29"
-        / "records.jsonl"
-    )
+    normalized = tmp_path / "normalized" / "cms" / PBJ_NURSE_KEY / "2026-07-29" / "records.jsonl"
     first = load_pbj_source(DATABASE_URL, get_source(PBJ_NURSE_KEY), manifest, raw, normalized)
     second = load_pbj_source(DATABASE_URL, get_source(PBJ_NURSE_KEY), manifest, raw, normalized)
     assert first.rows_loaded == 3

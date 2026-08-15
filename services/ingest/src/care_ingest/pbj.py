@@ -29,9 +29,7 @@ CATEGORY_FIELDS = {
     "medication_aide": "Hrs_MedAide",
 }
 NURSE_HOUR_FIELDS = tuple(
-    field
-    for base in CATEGORY_FIELDS.values()
-    for field in (base, f"{base}_emp", f"{base}_ctr")
+    field for base in CATEGORY_FIELDS.values() for field in (base, f"{base}_emp", f"{base}_ctr")
 )
 IDENTITY_FIELDS = (
     "PROVNUM",
@@ -238,9 +236,7 @@ def ingest_pbj_source(
                     providers.add(record["ccn"])
                     if any(char.isalpha() for char in record["ccn"]):
                         alphanumeric_providers.add(record["ccn"])
-                    provider_dates.setdefault(record["ccn"], set()).add(
-                        normalized["work_date"]
-                    )
+                    provider_dates.setdefault(record["ccn"], set()).add(normalized["work_date"])
                     dates.append(normalized["work_date"])
                     census = normalized["resident_census"]
                     summary.missing_census += census is None
@@ -255,7 +251,9 @@ def ingest_pbj_source(
                     message = str(error)
                     summary.negative_census_rows += message.startswith("negative MDScensus")
                     summary.negative_hour_rows += message.startswith("negative Hrs_")
-                    summary.quarter_mismatch_rows += "outside" in message or "row quarter" in message
+                    summary.quarter_mismatch_rows += (
+                        "outside" in message or "row quarter" in message
+                    )
                     summary.rejected_rows += 1
                     if rejected_handle:
                         rejected_handle.write(
@@ -280,8 +278,7 @@ def ingest_pbj_source(
         quarter_start, quarter_end = _quarter_bounds(manifest.source_period)
         expected_days = quarter_end.toordinal() - quarter_start.toordinal() + 1
         summary.providers_with_incomplete_quarters = sum(
-            len(observed_dates) != expected_days
-            for observed_dates in provider_dates.values()
+            len(observed_dates) != expected_days for observed_dates in provider_dates.values()
         )
     if dates:
         summary.date_min, summary.date_max = min(dates), max(dates)

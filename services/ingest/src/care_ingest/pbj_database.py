@@ -217,7 +217,8 @@ def _insert_summaries(
             count(*) FILTER (WHERE resident_census > 0 AND rn_group_hours=0)::integer zero_rn_days,
             count(*) FILTER (WHERE resident_census > 0 AND total_hours IS NULL) missing_total_days,
             count(*) FILTER (WHERE resident_census > 0 AND rn_group_hours IS NULL) missing_rn_days,
-            count(*) FILTER (WHERE resident_census > 0 AND lpn_group_hours IS NULL) missing_lpn_days,
+            count(*) FILTER (WHERE resident_census > 0 AND lpn_group_hours IS NULL)
+              missing_lpn_days,
             count(*) FILTER (WHERE resident_census > 0 AND hrs_cna IS NULL) missing_cna_days,
             count(*) FILTER (
               WHERE resident_census > 0 AND (employee_hours IS NULL OR contract_hours IS NULL)
@@ -398,7 +399,8 @@ def audit_pbj_database(database_url: str) -> dict[str, int]:
               (SELECT count(*) FROM pbj_staffing_quarter_summary s WHERE
                 s.days_represented<>(SELECT count(*) FROM pbj_staffing_day d
                   WHERE d.source_release_id=s.source_release_id AND d.ccn=s.ccn)),
-              (SELECT count(*) FROM ingest_run ir JOIN source_release sr ON sr.id=ir.source_release_id
+              (SELECT count(*) FROM ingest_run ir
+                JOIN source_release sr ON sr.id=ir.source_release_id
                 JOIN source_dataset sd ON sd.id=sr.source_dataset_id
                 WHERE sd.dataset_key=%s AND ir.status='running')
             """,
