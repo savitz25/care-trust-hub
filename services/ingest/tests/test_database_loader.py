@@ -198,11 +198,11 @@ def test_regulatory_set_based_load_idempotency_relationships_and_lineage(tmp_pat
         FIXTURE,
         provider_normalized,
     )
-    fixtures = {
+    fixtures: dict[str, str] = {
         "nursing-home-inspection-dates": (
             "CMS Certification Number (CCN),Survey Date,Type of Survey,"
             "Survey Cycle,Processing Date\n"
-            "015001,2026-01-02,Health Standard,1,2026-06-01\n",
+            "015001,2026-01-02,Health Standard,1,2026-06-01\n"
         ),
         "nursing-home-health-deficiencies": (
             "CMS Certification Number (CCN),Survey Date,Survey Type,Deficiency Prefix,"
@@ -211,12 +211,12 @@ def test_regulatory_set_based_load_idempotency_relationships_and_lineage(tmp_pat
             "Complaint Deficiency,Infection Control Inspection Deficiency,Citation under IDR,"
             "Citation under IIDR,Processing Date\n"
             "015001,2026-01-02,Health,F,Care,0880,Official CMS description,J,"
-            "Past Non-Compliance,2026-01-03,1,Y,N,N,N,N,2026-06-01\n",
+            "Past Non-Compliance,2026-01-03,1,Y,N,N,N,N,2026-06-01\n"
         ),
         "nursing-home-penalties": (
             "CMS Certification Number (CCN),Penalty Date,Penalty Type,Fine ID,Fine Amount,"
             "Payment Denial Start Date,Payment Denial Length in Days,Processing Date\n"
-            "015001,2026-02-03,Fine,77,12400.00,,,2026-06-01\n",
+            "015001,2026-02-03,Fine,77,12400.00,,,2026-06-01\n"
         ),
     }
     results = []
