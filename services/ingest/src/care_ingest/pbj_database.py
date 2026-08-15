@@ -87,16 +87,23 @@ def _copy_transport_stage(
                     for value in values:
                         copy.write_row(value)
         except psycopg.OperationalError:
-            with psycopg.connect(database_url) as connection:
-                connection.cursor().executemany(
-                    """
-                    INSERT INTO pbj_staffing_load_stage
-                      (load_key, ordinal, ccn, locator, normalized, raw_record)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                    ON CONFLICT (load_key, ordinal) DO NOTHING
-                    """,
-                    values,
-                )
+            for attempt in range(3):
+                try:
+                    with psycopg.connect(database_url) as connection:
+                        connection.cursor().executemany(
+                            """
+                            INSERT INTO pbj_staffing_load_stage
+                              (load_key, ordinal, ccn, locator, normalized, raw_record)
+                            VALUES (%s, %s, %s, %s, %s, %s)
+                            ON CONFLICT (load_key, ordinal) DO NOTHING
+                            """,
+                            values,
+                        )
+                    break
+                except psycopg.OperationalError:
+                    if attempt == 2:
+                        raise
+                    time.sleep(2 ** (attempt + 1))
         count += len(batch)
     return count, round(time.perf_counter() - started, 3)
 
