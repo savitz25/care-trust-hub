@@ -344,7 +344,8 @@ def test_pbj_set_based_load_formulas_unmatched_lineage_and_idempotency(tmp_path:
 
     with psycopg.connect(DATABASE_URL) as connection:
         stage = connection.execute(
-            "SELECT count(*), pg_total_relation_size('pbj_staffing_load_stage')"
+            "SELECT count(*), pg_total_relation_size('pbj_staffing_load_stage') "
+            "FROM pbj_staffing_load_stage"
         ).fetchone()
         assert stage[0] == 0
         assert stage[1] <= 64 * 1024
@@ -416,7 +417,8 @@ def test_pbj_set_based_load_formulas_unmatched_lineage_and_idempotency(tmp_path:
         )
     with psycopg.connect(DATABASE_URL) as connection:
         stage = connection.execute(
-            "SELECT count(*), pg_total_relation_size('pbj_staffing_load_stage')"
+            "SELECT count(*), pg_total_relation_size('pbj_staffing_load_stage') "
+            "FROM pbj_staffing_load_stage"
         ).fetchone()
         assert stage[0] == 0
         assert stage[1] <= 64 * 1024
