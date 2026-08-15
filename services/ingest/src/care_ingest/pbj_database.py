@@ -73,8 +73,8 @@ def _copy_transport_stage(
                 count + offset,
                 record["ccn"],
                 record["source_record_locator"],
-                Jsonb(record["normalized"]),
-                Jsonb(record["raw"]),
+                Jsonb({"normalized": record["normalized"], "raw": record["raw"]}),
+                Jsonb({}),
             )
             for offset, record in enumerate(batch, start=1)
         ]
@@ -104,15 +104,15 @@ def _copy_transport_stage(
 def _prepare_transaction_stage(cursor: psycopg.Cursor[Any], load_key: str) -> None:
     cursor.execute(
         """
-        CREATE TEMP TABLE pbj_stage ON COMMIT DROP AS
-        SELECT ccn, locator, normalized, raw_record, NULL::uuid AS provider_id
-        FROM pbj_staffing_load_stage WHERE load_key=%s ORDER BY ordinal
+        CREATE TEMP TABLE pbj_provider_match ON COMMIT DROP AS
+        SELECT DISTINCT ccn, NULL::uuid AS provider_id
+        FROM pbj_staffing_load_stage WHERE load_key=%s
         """,
         (load_key,),
     )
     cursor.execute(
         """
-        UPDATE pbj_stage s SET provider_id=pi.provider_id
+        UPDATE pbj_provider_match s SET provider_id=pi.provider_id
         FROM provider_identifier pi
         WHERE pi.issuer='CMS' AND pi.identifier_type='CCN'
           AND pi.identifier_value=s.ccn AND pi.valid_from IS NULL
@@ -125,6 +125,7 @@ def _insert_days(
     release_id: str,
     raw_object_id: str,
     ingest_run_id: str,
+    load_key: str,
 ) -> int:
     cursor.execute(
         """
@@ -141,39 +142,42 @@ def _insert_days(
           hrs_medaide, hrs_medaide_emp, hrs_medaide_ctr,
           source_record_locator, raw_record, transformation_version
         )
-        SELECT provider_id, ccn, %s, %s, %s,
-          normalized->>'daily_key', normalized->>'quarter',
-          (normalized->>'work_date')::date,
-          (normalized->>'resident_census')::integer,
-          (normalized->'hours'->>'Hrs_RNDON')::numeric,
-          (normalized->'hours'->>'Hrs_RNDON_emp')::numeric,
-          (normalized->'hours'->>'Hrs_RNDON_ctr')::numeric,
-          (normalized->'hours'->>'Hrs_RNadmin')::numeric,
-          (normalized->'hours'->>'Hrs_RNadmin_emp')::numeric,
-          (normalized->'hours'->>'Hrs_RNadmin_ctr')::numeric,
-          (normalized->'hours'->>'Hrs_RN')::numeric,
-          (normalized->'hours'->>'Hrs_RN_emp')::numeric,
-          (normalized->'hours'->>'Hrs_RN_ctr')::numeric,
-          (normalized->'hours'->>'Hrs_LPNadmin')::numeric,
-          (normalized->'hours'->>'Hrs_LPNadmin_emp')::numeric,
-          (normalized->'hours'->>'Hrs_LPNadmin_ctr')::numeric,
-          (normalized->'hours'->>'Hrs_LPN')::numeric,
-          (normalized->'hours'->>'Hrs_LPN_emp')::numeric,
-          (normalized->'hours'->>'Hrs_LPN_ctr')::numeric,
-          (normalized->'hours'->>'Hrs_CNA')::numeric,
-          (normalized->'hours'->>'Hrs_CNA_emp')::numeric,
-          (normalized->'hours'->>'Hrs_CNA_ctr')::numeric,
-          (normalized->'hours'->>'Hrs_NAtrn')::numeric,
-          (normalized->'hours'->>'Hrs_NAtrn_emp')::numeric,
-          (normalized->'hours'->>'Hrs_NAtrn_ctr')::numeric,
-          (normalized->'hours'->>'Hrs_MedAide')::numeric,
-          (normalized->'hours'->>'Hrs_MedAide_emp')::numeric,
-          (normalized->'hours'->>'Hrs_MedAide_ctr')::numeric,
-          locator, raw_record, %s
-        FROM pbj_stage
+        SELECT matched.provider_id, stage.ccn, %s, %s, %s,
+          stage.normalized->'normalized'->>'daily_key',
+          stage.normalized->'normalized'->>'quarter',
+          (stage.normalized->'normalized'->>'work_date')::date,
+          (stage.normalized->'normalized'->>'resident_census')::integer,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_RNDON')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_RNDON_emp')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_RNDON_ctr')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_RNadmin')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_RNadmin_emp')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_RNadmin_ctr')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_RN')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_RN_emp')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_RN_ctr')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_LPNadmin')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_LPNadmin_emp')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_LPNadmin_ctr')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_LPN')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_LPN_emp')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_LPN_ctr')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_CNA')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_CNA_emp')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_CNA_ctr')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_NAtrn')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_NAtrn_emp')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_NAtrn_ctr')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_MedAide')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_MedAide_emp')::numeric,
+          (stage.normalized->'normalized'->'hours'->>'Hrs_MedAide_ctr')::numeric,
+          stage.locator, stage.normalized->'raw', %s
+        FROM pbj_staffing_load_stage stage
+        JOIN pbj_provider_match matched ON matched.ccn=stage.ccn
+        WHERE stage.load_key=%s
         ON CONFLICT (source_release_id, ccn, work_date) DO NOTHING
         """,
-        (release_id, raw_object_id, ingest_run_id, TRANSFORMATION_VERSION),
+        (release_id, raw_object_id, ingest_run_id, TRANSFORMATION_VERSION, load_key),
     )
     return cursor.rowcount
 
@@ -337,13 +341,11 @@ def load_pbj_source(
                 )
                 run_id = str(cursor.fetchone()[0])
                 _prepare_transaction_stage(cursor, load_key)
-                cursor.execute("SELECT count(DISTINCT ccn) FROM pbj_stage")
+                cursor.execute("SELECT count(*) FROM pbj_provider_match")
                 providers = cursor.fetchone()[0]
-                cursor.execute(
-                    "SELECT count(DISTINCT ccn) FROM pbj_stage WHERE provider_id IS NULL"
-                )
+                cursor.execute("SELECT count(*) FROM pbj_provider_match WHERE provider_id IS NULL")
                 unmatched = cursor.fetchone()[0]
-                loaded = _insert_days(cursor, release_id, raw_object_id, run_id)
+                loaded = _insert_days(cursor, release_id, raw_object_id, run_id, load_key)
                 if loaded != rows:
                     raise RuntimeError("PBJ daily load count mismatch")
                 summaries = _insert_summaries(cursor, release_id, raw_object_id, run_id)
