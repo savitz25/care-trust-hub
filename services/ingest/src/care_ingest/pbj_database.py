@@ -33,6 +33,7 @@ HOUR_BASES = (
     "Hrs_NAtrn",
     "Hrs_MedAide",
 )
+PBJ_STAGE_LOCK = "care:pbj_staffing_load_stage:v1"
 
 
 @dataclass(frozen=True, slots=True)
@@ -106,6 +107,20 @@ def _copy_transport_stage(
                     time.sleep(2 ** (attempt + 1))
         count += len(batch)
     return count, round(time.perf_counter() - started, 3)
+
+
+def _truncate_transport_stage(database_url: str) -> None:
+    """Return the transient PBJ transport relation to its minimal footprint."""
+    for attempt in range(3):
+        try:
+            with psycopg.connect(database_url, autocommit=True) as connection:
+                connection.execute("SET lock_timeout = '5s'")
+                connection.execute("TRUNCATE TABLE pbj_staffing_load_stage")
+            return
+        except psycopg.OperationalError:
+            if attempt == 2:
+                raise
+            time.sleep(2 ** (attempt + 1))
 
 
 def _prepare_transaction_stage(cursor: psycopg.Cursor[Any], load_key: str) -> None:
@@ -333,44 +348,51 @@ def load_pbj_source(
             round(time.perf_counter() - started, 3),
         )
     load_key = f"{source.dataset_key}:{manifest.sha256}"
-    rows, stage_seconds = _copy_transport_stage(database_url, normalized_file, load_key)
-    transaction_started = time.perf_counter()
-    with psycopg.connect(database_url) as connection:
-        with connection.transaction():
-            with connection.cursor() as cursor:
-                cursor.execute("SET LOCAL statement_timeout = '20min'")
-                release_id, _ = _verified_release(cursor, source, manifest)
-                raw_object_id = _raw_object(cursor, release_id, manifest)
-                cursor.execute(
-                    "INSERT INTO ingest_run "
-                    "(source_release_id, transformation_version, status, started_at) "
-                    "VALUES (%s,%s,'running',now()) RETURNING id",
-                    (release_id, TRANSFORMATION_VERSION),
-                )
-                run_id = str(cursor.fetchone()[0])
-                _prepare_transaction_stage(cursor, load_key)
-                cursor.execute("SELECT count(*) FROM pbj_provider_match")
-                providers = cursor.fetchone()[0]
-                cursor.execute("SELECT count(*) FROM pbj_provider_match WHERE provider_id IS NULL")
-                unmatched = cursor.fetchone()[0]
-                loaded = _insert_days(cursor, release_id, raw_object_id, run_id, load_key)
-                if loaded != rows:
-                    raise RuntimeError("PBJ daily load count mismatch")
-                summaries = _insert_summaries(cursor, release_id, raw_object_id, run_id)
-                report = {
-                    "rows_read": rows,
-                    "rows_loaded": loaded,
-                    "providers": providers,
-                    "unmatched_ccns": unmatched,
-                    "summaries_created": summaries,
-                    "source_period": manifest.source_period,
-                }
-                cursor.execute(
-                    "UPDATE ingest_run SET status='succeeded', completed_at=now(), rows_read=%s, "
-                    "valid_rows=%s, report=%s WHERE id=%s",
-                    (rows, loaded, Jsonb(report), run_id),
-                )
-                cursor.execute("DELETE FROM pbj_staffing_load_stage WHERE load_key=%s", (load_key,))
+    with psycopg.connect(database_url, autocommit=True) as lease:
+        lease.execute("SELECT pg_advisory_lock(hashtext(%s))", (PBJ_STAGE_LOCK,))
+        try:
+            _truncate_transport_stage(database_url)
+            rows, stage_seconds = _copy_transport_stage(database_url, normalized_file, load_key)
+            transaction_started = time.perf_counter()
+            with psycopg.connect(database_url) as connection:
+                with connection.transaction():
+                    with connection.cursor() as cursor:
+                        cursor.execute("SET LOCAL statement_timeout = '20min'")
+                        release_id, _ = _verified_release(cursor, source, manifest)
+                        raw_object_id = _raw_object(cursor, release_id, manifest)
+                        cursor.execute(
+                            "INSERT INTO ingest_run "
+                            "(source_release_id, transformation_version, status, started_at) "
+                            "VALUES (%s,%s,'running',now()) RETURNING id",
+                            (release_id, TRANSFORMATION_VERSION),
+                        )
+                        run_id = str(cursor.fetchone()[0])
+                        _prepare_transaction_stage(cursor, load_key)
+                        cursor.execute("SELECT count(*) FROM pbj_provider_match")
+                        providers = cursor.fetchone()[0]
+                        cursor.execute(
+                            "SELECT count(*) FROM pbj_provider_match WHERE provider_id IS NULL"
+                        )
+                        unmatched = cursor.fetchone()[0]
+                        loaded = _insert_days(cursor, release_id, raw_object_id, run_id, load_key)
+                        if loaded != rows:
+                            raise RuntimeError("PBJ daily load count mismatch")
+                        summaries = _insert_summaries(cursor, release_id, raw_object_id, run_id)
+                        report = {
+                            "rows_read": rows,
+                            "rows_loaded": loaded,
+                            "providers": providers,
+                            "unmatched_ccns": unmatched,
+                            "summaries_created": summaries,
+                            "source_period": manifest.source_period,
+                        }
+                        cursor.execute(
+                            "UPDATE ingest_run SET status='succeeded', completed_at=now(), "
+                            "rows_read=%s, valid_rows=%s, report=%s WHERE id=%s",
+                            (rows, loaded, Jsonb(report), run_id),
+                        )
+        finally:
+            _truncate_transport_stage(database_url)
     transaction_seconds = round(time.perf_counter() - transaction_started, 3)
     return PbjLoadResult(
         source.dataset_key,

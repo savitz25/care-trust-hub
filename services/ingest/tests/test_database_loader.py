@@ -343,6 +343,13 @@ def test_pbj_set_based_load_formulas_unmatched_lineage_and_idempotency(tmp_path:
     assert second.ingest_run_id == first.ingest_run_id
 
     with psycopg.connect(DATABASE_URL) as connection:
+        stage = connection.execute(
+            "SELECT count(*), pg_total_relation_size('pbj_staffing_load_stage')"
+        ).fetchone()
+        assert stage[0] == 0
+        assert stage[1] <= 64 * 1024
+
+    with psycopg.connect(DATABASE_URL) as connection:
         result = connection.execute(
             """
             SELECT total_nurse_hprd::text, rn_hprd::text, lpn_hprd::text, cna_hprd::text,
@@ -385,3 +392,31 @@ def test_pbj_set_based_load_formulas_unmatched_lineage_and_idempotency(tmp_path:
             "succeeded",
             True,
         )
+
+    failed_raw = tmp_path / "pbj_failed.csv"
+    failed_raw.write_bytes(raw.read_bytes())
+    failed_manifest = replace(
+        manifest,
+        source_release_date="2026-08-01",
+        original_filename=failed_raw.name,
+        byte_size=failed_raw.stat().st_size,
+        sha256=sha256_file(failed_raw),
+    )
+    failed_normalized = tmp_path / "failed.jsonl"
+    failed_normalized.write_text(
+        normalized.read_text(encoding="utf-8") + "{not-json}\n", encoding="utf-8"
+    )
+    with pytest.raises(json.JSONDecodeError):
+        load_pbj_source(
+            DATABASE_URL,
+            get_source(PBJ_NURSE_KEY),
+            failed_manifest,
+            failed_raw,
+            failed_normalized,
+        )
+    with psycopg.connect(DATABASE_URL) as connection:
+        stage = connection.execute(
+            "SELECT count(*), pg_total_relation_size('pbj_staffing_load_stage')"
+        ).fetchone()
+        assert stage[0] == 0
+        assert stage[1] <= 64 * 1024
