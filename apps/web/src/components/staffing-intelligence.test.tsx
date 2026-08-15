@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import type { CareStaffingIntelligence } from "@/server/care/types";
 import { StaffingIntelligence } from "./staffing-intelligence";
@@ -45,6 +45,18 @@ const intelligence: CareStaffingIntelligence = {
 intelligence.history = [
   intelligence.latest!,
   { ...intelligence.latest!, quarter: "2025Q4", source: { ...source, sourceQuarter: "2025Q4" } },
+  {
+    ...intelligence.latest!,
+    quarter: "2025Q3",
+    rnHprd: 0.82,
+    source: { ...source, sourceQuarter: "2025Q3" },
+  },
+  {
+    ...intelligence.latest!,
+    quarter: "2025Q2",
+    rnHprd: 0.9,
+    source: { ...source, sourceQuarter: "2025Q2" },
+  },
 ];
 
 describe("staffing intelligence", () => {
@@ -63,6 +75,10 @@ describe("staffing intelligence", () => {
     expect(screen.getByText(/zero combined RN-category hours on 2 days/)).toBeVisible();
     expect(container.textContent).not.toMatch(/TrustHub staffing|staffing score|good|bad/i);
     expect(container.textContent).not.toContain("raw_record");
+    const historical = screen.getByRole("button", { name: "2025Q3" });
+    fireEvent.click(historical);
+    expect(historical).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByLabelText("2025Q3 calculated staffing measures")).toBeVisible();
   });
 
   it("states when no matched staffing quarter is loaded", () => {

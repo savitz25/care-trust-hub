@@ -1,4 +1,7 @@
+"use client";
+
 import type { CSSProperties } from "react";
+import { useState } from "react";
 import type { CareStaffingIntelligence, CareStaffingQuarterSummary } from "@/server/care/types";
 
 const hprd = (value: number | null) =>
@@ -77,11 +80,15 @@ function Trend({ history }: { history: CareStaffingQuarterSummary[] }) {
   );
   return (
     <div className="staffing-trend">
-      <h3>Quarter-over-quarter reported staffing</h3>
+      <h3>Staffing over time</h3>
       <div className="staffing-trend__visual" aria-hidden="true">
         {chronological.map((quarter) => (
           <div key={quarter.quarter}>
-            <span>{quarter.quarter}</span>
+            <span>
+              {quarter.quarter === history[0]?.quarter
+                ? `${quarter.quarter} (current)`
+                : quarter.quarter}
+            </span>
             <i
               className="staffing-bar staffing-bar--total"
               style={
@@ -110,6 +117,9 @@ function Trend({ history }: { history: CareStaffingQuarterSummary[] }) {
               <th scope="col">Quarter</th>
               <th scope="col">Total nursing</th>
               <th scope="col">RN categories</th>
+              <th scope="col">LPN/LVN</th>
+              <th scope="col">CNA</th>
+              <th scope="col">Contract share</th>
               <th scope="col">Days</th>
             </tr>
           </thead>
@@ -119,6 +129,13 @@ function Trend({ history }: { history: CareStaffingQuarterSummary[] }) {
                 <th scope="row">{quarter.quarter}</th>
                 <td>{hprd(quarter.totalNurseHprd)}</td>
                 <td>{hprd(quarter.rnHprd)}</td>
+                <td>{hprd(quarter.lpnHprd)}</td>
+                <td>{hprd(quarter.cnaHprd)}</td>
+                <td>
+                  {quarter.contractNurseShare === null
+                    ? "Not calculated"
+                    : `${Math.round(quarter.contractNurseShare * 1000) / 10}%`}
+                </td>
                 <td>{quarter.daysRepresented}</td>
               </tr>
             ))}
@@ -136,7 +153,9 @@ export function StaffingIntelligence({
   intelligence: CareStaffingIntelligence;
   cmsStaffingRating: number | null;
 }) {
+  const history = intelligence.history.slice(0, 4);
   const latest = intelligence.latest;
+  const [selectedQuarter, setSelectedQuarter] = useState(latest?.quarter ?? "");
   if (!latest) {
     return (
       <section
@@ -152,17 +171,23 @@ export function StaffingIntelligence({
       </section>
     );
   }
+  const selected = history.find((item) => item.quarter === selectedQuarter) ?? latest;
   const weekendRnLower =
-    latest.weekdayRnHprd !== null &&
-    latest.weekendRnHprd !== null &&
-    latest.weekendRnHprd < latest.weekdayRnHprd;
+    selected.weekdayRnHprd !== null &&
+    selected.weekendRnHprd !== null &&
+    selected.weekendRnHprd < selected.weekdayRnHprd;
+  const prior = history[1];
+  const rnDifference =
+    prior?.rnHprd !== null && prior?.rnHprd !== undefined && latest.rnHprd !== null
+      ? latest.rnHprd - prior.rnHprd
+      : null;
   const questions = [
     ...(weekendRnLower
       ? [
           "PBJ records show lower calculated RN-category hours per resident day on weekends this quarter. How does the facility plan RN coverage on Saturdays and Sundays?",
         ]
       : []),
-    ...(latest.contractNurseShare !== null && latest.contractNurseShare > 0
+    ...(selected.contractNurseShare !== null && selected.contractNurseShare > 0
       ? [
           "PBJ records show that some reported nursing hours were contract hours. How does the facility orient and integrate contract staff?",
         ]
@@ -184,15 +209,29 @@ export function StaffingIntelligence({
           calculations from daily PBJ records for {latest.quarter}.
         </p>
       </div>
+      <fieldset className="staffing-quarter-selector">
+        <legend>Inspect a PBJ quarter</legend>
+        {history.map((quarter) => (
+          <button
+            key={quarter.quarter}
+            type="button"
+            aria-pressed={selected.quarter === quarter.quarter}
+            onClick={() => setSelectedQuarter(quarter.quarter)}
+          >
+            {quarter.quarter}
+            {quarter.quarter === latest.quarter ? " (current)" : ""}
+          </button>
+        ))}
+      </fieldset>
       <dl
         className="staffing-metrics"
-        aria-label={`${latest.quarter} calculated staffing measures`}
+        aria-label={`${selected.quarter} calculated staffing measures`}
       >
         {[
-          ["Total nursing", latest.totalNurseHprd],
-          ["RN categories", latest.rnHprd],
-          ["LPN/LVN categories", latest.lpnHprd],
-          ["CNA", latest.cnaHprd],
+          ["Total nursing", selected.totalNurseHprd],
+          ["RN categories", selected.rnHprd],
+          ["LPN/LVN categories", selected.lpnHprd],
+          ["CNA", selected.cnaHprd],
         ].map(([label, value]) => (
           <div key={label as string}>
             <dt>{label}</dt>
@@ -205,7 +244,7 @@ export function StaffingIntelligence({
         <h3>Weekday and weekend calculations</h3>
         <div className="table-scroll" tabIndex={0}>
           <table>
-            <caption>{latest.quarter} reported hours per resident day</caption>
+            <caption>{selected.quarter} reported hours per resident day</caption>
             <thead>
               <tr>
                 <th scope="col">Measure</th>
@@ -216,31 +255,37 @@ export function StaffingIntelligence({
             <tbody>
               <tr>
                 <th scope="row">Total nursing</th>
-                <td>{hprd(latest.weekdayTotalNurseHprd)}</td>
-                <td>{hprd(latest.weekendTotalNurseHprd)}</td>
+                <td>{hprd(selected.weekdayTotalNurseHprd)}</td>
+                <td>{hprd(selected.weekendTotalNurseHprd)}</td>
               </tr>
               <tr>
                 <th scope="row">RN categories</th>
-                <td>{hprd(latest.weekdayRnHprd)}</td>
-                <td>{hprd(latest.weekendRnHprd)}</td>
+                <td>{hprd(selected.weekdayRnHprd)}</td>
+                <td>{hprd(selected.weekendRnHprd)}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-      {latest.contractNurseShare !== null && (
+      {selected.contractNurseShare !== null && (
         <p className="staffing-fact">
-          Contract staff accounted for {Math.round(latest.contractNurseShare * 1000) / 10}% of
+          Contract staff accounted for {Math.round(selected.contractNurseShare * 1000) / 10}% of
           reported nursing hours included in this quarter calculation.
         </p>
       )}
-      {latest.zeroReportedRnDays > 0 && (
+      {selected.zeroReportedRnDays > 0 && (
         <p className="staffing-fact">
-          PBJ reports zero combined RN-category hours on {latest.zeroReportedRnDays} day
-          {latest.zeroReportedRnDays === 1 ? "" : "s"} with a positive MDS census in this quarter.
+          PBJ reports zero combined RN-category hours on {selected.zeroReportedRnDays} day
+          {selected.zeroReportedRnDays === 1 ? "" : "s"} with a positive MDS census in this quarter.
         </p>
       )}
-      <Trend history={intelligence.history} />
+      {rnDifference !== null && (
+        <p className="staffing-fact">
+          Reported RN-category hours per resident day were {Math.abs(rnDifference).toFixed(3)}{" "}
+          {rnDifference >= 0 ? "higher" : "lower"} than the prior loaded quarter.
+        </p>
+      )}
+      <Trend history={history} />
       {questions.length > 0 && (
         <div className="staffing-questions">
           <h3>Questions to ask</h3>
@@ -251,7 +296,7 @@ export function StaffingIntelligence({
           </ul>
         </div>
       )}
-      <SourceDisclosure summary={latest} />
+      <SourceDisclosure summary={selected} />
     </section>
   );
 }

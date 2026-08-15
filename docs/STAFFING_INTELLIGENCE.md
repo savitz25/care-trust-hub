@@ -57,7 +57,9 @@ CMS's public-file exclusion methodology identifies facilities with quarter-level
 
 ## Read model and consumer copy
 
-The server-only repository provides bounded summary, history, daily-quarter, and weekend projections. History defaults to eight quarters and is capped at twelve; daily detail validates a quarter and returns at most 92 rows. No page component contains SQL and no consumer shape includes raw PBJ JSON.
+The server-only repository provides bounded summary, history, daily-quarter, and weekend projections. The consumer experience shows the current quarter plus up to three preceding quarters, while repository history remains capped at twelve; daily detail validates a quarter and returns at most 92 rows. No page component contains SQL and no consumer shape includes raw PBJ JSON.
+
+The initial one-year window uses four consecutive CMS source periods from April 1, 2025 through March 31, 2026 (CY2025Q2 through CY2026Q1). The quarter selector and accessible trend table use precomputed summaries rather than loading daily rows.
 
 The facility section identifies the source quarter and coverage, distinguishes reported PBJ measurements from the CMS staffing rating, shows a text/table equivalent for the trend, and uses neutral wording. Evidence-linked questions are deterministic: they may note an arithmetically lower weekend RN measure, nonzero contract participation, or an explicit zero combined-RN day, but never call staffing good, bad, unsafe, or deficient.
 
