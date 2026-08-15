@@ -90,6 +90,7 @@ jobs:
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0004_inspection_deficiency_penalty.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0005_regulatory_load_stage.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0006_pbj_staffing.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0007_ownership_organization_graph.sql
       - name: Verify migration objects
         run: |
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 <<'SQL'
@@ -105,6 +106,10 @@ jobs:
           SELECT to_regclass('public.pbj_staffing_day') IS NOT NULL AS pbj_day_exists;
           SELECT to_regclass('public.pbj_staffing_quarter_summary') IS NOT NULL AS pbj_summary_exists;
           SELECT to_regclass('public.pbj_staffing_load_stage') IS NOT NULL AS pbj_stage_exists;
+          SELECT to_regclass('public.organization') IS NOT NULL AS organization_exists;
+          SELECT to_regclass('public.organization_identifier') IS NOT NULL AS organization_identifier_exists;
+          SELECT to_regclass('public.provider_ownership_relationship') IS NOT NULL AS ownership_relationship_exists;
+          SELECT to_regclass('public.ownership_change_event') IS NOT NULL AS ownership_change_exists;
           SELECT EXISTS (
             SELECT 1 FROM pg_constraint
             WHERE conname = 'facility_snapshot_raw_object_release_fk'
