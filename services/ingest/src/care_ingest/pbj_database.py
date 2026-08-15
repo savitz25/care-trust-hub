@@ -330,6 +330,9 @@ def load_pbj_source(
             f"release {source.dataset_key}/{release_key} has a conflicting checksum"
         )
     if prior and prior[1] is not None:
+        with psycopg.connect(database_url, autocommit=True) as lease:
+            lease.execute("SELECT pg_advisory_lock(hashtext(%s))", (PBJ_STAGE_LOCK,))
+            _truncate_transport_stage(database_url)
         report = prior[2]
         return PbjLoadResult(
             source.dataset_key,
