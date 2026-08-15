@@ -56,7 +56,7 @@ def _organization(
         """INSERT INTO organization_identifier
         (organization_id, issuer, identifier_type, identifier_value,
          source_release_id, source_record_locator)
-        VALUES (%s,%s,%s,%s,%s,%s)""",
+        VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING""",
         (organization_id, issuer, identifier_type, value, release_id, locator),
     )
     return organization_id
@@ -289,6 +289,19 @@ def load_ownership_source(
                     seller = _organization(
                         cursor, "CMS_PECOS", "PAC_ID", record["seller_pac_id"], release_id, locator
                     )
+                    for organization_id, enrollment_id in (
+                        (buyer, record.get("buyer_enrollment_id")),
+                        (seller, record.get("seller_enrollment_id")),
+                    ):
+                        if enrollment_id:
+                            cursor.execute(
+                                """INSERT INTO organization_identifier
+                                (organization_id, issuer, identifier_type, identifier_value,
+                                 source_release_id, source_record_locator)
+                                VALUES (%s,'CMS_PECOS','ENROLLMENT_ID',%s,%s,%s)
+                                ON CONFLICT DO NOTHING""",
+                                (organization_id, enrollment_id, release_id, locator),
+                            )
                     ccn = record["ccn"]
                     provider_id = _provider(providers, ccn)
                     if provider_id is None:

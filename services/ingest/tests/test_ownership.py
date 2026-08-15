@@ -83,9 +83,11 @@ def test_chow_preserves_buyer_seller_and_effective_date() -> None:
     record = normalize_ownership_row(
         "skilled-nursing-facility-change-of-ownership",
         {
+            "ENROLLMENT ID - BUYER": "O20250101000001",
             "CCN - BUYER": "015001",
             "ASSOCIATE ID - BUYER": "1234567890",
             "ORGANIZATION NAME - BUYER": "BUYER LLC",
+            "ENROLLMENT ID - SELLER": "O20200101000002",
             "ASSOCIATE ID - SELLER": "0987654321",
             "ORGANIZATION NAME - SELLER": "SELLER LLC",
             "CHOW TYPE CODE": "CH",
@@ -95,5 +97,7 @@ def test_chow_preserves_buyer_seller_and_effective_date() -> None:
         2,
     )
     assert record["buyer_pac_id"] == "1234567890"
+    assert record["buyer_enrollment_id"] == "O20250101000001"
     assert record["seller_pac_id"] == "0987654321"
+    assert record["seller_enrollment_id"] == "O20200101000002"
     assert record["effective_date"] == "2025-05-01"
