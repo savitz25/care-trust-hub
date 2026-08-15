@@ -1,24 +1,19 @@
 import "server-only";
 import { Pool } from "pg";
+import { getCareDatabasePoolConfig } from "./database-config";
 
 declare global {
   var careDatabasePool: Pool | undefined;
 }
 
 function createPool(): Pool {
-  const connectionString = process.env.CARE_DATABASE_URL;
-  if (!connectionString) throw new Error("CARE_DATABASE_URL is required for server database reads");
-  const sslMode = process.env.CARE_DATABASE_SSL ?? "verify-full";
-  if (!new Set(["verify-full", "require", "disable"]).has(sslMode)) {
-    throw new Error("CARE_DATABASE_SSL must be verify-full, require, or disable");
-  }
-  return new Pool({
-    connectionString,
-    max: 5,
-    connectionTimeoutMillis: 10_000,
-    idleTimeoutMillis: 30_000,
-    ssl: sslMode === "disable" ? false : { rejectUnauthorized: sslMode === "verify-full" },
-  });
+  return new Pool(
+    getCareDatabasePoolConfig({
+      CARE_DATABASE_URL: process.env.CARE_DATABASE_URL,
+      CARE_DATABASE_SSL: process.env.CARE_DATABASE_SSL,
+      CARE_DATABASE_SSL_CA: process.env.CARE_DATABASE_SSL_CA,
+    }),
+  );
 }
 
 export function getCareDatabasePool(): Pool {
