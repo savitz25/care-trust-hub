@@ -78,8 +78,14 @@ describe("real provider presentation", () => {
   it("renders a conservative real facility detail without unavailable findings", () => {
     const { container } = render(<RealProviderDetail provider={detailProvider} />);
     expect(screen.getByRole("heading", { level: 1, name: "Mapped Provider" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "CMS rating overview" })).toBeInTheDocument();
+    expect(screen.getByText(/No proprietary TrustHub score/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Save to shortlist" })).toHaveAttribute(
+      "href",
+      "/shortlist",
+    );
     expect(
-      screen.getByRole("heading", { name: "Four published dimensions, not a proprietary score" }),
+      screen.getByRole("navigation", { name: "Facility record sections" }),
     ).toBeInTheDocument();
     expect(screen.getByText("CMS reports a 5-star staffing rating.")).toBeInTheDocument();
     expect(screen.getByText("Inspection and deficiency history")).toBeInTheDocument();

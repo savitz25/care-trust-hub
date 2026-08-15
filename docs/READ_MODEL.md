@@ -47,3 +47,7 @@ Do not replace these with a generic arbitrary-query function.
 Real provider URLs use `/facility/cms/[ccn]/[slug]`. The static `cms` segment keeps the route distinct from the synthetic Experience Lab's `/facility/[slug]` route. CCN is authoritative; the slug is presentation-only. A stale slug resolves by CCN and redirects to the current canonical name slug. Real search is limited to 25 records and real comparison to three providers.
 
 The Node PostgreSQL pool is reused on `globalThis` within a warm runtime and capped at five connections per runtime instance. No pool is created per route component or per metric. Before deployment, confirm the aggregate instance-to-pool limit against the managed pooler capacity.
+
+# Regulatory read boundary
+
+The server-only regulatory repository exposes bounded inspection, linked deficiency, penalty, repeat-tag, and chronology contracts. It issues three set-based parameterized queries per facility, selects current successful releases deterministically, and never exposes raw CMS JSON. Consumer rendering requires both the real-provider flag and the independent inspection-intelligence flag. See [INSPECTION_INTELLIGENCE.md](./INSPECTION_INTELLIGENCE.md).

@@ -82,9 +82,9 @@
       "historical_archive_availability": "Provider Data Catalog archives available",
       "schema_verification_state": "verified_2026-08-14",
       "documentation_url": "https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/nursing_home/NH_Data_Dictionary.pdf",
-      "enabled": false,
-      "implemented": false,
-      "notes": "One citation per row covering the displayed inspection history window."
+      "enabled": true,
+      "implemented": true,
+      "notes": "One health citation per row in CMS's published three-year window. Required contract re-verified from CMS on 2026-08-14."
     },
     {
       "dataset_key": "nursing-home-penalties",
@@ -99,9 +99,9 @@
       "historical_archive_availability": "Provider Data Catalog archives available",
       "schema_verification_state": "verified_2026-08-14",
       "documentation_url": "https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/nursing_home/NH_Data_Dictionary.pdf",
-      "enabled": false,
-      "implemented": false,
-      "notes": "Fines and payment denials for the published three-year window."
+      "enabled": true,
+      "implemented": true,
+      "notes": "Fines and payment denials in CMS's published three-year window. Required contract re-verified from CMS on 2026-08-14."
     },
     {
       "dataset_key": "nursing-home-inspection-dates",
@@ -116,9 +116,9 @@
       "historical_archive_availability": "Provider Data Catalog archives available",
       "schema_verification_state": "verified_2026-08-14",
       "documentation_url": "https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/nursing_home/NH_Data_Dictionary.pdf",
-      "enabled": false,
-      "implemented": false,
-      "notes": "Health, fire safety, complaint, and infection-control inspection dates."
+      "enabled": true,
+      "implemented": true,
+      "notes": "Health, fire safety, complaint, and infection-control inspection dates. Required contract re-verified from CMS on 2026-08-14."
     },
     {
       "dataset_key": "payroll-based-journal-daily-nurse-staffing",

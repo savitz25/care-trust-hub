@@ -12,6 +12,8 @@ from care_ingest.database import ReleaseChecksumConflict, load_provider_informat
 from care_ingest.manifest import ReleaseManifest, sha256_file
 from care_ingest.provider_information import normalize_row
 from care_ingest.registry import get_source
+from care_ingest.regulatory import ingest_regulatory_source
+from care_ingest.regulatory_database import load_regulatory_source
 
 FIXTURE = Path(__file__).parent / "fixtures" / "provider_information.csv"
 DATABASE_URL = os.environ.get("CARE_DATABASE_URL")
@@ -184,3 +186,82 @@ def test_alphanumeric_ccn_and_missing_values_round_trip_as_null(tmp_path: Path) 
             """
         ).fetchone()
         assert row == ("37E109", None, None, None)
+
+
+def test_regulatory_set_based_load_idempotency_relationships_and_lineage(tmp_path: Path) -> None:
+    provider_manifest = _manifest(FIXTURE, "2026-07-29")
+    provider_normalized = _normalized(FIXTURE, provider_manifest, tmp_path / "providers.jsonl")
+    load_provider_information(
+        DATABASE_URL,
+        get_source("nursing-home-provider-information"),
+        provider_manifest,
+        FIXTURE,
+        provider_normalized,
+    )
+    fixtures = {
+        "nursing-home-inspection-dates": (
+            "CMS Certification Number (CCN),Survey Date,Type of Survey,"
+            "Survey Cycle,Processing Date\n"
+            "015001,2026-01-02,Health Standard,1,2026-06-01\n",
+        ),
+        "nursing-home-health-deficiencies": (
+            "CMS Certification Number (CCN),Survey Date,Survey Type,Deficiency Prefix,"
+            "Deficiency Category,Deficiency Tag Number,Deficiency Description,Scope Severity Code,"
+            "Deficiency Corrected,Correction Date,Inspection Cycle,Standard Deficiency,"
+            "Complaint Deficiency,Infection Control Inspection Deficiency,Citation under IDR,"
+            "Citation under IIDR,Processing Date\n"
+            "015001,2026-01-02,Health,F,Care,0880,Official CMS description,J,"
+            "Past Non-Compliance,2026-01-03,1,Y,N,N,N,N,2026-06-01\n",
+        ),
+        "nursing-home-penalties": (
+            "CMS Certification Number (CCN),Penalty Date,Penalty Type,Fine ID,Fine Amount,"
+            "Payment Denial Start Date,Payment Denial Length in Days,Processing Date\n"
+            "015001,2026-02-03,Fine,77,12400.00,,,2026-06-01\n",
+        ),
+    }
+    results = []
+    for dataset_key, content in fixtures.items():
+        raw = tmp_path / f"{dataset_key}.csv"
+        raw.write_text(content, encoding="utf-8")
+        manifest = replace(
+            _manifest(raw, "2026-06-01"),
+            dataset_key=dataset_key,
+            cms_identifier=get_source(dataset_key).cms_identifier,
+            official_source_url=get_source(dataset_key).official_landing_page,
+        )
+        ingest_regulatory_source(raw, manifest, tmp_path)
+        normalized = tmp_path / "normalized" / "cms" / dataset_key / "2026-06-01" / "records.jsonl"
+        first = load_regulatory_source(
+            DATABASE_URL, get_source(dataset_key), manifest, raw, normalized
+        )
+        second = load_regulatory_source(
+            DATABASE_URL, get_source(dataset_key), manifest, raw, normalized
+        )
+        assert second.idempotent
+        assert second.ingest_run_id == first.ingest_run_id
+        results.append(first)
+    assert [result.rows_loaded for result in results] == [1, 1, 1]
+    with psycopg.connect(DATABASE_URL) as connection:
+        row = connection.execute(
+            """
+            SELECT d.deficiency_tag, d.scope_severity_code, i.survey_type,
+                   p.fine_amount::text, d.raw_record->>'Deficiency Tag Number',
+                   d.source_record_locator, ir.status, sd.dataset_key
+            FROM deficiency_finding d
+            JOIN inspection_event i ON i.id=d.inspection_event_id
+            JOIN ingest_run ir ON ir.id=d.ingest_run_id
+            JOIN source_release sr ON sr.id=d.source_release_id
+            JOIN source_dataset sd ON sd.id=sr.source_dataset_id
+            CROSS JOIN penalty_enforcement p
+            """
+        ).fetchone()
+        assert row == (
+            "0880",
+            "J",
+            "Health Standard",
+            "12400.00",
+            "0880",
+            "csv-row:2:ccn:015001",
+            "succeeded",
+            "nursing-home-health-deficiencies",
+        )

@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { RealProviderDetail } from "@/components/real-provider-detail";
 import { isCanonicalProviderSlug, providerHref } from "@/server/care/consumer";
-import { isRealProviderUiEnabled } from "@/server/care/feature-flags";
-import { getProviderByCcnForPage } from "@/server/care/cached-repository";
+import {
+  getProviderByCcnForPage,
+  getProviderRegulatoryIntelligenceForPage,
+} from "@/server/care/cached-repository";
+import {
+  isInspectionIntelligenceEnabled,
+  isRealProviderUiEnabled,
+} from "@/server/care/feature-flags";
 
 export const dynamic = "force-dynamic";
 
@@ -33,5 +39,8 @@ export default async function RealFacilityPage({
   const provider = await getProviderByCcnForPage(ccn);
   if (!provider) notFound();
   if (!isCanonicalProviderSlug(provider, slug)) redirect(providerHref(provider));
-  return <RealProviderDetail provider={provider} />;
+  const regulatory = isInspectionIntelligenceEnabled()
+    ? await getProviderRegulatoryIntelligenceForPage(provider.ccn)
+    : undefined;
+  return <RealProviderDetail provider={provider} regulatory={regulatory} />;
 }

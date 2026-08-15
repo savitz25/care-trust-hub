@@ -98,3 +98,71 @@ export interface DevelopmentProviderSearch {
 export interface ProviderDistanceResult extends CareProviderSummary {
   distanceMiles: number;
 }
+
+export interface CareRegulatorySourceDisclosure {
+  sourceOrganization: string;
+  datasetName: string;
+  cmsDatasetIdentifier: string;
+  officialSourceUrl: string;
+  releaseIdentifier: string;
+  sourceModifiedAt: string | null;
+  retrievedAt: string;
+  providerIdentifier: string;
+  sourceRecordLocator: string;
+}
+
+export interface CareScopeSeverity {
+  code: string;
+  scope: "Isolated" | "Pattern" | "Widespread";
+  severity: string;
+  severityLevel: 1 | 2 | 3 | 4;
+  immediateJeopardy: boolean;
+}
+
+export interface CareDeficiencyFinding {
+  id: string;
+  tag: string;
+  category: string | null;
+  officialDescription: string | null;
+  scopeSeverity: CareScopeSeverity;
+  correctionStatus: string | null;
+  correctionDate: string | null;
+  underIdr: boolean | null;
+  underIidr: boolean | null;
+  source: CareRegulatorySourceDisclosure;
+}
+
+export interface CareInspection {
+  id: string;
+  surveyDate: string;
+  surveyType: string;
+  surveyCycle: number;
+  findings: CareDeficiencyFinding[];
+  highestScopeSeverity: CareScopeSeverity | null;
+  source: CareRegulatorySourceDisclosure;
+}
+
+export interface CarePenalty {
+  id: string;
+  penaltyDate: string;
+  penaltyType: "Fine" | "Payment Denial";
+  fineAmount: string | null;
+  paymentDenialStartDate: string | null;
+  paymentDenialDays: number | null;
+  source: CareRegulatorySourceDisclosure;
+}
+
+export interface CareHistoryEvent {
+  id: string;
+  eventDate: string;
+  kind: "inspection" | "penalty";
+  title: string;
+  detail: string;
+}
+
+export interface CareRegulatoryIntelligence {
+  inspections: CareInspection[];
+  penalties: CarePenalty[];
+  repeatTags: Array<{ tag: string; inspectionCount: number }>;
+  timeline: CareHistoryEvent[];
+}

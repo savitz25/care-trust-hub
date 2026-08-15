@@ -5,10 +5,16 @@ import pytest
 from care_ingest.registry import load_registry, validate_registry
 
 
-def test_registry_has_one_enabled_implemented_source() -> None:
+def test_registry_has_only_implemented_sources_enabled() -> None:
     sources = load_registry()
     implemented = [source for source in sources if source.enabled]
-    assert [source.dataset_key for source in implemented] == ["nursing-home-provider-information"]
+    assert {source.dataset_key for source in implemented} == {
+        "nursing-home-provider-information",
+        "nursing-home-health-deficiencies",
+        "nursing-home-penalties",
+        "nursing-home-inspection-dates",
+    }
+    assert all(source.implemented for source in implemented)
     assert all(
         source.official_landing_page.startswith("https://data.cms.gov/") for source in sources
     )

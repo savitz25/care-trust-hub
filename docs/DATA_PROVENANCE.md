@@ -15,3 +15,7 @@ The local archive stores exact CMS bytes under `data/raw/cms/<dataset-key>/<sour
 Rejected rows are written separately under `data/rejected/` with the raw row, physical row number, and reason. They are never counted as normalized providers. Multiple release directories coexist; no command replaces an earlier checksum for the same logical release.
 
 Provider Information field and date semantics are defined in [PROVIDER_INFORMATION_FIELDS.md](./PROVIDER_INFORMATION_FIELDS.md). CMS source modification, publication, retrieval, and record observation dates are distinct and must never be collapsed into a generic `updated_at`.
+
+# Regulatory lineage
+
+Each inspection, deficiency, and penalty row directly references its provider, source release, raw object, ingest run, source-record locator, raw record, and transformation version. Ambiguous deficiency-to-inspection relationships remain null without losing the deficiency's independent lineage.

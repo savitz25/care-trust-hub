@@ -19,3 +19,13 @@ Provider Information contains one row per currently active nursing home. Its cur
 Provider Data Catalog exposes archived nursing-home topic downloads. Coverage and semantics must be verified per release before use. The All Owners, chain, and PBJ products expose version lists through the CMS Data API. Unknown or unconfirmed identifiers remain `null`/“requires verification” in the registry.
 
 Florida AHCA assisted-living data and other state regulators remain future state-adapter work and are not part of this registry.
+
+# Regulatory source implementation status
+
+The following official CMS monthly sources are VERIFIED and IMPLEMENTED behind a separate review flag:
+
+- Nursing Home Inspection Dates (`svdt-c123`): https://data.cms.gov/provider-data/dataset/svdt-c123
+- Nursing Home Health Deficiencies (`r5ix-sfxw`): https://data.cms.gov/provider-data/dataset/r5ix-sfxw
+- Nursing Home Penalties (`g6vv-u9sr`): https://data.cms.gov/provider-data/dataset/g6vv-u9sr
+
+Release-specific filenames, dates, and checksums are recorded in immutable local manifests. See [INSPECTION_INTELLIGENCE.md](./INSPECTION_INTELLIGENCE.md).

@@ -31,3 +31,7 @@ Provider attributes are stored as effective-dated snapshots, not overwritten cur
 ## Extension boundaries
 
 State adapters implement a common acquisition/validation interface but retain jurisdiction-specific semantics. Florida AHCA assisted-living support will be the first such adapter after the national nursing-home product. A later ownership graph will represent organizations and time-bounded ownership edges without assuming names alone prove identity.
+
+# Inspection-intelligence boundary
+
+Migration 0004 adds explicit inspection, deficiency, and penalty concepts; migration 0005 adds a non-evidence operational load stage for reliable managed-pooler transport. Regulatory evidence remains separate from Provider Information snapshots. The server-only read model composes current successful source releases into a consumer-safe, bounded view behind an independent feature flag.

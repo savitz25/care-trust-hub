@@ -12,3 +12,7 @@ Freshness dates describe different events and must remain separate.
 Avoid an ambiguous “Last updated.” Consumer surfaces should use centralized formatting such as “CMS source updated July 29, 2026,” with expandable details showing retrieval separately. If the source-modified date is absent, say it is not documented by CMS; do not substitute retrieval time.
 
 The canonical formatter is `apps/web/src/server/care/freshness.ts`. Missing facts remain `null`; presentation language must not imply why CMS did not report a value.
+
+# Regulatory event and release dates
+
+Inspection, deficiency, and penalty dates describe CMS-reported events. Source-modified, publication, retrieval, and ingest-completion dates describe release provenance. They must not be substituted for one another. Consumer source disclosures use source-modified and retrieval dates; chronology uses the underlying event date.

@@ -57,3 +57,7 @@ Use `db/queries/provider_information_verification.sql` with an explicit CCN to i
 - state and coordinate coverage.
 
 Database integration tests use synthetic fixtures and destructive table cleanup. Run them only against the disposable CI PostGIS service—never against a database containing a real validated release.
+
+# Regulatory releases
+
+Apply `0004_inspection_deficiency_penalty.sql` and `0005_regulatory_load_stage.sql` in sequence. Load Inspection Dates before Health Deficiencies, then Penalties. Use `python -m care_ingest audit-regulatory` after loading. The operational stage is unlogged and contains no durable evidence; durable rows are inserted and marked successful in a final transaction. Never truncate the validated Provider Information baseline.

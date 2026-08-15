@@ -85,3 +85,7 @@ Managed PostgreSQL/Supabase connection, migration, load, secret-handling, and pr
 The approved read boundary, freshness language, and future web-only deployment are documented in `docs/READ_MODEL.md`, `docs/DATA_FRESHNESS.md`, and `docs/VERCEL_DEPLOYMENT.md`.
 
 Copy scoped `.env.example` files to `.env.local` or the service-specific equivalent. Prefix browser-visible values with `NEXT_PUBLIC_`; secrets must remain server-only and uncommitted. Architectural decisions live in `docs/`; permanent engineering rules live in `AGENTS.md`.
+
+# CMS regulatory intelligence
+
+Task 007 adds verified CMS Inspection Dates, Health Deficiencies, and Penalties ingestion plus a server-only consumer read layer. It is independently disabled by default with `CARE_ENABLE_INSPECTION_INTELLIGENCE=false`. See [docs/INSPECTION_INTELLIGENCE.md](docs/INSPECTION_INTELLIGENCE.md) for source contracts, relationship rules, provenance, and commands.

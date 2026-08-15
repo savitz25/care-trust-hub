@@ -77,6 +77,21 @@ run("real Provider Information read model", () => {
     expect(radius.some((provider) => provider.ccn === reference!.ccn)).toBe(true);
   });
 
+  it("reads bounded regulatory intelligence without raw CMS JSON", async () => {
+    const { getProviderRegulatoryIntelligence } = await import("./regulatory-repository");
+    const intelligence = await timed("regulatory_intelligence", () =>
+      getProviderRegulatoryIntelligence("015019"),
+    );
+    expect(intelligence.inspections.length).toBeLessThanOrEqual(20);
+    expect(intelligence.penalties.length).toBeLessThanOrEqual(100);
+    expect(
+      intelligence.timeline.every(
+        (event, index, events) => index === 0 || events[index - 1]!.eventDate >= event.eventDate,
+      ),
+    ).toBe(true);
+    expect(JSON.stringify(intelligence)).not.toContain("raw_record");
+  });
+
   it("maps real consumer filters and comparison in bounded set-based queries", async () => {
     const { getProvidersByCcns, searchProvidersConsumer } = await import("./repository");
     const search = await timed("consumer_search", () =>
