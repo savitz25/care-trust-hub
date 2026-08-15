@@ -331,6 +331,7 @@ def load_pbj_source(
     with psycopg.connect(database_url) as connection:
         with connection.transaction():
             with connection.cursor() as cursor:
+                cursor.execute("SET LOCAL statement_timeout = '20min'")
                 release_id, _ = _verified_release(cursor, source, manifest)
                 raw_object_id = _raw_object(cursor, release_id, manifest)
                 cursor.execute(
