@@ -35,7 +35,9 @@ def _request(url: str, timeout: float):
         raise DownloadError(f"CMS request failed for {url}: {error}") from error
 
 
-def resolve_distribution(source: SourceDefinition, timeout: float = 30) -> dict[str, Any]:
+def resolve_distribution(
+    source: SourceDefinition, timeout: float = 30, source_period: str | None = None
+) -> dict[str, Any]:
     if not source.metadata_url:
         raise DownloadError(f"source has no implemented metadata strategy: {source.dataset_key}")
     with _request(source.metadata_url, timeout) as response:
@@ -58,14 +60,35 @@ def resolve_distribution(source: SourceDefinition, timeout: float = 30) -> dict[
         )
         if latest is None:
             raise DownloadError("official CMS catalog did not identify the latest PBJ release")
+        selected = latest
+        if source_period is not None:
+            if len(source_period) != 6 or source_period[4] != "Q" or source_period[5] not in "1234":
+                raise ValueError("PBJ source period must use YYYYQn")
+            year, quarter = int(source_period[:4]), int(source_period[5])
+            month = (quarter - 1) * 3 + 1
+            prefix = f"{year:04d}-{month:02d}-01/"
+            selected = next(
+                (
+                    item
+                    for item in distributions
+                    if item.get("format") == "API"
+                    and item.get("description") != "latest"
+                    and item.get("temporal", "").startswith(prefix)
+                ),
+                None,
+            )
+            if selected is None:
+                raise DownloadError(
+                    f"official CMS catalog has no fixed PBJ release for {source_period}"
+                )
         csv_distribution = next(
             (
                 item
                 for item in distributions
                 if item.get("mediaType") == "text/csv"
                 and item.get("downloadURL")
-                and item.get("temporal") == latest.get("temporal")
-                and item.get("modified") == latest.get("modified")
+                and item.get("temporal") == selected.get("temporal")
+                and item.get("modified") == selected.get("modified")
             ),
             None,
         )
@@ -75,19 +98,19 @@ def resolve_distribution(source: SourceDefinition, timeout: float = 30) -> dict[
                 for item in distributions
                 if item.get("format") == "API"
                 and item.get("description") != "latest"
-                and item.get("temporal") == latest.get("temporal")
-                and item.get("modified") == latest.get("modified")
+                and item.get("temporal") == selected.get("temporal")
+                and item.get("modified") == selected.get("modified")
             ),
             None,
         )
         if csv_distribution is None or fixed_api is None:
             raise DownloadError("official CMS catalog PBJ release metadata is incomplete")
-        period_start, period_end = latest["temporal"].split("/", maxsplit=1)
+        period_start, period_end = selected["temporal"].split("/", maxsplit=1)
         year, month = period_start[:4], int(period_start[5:7])
         return {
             "download_url": csv_distribution["downloadURL"],
             "content_type": csv_distribution["mediaType"],
-            "release_date": latest.get("modified"),
+            "release_date": selected.get("modified"),
             "released": None,
             "official_source_url": source.official_landing_page,
             "source_period": f"{year}Q{((month - 1) // 3) + 1}",
@@ -118,11 +141,14 @@ def resolve_distribution(source: SourceDefinition, timeout: float = 30) -> dict[
 
 
 def download_source(
-    source: SourceDefinition, data_root: Path, timeout: float = 120
+    source: SourceDefinition,
+    data_root: Path,
+    timeout: float = 120,
+    source_period: str | None = None,
 ) -> tuple[Path, ReleaseManifest]:
     if not source.enabled or not source.implemented:
         raise DownloadError(f"source is not enabled for download: {source.dataset_key}")
-    distribution = resolve_distribution(source, min(timeout, 30))
+    distribution = resolve_distribution(source, min(timeout, 30), source_period)
     url = distribution["download_url"]
     filename = safe_filename(Path(urlparse(url).path).name)
     LOGGER.info("Downloading %s from official CMS distribution", source.dataset_key)

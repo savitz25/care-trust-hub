@@ -175,3 +175,44 @@ def test_official_catalog_resolution_chooses_fixed_pbj_release(monkeypatch) -> N
     assert resolved["coverage_end"] == "2026-03-31"
     assert resolved["source_version_identifier"] == fixed_id
     assert resolved["download_url"].endswith("pbj.csv")
+
+
+def test_official_catalog_resolution_selects_historical_pbj_release(monkeypatch) -> None:
+    fixed_id = "a4227149-1ed3-41a5-adca-eaa98ea694e5"
+    temporal = "2025-04-01/2025-06-30"
+    modified = "2025-11-20"
+    catalog = {
+        "dataset": [
+            {
+                "title": "Payroll Based Journal Daily Nurse Staffing",
+                "distribution": [
+                    {
+                        "description": "latest",
+                        "format": "API",
+                        "temporal": "2026-01-01/2026-03-31",
+                        "modified": "2026-07-29",
+                    },
+                    {
+                        "format": "API",
+                        "accessURL": f"https://data.cms.gov/data-api/v1/dataset/{fixed_id}/data",
+                        "temporal": temporal,
+                        "modified": modified,
+                    },
+                    {
+                        "format": "CSV",
+                        "mediaType": "text/csv",
+                        "downloadURL": "https://data.cms.gov/sites/default/files/PBJ_CY2025Q2.csv",
+                        "temporal": temporal,
+                        "modified": modified,
+                    },
+                ],
+            }
+        ]
+    }
+    monkeypatch.setattr(
+        "care_ingest.downloader._request",
+        lambda _url, _timeout: BytesIO(json.dumps(catalog).encode()),
+    )
+    resolved = resolve_distribution(get_source(PBJ_NURSE_KEY), source_period="2025Q2")
+    assert resolved["source_period"] == "2025Q2"
+    assert resolved["source_version_identifier"] == fixed_id

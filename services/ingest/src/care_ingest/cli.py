@@ -58,6 +58,7 @@ def build_parser() -> argparse.ArgumentParser:
     download = commands.add_parser("download", help="Download an enabled source release")
     download.add_argument("dataset_key", choices=IMPLEMENTED_KEYS)
     download.add_argument("--timeout", type=float, default=120)
+    download.add_argument("--source-period", help="Fixed PBJ quarter in YYYYQn form")
     for name in ("validate", "ingest", "summarize"):
         command = commands.add_parser(name, help=f"{name.title()} an archived release")
         command.add_argument("dataset_key", choices=IMPLEMENTED_KEYS)
@@ -122,7 +123,9 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return 0
     if args.command == "download":
-        path, manifest = download_source(get_source(args.dataset_key), data_root, args.timeout)
+        path, manifest = download_source(
+            get_source(args.dataset_key), data_root, args.timeout, args.source_period
+        )
         print(f"Archived: {path}")
         print(manifest.to_json(), end="")
         return 0
