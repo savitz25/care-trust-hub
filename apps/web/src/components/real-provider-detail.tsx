@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type {
   CareProviderDetail,
+  CareOwnershipIntelligence,
   CareRegulatoryIntelligence,
   CareStaffingIntelligence,
 } from "@/server/care/types";
@@ -8,6 +9,7 @@ import { CMS_RATING_EXPLANATIONS, factualRatingObservations } from "@/server/car
 import { formatFreshnessLabels } from "@/server/care/freshness";
 import { CmsStarRating, ParticipationFacts } from "./real-provider";
 import { PrintButton } from "./print-button";
+import { OwnershipIntelligence } from "./ownership-intelligence";
 import { RegulatoryIntelligence } from "./regulatory-intelligence";
 import { StaffingIntelligence } from "./staffing-intelligence";
 
@@ -36,10 +38,12 @@ export function FacilitySourceRegister({
   provider,
   regulatory,
   staffing,
+  ownership,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
   staffing?: CareStaffingIntelligence;
+  ownership?: CareOwnershipIntelligence;
 }) {
   const sources: FacilitySourceEntry[] = [
     {
@@ -96,6 +100,24 @@ export function FacilitySourceRegister({
       supports: "PBJ staffing cards, history, and transparent calculations",
     });
   }
+  const ownershipSources = [
+    ...(ownership?.parties.map((party) => party.source) ?? []),
+    ...(ownership?.changes.map((change) => change.source) ?? []),
+  ];
+  for (const ownershipSource of ownershipSources) {
+    if (sources.some((entry) => entry.datasetIdentifier === ownershipSource.cmsDatasetIdentifier))
+      continue;
+    sources.push({
+      key: `ownership-${ownershipSource.cmsDatasetIdentifier}`,
+      sourceOrganization: ownershipSource.sourceOrganization,
+      datasetName: ownershipSource.datasetName,
+      datasetIdentifier: ownershipSource.cmsDatasetIdentifier,
+      officialSourceUrl: ownershipSource.officialSourceUrl,
+      sourceModifiedAt: ownershipSource.sourceModifiedAt,
+      retrievedAt: ownershipSource.retrievedAt,
+      supports: "Ownership parties, organization connections, and ownership history",
+    });
+  }
   return (
     <div className="source-register__datasets">
       {sources.map((source) => (
@@ -142,10 +164,12 @@ export function RealProviderDetail({
   provider,
   regulatory,
   staffing,
+  ownership,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
   staffing?: CareStaffingIntelligence;
+  ownership?: CareOwnershipIntelligence;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
@@ -237,6 +261,7 @@ export function RealProviderDetail({
 
         <nav className="provider-section-nav" aria-label="Facility record sections">
           <a href="#overview">Overview</a>
+          {ownership && <a href="#ownership">Ownership</a>}
           {regulatory && <a href="#inspections">Inspections</a>}
           {regulatory && <a href="#penalties">Penalties</a>}
           {regulatory && <a href="#history">History</a>}
@@ -244,7 +269,8 @@ export function RealProviderDetail({
           <a href="#sources">Sources</a>
         </nav>
 
-        {regulatory && <RegulatoryIntelligence intelligence={regulatory} />}
+        {ownership && <OwnershipIntelligence intelligence={ownership} />}
+        {regulatory && <RegulatoryIntelligence intelligence={regulatory} ownership={ownership} />}
         {staffing && (
           <StaffingIntelligence
             intelligence={staffing}
@@ -281,9 +307,11 @@ export function RealProviderDetail({
             </p>
           </div>
           <ul className="future-source-list">
-            {additionalLayers.map((layer) => (
-              <li key={layer}>{layer}</li>
-            ))}
+            {additionalLayers
+              .filter((layer) => !ownership || layer !== "Ownership intelligence")
+              .map((layer) => (
+                <li key={layer}>{layer}</li>
+              ))}
           </ul>
         </section>
 
@@ -296,7 +324,12 @@ export function RealProviderDetail({
             <p className="eyebrow">Source register</p>
             <h2 id="real-source-title">See where this record came from</h2>
           </div>
-          <FacilitySourceRegister provider={provider} regulatory={regulatory} staffing={staffing} />
+          <FacilitySourceRegister
+            provider={provider}
+            regulatory={regulatory}
+            staffing={staffing}
+            ownership={ownership}
+          />
           <p className="independence-statement">
             No paid placements. Facilities cannot pay to rank higher. We cite. You decide.
           </p>

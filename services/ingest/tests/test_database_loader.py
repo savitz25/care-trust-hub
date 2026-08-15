@@ -10,6 +10,7 @@ import pytest
 
 from care_ingest.database import ReleaseChecksumConflict, load_provider_information
 from care_ingest.manifest import ReleaseManifest, sha256_file
+from care_ingest.ownership_database import load_ownership_source
 from care_ingest.pbj import NURSE_HOUR_FIELDS, PBJ_NURSE_KEY, ingest_pbj_source
 from care_ingest.pbj_database import load_pbj_source
 from care_ingest.provider_information import normalize_row
@@ -53,6 +54,34 @@ def _normalized(raw_file: Path, manifest: ReleaseManifest, destination: Path) ->
         "".join(json.dumps(record) + "\n" for record in records), encoding="utf-8"
     )
     return destination
+
+
+def _ownership_manifest(raw_file: Path, dataset_key: str, release: str) -> ReleaseManifest:
+    source = get_source(dataset_key)
+    return ReleaseManifest(
+        manifest_version=2,
+        dataset_key=dataset_key,
+        source_organization=source.source_organization,
+        cms_identifier=source.cms_identifier,
+        official_source_url=source.official_landing_page,
+        retrieval_timestamp=datetime(2026, 8, 15, tzinfo=UTC).isoformat(),
+        source_release_date=release,
+        original_filename=raw_file.name,
+        byte_size=raw_file.stat().st_size,
+        sha256=sha256_file(raw_file),
+        content_type="text/csv",
+        transformation_version=None,
+        ingestion_status="ingested",
+        source_modified_at=release,
+        published_at=None,
+        source_period=None,
+        source_version_identifier=f"synthetic-{release}",
+    )
+
+
+def _jsonl(path: Path, records: list[dict]) -> Path:
+    path.write_text("".join(json.dumps(record) + "\n" for record in records), encoding="utf-8")
+    return path
 
 
 @pytest.fixture(autouse=True)
@@ -350,6 +379,148 @@ def test_pbj_set_based_load_formulas_unmatched_lineage_and_idempotency(tmp_path:
         assert stage[0] == 0
         assert stage[1] <= 64 * 1024
 
+
+def test_ownership_identity_is_identifier_based_and_individuals_stay_separate(
+    tmp_path: Path,
+) -> None:
+    with psycopg.connect(DATABASE_URL) as connection:
+        provider_ids = []
+        for ccn in ("015001", "015002"):
+            provider_id = connection.execute(
+                "INSERT INTO provider(provider_type) VALUES ('nursing_home') RETURNING id"
+            ).fetchone()[0]
+            provider_ids.append(provider_id)
+            connection.execute(
+                "INSERT INTO provider_identifier "
+                "(provider_id,issuer,identifier_type,identifier_value) "
+                "VALUES (%s,'CMS','CCN',%s)",
+                (provider_id, ccn),
+            )
+
+    enrollment_source = get_source("skilled-nursing-facility-enrollments")
+    first_raw = tmp_path / "enrollments-first.csv"
+    first_raw.write_text("synthetic enrollment source", encoding="utf-8")
+    first_manifest = _ownership_manifest(
+        first_raw, "skilled-nursing-facility-enrollments", "2026-01-01"
+    )
+    first_records = [
+        {
+            "record_kind": "enrollment",
+            "record_key": "enrollment-a",
+            "ccn": "015001",
+            "organization_pac_id": "1111111111",
+            "enrollment_id": "O20200101000001",
+            "organization_name": "OLD NAME LLC",
+            "dba_name": None,
+            "npi": None,
+            "role_code": "ENROLLED_ORGANIZATION",
+            "role_text": "Medicare-enrolled legal organization",
+            "association_date": None,
+            "ownership_percentage": None,
+            "classifications": {},
+            "source_record_locator": "csv-row:2",
+            "raw_record": {"CCN": "015001"},
+        },
+        {
+            "record_kind": "enrollment",
+            "record_key": "enrollment-b",
+            "ccn": "015002",
+            "organization_pac_id": "2222222222",
+            "enrollment_id": "O20200101000002",
+            "organization_name": "SAME DISPLAY NAME LLC",
+            "dba_name": None,
+            "npi": None,
+            "role_code": "ENROLLED_ORGANIZATION",
+            "role_text": "Medicare-enrolled legal organization",
+            "association_date": None,
+            "ownership_percentage": None,
+            "classifications": {},
+            "source_record_locator": "csv-row:3",
+            "raw_record": {"CCN": "015002"},
+        },
+    ]
+    load_ownership_source(
+        DATABASE_URL,
+        enrollment_source,
+        first_manifest,
+        first_raw,
+        _jsonl(tmp_path / "first.jsonl", first_records),
+    )
+
+    renamed_raw = tmp_path / "enrollments-renamed.csv"
+    renamed_raw.write_text("synthetic renamed source", encoding="utf-8")
+    renamed_manifest = _ownership_manifest(
+        renamed_raw, "skilled-nursing-facility-enrollments", "2026-02-01"
+    )
+    renamed_record = {
+        **first_records[0],
+        "record_key": "enrollment-a-renamed",
+        "organization_name": "SAME DISPLAY NAME LLC",
+    }
+    load_ownership_source(
+        DATABASE_URL,
+        enrollment_source,
+        renamed_manifest,
+        renamed_raw,
+        _jsonl(tmp_path / "renamed.jsonl", [renamed_record]),
+    )
+
+    owner_raw = tmp_path / "owners.csv"
+    owner_raw.write_text("synthetic owner source", encoding="utf-8")
+    owner_manifest = _ownership_manifest(
+        owner_raw, "skilled-nursing-facility-all-owners", "2026-02-01"
+    )
+    individual = {
+        "record_kind": "owner",
+        "record_key": "owner-person",
+        "enrollment_id": "O20200101000001",
+        "party_kind": "individual",
+        "party_pac_id": "3333333333",
+        "party_name": "PUBLIC, JANE",
+        "role_code": "34",
+        "role_text": "5% OR GREATER DIRECT OWNERSHIP INTEREST",
+        "association_date": "2020-01-01",
+        "ownership_percentage": 25,
+        "classifications": {"reit": False, "private_equity_company": False},
+        "source_record_locator": "csv-row:2",
+        "raw_record": {"TYPE - OWNER": "I"},
+    }
+    first = load_ownership_source(
+        DATABASE_URL,
+        get_source("skilled-nursing-facility-all-owners"),
+        owner_manifest,
+        owner_raw,
+        _jsonl(tmp_path / "owner.jsonl", [individual]),
+    )
+    rerun = load_ownership_source(
+        DATABASE_URL,
+        get_source("skilled-nursing-facility-all-owners"),
+        owner_manifest,
+        owner_raw,
+        tmp_path / "owner.jsonl",
+    )
+    assert not first.idempotent
+    assert rerun.idempotent
+    with psycopg.connect(DATABASE_URL) as connection:
+        assert connection.execute("SELECT count(*) FROM organization").fetchone()[0] == 2
+        assert (
+            connection.execute(
+                "SELECT count(*) FROM ownership_party WHERE party_kind='individual' "
+                "AND organization_id IS NULL"
+            ).fetchone()[0]
+            == 1
+        )
+        assert (
+            connection.execute(
+                "SELECT count(DISTINCT organization_id) FROM organization_identifier "
+                "WHERE identifier_type='PAC_ID'"
+            ).fetchone()[0]
+            == 2
+        )
+
+    # Keep the PBJ tail assertions in this legacy integration module exercising their full setup.
+    test_pbj_set_based_load_formulas_unmatched_lineage_and_idempotency(tmp_path)
+
     with psycopg.connect(DATABASE_URL) as connection:
         result = connection.execute(
             """
@@ -394,6 +565,19 @@ def test_pbj_set_based_load_formulas_unmatched_lineage_and_idempotency(tmp_path:
             True,
         )
 
+    raw = tmp_path / "pbj.csv"
+    manifest = replace(
+        _manifest(raw, "2026-07-29"),
+        dataset_key=PBJ_NURSE_KEY,
+        cms_identifier="7e0d53ba-8f02-4c66-98a5-14a1c997c50d",
+        official_source_url=(
+            "https://data.cms.gov/quality-of-care/payroll-based-journal-daily-nurse-staffing"
+        ),
+        transformation_version=None,
+        source_period="2026Q1",
+        source_version_identifier="6e5d5e28-66fd-41bc-a36c-db54dcbffd3e",
+    )
+    normalized = tmp_path / "normalized" / "cms" / PBJ_NURSE_KEY / "2026-07-29" / "records.jsonl"
     failed_raw = tmp_path / "pbj_failed.csv"
     failed_raw.write_bytes(raw.read_bytes())
     failed_manifest = replace(

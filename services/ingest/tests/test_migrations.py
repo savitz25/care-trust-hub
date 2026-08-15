@@ -23,3 +23,8 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
         (5, "regulatory_load_stage"),
     )
     assert all((migrations / f"000{number}_{name}.sql").is_file() for number, name in prior)
+    ownership = (migrations / "0007_ownership_organization_graph.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE organization (" in ownership
+    assert "CREATE TABLE ownership_party (" in ownership
+    assert "subscription" not in ownership
+    assert "billing" not in ownership

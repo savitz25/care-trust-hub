@@ -118,6 +118,49 @@ def resolve_distribution(
             "coverage_end": period_end,
             "source_version_identifier": fixed_api["accessURL"].split("/dataset/")[1].split("/")[0],
         }
+    if source.metadata_url.endswith("/data.json"):
+        dataset = next(
+            (
+                item
+                for item in metadata.get("dataset", [])
+                if item.get("title") == source.official_name
+            ),
+            None,
+        )
+        if dataset is None:
+            raise DownloadError(f"official CMS catalog did not contain {source.official_name}")
+        distributions = dataset.get("distribution", [])
+        csv_distribution = next(
+            (
+                item
+                for item in distributions
+                if item.get("mediaType") == "text/csv"
+                and item.get("modified") == dataset.get("modified")
+                and item.get("downloadURL")
+            ),
+            None,
+        )
+        fixed_api = next(
+            (
+                item
+                for item in distributions
+                if item.get("format") == "API"
+                and item.get("description") != "latest"
+                and item.get("modified") == dataset.get("modified")
+            ),
+            None,
+        )
+        if csv_distribution is None or fixed_api is None:
+            raise DownloadError("official CMS ownership distribution metadata is incomplete")
+        return {
+            "download_url": csv_distribution["downloadURL"],
+            "content_type": csv_distribution["mediaType"],
+            "release_date": dataset.get("modified"),
+            "released": dataset.get("released"),
+            "official_source_url": dataset.get("landingPage", source.official_landing_page),
+            "source_period": csv_distribution.get("temporal"),
+            "source_version_identifier": fixed_api["accessURL"].split("/dataset/")[1].split("/")[0],
+        }
     distributions = metadata.get("distribution", [])
     csv_distribution = next(
         (

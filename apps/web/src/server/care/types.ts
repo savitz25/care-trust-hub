@@ -155,7 +155,7 @@ export interface CarePenalty {
 export interface CareHistoryEvent {
   id: string;
   eventDate: string;
-  kind: "inspection" | "penalty";
+  kind: "inspection" | "penalty" | "ownership";
   title: string;
   detail: string;
 }
@@ -216,4 +216,43 @@ export interface CareDailyStaffing {
 export interface CareStaffingIntelligence {
   latest: CareStaffingQuarterSummary | null;
   history: CareStaffingQuarterSummary[];
+}
+
+export interface CareOwnershipSourceDisclosure {
+  sourceOrganization: string;
+  datasetName: string;
+  cmsDatasetIdentifier: string;
+  officialSourceUrl: string;
+  releaseIdentifier: string;
+  sourceModifiedAt: string | null;
+  retrievedAt: string;
+}
+
+export interface CareOwnershipParty {
+  id: string;
+  kind: "organization" | "individual";
+  displayName: string;
+  roleCode: string | null;
+  roleText: string;
+  associationDate: string | null;
+  ownershipPercentage: number | null;
+  classifications: Record<string, boolean | string>;
+  connectedProviderCount: number | null;
+  connectedStates: string[];
+  source: CareOwnershipSourceDisclosure;
+}
+
+export interface CareOwnershipChange {
+  id: string;
+  effectiveDate: string;
+  changeTypeCode: string;
+  changeTypeText: string;
+  buyerName: string;
+  sellerName: string;
+  source: CareOwnershipSourceDisclosure;
+}
+
+export interface CareOwnershipIntelligence {
+  parties: CareOwnershipParty[];
+  changes: CareOwnershipChange[];
 }

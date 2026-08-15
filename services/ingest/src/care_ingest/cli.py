@@ -12,6 +12,8 @@ from .database import load_provider_information
 from .downloader import download_source, resolve_distribution
 from .manifest import ReleaseManifest, sha256_file
 from .migrations import apply_migration
+from .ownership import OWNERSHIP_KEYS, ingest_ownership_source
+from .ownership_database import audit_ownership_database, load_ownership_source
 from .pbj import PBJ_NURSE_KEY, ingest_pbj_source
 from .pbj_database import audit_pbj_database, load_pbj_source
 from .provider_information import ingest_provider_information
@@ -27,7 +29,7 @@ from .regulatory_database import audit_regulatory_database, load_regulatory_sour
 
 PROVIDER_INFORMATION_KEY = "nursing-home-provider-information"
 REGULATORY_KEYS = (INSPECTIONS_KEY, DEFICIENCIES_KEY, PENALTIES_KEY)
-IMPLEMENTED_KEYS = (PROVIDER_INFORMATION_KEY, *REGULATORY_KEYS, PBJ_NURSE_KEY)
+IMPLEMENTED_KEYS = (PROVIDER_INFORMATION_KEY, *REGULATORY_KEYS, PBJ_NURSE_KEY, *OWNERSHIP_KEYS)
 
 
 def default_data_root() -> Path:
@@ -77,6 +79,8 @@ def build_parser() -> argparse.ArgumentParser:
     audit.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     staffing_audit = commands.add_parser("audit-staffing", help="Audit PBJ staffing database")
     staffing_audit.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    ownership_audit = commands.add_parser("audit-ownership", help="Audit ownership database")
+    ownership_audit.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     return parser
 
 
@@ -105,6 +109,11 @@ def main(argv: list[str] | None = None) -> int:
         if not args.database_url:
             parser.error("audit-staffing requires CARE_DATABASE_URL or --database-url")
         print(json.dumps(audit_pbj_database(args.database_url), indent=2, sort_keys=True))
+        return 0
+    if args.command == "audit-ownership":
+        if not args.database_url:
+            parser.error("audit-ownership requires CARE_DATABASE_URL or --database-url")
+        print(json.dumps(audit_ownership_database(args.database_url), indent=2, sort_keys=True))
         return 0
 
     if args.command == "list-sources":
@@ -139,6 +148,8 @@ def main(argv: list[str] | None = None) -> int:
         if args.dataset_key == PROVIDER_INFORMATION_KEY
         else ingest_pbj_source
         if args.dataset_key == PBJ_NURSE_KEY
+        else ingest_ownership_source
+        if args.dataset_key in OWNERSHIP_KEYS
         else ingest_regulatory_source
     )
     if args.command == "validate":
@@ -180,6 +191,8 @@ def main(argv: list[str] | None = None) -> int:
             if args.dataset_key == PROVIDER_INFORMATION_KEY
             else load_pbj_source
             if args.dataset_key == PBJ_NURSE_KEY
+            else load_ownership_source
+            if args.dataset_key in OWNERSHIP_KEYS
             else load_regulatory_source
         )
         result = loader(

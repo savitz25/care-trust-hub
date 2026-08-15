@@ -41,4 +41,17 @@ describe("real provider UI feature flag", () => {
       }),
     ).toBe(false);
   });
+
+  it("requires both real-provider and ownership opt-ins", async () => {
+    const { isOwnershipIntelligenceEnabled } = await import("./feature-flags");
+    expect(isOwnershipIntelligenceEnabled({ CARE_ENABLE_OWNERSHIP_INTELLIGENCE: "true" })).toBe(
+      false,
+    );
+    expect(
+      isOwnershipIntelligenceEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_OWNERSHIP_INTELLIGENCE: "true",
+      }),
+    ).toBe(true);
+  });
 });

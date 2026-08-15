@@ -1,6 +1,7 @@
 import type {
   CareRegulatoryIntelligence,
   CareRegulatorySourceDisclosure,
+  CareOwnershipIntelligence,
 } from "@/server/care/types";
 
 function formatDate(value: string): string {
@@ -48,8 +49,10 @@ function RegulatorySource({ source }: { source: CareRegulatorySourceDisclosure }
 
 export function RegulatoryIntelligence({
   intelligence,
+  ownership,
 }: {
   intelligence: CareRegulatoryIntelligence;
+  ownership?: CareOwnershipIntelligence;
 }) {
   const latest = intelligence.inspections[0];
   const immediateJeopardy = latest?.findings.some(
@@ -73,6 +76,16 @@ export function RegulatoryIntelligence({
           `CMS records show a monetary penalty dated ${formatDate(penalty.penaltyDate)}. What changes were made after that enforcement action?`,
       ),
   ];
+  const timeline = [
+    ...intelligence.timeline,
+    ...(ownership?.changes.map((change) => ({
+      id: `ownership-${change.id}`,
+      eventDate: change.effectiveDate,
+      kind: "ownership" as const,
+      title: change.changeTypeText,
+      detail: `CMS enrollment record: ${change.sellerName} to ${change.buyerName}`,
+    })) ?? []),
+  ].sort((a, b) => b.eventDate.localeCompare(a.eventDate) || a.id.localeCompare(b.id));
   return (
     <>
       <section
@@ -218,8 +231,8 @@ export function RegulatoryIntelligence({
           <h2 id="history-title">Verified regulatory chronology</h2>
         </div>
         <ol className="regulatory-timeline">
-          {intelligence.timeline.map((event) => (
-            <li key={event.id}>
+          {timeline.map((event) => (
+            <li key={event.id} data-event-kind={event.kind}>
               <time dateTime={event.eventDate}>{formatDate(event.eventDate)}</time>
               <strong>{event.title}</strong>
               <span>{event.detail}</span>
