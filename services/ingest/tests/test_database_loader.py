@@ -407,7 +407,7 @@ def test_pbj_set_based_load_formulas_unmatched_lineage_and_idempotency(tmp_path:
     failed_normalized.write_text(
         normalized.read_text(encoding="utf-8") + "{not-json}\n", encoding="utf-8"
     )
-    with pytest.raises(json.JSONDecodeError):
+    with pytest.raises(ValueError, match="invalid normalized JSON"):
         load_pbj_source(
             DATABASE_URL,
             get_source(PBJ_NURSE_KEY),
