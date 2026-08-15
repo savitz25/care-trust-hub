@@ -119,6 +119,20 @@ def test_ingest_reports_duplicates_zero_census_and_rejects(tmp_path: Path) -> No
     assert summary.providers_with_incomplete_quarters == 1
 
 
+def test_ingest_reads_official_windows_1252_text(tmp_path: Path) -> None:
+    raw = tmp_path / "pbj.csv"
+    row = _row(PROVNAME="Synthetic Director’s Center")
+    with raw.open("w", encoding="cp1252", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(row))
+        writer.writeheader()
+        writer.writerow(row)
+    summary = ingest_pbj_source(raw, _manifest(raw), tmp_path)
+    assert summary.normalized_rows == 1
+    normalized = tmp_path / "normalized" / "cms" / PBJ_NURSE_KEY / "2026-07-29" / "records.jsonl"
+    record = json.loads(normalized.read_text(encoding="utf-8"))
+    assert record["raw"]["PROVNAME"] == "Synthetic Director’s Center"
+
+
 def test_official_catalog_resolution_chooses_fixed_pbj_release(monkeypatch) -> None:
     temporal = "2026-01-01/2026-03-31"
     modified = "2026-07-29"

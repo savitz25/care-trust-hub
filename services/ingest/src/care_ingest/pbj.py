@@ -216,7 +216,7 @@ def ingest_pbj_source(
     provider_dates: dict[str, set[str]] = {}
     dates: list[str] = []
     try:
-        with source_file.open("r", encoding="utf-8-sig", newline="") as handle:
+        with source_file.open("r", encoding="cp1252", newline="") as handle:
             reader = csv.DictReader(handle)
             unexpected = verify_pbj_schema(reader.fieldnames)
             if unexpected:
