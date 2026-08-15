@@ -13,6 +13,7 @@ const source = {
   retrievedAt: "2026-08-15T00:00:00.000Z",
 };
 const intelligence: CareOwnershipIntelligence = {
+  totalPartyCount: 2,
   parties: [
     {
       id: "party-1",

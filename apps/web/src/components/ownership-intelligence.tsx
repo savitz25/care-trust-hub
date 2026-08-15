@@ -96,15 +96,15 @@ export function OwnershipIntelligence({
       </div>
       <dl className="real-fact-grid">
         <div>
-          <dt>Reported parties</dt>
-          <dd>{intelligence.parties.length}</dd>
+          <dt>Reported party records</dt>
+          <dd>{intelligence.totalPartyCount}</dd>
         </div>
         <div>
-          <dt>Organizations</dt>
+          <dt>Organizations shown</dt>
           <dd>{organizations.length}</dd>
         </div>
         <div>
-          <dt>Individuals</dt>
+          <dt>Individuals shown</dt>
           <dd>{intelligence.parties.length - organizations.length}</dd>
         </div>
         <div>

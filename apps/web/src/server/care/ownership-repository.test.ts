@@ -29,6 +29,7 @@ describe("ownership repository", () => {
             release_key: "2026-07-27",
             source_modified_at: new Date("2026-07-27T00:00:00Z"),
             retrieved_at: new Date("2026-08-15T00:00:00Z"),
+            total_party_count: "82",
           },
         ],
       })
@@ -37,8 +38,11 @@ describe("ownership repository", () => {
     const result = await getProviderOwnershipIntelligence("12a345");
     expect(result.parties[0]?.ownershipPercentage).toBe(25);
     expect(result.parties[0]?.connectedProviderCount).toBe(2);
+    expect(result.totalPartyCount).toBe(82);
     expect(JSON.stringify(result)).not.toMatch(/raw_record|subscription|billing|entitlement/);
     expect(query).toHaveBeenCalledTimes(2);
+    expect(query.mock.calls[0]?.[0]).toContain("r.raw_record->>'ORGANIZATION NAME'");
+    expect(query.mock.calls[0]?.[0]).toContain("r.raw_record->>'Owner Name'");
   });
 
   it("validates provider identity before querying", async () => {

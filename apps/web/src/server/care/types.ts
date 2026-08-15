@@ -254,5 +254,6 @@ export interface CareOwnershipChange {
 
 export interface CareOwnershipIntelligence {
   parties: CareOwnershipParty[];
+  totalPartyCount: number;
   changes: CareOwnershipChange[];
 }

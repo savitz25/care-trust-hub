@@ -32,6 +32,7 @@ interface PartyRow extends QueryResultRow {
   release_key: string;
   source_modified_at: Date | null;
   retrieved_at: Date;
+  total_party_count: string;
 }
 
 interface ChangeRow extends QueryResultRow {
@@ -80,7 +81,18 @@ export async function getProviderOwnershipIntelligence(
          SELECT provider_id FROM provider_identifier WHERE issuer='CMS' AND identifier_type='CCN'
            AND identifier_value=$1 AND valid_from IS NULL
        )
-       SELECT r.id, p.party_kind, p.display_name, r.relationship_role_code,
+       SELECT r.id, p.party_kind, count(*) OVER()::text total_party_count,
+         CASE sd.dataset_key
+           WHEN 'skilled-nursing-facility-enrollments' THEN
+             COALESCE(NULLIF(r.raw_record->>'ORGANIZATION NAME',''),p.display_name)
+           WHEN 'skilled-nursing-facility-all-owners' THEN
+             COALESCE(NULLIF(r.raw_record->>'ORGANIZATION NAME - OWNER',''),
+               NULLIF(concat_ws(', ',NULLIF(r.raw_record->>'LAST NAME - OWNER',''),
+                 NULLIF(r.raw_record->>'FIRST NAME - OWNER','')),''),p.display_name)
+           WHEN 'nursing-home-ownership' THEN
+             COALESCE(NULLIF(r.raw_record->>'Owner Name',''),p.display_name)
+           ELSE p.display_name
+         END display_name, r.relationship_role_code,
          r.relationship_role_text, r.association_date::text, r.ownership_percentage::text,
          r.classifications, sd.source_organization, sd.display_name dataset_name,
          CASE sd.dataset_key
@@ -146,5 +158,9 @@ export async function getProviderOwnershipIntelligence(
     sellerName: row.seller_name,
     source: source(row),
   }));
-  return { parties, changes };
+  return {
+    parties,
+    totalPartyCount: partyResult.rows[0] ? Number(partyResult.rows[0].total_party_count) : 0,
+    changes,
+  };
 }
