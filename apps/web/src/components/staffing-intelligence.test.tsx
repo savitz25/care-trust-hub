@@ -73,12 +73,25 @@ describe("staffing intelligence", () => {
     expect(screen.getByText(/lower calculated RN-category hours/)).toBeVisible();
     expect(screen.getByText(/12% of reported nursing hours/)).toBeVisible();
     expect(screen.getByText(/zero combined RN-category hours on 2 days/)).toBeVisible();
+    expect(
+      screen.getByText(/daily PBJ records for 2026Q1 \(current source quarter\)/),
+    ).toBeVisible();
+    expect(screen.getByText("Monday–Friday")).toBeVisible();
+    expect(screen.getByText("Saturday–Sunday")).toBeVisible();
+    expect(
+      screen.getByText("Solid bar: Total nursing · Outlined bar: RN categories"),
+    ).toBeVisible();
     expect(container.textContent).not.toMatch(/TrustHub staffing|staffing score|good|bad/i);
+    expect(container.textContent).not.toMatch(/â|Â|�/);
     expect(container.textContent).not.toContain("raw_record");
     const historical = screen.getByRole("button", { name: "2025Q3" });
     fireEvent.click(historical);
     expect(historical).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByLabelText("2025Q3 calculated staffing measures")).toBeVisible();
+    expect(
+      screen.getByText(/daily PBJ records for 2025Q3 \(selected historical quarter\)/),
+    ).toBeVisible();
+    expect(screen.getByRole("button", { name: "2026Q1 (current)" })).toBeVisible();
   });
 
   it("states when no matched staffing quarter is loaded", () => {

@@ -36,7 +36,7 @@ function SourceDisclosure({ summary }: { summary: CareStaffingQuarterSummary }) 
         <div>
           <dt>Coverage</dt>
           <dd>
-            {date(summary.coverageStart)}â€“{date(summary.coverageEnd)}
+            {date(summary.coverageStart)}–{date(summary.coverageEnd)}
           </dd>
         </div>
         <div>
@@ -108,7 +108,9 @@ function Trend({ history }: { history: CareStaffingQuarterSummary[] }) {
           </div>
         ))}
       </div>
-      <p className="staffing-trend__legend">Solid: total nursing Â· outlined: RN categories</p>
+      <p className="staffing-trend__legend">
+        Solid bar: Total nursing · Outlined bar: RN categories
+      </p>
       <div className="table-scroll" tabIndex={0} aria-label="Quarterly staffing trend table">
         <table>
           <caption>Calculated reported hours per resident day by PBJ quarter</caption>
@@ -206,7 +208,11 @@ export function StaffingIntelligence({
           CMS staffing rating:{" "}
           {cmsStaffingRating === null ? "not reported" : `${cmsStaffingRating} of 5 stars`}. CMS
           calculates that rating separately using its published methodology. The values below are
-          calculations from daily PBJ records for {latest.quarter}.
+          calculations from daily PBJ records for {selected.quarter}
+          {selected.quarter === latest.quarter
+            ? " (current source quarter)"
+            : " (selected historical quarter)"}
+          .
         </p>
       </div>
       <fieldset className="staffing-quarter-selector">
@@ -248,8 +254,8 @@ export function StaffingIntelligence({
             <thead>
               <tr>
                 <th scope="col">Measure</th>
-                <th scope="col">Mondayâ€“Friday</th>
-                <th scope="col">Saturdayâ€“Sunday</th>
+                <th scope="col">Monday–Friday</th>
+                <th scope="col">Saturday–Sunday</th>
               </tr>
             </thead>
             <tbody>

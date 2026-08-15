@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import type { CareProviderDetail, CareProviderSearchResult } from "@/server/care/types";
+import type {
+  CareProviderDetail,
+  CareProviderSearchResult,
+  CareRegulatoryIntelligence,
+  CareStaffingIntelligence,
+} from "@/server/care/types";
 import { CmsStarRating, RealProviderCard, RealSourceDisclosure } from "./real-provider";
 import { RealProviderDetail } from "./real-provider-detail";
 
@@ -45,6 +50,105 @@ const detailProvider: CareProviderDetail = {
   legalBusinessName: null,
   telephone: null,
 };
+const regulatorySource = {
+  sourceOrganization: source.sourceOrganization,
+  datasetName: "Nursing Home Inspection Dates",
+  cmsDatasetIdentifier: "inspection-dataset",
+  officialSourceUrl: "https://data.cms.gov/inspection-dataset",
+  releaseIdentifier: "inspection-release",
+  sourceModifiedAt: "2026-07-20T00:00:00.000Z",
+  retrievedAt: "2026-08-13T00:00:00.000Z",
+  providerIdentifier: provider.ccn,
+  sourceRecordLocator: "source-row",
+};
+const regulatory: CareRegulatoryIntelligence = {
+  inspections: [
+    {
+      id: "inspection-1",
+      surveyDate: "2026-06-01",
+      surveyType: "Health Standard",
+      surveyCycle: 1,
+      findings: [
+        {
+          id: "finding-1",
+          tag: "F880",
+          category: "Infection Control",
+          officialDescription: "CMS description",
+          scopeSeverity: {
+            code: "D",
+            scope: "Isolated",
+            severity: "No actual harm with potential for more than minimal harm",
+            severityLevel: 2,
+            immediateJeopardy: false,
+          },
+          correctionStatus: null,
+          correctionDate: null,
+          underIdr: false,
+          underIidr: false,
+          source: {
+            ...regulatorySource,
+            datasetName: "Nursing Home Health Deficiencies",
+            cmsDatasetIdentifier: "deficiency-dataset",
+          },
+        },
+      ],
+      highestScopeSeverity: null,
+      source: regulatorySource,
+    },
+  ],
+  penalties: [
+    {
+      id: "penalty-1",
+      penaltyDate: "2026-05-01",
+      penaltyType: "Fine",
+      fineAmount: "1000.00",
+      paymentDenialStartDate: null,
+      paymentDenialDays: null,
+      source: {
+        ...regulatorySource,
+        datasetName: "Nursing Home Penalties",
+        cmsDatasetIdentifier: "penalty-dataset",
+      },
+    },
+  ],
+  repeatTags: [],
+  timeline: [],
+};
+const staffingSource = {
+  sourceOrganization: source.sourceOrganization,
+  datasetName: "Payroll Based Journal Daily Nurse Staffing",
+  cmsDatasetIdentifier: "pbj-dataset",
+  sourceVersionIdentifier: "pbj-version",
+  officialSourceUrl: "https://data.cms.gov/pbj-dataset",
+  releaseIdentifier: "pbj-release",
+  sourceQuarter: "2026Q1",
+  sourceModifiedAt: "2026-07-29T00:00:00.000Z",
+  sourcePublishedAt: null,
+  retrievedAt: "2026-08-14T00:00:00.000Z",
+  providerIdentifier: provider.ccn,
+  sourceRecordLocator: "derived-quarter",
+};
+const staffingSummary = {
+  quarter: "2026Q1",
+  coverageStart: "2026-01-01",
+  coverageEnd: "2026-03-31",
+  daysRepresented: 90,
+  positiveCensusDays: 90,
+  missingCensusDays: 0,
+  totalNurseHprd: 3.5,
+  rnHprd: 0.75,
+  lpnHprd: 0.65,
+  cnaHprd: 1.9,
+  weekdayTotalNurseHprd: 3.6,
+  weekendTotalNurseHprd: 3.2,
+  weekdayRnHprd: 0.8,
+  weekendRnHprd: 0.6,
+  contractNurseShare: 0.1,
+  zeroReportedRnDays: 0,
+  formulaVersion: "formula-v1",
+  source: staffingSource,
+};
+const staffing: CareStaffingIntelligence = { latest: staffingSummary, history: [staffingSummary] };
 
 describe("real provider presentation", () => {
   it("gives stars and missing ratings accessible text equivalents", () => {
@@ -75,8 +179,10 @@ describe("real provider presentation", () => {
     expect(screen.getByText("View source details").closest("details")).toBeInTheDocument();
   });
 
-  it("renders a conservative real facility detail without unavailable findings", () => {
-    const { container } = render(<RealProviderDetail provider={detailProvider} />);
+  it("renders truthful preview copy, complete sources, and working section anchors", () => {
+    const { container } = render(
+      <RealProviderDetail provider={detailProvider} regulatory={regulatory} staffing={staffing} />,
+    );
     expect(screen.getByRole("heading", { level: 1, name: "Mapped Provider" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "CMS rating overview" })).toBeInTheDocument();
     expect(screen.getByText(/No proprietary TrustHub score/)).toBeInTheDocument();
@@ -88,8 +194,37 @@ describe("real provider presentation", () => {
       screen.getByRole("navigation", { name: "Facility record sections" }),
     ).toBeInTheDocument();
     expect(screen.getByText("CMS reports a 5-star staffing rating.")).toBeInTheDocument();
-    expect(screen.getByText("Inspection and deficiency history")).toBeInTheDocument();
-    expect(container.textContent).not.toContain("Recent enforcement activity");
+    expect(
+      screen.getByText(/combines verified CMS datasets and transparent calculations/),
+    ).toBeVisible();
+    expect(container.textContent).not.toContain("Provider Information fields only");
+    expect(container.textContent).not.toContain("Detailed staffing trends");
+    expect(container.textContent).not.toContain("Evidence layers still being integrated");
+    expect(container.querySelector(".future-source-list")).not.toHaveTextContent(
+      "Facility history",
+    );
+    for (const dataset of [
+      "Nursing Home Provider Information",
+      "Nursing Home Inspection Dates",
+      "Nursing Home Health Deficiencies",
+      "Nursing Home Penalties",
+      "Payroll Based Journal Daily Nurse Staffing",
+    ]) {
+      expect(screen.getAllByText(dataset).length).toBeGreaterThan(0);
+    }
+    const sectionNav = screen.getByRole("navigation", { name: "Facility record sections" });
+    for (const [name, href] of [
+      ["Overview", "#overview"],
+      ["Inspections", "#inspections"],
+      ["Penalties", "#penalties"],
+      ["History", "#history"],
+      ["Staffing", "#staffing"],
+      ["Sources", "#sources"],
+    ]) {
+      expect(sectionNav.querySelector(`a[href="${href}"]`)).toHaveTextContent(name);
+      expect(container.querySelector(href)).toBeInTheDocument();
+    }
+    expect(container.textContent).not.toMatch(/TrustHub staffing rating|staffing score/i);
     expect(container.textContent).not.toContain("raw_record");
   });
 });
