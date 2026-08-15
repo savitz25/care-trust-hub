@@ -99,8 +99,8 @@ def _verified_release(
         INSERT INTO source_release
           (source_dataset_id, release_key, retrieved_at, content_sha256,
            official_source_url, source_release_date, source_modified_at,
-           source_published_at, source_period)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+           source_published_at, source_period, source_version_identifier)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (source_dataset_id, release_key) DO NOTHING
         RETURNING id
         """,
@@ -114,6 +114,7 @@ def _verified_release(
             source_modified_at,
             manifest.published_at,
             manifest.source_period,
+            manifest.source_version_identifier,
         ),
     )
     inserted_release = cursor.fetchone()
@@ -121,7 +122,7 @@ def _verified_release(
         return str(inserted_release[0]), True
     cursor.execute(
         """
-        SELECT id, content_sha256, official_source_url
+        SELECT id, content_sha256, official_source_url, source_version_identifier
         FROM source_release
         WHERE source_dataset_id = %s AND release_key = %s
         FOR UPDATE
@@ -138,6 +139,8 @@ def _verified_release(
         )
     if existing[2] != manifest.official_source_url:
         raise ValueError("existing release official source URL conflicts with manifest")
+    if existing[3] != manifest.source_version_identifier:
+        raise ValueError("existing release version identifier conflicts with manifest")
     return str(existing[0]), False
 
 

@@ -51,3 +51,7 @@ The Node PostgreSQL pool is reused on `globalThis` within a warm runtime and cap
 # Regulatory read boundary
 
 The server-only regulatory repository exposes bounded inspection, linked deficiency, penalty, repeat-tag, and chronology contracts. It issues three set-based parameterized queries per facility, selects current successful releases deterministically, and never exposes raw CMS JSON. Consumer rendering requires both the real-provider flag and the independent inspection-intelligence flag. See [INSPECTION_INTELLIGENCE.md](./INSPECTION_INTELLIGENCE.md).
+
+## Staffing read boundary
+
+The server-only staffing repository exposes current summary, multi-quarter history, one-quarter daily detail, and weekend comparison contracts. History is capped at twelve quarters and daily detail at 92 days. Queries select successful PBJ releases deterministically, validate CCN/quarter input, and return no raw CMS row, storage key, checksum, or internal lineage identifier. Consumer rendering requires both `CARE_ENABLE_REAL_PROVIDER_UI=true` and the independent `CARE_ENABLE_STAFFING_INTELLIGENCE=true` flag. See [STAFFING_INTELLIGENCE.md](./STAFFING_INTELLIGENCE.md).

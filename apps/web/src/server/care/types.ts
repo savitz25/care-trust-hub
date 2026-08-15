@@ -166,3 +166,54 @@ export interface CareRegulatoryIntelligence {
   repeatTags: Array<{ tag: string; inspectionCount: number }>;
   timeline: CareHistoryEvent[];
 }
+
+export interface CareStaffingSourceDisclosure {
+  sourceOrganization: string;
+  datasetName: string;
+  cmsDatasetIdentifier: string;
+  sourceVersionIdentifier: string | null;
+  officialSourceUrl: string;
+  releaseIdentifier: string;
+  sourceQuarter: string;
+  sourceModifiedAt: string | null;
+  sourcePublishedAt: string | null;
+  retrievedAt: string;
+  providerIdentifier: string;
+  sourceRecordLocator: string;
+}
+
+export interface CareStaffingQuarterSummary {
+  quarter: string;
+  coverageStart: string;
+  coverageEnd: string;
+  daysRepresented: number;
+  positiveCensusDays: number;
+  missingCensusDays: number;
+  totalNurseHprd: number | null;
+  rnHprd: number | null;
+  lpnHprd: number | null;
+  cnaHprd: number | null;
+  weekdayTotalNurseHprd: number | null;
+  weekendTotalNurseHprd: number | null;
+  weekdayRnHprd: number | null;
+  weekendRnHprd: number | null;
+  contractNurseShare: number | null;
+  zeroReportedRnDays: number;
+  formulaVersion: string;
+  source: CareStaffingSourceDisclosure;
+}
+
+export interface CareDailyStaffing {
+  workDate: string;
+  residentCensus: number | null;
+  totalNurseHprd: number | null;
+  rnHprd: number | null;
+  lpnHprd: number | null;
+  cnaHprd: number | null;
+  isWeekend: boolean;
+}
+
+export interface CareStaffingIntelligence {
+  latest: CareStaffingQuarterSummary | null;
+  history: CareStaffingQuarterSummary[];
+}

@@ -5,10 +5,12 @@ import { isCanonicalProviderSlug, providerHref } from "@/server/care/consumer";
 import {
   getProviderByCcnForPage,
   getProviderRegulatoryIntelligenceForPage,
+  getProviderStaffingSummaryForPage,
 } from "@/server/care/cached-repository";
 import {
   isInspectionIntelligenceEnabled,
   isRealProviderUiEnabled,
+  isStaffingIntelligenceEnabled,
 } from "@/server/care/feature-flags";
 
 export const dynamic = "force-dynamic";
@@ -42,5 +44,8 @@ export default async function RealFacilityPage({
   const regulatory = isInspectionIntelligenceEnabled()
     ? await getProviderRegulatoryIntelligenceForPage(provider.ccn)
     : undefined;
-  return <RealProviderDetail provider={provider} regulatory={regulatory} />;
+  const staffing = isStaffingIntelligenceEnabled()
+    ? await getProviderStaffingSummaryForPage(provider.ccn)
+    : undefined;
+  return <RealProviderDetail provider={provider} regulatory={regulatory} staffing={staffing} />;
 }

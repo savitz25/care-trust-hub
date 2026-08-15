@@ -19,3 +19,9 @@ Provider Information field and date semantics are defined in [PROVIDER_INFORMATI
 # Regulatory lineage
 
 Each inspection, deficiency, and penalty row directly references its provider, source release, raw object, ingest run, source-record locator, raw record, and transformation version. Ambiguous deficiency-to-inspection relationships remain null without losing the deficiency's independent lineage.
+
+## PBJ staffing lineage
+
+Each PBJ day retains CMS CCN, work date, source quarter, all verified published hour components and MDS census, record locator, raw record, immutable raw object, fixed source version, ingest run, and transformation version. The daily identity is scoped to source release so later quarterly versions never overwrite history. Unmatched CMS CCNs are preserved with their official identifier and null internal-provider relationship.
+
+Quarter summaries reference the same release, raw object, and ingest run and carry an explicit formula version. They are derived platform calculations, not CMS staffing ratings. The consumer read model exposes concise source and coverage facts but never raw source JSON.

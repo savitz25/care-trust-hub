@@ -16,3 +16,7 @@ The canonical formatter is `apps/web/src/server/care/freshness.ts`. Missing fact
 # Regulatory event and release dates
 
 Inspection, deficiency, and penalty dates describe CMS-reported events. Source-modified, publication, retrieval, and ingest-completion dates describe release provenance. They must not be substituted for one another. Consumer source disclosures use source-modified and retrieval dates; chronology uses the underlying event date.
+
+## PBJ quarter and coverage dates
+
+PBJ `CY_Qtr` is a source period, while work dates define actual daily coverage. A quarter label, coverage start/end, CMS catalog source-modified date, fixed version identifier, retrieval time, and ingest completion remain separate. CMS publication date stays null when the catalog does not provide one. Consumer staffing disclosures show the quarter and coverage period and label source-updated and retrieval dates distinctly.

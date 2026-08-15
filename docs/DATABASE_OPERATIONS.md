@@ -61,3 +61,9 @@ Database integration tests use synthetic fixtures and destructive table cleanup.
 # Regulatory releases
 
 Apply `0004_inspection_deficiency_penalty.sql` and `0005_regulatory_load_stage.sql` in sequence. Load Inspection Dates before Health Deficiencies, then Penalties. Use `python -m care_ingest audit-regulatory` after loading. The operational stage is unlogged and contains no durable evidence; durable rows are inserted and marked successful in a final transaction. Never truncate the validated Provider Information baseline.
+
+## PBJ staffing releases
+
+Apply `0006_pbj_staffing.sql` after migrations 0001–0005. Download, validate, and normalize a fixed quarterly PBJ Daily Nurse Staffing CSV before database promotion. The PBJ loader uses bounded COPY staging and set-based inserts and summaries in a single transaction; an idempotent rerun must not create additional daily or summary rows. Run `python -m care_ingest audit-staffing` after loading and review unmatched CCNs, duplicates, invalid census/hours, incomplete quarters, lineage gaps, and detail/summary discrepancies.
+
+Start with one current quarter and record download, normalization, COPY, insert, summary, total, and rerun durations. Review volume and pooler behavior before adding history; never launch a blind multi-quarter load. PBJ raw, normalized, rejected, report, and cache artifacts remain under ignored data storage and must not enter Git.

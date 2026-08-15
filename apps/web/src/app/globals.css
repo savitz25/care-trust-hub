@@ -1210,6 +1210,130 @@ fieldset legend span {
   list-style: none;
   counter-reset: questions;
 }
+
+.staffing-section {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.staffing-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.staffing-metrics > div {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--color-warm-200);
+  border-radius: 0.75rem;
+  background: var(--color-white);
+}
+
+.staffing-metrics dt {
+  color: var(--color-slate-700);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.staffing-metrics dd {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+  font-weight: 750;
+  line-height: 1;
+}
+
+.staffing-metrics small {
+  display: block;
+  margin-top: 0.45rem;
+  color: var(--color-slate-700);
+}
+
+.table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+}
+
+.table-scroll:focus-visible {
+  outline: 3px solid var(--color-caution-700);
+  outline-offset: 3px;
+}
+
+.table-scroll table {
+  width: 100%;
+  min-width: 32rem;
+  border-collapse: collapse;
+}
+
+.table-scroll caption {
+  padding: 0.5rem 0;
+  text-align: left;
+  font-weight: 650;
+}
+
+.table-scroll th,
+.table-scroll td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--color-warm-200);
+  text-align: left;
+}
+
+.staffing-fact,
+.staffing-questions,
+.staffing-source {
+  padding: 1rem;
+  border-left: 4px solid var(--color-jade-500);
+  background: var(--color-jade-50);
+}
+
+.staffing-trend__visual {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.staffing-trend__visual > div {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  gap: 0.35rem 0.75rem;
+  align-items: center;
+}
+
+.staffing-trend__visual span {
+  grid-row: span 2;
+  font-weight: 700;
+}
+
+.staffing-bar {
+  display: block;
+  width: max(2px, var(--staffing-width));
+  height: 0.65rem;
+  border: 2px solid currentColor;
+  background: currentColor;
+}
+
+.staffing-bar--rn {
+  background: transparent;
+}
+
+.staffing-trend__legend {
+  color: var(--color-slate-700);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 720px) {
+  .staffing-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 390px) {
+  .staffing-metrics {
+    grid-template-columns: 1fr;
+  }
+}
 .question-list li {
   position: relative;
   border-radius: var(--radius-md);

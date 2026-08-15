@@ -22,4 +22,23 @@ describe("real provider UI feature flag", () => {
       true,
     );
   });
+
+  it("requires both real-provider and staffing opt-ins", async () => {
+    const { isStaffingIntelligenceEnabled } = await import("./feature-flags");
+    expect(isStaffingIntelligenceEnabled({ CARE_ENABLE_STAFFING_INTELLIGENCE: "true" })).toBe(
+      false,
+    );
+    expect(
+      isStaffingIntelligenceEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_STAFFING_INTELLIGENCE: "true",
+      }),
+    ).toBe(true);
+    expect(
+      isStaffingIntelligenceEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_INSPECTION_INTELLIGENCE: "true",
+      }),
+    ).toBe(false);
+  });
 });

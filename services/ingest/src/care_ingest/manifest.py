@@ -29,6 +29,7 @@ class ReleaseManifest:
     source_modified_at: str | None = None
     published_at: str | None = None
     source_period: str | None = None
+    source_version_identifier: str | None = None
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, sort_keys=True) + "\n"

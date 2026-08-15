@@ -35,3 +35,7 @@ State adapters implement a common acquisition/validation interface but retain ju
 # Inspection-intelligence boundary
 
 Migration 0004 adds explicit inspection, deficiency, and penalty concepts; migration 0005 adds a non-evidence operational load stage for reliable managed-pooler transport. Regulatory evidence remains separate from Provider Information snapshots. The server-only read model composes current successful source releases into a consumer-safe, bounded view behind an independent feature flag.
+
+## Staffing-intelligence boundary
+
+Migration 0006 adds PBJ daily facts and deterministic quarter summaries. Normalized PBJ rows move through bounded COPY staging, set-based CCN resolution, set-based inserts, and summary calculation in one transaction. Daily source facts, platform-derived HPRD measures, and CMS-published ratings remain separate concepts. The web reads only bounded server-side projections behind `CARE_ENABLE_STAFFING_INTELLIGENCE`; it never parses source files or exposes raw rows. See [STAFFING_INTELLIGENCE.md](./STAFFING_INTELLIGENCE.md).

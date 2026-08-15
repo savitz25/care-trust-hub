@@ -89,3 +89,7 @@ Copy scoped `.env.example` files to `.env.local` or the service-specific equival
 # CMS regulatory intelligence
 
 Task 007 adds verified CMS Inspection Dates, Health Deficiencies, and Penalties ingestion plus a server-only consumer read layer. It is independently disabled by default with `CARE_ENABLE_INSPECTION_INTELLIGENCE=false`. See [docs/INSPECTION_INTELLIGENCE.md](docs/INSPECTION_INTELLIGENCE.md) for source contracts, relationship rules, provenance, and commands.
+
+# CMS PBJ staffing intelligence
+
+Task 008 adds a quarterly CMS Payroll Based Journal Daily Nurse Staffing pipeline, normalized daily facts, deterministic quarter summaries, and a bounded server-only facility read model. It does not ingest Employee Detail, reproduce CMS stars, rank facilities, or create a staffing score. The consumer section requires both `CARE_ENABLE_REAL_PROVIDER_UI=true` and the server-only `CARE_ENABLE_STAFFING_INTELLIGENCE=true`; both remain false by default. See [docs/STAFFING_INTELLIGENCE.md](docs/STAFFING_INTELLIGENCE.md).

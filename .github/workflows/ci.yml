@@ -89,6 +89,7 @@ jobs:
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0003_provider_information_load.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0004_inspection_deficiency_penalty.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0005_regulatory_load_stage.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0006_pbj_staffing.sql
       - name: Verify migration objects
         run: |
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 <<'SQL'
@@ -101,6 +102,9 @@ jobs:
           SELECT to_regclass('public.deficiency_finding') IS NOT NULL AS deficiency_finding_exists;
           SELECT to_regclass('public.penalty_enforcement') IS NOT NULL AS penalty_enforcement_exists;
           SELECT to_regclass('public.regulatory_load_stage') IS NOT NULL AS regulatory_stage_exists;
+          SELECT to_regclass('public.pbj_staffing_day') IS NOT NULL AS pbj_day_exists;
+          SELECT to_regclass('public.pbj_staffing_quarter_summary') IS NOT NULL AS pbj_summary_exists;
+          SELECT to_regclass('public.pbj_staffing_load_stage') IS NOT NULL AS pbj_stage_exists;
           SELECT EXISTS (
             SELECT 1 FROM pg_constraint
             WHERE conname = 'facility_snapshot_raw_object_release_fk'

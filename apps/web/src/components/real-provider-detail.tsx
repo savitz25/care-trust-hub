@@ -1,10 +1,15 @@
 import Link from "next/link";
-import type { CareProviderDetail, CareRegulatoryIntelligence } from "@/server/care/types";
+import type {
+  CareProviderDetail,
+  CareRegulatoryIntelligence,
+  CareStaffingIntelligence,
+} from "@/server/care/types";
 import { CMS_RATING_EXPLANATIONS, factualRatingObservations } from "@/server/care/consumer";
 import { formatFreshnessLabels } from "@/server/care/freshness";
 import { CmsStarRating, ParticipationFacts, RealSourceDisclosure } from "./real-provider";
 import { PrintButton } from "./print-button";
 import { RegulatoryIntelligence } from "./regulatory-intelligence";
+import { StaffingIntelligence } from "./staffing-intelligence";
 
 const additionalLayers = [
   "Inspection and deficiency history",
@@ -18,9 +23,11 @@ const additionalLayers = [
 export function RealProviderDetail({
   provider,
   regulatory,
+  staffing,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
+  staffing?: CareStaffingIntelligence;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
@@ -114,10 +121,17 @@ export function RealProviderDetail({
           {regulatory && <a href="#inspections">Inspections</a>}
           {regulatory && <a href="#penalties">Penalties</a>}
           {regulatory && <a href="#history">History</a>}
+          {staffing && <a href="#staffing">Staffing</a>}
           <a href="#sources">Sources</a>
         </nav>
 
         {regulatory && <RegulatoryIntelligence intelligence={regulatory} />}
+        {staffing && (
+          <StaffingIntelligence
+            intelligence={staffing}
+            cmsStaffingRating={provider.ratings.staffing}
+          />
+        )}
 
         <section className="profile-section" aria-labelledby="verify-title">
           <div className="section-heading">

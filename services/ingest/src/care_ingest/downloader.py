@@ -40,6 +40,61 @@ def resolve_distribution(source: SourceDefinition, timeout: float = 30) -> dict[
         raise DownloadError(f"source has no implemented metadata strategy: {source.dataset_key}")
     with _request(source.metadata_url, timeout) as response:
         metadata: dict[str, Any] = json.load(response)
+    if source.dataset_key == "payroll-based-journal-daily-nurse-staffing":
+        datasets = metadata.get("dataset", [])
+        metadata = next(
+            (item for item in datasets if item.get("title") == source.official_name), None
+        )
+        if metadata is None:
+            raise DownloadError("official CMS catalog did not contain the PBJ nurse dataset")
+        distributions = metadata.get("distribution", [])
+        latest = next(
+            (
+                item
+                for item in distributions
+                if item.get("description") == "latest" and item.get("format") == "API"
+            ),
+            None,
+        )
+        if latest is None:
+            raise DownloadError("official CMS catalog did not identify the latest PBJ release")
+        csv_distribution = next(
+            (
+                item
+                for item in distributions
+                if item.get("mediaType") == "text/csv"
+                and item.get("downloadURL")
+                and item.get("temporal") == latest.get("temporal")
+                and item.get("modified") == latest.get("modified")
+            ),
+            None,
+        )
+        fixed_api = next(
+            (
+                item
+                for item in distributions
+                if item.get("format") == "API"
+                and item.get("description") != "latest"
+                and item.get("temporal") == latest.get("temporal")
+                and item.get("modified") == latest.get("modified")
+            ),
+            None,
+        )
+        if csv_distribution is None or fixed_api is None:
+            raise DownloadError("official CMS catalog PBJ release metadata is incomplete")
+        period_start, period_end = latest["temporal"].split("/", maxsplit=1)
+        year, month = period_start[:4], int(period_start[5:7])
+        return {
+            "download_url": csv_distribution["downloadURL"],
+            "content_type": csv_distribution["mediaType"],
+            "release_date": latest.get("modified"),
+            "released": None,
+            "official_source_url": source.official_landing_page,
+            "source_period": f"{year}Q{((month - 1) // 3) + 1}",
+            "coverage_start": period_start,
+            "coverage_end": period_end,
+            "source_version_identifier": fixed_api["accessURL"].split("/dataset/")[1].split("/")[0],
+        }
     distributions = metadata.get("distribution", [])
     csv_distribution = next(
         (
@@ -57,6 +112,8 @@ def resolve_distribution(source: SourceDefinition, timeout: float = 30) -> dict[
         "release_date": metadata.get("modified"),
         "released": metadata.get("released"),
         "official_source_url": metadata.get("landingPage", source.official_landing_page),
+        "source_period": None,
+        "source_version_identifier": None,
     }
 
 
@@ -96,7 +153,8 @@ def download_source(
             ingestion_status="downloaded",
             source_modified_at=distribution["release_date"],
             published_at=distribution["released"],
-            source_period=None,
+            source_period=distribution["source_period"],
+            source_version_identifier=distribution["source_version_identifier"],
         )
         return RawArchive(data_root).store(temporary_path, manifest)
     finally:

@@ -22,3 +22,11 @@ export const CMS_REGULATORY_SOURCES = {
     datasetIdentifier: "g6vv-u9sr",
   },
 } as const;
+
+export const CMS_PBJ_NURSE_SOURCE = {
+  datasetKey: "payroll-based-journal-daily-nurse-staffing",
+  organization: "Centers for Medicare & Medicaid Services",
+  datasetName: "Payroll Based Journal Daily Nurse Staffing",
+  datasetIdentifier: "7e0d53ba-8f02-4c66-98a5-14a1c997c50d",
+  officialUrl: "https://data.cms.gov/quality-of-care/payroll-based-journal-daily-nurse-staffing",
+} as const;

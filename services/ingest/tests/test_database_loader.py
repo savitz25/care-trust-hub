@@ -10,6 +10,8 @@ import pytest
 
 from care_ingest.database import ReleaseChecksumConflict, load_provider_information
 from care_ingest.manifest import ReleaseManifest, sha256_file
+from care_ingest.pbj import NURSE_HOUR_FIELDS, PBJ_NURSE_KEY, ingest_pbj_source
+from care_ingest.pbj_database import load_pbj_source
 from care_ingest.provider_information import normalize_row
 from care_ingest.registry import get_source
 from care_ingest.regulatory import ingest_regulatory_source
@@ -264,4 +266,129 @@ def test_regulatory_set_based_load_idempotency_relationships_and_lineage(tmp_pat
             "csv-row:2:ccn:015001",
             "succeeded",
             "nursing-home-health-deficiencies",
+        )
+
+
+def test_pbj_set_based_load_formulas_unmatched_lineage_and_idempotency(tmp_path: Path) -> None:
+    provider_manifest = _manifest(FIXTURE, "2026-07-29")
+    provider_normalized = _normalized(FIXTURE, provider_manifest, tmp_path / "providers.jsonl")
+    load_provider_information(
+        DATABASE_URL,
+        get_source("nursing-home-provider-information"),
+        provider_manifest,
+        FIXTURE,
+        provider_normalized,
+    )
+
+    def staffing_row(ccn: str, work_date: str, multiplier: int) -> dict[str, str]:
+        row = {
+            "PROVNUM": ccn,
+            "PROVNAME": "Synthetic fixture provider",
+            "CITY": "Fixture City",
+            "STATE": "AL",
+            "COUNTY_NAME": "Fixture County",
+            "COUNTY_FIPS": "001",
+            "CY_Qtr": "2026Q1",
+            "WorkDate": work_date,
+            "MDScensus": str(10 * multiplier),
+            **dict.fromkeys(NURSE_HOUR_FIELDS, "0.00"),
+        }
+        for field, value in {
+            "Hrs_RNDON": 1,
+            "Hrs_RNDON_emp": 1,
+            "Hrs_RNadmin": 1,
+            "Hrs_RNadmin_emp": 1,
+            "Hrs_RN": 8,
+            "Hrs_RN_emp": 6,
+            "Hrs_RN_ctr": 2,
+            "Hrs_LPN": 5,
+            "Hrs_LPN_emp": 5,
+            "Hrs_CNA": 20,
+            "Hrs_CNA_emp": 20,
+        }.items():
+            row[field] = str(value * multiplier)
+        return row
+
+    raw = tmp_path / "pbj.csv"
+    rows = [
+        staffing_row("015001", "20260102", 1),
+        staffing_row("015001", "20260103", 2),
+        staffing_row("99A999", "20260104", 1),
+    ]
+    with raw.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+    manifest = replace(
+        _manifest(raw, "2026-07-29"),
+        dataset_key=PBJ_NURSE_KEY,
+        cms_identifier="7e0d53ba-8f02-4c66-98a5-14a1c997c50d",
+        official_source_url=(
+            "https://data.cms.gov/quality-of-care/payroll-based-journal-daily-nurse-staffing"
+        ),
+        transformation_version=None,
+        source_period="2026Q1",
+        source_version_identifier="6e5d5e28-66fd-41bc-a36c-db54dcbffd3e",
+    )
+    summary = ingest_pbj_source(raw, manifest, tmp_path)
+    assert summary.normalized_rows == 3
+    normalized = (
+        tmp_path
+        / "normalized"
+        / "cms"
+        / PBJ_NURSE_KEY
+        / "2026-07-29"
+        / "records.jsonl"
+    )
+    first = load_pbj_source(DATABASE_URL, get_source(PBJ_NURSE_KEY), manifest, raw, normalized)
+    second = load_pbj_source(DATABASE_URL, get_source(PBJ_NURSE_KEY), manifest, raw, normalized)
+    assert first.rows_loaded == 3
+    assert first.providers == 2
+    assert first.unmatched_ccns == 1
+    assert first.summaries_created == 2
+    assert second.idempotent
+    assert second.ingest_run_id == first.ingest_run_id
+
+    with psycopg.connect(DATABASE_URL) as connection:
+        result = connection.execute(
+            """
+            SELECT total_nurse_hprd::text, rn_hprd::text, lpn_hprd::text, cna_hprd::text,
+                   weekday_total_nurse_hprd::text, weekend_total_nurse_hprd::text,
+                   contract_nurse_share::text, zero_reported_rn_days, days_represented,
+                   positive_census_days, census_sum
+            FROM pbj_staffing_quarter_summary WHERE ccn='015001'
+            """
+        ).fetchone()
+        assert result == (
+            "3.500000",
+            "1.000000",
+            "0.500000",
+            "2.000000",
+            "3.500000",
+            "3.500000",
+            "0.05714286",
+            0,
+            2,
+            2,
+            30,
+        )
+        lineage = connection.execute(
+            """
+            SELECT d.provider_id IS NULL, d.raw_record->>'PROVNUM', d.source_record_locator,
+                   sd.dataset_key, ir.status, ro.content_sha256=sr.content_sha256
+            FROM pbj_staffing_day d
+            JOIN source_release sr ON sr.id=d.source_release_id
+            JOIN source_dataset sd ON sd.id=sr.source_dataset_id
+            JOIN ingest_run ir ON ir.id=d.ingest_run_id
+            JOIN raw_object ro ON ro.id=d.raw_object_id
+            WHERE d.ccn='99A999'
+            """
+        ).fetchone()
+        assert lineage == (
+            True,
+            "99A999",
+            "csv-row:4:ccn:99A999:date:2026-01-04",
+            PBJ_NURSE_KEY,
+            "succeeded",
+            True,
         )
