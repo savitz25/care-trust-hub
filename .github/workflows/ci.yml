@@ -60,6 +60,28 @@ jobs:
       PGPASSWORD: care-ci-only
     steps:
       - uses: actions/checkout@v4
+      - name: Wait for stable PostgreSQL SQL connectivity
+        run: |
+          required_successes=3
+          consecutive_successes=0
+          max_attempts=30
+
+          for attempt in $(seq 1 "$max_attempts"); do
+            if result=$(psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -Atqc "SELECT 1" 2>/dev/null) && [ "$result" = "1" ]; then
+              consecutive_successes=$((consecutive_successes + 1))
+              echo "PostgreSQL SQL readiness check ${consecutive_successes}/${required_successes} succeeded."
+              if [ "$consecutive_successes" -eq "$required_successes" ]; then
+                exit 0
+              fi
+            else
+              consecutive_successes=0
+              echo "PostgreSQL SQL readiness attempt ${attempt}/${max_attempts} did not succeed; retrying."
+            fi
+            sleep 1
+          done
+
+          echo "::error::PostgreSQL did not sustain ${required_successes} successful SQL readiness checks within ${max_attempts} attempts."
+          exit 1
       - name: Apply database migrations
         run: |
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0001_foundation.sql
