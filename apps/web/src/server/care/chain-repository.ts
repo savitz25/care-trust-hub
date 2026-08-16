@@ -45,7 +45,7 @@ export async function getChainIntelligence(
       [cmsChainId],
     ),
     pool.query(
-      `SELECT DISTINCT ON (cp.provider_id) cp.provider_identifier ccn,fs.attributes->>'provider_name' provider_name,fs.state_code,fs.ratings->>'overall' overall FROM cms_chain_provider cp JOIN cms_chain c ON c.id=cp.chain_id JOIN facility_snapshot fs ON fs.provider_id=cp.provider_id WHERE c.cms_chain_id=$1 AND ($2::text IS NULL OR cp.provider_identifier<>$2) ORDER BY cp.provider_id,fs.observed_at DESC NULLS LAST LIMIT 100`,
+      `SELECT DISTINCT ON (cp.provider_id) cp.provider_identifier ccn,fs.provider_name,fs.state_code,fs.overall_rating overall FROM cms_chain_provider cp JOIN cms_chain c ON c.id=cp.chain_id JOIN facility_snapshot fs ON fs.provider_id=cp.provider_id WHERE c.cms_chain_id=$1 AND ($2::text IS NULL OR cp.provider_identifier<>$2) ORDER BY cp.provider_id,fs.observed_at DESC NULLS LAST LIMIT 100`,
       [cmsChainId, excludeCcn ?? null],
     ),
     pool.query(
