@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { TrustRequestForm } from "@/components/trust-request-form";
 import { isTrustParticipationEnabled } from "@/server/care/feature-flags";
+import { RealDataNotice } from "@/components/evidence";
+export const metadata = { title: "Trust request", robots: { index: false, follow: false } };
 const kinds = ["claim", "correction", "source-concern", "context"] as const;
 export const dynamic = "force-dynamic";
 export default async function TrustRequestPage({
@@ -17,10 +19,10 @@ export default async function TrustRequestPage({
   const ccn = (await searchParams).ccn?.toUpperCase() ?? "";
   return (
     <div className="page-shell narrow-shell">
-      <div className="real-data-notice">
-        <strong>Controlled Preview workflow</strong>
-        <span>Requests are manually reviewed and do not alter government evidence.</span>
-      </div>
+      <RealDataNotice />
+      <p className="source-inline">
+        Requests are manually reviewed and do not alter government evidence.
+      </p>
       <TrustRequestForm
         kind={kind as (typeof kinds)[number]}
         ccn={/^[A-Z0-9]{6}$/.test(ccn) ? ccn : ""}

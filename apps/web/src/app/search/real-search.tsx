@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { RealProviderCard } from "@/components/real-provider";
+import { RealDataNotice } from "@/components/evidence";
 import { parseConsumerSearch } from "@/server/care/search-contract";
 import { resolveZipLocation, searchProvidersConsumer } from "@/server/care/repository";
 
@@ -95,13 +96,7 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
   const radius = parsed.criteria.radiusMiles ?? 25;
   return (
     <>
-      <div className="real-data-notice" role="note">
-        <strong>Controlled real CMS data review</strong>
-        <span>
-          Not publicly activated. Search uses validated CMS Provider Information and supporting
-          Census geography.
-        </span>
-      </div>
+      <RealDataNotice />
       <header className="page-intro page-intro--compact">
         <p className="eyebrow">Find care</p>
         <h1>Find nursing homes near you.</h1>

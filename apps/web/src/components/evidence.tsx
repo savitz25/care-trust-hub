@@ -1,5 +1,19 @@
 import type { ReactNode } from "react";
 import type { EvidenceDimension, HistoryEvent, Signal, SourceCitation } from "@care/domain";
+import { isPublicLaunchEnabled } from "@/config/deployment";
+
+export function RealDataNotice({ compact = false }: { compact?: boolean }) {
+  if (isPublicLaunchEnabled()) return null;
+  return (
+    <div className={`real-data-notice${compact ? " synthetic-notice--compact" : ""}`} role="note">
+      <strong>Controlled real CMS data review</strong>
+      <span>
+        Not publicly activated. This preview combines verified CMS datasets and transparent
+        calculations and is excluded from search indexing.
+      </span>
+    </div>
+  );
+}
 
 export function SyntheticDataNotice({ compact = false }: { compact?: boolean }) {
   return (
@@ -106,15 +120,14 @@ export function HistoryTimeline({ events }: { events: readonly HistoryEvent[] })
 }
 
 export function TrustStrip() {
-  const items = [
-    "No paid placements",
-    "No facility lead fees",
-    "Public sources cited",
-    "Data dates shown",
-  ];
   return (
     <section className="trust-strip" aria-label="Our independence commitments">
-      {items.map((item) => (
+      {[
+        "No paid placements",
+        "No facility lead fees",
+        "Public sources cited",
+        "Data dates shown",
+      ].map((item) => (
         <div key={item}>
           <span aria-hidden="true">✓</span>
           <strong>{item}</strong>

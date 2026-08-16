@@ -1,5 +1,26 @@
 # Vercel web preview deployment
 
+## SeniorTrustHub launch model
+
+`main` is the Vercel Production branch and deploys automatically. `preview-real-data` remains the stable real-data Preview branch. Random and stable Preview URLs must remain `noindex, nofollow`.
+
+Public canonical/index behavior requires both `VERCEL_ENV=production` and the server-only `CARE_ENABLE_PUBLIC_LAUNCH=true`. Without that explicit gate, robots disallow crawling, sitemap routes return 404, and no `www.seniortrusthub.com` canonical is emitted. The apex and stable Production Vercel alias redirect to `https://www.seniortrusthub.com` only after the gate is active; random Preview URLs never redirect.
+
+Production V1 server flags are:
+
+- `CARE_ENABLE_REAL_PROVIDER_UI=true`
+- `CARE_ENABLE_INSPECTION_INTELLIGENCE=true`
+- `CARE_ENABLE_STAFFING_INTELLIGENCE=true`
+- `CARE_ENABLE_OWNERSHIP_INTELLIGENCE=true`
+- `CARE_ENABLE_CHAIN_INTELLIGENCE=true`
+- `CARE_ENABLE_TRUST_PARTICIPATION=true`
+- `CARE_ENABLE_PUBLIC_LAUNCH=true` (set last)
+- `CARE_DATABASE_SSL=require`
+
+All evidence flags default false. Staffing, ownership, chain, and trust participation explicitly require real-provider UI in their feature helpers. No `CARE_ENABLE_*` variable is `NEXT_PUBLIC_` or exposed to browser code. `CARE_ENABLE_DEVELOPMENT_DATA` must remain unset in Preview and Production.
+
+The canonical Production origin is `https://www.seniortrusthub.com`. Do not set Preview canonical configuration to that origin.
+
 Deployment is not a production launch approval. The first Vercel deployment is a private Preview of `apps/web`; `services/ingest` remains an independently operated Python service and must not be packaged or deployed with the web application.
 
 ## Architecture

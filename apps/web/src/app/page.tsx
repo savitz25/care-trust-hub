@@ -1,4 +1,4 @@
-import { TrustStrip, SyntheticDataNotice } from "@/components/evidence";
+import { TrustStrip, RealDataNotice, SyntheticDataNotice } from "@/components/evidence";
 import { brand } from "@/config/brand";
 
 const paths = [
@@ -36,7 +36,11 @@ export default function Home() {
   return (
     <>
       <div className="page-shell home-page">
-        <SyntheticDataNotice compact />
+        {process.env.CARE_ENABLE_REAL_PROVIDER_UI === "true" ? (
+          <RealDataNotice compact />
+        ) : (
+          <SyntheticDataNotice compact />
+        )}
         <section className="home-hero" aria-labelledby="home-title">
           <p className="eyebrow">Independent care research</p>
           <h1 id="home-title">{brand.tagline}</h1>

@@ -15,6 +15,7 @@ import { RegulatoryIntelligence } from "./regulatory-intelligence";
 import { StaffingIntelligence } from "./staffing-intelligence";
 import { ChainIntelligence } from "./chain-intelligence";
 import { WhatToReview } from "./what-to-review";
+import { RealDataNotice } from "./evidence";
 
 const additionalLayers = ["Ownership intelligence", "Chain / portfolio intelligence"];
 
@@ -234,13 +235,7 @@ export function RealProviderDetail({
   return (
     <div className="investigation-page real-investigation-page">
       <div className="page-shell">
-        <div className="real-data-notice" role="note">
-          <strong>Controlled real CMS data review</strong>
-          <span>
-            Not publicly activated. This preview combines verified CMS datasets and transparent
-            calculations from those records.
-          </span>
-        </div>
+        <RealDataNotice />
         <nav className="breadcrumbs" aria-label="Breadcrumb">
           <Link href="/search">Search</Link>
           <span aria-hidden="true">/</span>

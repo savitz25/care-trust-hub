@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "Compare facilities",
   description:
     "Compare fictional facilities across transparent evidence dimensions without declaring a winner.",
+  robots: { index: false, follow: false },
 };
 
 const defaultSlugs = ["harbor-pines", "meadowridge", "willow-harbor"];

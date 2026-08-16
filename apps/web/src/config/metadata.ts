@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { brand } from "./brand";
+import { isPublicLaunchEnabled, productionOrigin } from "./deployment";
 
 const localDevelopmentOrigin = "http://localhost:3000";
 
@@ -36,8 +37,11 @@ export function resolveSiteOrigin(
 }
 
 export const siteMetadata: Metadata = {
-  metadataBase: resolveSiteOrigin(),
-  title: { default: brand.publicName, template: `%s | ${brand.publicName}` },
+  metadataBase: isPublicLaunchEnabled() ? productionOrigin : resolveSiteOrigin(),
+  title: {
+    default: `${brand.publicName} — Independent nursing home research`,
+    template: `%s | ${brand.publicName}`,
+  },
   description: brand.description,
   applicationName: brand.publicName,
   openGraph: {
@@ -46,6 +50,13 @@ export const siteMetadata: Metadata = {
     siteName: brand.publicName,
     title: brand.publicName,
     description: brand.description,
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: brand.publicName }],
   },
-  robots: { index: false, follow: false },
+  twitter: {
+    card: "summary_large_image",
+    title: brand.publicName,
+    description: brand.description,
+    images: ["/opengraph-image"],
+  },
+  robots: { index: isPublicLaunchEnabled(), follow: isPublicLaunchEnabled() },
 };

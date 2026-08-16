@@ -28,6 +28,10 @@ export function providerHref(provider: Pick<CareProviderDetail, "ccn" | "provide
   return `/facility/cms/${provider.ccn}/${providerSlug(provider.providerName)}`;
 }
 
+export function chainHref(chain: { cmsChainId: string; chainName: string }): string {
+  return `/chain/${chain.cmsChainId}/${providerSlug(chain.chainName)}`;
+}
+
 export function isCanonicalProviderSlug(
   provider: Pick<CareProviderDetail, "providerName">,
   slug: string,

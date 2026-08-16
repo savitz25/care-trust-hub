@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CareChainIntelligence } from "@/server/care/types";
+import { chainHref } from "@/server/care/consumer";
 const metric = (chain: CareChainIntelligence, key: string) => chain.current.metrics[key];
 export function ChainIntelligence({
   chain,
@@ -57,7 +58,11 @@ export function ChainIntelligence({
         </div>
       </dl>
       {facility && (
-        <Link href={`/chain/${chain.cmsChainId}/review`}>Review CMS chain evidence</Link>
+        <Link
+          href={chainHref({ cmsChainId: chain.cmsChainId, chainName: chain.current.chainName })}
+        >
+          Review CMS chain evidence
+        </Link>
       )}
       {chain.history.length > 1 && (
         <div>

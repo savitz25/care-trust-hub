@@ -4,12 +4,13 @@ import { suggestProvidersByNames } from "@/server/care/repository";
 import { parseShortlistNames } from "@/server/care/shortlist-contract";
 import { RealShortlistWorkspace } from "./real-shortlist";
 import { ShortlistTool } from "./shortlist-tool";
-import { SyntheticDataNotice } from "@/components/evidence";
+import { RealDataNotice, SyntheticDataNotice } from "@/components/evidence";
 
 export const metadata: Metadata = {
   title: "Research a nursing-home shortlist",
   description:
     "Match a list of nursing homes to public CMS records and research them side by side.",
+  robots: { index: false, follow: false },
 };
 export const dynamic = "force-dynamic";
 export default async function ShortlistPage({
@@ -29,10 +30,7 @@ export default async function ShortlistPage({
   const candidates = await suggestProvidersByNames(names);
   return (
     <div className="page-shell narrow-shell">
-      <div className="real-data-notice">
-        <strong>Controlled real CMS data review</strong>
-        <span>Not publicly activated. Candidate matches use CMS Provider Information.</span>
-      </div>
+      <RealDataNotice />
       <header className="page-intro">
         <p className="eyebrow">Crisis shortlist</p>
         <h1>Already have a list of facilities?</h1>
