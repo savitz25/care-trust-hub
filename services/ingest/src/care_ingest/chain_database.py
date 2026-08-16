@@ -16,6 +16,7 @@ from psycopg.types.json import Jsonb
 from .chain import CHAIN_VERSION
 from .database import _raw_object, _verified_release, iter_normalized_records
 from .manifest import ReleaseManifest, sha256_file
+from .ownership import _source_encoding
 from .registry import SourceDefinition
 
 CHAIN_NS = uuid.UUID("9849ce1e-06cd-5d07-8b53-3b38188dfa69")
@@ -171,7 +172,10 @@ def load_chain_membership(
         )
         n = matched = unmatched = 0
         chains = set()
-        with source_file.open("r", encoding="utf-8-sig", newline="") as handle, con.pipeline():
+        with (
+            source_file.open("r", encoding=_source_encoding(source_file), newline="") as handle,
+            con.pipeline(),
+        ):
             for line, row in enumerate(csv.DictReader(handle), start=2):
                 chain_id = (row.get("AFFILIATION ENTITY ID") or "").strip()
                 chain_name = (row.get("AFFILIATION ENTITY NAME") or "").strip()
