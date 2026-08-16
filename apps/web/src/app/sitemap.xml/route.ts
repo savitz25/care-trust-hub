@@ -4,6 +4,8 @@ import {
   getFacilitySitemapCount,
 } from "@/server/care/launch-repository";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   if (!isPublicLaunchEnabled()) return new Response("Not found", { status: 404 });
   const pages = Math.ceil((await getFacilitySitemapCount()) / FACILITY_SITEMAP_PAGE_SIZE);

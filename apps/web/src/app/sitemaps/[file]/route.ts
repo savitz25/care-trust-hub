@@ -2,6 +2,8 @@ import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
 import { chainHref, providerSlug } from "@/server/care/consumer";
 import { getChainSitemapRows, getFacilitySitemapPage } from "@/server/care/launch-repository";
 
+export const dynamic = "force-dynamic";
+
 const corePaths = [
   "/",
   "/about",
