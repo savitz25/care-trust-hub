@@ -42,6 +42,66 @@ def resolve_distribution(
         raise DownloadError(f"source has no implemented metadata strategy: {source.dataset_key}")
     with _request(source.metadata_url, timeout) as response:
         metadata: dict[str, Any] = json.load(response)
+    if source.dataset_key == "nursing-home-chain-performance-measures":
+        dataset = next(
+            (
+                item
+                for item in metadata.get("dataset", [])
+                if item.get("title") == source.official_name
+            ),
+            None,
+        )
+        if dataset is None:
+            raise DownloadError("official CMS catalog did not contain chain performance")
+        distributions = dataset.get("distribution", [])
+        selected_month = source_period
+        if selected_month is not None and (len(selected_month) != 7 or selected_month[4] != "-"):
+            raise ValueError("chain source period must use YYYY-MM")
+        candidates = [
+            item
+            for item in distributions
+            if item.get("mediaType") == "text/csv" and item.get("downloadURL")
+        ]
+        selected = (
+            next(
+                (
+                    item
+                    for item in candidates
+                    if selected_month
+                    and item.get("temporal", "").startswith(selected_month + "-01/")
+                ),
+                None,
+            )
+            if selected_month
+            else next(
+                (item for item in candidates if item.get("modified") == dataset.get("modified")),
+                None,
+            )
+        )
+        if selected is None:
+            raise DownloadError("official CMS catalog has no requested chain release")
+        fixed = next(
+            (
+                item
+                for item in distributions
+                if item.get("format") == "API"
+                and item.get("description") != "latest"
+                and item.get("temporal") == selected.get("temporal")
+                and item.get("modified") == selected.get("modified")
+            ),
+            None,
+        )
+        if fixed is None:
+            raise DownloadError("chain fixed version metadata is incomplete")
+        return {
+            "download_url": selected["downloadURL"],
+            "content_type": selected["mediaType"],
+            "release_date": selected["modified"],
+            "released": None,
+            "official_source_url": source.official_landing_page,
+            "source_period": selected["temporal"],
+            "source_version_identifier": fixed["accessURL"].split("/dataset/")[1].split("/")[0],
+        }
     if source.dataset_key == "payroll-based-journal-daily-nurse-staffing":
         datasets = metadata.get("dataset", [])
         metadata = next(

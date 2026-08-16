@@ -54,4 +54,15 @@ describe("real provider UI feature flag", () => {
       }),
     ).toBe(true);
   });
+  it("requires both real-provider and chain opt-ins without billing state", async () => {
+    const { isChainIntelligenceEnabled } = await import("./feature-flags");
+    expect(isChainIntelligenceEnabled({ CARE_ENABLE_CHAIN_INTELLIGENCE: "true" })).toBe(false);
+    expect(
+      isChainIntelligenceEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_CHAIN_INTELLIGENCE: "true",
+        SUBSCRIPTION_STATUS: "paid",
+      }),
+    ).toBe(true);
+  });
 });

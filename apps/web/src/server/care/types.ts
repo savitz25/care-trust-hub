@@ -257,3 +257,34 @@ export interface CareOwnershipIntelligence {
   totalPartyCount: number;
   changes: CareOwnershipChange[];
 }
+export interface CareChainSnapshot {
+  releaseMonth: string;
+  chainName: string;
+  facilityCount: number;
+  stateCount: number;
+  metrics: Record<string, number | null>;
+}
+export interface CareChainFacility {
+  ccn: string;
+  providerName: string;
+  state: string;
+  overallRating: number | null;
+}
+export interface CareChainIntelligence {
+  cmsChainId: string;
+  current: CareChainSnapshot;
+  history: CareChainSnapshot[];
+  facilities: CareChainFacility[];
+  source: {
+    datasetIdentifier: string;
+    versionIdentifier: string | null;
+    officialUrl: string;
+    sourceModifiedAt: string | null;
+    retrievedAt: string;
+  };
+  membershipSource: {
+    datasetIdentifier: string;
+    sourceModifiedAt: string | null;
+    retrievedAt: string;
+  };
+}

@@ -109,16 +109,16 @@
       "official_name": "Nursing Home Chain Performance Measures",
       "cms_identifier": "97ecfad1-d3f1-4d42-b774-d74661d830bc",
       "official_landing_page": "https://data.cms.gov/quality-of-care/nursing-home-chain-performance-measures",
-      "metadata_url": null,
+      "metadata_url": "https://data.cms.gov/data.json",
       "expected_format": "CSV via CMS Data API",
       "update_cadence": "Monthly",
       "provider_type": "nursing_home_chain",
       "historical_archive_availability": "Monthly versions listed by CMS Data API",
-      "schema_verification_state": "verified_2026-08-14",
+      "schema_verification_state": "verified_2026-08-15",
       "documentation_url": "https://data.cms.gov/quality-of-care/nursing-home-chain-performance-measures/api-docs",
-      "enabled": false,
-      "implemented": false,
-      "notes": "Chain-level aggregates; planned, not ingested in Task 003."
+      "enabled": true,
+      "implemented": true,
+      "notes": "Official monthly CMS chain aggregates; CMS Chain ID remains distinct from organization identity."
     },
     {
       "dataset_key": "nursing-home-health-deficiencies",

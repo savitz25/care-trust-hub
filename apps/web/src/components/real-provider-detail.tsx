@@ -4,6 +4,7 @@ import type {
   CareOwnershipIntelligence,
   CareRegulatoryIntelligence,
   CareStaffingIntelligence,
+  CareChainIntelligence,
 } from "@/server/care/types";
 import { CMS_RATING_EXPLANATIONS, factualRatingObservations } from "@/server/care/consumer";
 import { formatFreshnessLabels } from "@/server/care/freshness";
@@ -12,6 +13,7 @@ import { PrintButton } from "./print-button";
 import { OwnershipIntelligence } from "./ownership-intelligence";
 import { RegulatoryIntelligence } from "./regulatory-intelligence";
 import { StaffingIntelligence } from "./staffing-intelligence";
+import { ChainIntelligence } from "./chain-intelligence";
 
 const additionalLayers = ["Ownership intelligence", "Chain / portfolio intelligence"];
 
@@ -39,11 +41,13 @@ export function FacilitySourceRegister({
   regulatory,
   staffing,
   ownership,
+  chain,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
   staffing?: CareStaffingIntelligence;
   ownership?: CareOwnershipIntelligence;
+  chain?: CareChainIntelligence;
 }) {
   const sources: FacilitySourceEntry[] = [
     {
@@ -118,6 +122,33 @@ export function FacilitySourceRegister({
       supports: "Ownership parties, organization connections, and ownership history",
     });
   }
+  if (chain) {
+    sources.push({
+      key: `chain-${chain.source.versionIdentifier}`,
+      sourceOrganization: "Centers for Medicare & Medicaid Services (CMS)",
+      datasetName: "Nursing Home Chain Performance Measures",
+      datasetIdentifier: chain.source.datasetIdentifier,
+      officialSourceUrl: chain.source.officialUrl,
+      sourceModifiedAt: chain.source.sourceModifiedAt,
+      retrievedAt: chain.source.retrievedAt,
+      coverage: chain.current.releaseMonth.slice(0, 7),
+      supports: "CMS chain context, performance, and monthly history",
+    });
+    if (
+      !sources.some((entry) => entry.datasetIdentifier === chain.membershipSource.datasetIdentifier)
+    )
+      sources.push({
+        key: "chain-membership",
+        sourceOrganization: "Centers for Medicare & Medicaid Services (CMS)",
+        datasetName: "Skilled Nursing Facility Enrollments",
+        datasetIdentifier: chain.membershipSource.datasetIdentifier,
+        officialSourceUrl:
+          "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/skilled-nursing-facility-enrollments",
+        sourceModifiedAt: chain.membershipSource.sourceModifiedAt,
+        retrievedAt: chain.membershipSource.retrievedAt,
+        supports: "Exact CMS chain affiliation",
+      });
+  }
   return (
     <div className="source-register__datasets">
       {sources.map((source) => (
@@ -165,11 +196,13 @@ export function RealProviderDetail({
   regulatory,
   staffing,
   ownership,
+  chain,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
   staffing?: CareStaffingIntelligence;
   ownership?: CareOwnershipIntelligence;
+  chain?: CareChainIntelligence;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
@@ -262,6 +295,7 @@ export function RealProviderDetail({
         <nav className="provider-section-nav" aria-label="Facility record sections">
           <a href="#overview">Overview</a>
           {ownership && <a href="#ownership">Ownership</a>}
+          {chain && <a href="#chain">Chain</a>}
           {regulatory && <a href="#inspections">Inspections</a>}
           {regulatory && <a href="#penalties">Penalties</a>}
           {regulatory && <a href="#history">History</a>}
@@ -270,6 +304,7 @@ export function RealProviderDetail({
         </nav>
 
         {ownership && <OwnershipIntelligence intelligence={ownership} />}
+        {chain && <ChainIntelligence chain={chain} facility />}
         {regulatory && <RegulatoryIntelligence intelligence={regulatory} ownership={ownership} />}
         {staffing && (
           <StaffingIntelligence
@@ -309,6 +344,7 @@ export function RealProviderDetail({
           <ul className="future-source-list">
             {additionalLayers
               .filter((layer) => !ownership || layer !== "Ownership intelligence")
+              .filter((layer) => !chain || layer !== "Chain / portfolio intelligence")
               .map((layer) => (
                 <li key={layer}>{layer}</li>
               ))}
@@ -329,6 +365,7 @@ export function RealProviderDetail({
             regulatory={regulatory}
             staffing={staffing}
             ownership={ownership}
+            chain={chain}
           />
           <p className="independence-statement">
             No paid placements. Facilities cannot pay to rank higher. We cite. You decide.

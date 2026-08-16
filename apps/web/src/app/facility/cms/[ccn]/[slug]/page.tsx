@@ -4,12 +4,14 @@ import { RealProviderDetail } from "@/components/real-provider-detail";
 import { isCanonicalProviderSlug, providerHref } from "@/server/care/consumer";
 import {
   getProviderByCcnForPage,
+  getProviderChainIntelligenceForPage,
   getProviderOwnershipIntelligenceForPage,
   getProviderRegulatoryIntelligenceForPage,
   getProviderStaffingSummaryForPage,
 } from "@/server/care/cached-repository";
 import {
   isInspectionIntelligenceEnabled,
+  isChainIntelligenceEnabled,
   isOwnershipIntelligenceEnabled,
   isRealProviderUiEnabled,
   isStaffingIntelligenceEnabled,
@@ -52,12 +54,16 @@ export default async function RealFacilityPage({
   const ownership = isOwnershipIntelligenceEnabled()
     ? await getProviderOwnershipIntelligenceForPage(provider.ccn)
     : undefined;
+  const chain = isChainIntelligenceEnabled()
+    ? await getProviderChainIntelligenceForPage(provider.ccn)
+    : undefined;
   return (
     <RealProviderDetail
       provider={provider}
       regulatory={regulatory}
       staffing={staffing}
       ownership={ownership}
+      chain={chain ?? undefined}
     />
   );
 }

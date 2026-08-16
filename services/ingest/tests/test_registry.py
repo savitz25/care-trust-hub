@@ -19,6 +19,7 @@ def test_registry_has_only_implemented_sources_enabled() -> None:
         "skilled-nursing-facility-all-owners",
         "skilled-nursing-facility-change-of-ownership",
         "skilled-nursing-facility-change-of-ownership-owner-information",
+        "nursing-home-chain-performance-measures",
     }
     assert all(source.implemented for source in implemented)
     assert all(

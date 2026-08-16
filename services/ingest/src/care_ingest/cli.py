@@ -8,6 +8,8 @@ import logging
 import os
 from pathlib import Path
 
+from .chain import CHAIN_KEY, ingest_chain_source
+from .chain_database import load_chain_membership, load_chain_source
 from .database import load_provider_information
 from .downloader import download_source, resolve_distribution
 from .manifest import ReleaseManifest, sha256_file
@@ -29,7 +31,13 @@ from .regulatory_database import audit_regulatory_database, load_regulatory_sour
 
 PROVIDER_INFORMATION_KEY = "nursing-home-provider-information"
 REGULATORY_KEYS = (INSPECTIONS_KEY, DEFICIENCIES_KEY, PENALTIES_KEY)
-IMPLEMENTED_KEYS = (PROVIDER_INFORMATION_KEY, *REGULATORY_KEYS, PBJ_NURSE_KEY, *OWNERSHIP_KEYS)
+IMPLEMENTED_KEYS = (
+    PROVIDER_INFORMATION_KEY,
+    *REGULATORY_KEYS,
+    PBJ_NURSE_KEY,
+    *OWNERSHIP_KEYS,
+    CHAIN_KEY,
+)
 
 
 def default_data_root() -> Path:
@@ -81,6 +89,11 @@ def build_parser() -> argparse.ArgumentParser:
     staffing_audit.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     ownership_audit = commands.add_parser("audit-ownership", help="Audit ownership database")
     ownership_audit.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    membership = commands.add_parser(
+        "load-chain-membership", help="Load exact CMS chain membership from SNF Enrollments"
+    )
+    membership.add_argument("--release", required=True)
+    membership.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     return parser
 
 
@@ -115,6 +128,23 @@ def main(argv: list[str] | None = None) -> int:
             parser.error("audit-ownership requires CARE_DATABASE_URL or --database-url")
         print(json.dumps(audit_ownership_database(args.database_url), indent=2, sort_keys=True))
         return 0
+    if args.command == "load-chain-membership":
+        if not args.database_url:
+            parser.error("load-chain-membership requires CARE_DATABASE_URL")
+        source_file, manifest_path = _release_paths(
+            data_root, "skilled-nursing-facility-enrollments", args.release
+        )
+        manifest = ReleaseManifest.from_path(manifest_path)
+        print(
+            load_chain_membership(
+                args.database_url,
+                get_source("skilled-nursing-facility-enrollments"),
+                manifest,
+                source_file,
+            ).to_json(),
+            end="",
+        )
+        return 0
 
     if args.command == "list-sources":
         for source in load_registry():
@@ -148,6 +178,8 @@ def main(argv: list[str] | None = None) -> int:
         if args.dataset_key == PROVIDER_INFORMATION_KEY
         else ingest_pbj_source
         if args.dataset_key == PBJ_NURSE_KEY
+        else ingest_chain_source
+        if args.dataset_key == CHAIN_KEY
         else ingest_ownership_source
         if args.dataset_key in OWNERSHIP_KEYS
         else ingest_regulatory_source
@@ -191,6 +223,8 @@ def main(argv: list[str] | None = None) -> int:
             if args.dataset_key == PROVIDER_INFORMATION_KEY
             else load_pbj_source
             if args.dataset_key == PBJ_NURSE_KEY
+            else load_chain_source
+            if args.dataset_key == CHAIN_KEY
             else load_ownership_source
             if args.dataset_key in OWNERSHIP_KEYS
             else load_regulatory_source
