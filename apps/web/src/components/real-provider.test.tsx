@@ -194,6 +194,13 @@ describe("real provider presentation", () => {
       screen.getByRole("navigation", { name: "Facility record sections" }),
     ).toBeInTheDocument();
     expect(screen.getByText("CMS reports a 5-star staffing rating.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "What to review" })).toBeInTheDocument();
+    expect(
+      screen.getByText(/RN staffing was 0.75 hours per resident day in 2026Q1/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/latest standard inspection on Jun 1, 2026 cited 1 deficiencies/),
+    ).toBeInTheDocument();
     expect(
       screen.getByText(/combines verified CMS datasets and transparent calculations/),
     ).toBeVisible();

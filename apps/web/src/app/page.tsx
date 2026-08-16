@@ -4,21 +4,21 @@ import { brand } from "@/config/brand";
 const paths = [
   {
     number: "01",
-    title: "I have a shortlist",
+    title: "I already have a list",
     text: "I was given facility names and need to research them.",
     href: "/shortlist",
     action: "Research my list",
   },
   {
     number: "02",
-    title: "Research a facility",
+    title: "Research a facility by name",
     text: "I already know the facility I’m considering.",
     href: "/search",
     action: "Look up a facility",
   },
   {
     number: "03",
-    title: "Find care near me",
+    title: "Search nursing homes near me",
     text: "Show me facilities near a location.",
     href: "/search",
     action: "Explore nearby care",

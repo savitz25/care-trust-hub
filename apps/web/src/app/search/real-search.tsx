@@ -1,136 +1,190 @@
+import Link from "next/link";
 import { RealProviderCard } from "@/components/real-provider";
 import { parseConsumerSearch } from "@/server/care/search-contract";
-import { searchProvidersConsumer } from "@/server/care/repository";
+import { resolveZipLocation, searchProvidersConsumer } from "@/server/care/repository";
 
 type SearchParams = Record<string, string | string[] | undefined>;
+const states = [
+  "AL",
+  "AK",
+  "AZ",
+  "AR",
+  "CA",
+  "CO",
+  "CT",
+  "DE",
+  "DC",
+  "FL",
+  "GA",
+  "HI",
+  "ID",
+  "IL",
+  "IN",
+  "IA",
+  "KS",
+  "KY",
+  "LA",
+  "ME",
+  "MD",
+  "MA",
+  "MI",
+  "MN",
+  "MS",
+  "MO",
+  "MT",
+  "NE",
+  "NV",
+  "NH",
+  "NJ",
+  "NM",
+  "NY",
+  "NC",
+  "ND",
+  "OH",
+  "OK",
+  "OR",
+  "PA",
+  "RI",
+  "SC",
+  "SD",
+  "TN",
+  "TX",
+  "UT",
+  "VT",
+  "VA",
+  "WA",
+  "WV",
+  "WI",
+  "WY",
+];
+const radii = [10, 25, 50, 100];
 
-function toUrlSearchParams(values: SearchParams): URLSearchParams {
+function toParams(values: SearchParams) {
   const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(values)) {
+  for (const [key, value] of Object.entries(values))
     if (typeof value === "string") params.set(key, value);
-  }
   return params;
 }
-
-function current(params: URLSearchParams, key: string): string {
-  return params.get(key) ?? "";
-}
+const current = (params: URLSearchParams, key: string) => params.get(key) ?? "";
 
 export async function RealSearch({ searchParams }: { searchParams: SearchParams }) {
-  const params = toUrlSearchParams(searchParams);
+  const params = toParams(searchParams);
   const parsed = parseConsumerSearch(params);
-  const results =
+  let locationResolved = false;
+  if (parsed.submitted && parsed.errors.length === 0 && parsed.criteria.zip) {
+    const reference = await resolveZipLocation(parsed.criteria.zip);
+    if (reference) {
+      parsed.criteria.latitude = reference.latitude;
+      parsed.criteria.longitude = reference.longitude;
+      parsed.criteria.sort ??= "distance";
+      locationResolved = true;
+    }
+  }
+  const found =
     parsed.submitted && parsed.errors.length === 0
       ? await searchProvidersConsumer(parsed.criteria)
       : [];
-  const compareCcns = results.slice(0, 2).map((provider) => provider.ccn);
-
+  const hasMore = found.length > 20;
+  const results = found.slice(0, 20);
+  const page = Math.floor((parsed.criteria.offset ?? 0) / 20) + 1;
+  const pageHref = (next: number) => {
+    const copy = new URLSearchParams(params);
+    copy.set("page", String(next));
+    return `/search?${copy}`;
+  };
+  const radius = parsed.criteria.radiusMiles ?? 25;
   return (
     <>
       <div className="real-data-notice" role="note">
         <strong>Controlled real CMS data review</strong>
         <span>
-          This feature is not publicly activated. Results come from the current validated CMS
-          Provider Information release.
+          Not publicly activated. Search uses validated CMS Provider Information and supporting
+          Census geography.
         </span>
       </div>
       <header className="page-intro page-intro--compact">
-        <p className="eyebrow">Facility research</p>
-        <h1>Find nursing homes through published CMS evidence.</h1>
+        <p className="eyebrow">Find care</p>
+        <h1>Find nursing homes near you.</h1>
         <p className="lede">
           Search without sales calls, paid placement, or a hidden ranking score.
         </p>
       </header>
       <div className="search-layout real-search-layout">
-        <form className="search-panel" method="get" aria-label="Real CMS provider search">
+        <form className="search-panel" method="get" aria-label="Nursing home search">
           <input type="hidden" name="search" value="1" />
           <div className="field">
-            <label htmlFor="real-q">Provider name or CMS ID</label>
+            <label htmlFor="real-q">
+              Facility name or CMS provider ID <small>(optional)</small>
+            </label>
             <input id="real-q" name="q" defaultValue={current(params, "q")} />
           </div>
-          <div className="filter-row">
+          <fieldset>
+            <legend>Location</legend>
             <div className="field">
-              <label htmlFor="real-city">City</label>
-              <input id="real-city" name="city" defaultValue={current(params, "city")} />
-            </div>
-            <div className="field">
-              <label htmlFor="real-state">State</label>
+              <label htmlFor="real-zip">ZIP code</label>
               <input
-                id="real-state"
-                name="state"
-                maxLength={2}
-                defaultValue={current(params, "state")}
+                id="real-zip"
+                name="zip"
+                inputMode="numeric"
+                maxLength={5}
+                defaultValue={current(params, "zip")}
               />
             </div>
-          </div>
-          <div className="field">
-            <label htmlFor="real-zip">ZIP (exact match)</label>
-            <input
-              id="real-zip"
-              name="zip"
-              inputMode="numeric"
-              maxLength={5}
-              defaultValue={current(params, "zip")}
-            />
-          </div>
+            <p className="filter-note">Or search by city and state.</p>
+            <div className="filter-row">
+              <div className="field">
+                <label htmlFor="real-city">City</label>
+                <input id="real-city" name="city" defaultValue={current(params, "city")} />
+              </div>
+              <div className="field">
+                <label htmlFor="real-state">State</label>
+                <select id="real-state" name="state" defaultValue={current(params, "state")}>
+                  <option value="">Select state</option>
+                  {states.map((state) => (
+                    <option key={state}>{state}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="field">
+              <label htmlFor="real-radius">Distance</label>
+              <select
+                id="real-radius"
+                name="radius"
+                defaultValue={current(params, "radius") || "25"}
+              >
+                {radii.map((value) => (
+                  <option key={value} value={value}>
+                    {value} miles
+                  </option>
+                ))}
+              </select>
+            </div>
+          </fieldset>
           <details className="search-advanced">
-            <summary>Optional evidence and radius filters</summary>
+            <summary>More filters</summary>
             <div className="filter-row">
-              <div className="field">
-                <label htmlFor="real-overall">CMS overall rating</label>
-                <select id="real-overall" name="overall" defaultValue={current(params, "overall")}>
-                  <option value="">Any</option>
-                  {[5, 4, 3, 2, 1].map((value) => (
-                    <option key={value} value={value}>
-                      {value} stars
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="field">
-                <label htmlFor="real-staffing">Staffing rating</label>
-                <select
-                  id="real-staffing"
-                  name="staffing"
-                  defaultValue={current(params, "staffing")}
-                >
-                  <option value="">Any</option>
-                  {[5, 4, 3, 2, 1].map((value) => (
-                    <option key={value} value={value}>
-                      {value} stars
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {[
+                ["overall", "CMS overall rating"],
+                ["staffing", "CMS staffing rating"],
+                ["inspection", "CMS health inspection rating"],
+              ].map(([name, label]) => (
+                <div className="field" key={name}>
+                  <label htmlFor={`real-${name}`}>{label}</label>
+                  <select id={`real-${name}`} name={name} defaultValue={current(params, name)}>
+                    <option value="">Any</option>
+                    {[5, 4, 3, 2, 1].map((value) => (
+                      <option key={value} value={value}>
+                        {value} stars
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ))}
             </div>
             <div className="filter-row">
               <div className="field">
-                <label htmlFor="real-inspection">Health inspection rating</label>
-                <select
-                  id="real-inspection"
-                  name="inspection"
-                  defaultValue={current(params, "inspection")}
-                >
-                  <option value="">Any</option>
-                  {[5, 4, 3, 2, 1].map((value) => (
-                    <option key={value} value={value}>
-                      {value} stars
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="field">
-                <label htmlFor="real-ownership">Ownership descriptor contains</label>
-                <input
-                  id="real-ownership"
-                  name="ownership"
-                  defaultValue={current(params, "ownership")}
-                />
-              </div>
-            </div>
-            <div className="filter-row">
-              <div className="field">
-                <label htmlFor="real-medicare">Medicare participation</label>
+                <label htmlFor="real-medicare">Medicare</label>
                 <select
                   id="real-medicare"
                   name="medicare"
@@ -142,7 +196,7 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
                 </select>
               </div>
               <div className="field">
-                <label htmlFor="real-medicaid">Medicaid participation</label>
+                <label htmlFor="real-medicaid">Medicaid</label>
                 <select
                   id="real-medicaid"
                   name="medicaid"
@@ -154,67 +208,38 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
                 </select>
               </div>
             </div>
-            <fieldset>
-              <legend>Radius from known coordinates</legend>
-              <p className="filter-note">
-                No geocoder is used. Enter all three values to search by radius.
-              </p>
-              <div className="filter-row">
-                <div className="field">
-                  <label htmlFor="real-lat">Latitude</label>
-                  <input
-                    id="real-lat"
-                    name="lat"
-                    inputMode="decimal"
-                    defaultValue={current(params, "lat")}
-                  />
-                </div>
-                <div className="field">
-                  <label htmlFor="real-lon">Longitude</label>
-                  <input
-                    id="real-lon"
-                    name="lon"
-                    inputMode="decimal"
-                    defaultValue={current(params, "lon")}
-                  />
-                </div>
-              </div>
-              <div className="field">
-                <label htmlFor="real-radius">Radius in miles</label>
-                <input
-                  id="real-radius"
-                  name="radius"
-                  inputMode="decimal"
-                  defaultValue={current(params, "radius")}
-                />
-              </div>
-            </fieldset>
           </details>
           <div className="field">
             <label htmlFor="real-sort">Sort results</label>
             <select id="real-sort" name="sort" defaultValue={current(params, "sort")}>
-              <option value="">Automatic (name or distance)</option>
+              <option value="">Automatic: distance for ZIP, name otherwise</option>
+              <option value="distance">Distance</option>
               <option value="name">Facility name</option>
-              <option value="cms-overall-desc">CMS overall rating (highest first)</option>
-              <option value="distance">Distance (requires radius inputs)</option>
+              <option value="cms-overall-desc">CMS overall rating — highest first</option>
             </select>
           </div>
           <button className="button button--primary" type="submit">
-            Search CMS providers
+            Search nursing homes
           </button>
-          <p className="filter-note">
-            Maximum 25 results. ZIP search is exact until an approved geocoding source is added.
-          </p>
         </form>
         <section className="results" aria-labelledby="real-results-title">
           <div className="results__header">
             <div>
               <p className="eyebrow">CMS Provider Information</p>
               <h2 id="real-results-title">
-                {parsed.submitted ? "Search results" : "Start with a name or location"}
+                {parsed.submitted
+                  ? locationResolved
+                    ? `Nursing homes within ${radius} miles of ${parsed.criteria.zip}`
+                    : "Search results"
+                  : "Start with a name or location"}
               </h2>
             </div>
-            {parsed.submitted && <strong aria-live="polite">{results.length} results</strong>}
+            {parsed.submitted && (
+              <strong aria-live="polite">
+                {results.length}
+                {hasMore ? "+" : ""} shown
+              </strong>
+            )}
           </div>
           {parsed.errors.length > 0 && (
             <div className="empty-state" role="alert">
@@ -226,17 +251,68 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
               </ul>
             </div>
           )}
+          {parsed.submitted &&
+            parsed.criteria.zip &&
+            !locationResolved &&
+            parsed.errors.length === 0 && (
+              <div className="methodology-note" role="status">
+                <strong>This ZIP area could not be resolved geographically.</strong>
+                <p>
+                  Exact facility ZIP matches are shown when available. Try a city and state or
+                  another nearby ZIP.
+                </p>
+              </div>
+            )}
           {results.map((provider) => (
-            <RealProviderCard key={provider.ccn} provider={provider} compareCcns={compareCcns} />
+            <RealProviderCard
+              key={provider.ccn}
+              provider={provider}
+              compareCcns={results.slice(0, 2).map((item) => item.ccn)}
+            />
           ))}
           {parsed.submitted && parsed.errors.length === 0 && results.length === 0 && (
             <div className="empty-state">
-              <h3>No CMS providers matched</h3>
-              <p>Try fewer filters, a facility-name fragment, or a state search.</p>
+              <h3>
+                {locationResolved
+                  ? `No nursing homes were found within ${radius} miles of ${parsed.criteria.zip}.`
+                  : "No facility matched that search."}
+              </h3>
+              <p>Try part of the facility name, add a city and state, or expand the distance.</p>
+              {locationResolved && radius < 100 && (
+                <Link
+                  className="button button--secondary"
+                  href={(() => {
+                    const copy = new URLSearchParams(params);
+                    copy.set("radius", String(radius === 10 ? 25 : radius === 25 ? 50 : 100));
+                    return `/search?${copy}`;
+                  })()}
+                >
+                  Expand search distance
+                </Link>
+              )}
             </div>
+          )}
+          {(page > 1 || hasMore) && (
+            <nav className="pagination" aria-label="Search result pages">
+              {page > 1 && (
+                <Link className="button button--quiet" href={pageHref(page - 1)}>
+                  Previous
+                </Link>
+              )}
+              <span>Page {page}</span>
+              {hasMore && (
+                <Link className="button button--quiet" href={pageHref(page + 1)}>
+                  Load 20 more
+                </Link>
+              )}
+            </nav>
           )}
         </section>
       </div>
+      <p className="methodology-note">
+        ZIP-area searches use the representative point for the corresponding 2025 Census ZIP Code
+        Tabulation Area. ZCTAs approximate USPS ZIP service areas; not every USPS ZIP has a ZCTA.
+      </p>
     </>
   );
 }

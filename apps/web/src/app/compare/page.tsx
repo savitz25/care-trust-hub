@@ -4,8 +4,9 @@ import { getComparisonObservations, syntheticFacilities, type Facility } from "@
 import { StarValue, SyntheticDataNotice, TrendIndicator } from "@/components/evidence";
 import { PrintButton } from "@/components/print-button";
 import { isRealProviderUiEnabled } from "@/server/care/feature-flags";
-import { getProvidersByCcns } from "@/server/care/repository";
+import { getDecisionSummariesByCcns, getProvidersByCcns } from "@/server/care/repository";
 import { RealCompare } from "./real-compare";
+import { parsePublicProviderSelection } from "@/server/care/shortlist-contract";
 
 export const metadata: Metadata = {
   title: "Compare facilities",
@@ -46,13 +47,10 @@ export default async function ComparePage({
 }) {
   const params = await searchParams;
   if (isRealProviderUiEnabled() && params.real) {
-    const ccns = params.real
-      .split(",")
-      .map((ccn) => ccn.trim().toUpperCase())
-      .filter((ccn) => /^[A-Z0-9]{6}$/.test(ccn))
-      .slice(0, 3);
+    const ccns = parsePublicProviderSelection(params.real, 3);
     const providers = await getProvidersByCcns(ccns);
-    return <RealCompare providers={providers} />;
+    const summaries = await getDecisionSummariesByCcns(ccns);
+    return <RealCompare providers={providers} summaries={summaries} />;
   }
   const requested = params.facilities?.split(",").slice(0, 3) ?? defaultSlugs;
   const facilities = requested

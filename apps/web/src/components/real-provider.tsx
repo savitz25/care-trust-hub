@@ -6,6 +6,7 @@ import type {
 } from "@/server/care/types";
 import { cmsRatingText, providerHref } from "@/server/care/consumer";
 import { formatFreshnessLabels, formatMissingCmsValue } from "@/server/care/freshness";
+import { ShortlistButton } from "./shortlist-button";
 
 export function CmsStarRating({ value }: { value: number | null }) {
   return (
@@ -91,7 +92,9 @@ export function RealProviderCard({
               .join(", ")}
           </p>
           {provider.distanceMiles !== undefined && (
-            <p>{provider.distanceMiles.toFixed(1)} miles from entered coordinates</p>
+            <p>
+              <strong>{provider.distanceMiles.toFixed(1)} miles away</strong>
+            </p>
           )}
         </div>
         <span className="ccn-label">CMS ID {provider.ccn}</span>
@@ -132,8 +135,9 @@ export function RealProviderCard({
       </dl>
       <div className="facility-card__actions">
         <Link className="button button--primary" href={providerHref(provider)}>
-          View CMS evidence
+          View research
         </Link>
+        <ShortlistButton ccn={provider.ccn} />
         <Link className="button button--quiet" href={`/compare?real=${compare.join(",")}`}>
           Compare
         </Link>

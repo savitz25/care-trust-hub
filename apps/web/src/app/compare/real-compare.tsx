@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { CareProviderDetail } from "@/server/care/types";
+import type { CareDecisionSummary, CareProviderDetail } from "@/server/care/types";
 import { providerHref } from "@/server/care/consumer";
 import { formatFreshnessLabels, formatMissingCmsValue } from "@/server/care/freshness";
 import { CmsStarRating } from "@/components/real-provider";
@@ -9,7 +9,13 @@ function YesNo({ value }: { value: boolean | null }) {
   return <>{value === null ? "Not reported" : value ? "Yes" : "No"}</>;
 }
 
-export function RealCompare({ providers }: { providers: CareProviderDetail[] }) {
+export function RealCompare({
+  providers,
+  summaries = [],
+}: {
+  providers: CareProviderDetail[];
+  summaries?: CareDecisionSummary[];
+}) {
   return (
     <div className="page-shell compare-page real-compare-page">
       <div className="real-data-notice" role="note">
@@ -34,6 +40,7 @@ export function RealCompare({ providers }: { providers: CareProviderDetail[] }) 
         <div className="real-compare-stack">
           {providers.map((provider) => {
             const freshness = formatFreshnessLabels(provider.source.freshness);
+            const evidence = summaries.find((item) => item.ccn === provider.ccn);
             return (
               <article className="real-compare-provider" key={provider.ccn}>
                 <header>
@@ -97,6 +104,50 @@ export function RealCompare({ providers }: { providers: CareProviderDetail[] }) 
                     <dd>{freshness.sourceUpdated}</dd>
                   </div>
                 </dl>
+                <div className="compare-evidence-groups">
+                  <section>
+                    <h3>Staffing</h3>
+                    <p>
+                      {evidence?.staffingQuarter
+                        ? `${evidence.staffingQuarter}: ${evidence.totalNurseHprd?.toFixed(2) ?? "Not reported"} total nursing HPRD; ${evidence.rnHprd?.toFixed(2) ?? "Not reported"} RN HPRD; ${evidence.weekendRnHprd?.toFixed(2) ?? "Not reported"} weekend RN HPRD.`
+                        : "Not available in this source."}
+                    </p>
+                  </section>
+                  <section>
+                    <h3>Latest standard inspection</h3>
+                    <p>
+                      {evidence?.inspectionDate
+                        ? `${evidence.inspectionDate}: ${evidence.deficiencyCount ?? "Not reported"} cited deficiencies.`
+                        : "Not available in this source."}
+                    </p>
+                  </section>
+                  <section>
+                    <h3>Enforcement</h3>
+                    <p>
+                      {evidence?.latestPenaltyType
+                        ? evidence.latestPenaltyType === "Fine"
+                          ? `Latest loaded fine: $${evidence.latestFineAmount?.toLocaleString("en-US") ?? "not reported"}.`
+                          : `Latest loaded payment denial: ${evidence.paymentDenialDays ?? "not reported"} days.`
+                        : "Not available in this source."}
+                    </p>
+                  </section>
+                  <section>
+                    <h3>Ownership</h3>
+                    <p>
+                      {evidence
+                        ? `${evidence.ownershipPartyCount} disclosed ownership/control parties${evidence.ownershipChangeDate ? `; latest ownership change effective ${evidence.ownershipChangeDate}` : ""}.`
+                        : "Not available in this source."}
+                    </p>
+                  </section>
+                  <section>
+                    <h3>Chain</h3>
+                    <p>
+                      {evidence?.chainName
+                        ? `${evidence.chainName}: CMS published ${evidence.chainFacilityCount} facilities across ${evidence.chainStateCount} states or territories for ${evidence.chainReleaseMonth?.slice(0, 7)}.`
+                        : "Not available in this source."}
+                    </p>
+                  </section>
+                </div>
               </article>
             );
           })}

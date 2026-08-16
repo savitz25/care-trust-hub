@@ -17,27 +17,38 @@ describe("consumer provider search contract", () => {
       overallRating: 5,
       medicare: true,
       sort: "cms-overall-desc",
-      limit: 25,
+      radiusMiles: 25,
+      limit: 21,
+      offset: 0,
     });
   });
 
-  it("rejects malformed filters and incomplete radius input", () => {
+  it("rejects malformed consumer location filters", () => {
     const parsed = parseConsumerSearch(
       new URLSearchParams("search=1&state=Alabama&zip=12&overall=0&lat=33&sort=distance"),
     );
-    expect(parsed.errors.length).toBeGreaterThanOrEqual(5);
+    expect(parsed.errors.length).toBeGreaterThanOrEqual(3);
   });
 
-  it("accepts a complete bounded coordinate search", () => {
+  it("accepts ZIP distance options without exposing coordinates", () => {
     const parsed = parseConsumerSearch(
-      new URLSearchParams("search=1&lat=33.5&lon=-86.8&radius=10&sort=distance"),
+      new URLSearchParams("search=1&zip=33443&radius=10&sort=distance&page=2"),
     );
     expect(parsed.errors).toEqual([]);
     expect(parsed.criteria).toMatchObject({
-      latitude: 33.5,
-      longitude: -86.8,
+      zip: "33443",
       radiusMiles: 10,
       sort: "distance",
+      offset: 20,
     });
+  });
+
+  it("uses 25 miles by default and rejects unsupported distances", () => {
+    expect(
+      parseConsumerSearch(new URLSearchParams("search=1&zip=33443")).criteria.radiusMiles,
+    ).toBe(25);
+    expect(
+      parseConsumerSearch(new URLSearchParams("search=1&zip=33443&radius=30")).errors,
+    ).not.toEqual([]);
   });
 });

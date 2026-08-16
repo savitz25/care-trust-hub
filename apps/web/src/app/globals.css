@@ -1927,3 +1927,70 @@ fieldset legend span {
     text-decoration: none;
   }
 }
+
+.what-to-review {
+  margin-block: var(--space-7);
+  padding: var(--space-6);
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--radius-lg);
+  background: var(--color-warm-50);
+}
+.what-to-review__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+.what-to-review__grid article,
+.what-to-review__enforcement,
+.shortlist-overview,
+.research-facility {
+  padding: var(--space-5);
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  break-inside: avoid;
+}
+.what-to-review__enforcement {
+  margin-top: var(--space-4);
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-block: var(--space-5);
+}
+.research-packet {
+  max-width: 58rem;
+}
+.research-facility {
+  margin-block: var(--space-5);
+}
+@media (max-width: 42rem) {
+  .what-to-review__grid {
+    grid-template-columns: 1fr;
+  }
+  .pagination {
+    align-items: stretch;
+    flex-direction: column;
+    text-align: center;
+  }
+  .search-panel fieldset {
+    min-width: 0;
+  }
+}
+@media print {
+  .what-to-review,
+  .research-facility,
+  .shortlist-overview {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+  .research-packet .button {
+    display: none !important;
+  }
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+  }
+}

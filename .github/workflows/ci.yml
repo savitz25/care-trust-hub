@@ -92,11 +92,13 @@ jobs:
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0006_pbj_staffing.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0007_ownership_organization_graph.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0008_cms_chain_intelligence.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0009_location_reference.sql
       - name: Verify migration objects
         run: |
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 <<'SQL'
           SELECT PostGIS_Version();
-          SELECT to_regclass('public.source_release') IS NOT NULL AS source_release_exists;
+            SELECT to_regclass('public.source_release') IS NOT NULL AS source_release_exists;
+            SELECT to_regclass('public.location_reference') IS NOT NULL AS location_reference_exists;
           SELECT to_regclass('public.cms_chain_performance_snapshot') IS NOT NULL AS chain_snapshot_exists;
           SELECT to_regclass('public.raw_object') IS NOT NULL AS raw_object_exists;
           SELECT to_regclass('public.ingest_run') IS NOT NULL AS ingest_run_exists;

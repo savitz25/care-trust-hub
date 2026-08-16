@@ -113,6 +113,7 @@ describe("server-only care repository", () => {
       true,
       true,
       25,
+      0,
     ]);
     await expect(searchProvidersConsumer({ overallRating: 0 })).rejects.toThrow(RangeError);
     await expect(searchProvidersConsumer({ sort: "distance" })).rejects.toThrow(RangeError);

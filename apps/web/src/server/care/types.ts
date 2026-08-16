@@ -78,6 +78,33 @@ export interface ConsumerProviderSearch {
   medicaid?: boolean;
   sort?: CareProviderSort;
   limit?: number;
+  offset?: number;
+}
+
+export interface CareLocationReference {
+  code: string;
+  latitude: number;
+  longitude: number;
+  sourceVersion: string;
+}
+
+export interface CareDecisionSummary {
+  ccn: string;
+  staffingQuarter: string | null;
+  totalNurseHprd: number | null;
+  rnHprd: number | null;
+  weekendRnHprd: number | null;
+  inspectionDate: string | null;
+  deficiencyCount: number | null;
+  latestPenaltyType: string | null;
+  latestFineAmount: number | null;
+  paymentDenialDays: number | null;
+  ownershipPartyCount: number;
+  ownershipChangeDate: string | null;
+  chainName: string | null;
+  chainFacilityCount: number | null;
+  chainStateCount: number | null;
+  chainReleaseMonth: string | null;
 }
 
 export interface CareProviderHistoryMetadata {

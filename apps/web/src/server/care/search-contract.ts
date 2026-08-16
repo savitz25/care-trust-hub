@@ -36,32 +36,19 @@ export function parseConsumerSearch(params: URLSearchParams): ParsedConsumerSear
   if (state && !/^[A-Z]{2}$/.test(state)) errors.push("State must be a two-letter code.");
   if (zip && !/^\d{5}$/.test(zip)) errors.push("ZIP must contain five digits.");
 
-  const coordinateValues = [text(params, "lat"), text(params, "lon"), text(params, "radius")];
-  const hasCoordinate = coordinateValues.some(Boolean);
-  const hasAllCoordinates = coordinateValues.every(Boolean);
-  let latitude: number | undefined;
-  let longitude: number | undefined;
-  let radiusMiles: number | undefined;
-  if (hasCoordinate && !hasAllCoordinates) {
-    errors.push("Latitude, longitude, and radius are required together.");
-  } else if (hasAllCoordinates) {
-    latitude = Number(coordinateValues[0]);
-    longitude = Number(coordinateValues[1]);
-    radiusMiles = Number(coordinateValues[2]);
-    if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90)
-      errors.push("Latitude is invalid.");
-    if (!Number.isFinite(longitude) || longitude < -180 || longitude > 180)
-      errors.push("Longitude is invalid.");
-    if (!Number.isFinite(radiusMiles) || radiusMiles <= 0 || radiusMiles > 250)
-      errors.push("Radius must be between 0 and 250 miles.");
-  }
+  const radiusValue = text(params, "radius") ?? "25";
+  const allowedRadii = [10, 25, 50, 100];
+  const radiusMiles = Number(radiusValue);
+  if (!allowedRadii.includes(radiusMiles))
+    errors.push("Choose a 10, 25, 50, or 100 mile distance.");
+  const pageValue = Number(text(params, "page") ?? "1");
+  const page = Number.isInteger(pageValue) && pageValue > 0 ? pageValue : 1;
 
   const sortValue = text(params, "sort");
   const allowedSorts = ["name", "cms-overall-desc", "distance"] as const;
   const sort = allowedSorts.find((candidate) => candidate === sortValue) ?? undefined;
   if (sortValue && !sort) errors.push("The selected sort is not supported.");
-  if (sort === "distance" && !hasAllCoordinates)
-    errors.push("Distance sorting requires coordinates and a radius.");
+  if (sort === "distance" && !zip) errors.push("Distance sorting requires a ZIP code.");
 
   return {
     submitted: params.get("search") === "1",
@@ -77,11 +64,10 @@ export function parseConsumerSearch(params: URLSearchParams): ParsedConsumerSear
       ownership: text(params, "ownership"),
       medicare: optionalBoolean(params, "medicare"),
       medicaid: optionalBoolean(params, "medicaid"),
-      latitude,
-      longitude,
-      radiusMiles,
+      radiusMiles: zip ? radiusMiles : undefined,
       sort,
-      limit: 25,
+      limit: 21,
+      offset: (page - 1) * 20,
     },
   };
 }

@@ -14,6 +14,7 @@ import { OwnershipIntelligence } from "./ownership-intelligence";
 import { RegulatoryIntelligence } from "./regulatory-intelligence";
 import { StaffingIntelligence } from "./staffing-intelligence";
 import { ChainIntelligence } from "./chain-intelligence";
+import { WhatToReview } from "./what-to-review";
 
 const additionalLayers = ["Ownership intelligence", "Chain / portfolio intelligence"];
 
@@ -291,6 +292,14 @@ export function RealProviderDetail({
         <section className="provider-facts-strip" aria-label="Facility facts">
           <ParticipationFacts provider={provider} />
         </section>
+
+        <WhatToReview
+          provider={provider}
+          regulatory={regulatory}
+          staffing={staffing}
+          ownership={ownership}
+          chain={chain}
+        />
 
         <nav className="provider-section-nav" aria-label="Facility record sections">
           <a href="#overview">Overview</a>

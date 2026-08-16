@@ -7,6 +7,8 @@ import type {
   CareProviderHistoryMetadata,
   CareProviderSearchResult,
   CareProviderSummary,
+  CareLocationReference,
+  CareDecisionSummary,
   ConsumerProviderSearch,
   DevelopmentProviderSearch,
   ProviderDistanceResult,
@@ -183,7 +185,7 @@ export async function getProviderCurrentSnapshot(ccn: string) {
 }
 
 export async function getProvidersByCcns(ccns: string[]): Promise<CareProviderDetail[]> {
-  const unique = [...new Set(ccns.map(validateCcn))].slice(0, 3);
+  const unique = [...new Set(ccns.map(validateCcn))].slice(0, 10);
   if (unique.length === 0) return [];
   const result = await getCareDatabasePool().query<ProviderRow>(
     `${CURRENT_SNAPSHOT_CTE} SELECT ${APPROVED_COLUMNS} FROM current_snapshots WHERE ccn=ANY($1::text[])`,
@@ -307,7 +309,7 @@ export async function searchProvidersConsumer(
   if (criteria.city?.trim()) {
     conditions.push(`city ILIKE ${parameter(escapedLike(criteria.city.trim()))} ESCAPE '\\'`);
   }
-  if (criteria.zip?.trim()) {
+  if (criteria.zip?.trim() && criteria.latitude === undefined) {
     const zip = criteria.zip.trim();
     if (!/^\d{5}$/.test(zip)) throw new RangeError("ZIP must contain five digits");
     conditions.push(`zip_code=${parameter(zip)}`);
@@ -376,13 +378,110 @@ export async function searchProvidersConsumer(
         ? "overall_rating DESC NULLS LAST, provider_name, ccn"
         : "provider_name, ccn";
   const limitParameter = parameter(validateLimit(criteria.limit));
+  const offset = criteria.offset ?? 0;
+  if (!Number.isInteger(offset) || offset < 0 || offset > 10000)
+    throw new RangeError("offset must be between 0 and 10000");
+  const offsetParameter = parameter(offset);
   const result = await getCareDatabasePool().query<ProviderRow & { distance_miles?: number }>(
     `${CURRENT_SNAPSHOT_CTE} SELECT ${APPROVED_COLUMNS}${distanceExpression ? `, ${distanceExpression} AS distance_miles` : ""}
      FROM current_snapshots ${conditions.length ? `WHERE ${conditions.join(" AND ")}` : ""}
-     ORDER BY ${orderBy} LIMIT ${limitParameter}`,
+     ORDER BY ${orderBy} LIMIT ${limitParameter} OFFSET ${offsetParameter}`,
     values,
   );
   return result.rows.map((row) => searchResult(row, row.distance_miles));
+}
+
+export async function resolveZipLocation(zip: string): Promise<CareLocationReference | null> {
+  const value = zip.trim();
+  if (!/^\d{5}$/.test(value)) throw new RangeError("ZIP must contain five digits");
+  const result = await getCareDatabasePool().query<{
+    location_code: string;
+    latitude: number;
+    longitude: number;
+    source_version: string;
+  }>(
+    `SELECT location_code,latitude,longitude,source_version FROM location_reference
+     WHERE location_type='CENSUS_ZCTA' AND location_code=$1
+     ORDER BY source_version DESC LIMIT 1`,
+    [value],
+  );
+  const row = result.rows[0];
+  return row
+    ? {
+        code: row.location_code,
+        latitude: row.latitude,
+        longitude: row.longitude,
+        sourceVersion: row.source_version,
+      }
+    : null;
+}
+
+export async function suggestProvidersByNames(
+  names: string[],
+): Promise<CareProviderSearchResult[]> {
+  const normalized = [...new Set(names.map((name) => name.trim()).filter(Boolean))].slice(0, 10);
+  if (normalized.length === 0) return [];
+  const patterns = normalized.map(escapedLike);
+  const result = await getCareDatabasePool().query<ProviderRow>(
+    `${CURRENT_SNAPSHOT_CTE} SELECT ${APPROVED_COLUMNS} FROM current_snapshots
+     WHERE provider_name ILIKE ANY($1::text[]) ORDER BY provider_name,city,state_code,ccn LIMIT 50`,
+    [patterns],
+  );
+  return result.rows.map((row) => searchResult(row));
+}
+
+export async function getDecisionSummariesByCcns(ccns: string[]): Promise<CareDecisionSummary[]> {
+  const values = [...new Set(ccns.map(validateCcn))].slice(0, 10);
+  if (values.length === 0) return [];
+  const result = await getCareDatabasePool().query<{
+    ccn: string;
+    source_quarter: string | null;
+    total_nurse_hprd: string | null;
+    rn_hprd: string | null;
+    weekend_rn_hprd: string | null;
+    inspection_date: Date | null;
+    deficiency_count: number | null;
+    penalty_type: string | null;
+    fine_amount: string | null;
+    payment_denial_days: number | null;
+    party_count: string | number;
+    change_date: Date | null;
+    chain_name: string | null;
+    published_facility_count: number | null;
+    published_state_count: number | null;
+    release_month: Date | null;
+  }>(
+    `SELECT pi.identifier_value ccn,staff.source_quarter,staff.total_nurse_hprd,staff.rn_hprd,staff.weekend_rn_hprd,
+      inspect.survey_date inspection_date,inspect.deficiency_count,penalty.penalty_type,penalty.fine_amount,penalty.payment_denial_days,
+      (SELECT count(DISTINCT por.ownership_party_id) FROM provider_ownership_relationship por WHERE por.provider_id=p.id) party_count,
+      (SELECT max(oce.effective_date) FROM ownership_change_event oce WHERE oce.provider_id=p.id) change_date,
+      chain.chain_name,chain.published_facility_count,chain.published_state_count,chain.release_month
+    FROM provider p JOIN provider_identifier pi ON pi.provider_id=p.id AND pi.issuer='CMS' AND pi.identifier_type='CCN' AND pi.valid_from IS NULL
+    LEFT JOIN LATERAL (SELECT source_quarter,total_nurse_hprd,rn_hprd,weekend_rn_hprd FROM pbj_staffing_quarter_summary s WHERE s.provider_id=p.id ORDER BY coverage_end DESC LIMIT 1) staff ON true
+    LEFT JOIN LATERAL (SELECT i.survey_date,(SELECT count(*)::int FROM deficiency_finding d WHERE d.inspection_event_id=i.id) deficiency_count FROM inspection_event i WHERE i.provider_id=p.id AND i.survey_type ILIKE '%standard%' AND i.survey_type NOT ILIKE '%complaint%' AND i.survey_type NOT ILIKE '%fire%' ORDER BY i.survey_date DESC LIMIT 1) inspect ON true
+    LEFT JOIN LATERAL (SELECT penalty_type,fine_amount,payment_denial_days FROM penalty_enforcement pe WHERE pe.provider_id=p.id ORDER BY penalty_date DESC LIMIT 1) penalty ON true
+    LEFT JOIN LATERAL (SELECT cp.chain_name,s.published_facility_count,s.published_state_count,s.release_month FROM cms_chain_provider cp JOIN cms_chain_performance_snapshot s ON s.chain_id=cp.chain_id WHERE cp.provider_id=p.id ORDER BY s.release_month DESC LIMIT 1) chain ON true
+    WHERE pi.identifier_value=ANY($1::text[])`,
+    [values],
+  );
+  return result.rows.map((row) => ({
+    ccn: row.ccn,
+    staffingQuarter: row.source_quarter,
+    totalNurseHprd: row.total_nurse_hprd === null ? null : Number(row.total_nurse_hprd),
+    rnHprd: row.rn_hprd === null ? null : Number(row.rn_hprd),
+    weekendRnHprd: row.weekend_rn_hprd === null ? null : Number(row.weekend_rn_hprd),
+    inspectionDate: row.inspection_date?.toISOString().slice(0, 10) ?? null,
+    deficiencyCount: row.deficiency_count,
+    latestPenaltyType: row.penalty_type,
+    latestFineAmount: row.fine_amount === null ? null : Number(row.fine_amount),
+    paymentDenialDays: row.payment_denial_days,
+    ownershipPartyCount: Number(row.party_count),
+    ownershipChangeDate: row.change_date?.toISOString().slice(0, 10) ?? null,
+    chainName: row.chain_name,
+    chainFacilityCount: row.published_facility_count,
+    chainStateCount: row.published_state_count,
+    chainReleaseMonth: row.release_month?.toISOString().slice(0, 10) ?? null,
+  }));
 }
 
 export async function providersWithinRadius(
