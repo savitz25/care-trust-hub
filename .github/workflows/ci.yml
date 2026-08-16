@@ -93,6 +93,7 @@ jobs:
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0007_ownership_organization_graph.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0008_cms_chain_intelligence.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0009_location_reference.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0010_consumer_search_indexes.sql
       - name: Verify migration objects
         run: |
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 <<'SQL'
