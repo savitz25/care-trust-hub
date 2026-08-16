@@ -8,8 +8,8 @@ CREATE TABLE cms_chain_performance_snapshot (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   chain_id uuid NOT NULL REFERENCES cms_chain(id),
   source_release_id uuid NOT NULL REFERENCES source_release(id),
-  raw_object_id uuid NOT NULL REFERENCES raw_source_object(id),
-  ingest_run_id uuid NOT NULL REFERENCES ingest_run(id),
+  raw_object_id uuid NOT NULL,
+  ingest_run_id uuid NOT NULL,
   release_month date NOT NULL,
   chain_name text NOT NULL,
   published_facility_count integer NOT NULL CHECK (published_facility_count >= 0),
@@ -18,7 +18,9 @@ CREATE TABLE cms_chain_performance_snapshot (
   source_record_locator text NOT NULL,
   raw_record jsonb NOT NULL,
   transformation_version text NOT NULL,
-  UNIQUE(chain_id, source_release_id)
+  UNIQUE(chain_id, source_release_id),
+  FOREIGN KEY(raw_object_id,source_release_id) REFERENCES raw_object(id,source_release_id),
+  FOREIGN KEY(ingest_run_id,source_release_id) REFERENCES ingest_run(id,source_release_id)
 );
 CREATE TABLE cms_chain_provider (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -27,13 +29,15 @@ CREATE TABLE cms_chain_provider (
   provider_identifier text NOT NULL,
   enrollment_id text NOT NULL,
   source_release_id uuid NOT NULL REFERENCES source_release(id),
-  raw_object_id uuid NOT NULL REFERENCES raw_source_object(id),
-  ingest_run_id uuid NOT NULL REFERENCES ingest_run(id),
+  raw_object_id uuid NOT NULL,
+  ingest_run_id uuid NOT NULL,
   chain_name text NOT NULL,
   source_record_locator text NOT NULL,
   raw_record jsonb NOT NULL,
   transformation_version text NOT NULL,
-  UNIQUE(source_release_id,enrollment_id)
+  UNIQUE(source_release_id,enrollment_id),
+  FOREIGN KEY(raw_object_id,source_release_id) REFERENCES raw_object(id,source_release_id),
+  FOREIGN KEY(ingest_run_id,source_release_id) REFERENCES ingest_run(id,source_release_id)
 );
 CREATE TABLE cms_chain_organization (
   chain_id uuid NOT NULL REFERENCES cms_chain(id),
