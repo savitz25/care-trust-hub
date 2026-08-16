@@ -32,6 +32,10 @@ export function chainHref(chain: { cmsChainId: string; chainName: string }): str
   return `/chain/${chain.cmsChainId}/${providerSlug(chain.chainName)}`;
 }
 
+export function isValidCmsChainId(value: string): boolean {
+  return /^\d+$/.test(value);
+}
+
 export function isCanonicalProviderSlug(
   provider: Pick<CareProviderDetail, "providerName">,
   slug: string,

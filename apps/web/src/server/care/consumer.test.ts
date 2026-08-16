@@ -3,6 +3,7 @@ import {
   cmsRatingText,
   factualRatingObservations,
   isCanonicalProviderSlug,
+  isValidCmsChainId,
   providerHref,
   providerSlug,
 } from "./consumer";
@@ -14,6 +15,13 @@ describe("real provider consumer mapping", () => {
     expect(providerHref(provider)).toBe("/facility/cms/01A193/example-and-care-inc");
     expect(isCanonicalProviderSlug(provider, "old-name")).toBe(false);
     expect(isCanonicalProviderSlug(provider, "example-and-care-inc")).toBe(true);
+  });
+
+  it("accepts only the numeric CMS chain identifiers used by public chain routes", () => {
+    expect(isValidCmsChainId("1")).toBe(true);
+    expect(isValidCmsChainId("00123")).toBe(true);
+    expect(isValidCmsChainId("not-a-chain")).toBe(false);
+    expect(isValidCmsChainId("")).toBe(false);
   });
 
   it("preserves missing ratings without manufacturing a value or judgment", () => {

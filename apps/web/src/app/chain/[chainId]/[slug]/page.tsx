@@ -5,7 +5,7 @@ import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import { isChainIntelligenceEnabled } from "@/server/care/feature-flags";
 import { getChainIntelligence } from "@/server/care/chain-repository";
-import { chainHref, providerSlug } from "@/server/care/consumer";
+import { chainHref, isValidCmsChainId, providerSlug } from "@/server/care/consumer";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
@@ -15,7 +15,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   if (!isChainIntelligenceEnabled())
     return { title: "Chain not found", robots: publicRobots(false) };
-  const chain = await getChainIntelligence((await params).chainId).catch(() => null);
+  const { chainId } = await params;
+  if (!isValidCmsChainId(chainId)) return { title: "Chain not found", robots: publicRobots(false) };
+  const chain = await getChainIntelligence(chainId);
   if (!chain) return { title: "Chain not found", robots: publicRobots(false) };
   const href = chainHref({ cmsChainId: chain.cmsChainId, chainName: chain.current.chainName });
   return {
@@ -32,6 +34,7 @@ export default async function ChainPage({
 }) {
   if (!isChainIntelligenceEnabled()) notFound();
   const { chainId, slug } = await params;
+  if (!isValidCmsChainId(chainId)) notFound();
   const chain = await getChainIntelligence(chainId);
   if (!chain) notFound();
   if (slug !== providerSlug(chain.current.chainName))
