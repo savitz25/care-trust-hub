@@ -5,7 +5,7 @@ export function Header({ productName, networkName }: { productName: string; netw
         <a className="brand-mark" href="/" aria-label={`${productName} home`}>
           <img
             className="brand-mark__logo"
-            src="/brand/seniortrusthub-compact.svg"
+            src="/brand/senior-trust-hub-logo.svg"
             alt=""
             aria-hidden="true"
           />
@@ -16,7 +16,9 @@ export function Header({ productName, networkName }: { productName: string; netw
           <a href="/search">Find care</a>
           <a href="/compare">Compare</a>
         </nav>
-        <span className="network-label">{networkName}</span>
+        <a className="network-label" href="https://www.asktrusthub.com/">
+          {networkName}
+        </a>
       </div>
     </header>
   );
@@ -37,17 +39,27 @@ export function Footer({
         <div>
           <img
             className="site-footer__logo"
-            src="/brand/seniortrusthub-footer.svg"
+            src="/brand/senior-trust-hub-footer.svg"
             alt={productName}
           />
           <strong className="site-footer__motto">{philosophy}</strong>
+          <p>Research senior care without being sold senior care.</p>
           <p>
             {productName} is part of the {networkName} network.
           </p>
         </div>
         <div>
           <strong>Our promise</strong>
-          <p>No paid placements. No facility lead fees. Sources and dates shown.</p>
+          <p>No paid placements. Facilities cannot pay to rank higher.</p>
+          <nav className="footer-nav" aria-label="About SeniorTrustHub">
+            <a href="/about">About</a>
+            <a href="/methodology">Methodology</a>
+            <a href="/sources">Sources</a>
+            <a href="/independence">Independence</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+            <a href="/contact">Contact</a>
+          </nav>
         </div>
       </div>
     </footer>

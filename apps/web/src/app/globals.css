@@ -209,7 +209,7 @@ summary {
 .site-header__inner {
   display: flex;
   width: min(calc(100% - 2rem), var(--content-width));
-  min-height: 4.75rem;
+  min-height: 6.75rem;
   align-items: center;
   gap: var(--space-6);
   margin-inline: auto;
@@ -225,7 +225,7 @@ summary {
 }
 .brand-mark__logo {
   display: block;
-  width: clamp(9.5rem, 17vw, 12rem);
+  width: clamp(16rem, 25vw, 22rem);
   height: auto;
 }
 .brand-mark__symbol {
@@ -269,6 +269,8 @@ summary {
   border-left: 1px solid var(--color-warm-200);
   color: var(--color-slate-500);
   font-size: 0.8rem;
+  font-weight: 750;
+  text-decoration: none;
 }
 .site-footer {
   background: var(--color-trust-navy);
@@ -276,7 +278,7 @@ summary {
 }
 .site-footer__logo {
   display: block;
-  width: min(15rem, 100%);
+  width: min(22rem, 100%);
   height: auto;
   margin-bottom: var(--space-4);
 }
@@ -329,6 +331,26 @@ summary {
   gap: var(--space-8);
   margin-inline: auto;
   padding-block: var(--space-12);
+}
+
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1rem;
+  margin-top: 1rem;
+}
+
+.footer-nav a {
+  color: inherit;
+}
+
+.legal-page {
+  max-width: 52rem;
+  margin: 2rem auto 4rem;
+}
+
+.legal-page h2 {
+  margin-top: 2rem;
 }
 .site-footer strong,
 .site-footer p {
@@ -1766,7 +1788,8 @@ fieldset legend span {
 
 @media (max-width: 50rem) {
   .brand-mark__logo {
-    width: 9.5rem;
+    width: min(17rem, 72vw);
+    content: url("/brand/senior-trust-hub-logo-compact.svg");
   }
   .site-header__inner {
     flex-wrap: wrap;
@@ -1823,7 +1846,7 @@ fieldset legend span {
 
 @media (max-width: 390px) {
   .brand-mark__logo {
-    width: 8.5rem;
+    width: min(15rem, 76vw);
   }
   .site-nav {
     gap: var(--space-2);

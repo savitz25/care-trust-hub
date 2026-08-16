@@ -20,9 +20,9 @@ describe("SeniorTrustHub public brand", () => {
 
   it("ships the approved bracket and four-point hub SVG assets", () => {
     const lightAssets = [
-      "seniortrusthub-icon.svg",
-      "seniortrusthub-horizontal.svg",
-      "seniortrusthub-compact.svg",
+      "senior-trust-hub-icon.svg",
+      "senior-trust-hub-logo.svg",
+      "senior-trust-hub-logo-compact.svg",
     ];
     for (const asset of lightAssets) {
       const source = readFileSync(join(process.cwd(), "public", "brand", asset), "utf8");
@@ -31,10 +31,10 @@ describe("SeniorTrustHub public brand", () => {
       expect(source).toContain("#F86008");
     }
     const footer = readFileSync(
-      join(process.cwd(), "public", "brand", "seniortrusthub-footer.svg"),
+      join(process.cwd(), "public", "brand", "senior-trust-hub-footer.svg"),
       "utf8",
     );
-    expect(footer).toContain("#d99ad3");
+    expect(footer).toContain("#D99AD3");
     expect(footer).toContain("#F86008");
   });
 });

@@ -6,6 +6,11 @@ import { providerHref } from "@/server/care/consumer";
 import { getDecisionSummariesByCcns, getProvidersByCcns } from "@/server/care/repository";
 import { parsePublicProviderSelection } from "@/server/care/shortlist-contract";
 
+export const metadata = {
+  title: "Nursing home research summary",
+  robots: { index: false, follow: false },
+};
+
 export const dynamic = "force-dynamic";
 export default async function ResearchPage({
   searchParams,
@@ -23,7 +28,7 @@ export default async function ResearchPage({
       <header className="page-intro">
         <Image
           className="research-packet__brand"
-          src="/brand/seniortrusthub-horizontal.svg"
+          src="/brand/senior-trust-hub-logo.svg"
           alt="SeniorTrustHub"
           width={560}
           height={112}
