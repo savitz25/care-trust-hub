@@ -64,7 +64,9 @@ export function validateTrustRequest(input: TrustRequestInput) {
   const description = clean(input.description, 5000);
   const descriptionLimit = input.requestType === "provider_factual_context" ? 3000 : 5000;
   if (typeof input.description === "string" && input.description.trim().length > descriptionLimit) {
-    errors.push(`Description must be ${descriptionLimit.toLocaleString("en-US")} characters or fewer.`);
+    errors.push(
+      `Description must be ${descriptionLimit.toLocaleString("en-US")} characters or fewer.`,
+    );
   }
   if (!name || !role || !organization) errors.push("Name, role, and organization are required.");
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
