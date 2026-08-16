@@ -37,4 +37,19 @@ describe("SeniorTrustHub public brand", () => {
     expect(footer).toContain("#D99AD3");
     expect(footer).toContain("#F86008");
   });
+
+  it("keeps intentional clear space between the hub and two-line wordmark", () => {
+    const desktop = readFileSync(
+      join(process.cwd(), "public", "brand", "senior-trust-hub-logo.svg"),
+      "utf8",
+    );
+    const compact = readFileSync(
+      join(process.cwd(), "public", "brand", "senior-trust-hub-logo-compact.svg"),
+      "utf8",
+    );
+    expect(desktop).toContain('viewBox="0 0 430 140"');
+    expect(desktop.match(/<text x="142"/g)).toHaveLength(2);
+    expect(compact).toContain('viewBox="0 0 350 114"');
+    expect(compact.match(/<text x="126"/g)).toHaveLength(2);
+  });
 });
