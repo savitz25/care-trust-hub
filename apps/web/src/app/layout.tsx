@@ -7,7 +7,10 @@ import "./globals.css";
 export const metadata = siteMetadata;
 export const viewport = { themeColor: brand.colors.primary, colorScheme: "light" };
 
-const brandStyles = { "--color-evergreen-600": brand.colors.primary } as CSSProperties;
+const brandStyles = {
+  "--color-senior-plum": brand.colors.primary,
+  "--color-trust-navy": brand.colors.navy,
+} as CSSProperties;
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
@@ -20,7 +23,11 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <main id="main-content" tabIndex={-1}>
           {children}
         </main>
-        <Footer philosophy={brand.philosophy} networkName={brand.networkName} />
+        <Footer
+          philosophy={brand.philosophy}
+          networkName={brand.networkName}
+          productName={brand.publicName}
+        />
       </body>
     </html>
   );

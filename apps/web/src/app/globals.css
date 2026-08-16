@@ -19,6 +19,8 @@
   --color-serious-50: #fbefec;
   --color-serious-700: #8c3f35;
   --color-white: #ffffff;
+  --color-senior-plum: #681860;
+  --color-trust-navy: #082860;
   --font-sans:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-serif: Georgia, "Times New Roman", serif;
@@ -221,6 +223,11 @@ summary {
   color: var(--color-slate-950);
   text-decoration: none;
 }
+.brand-mark__logo {
+  display: block;
+  width: clamp(9.5rem, 17vw, 12rem);
+  height: auto;
+}
 .brand-mark__symbol {
   display: grid;
   width: 2.2rem;
@@ -264,8 +271,57 @@ summary {
   font-size: 0.8rem;
 }
 .site-footer {
-  background: var(--color-evergreen-800);
+  background: var(--color-trust-navy);
   color: var(--color-white);
+}
+.site-footer__logo {
+  display: block;
+  width: min(15rem, 100%);
+  height: auto;
+  margin-bottom: var(--space-4);
+}
+.site-footer__motto {
+  display: block;
+}
+.research-packet__brand {
+  display: block;
+  width: min(20rem, 100%);
+  height: auto;
+  margin-bottom: var(--space-6);
+}
+.trust-form {
+  display: grid;
+  max-width: 48rem;
+  gap: var(--space-5);
+}
+.trust-form label {
+  display: grid;
+  gap: var(--space-2);
+  font-weight: 750;
+}
+.trust-form input,
+.trust-form textarea {
+  width: 100%;
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  background: var(--color-white);
+  color: var(--color-slate-950);
+}
+.trust-form__status {
+  border-left: 0.25rem solid var(--color-senior-plum);
+  padding-left: var(--space-3);
+}
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.provider-context {
+  border-left: 0.25rem solid var(--color-senior-plum);
+  padding-left: var(--space-5);
 }
 .site-footer__inner {
   display: grid;
@@ -1709,6 +1765,9 @@ fieldset legend span {
 }
 
 @media (max-width: 50rem) {
+  .brand-mark__logo {
+    width: 9.5rem;
+  }
   .site-header__inner {
     flex-wrap: wrap;
     gap: var(--space-2);
@@ -1759,6 +1818,23 @@ fieldset legend span {
   }
   .facility-card__actions .button {
     flex: 1 1 9rem;
+  }
+}
+
+@media (max-width: 390px) {
+  .brand-mark__logo {
+    width: 8.5rem;
+  }
+  .site-nav {
+    gap: var(--space-2);
+  }
+  .site-nav a {
+    font-size: 0.82rem;
+  }
+  .trust-form fieldset {
+    min-width: 0;
+    margin-inline: 0;
+    padding-inline: var(--space-3);
   }
 }
 

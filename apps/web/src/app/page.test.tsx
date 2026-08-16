@@ -7,7 +7,7 @@ describe("experience lab home", () => {
     render(<DevelopmentHome />);
     expect(screen.getByRole("note")).toHaveTextContent(/synthetic demonstration data/i);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      /research care without being sold care/i,
+      /research senior care without being sold senior care/i,
     );
     expect(screen.queryByText(/request pricing/i)).not.toBeInTheDocument();
   });

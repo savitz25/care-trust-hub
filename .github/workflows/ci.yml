@@ -94,12 +94,17 @@ jobs:
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0008_cms_chain_intelligence.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0009_location_reference.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0010_consumer_search_indexes.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0011_trust_participation.sql
       - name: Verify migration objects
         run: |
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 <<'SQL'
           SELECT PostGIS_Version();
             SELECT to_regclass('public.source_release') IS NOT NULL AS source_release_exists;
             SELECT to_regclass('public.location_reference') IS NOT NULL AS location_reference_exists;
+            SELECT to_regclass('public.trust_request') IS NOT NULL AS trust_request_exists;
+          SELECT to_regclass('public.provider_context_submission') IS NOT NULL AS provider_context_exists;
+          SELECT to_regclass('public.trusthub_manual_override') IS NOT NULL AS trust_override_exists;
+          SELECT to_regclass('public.trust_audit_event') IS NOT NULL AS trust_audit_exists;
           SELECT to_regclass('public.cms_chain_performance_snapshot') IS NOT NULL AS chain_snapshot_exists;
           SELECT to_regclass('public.raw_object') IS NOT NULL AS raw_object_exists;
           SELECT to_regclass('public.ingest_run') IS NOT NULL AS ingest_run_exists;
@@ -119,6 +124,37 @@ jobs:
             SELECT 1 FROM pg_constraint
             WHERE conname = 'facility_snapshot_raw_object_release_fk'
           ) AS raw_lineage_constraint_exists;
+          DO $$
+          DECLARE
+            request_id uuid;
+            status_rows integer;
+            audit_rows integer;
+            append_only_blocked boolean := false;
+          BEGIN
+            INSERT INTO trust_request (
+              request_type, submitter_name, submitter_role, submitter_organization,
+              submitter_email, factual_description
+            ) VALUES (
+              'profile_claim', 'Synthetic CI reviewer', 'Administrator', 'Synthetic CI organization',
+              'ci@example.invalid', 'Synthetic migration verification; not a real provider claim.'
+            ) RETURNING id INTO request_id;
+
+            UPDATE trust_request SET status='under_review' WHERE id=request_id;
+            SELECT count(*) INTO status_rows FROM trust_request_status_history WHERE trust_request_id=request_id;
+            SELECT count(*) INTO audit_rows FROM trust_audit_event WHERE trust_request_id=request_id;
+            IF status_rows <> 2 OR audit_rows <> 2 THEN
+              RAISE EXCEPTION 'trust audit triggers did not append expected events';
+            END IF;
+
+            BEGIN
+              UPDATE trust_audit_event SET event_data='{}'::jsonb WHERE trust_request_id=request_id;
+            EXCEPTION WHEN raise_exception THEN
+              append_only_blocked := true;
+            END;
+            IF NOT append_only_blocked THEN
+              RAISE EXCEPTION 'append-only trust audit unexpectedly allowed UPDATE';
+            END IF;
+          END $$;
           SQL
       - uses: actions/setup-python@v5
         with:

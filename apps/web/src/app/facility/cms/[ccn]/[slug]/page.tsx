@@ -8,6 +8,7 @@ import {
   getProviderOwnershipIntelligenceForPage,
   getProviderRegulatoryIntelligenceForPage,
   getProviderStaffingSummaryForPage,
+  getApprovedProviderContextForPage,
 } from "@/server/care/cached-repository";
 import {
   isInspectionIntelligenceEnabled,
@@ -15,6 +16,7 @@ import {
   isOwnershipIntelligenceEnabled,
   isRealProviderUiEnabled,
   isStaffingIntelligenceEnabled,
+  isTrustParticipationEnabled,
 } from "@/server/care/feature-flags";
 
 export const dynamic = "force-dynamic";
@@ -57,6 +59,10 @@ export default async function RealFacilityPage({
   const chain = isChainIntelligenceEnabled()
     ? await getProviderChainIntelligenceForPage(provider.ccn)
     : undefined;
+  const trustParticipation = isTrustParticipationEnabled();
+  const providerContext = trustParticipation
+    ? await getApprovedProviderContextForPage(provider.ccn)
+    : [];
   return (
     <RealProviderDetail
       provider={provider}
@@ -64,6 +70,8 @@ export default async function RealFacilityPage({
       staffing={staffing}
       ownership={ownership}
       chain={chain ?? undefined}
+      providerContext={providerContext}
+      trustParticipation={trustParticipation}
     />
   );
 }

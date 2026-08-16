@@ -3,13 +3,13 @@ export function Header({ productName, networkName }: { productName: string; netw
     <header className="site-header">
       <div className="site-header__inner">
         <a className="brand-mark" href="/" aria-label={`${productName} home`}>
-          <span className="brand-mark__symbol" aria-hidden="true">
-            C
-          </span>
-          <span>
-            <strong>{productName}</strong>
-            <small>Independent care research</small>
-          </span>
+          <img
+            className="brand-mark__logo"
+            src="/brand/seniortrusthub-compact.svg"
+            alt=""
+            aria-hidden="true"
+          />
+          <span className="visually-hidden">{productName}</span>
         </a>
         <nav className="site-nav" aria-label="Primary navigation">
           <a href="/shortlist">Shortlist</a>
@@ -22,13 +22,28 @@ export function Header({ productName, networkName }: { productName: string; netw
   );
 }
 
-export function Footer({ philosophy, networkName }: { philosophy: string; networkName: string }) {
+export function Footer({
+  philosophy,
+  networkName,
+  productName = "SeniorTrustHub",
+}: {
+  philosophy: string;
+  networkName: string;
+  productName?: string;
+}) {
   return (
     <footer className="site-footer">
       <div className="site-footer__inner">
         <div>
+          <img
+            className="site-footer__logo"
+            src="/brand/seniortrusthub-footer.svg"
+            alt={productName}
+          />
           <strong className="site-footer__motto">{philosophy}</strong>
-          <p>Independent research within the {networkName} network.</p>
+          <p>
+            {productName} is part of the {networkName} network.
+          </p>
         </div>
         <div>
           <strong>Our promise</strong>

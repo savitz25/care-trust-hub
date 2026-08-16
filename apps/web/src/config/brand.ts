@@ -1,13 +1,15 @@
 export const brand = {
   productKey: "care",
-  publicName: "Care intelligence platform",
+  publicName: "SeniorTrustHub",
   networkName: "Ask Trust Hub",
-  tagline: "Research care without being sold care.",
+  tagline: "Research senior care without being sold senior care.",
   philosophy: "We cite. You decide.",
-  description: "An independent development environment for evidence-led care research.",
+  description:
+    "Independent senior care research using published government evidence. No paid placements.",
   locale: "en_US",
   colors: {
-    primary: "#1d5b4f",
+    primary: "#681860",
+    navy: "#082860",
   },
 } as const;
 

@@ -234,4 +234,31 @@ describe("real provider presentation", () => {
     expect(container.textContent).not.toMatch(/TrustHub staffing rating|staffing score/i);
     expect(container.textContent).not.toContain("raw_record");
   });
+
+  it("keeps approved provider context separate from CMS evidence and offers free participation", () => {
+    render(
+      <RealProviderDetail
+        provider={detailProvider}
+        providerContext={[
+          {
+            id: "context-1",
+            text: "A separately moderated factual statement for this synthetic fixture.",
+            submittedAt: "2026-08-01T00:00:00.000Z",
+            approvedAt: "2026-08-02T00:00:00.000Z",
+            referencedSection: "Ownership",
+          },
+        ]}
+        trustParticipation
+      />,
+    );
+    expect(screen.getByRole("heading", { name: "Provider context" })).toBeInTheDocument();
+    expect(screen.getByText(/separate from the CMS evidence above/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Suggest a correction" })).toHaveAttribute(
+      "href",
+      "/trust/correction?ccn=01A193",
+    );
+    expect(
+      screen.getByText(/submissions never replace CMS evidence or affect ranking/i),
+    ).toBeVisible();
+  });
 });

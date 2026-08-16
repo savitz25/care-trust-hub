@@ -65,4 +65,16 @@ describe("real provider UI feature flag", () => {
       }),
     ).toBe(true);
   });
+
+  it("requires both real-provider and trust-participation opt-ins without billing state", async () => {
+    const { isTrustParticipationEnabled } = await import("./feature-flags");
+    expect(isTrustParticipationEnabled({ CARE_ENABLE_TRUST_PARTICIPATION: "true" })).toBe(false);
+    expect(
+      isTrustParticipationEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_TRUST_PARTICIPATION: "true",
+        SUBSCRIPTION_STATUS: "paid",
+      }),
+    ).toBe(true);
+  });
 });

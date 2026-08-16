@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { PrintButton } from "@/components/print-button";
 import { CmsStarRating } from "@/components/real-provider";
 import { providerHref } from "@/server/care/consumer";
@@ -20,6 +21,13 @@ export default async function ResearchPage({
   return (
     <div className="page-shell research-packet">
       <header className="page-intro">
+        <Image
+          className="research-packet__brand"
+          src="/brand/seniortrusthub-horizontal.svg"
+          alt="SeniorTrustHub"
+          width={560}
+          height={112}
+        />
         <p className="eyebrow">Shareable research packet</p>
         <h1>Nursing home research summary</h1>
         <p>

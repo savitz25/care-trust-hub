@@ -28,3 +28,12 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "CREATE TABLE ownership_party (" in ownership
     assert "subscription" not in ownership
     assert "billing" not in ownership
+
+    trust = (migrations / "0011_trust_participation.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE trust_request (" in trust
+    assert "CREATE TABLE provider_context_submission (" in trust
+    assert "CREATE TABLE trusthub_manual_override (" in trust
+    assert "CREATE TABLE trust_audit_event (" in trust
+    assert "append-only" in trust
+    assert "subscription" not in trust
+    assert "billing" not in trust

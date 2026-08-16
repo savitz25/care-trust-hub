@@ -198,12 +198,22 @@ export function RealProviderDetail({
   staffing,
   ownership,
   chain,
+  providerContext = [],
+  trustParticipation = false,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
   staffing?: CareStaffingIntelligence;
   ownership?: CareOwnershipIntelligence;
   chain?: CareChainIntelligence;
+  providerContext?: Array<{
+    id: string;
+    text: string;
+    submittedAt: string;
+    approvedAt: string;
+    referencedSection: string | null;
+  }>;
+  trustParticipation?: boolean;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
@@ -359,6 +369,71 @@ export function RealProviderDetail({
               ))}
           </ul>
         </section>
+
+        {providerContext.length > 0 && (
+          <section
+            className="profile-section provider-context"
+            aria-labelledby="provider-context-title"
+          >
+            <div className="section-heading">
+              <p className="eyebrow">Provider-supplied information</p>
+              <h2 id="provider-context-title">Provider context</h2>
+              <p>
+                Submitted by a representative of the provider. These statements are separate from
+                the CMS evidence above.
+              </p>
+            </div>
+            {providerContext.map((item) => (
+              <article key={item.id}>
+                <p>{item.text}</p>
+                <dl>
+                  <div>
+                    <dt>Referenced section</dt>
+                    <dd>{item.referencedSection ?? "General facility profile"}</dd>
+                  </div>
+                  <div>
+                    <dt>Approved for display</dt>
+                    <dd>{sourceDate(item.approvedAt)}</dd>
+                  </div>
+                </dl>
+              </article>
+            ))}
+          </section>
+        )}
+
+        {trustParticipation && (
+          <section
+            className="profile-section trust-participation"
+            aria-labelledby="participation-title"
+          >
+            <div className="section-heading">
+              <p className="eyebrow">Trust participation</p>
+              <h2 id="participation-title">See something that needs correction?</h2>
+              <p>
+                Claims, corrections, and factual context are free. Submissions never replace CMS
+                evidence or affect ranking.
+              </p>
+            </div>
+            <div className="facility-card__actions">
+              <Link
+                className="button button--secondary"
+                href={`/trust/correction?ccn=${provider.ccn}`}
+              >
+                Suggest a correction
+              </Link>
+              <Link
+                className="button button--quiet"
+                href={`/trust/source-concern?ccn=${provider.ccn}`}
+              >
+                Report a source-data concern
+              </Link>
+              <Link className="button button--quiet" href={`/trust/claim?ccn=${provider.ccn}`}>
+                Represent this facility? Submit a profile claim
+              </Link>
+            </div>
+            <Link href="/trust/corrections">How corrections work</Link>
+          </section>
+        )}
 
         <section
           className="profile-section source-register"
