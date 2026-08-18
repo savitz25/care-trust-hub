@@ -20,14 +20,30 @@ import {
 } from "../../../packages/domain/src/facility-intelligence";
 
 const HOLDOUT_MODE = process.argv.includes("--holdout");
-const VERSION = HOLDOUT_MODE
-  ? "FACILITY_IDENTITY_HOLDOUT_2026_08_V1"
-  : "FACILITY_IDENTITY_PILOT_2026_08_V1";
-const RESOLVER_VERSION = HOLDOUT_MODE
-  ? `${FACILITY_IDENTITY_RESOLVER_V2}-holdout-acquisition`
-  : "facility-identity-pilot-v1";
-const MAXIMUM_REQUESTS = HOLDOUT_MODE ? 210 : 450;
-const TARGET_SIZE = HOLDOUT_MODE ? 100 : 200;
+const NATIONAL_MODE = process.argv.includes("--national");
+const VERSION = NATIONAL_MODE
+  ? "FACILITY_IDENTITY_NATIONAL_2026_08_V1"
+  : HOLDOUT_MODE
+    ? "FACILITY_IDENTITY_HOLDOUT_2026_08_V1"
+    : "FACILITY_IDENTITY_PILOT_2026_08_V1";
+const RESOLVER_VERSION = NATIONAL_MODE
+  ? `${FACILITY_IDENTITY_RESOLVER_V2}-national-acquisition`
+  : HOLDOUT_MODE
+    ? `${FACILITY_IDENTITY_RESOLVER_V2}-holdout-acquisition`
+    : "facility-identity-pilot-v1";
+const requestedBatchSize = Number(
+  process.argv.find((value) => value.startsWith("--batch-size="))?.split("=")[1] ??
+    (NATIONAL_MODE ? 1000 : HOLDOUT_MODE ? 100 : 200),
+);
+if (!Number.isInteger(requestedBatchSize) || requestedBatchSize < 1 || requestedBatchSize > 1000)
+  throw new Error("--batch-size must be an integer from 1 through 1000");
+const MAXIMUM_REQUESTS = NATIONAL_MODE
+  ? Math.ceil(requestedBatchSize * 2.05)
+  : HOLDOUT_MODE
+    ? 210
+    : 450;
+const TARGET_SIZE = NATIONAL_MODE ? requestedBatchSize : HOLDOUT_MODE ? 100 : 200;
+const NATIONAL_REQUEST_CEILING = 31_000;
 const GOOGLE_SOURCE = "google_places";
 
 type Facility = {
@@ -383,21 +399,29 @@ async function excludeOriginalPilot(
   client: PoolClient,
   facilities: Facility[],
 ): Promise<Facility[]> {
-  if (!HOLDOUT_MODE) return facilities;
+  if (!HOLDOUT_MODE && !NATIONAL_MODE) return facilities;
   const original = await client.query<{ cms_ccn: string }>(
     `SELECT rp.cms_ccn FROM facility_intelligence_run_provider rp
      JOIN facility_intelligence_run r ON r.id=rp.run_id
-     WHERE r.resolver_version='facility-identity-pilot-v1'
-       AND r.requested_facility_count=200
+     WHERE (r.resolver_version='facility-identity-pilot-v1' AND r.requested_facility_count=200)
+        OR r.resolver_version=$1
+        OR r.resolver_version=$2
      ORDER BY r.created_at DESC`,
+    [
+      `${FACILITY_IDENTITY_RESOLVER_V2}-holdout-acquisition`,
+      `${FACILITY_IDENTITY_RESOLVER_V2}-national-acquisition`,
+    ],
   );
-  const excluded = new Set(original.rows.slice(0, 200).map((row) => row.cms_ccn));
-  if (excluded.size !== 200)
-    throw new Error(`Expected 200 original pilot CCNs; got ${excluded.size}`);
+  const excluded = new Set(original.rows.map((row) => row.cms_ccn));
+  if (excluded.size < 300 && NATIONAL_MODE)
+    throw new Error(`Expected at least 300 completed pilot/holdout CCNs; got ${excluded.size}`);
+  if (excluded.size < 200 && HOLDOUT_MODE)
+    throw new Error(`Expected at least 200 original pilot CCNs; got ${excluded.size}`);
   return facilities.filter((facility) => !excluded.has(facility.ccn));
 }
 
 function selectCohort(facilities: Facility[]): SelectedFacility[] {
+  if (NATIONAL_MODE) return selectNationalBatch(facilities);
   if (HOLDOUT_MODE) return selectHoldoutCohort(facilities);
   const quotas: Array<[string, number]> = [
     ["straightforward_independent", 25],
@@ -445,6 +469,38 @@ function selectCohort(facilities: Facility[]): SelectedFacility[] {
   return [...selected.values()].sort((a, b) =>
     stableRank(a.ccn, "manifest").localeCompare(stableRank(b.ccn, "manifest")),
   );
+}
+
+function selectNationalBatch(facilities: Facility[]): SelectedFacility[] {
+  const target = Math.min(TARGET_SIZE, facilities.length);
+  const ordered = [...facilities].sort((a, b) =>
+    stableRank(a.ccn, "national-manifest").localeCompare(stableRank(b.ccn, "national-manifest")),
+  );
+  const selected: SelectedFacility[] = [];
+  const regionBuckets = new Map<string, Facility[]>();
+  for (const facility of ordered) {
+    const region = regionFor(facility.state);
+    regionBuckets.set(region, [...(regionBuckets.get(region) ?? []), facility]);
+  }
+  const regions = [...regionBuckets.keys()].sort();
+  while (selected.length < target) {
+    let progressed = false;
+    for (const region of regions) {
+      const facility = regionBuckets.get(region)?.shift();
+      if (!facility) continue;
+      progressed = true;
+      selected.push({
+        ...facility,
+        strata: strataFor(facility),
+        selectedBy: target === 500 ? "national_canary" : "national_batch",
+        region,
+        selectionReason: `Deterministic ${VERSION} ${target === 500 ? "canary" : "batch"} selection`,
+      });
+      if (selected.length >= target) break;
+    }
+    if (!progressed) break;
+  }
+  return selected;
 }
 
 function selectHoldoutCohort(facilities: Facility[]): SelectedFacility[] {
@@ -539,6 +595,19 @@ async function createRun(
   dryRun: boolean,
 ): Promise<string> {
   const fingerprint = sha256(cohort.map((facility) => facility.ccn).join("|"));
+  let maximumRequests = MAXIMUM_REQUESTS;
+  if (NATIONAL_MODE && !dryRun) {
+    const nationalUsage = await client.query<{ used: string }>(
+      `SELECT coalesce(sum(used_requests),0)::text used FROM facility_intelligence_run
+       WHERE resolver_version=$1`,
+      [RESOLVER_VERSION],
+    );
+    const remaining = NATIONAL_REQUEST_CEILING - Number(nationalUsage.rows[0].used);
+    if (remaining <= 0) throw new Error("National Google request ceiling is exhausted");
+    maximumRequests = Math.min(maximumRequests, remaining);
+    if (maximumRequests < cohort.length)
+      throw new Error("National Google request ceiling cannot cover one discovery per facility");
+  }
   const run = await client.query<{ id: string }>(
     `INSERT INTO facility_intelligence_run
       (source_type,adapter_version,resolver_version,run_mode,status,requested_facility_count,
@@ -549,7 +618,7 @@ async function createRun(
       dryRun ? "dry_run" : "pilot",
       dryRun ? "succeeded" : "planned",
       cohort.length,
-      dryRun ? 0 : MAXIMUM_REQUESTS,
+      dryRun ? 0 : maximumRequests,
       fingerprint,
     ],
   );
@@ -912,41 +981,52 @@ async function runPilot(pool: Pool, runId: string, facilityLimit?: number): Prom
       `SELECT provider_id,cms_ccn,selection_metadata FROM facility_intelligence_run_provider WHERE run_id=$1 AND status IN ('pending','running','failed') ORDER BY ordinal`,
       [runId],
     );
-    for (const row of rows.rows.slice(0, facilityLimit)) {
-      const metadata = row.selection_metadata as Record<string, unknown>;
-      const facility: SelectedFacility = {
-        providerId: row.provider_id,
-        ccn: row.cms_ccn,
-        name: String(metadata.canonicalName),
-        legalName: null,
-        address: metadata.cmsAddress as string | null,
-        city: metadata.city as string | null,
-        state: String(metadata.state),
-        zip: metadata.zip as string | null,
-        phone: metadata.cmsPhone as string | null,
-        latitude: (metadata.coordinates as { latitude?: number } | null)?.latitude ?? null,
-        longitude: (metadata.coordinates as { longitude?: number } | null)?.longitude ?? null,
-        ownershipType: metadata.ownershipType as string | null,
-        chainId: (metadata.chain as { id?: string } | null)?.id ?? null,
-        chainName: (metadata.chain as { name?: string } | null)?.name ?? null,
-        chainSize: Number((metadata.chain as { size?: number } | null)?.size ?? 0),
-        hasOwnershipChange: (metadata.strata as string[]).includes("recent_ownership_or_rename"),
-        overallRating: null,
-        similarMarketNames: 0,
-        marketFacilityCount: 0,
-        strata: metadata.strata as string[],
-        selectedBy: String(metadata.selectedBy),
-        region: String(metadata.region),
-        selectionReason: String(metadata.reason),
-      };
-      try {
-        await processFacility(client, runId, facility, budget, cache);
-      } finally {
-        await client.query(
-          `UPDATE facility_intelligence_run r SET used_requests=x.requests,discovery_requests=x.discovery,details_requests=x.details,retry_requests=x.retries,cache_hits=x.cache_hits FROM (SELECT coalesce(sum(discovery_requests+details_requests),0)::int requests,coalesce(sum(discovery_requests),0)::int discovery,coalesce(sum(details_requests),0)::int details,coalesce(sum(retry_requests),0)::int retries,coalesce(sum(cache_hits),0)::int cache_hits FROM facility_intelligence_run_provider WHERE run_id=$1) x WHERE r.id=$1`,
-          [runId],
-        );
-      }
+    const selectedRows = rows.rows.slice(0, facilityLimit);
+    const concurrency = NATIONAL_MODE ? 5 : 1;
+    for (let offset = 0; offset < selectedRows.length; offset += concurrency) {
+      const chunk = selectedRows.slice(offset, offset + concurrency);
+      await Promise.all(
+        chunk.map(async (row) => {
+          const worker = await pool.connect();
+          const metadata = row.selection_metadata as Record<string, unknown>;
+          const facility: SelectedFacility = {
+            providerId: row.provider_id,
+            ccn: row.cms_ccn,
+            name: String(metadata.canonicalName),
+            legalName: null,
+            address: metadata.cmsAddress as string | null,
+            city: metadata.city as string | null,
+            state: String(metadata.state),
+            zip: metadata.zip as string | null,
+            phone: metadata.cmsPhone as string | null,
+            latitude: (metadata.coordinates as { latitude?: number } | null)?.latitude ?? null,
+            longitude: (metadata.coordinates as { longitude?: number } | null)?.longitude ?? null,
+            ownershipType: metadata.ownershipType as string | null,
+            chainId: (metadata.chain as { id?: string } | null)?.id ?? null,
+            chainName: (metadata.chain as { name?: string } | null)?.name ?? null,
+            chainSize: Number((metadata.chain as { size?: number } | null)?.size ?? 0),
+            hasOwnershipChange: (metadata.strata as string[]).includes(
+              "recent_ownership_or_rename",
+            ),
+            overallRating: null,
+            similarMarketNames: 0,
+            marketFacilityCount: 0,
+            strata: metadata.strata as string[],
+            selectedBy: String(metadata.selectedBy),
+            region: String(metadata.region),
+            selectionReason: String(metadata.reason),
+          };
+          try {
+            await processFacility(worker, runId, facility, budget, cache);
+          } finally {
+            worker.release();
+          }
+        }),
+      );
+      await client.query(
+        `UPDATE facility_intelligence_run r SET used_requests=x.requests,discovery_requests=x.discovery,details_requests=x.details,retry_requests=x.retries,cache_hits=x.cache_hits FROM (SELECT coalesce(sum(discovery_requests+details_requests),0)::int requests,coalesce(sum(discovery_requests),0)::int discovery,coalesce(sum(details_requests),0)::int details,coalesce(sum(retry_requests),0)::int retries,coalesce(sum(cache_hits),0)::int cache_hits FROM facility_intelligence_run_provider WHERE run_id=$1) x WHERE r.id=$1`,
+        [runId],
+      );
     }
     await client.query(
       `UPDATE facility_intelligence_run r SET status=CASE WHEN EXISTS(SELECT 1 FROM facility_intelligence_run_provider WHERE run_id=$1 AND status='failed' AND last_error_code='BUDGET_EXCEEDED') THEN 'budget_exhausted' WHEN EXISTS(SELECT 1 FROM facility_intelligence_run_provider WHERE run_id=$1 AND status IN ('pending','running','failed')) THEN 'running' ELSE 'succeeded' END,completed_at=CASE WHEN EXISTS(SELECT 1 FROM facility_intelligence_run_provider WHERE run_id=$1 AND status IN ('pending','running','failed')) THEN NULL ELSE now() END,successes=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND status='succeeded'),failures=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND status='failed'),unresolved=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND final_resolution_state='UNRESOLVED'),review_required=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND final_resolution_state='REVIEW_REQUIRED'),release_fingerprint=$2 WHERE id=$1`,
@@ -1182,7 +1262,7 @@ async function main(): Promise<void> {
   const pool = new Pool({
     connectionString: process.env.CARE_DATABASE_URL,
     ssl: { rejectUnauthorized: false },
-    max: 3,
+    max: NATIONAL_MODE ? 12 : 3,
     connectionTimeoutMillis: 15_000,
   });
   const client = await pool.connect();

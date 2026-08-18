@@ -264,46 +264,51 @@ function placeScope(
   return competitors.length ? "ambiguous" : "facility_specific";
 }
 
-async function insertClaim(
+async function insertClaims(
   client: PoolClient,
   runId: string,
   manifest: ManifestRow,
   candidate: CandidateRow,
-  claimType: string,
-  value: unknown,
-  claim: ClaimResolutionV2,
   matchingFeatures: MatchFeature[],
+  claims: Array<{ claimType: string; value: unknown; claim: ClaimResolutionV2 }>,
 ): Promise<void> {
   const resolverReference = `system:${FACILITY_IDENTITY_RESOLVER_V2}:${runId}`;
-  const inserted = await client.query<{ id: string }>(
-    `INSERT INTO facility_claim
-      (provider_id,claim_type,claim_value,normalized_value,resolution_state,confidence,
-       resolution_method,resolution_reason,matching_features,conflicts,threshold_version,
-       resolved_at,resolver_reference,review_state,publication_eligible)
-     VALUES ($1,$2,$3,$4,$5,$6,'claim_specific_identity_v2',$7,$8,$9,$10,now(),$11,$12,false)
-     RETURNING id`,
+  const records = claims.map(({ claimType, value, claim }) => ({
+    claim_type: claimType,
+    claim_value: value,
+    normalized_value: typeof value === "string" ? value.toLowerCase() : null,
+    resolution_state: claim.state,
+    confidence: claim.confidence,
+    resolution_reason: claim.reason,
+    review_state: claim.state === "VERIFIED" ? "decided" : "open",
+  }));
+  await client.query(
+    `WITH input AS (
+       SELECT * FROM jsonb_to_recordset($3::jsonb) AS x(
+         claim_type text,claim_value jsonb,normalized_value text,resolution_state text,
+         confidence numeric,resolution_reason text,review_state text)
+     ), inserted AS (
+       INSERT INTO facility_claim
+         (provider_id,claim_type,claim_value,normalized_value,resolution_state,confidence,
+          resolution_method,resolution_reason,matching_features,conflicts,threshold_version,
+          resolved_at,resolver_reference,review_state,publication_eligible)
+       SELECT $1,i.claim_type,coalesce(i.claim_value,'null'::jsonb),i.normalized_value,
+         i.resolution_state::facility_resolution_state,i.confidence,
+         'claim_specific_identity_v2',i.resolution_reason,$4::jsonb,$5::jsonb,$6,
+         now(),$7,i.review_state::facility_review_status,false
+       FROM input i RETURNING id,resolution_state
+     )
+     INSERT INTO facility_claim_observation(claim_id,observation_id,evidence_role)
+     SELECT id,$2,CASE WHEN resolution_state='REVIEW_REQUIRED' THEN 'conflicting' ELSE 'supporting' END
+     FROM inserted`,
     [
       manifest.provider_id,
-      claimType,
-      JSON.stringify(value),
-      typeof value === "string" ? value.toLowerCase() : null,
-      claim.state,
-      claim.confidence,
-      claim.reason,
+      candidate.source_observation_id,
+      JSON.stringify(records),
       JSON.stringify(matchingFeatures),
       JSON.stringify(candidate.conflicts),
       FACILITY_IDENTITY_RESOLVER_V2,
       resolverReference,
-      claim.state === "VERIFIED" ? "decided" : "open",
-    ],
-  );
-  await client.query(
-    `INSERT INTO facility_claim_observation(claim_id,observation_id,evidence_role)
-     VALUES ($1,$2,$3)`,
-    [
-      inserted.rows[0].id,
-      candidate.source_observation_id,
-      claim.state === "REVIEW_REQUIRED" ? "conflicting" : "supporting",
     ],
   );
 }
@@ -338,7 +343,26 @@ async function runV2(client: PoolClient, v1RunId: string, runId: string): Promis
   for (const row of manifest.rows) {
     const providerCandidates = byProvider.get(row.provider_id) ?? [];
     const top = providerCandidates[0];
-    if (!top) throw new Error(`No persisted candidate for pilot CCN ${row.cms_ccn}`);
+    if (!top) {
+      const metadata = {
+        ...row.selection_metadata,
+        v2: {
+          state: "UNRESOLVED",
+          confidence: 0,
+          reason: "No persisted Google candidate exists",
+          auditStatus: null,
+          changedPlaceId: false,
+        },
+      };
+      await client.query(
+        `UPDATE facility_intelligence_run_provider SET status='unresolved',completed_at=now(),
+           final_resolution_state='UNRESOLVED',verified_audit_status=NULL,
+           selection_metadata=$3,candidate_count=0,reason_codes=ARRAY['NO_GOOGLE_RESULT']
+         WHERE run_id=$1 AND provider_id=$2`,
+        [runId, row.provider_id, metadata],
+      );
+      continue;
+    }
     const plausible = providerCandidates.filter(
       (candidate) =>
         candidate.resolution_state !== "REJECTED" && Number(candidate.confidence) >= 0.72,
@@ -424,66 +448,38 @@ async function runV2(client: PoolClient, v1RunId: string, runId: string): Promis
       confidence: decision.confidence,
       reason: decision.reason,
     };
-    await insertClaim(
-      client,
-      runId,
-      row,
-      top,
-      "google_place_identity",
-      top.external_identifier_value,
-      identityClaim,
-      features,
-    );
-    await insertClaim(
-      client,
-      runId,
-      row,
-      top,
-      "google_public_name",
-      top.candidate_name,
-      decision.fieldClaims.publicName,
-      features,
-    );
-    await insertClaim(
-      client,
-      runId,
-      row,
-      top,
-      "google_physical_address",
-      top.candidate_address,
-      decision.fieldClaims.address,
-      features,
-    );
-    await insertClaim(
-      client,
-      runId,
-      row,
-      top,
-      "google_public_phone",
-      top.candidate_phone,
-      decision.fieldClaims.phone,
-      features,
-    );
-    await insertClaim(
-      client,
-      runId,
-      row,
-      top,
-      "google_official_website",
-      top.candidate_website,
-      decision.fieldClaims.website,
-      features,
-    );
-    await insertClaim(
-      client,
-      runId,
-      row,
-      top,
-      "google_business_status",
-      top.business_status,
-      decision.fieldClaims.businessStatus,
-      features,
-    );
+    await insertClaims(client, runId, row, top, features, [
+      {
+        claimType: "google_place_identity",
+        value: top.external_identifier_value,
+        claim: identityClaim,
+      },
+      {
+        claimType: "google_public_name",
+        value: top.candidate_name,
+        claim: decision.fieldClaims.publicName,
+      },
+      {
+        claimType: "google_physical_address",
+        value: top.candidate_address,
+        claim: decision.fieldClaims.address,
+      },
+      {
+        claimType: "google_public_phone",
+        value: top.candidate_phone,
+        claim: decision.fieldClaims.phone,
+      },
+      {
+        claimType: "google_official_website",
+        value: top.candidate_website,
+        claim: decision.fieldClaims.website,
+      },
+      {
+        claimType: "google_business_status",
+        value: top.business_status,
+        claim: decision.fieldClaims.businessStatus,
+      },
+    ]);
     await client.query(
       `INSERT INTO facility_resolution_audit_event
         (provider_id,candidate_id,previous_state,new_state,resolver_kind,resolver_reference,

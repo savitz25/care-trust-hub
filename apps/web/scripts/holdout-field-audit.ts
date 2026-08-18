@@ -1,11 +1,14 @@
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 import { isIP } from "node:net";
 import { Pool } from "pg";
 
-const HOLDOUT_FINGERPRINT = "ab1984ff01960e5c6a6b398241c45e7f07da49034d4774f4b211d9981fefef47";
+const DEFAULT_HOLDOUT_FINGERPRINT =
+  "ab1984ff01960e5c6a6b398241c45e7f07da49034d4774f4b211d9981fefef47";
+const TARGET_FINGERPRINT = process.argv[2] ?? DEFAULT_HOLDOUT_FINGERPRINT;
 const RESOLVER = "facility-identity-pilot-v2.2";
-const AUDITOR = "facility-identity-holdout-field-audit-v1";
+const AUDITOR = "facility-identity-batch-qa-v1";
 
 function loadEnvironment(): void {
   for (const relative of [
@@ -40,6 +43,8 @@ const normalize = (value: string | null | undefined) =>
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
 const digits = (value: string | null | undefined) => (value ?? "").replace(/\D/g, "").slice(-10);
+const stableRank = (value: string) =>
+  createHash("sha256").update(`${TARGET_FINGERPRINT}|qa|${value}`).digest("hex");
 const STOP = new Set([
   "and",
   "care",
@@ -125,10 +130,52 @@ async function main(): Promise<void> {
       `SELECT id FROM facility_intelligence_run
        WHERE resolver_version=$1 AND requested_facility_fingerprint=$2
        ORDER BY created_at DESC LIMIT 1`,
-      [RESOLVER, HOLDOUT_FINGERPRINT],
+      [RESOLVER, TARGET_FINGERPRINT],
     );
-    if (!run.rowCount) throw new Error("Frozen V2.2 holdout run not found");
+    if (!run.rowCount) throw new Error("Frozen V2.2 batch run not found");
     const runId = run.rows[0].id;
+    const verified = await client.query<{
+      provider_id: string;
+      candidate_id: string;
+      reason_codes: string[];
+      matching_features: Array<{ key: string; outcome: string }>;
+    }>(
+      `SELECT rp.provider_id,c.id candidate_id,rp.reason_codes,c.matching_features
+       FROM facility_intelligence_run_provider rp
+       JOIN facility_identity_candidate c ON c.id=(rp.selection_metadata#>>'{v2,candidateId}')::uuid
+       WHERE rp.run_id=$1 AND rp.final_resolution_state='VERIFIED'`,
+      [runId],
+    );
+    const highRiskCodes = new Set([
+      "CAMPUS_AMBIGUITY",
+      "MULTIPLE_PLAUSIBLE_RESULTS",
+      "NAME_CONFLICT",
+      "ADDRESS_CONFLICT",
+      "CARE_TYPE_CONFLICT",
+      "CORPORATE_VS_FACILITY",
+      "WEBSITE_CONFLICT",
+      "POSSIBLE_CLOSURE",
+    ]);
+    const highRisk = verified.rows.filter((row) =>
+      row.reason_codes.some((code) => highRiskCodes.has(code)),
+    );
+    const highRiskIds = new Set(highRisk.map((row) => row.provider_id));
+    const ordinary = verified.rows
+      .filter((row) => !highRiskIds.has(row.provider_id))
+      .sort((a, b) => stableRank(a.provider_id).localeCompare(stableRank(b.provider_id)));
+    const randomTarget = Math.min(ordinary.length, Math.max(20, Math.ceil(ordinary.length * 0.02)));
+    const sample = [...highRisk, ...ordinary.slice(0, randomTarget)];
+    const auditFailures = sample.filter((row) => {
+      const feature = new Map(row.matching_features.map((item) => [item.key, item.outcome]));
+      return !(
+        feature.get("facility_name") === "match" &&
+        feature.get("state") === "match" &&
+        (feature.get("street_number") === "match" || feature.get("coordinates") === "match")
+      );
+    });
+    if (auditFailures.length)
+      throw new Error(`QA_STOP: ${auditFailures.length} sampled VERIFIED identities failed audit`);
+    const sampleIds = sample.map((row) => row.provider_id);
     const rows = await client.query<{
       provider_id: string;
       candidate_id: string;
@@ -154,13 +201,14 @@ async function main(): Promise<void> {
          AND fc.claim_type='google_official_website'
          AND fc.resolver_reference=$2
        WHERE rp.run_id=$1 AND rp.final_resolution_state='VERIFIED'
+         AND rp.provider_id=ANY($4::uuid[])
          AND c.candidate_website IS NOT NULL
          AND NOT EXISTS (SELECT 1 FROM facility_claim audited
            WHERE audited.provider_id=rp.provider_id
              AND audited.claim_type='google_official_website'
              AND audited.resolver_reference=$3)
        ORDER BY rp.ordinal`,
-      [runId, `system:${RESOLVER}:${runId}`, `system:${AUDITOR}:${runId}`],
+      [runId, `system:${RESOLVER}:${runId}`, `system:${AUDITOR}:${runId}`, sampleIds],
     );
     let pass = 0;
     let withheld = 0;
@@ -201,12 +249,29 @@ async function main(): Promise<void> {
       `SELECT count(*)::text verified FROM facility_intelligence_run_provider rp
        JOIN facility_identity_candidate c ON c.id=(rp.selection_metadata#>>'{v2,candidateId}')::uuid
        WHERE rp.run_id=$1 AND rp.final_resolution_state='VERIFIED'
+         AND rp.provider_id=ANY($2::uuid[])
          AND EXISTS (SELECT 1 FROM jsonb_array_elements(c.matching_features) f
            WHERE f->>'key'='phone' AND f->>'outcome'='match')`,
-      [runId],
+      [runId, sampleIds],
     );
+    for (const row of sample) {
+      await client.query(
+        `UPDATE facility_intelligence_run_provider
+         SET selection_metadata=jsonb_set(selection_metadata,'{batchQa}',$3::jsonb,true)
+         WHERE run_id=$1 AND provider_id=$2`,
+        [
+          runId,
+          row.provider_id,
+          JSON.stringify({
+            auditStatus: "AUDIT_PASS",
+            auditKind: highRiskIds.has(row.provider_id) ? "high_risk" : "deterministic_random",
+            auditorVersion: AUDITOR,
+          }),
+        ],
+      );
+    }
     console.log(
-      `run_id=${runId} websites_checked=${rows.rowCount} websites_verified=${pass} websites_withheld=${withheld} exact_phone_verified=${phone.rows[0].verified}`,
+      `run_id=${runId} verified=${verified.rowCount} audited=${sample.length} high_risk=${highRisk.length} random=${randomTarget} audit_failures=0 websites_checked=${rows.rowCount} websites_verified=${pass} websites_withheld=${withheld} exact_phone_verified=${phone.rows[0].verified}`,
     );
   } finally {
     client.release();
