@@ -3,11 +3,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { brand } from "./brand";
 import { siteMetadata } from "./metadata";
-import {
-  ASK_NETWORK_STANDARD_VERSION,
-  CURRENT_NETWORK_HUB_ID,
-  NETWORK_HUBS,
-} from "./network";
+import { ASK_NETWORK_STANDARD_VERSION, CURRENT_NETWORK_HUB_ID, NETWORK_HUBS } from "./network";
 
 describe("SeniorTrustHub public brand", () => {
   it("uses the approved public identity while retaining internal product keys", () => {

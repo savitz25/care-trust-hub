@@ -82,7 +82,7 @@ Environment scoping in Vercel must keep the real-provider flag in Preview only. 
 
 ## Database connection and TLS
 
-Use the Supabase session-pooler connection rather than a direct database connection for serverless preview traffic. The application keeps one process-global `pg` pool per warm Node.js function instance, capped at five connections, with bounded connection and idle timeouts. This is reasonable for controlled preview traffic, but database connection usage must be monitored before a public launch because Vercel can run multiple concurrent instances.
+Use the Supabase **transaction** pooler (port 6543) for the web runtime. A session-pooler URL (port 5432 on `*.pooler.supabase.com`) is rewritten to transaction mode unless `CARE_DATABASE_POOL_MODE=session`. Ingest and migrations may keep a session or direct URL. Each Vercel instance reuses one process-global `pg` pool with `max=1`, a 4s connect timeout, and a 5s idle timeout so unused instances release clients quickly.
 
 `CARE_DATABASE_SSL=require` keeps transport encrypted and matches the connection mode validated locally. `verify-full` is preferable once the runtime has the required trusted CA chain; test it in Preview before changing Production. Never use `disable` on Vercel.
 
