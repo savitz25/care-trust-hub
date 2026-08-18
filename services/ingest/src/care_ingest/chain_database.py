@@ -16,7 +16,7 @@ from psycopg.types.json import Jsonb
 from .chain import CHAIN_VERSION
 from .database import _raw_object, _verified_release, iter_normalized_records
 from .manifest import ReleaseManifest, sha256_file
-from .ownership import _source_encoding
+from .ownership import _source_encoding, normalize_cms_ccn
 from .registry import SourceDefinition
 
 CHAIN_NS = uuid.UUID("9849ce1e-06cd-5d07-8b53-3b38188dfa69")
@@ -179,7 +179,7 @@ def load_chain_membership(
             for line, row in enumerate(csv.DictReader(handle), start=2):
                 chain_id = (row.get("AFFILIATION ENTITY ID") or "").strip()
                 chain_name = (row.get("AFFILIATION ENTITY NAME") or "").strip()
-                ccn = (row.get("CCN") or "").strip().upper()
+                ccn = normalize_cms_ccn(row.get("CCN") or "")
                 enrollment = (row.get("ENROLLMENT ID") or "").strip()
                 if not chain_id:
                     continue

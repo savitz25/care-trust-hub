@@ -7,3 +7,5 @@ Apply migrations with a future migration runner in filename order inside a trans
 For optional local validation, `docker compose up -d postgres` starts PostgreSQL 16 with PostGIS. Apply `0001`, `0002`, then `0003` using `psql` as documented in the root README. File validation and normalization occur before transactional database promotion.
 
 `queries/provider_information_verification.sql` demonstrates CCN lookup, current and historical snapshots, raw-row retrieval, release lineage, state grouping, and coordinate availability. It requires an explicit psql `ccn` variable and does not power consumer routes.
+
+Migration `0012_facility_intelligence_evidence_identity.sql` adds the Facility Intelligence V2 observation, claim, candidate, external-identifier, cache, run, review, and audit model. Its backfill uses existing CMS evidence only and its relationship reconciliation is limited to exact unique matches for five-digit numeric CCNs whose leading zero was lost by source spreadsheet typing. Review its impact before production application; it performs no external enrichment.

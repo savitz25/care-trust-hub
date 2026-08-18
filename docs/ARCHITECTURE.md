@@ -32,6 +32,12 @@ Provider attributes are stored as effective-dated snapshots, not overwritten cur
 
 State adapters implement a common acquisition/validation interface but retain jurisdiction-specific semantics. Florida AHCA assisted-living support will be the first such adapter after the national nursing-home product. A later ownership graph will represent organizations and time-bounded ownership edges without assuming names alone prove identity.
 
+## Facility Intelligence V2
+
+Migration 0012 extends the existing evidence foundation rather than replacing it. CMS CCN remains the canonical nursing-home identifier. Immutable typed source observations support separately resolved, versioned claims; external identifiers, candidates, review actions, and resolution audit events all retain observation provenance. Only verified claims can become publication-eligible. Commercial observations such as Google Places remain corroboration and cannot overwrite CMS or state regulatory evidence.
+
+Enrichment runs require an explicit facility manifest, mode, adapter/resolver version, and request budget. Dry runs have a zero network budget. Persistent caching is keyed by operation, field mask, request fingerprint, and adapter version so deployments cannot implicitly trigger national enrichment. See [Task 014B architecture](./task-014b-facility-intelligence-evidence-identity-architecture.md).
+
 # Inspection-intelligence boundary
 
 Migration 0004 adds explicit inspection, deficiency, and penalty concepts; migration 0005 adds a non-evidence operational load stage for reliable managed-pooler transport. Regulatory evidence remains separate from Provider Information snapshots. The server-only read model composes current successful source releases into a consumer-safe, bounded view behind an independent feature flag.

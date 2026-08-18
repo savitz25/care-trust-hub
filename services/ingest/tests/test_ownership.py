@@ -1,4 +1,10 @@
-from care_ingest.ownership import normalize_ownership_row
+from care_ingest.ownership import normalize_cms_ccn, normalize_ownership_row
+
+
+def test_numeric_five_digit_ccn_restores_source_lost_leading_zero() -> None:
+    assert normalize_cms_ccn("15001") == "015001"
+    assert normalize_cms_ccn("01A193") == "01A193"
+    assert normalize_cms_ccn("1234567") == "1234567"
 
 
 def test_official_identifier_survives_name_change_without_name_merge() -> None:

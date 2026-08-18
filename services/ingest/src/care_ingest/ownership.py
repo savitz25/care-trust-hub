@@ -79,6 +79,12 @@ def _key(*values: str) -> str:
     return hashlib.sha256("|".join(values).encode()).hexdigest()
 
 
+def normalize_cms_ccn(value: str) -> str:
+    """Restore the leading zero CMS spreadsheets may drop from numeric CCNs."""
+    normalized = value.strip().upper()
+    return normalized.zfill(6) if normalized.isdigit() and len(normalized) == 5 else normalized
+
+
 def _classifications(row: dict[str, str], suffix: str = " - OWNER") -> dict[str, bool | str]:
     labels = {
         "MANAGEMENT SERVICES COMPANY": "management_services_company",
@@ -103,7 +109,7 @@ def _classifications(row: dict[str, str], suffix: str = " - OWNER") -> dict[str,
 def normalize_ownership_row(dataset_key: str, row: dict[str, str], line: int) -> dict[str, Any]:
     locator = f"csv-row:{line}"
     if dataset_key == "skilled-nursing-facility-enrollments":
-        ccn = _value(row, "CCN").upper()
+        ccn = normalize_cms_ccn(_value(row, "CCN"))
         pac = _value(row, "ASSOCIATE ID")
         enrollment = _value(row, "ENROLLMENT ID")
         name = _value(row, "ORGANIZATION NAME")
@@ -163,7 +169,7 @@ def normalize_ownership_row(dataset_key: str, row: dict[str, str], line: int) ->
             "raw_record": row,
         }
     if dataset_key == "nursing-home-ownership":
-        ccn = _value(row, "CMS Certification Number (CCN)").upper()
+        ccn = normalize_cms_ccn(_value(row, "CMS Certification Number (CCN)"))
         owner_type = _value(row, "Owner Type").lower()
         party_kind = "individual" if owner_type == "individual" else "organization"
         name = _value(row, "Owner Name")
@@ -198,7 +204,7 @@ def normalize_ownership_row(dataset_key: str, row: dict[str, str], line: int) ->
         buyer_pac = _value(row, "ASSOCIATE ID - BUYER")
         seller_pac = _value(row, "ASSOCIATE ID - SELLER")
         effective = _date(_value(row, "EFFECTIVE DATE"))
-        ccn = (_value(row, "CCN - BUYER") or _value(row, "CCN - SELLER")).upper()
+        ccn = normalize_cms_ccn(_value(row, "CCN - BUYER") or _value(row, "CCN - SELLER"))
         if not (buyer_pac and seller_pac and effective and ccn):
             raise ValueError("CHOW row missing buyer, seller, effective date, or CCN")
         return {

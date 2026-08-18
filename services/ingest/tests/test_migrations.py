@@ -37,3 +37,15 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "append-only" in trust
     assert "subscription" not in trust
     assert "billing" not in trust
+
+    intelligence = (migrations / "0012_facility_intelligence_evidence_identity.sql").read_text(
+        encoding="utf-8"
+    )
+    assert "CREATE TABLE facility_source_observation (" in intelligence
+    assert "CREATE TABLE facility_claim (" in intelligence
+    assert "CREATE TABLE facility_identity_candidate (" in intelligence
+    assert "CREATE TABLE facility_review_item (" in intelligence
+    assert "CREATE TABLE facility_external_request_cache (" in intelligence
+    assert "facility_intelligence_append_only" in intelligence
+    assert "CHECK (publication_eligible = false OR resolution_state = 'VERIFIED')" in intelligence
+    assert "GOOGLE_PLACES_API_KEY" not in intelligence

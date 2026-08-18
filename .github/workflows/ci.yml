@@ -95,6 +95,7 @@ jobs:
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0009_location_reference.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0010_consumer_search_indexes.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0011_trust_participation.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0012_facility_intelligence_evidence_identity.sql
       - name: Verify migration objects
         run: |
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 <<'SQL'
@@ -106,6 +107,11 @@ jobs:
           SELECT to_regclass('public.trusthub_manual_override') IS NOT NULL AS trust_override_exists;
           SELECT to_regclass('public.trust_audit_event') IS NOT NULL AS trust_audit_exists;
           SELECT to_regclass('public.cms_chain_performance_snapshot') IS NOT NULL AS chain_snapshot_exists;
+          SELECT to_regclass('public.facility_source_observation') IS NOT NULL AS facility_observation_exists;
+          SELECT to_regclass('public.facility_claim') IS NOT NULL AS facility_claim_exists;
+          SELECT to_regclass('public.facility_identity_candidate') IS NOT NULL AS facility_candidate_exists;
+          SELECT to_regclass('public.facility_review_item') IS NOT NULL AS facility_review_exists;
+          SELECT to_regclass('public.facility_external_request_cache') IS NOT NULL AS facility_cache_exists;
           SELECT to_regclass('public.raw_object') IS NOT NULL AS raw_object_exists;
           SELECT to_regclass('public.ingest_run') IS NOT NULL AS ingest_run_exists;
           SELECT to_regclass('public.facility_snapshot_location_gix') IS NOT NULL AS location_index_exists;

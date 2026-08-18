@@ -606,3 +606,122 @@ def test_ownership_identity_is_identifier_based_and_individuals_stay_separate(
         ).fetchone()
         assert stage[0] == 0
         assert stage[1] <= 64 * 1024
+
+
+def test_facility_intelligence_observations_claims_review_and_audit_are_guarded() -> None:
+    with psycopg.connect(DATABASE_URL) as connection:
+        provider_id = connection.execute(
+            "INSERT INTO provider(provider_type) VALUES ('nursing_home') RETURNING id"
+        ).fetchone()[0]
+        observation_id = connection.execute(
+            """
+            INSERT INTO facility_source_observation (
+              provider_id,canonical_ccn,source_type,source_authority,source_identifier,
+              source_record_identifier,observation_type,observed_value,normalized_value,
+              retrieved_at,release_identifier,evidence_fingerprint,adapter_version
+            ) VALUES (
+              %s,'015001','synthetic_test','federal_healthcare','synthetic-source',
+              'synthetic-record','facility_identity','{"name":"Synthetic Facility"}',
+              'synthetic facility',now(),'synthetic-release',repeat('a',64),'synthetic-v1'
+            ) RETURNING id
+            """,
+            (provider_id,),
+        ).fetchone()[0]
+        external_id = connection.execute(
+            """
+            INSERT INTO facility_external_identifier (
+              provider_id,namespace,identifier_type,identifier_value,normalized_value,
+              source_observation_id,verification_state,verified_at
+            ) VALUES (%s,'CMS','CCN','015001','015001',%s,'VERIFIED',now()) RETURNING id
+            """,
+            (provider_id, observation_id),
+        ).fetchone()[0]
+        claim_ids = {}
+        for state in ("VERIFIED", "PROBABLE", "REVIEW_REQUIRED", "REJECTED", "UNRESOLVED"):
+            claim_ids[state] = connection.execute(
+                """
+                INSERT INTO facility_claim (
+                  provider_id,claim_type,claim_value,normalized_value,resolution_state,
+                  confidence,resolution_method,resolution_reason,threshold_version,
+                  resolved_at,resolver_reference,review_state,publication_eligible
+                ) VALUES (%s,%s,'"synthetic"','synthetic',%s,0.5,'synthetic_rule',
+                  'Synthetic integration test decision','synthetic-v1',now(),
+                  'system:synthetic-test','open',false) RETURNING id
+                """,
+                (provider_id, f"synthetic_{state.lower()}", state),
+            ).fetchone()[0]
+        connection.execute(
+            "INSERT INTO facility_claim_observation(claim_id,observation_id,evidence_role) "
+            "VALUES (%s,%s,'supporting')",
+            (claim_ids["VERIFIED"], observation_id),
+        )
+        candidate_id = connection.execute(
+            """
+            INSERT INTO facility_identity_candidate (
+              provider_id,canonical_ccn,source_type,external_identifier_namespace,
+              external_identifier_value,resolution_state,threshold_version,
+              source_observation_id,discovered_at
+            ) VALUES (%s,'015001','synthetic_test','SYNTHETIC','candidate-1',
+              'REVIEW_REQUIRED','synthetic-v1',%s,now()) RETURNING id
+            """,
+            (provider_id, observation_id),
+        ).fetchone()[0]
+        review_id = connection.execute(
+            """
+            INSERT INTO facility_review_item (
+              provider_id,candidate_id,review_type,evidence_summary
+            ) VALUES (%s,%s,'multiple_candidates','{"summary":"Synthetic evidence"}')
+            RETURNING id
+            """,
+            (provider_id, candidate_id),
+        ).fetchone()[0]
+        connection.execute(
+            """
+            INSERT INTO facility_review_action (
+              review_item_id,action,previous_state,new_state,actor_kind,actor_reference,
+              reason,rule_version,supporting_observation_ids
+            ) VALUES (%s,'defer','REVIEW_REQUIRED','REVIEW_REQUIRED','reviewer',
+              'synthetic-reviewer','Synthetic ambiguity remains','synthetic-v1',ARRAY[%s]::uuid[])
+            """,
+            (review_id, observation_id),
+        )
+        connection.execute(
+            """
+            INSERT INTO facility_resolution_audit_event (
+              provider_id,candidate_id,previous_state,new_state,resolver_kind,
+              resolver_reference,resolution_method,reason,rule_version,
+              supporting_observation_ids
+            ) VALUES (%s,%s,'UNRESOLVED','REVIEW_REQUIRED','system','synthetic-v1',
+              'deterministic_features','Synthetic ambiguity','synthetic-v1',ARRAY[%s]::uuid[])
+            """,
+            (provider_id, candidate_id, observation_id),
+        )
+        assert external_id is not None
+        assert set(claim_ids) == {
+            "VERIFIED",
+            "PROBABLE",
+            "REVIEW_REQUIRED",
+            "REJECTED",
+            "UNRESOLVED",
+        }
+
+    with pytest.raises(psycopg.errors.RaiseException, match="append-only"):
+        with psycopg.connect(DATABASE_URL) as connection:
+            connection.execute(
+                "UPDATE facility_source_observation SET status='superseded' WHERE id=%s",
+                (observation_id,),
+            )
+
+    with pytest.raises(psycopg.errors.CheckViolation):
+        with psycopg.connect(DATABASE_URL) as connection:
+            connection.execute(
+                """
+                INSERT INTO facility_claim (
+                  provider_id,claim_type,claim_value,resolution_state,resolution_method,
+                  resolution_reason,threshold_version,resolved_at,resolver_reference,
+                  publication_eligible
+                ) VALUES (%s,'invalid_publication','"synthetic"','PROBABLE','synthetic_rule',
+                  'Synthetic invalid publication','synthetic-v1',now(),'system:test',true)
+                """,
+                (provider_id,),
+            )
