@@ -81,9 +81,21 @@ async function findV1Run(client: PoolClient): Promise<string> {
 }
 
 async function createV2Run(client: PoolClient, v1RunId: string): Promise<string> {
+  const source = await client.query<{
+    requested_facility_count: number;
+    requested_facility_fingerprint: string;
+  }>(
+    `SELECT requested_facility_count,requested_facility_fingerprint
+     FROM facility_intelligence_run WHERE id=$1`,
+    [v1RunId],
+  );
+  if (!source.rowCount) throw new Error("Source evidence run was not found");
+  const expectedCount = source.rows[0].requested_facility_count;
   const existing = await client.query<{ id: string }>(
-    `SELECT id FROM facility_intelligence_run WHERE resolver_version=$1 ORDER BY created_at DESC LIMIT 1`,
-    [FACILITY_IDENTITY_RESOLVER_V2],
+    `SELECT id FROM facility_intelligence_run
+     WHERE resolver_version=$1 AND requested_facility_fingerprint=$2
+     ORDER BY created_at DESC LIMIT 1`,
+    [FACILITY_IDENTITY_RESOLVER_V2, source.rows[0].requested_facility_fingerprint],
   );
   if (existing.rowCount) return existing.rows[0].id;
   const v1Rows = await client.query<ManifestRow>(
@@ -92,15 +104,21 @@ async function createV2Run(client: PoolClient, v1RunId: string): Promise<string>
      FROM facility_intelligence_run_provider WHERE run_id=$1 ORDER BY ordinal`,
     [v1RunId],
   );
-  if (v1Rows.rowCount !== 200)
-    throw new Error(`Expected 200 V1 manifest rows; got ${v1Rows.rowCount}`);
+  if (v1Rows.rowCount !== expectedCount)
+    throw new Error(`Expected ${expectedCount} source manifest rows; got ${v1Rows.rowCount}`);
   const fingerprint = sha256(v1Rows.rows.map((row) => row.cms_ccn).join("|"));
   const run = await client.query<{ id: string }>(
     `INSERT INTO facility_intelligence_run
       (source_type,adapter_version,resolver_version,run_mode,status,requested_facility_count,
        maximum_requests,requested_facility_fingerprint,started_at)
-     VALUES ('google_places',$1,$2,'pilot','planned',200,$3,$4,now()) RETURNING id`,
-    [V2_ADAPTER, FACILITY_IDENTITY_RESOLVER_V2, NEW_GOOGLE_REQUEST_LIMIT, fingerprint],
+     VALUES ('google_places',$1,$2,'pilot','planned',$3,$4,$5,now()) RETURNING id`,
+    [
+      V2_ADAPTER,
+      FACILITY_IDENTITY_RESOLVER_V2,
+      expectedCount,
+      NEW_GOOGLE_REQUEST_LIMIT,
+      fingerprint,
+    ],
   );
   const runId = run.rows[0].id;
   for (const row of v1Rows.rows) {
@@ -531,6 +549,24 @@ async function report(client: PoolClient, runId: string): Promise<void> {
       "SELECT focus,final_resolution_state,count(*) FROM facility_intelligence_run_provider CROSS JOIN LATERAL jsonb_array_elements_text(selection_metadata->'focusGroups') focus WHERE run_id=$1 GROUP BY 1,2 ORDER BY 1,2",
     ],
     [
+      "selection_groups",
+      "SELECT selection_metadata->>'selectedBy' selection_group,count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 GROUP BY 1 ORDER BY 1",
+    ],
+    [
+      "primary_review_reasons",
+      `SELECT CASE
+         WHEN reason_codes @> ARRAY['CARE_TYPE_CONFLICT']::text[] THEN 'CARE_TYPE_CONFLICT'
+         WHEN reason_codes @> ARRAY['MULTIPLE_PLAUSIBLE_RESULTS']::text[] THEN 'MULTIPLE_PLAUSIBLE_RESULTS'
+         WHEN reason_codes @> ARRAY['CAMPUS_AMBIGUITY']::text[] THEN 'CAMPUS_AMBIGUITY'
+         WHEN reason_codes @> ARRAY['ADDRESS_CONFLICT']::text[] THEN 'ADDRESS_CONFLICT'
+         WHEN reason_codes @> ARRAY['NAME_CONFLICT']::text[] THEN 'NAME_CONFLICT'
+         WHEN reason_codes @> ARRAY['PHONE_CONFLICT']::text[] THEN 'PHONE_CONFLICT'
+         WHEN reason_codes @> ARRAY['INSUFFICIENT_EVIDENCE']::text[] THEN 'INSUFFICIENT_EVIDENCE'
+         ELSE 'INSUFFICIENT_EVIDENCE' END primary_reason,count(*)
+       FROM facility_intelligence_run_provider WHERE run_id=$1 AND final_resolution_state='REVIEW_REQUIRED'
+       GROUP BY 1 ORDER BY 2 DESC`,
+    ],
+    [
       "fields",
       "SELECT claim_type,resolution_state,count(*) FROM facility_claim WHERE resolver_reference=$1 GROUP BY 1,2 ORDER BY 1,2",
     ],
@@ -575,14 +611,27 @@ async function main(): Promise<void> {
   const client = await pool.connect();
   try {
     const command = process.argv[2];
-    const v1RunId = await findV1Run(client);
+    const sourceRunId = process.argv[3];
     if (command === "run") {
+      const v1RunId = await findV1Run(client);
       await client.query("BEGIN");
       try {
         const runId = await createV2Run(client, v1RunId);
         await runV2(client, v1RunId, runId);
         await client.query("COMMIT");
         console.log(`v2_run_id=${runId} new_google_requests=0`);
+        await report(client, runId);
+      } catch (error) {
+        await client.query("ROLLBACK");
+        throw error;
+      }
+    } else if (command === "holdout" && sourceRunId) {
+      await client.query("BEGIN");
+      try {
+        const runId = await createV2Run(client, sourceRunId);
+        await runV2(client, sourceRunId, runId);
+        await client.query("COMMIT");
+        console.log(`v2_holdout_run_id=${runId} new_google_requests=0`);
         await report(client, runId);
       } catch (error) {
         await client.query("ROLLBACK");
@@ -613,7 +662,10 @@ async function main(): Promise<void> {
         [FACILITY_IDENTITY_RESOLVER_V2],
       );
       console.log(JSON.stringify(rows.rows));
-    } else throw new Error("Usage: resolver-v2-retest.ts run|report|regressions");
+    } else
+      throw new Error(
+        "Usage: resolver-v2-retest.ts run|holdout <source-run-id>|report|regressions",
+      );
   } finally {
     client.release();
     await pool.end();

@@ -12,16 +12,22 @@ import {
 } from "../src/server/places/google-places";
 import { PostgresGooglePlacesCache } from "../src/server/places/postgres-google-places-cache";
 import {
+  FACILITY_IDENTITY_RESOLVER_V2,
   resolveIdentityCandidate,
   type MatchFeature,
   type ResolutionDecision,
   type ResolutionState,
 } from "../../../packages/domain/src/facility-intelligence";
 
-const VERSION = "FACILITY_IDENTITY_PILOT_2026_08_V1";
-const RESOLVER_VERSION = "facility-identity-pilot-v1";
-const MAXIMUM_REQUESTS = 450;
-const TARGET_SIZE = 200;
+const HOLDOUT_MODE = process.argv.includes("--holdout");
+const VERSION = HOLDOUT_MODE
+  ? "FACILITY_IDENTITY_HOLDOUT_2026_08_V1"
+  : "FACILITY_IDENTITY_PILOT_2026_08_V1";
+const RESOLVER_VERSION = HOLDOUT_MODE
+  ? `${FACILITY_IDENTITY_RESOLVER_V2}-holdout-acquisition`
+  : "facility-identity-pilot-v1";
+const MAXIMUM_REQUESTS = HOLDOUT_MODE ? 210 : 450;
+const TARGET_SIZE = HOLDOUT_MODE ? 100 : 200;
 const GOOGLE_SOURCE = "google_places";
 
 type Facility = {
@@ -373,7 +379,26 @@ async function fetchFacilities(client: PoolClient): Promise<Facility[]> {
   }));
 }
 
+async function excludeOriginalPilot(
+  client: PoolClient,
+  facilities: Facility[],
+): Promise<Facility[]> {
+  if (!HOLDOUT_MODE) return facilities;
+  const original = await client.query<{ cms_ccn: string }>(
+    `SELECT rp.cms_ccn FROM facility_intelligence_run_provider rp
+     JOIN facility_intelligence_run r ON r.id=rp.run_id
+     WHERE r.resolver_version='facility-identity-pilot-v1'
+       AND r.requested_facility_count=200
+     ORDER BY r.created_at DESC`,
+  );
+  const excluded = new Set(original.rows.slice(0, 200).map((row) => row.cms_ccn));
+  if (excluded.size !== 200)
+    throw new Error(`Expected 200 original pilot CCNs; got ${excluded.size}`);
+  return facilities.filter((facility) => !excluded.has(facility.ccn));
+}
+
 function selectCohort(facilities: Facility[]): SelectedFacility[] {
+  if (HOLDOUT_MODE) return selectHoldoutCohort(facilities);
   const quotas: Array<[string, number]> = [
     ["straightforward_independent", 25],
     ["large_national_chain", 25],
@@ -419,6 +444,68 @@ function selectCohort(facilities: Facility[]): SelectedFacility[] {
     throw new Error(`Expected ${TARGET_SIZE} facilities; got ${selected.size}`);
   return [...selected.values()].sort((a, b) =>
     stableRank(a.ccn, "manifest").localeCompare(stableRank(b.ccn, "manifest")),
+  );
+}
+
+function selectHoldoutCohort(facilities: Facility[]): SelectedFacility[] {
+  const decorated = facilities.map((facility) => ({ facility, strata: strataFor(facility) }));
+  const selected = new Map<string, SelectedFacility>();
+  const stateCounts = new Map<string, number>();
+  const select = (
+    group: "representative" | "difficult" | "extreme_edge",
+    quota: number,
+    eligible: typeof decorated,
+  ) => {
+    let added = 0;
+    for (const entry of eligible.sort((a, b) =>
+      stableRank(a.facility.ccn, group).localeCompare(stableRank(b.facility.ccn, group)),
+    )) {
+      if (added >= quota) break;
+      if (selected.has(entry.facility.ccn)) continue;
+      if ((stateCounts.get(entry.facility.state) ?? 0) >= 5) continue;
+      selected.set(entry.facility.ccn, {
+        ...entry.facility,
+        strata: entry.strata,
+        selectedBy: group,
+        region: regionFor(entry.facility.state),
+        selectionReason: `Seeded unseen ${VERSION} ${group} validation case`,
+      });
+      stateCounts.set(entry.facility.state, (stateCounts.get(entry.facility.state) ?? 0) + 1);
+      added += 1;
+    }
+    if (added !== quota) throw new Error(`Insufficient ${group} facilities: ${added}/${quota}`);
+  };
+  const extreme = decorated.filter(({ strata }) =>
+    strata.some((value) =>
+      [
+        "hospital_campus_associated",
+        "similar_name_same_market",
+        "deliberately_difficult_edge",
+      ].includes(value),
+    ),
+  );
+  const difficult = decorated.filter(({ strata }) =>
+    strata.some((value) =>
+      [
+        "common_generic_name",
+        "recent_ownership_or_rename",
+        "address_phone_inconsistency_proxy",
+        "rural_sparse_web_proxy",
+        "large_national_chain",
+        "regional_chain",
+      ].includes(value),
+    ),
+  );
+  const representative = decorated.filter(
+    ({ strata }) => !strata.includes("deliberately_difficult_edge"),
+  );
+  select("extreme_edge", 10, extreme);
+  select("difficult", 30, difficult);
+  select("representative", 60, representative);
+  if (selected.size !== TARGET_SIZE)
+    throw new Error(`Expected ${TARGET_SIZE} facilities; got ${selected.size}`);
+  return [...selected.values()].sort((a, b) =>
+    stableRank(a.ccn, "holdout-manifest").localeCompare(stableRank(b.ccn, "holdout-manifest")),
   );
 }
 
@@ -1101,7 +1188,9 @@ async function main(): Promise<void> {
   const client = await pool.connect();
   try {
     if (command === "cohort") {
-      const cohort = selectCohort(await fetchFacilities(client));
+      const cohort = selectCohort(
+        await excludeOriginalPilot(client, await fetchFacilities(client)),
+      );
       if (argument === "--dry-run") {
         console.log(
           `dry_run=true facilities=${cohort.length} fingerprint=${sha256(cohort.map((f) => f.ccn).join("|"))}`,
