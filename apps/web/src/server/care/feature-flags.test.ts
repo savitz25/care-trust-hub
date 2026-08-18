@@ -171,6 +171,16 @@ describe("real provider UI feature flag", () => {
     ).toBe(false);
   });
 
+  it("keeps the care-needs navigator fail-closed and independent of facility flags", async () => {
+    const { isCareNeedsNavigatorEnabled, isRealProviderUiEnabled } = await import(
+      "./feature-flags"
+    );
+    expect(isCareNeedsNavigatorEnabled({})).toBe(false);
+    expect(isCareNeedsNavigatorEnabled({ CARE_ENABLE_CARE_NEEDS_NAVIGATOR: "TRUE" })).toBe(false);
+    expect(isCareNeedsNavigatorEnabled({ CARE_ENABLE_CARE_NEEDS_NAVIGATOR: "true" })).toBe(true);
+    expect(isRealProviderUiEnabled({ CARE_ENABLE_CARE_NEEDS_NAVIGATOR: "true" })).toBe(false);
+  });
+
   it("requires both real-provider and trust-participation opt-ins without billing state", async () => {
     const { isTrustParticipationEnabled } = await import("./feature-flags");
     expect(isTrustParticipationEnabled({ CARE_ENABLE_TRUST_PARTICIPATION: "true" })).toBe(false);

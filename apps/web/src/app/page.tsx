@@ -33,6 +33,16 @@ const paths = [
 ] as const;
 
 export default function Home() {
+  const navigatorEnabled = process.env.CARE_ENABLE_CARE_NEEDS_NAVIGATOR === "true";
+  const entries = paths.map((path) =>
+    path.number === "04" && navigatorEnabled
+      ? {
+          ...path,
+          href: "/tools/care-needs-navigator",
+          action: "Use the Care Needs Navigator",
+        }
+      : path,
+  );
   return (
     <>
       <div className="page-shell home-page">
@@ -63,7 +73,7 @@ export default function Home() {
             <h2 id="start-title">What would help right now?</h2>
           </div>
           <div className="entry-grid">
-            {paths.map((path) => (
+            {entries.map((path) => (
               <a className="entry-card" href={path.href} key={path.number}>
                 <span className="entry-card__number">{path.number}</span>
                 <h3>{path.title}</h3>
@@ -75,6 +85,21 @@ export default function Home() {
             ))}
           </div>
         </section>
+        {navigatorEnabled ? (
+          <section className="entry-section" aria-labelledby="navigator-home-title">
+            <div className="section-heading">
+              <p className="eyebrow">Not sure what kind of care you need?</p>
+              <h2 id="navigator-home-title">Start with the care landscape, not a facility list</h2>
+            </div>
+            <p>
+              The Care Needs Navigator explains which settings may be worth investigating based on
+              daily needs, safety, and support — without a score or a sales pitch.
+            </p>
+            <a className="button button--secondary" href="/tools/care-needs-navigator">
+              Use the Care Needs Navigator →
+            </a>
+          </section>
+        ) : null}
         <section className="mode-grid" id="planning" aria-labelledby="mode-title">
           <h2 id="mode-title" className="visually-hidden">
             Choose your research pace

@@ -1,4 +1,5 @@
 import { PublicInformationPage } from "@/components/public-information-page";
+import { isCareNeedsNavigatorEnabled } from "@/server/care/feature-flags";
 export const metadata = { title: "Data methodology" };
 export default function Page() {
   return (
@@ -16,6 +17,19 @@ export default function Page() {
       <p>
         Derived values identify their source period and method. PBJ hours per resident day use
         eligible positive-census days and ratio-of-sums calculations.
+      </p>
+      <h2>Care Needs Navigator</h2>
+      <p>
+        The Navigator is a versioned, deterministic educational tool. It does not diagnose,
+        determine medical necessity, or persist health answers. When skilled nursing or short-term
+        rehabilitation may be worth investigating, it can continue into SeniorTrustHub&apos;s
+        existing CMS-certified facility research.
+        {isCareNeedsNavigatorEnabled() ? (
+          <>
+            {" "}
+            <a href="/tools/care-needs-navigator">Open the Care Needs Navigator</a>.
+          </>
+        ) : null}
       </p>
       <h2>Limits</h2>
       <p>

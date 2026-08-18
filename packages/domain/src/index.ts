@@ -29,3 +29,4 @@ export * from "./state-regulator";
 export * from "./state-publication";
 export * from "./facility-history";
 export * from "./ownership-intelligence";
+export * from "./care-needs-navigator";

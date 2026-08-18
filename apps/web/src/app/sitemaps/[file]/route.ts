@@ -1,6 +1,9 @@
 import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
 import { chainHref, organizationHref, providerSlug } from "@/server/care/consumer";
-import { isOwnershipIntelligenceV2Enabled } from "@/server/care/feature-flags";
+import {
+  isCareNeedsNavigatorEnabled,
+  isOwnershipIntelligenceV2Enabled,
+} from "@/server/care/feature-flags";
 import {
   getChainSitemapRows,
   getFacilitySitemapPage,
@@ -33,14 +36,18 @@ const urlset = (urls: string) =>
 export async function GET(_request: Request, { params }: { params: Promise<{ file: string }> }) {
   if (!isPublicLaunchEnabled()) return new Response("Not found", { status: 404 });
   const { file } = await params;
-  if (file === "core.xml")
+  if (file === "core.xml") {
+    const paths = isCareNeedsNavigatorEnabled()
+      ? [...corePaths, "/tools/care-needs-navigator"]
+      : corePaths;
     return response(
       urlset(
-        corePaths
+        paths
           .map((path) => `<url><loc>${new URL(path, productionOrigin).href}</loc></url>`)
           .join(""),
       ),
     );
+  }
   if (file === "chains.xml") {
     const rows = await getChainSitemapRows();
     return response(
