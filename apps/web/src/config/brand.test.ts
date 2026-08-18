@@ -3,6 +3,11 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { brand } from "./brand";
 import { siteMetadata } from "./metadata";
+import {
+  ASK_NETWORK_STANDARD_VERSION,
+  CURRENT_NETWORK_HUB_ID,
+  NETWORK_HUBS,
+} from "./network";
 
 describe("SeniorTrustHub public brand", () => {
   it("uses the approved public identity while retaining internal product keys", () => {
@@ -51,5 +56,22 @@ describe("SeniorTrustHub public brand", () => {
     expect(desktop.match(/<text x="142"/g)).toHaveLength(2);
     expect(compact).toContain('viewBox="0 0 350 114"');
     expect(compact.match(/<text x="126"/g)).toHaveLength(2);
+  });
+
+  it("ships Network V2 hub IDs and canonical origins", () => {
+    expect(ASK_NETWORK_STANDARD_VERSION).toBe("2026.08.18-network-v2");
+    expect(CURRENT_NETWORK_HUB_ID).toBe("senior");
+    expect(NETWORK_HUBS.map((hub) => hub.id)).toEqual([
+      "ask",
+      "move",
+      "lender",
+      "insurance",
+      "contractor",
+      "senior",
+      "investor",
+    ]);
+    expect(NETWORK_HUBS.find((hub) => hub.id === "investor")?.href).toBe(
+      "https://www.investortrusthub.com",
+    );
   });
 });

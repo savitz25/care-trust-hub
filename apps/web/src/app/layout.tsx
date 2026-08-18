@@ -1,6 +1,12 @@
 import type { CSSProperties, ReactNode } from "react";
 import { Footer, Header } from "@care/ui";
 import { brand } from "@/config/brand";
+import {
+  ASK_NETWORK_OWNERSHIP_SHORT,
+  ASK_NETWORK_STANDARD_URL,
+  CURRENT_NETWORK_HUB_ID,
+  NETWORK_HUBS,
+} from "@/config/network";
 import { siteMetadata } from "@/config/metadata";
 import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
 import { StructuredData } from "@/components/structured-data";
@@ -22,7 +28,12 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <a className="skip-link" href="#main-content">
           Skip to main content
         </a>
-        <Header productName={brand.publicName} networkName={brand.networkName} />
+        <Header
+          productName={brand.publicName}
+          networkName={brand.networkName}
+          networkLinks={NETWORK_HUBS}
+          currentHubId={CURRENT_NETWORK_HUB_ID}
+        />
         <main id="main-content" tabIndex={-1}>
           {isPublicLaunchEnabled() && (
             <StructuredData
@@ -35,7 +46,12 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
                     name: brand.publicName,
                     url: productionOrigin.href,
                     logo: new URL("/brand/senior-trust-hub-logo.svg", productionOrigin).href,
-                    parentOrganization: { "@type": "Organization", name: brand.networkName },
+                    parentOrganization: {
+                      "@type": "Organization",
+                      "@id": "https://www.asktrusthub.com/#organization",
+                      name: brand.networkName,
+                      url: "https://www.asktrusthub.com",
+                    },
                   },
                   {
                     "@type": "WebSite",
@@ -54,6 +70,9 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           philosophy={brand.philosophy}
           networkName={brand.networkName}
           productName={brand.publicName}
+          networkLinks={NETWORK_HUBS}
+          standardUrl={ASK_NETWORK_STANDARD_URL}
+          ownershipLine={ASK_NETWORK_OWNERSHIP_SHORT}
         />
         <PrivacyAnalytics />
       </body>
