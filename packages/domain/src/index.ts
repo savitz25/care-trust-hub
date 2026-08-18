@@ -33,3 +33,5 @@ export * from "./care-needs-navigator";
 export * from "./senior-care-cost-benchmarks";
 export * from "./senior-care-cost-planner";
 export * from "./interview-builder";
+export * from "./family-workspace";
+export * from "./family-workspace-comparison";

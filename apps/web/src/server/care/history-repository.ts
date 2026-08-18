@@ -102,4 +102,87 @@ export async function getPublishedFacilityHistory(
   };
 }
 
+function mapHistoryRow(row: HistoryRow): HistoryEventRecord {
+  return {
+    id: row.id,
+    eventType: row.event_type,
+    eventFamily: row.event_family,
+    eventDate: row.event_date,
+    datePrecision: row.date_precision,
+    dateBasis: row.date_basis,
+    importance: row.importance,
+    title: row.title,
+    summary: row.summary,
+    previousValue: row.previous_value,
+    newValue: row.new_value,
+    evidenceHref: row.evidence_href,
+    sourceDatasetName: row.source_dataset_key,
+    sourceRecordLocator: row.source_record_locator,
+    sourceLabel: row.source_label ?? (row.event_family === "state" ? "State regulator" : "CMS"),
+    regulator: row.regulator,
+  };
+}
+
+export async function getPublishedFacilityHistoriesByCcns(
+  ccns: readonly string[],
+  options: { includeStateEvents?: boolean } = {},
+): Promise<Map<string, CareFacilityHistory>> {
+  const unique = [...new Set(ccns.map(validateCcn))].slice(0, 5);
+  const result = new Map<string, CareFacilityHistory>();
+  if (unique.length === 0) return result;
+  const includeState = options.includeStateEvents === true;
+  const stateClause = includeState
+    ? "AND (e.event_family <> 'state' OR coalesce(e.federal_relationship, '') <> 'POSSIBLE_DUPLICATE')"
+    : "AND e.event_family <> 'state'";
+  const pool = getCareDatabasePool();
+  const [events, counts] = await Promise.all([
+    pool.query<HistoryRow & { ccn: string }>(
+      `SELECT * FROM (
+         SELECT e.id, e.event_type, e.event_family, e.event_date::text, e.date_precision,
+                e.date_basis, e.importance, e.title, e.summary, e.previous_value, e.new_value,
+                e.evidence_href, e.source_dataset_key, e.source_record_locator,
+                e.source_label, e.regulator, pi.identifier_value AS ccn,
+                row_number() OVER (
+                  PARTITION BY pi.identifier_value
+                  ORDER BY e.event_date DESC, e.importance ASC, e.id DESC
+                ) AS rn
+           FROM published_facility_history_event e
+           JOIN provider_identifier pi ON pi.provider_id = e.provider_id
+            AND pi.issuer = 'CMS' AND pi.identifier_type = 'CCN' AND pi.valid_to IS NULL
+          WHERE pi.identifier_value = ANY($1::text[])
+            ${stateClause}
+       ) ranked
+       WHERE ranked.rn <= $2`,
+      [unique, HISTORY_READ_CAP],
+    ),
+    pool.query<{ ccn: string; total: string }>(
+      `SELECT pi.identifier_value AS ccn, count(*)::text AS total
+         FROM published_facility_history_event e
+         JOIN provider_identifier pi ON pi.provider_id = e.provider_id
+          AND pi.issuer = 'CMS' AND pi.identifier_type = 'CCN' AND pi.valid_to IS NULL
+        WHERE pi.identifier_value = ANY($1::text[])
+          ${stateClause}
+        GROUP BY pi.identifier_value`,
+      [unique],
+    ),
+  ]);
+  const grouped = new Map<string, HistoryEventRecord[]>();
+  for (const row of events.rows) {
+    grouped.set(row.ccn, [...(grouped.get(row.ccn) ?? []), mapHistoryRow(row)]);
+  }
+  const totals = new Map(counts.rows.map((row) => [row.ccn, Number(row.total)]));
+  for (const ccn of unique) {
+    const mapped = grouped.get(ccn) ?? [];
+    const totalCount = totals.get(ccn) ?? mapped.length;
+    result.set(ccn, {
+      events: mapped,
+      totalCount,
+      coverageLabel: historyCoverageLabel(totalCount),
+      recentHighlights: selectRecentHighlights(mapped),
+      emptyRecentLabel: recentChangesFallback(),
+    });
+  }
+  return result;
+}
+
 export const FACILITY_HISTORY_DEFAULT_LIMIT = DEFAULT_HISTORY_LIMIT;

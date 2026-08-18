@@ -50,6 +50,19 @@ describe("published facility history reads", () => {
     expect(query.mock.calls[0][0]).not.toMatch(/AND e.event_family <> 'state'\s*$/m);
   });
 
+  it("batches published history for up to five CCNs in two queries", async () => {
+    query.mockResolvedValueOnce({ rows: [] }).mockResolvedValueOnce({ rows: [] });
+    const { getPublishedFacilityHistoriesByCcns } = await import("./history-repository");
+    await getPublishedFacilityHistoriesByCcns(["015009", "015010", "015012", "055001", "335004"], {
+      includeStateEvents: true,
+    });
+    expect(query).toHaveBeenCalledTimes(2);
+    expect(query.mock.calls[0][0]).toContain("ANY($1::text[])");
+    expect(query.mock.calls[0][0]).toContain("row_number()");
+    expect(query.mock.calls[0][0]).not.toContain("google_");
+    expect(query.mock.calls[0][1][0]).toHaveLength(5);
+  });
+
   it("returns an empty history safely for a valid CCN with no events", async () => {
     query.mockResolvedValueOnce({ rows: [] }).mockResolvedValueOnce({ rows: [{ total: "0" }] });
     const { getPublishedFacilityHistory } = await import("./history-repository");
