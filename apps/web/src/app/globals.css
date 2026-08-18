@@ -1971,6 +1971,65 @@ fieldset legend span {
   border-left: 3px solid var(--color-jade-500);
   padding: var(--space-3) var(--space-4);
 }
+.facility-history {
+  padding-block: var(--space-6);
+}
+.facility-history__recent {
+  margin: var(--space-4) 0;
+}
+.facility-history__recent ul,
+.facility-history__list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.facility-history__recent li,
+.facility-history__list li {
+  display: grid;
+  gap: var(--space-1);
+}
+.facility-history__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-4) 0;
+}
+.facility-history__filters .button {
+  min-height: 2.75rem;
+}
+.facility-history__year {
+  margin-top: var(--space-5);
+}
+.facility-history__list li {
+  grid-template-columns: minmax(0, 1fr);
+  border-left: 3px solid var(--color-jade-500);
+  padding: var(--space-3) var(--space-4);
+}
+.facility-history__list time {
+  color: var(--color-slate-600);
+  font-weight: 750;
+}
+.facility-history__list p,
+.facility-history__recent span {
+  margin: 0;
+  color: var(--color-slate-700);
+}
+.facility-history__source a,
+.facility-history__source {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+@media (min-width: 40rem) {
+  .facility-history__list li {
+    grid-template-columns: 7rem minmax(0, 1fr);
+    align-items: start;
+  }
+}
 
 @media (max-width: 600px) {
   .regulatory-timeline > li {

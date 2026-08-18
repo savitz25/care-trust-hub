@@ -6,10 +6,12 @@ import type {
   CareStaffingIntelligence,
   CareChainIntelligence,
   CarePublishedFacilityEnrichment,
+  CareFacilityHistory,
 } from "@/server/care/types";
 import type { PublishedStateIntelligence } from "@care/domain";
 import { VerifiedPublicContact } from "./verified-public-contact";
 import { StateLicenseOversight } from "./state-license-oversight";
+import { FacilityHistory } from "./facility-history";
 import { CMS_RATING_EXPLANATIONS, factualRatingObservations } from "@/server/care/consumer";
 import { formatFreshnessLabels } from "@/server/care/freshness";
 import { CmsStarRating, ParticipationFacts } from "./real-provider";
@@ -266,6 +268,7 @@ export function RealProviderDetail({
   trustParticipation = false,
   publishedEnrichment,
   stateIntelligence,
+  facilityHistory,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
@@ -282,6 +285,7 @@ export function RealProviderDetail({
   trustParticipation?: boolean;
   publishedEnrichment?: CarePublishedFacilityEnrichment;
   stateIntelligence?: PublishedStateIntelligence;
+  facilityHistory?: CareFacilityHistory;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
@@ -390,7 +394,7 @@ export function RealProviderDetail({
           {chain && <a href="#chain">Chain</a>}
           {regulatory && <a href="#inspections">Inspections</a>}
           {regulatory && <a href="#penalties">Penalties</a>}
-          {regulatory && <a href="#history">History</a>}
+          {(facilityHistory || regulatory) && <a href="#history">History</a>}
           {stateIntelligence ? <a href="#state-license">State license</a> : null}
           {staffing && <a href="#staffing">Staffing</a>}
           {publishedEnrichment &&
@@ -405,7 +409,14 @@ export function RealProviderDetail({
 
         {ownership && <OwnershipIntelligence intelligence={ownership} />}
         {chain && <ChainIntelligence chain={chain} facility />}
-        {regulatory && <RegulatoryIntelligence intelligence={regulatory} ownership={ownership} />}
+        {regulatory && (
+          <RegulatoryIntelligence
+            intelligence={regulatory}
+            ownership={ownership}
+            hideChronology={Boolean(facilityHistory)}
+          />
+        )}
+        {facilityHistory ? <FacilityHistory history={facilityHistory} /> : null}
         {staffing && (
           <StaffingIntelligence
             intelligence={staffing}

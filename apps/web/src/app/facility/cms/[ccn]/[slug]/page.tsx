@@ -11,6 +11,7 @@ import {
   getApprovedProviderContextForPage,
   getPublishedFacilityEnrichmentForPage,
   getPublishedStateIntelligenceForPage,
+  getPublishedFacilityHistoryForPage,
 } from "@/server/care/cached-repository";
 import {
   isInspectionIntelligenceEnabled,
@@ -19,6 +20,7 @@ import {
   isRealProviderUiEnabled,
   isStaffingIntelligenceEnabled,
   isStateRegulatoryIntelligenceEnabled,
+  isFacilityHistoryEnabled,
   isTrustParticipationEnabled,
   isVerifiedEnrichmentEnabled,
 } from "@/server/care/feature-flags";
@@ -78,6 +80,9 @@ export default async function RealFacilityPage({
     ? ((await getPublishedStateIntelligenceForPage(provider.ccn, provider.location.state)) ??
       undefined)
     : undefined;
+  const facilityHistory = isFacilityHistoryEnabled()
+    ? await getPublishedFacilityHistoryForPage(provider.ccn)
+    : undefined;
   return (
     <RealProviderDetail
       provider={provider}
@@ -89,6 +94,7 @@ export default async function RealFacilityPage({
       trustParticipation={trustParticipation}
       publishedEnrichment={publishedEnrichment}
       stateIntelligence={stateIntelligence}
+      facilityHistory={facilityHistory}
     />
   );
 }

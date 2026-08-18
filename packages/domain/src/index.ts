@@ -27,3 +27,4 @@ export * from "./facility-intelligence";
 export * from "./enrichment-publication";
 export * from "./state-regulator";
 export * from "./state-publication";
+export * from "./facility-history";

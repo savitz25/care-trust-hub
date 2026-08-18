@@ -200,6 +200,31 @@ export interface CareHistoryEvent {
   detail: string;
 }
 
+export interface CareFacilityHistoryEvent {
+  id: string;
+  eventType: import("@care/domain").HistoryEventType;
+  eventFamily: "rating" | "staffing" | "inspection" | "enforcement" | "ownership" | "state";
+  eventDate: string;
+  datePrecision: "day" | "month" | "quarter" | "release";
+  dateBasis: "occurred" | "reported_in_release";
+  importance: "HIGH" | "MEDIUM" | "LOW";
+  title: string;
+  summary: string;
+  previousValue: string | null;
+  newValue: string | null;
+  evidenceHref: string;
+  sourceDatasetName: string;
+  sourceRecordLocator: string | null;
+}
+
+export interface CareFacilityHistory {
+  events: CareFacilityHistoryEvent[];
+  totalCount: number;
+  coverageLabel: string;
+  recentHighlights: Array<{ title: string; summary: string }>;
+  emptyRecentLabel: string;
+}
+
 export interface CareRegulatoryIntelligence {
   inspections: CareInspection[];
   penalties: CarePenalty[];

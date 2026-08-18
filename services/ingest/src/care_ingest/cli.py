@@ -107,6 +107,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     state.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     state.add_argument("--timeout", type=float, default=180)
+    history = commands.add_parser(
+        "derive-facility-history",
+        help="Idempotently derive national facility-history events from existing CMS evidence",
+    )
+    history.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     return parser
 
 
@@ -140,6 +145,13 @@ def main(argv: list[str] | None = None) -> int:
         if not args.database_url:
             parser.error("audit-ownership requires CARE_DATABASE_URL or --database-url")
         print(json.dumps(audit_ownership_database(args.database_url), indent=2, sort_keys=True))
+        return 0
+    if args.command == "derive-facility-history":
+        if not args.database_url:
+            parser.error("derive-facility-history requires CARE_DATABASE_URL or --database-url")
+        from .facility_history import derive_facility_history_json
+
+        print(derive_facility_history_json(args.database_url), end="")
         return 0
     if args.command == "ingest-state":
         if not args.database_url:

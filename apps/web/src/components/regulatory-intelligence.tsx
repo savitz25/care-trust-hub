@@ -50,9 +50,11 @@ function RegulatorySource({ source }: { source: CareRegulatorySourceDisclosure }
 export function RegulatoryIntelligence({
   intelligence,
   ownership,
+  hideChronology = false,
 }: {
   intelligence: CareRegulatoryIntelligence;
   ownership?: CareOwnershipIntelligence;
+  hideChronology?: boolean;
 }) {
   const latest = intelligence.inspections[0];
   const immediateJeopardy = latest?.findings.some(
@@ -221,25 +223,27 @@ export function RegulatoryIntelligence({
         )}
       </section>
 
-      <section
-        className="profile-section profile-section--tint"
-        id="history"
-        aria-labelledby="history-title"
-      >
-        <div className="section-heading">
-          <p className="eyebrow">Facility history</p>
-          <h2 id="history-title">Verified regulatory chronology</h2>
-        </div>
-        <ol className="regulatory-timeline">
-          {timeline.map((event) => (
-            <li key={event.id} data-event-kind={event.kind}>
-              <time dateTime={event.eventDate}>{formatDate(event.eventDate)}</time>
-              <strong>{event.title}</strong>
-              <span>{event.detail}</span>
-            </li>
-          ))}
-        </ol>
-      </section>
+      {!hideChronology && (
+        <section
+          className="profile-section profile-section--tint"
+          id="history"
+          aria-labelledby="history-title"
+        >
+          <div className="section-heading">
+            <p className="eyebrow">Facility history</p>
+            <h2 id="history-title">Verified regulatory chronology</h2>
+          </div>
+          <ol className="regulatory-timeline">
+            {timeline.map((event) => (
+              <li key={event.id} data-event-kind={event.kind}>
+                <time dateTime={event.eventDate}>{formatDate(event.eventDate)}</time>
+                <strong>{event.title}</strong>
+                <span>{event.detail}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
 
       {questions.length > 0 && (
         <section className="profile-section" aria-labelledby="questions-title">

@@ -84,6 +84,18 @@ describe("real provider UI feature flag", () => {
     ).toBe(true);
   });
 
+  it("keeps facility history fail-closed without an explicit opt-in", async () => {
+    const { isFacilityHistoryEnabled, isRealProviderUiEnabled } = await import("./feature-flags");
+    expect(isFacilityHistoryEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(false);
+    expect(
+      isFacilityHistoryEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_FACILITY_HISTORY: "true",
+      }),
+    ).toBe(true);
+    expect(isRealProviderUiEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(true);
+  });
+
   it("disables only the state layer when the state flag is missing", async () => {
     const {
       isRealProviderUiEnabled,
