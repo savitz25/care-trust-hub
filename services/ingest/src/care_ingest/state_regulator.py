@@ -74,6 +74,7 @@ class StateLicenseRecord:
     licensee: str | None
     operator_name: str | None
     administrator: str | None
+    management_company: str | None
     capacity: int | None
     issue_date: date | None
     expiration_date: date | None
@@ -137,8 +138,9 @@ def validate_state_regulator_sources(sources: tuple[StateRegulatorSource, ...]) 
     keys = [source.dataset_key for source in sources]
     if len(keys) != len(set(keys)):
         raise ValueError("state dataset keys must be unique")
-    if any(source.implemented for source in sources):
-        raise ValueError("015A must not mark state adapters implemented")
+    implemented = {source.state_code for source in sources if source.implemented}
+    if implemented - {"CA", "NY", "TX"}:
+        raise ValueError("only CA, NY, and TX adapters may be marked implemented")
     for source in sources:
         if not re.fullmatch(r"[A-Z]{2}", source.state_code):
             raise ValueError(f"invalid state code: {source.state_code}")
@@ -159,6 +161,99 @@ def get_state_regulator_source(dataset_key: str) -> StateRegulatorSource:
         )
     except StopIteration as error:
         raise KeyError(f"unknown state dataset key: {dataset_key}") from error
+
+
+CCN_PATTERN = re.compile(r"^[0-9A-Z]{6}$")
+ADAPTER_VERSION = "state-regulator-v1"
+RESOLVER_VERSION = "state-cms-bridge-v1"
+
+
+def normalize_ccn(value: object | None) -> str | None:
+    text = re.sub(r"[^0-9A-Za-z]", "", str(value or "")).upper()
+    if re.fullmatch(r"\d{1,5}", text):
+        text = text.zfill(6)
+    return text if CCN_PATTERN.fullmatch(text) else None
+
+
+@dataclass(frozen=True, slots=True)
+class UniverseMatch:
+    state: str
+    reason: str
+    matched_on: tuple[str, ...]
+    cms: CanonicalCmsFacility | None
+    candidate_count: int
+
+
+def match_against_cms_universe(
+    record: StateLicenseRecord, universe: list[CanonicalCmsFacility]
+) -> UniverseMatch:
+    """Resolve one state record against the current CMS universe.
+
+    Multiple equally strong matches stay REVIEW_REQUIRED. Name-only never verifies.
+    """
+    in_state = [item for item in universe if item.state.upper() == record.state_code.upper()]
+    normalized = normalize_ccn(record.cms_ccn)
+    if normalized:
+        exact = [item for item in in_state if item.cms_ccn == normalized]
+        if len(exact) == 1:
+            return UniverseMatch(
+                "VERIFIED",
+                "State source supplied the same CMS CCN",
+                ("cms_ccn",),
+                exact[0],
+                1,
+            )
+        if not exact:
+            return UniverseMatch(
+                "UNRESOLVED",
+                "State CCN is not in the current canonical CMS universe",
+                ("cms_ccn",),
+                None,
+                0,
+            )
+        return UniverseMatch(
+            "REVIEW_REQUIRED",
+            "State CCN matched more than one current CMS facility",
+            ("cms_ccn",),
+            None,
+            len(exact),
+        )
+
+    scored = [(item, resolve_against_canonical_cms(record, item)) for item in in_state]
+    verified = [pair for pair in scored if pair[1].state == "VERIFIED"]
+    if len(verified) == 1:
+        cms, bridge = verified[0]
+        return UniverseMatch(bridge.state, bridge.reason, bridge.matched_on, cms, 1)
+    if len(verified) > 1:
+        return UniverseMatch(
+            "REVIEW_REQUIRED",
+            "Multiple CMS facilities satisfy the same deterministic state evidence",
+            verified[0][1].matched_on,
+            None,
+            len(verified),
+        )
+    probable = [pair for pair in scored if pair[1].state == "PROBABLE"]
+    if len(probable) == 1:
+        cms, bridge = probable[0]
+        return UniverseMatch(bridge.state, bridge.reason, bridge.matched_on, cms, 1)
+    if len(probable) > 1:
+        return UniverseMatch(
+            "REVIEW_REQUIRED",
+            "Multiple CMS facilities share the same address locality",
+            probable[0][1].matched_on,
+            None,
+            len(probable),
+        )
+    review = [pair for pair in scored if pair[1].state == "REVIEW_REQUIRED"]
+    if review:
+        return UniverseMatch(
+            "REVIEW_REQUIRED",
+            review[0][1].reason,
+            review[0][1].matched_on,
+            None,
+            len(review),
+        )
+    return UniverseMatch("UNRESOLVED", "No overlapping identity evidence", (), None, 0)
 
 
 def _digits(value: str | None) -> str:
@@ -260,22 +355,38 @@ def observations_from_license_record(
         (StateClaimType.STATE_LICENSEE, record.licensee),
         (StateClaimType.STATE_OPERATOR, record.operator_name),
         (StateClaimType.STATE_ADMINISTRATOR, record.administrator),
+        (StateClaimType.STATE_MANAGEMENT_ENTITY, record.management_company),
         (
             StateClaimType.STATE_LICENSE_CAPACITY,
             str(record.capacity) if record.capacity is not None else None,
         ),
+        (
+            StateClaimType.STATE_LICENSE_ISSUE_DATE,
+            record.issue_date.isoformat() if record.issue_date else None,
+        ),
+        (
+            StateClaimType.STATE_LICENSE_EXPIRATION_DATE,
+            record.expiration_date.isoformat() if record.expiration_date else None,
+        ),
+    ]
+    extras: list[tuple[str, str | None]] = [
+        ("STATE_PHONE", record.phone),
+        ("STATE_ADDRESS", record.address),
     ]
     observations: list[FacilitySourceObservation] = []
-    for claim_type, value in fields:
+    for claim_type, value in [*fields, *extras]:
         if not value:
             continue
+        observation_type = (
+            claim_type.value if isinstance(claim_type, StateClaimType) else claim_type
+        )
         observations.append(
             FacilitySourceObservation(
                 source_type=source.dataset_key,
                 source_authority=SourceAuthority.STATE_HEALTHCARE_REGULATOR,
                 source_identifier=source.dataset_key,
                 source_record_identifier=record.source_record_identifier,
-                observation_type=claim_type.value,
+                observation_type=observation_type,
                 observed_value=value,
                 normalized_value=value.casefold(),
                 observed_at=None,
@@ -295,7 +406,7 @@ def observations_from_license_record(
                 legal_entity_name=record.licensee,
                 capacity=record.capacity,
                 address=record.address,
-                provenance={"claim_type": claim_type.value, "state": record.state_code},
+                provenance={"claim_type": observation_type, "state": record.state_code},
             )
         )
     return observations

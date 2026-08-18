@@ -14,7 +14,7 @@
       "automation_difficulty": "LOW",
       "cms_reconciliation": "EXCELLENT",
       "assisted_living_same_ecosystem": false,
-      "implemented": false,
+      "implemented": true,
       "notes": "Explicit CCN column. SNF/ICF on CDPH file. Assisted living is CDSS CCL, not this file."
     },
     {
@@ -29,7 +29,7 @@
       "automation_difficulty": "LOW",
       "cms_reconciliation": "STRONG",
       "assisted_living_same_ecosystem": true,
-      "implemented": false,
+      "implemented": true,
       "notes": "Operator, operating certificate, address, phone. No explicit CCN. Adult Home / Enriched Housing on same HFIS."
     },
     {
@@ -44,7 +44,7 @@
       "automation_difficulty": "LOW",
       "cms_reconciliation": "STRONG",
       "assisted_living_same_ecosystem": true,
-      "implemented": false,
+      "implemented": true,
       "notes": "Official Excel directory plus closures and quarterly CHOW PDFs. TULIP search is HTML/session."
     },
     {

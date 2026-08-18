@@ -94,6 +94,19 @@ def build_parser() -> argparse.ArgumentParser:
     )
     membership.add_argument("--release", required=True)
     membership.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    state = commands.add_parser(
+        "ingest-state", help="Ingest current CA/NY/TX state regulatory licensing evidence"
+    )
+    state.add_argument(
+        "dataset_key",
+        choices=(
+            "ca-cdph-healthcare-facility-locations",
+            "ny-doh-hfis-general-information",
+            "tx-hhsc-nursing-facility-directory",
+        ),
+    )
+    state.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    state.add_argument("--timeout", type=float, default=180)
     return parser
 
 
@@ -127,6 +140,18 @@ def main(argv: list[str] | None = None) -> int:
         if not args.database_url:
             parser.error("audit-ownership requires CARE_DATABASE_URL or --database-url")
         print(json.dumps(audit_ownership_database(args.database_url), indent=2, sort_keys=True))
+        return 0
+    if args.command == "ingest-state":
+        if not args.database_url:
+            parser.error("ingest-state requires CARE_DATABASE_URL or --database-url")
+        from .state_regulator_database import ingest_state_source
+
+        print(
+            ingest_state_source(
+                args.database_url, args.dataset_key, timeout=args.timeout
+            ).to_json(),
+            end="",
+        )
         return 0
     if args.command == "load-chain-membership":
         if not args.database_url:

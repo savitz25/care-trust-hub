@@ -34,6 +34,7 @@ def _ca_record() -> StateLicenseRecord:
         licensee=payload["BUSINESS_NAME"],
         operator_name=None,
         administrator=payload["FACADMIN"],
+        management_company=None,
         capacity=payload["CAPACITY"],
         issue_date=None,
         expiration_date=None,
@@ -54,7 +55,8 @@ def test_discovery_registry_covers_eight_unimplemented_states() -> None:
         "OH",
         "NJ",
     }
-    assert all(not source.implemented for source in sources)
+    implemented = {source.state_code for source in sources if source.implemented}
+    assert implemented == {"CA", "NY", "TX"}
     california = get_state_regulator_source("ca-cdph-healthcare-facility-locations")
     assert california.cms_reconciliation == "EXCELLENT"
     assert california.automation_difficulty == "LOW"
@@ -102,6 +104,7 @@ def test_name_only_overlap_stays_under_review() -> None:
         licensee=record.licensee,
         operator_name=record.operator_name,
         administrator=record.administrator,
+        management_company=record.management_company,
         capacity=record.capacity,
         issue_date=record.issue_date,
         expiration_date=record.expiration_date,
