@@ -112,6 +112,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Idempotently derive national facility-history events from existing CMS evidence",
     )
     history.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    portfolios = commands.add_parser(
+        "derive-ownership-portfolios",
+        help="Derive current/historical ownership portfolios from existing CMS evidence",
+    )
+    portfolios.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     enforcement = commands.add_parser(
         "ingest-state-enforcement",
         help="Ingest official CA/NY/TX state enforcement and inspection events",
@@ -159,6 +164,13 @@ def main(argv: list[str] | None = None) -> int:
         from .facility_history import derive_facility_history_json
 
         print(derive_facility_history_json(args.database_url), end="")
+        return 0
+    if args.command == "derive-ownership-portfolios":
+        if not args.database_url:
+            parser.error("derive-ownership-portfolios requires CARE_DATABASE_URL or --database-url")
+        from .ownership_portfolio import derive_ownership_portfolios_json
+
+        print(derive_ownership_portfolios_json(args.database_url), end="")
         return 0
     if args.command == "ingest-state-enforcement":
         if not args.database_url:

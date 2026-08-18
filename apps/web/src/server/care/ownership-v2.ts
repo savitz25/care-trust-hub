@@ -1,12 +1,14 @@
 import "server-only";
 import {
   classifyOwnershipRole,
-  computePortfolioMetrics,
+  corroboratesGovernmentSources,
+  PORTFOLIO_METRICS_DISCLAIMER,
   selectPortfolioOrganization,
   STATE_HISTORY_REGULATORS,
   whoIsBehindItems,
   type PublishableStateCode,
 } from "@care/domain";
+import { organizationHref } from "./consumer";
 import { getCareDatabasePool } from "./db";
 import type { PublishedStateIntelligence } from "@care/domain";
 import type {
@@ -18,22 +20,29 @@ import type {
   CareRelatedFacility,
 } from "./types";
 
-interface RelatedRow {
+interface PortfolioRow {
+  organization_id: string;
+  display_name: string;
+  current_facility_count: number;
+  historical_facility_count: number;
+  state_count: number;
+  states: string[];
+  relationship_roles: string[];
+  publication_eligible: boolean;
+  indexable: boolean;
+  snapshot: Record<string, unknown>;
+}
+
+interface MemberRow {
   ccn: string;
   provider_name: string;
   city: string | null;
   state_code: string;
   overall_rating: number | null;
   staffing_rating: number | null;
-  health_inspection_rating: number | null;
-  quality_measure_rating: number | null;
   had_penalty: boolean;
-  penalty_amount: string | null;
-  had_ownership_change: boolean;
-  had_recent_state: boolean;
-  rn_hprd: string | null;
-  total_nurse_hprd: string | null;
   relationship_type: string;
+  membership_status: "current" | "historical" | "uncertain";
 }
 
 function regulatorLabel(stateCode: string | undefined): string {
@@ -41,6 +50,76 @@ function regulatorLabel(stateCode: string | undefined): string {
     return STATE_HISTORY_REGULATORS[stateCode as PublishableStateCode];
   }
   return "State regulator";
+}
+
+function numberOrNull(value: unknown): number | null {
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
+function countOrZero(value: unknown): number {
+  return typeof value === "number" && Number.isFinite(value) ? value : 0;
+}
+
+function distribution(value: unknown): Record<1 | 2 | 3 | 4 | 5, number> {
+  const record = value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+  return {
+    1: countOrZero(record["1"]),
+    2: countOrZero(record["2"]),
+    3: countOrZero(record["3"]),
+    4: countOrZero(record["4"]),
+    5: countOrZero(record["5"]),
+  };
+}
+
+export function mapPortfolioRow(
+  row: PortfolioRow,
+  relationshipType: string,
+  relatedFacilities: CareRelatedFacility[],
+): CareOwnershipPortfolio {
+  const snapshot = row.snapshot ?? {};
+  return {
+    organizationId: row.organization_id,
+    organizationName: row.display_name,
+    relationshipType,
+    href: organizationHref({
+      organizationId: row.organization_id,
+      organizationName: row.display_name,
+    }),
+    indexable: row.indexable,
+    facilityCount: row.current_facility_count,
+    historicalFacilityCount: row.historical_facility_count,
+    stateCount: row.state_count,
+    states: row.states ?? [],
+    relationshipRoles: row.relationship_roles ?? [],
+    relatedFacilities,
+    overallAverage: numberOrNull(snapshot.overallAverage),
+    overallSampleSize: countOrZero(snapshot.overallSampleSize),
+    overallDistribution: distribution(snapshot.overallDistribution),
+    staffingAverage: numberOrNull(snapshot.staffingAverage),
+    staffingSampleSize: countOrZero(snapshot.staffingSampleSize),
+    healthInspectionAverage: numberOrNull(snapshot.healthInspectionAverage),
+    healthInspectionSampleSize: countOrZero(snapshot.healthInspectionSampleSize),
+    qualityMeasureAverage: numberOrNull(snapshot.qualityMeasureAverage),
+    qualityMeasureSampleSize: countOrZero(snapshot.qualityMeasureSampleSize),
+    averageRnHprd: numberOrNull(snapshot.averageRnHprd),
+    rnSampleSize: countOrZero(snapshot.rnSampleSize),
+    averageTotalNurseHprd: numberOrNull(snapshot.averageTotalNurseHprd),
+    totalNurseSampleSize: countOrZero(snapshot.totalNurseSampleSize),
+    facilitiesWithPenalty: countOrZero(snapshot.facilitiesWithPenalty),
+    totalFineAmount: numberOrNull(snapshot.totalFineAmount),
+    facilitiesWithOwnershipChange: countOrZero(snapshot.facilitiesWithOwnershipChange),
+    facilitiesWithRecentStateEnforcement: countOrZero(
+      snapshot.facilitiesWithRecentStateEnforcement,
+    ),
+    facilitiesWithRecentCmsPenalty: countOrZero(snapshot.facilitiesWithRecentCmsPenalty),
+    facilitiesWithRecentHighValueEnforcement: countOrZero(
+      snapshot.facilitiesWithRecentHighValueEnforcement,
+    ),
+    facilitiesWithRecentComplaintInspection: countOrZero(
+      snapshot.facilitiesWithRecentComplaintInspection,
+    ),
+    disclaimer: PORTFOLIO_METRICS_DISCLAIMER,
+  };
 }
 
 export async function getOwnershipOperationSummary(
@@ -68,6 +147,11 @@ export async function getOwnershipOperationSummary(
     ? { value: state.managementCompany.value, source: regulatorLabel(state.stateCode) }
     : null;
   const chainName = options.chain?.current.chainName ?? null;
+  const supportedByMultipleGovernmentSources = corroboratesGovernmentSources({
+    cmsOrganizationNames: organizations.map((party) => party.displayName),
+    stateOperator: operator?.value ?? null,
+    stateLicensee: licensee?.value ?? null,
+  });
   const summary: CareOwnershipOperationSummary = {
     operator,
     licensee,
@@ -85,112 +169,86 @@ export async function getOwnershipOperationSummary(
       chainName,
       ownershipChanges: ownership.changes.length,
     }),
+    supportedByMultipleGovernmentSources,
     portfolio: null,
   };
-  const selected = selectPortfolioOrganization(ownership.parties);
-  if (!selected?.organizationId) return summary;
-  summary.portfolio = await loadPortfolio(
-    selected.organizationId,
-    selected.displayName,
-    selected.roleText,
+  const organizationIds = [
+    ...new Set(
+      organizations
+        .map((party) => party.organizationId)
+        .filter((value): value is string => Boolean(value)),
+    ),
+  ];
+  if (!organizationIds.length) return summary;
+  const published = await loadPublishedPortfolios(organizationIds);
+  const selected = selectPortfolioOrganization(
+    organizations.map((party) => ({
+      ...party,
+      connectedProviderCount: party.organizationId
+        ? (published.get(party.organizationId)?.current_facility_count ?? 0)
+        : 0,
+    })),
   );
+  if (!selected?.organizationId) return summary;
+  const row = published.get(selected.organizationId);
+  if (!row) return summary;
+  const relatedFacilities = await loadPortfolioMembers(selected.organizationId, "current", 12);
+  summary.portfolio = mapPortfolioRow(row, selected.roleText, relatedFacilities);
   return summary;
 }
 
-async function loadPortfolio(
+async function loadPublishedPortfolios(
+  organizationIds: string[],
+): Promise<Map<string, PortfolioRow>> {
+  const result = await getCareDatabasePool().query<PortfolioRow>(
+    `SELECT organization_id, display_name, current_facility_count, historical_facility_count,
+       state_count, states, relationship_roles, publication_eligible, indexable, snapshot
+     FROM ownership_portfolio
+     WHERE organization_id = ANY($1::uuid[]) AND publication_eligible`,
+    [organizationIds],
+  );
+  return new Map(result.rows.map((row) => [row.organization_id, row]));
+}
+
+export async function loadPortfolioMembers(
   organizationId: string,
-  organizationName: string,
-  relationshipType: string,
-): Promise<CareOwnershipPortfolio | null> {
-  const result = await getCareDatabasePool().query<RelatedRow>(
-    `WITH members AS (
-       SELECT DISTINCT rr.provider_id, rr.relationship_role_text
-       FROM ownership_party p
-       JOIN provider_ownership_relationship rr ON rr.ownership_party_id = p.id
-       WHERE p.organization_id = $1 AND rr.provider_id IS NOT NULL
-     )
-     SELECT DISTINCT ON (pi.identifier_value)
-       pi.identifier_value ccn, fs.provider_name, fs.city, fs.state_code,
-       fs.overall_rating, fs.staffing_rating, fs.health_inspection_rating, fs.quality_measure_rating,
-       EXISTS (SELECT 1 FROM penalty_enforcement pe WHERE pe.provider_id = m.provider_id) had_penalty,
-       (SELECT sum(pe.fine_amount) FROM penalty_enforcement pe
-         WHERE pe.provider_id = m.provider_id AND pe.penalty_type = 'Fine')::text penalty_amount,
-       EXISTS (SELECT 1 FROM ownership_change_event oce WHERE oce.provider_id = m.provider_id) had_ownership_change,
-       EXISTS (
-         SELECT 1 FROM facility_history_event he
-         WHERE he.provider_id = m.provider_id AND he.event_family = 'state'
-           AND he.publication_eligible AND he.importance IN ('HIGH','MEDIUM')
-           AND he.event_date >= (CURRENT_DATE - INTERVAL '18 months')
-       ) had_recent_state,
-       latest.rn_hprd::text, latest.total_nurse_hprd::text, m.relationship_role_text relationship_type
-     FROM members m
-     JOIN provider_identifier pi ON pi.provider_id = m.provider_id
+  membershipStatus: "current" | "historical",
+  limit = 200,
+): Promise<CareRelatedFacility[]> {
+  const result = await getCareDatabasePool().query<MemberRow>(
+    `SELECT pi.identifier_value ccn, fs.provider_name, fs.city, fs.state_code,
+       fs.overall_rating, fs.staffing_rating,
+       EXISTS (SELECT 1 FROM penalty_enforcement pe WHERE pe.provider_id = mem.provider_id) had_penalty,
+       coalesce(array_to_string(mem.relationship_roles, ', '), 'CMS ownership relationship') relationship_type,
+       mem.membership_status
+     FROM ownership_portfolio_member mem
+     JOIN provider_identifier pi ON pi.provider_id = mem.provider_id
        AND pi.issuer = 'CMS' AND pi.identifier_type = 'CCN' AND pi.valid_to IS NULL
-     JOIN facility_snapshot fs ON fs.provider_id = m.provider_id
-     LEFT JOIN LATERAL (
-       SELECT s.rn_hprd, s.total_nurse_hprd
-       FROM pbj_staffing_quarter_summary s
-       WHERE s.provider_id = m.provider_id
-       ORDER BY s.source_quarter DESC
+     JOIN LATERAL (
+       SELECT provider_name, city, state_code, overall_rating, staffing_rating
+       FROM facility_snapshot fs
+       WHERE fs.provider_id = mem.provider_id
+       ORDER BY fs.observed_at DESC NULLS LAST
        LIMIT 1
-     ) latest ON true
-     ORDER BY pi.identifier_value, fs.observed_at DESC NULLS LAST`,
-    [organizationId],
+     ) fs ON true
+     WHERE mem.organization_id = $1 AND mem.membership_status = $2
+     ORDER BY fs.provider_name, pi.identifier_value
+     LIMIT $3`,
+    [organizationId, membershipStatus, limit],
   );
-  if (result.rows.length < 3) return null;
-  const relatedFacilities: CareRelatedFacility[] = [...result.rows]
-    .sort((left, right) => left.provider_name.localeCompare(right.provider_name))
-    .slice(0, 40)
-    .map((row) => ({
-      ccn: row.ccn,
-      providerName: row.provider_name,
-      city: row.city,
-      state: row.state_code,
-      overallRating: row.overall_rating,
-      staffingRating: row.staffing_rating,
-      hadPenalty: row.had_penalty,
-      relationshipType: row.relationship_type,
-    }));
-  const states = [...new Set(result.rows.map((row) => row.state_code))].sort();
-  const metrics = computePortfolioMetrics(
-    result.rows.map((row) => ({
-      overallRating: row.overall_rating,
-      staffingRating: row.staffing_rating,
-      healthInspectionRating: row.health_inspection_rating,
-      qualityMeasureRating: row.quality_measure_rating,
-      rnHprd: row.rn_hprd == null ? null : Number(row.rn_hprd),
-      totalNurseHprd: row.total_nurse_hprd == null ? null : Number(row.total_nurse_hprd),
-      hadPenalty: row.had_penalty,
-      penaltyAmount: row.penalty_amount == null ? null : Number(row.penalty_amount),
-      hadOwnershipChange: row.had_ownership_change,
-      hadRecentStateEnforcement: row.had_recent_state,
-    })),
-    states.length,
-  );
+  return result.rows.map(mapMember);
+}
+
+function mapMember(row: MemberRow): CareRelatedFacility {
   return {
-    organizationId,
-    organizationName,
-    relationshipType,
-    facilityCount: metrics.facilityCount,
-    stateCount: metrics.stateCount,
-    states,
-    relatedFacilities,
-    overallAverage: metrics.overall.average,
-    overallSampleSize: metrics.overall.sampleSize,
-    overallDistribution: metrics.overall.distribution,
-    staffingAverage: metrics.staffing.average,
-    staffingSampleSize: metrics.staffing.sampleSize,
-    healthInspectionAverage: metrics.healthInspection.average,
-    healthInspectionSampleSize: metrics.healthInspection.sampleSize,
-    qualityMeasureAverage: metrics.qualityMeasure.average,
-    qualityMeasureSampleSize: metrics.qualityMeasure.sampleSize,
-    averageRnHprd: metrics.averageRnHprd,
-    rnSampleSize: metrics.rnSampleSize,
-    averageTotalNurseHprd: metrics.averageTotalNurseHprd,
-    totalNurseSampleSize: metrics.totalNurseSampleSize,
-    facilitiesWithPenalty: metrics.facilitiesWithPenalty,
-    totalFineAmount: metrics.totalFineAmount,
-    facilitiesWithOwnershipChange: metrics.facilitiesWithOwnershipChange,
-    facilitiesWithRecentStateEnforcement: metrics.facilitiesWithRecentStateEnforcement,
+    ccn: row.ccn,
+    providerName: row.provider_name,
+    city: row.city,
+    state: row.state_code,
+    overallRating: row.overall_rating,
+    staffingRating: row.staffing_rating,
+    hadPenalty: row.had_penalty,
+    relationshipType: row.relationship_type,
+    membershipStatus: row.membership_status,
   };
 }

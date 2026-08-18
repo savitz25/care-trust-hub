@@ -1,4 +1,5 @@
 import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
+import { isOwnershipIntelligenceV2Enabled } from "@/server/care/feature-flags";
 import {
   FACILITY_SITEMAP_PAGE_SIZE,
   getFacilitySitemapCount,
@@ -12,6 +13,7 @@ export async function GET() {
   const urls = [
     "core.xml",
     "chains.xml",
+    ...(isOwnershipIntelligenceV2Enabled() ? ["organizations.xml"] : []),
     ...Array.from({ length: pages }, (_, index) => `facilities-${index}.xml`),
   ];
   const xml = `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((value) => `<sitemap><loc>${new URL(`/sitemaps/${value}`, productionOrigin).href}</loc></sitemap>`).join("")}</sitemapindex>`;

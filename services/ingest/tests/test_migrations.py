@@ -55,3 +55,12 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "ADD COLUMN verified_audit_status text" in pilot
     assert "facility_run_provider_reason_codes_gin" in pilot
     assert "GOOGLE_PLACES_API_KEY" not in pilot
+
+    portfolio = (migrations / "0019_ownership_portfolio.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE ownership_portfolio (" in portfolio
+    assert "CREATE TABLE ownership_portfolio_member (" in portfolio
+    assert "membership_status" in portfolio
+    assert "publication_eligible" in portfolio
+    assert "CHECK (publication_eligible = false OR resolution_state = 'VERIFIED')" in portfolio
+    assert "ALTER TABLE organization" not in portfolio
+    assert "DROP TABLE" not in portfolio

@@ -12,6 +12,7 @@ const summary: CareOwnershipOperationSummary = {
   individualCount: 6,
   chainName: "Example Group",
   ownershipChangeCount: 1,
+  supportedByMultipleGovernmentSources: true,
   whoIsBehind: [
     "an operating organization identified by the state regulator",
     "a state licensee",
@@ -20,9 +21,13 @@ const summary: CareOwnershipOperationSummary = {
     "a CMS chain / common-control group",
   ],
   portfolio: {
-    organizationId: "org-1",
+    organizationId: "11111111-1111-4111-8111-111111111111",
     organizationName: "Example LLC",
     relationshipType: "DIRECT OWNERSHIP",
+    href: "/ownership/11111111-1111-4111-8111-111111111111/example-llc",
+    indexable: true,
+    historicalFacilityCount: 0,
+    relationshipRoles: ["DIRECT OWNERSHIP"],
     facilityCount: 3,
     stateCount: 1,
     states: ["CA"],
@@ -55,6 +60,10 @@ const summary: CareOwnershipOperationSummary = {
     totalFineAmount: 15000,
     facilitiesWithOwnershipChange: 1,
     facilitiesWithRecentStateEnforcement: 0,
+    facilitiesWithRecentCmsPenalty: 1,
+    facilitiesWithRecentHighValueEnforcement: 0,
+    facilitiesWithRecentComplaintInspection: 1,
+    disclaimer: "These figures summarize currently connected CMS-certified nursing homes.",
   },
 };
 
@@ -62,10 +71,12 @@ describe("ownership operation v2", () => {
   it("keeps operator, licensee, and chain distinct and does not rank related facilities", () => {
     render(<OwnershipOperation summary={summary} />);
     expect(screen.getByRole("heading", { name: "Ownership & Operation" })).toBeVisible();
-    expect(screen.getByText("Facility operator")).toBeInTheDocument();
+    expect(screen.getByText("Operator")).toBeInTheDocument();
     expect(screen.getByText("Operator LLC")).toBeInTheDocument();
-    expect(screen.getByText("State licensee")).toBeInTheDocument();
-    expect(screen.getByText("Chain / common-control group")).toBeInTheDocument();
+    expect(screen.getByText("Licensee")).toBeInTheDocument();
+    expect(screen.getByText("Chain")).toBeInTheDocument();
+    expect(screen.getByText(/Supported by multiple government sources/)).toBeInTheDocument();
+    expect(screen.getByText(/Explore ownership network/)).toBeInTheDocument();
     expect(screen.getByText(/6 individual ownership interests/)).toBeInTheDocument();
     expect(screen.getByText("Alpha Care")).toBeInTheDocument();
     expect(screen.getByText(/3.2 stars across 3 reporting facilities/)).toBeInTheDocument();

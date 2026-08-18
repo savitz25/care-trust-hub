@@ -1,6 +1,11 @@
 import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
-import { chainHref, providerSlug } from "@/server/care/consumer";
-import { getChainSitemapRows, getFacilitySitemapPage } from "@/server/care/launch-repository";
+import { chainHref, organizationHref, providerSlug } from "@/server/care/consumer";
+import { isOwnershipIntelligenceV2Enabled } from "@/server/care/feature-flags";
+import {
+  getChainSitemapRows,
+  getFacilitySitemapPage,
+  getIndexableOrganizationSitemapRows,
+} from "@/server/care/launch-repository";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +49,20 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
           .map(
             (row) =>
               `<url><loc>${new URL(chainHref({ cmsChainId: row.cms_chain_id, chainName: row.chain_name }), productionOrigin).href}</loc><lastmod>${row.release_month.toISOString().slice(0, 10)}</lastmod></url>`,
+          )
+          .join(""),
+      ),
+    );
+  }
+  if (file === "organizations.xml") {
+    if (!isOwnershipIntelligenceV2Enabled()) return new Response("Not found", { status: 404 });
+    const rows = await getIndexableOrganizationSitemapRows();
+    return response(
+      urlset(
+        rows
+          .map(
+            (row) =>
+              `<url><loc>${new URL(organizationHref({ organizationId: row.organization_id, organizationName: row.display_name }), productionOrigin).href}</loc><lastmod>${row.derived_at.toISOString().slice(0, 10)}</lastmod></url>`,
           )
           .join(""),
       ),

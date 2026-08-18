@@ -1,5 +1,15 @@
+import type { ResolutionState } from "./facility-intelligence";
+
 export const PORTFOLIO_MIN_FACILITIES = 3;
 export const PORTFOLIO_MIN_METRIC_SAMPLE = 3;
+export const HIGH_VALUE_FINE_USD = 10_000;
+export const RECENT_ENFORCEMENT_MONTHS = 18;
+export const PORTFOLIO_METRICS_DISCLAIMER =
+  "These figures summarize currently connected CMS-certified nursing homes. Some facilities have incomplete measures; missing values are omitted, not treated as zero. Ownership structures can change. State operator or licensee evidence may differ from CMS ownership disclosures.";
+
+export type MembershipStatus = "current" | "historical" | "uncertain";
+export type OrganizationRisk = "clear" | "generic" | "person_like";
+export type OrganizationMatchMethod = "authoritative_identifier" | "fuzzy_name";
 
 export const OWNERSHIP_ROLES = [
   "individual_owner",
@@ -34,6 +44,9 @@ export interface PortfolioFacilityInput {
   penaltyAmount: number | null;
   hadOwnershipChange: boolean;
   hadRecentStateEnforcement: boolean;
+  hadRecentCmsPenalty: boolean;
+  hadRecentHighValueEnforcement: boolean;
+  hadRecentComplaintInspection: boolean;
 }
 
 export interface RatingMetric {
@@ -57,6 +70,9 @@ export interface OwnershipPortfolioMetrics {
   totalFineAmount: number | null;
   facilitiesWithOwnershipChange: number;
   facilitiesWithRecentStateEnforcement: number;
+  facilitiesWithRecentCmsPenalty: number;
+  facilitiesWithRecentHighValueEnforcement: number;
+  facilitiesWithRecentComplaintInspection: number;
 }
 
 export function normalizeOrganizationName(name: string): string {
@@ -77,6 +93,93 @@ export function organizationLabelsCompatible(left: string, right: string): boole
   const a = normalizeOrganizationName(left);
   const b = normalizeOrganizationName(right);
   return Boolean(a && b && a === b);
+}
+
+const GENERIC_STEMS = new Set([
+  "care",
+  "health",
+  "healthcare",
+  "health care",
+  "holdings",
+  "management",
+  "medical",
+  "nursing",
+  "nursing home",
+  "properties",
+  "property",
+  "realty",
+  "senior care",
+  "senior living",
+  "services",
+]);
+
+export function classifyOrganizationRisk(name: string): OrganizationRisk {
+  const compact = name.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").trim();
+  if (/^[a-z]+(?:[-'][a-z]+)*, [a-z]+(?: [a-z])?$/.test(compact)) return "person_like";
+  const normalized = normalizeOrganizationName(name);
+  if (!normalized) return "generic";
+  const stem = normalized
+    .replace(/\b(llc|inc|corp|ltd|the)\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!stem || stem.length < 4 || GENERIC_STEMS.has(stem)) return "generic";
+  return "clear";
+}
+
+export function classifyMembershipStatus(input: {
+  inLatestSuccessfulRelease: boolean;
+  seenInOlderRelease: boolean;
+}): MembershipStatus {
+  if (input.inLatestSuccessfulRelease) return "current";
+  if (input.seenInOlderRelease) return "historical";
+  return "uncertain";
+}
+
+export function selectCurrentMembers<T extends { membershipStatus: MembershipStatus }>(
+  members: readonly T[],
+): T[] {
+  return members.filter((member) => member.membershipStatus === "current");
+}
+
+export function canPublishPortfolioMembership(input: {
+  organizationId: string | null | undefined;
+  resolutionState: ResolutionState;
+  matchMethod: OrganizationMatchMethod;
+}): boolean {
+  return (
+    Boolean(input.organizationId) &&
+    input.resolutionState === "VERIFIED" &&
+    input.matchMethod === "authoritative_identifier"
+  );
+}
+
+export function isPortfolioPublicationEligible(input: {
+  resolutionState: ResolutionState;
+  currentFacilityCount: number;
+  risk: OrganizationRisk;
+}): boolean {
+  return (
+    input.resolutionState === "VERIFIED" &&
+    input.currentFacilityCount >= PORTFOLIO_MIN_FACILITIES &&
+    input.risk === "clear"
+  );
+}
+
+export function isOrganizationPageIndexable(input: { publicationEligible: boolean }): boolean {
+  return input.publicationEligible;
+}
+
+export function corroboratesGovernmentSources(input: {
+  cmsOrganizationNames: readonly string[];
+  stateOperator: string | null;
+  stateLicensee: string | null;
+}): boolean {
+  return input.cmsOrganizationNames.some((name) => {
+    if (input.stateOperator && organizationLabelsCompatible(name, input.stateOperator)) {
+      return true;
+    }
+    return Boolean(input.stateLicensee && organizationLabelsCompatible(name, input.stateLicensee));
+  });
 }
 
 export function classifyOwnershipRole(
@@ -168,6 +271,14 @@ export function computePortfolioMetrics(
       .length,
     facilitiesWithRecentStateEnforcement: facilities.filter(
       (facility) => facility.hadRecentStateEnforcement,
+    ).length,
+    facilitiesWithRecentCmsPenalty: facilities.filter((facility) => facility.hadRecentCmsPenalty)
+      .length,
+    facilitiesWithRecentHighValueEnforcement: facilities.filter(
+      (facility) => facility.hadRecentHighValueEnforcement,
+    ).length,
+    facilitiesWithRecentComplaintInspection: facilities.filter(
+      (facility) => facility.hadRecentComplaintInspection,
     ).length,
   };
 }

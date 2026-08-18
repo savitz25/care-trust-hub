@@ -18,13 +18,18 @@ function money(value: number | null): string {
 
 export function OwnershipOperation({ summary }: { summary: CareOwnershipOperationSummary }) {
   const facts = [
+    summary.cmsOwnershipType && {
+      label: "Ownership type",
+      value: summary.cmsOwnershipType,
+      note: "CMS",
+    },
     summary.operator && {
-      label: "Facility operator",
+      label: "Operator",
       value: summary.operator.value,
       note: summary.operator.source,
     },
     summary.licensee && {
-      label: "State licensee",
+      label: "Licensee",
       value: summary.licensee.value,
       note: summary.licensee.source,
     },
@@ -33,25 +38,15 @@ export function OwnershipOperation({ summary }: { summary: CareOwnershipOperatio
       value: summary.managementCompany.value,
       note: summary.managementCompany.source,
     },
-    summary.cmsOwnershipType && {
-      label: "CMS ownership type",
-      value: summary.cmsOwnershipType,
-      note: "CMS",
-    },
-    summary.organizationCount > 0 && {
-      label: "Connected ownership organizations",
-      value: String(summary.organizationCount),
-      note: "CMS ownership disclosures",
-    },
-    summary.individualCount > 0 && {
-      label: "Connected individuals",
-      value: `${summary.individualCount} ownership records`,
-      note: "CMS ownership disclosures",
-    },
     summary.chainName && {
-      label: "Chain / common-control group",
+      label: "Chain",
       value: summary.chainName,
-      note: "CMS chain grouping, not automatically the legal owner",
+      note: `CMS identifies this facility as part of the ${summary.chainName} chain.`,
+    },
+    summary.portfolio && {
+      label: "Related facilities",
+      value: String(summary.portfolio.facilityCount),
+      note: "Current CMS organization identity",
     },
     summary.ownershipChangeCount > 0 && {
       label: "Ownership changes",
@@ -70,8 +65,8 @@ export function OwnershipOperation({ summary }: { summary: CareOwnershipOperatio
         <p className="eyebrow">Ownership &amp; operation</p>
         <h2 id="ownership-operation-title">Ownership &amp; Operation</h2>
         <p>
-          These labels keep operator, licensee, owner, manager, and chain separate. A connected
-          organization is not automatically the party that runs daily operations.
+          Operator, licensee, owner, manager, and chain stay separate. A connected organization is
+          not automatically the party that runs daily operations.
         </p>
       </div>
       {facts.length > 0 && (
@@ -86,6 +81,14 @@ export function OwnershipOperation({ summary }: { summary: CareOwnershipOperatio
             </div>
           ))}
         </dl>
+      )}
+      {summary.supportedByMultipleGovernmentSources && (
+        <p className="ownership-v2__corroboration">Supported by multiple government sources</p>
+      )}
+      {summary.portfolio && (
+        <p>
+          <Link href={summary.portfolio.href}>Explore ownership network →</Link>
+        </p>
       )}
       {summary.whoIsBehind.length > 0 && (
         <div className="ownership-v2__behind">
@@ -103,11 +106,8 @@ export function OwnershipOperation({ summary }: { summary: CareOwnershipOperatio
           <div className="ownership-v2__portfolio">
             <h3>Related facilities</h3>
             <p>
-              {summary.portfolio.facilityCount} nursing homes are connected to{" "}
-              {summary.portfolio.organizationName} through the same CMS organization identity.
-            </p>
-            <p>
-              <a href="#related-facilities">View related facilities</a>
+              {summary.portfolio.facilityCount} currently connected nursing homes share this CMS
+              organization identity with {summary.portfolio.organizationName}.
             </p>
             <dl className="real-fact-grid">
               <div>
@@ -119,47 +119,52 @@ export function OwnershipOperation({ summary }: { summary: CareOwnershipOperatio
                 </dd>
               </div>
               <div>
-                <dt>Average staffing rating</dt>
-                <dd>
-                  {summary.portfolio.staffingAverage == null
-                    ? "Not enough comparable data"
-                    : `${summary.portfolio.staffingAverage} stars across ${summary.portfolio.staffingSampleSize} reporting facilities`}
-                </dd>
-              </div>
-              <div>
                 <dt>CMS monetary penalties</dt>
                 <dd>
                   {summary.portfolio.facilitiesWithPenalty} of {summary.portfolio.facilityCount}{" "}
-                  facilities had a recorded monetary penalty in the available period.
+                  facilities had a recorded monetary penalty in the available CMS period.
                 </dd>
               </div>
               <div>
-                <dt>Total recorded fines</dt>
-                <dd>{money(summary.portfolio.totalFineAmount)}</dd>
+                <dt>Recent CMS penalties</dt>
+                <dd>
+                  {summary.portfolio.facilitiesWithRecentCmsPenalty} facilities had a CMS penalty in
+                  the last 18 months.
+                </dd>
               </div>
-              {summary.portfolio.averageTotalNurseHprd != null && (
+              <div>
+                <dt>Recent high-value CMS enforcement</dt>
+                <dd>
+                  {summary.portfolio.facilitiesWithRecentHighValueEnforcement} facilities had a
+                  high-value CMS fine or payment denial in the last 18 months.
+                </dd>
+              </div>
+              <div>
+                <dt>Recent CMS complaint inspections</dt>
+                <dd>
+                  {summary.portfolio.facilitiesWithRecentComplaintInspection} facilities had a CMS
+                  complaint inspection in the last 18 months.
+                </dd>
+              </div>
+              {summary.portfolio.facilitiesWithRecentStateEnforcement > 0 && (
                 <div>
-                  <dt>Average total nurse staffing</dt>
+                  <dt>Recent state enforcement (CA/NY, labeled separately)</dt>
                   <dd>
-                    {summary.portfolio.averageTotalNurseHprd} hours per resident day across{" "}
-                    {summary.portfolio.totalNurseSampleSize} reporting facilities
+                    {summary.portfolio.facilitiesWithRecentStateEnforcement} facilities had a
+                    published state enforcement or inspection event in the last 18 months. State
+                    evidence is not mixed into national CMS averages.
                   </dd>
                 </div>
               )}
+              <div>
+                <dt>Total recorded CMS fines</dt>
+                <dd>{money(summary.portfolio.totalFineAmount)}</dd>
+              </div>
             </dl>
-            {summary.portfolio.overallSampleSize >= 3 && (
-              <ol className="ownership-v2__distribution">
-                {([5, 4, 3, 2, 1] as const).map((star) => (
-                  <li key={star}>
-                    {star}★ {summary.portfolio!.overallDistribution[star]}{" "}
-                    {summary.portfolio!.overallDistribution[star] === 1 ? "facility" : "facilities"}
-                  </li>
-                ))}
-              </ol>
-            )}
+            <p className="ownership-v2__disclaimer">{summary.portfolio.disclaimer}</p>
           </div>
           <div id="related-facilities" className="ownership-v2__related">
-            <h3>Facilities connected to this organization</h3>
+            <h3>Facilities currently connected to this organization</h3>
             <ul>
               {summary.portfolio.relatedFacilities.map((facility) => (
                 <li key={facility.ccn}>
@@ -173,6 +178,13 @@ export function OwnershipOperation({ summary }: { summary: CareOwnershipOperatio
                 </li>
               ))}
             </ul>
+            {summary.portfolio.facilityCount > summary.portfolio.relatedFacilities.length && (
+              <p>
+                <Link href={summary.portfolio.href}>
+                  View all {summary.portfolio.facilityCount} connected facilities
+                </Link>
+              </p>
+            )}
           </div>
         </>
       )}

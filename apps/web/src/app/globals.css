@@ -1002,6 +1002,44 @@ fieldset legend span {
   display: inline-flex;
   align-items: center;
 }
+.ownership-v2__corroboration,
+.ownership-v2__disclaimer {
+  color: var(--color-slate-600);
+  font-size: 0.95rem;
+}
+.organization-portfolio {
+  display: grid;
+  gap: var(--space-6);
+}
+.organization-related__controls {
+  display: grid;
+  gap: var(--space-3);
+  margin-block: var(--space-3);
+}
+.organization-related__controls label {
+  display: grid;
+  gap: var(--space-1);
+  font-size: 0.9rem;
+}
+.organization-related__controls input,
+.organization-related__controls select {
+  min-height: 2.75rem;
+  padding-inline: 0.75rem;
+}
+.organization-related ul {
+  margin: var(--space-3) 0 0;
+  padding-left: 1.25rem;
+}
+.organization-related li {
+  display: grid;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+@media (min-width: 720px) {
+  .organization-related__controls {
+    grid-template-columns: 2fr 1fr;
+  }
+}
 .provider-section-nav {
   display: flex;
   overflow-x: auto;

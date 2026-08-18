@@ -10,6 +10,7 @@ import { getPublishedFacilityEnrichment } from "./enrichment-publication";
 import { getPublishedStateIntelligence } from "./state-publication";
 import { getPublishedFacilityHistory } from "./history-repository";
 import { getOwnershipOperationSummary } from "./ownership-v2";
+import { getPublishedOrganizationPortfolio } from "./ownership-portfolio";
 
 export const getProviderByCcnForPage = cache(getProviderByCcn);
 export const getProviderRegulatoryIntelligenceForPage = cache(getProviderRegulatoryIntelligence);
@@ -21,3 +22,4 @@ export const getPublishedFacilityEnrichmentForPage = cache(getPublishedFacilityE
 export const getPublishedStateIntelligenceForPage = cache(getPublishedStateIntelligence);
 export const getPublishedFacilityHistoryForPage = cache(getPublishedFacilityHistory);
 export const getOwnershipOperationSummaryForPage = cache(getOwnershipOperationSummary);
+export const getPublishedOrganizationPortfolioForPage = cache(getPublishedOrganizationPortfolio);

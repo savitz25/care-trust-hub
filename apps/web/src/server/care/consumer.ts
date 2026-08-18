@@ -36,6 +36,17 @@ export function isValidCmsChainId(value: string): boolean {
   return /^\d+$/.test(value);
 }
 
+export function isValidOrganizationId(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+
+export function organizationHref(organization: {
+  organizationId: string;
+  organizationName: string;
+}): string {
+  return `/ownership/${organization.organizationId}/${providerSlug(organization.organizationName)}`;
+}
+
 export function isCanonicalProviderSlug(
   provider: Pick<CareProviderDetail, "providerName">,
   slug: string,

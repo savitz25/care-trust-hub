@@ -4,6 +4,8 @@ import {
   factualRatingObservations,
   isCanonicalProviderSlug,
   isValidCmsChainId,
+  isValidOrganizationId,
+  organizationHref,
   providerHref,
   providerSlug,
 } from "./consumer";
@@ -22,6 +24,15 @@ describe("real provider consumer mapping", () => {
     expect(isValidCmsChainId("00123")).toBe(true);
     expect(isValidCmsChainId("not-a-chain")).toBe(false);
     expect(isValidCmsChainId("")).toBe(false);
+  });
+
+  it("builds ownership organization routes only for UUID identities", () => {
+    const organizationId = "11111111-1111-4111-8111-111111111111";
+    expect(isValidOrganizationId(organizationId)).toBe(true);
+    expect(isValidOrganizationId("not-an-org")).toBe(false);
+    expect(organizationHref({ organizationId, organizationName: "Example Healthcare LLC" })).toBe(
+      `/ownership/${organizationId}/example-healthcare-llc`,
+    );
   });
 
   it("preserves missing ratings without manufacturing a value or judgment", () => {

@@ -31,6 +31,20 @@ export async function getFacilitySitemapPage(page: number) {
   return result.rows;
 }
 
+export async function getIndexableOrganizationSitemapRows() {
+  const result = await getCareDatabasePool().query<{
+    organization_id: string;
+    display_name: string;
+    derived_at: Date;
+  }>(
+    `SELECT organization_id, display_name, derived_at
+     FROM ownership_portfolio
+     WHERE indexable AND publication_eligible
+     ORDER BY organization_id`,
+  );
+  return result.rows;
+}
+
 export async function getChainSitemapRows() {
   const result = await getCareDatabasePool().query<{
     cms_chain_id: string;

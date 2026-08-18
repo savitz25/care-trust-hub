@@ -335,15 +335,20 @@ export interface CareRelatedFacility {
   staffingRating: number | null;
   hadPenalty: boolean;
   relationshipType: string;
+  membershipStatus?: "current" | "historical" | "uncertain";
 }
 
 export interface CareOwnershipPortfolio {
   organizationId: string;
   organizationName: string;
   relationshipType: string;
+  href: string;
+  indexable: boolean;
   facilityCount: number;
+  historicalFacilityCount: number;
   stateCount: number;
   states: string[];
+  relationshipRoles: string[];
   relatedFacilities: CareRelatedFacility[];
   overallAverage: number | null;
   overallSampleSize: number;
@@ -362,6 +367,23 @@ export interface CareOwnershipPortfolio {
   totalFineAmount: number | null;
   facilitiesWithOwnershipChange: number;
   facilitiesWithRecentStateEnforcement: number;
+  facilitiesWithRecentCmsPenalty: number;
+  facilitiesWithRecentHighValueEnforcement: number;
+  facilitiesWithRecentComplaintInspection: number;
+  disclaimer: string;
+}
+
+export interface CareOwnershipChangeRecord {
+  effectiveDate: string;
+  changeTypeText: string;
+  facilityName: string;
+  ccn: string;
+}
+
+export interface CareOrganizationPortfolioPage {
+  portfolio: CareOwnershipPortfolio;
+  historicalFacilities: CareRelatedFacility[];
+  ownershipChanges: CareOwnershipChangeRecord[];
 }
 
 export interface CareOwnershipOperationSummary {
@@ -374,6 +396,7 @@ export interface CareOwnershipOperationSummary {
   chainName: string | null;
   ownershipChangeCount: number;
   whoIsBehind: string[];
+  supportedByMultipleGovernmentSources: boolean;
   portfolio: CareOwnershipPortfolio | null;
 }
 export interface CareChainSnapshot {

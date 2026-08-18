@@ -103,6 +103,7 @@ describe("server-only care repository", () => {
     expect(JSON.stringify(results)).not.toContain("raw_record");
     expect(query.mock.calls[0][0]).not.toContain("facility_claim");
     expect(query.mock.calls[0][0]).not.toContain("facility_history_event");
+    expect(query.mock.calls[0][0]).not.toContain("ownership_portfolio");
     expect(query.mock.calls[0][0]).not.toContain("google_");
     expect(query.mock.calls[0][0]).toContain("overall_rating DESC NULLS LAST");
     expect(query.mock.calls[0][1]).toEqual([
