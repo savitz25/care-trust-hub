@@ -26,11 +26,18 @@ export const HISTORY_EVENT_TYPES = [
   "OWNERSHIP_CHANGED",
   "STATE_INSPECTION",
   "STATE_COMPLAINT",
+  "STATE_COMPLAINT_INSPECTION",
   "STATE_ENFORCEMENT",
+  "STATE_ENFORCEMENT_ACTION",
   "STATE_FINE",
+  "STATE_ADMINISTRATIVE_ORDER",
   "STATE_LICENSE_RESTRICTION",
+  "STATE_LICENSE_SUSPENSION",
   "STATE_CLOSURE",
+  "STATE_CLOSURE_ACTION",
+  "STATE_IMMEDIATE_JEOPARDY",
   "STATE_OPERATOR_CHANGE",
+  "STATE_OWNERSHIP_CHANGE",
 ] as const;
 
 export type HistoryEventType = (typeof HISTORY_EVENT_TYPES)[number];
@@ -42,7 +49,24 @@ export const HISTORY_FILTERS = [
   "inspection",
   "enforcement",
   "ownership",
+  "state",
 ] as const;
+
+export const FEDERAL_RELATIONSHIPS = [
+  "STATE_ONLY",
+  "FEDERAL_ONLY",
+  "STATE_AND_CMS_CORROBORATED",
+  "POSSIBLE_DUPLICATE",
+  "UNKNOWN_RELATIONSHIP",
+] as const;
+
+export type FederalRelationship = (typeof FEDERAL_RELATIONSHIPS)[number];
+
+export const STATE_HISTORY_REGULATORS = {
+  CA: "California Department of Public Health",
+  NY: "New York State Department of Health",
+  TX: "Texas Health and Human Services Commission",
+} as const;
 
 export type HistoryFilter = (typeof HISTORY_FILTERS)[number];
 
@@ -72,6 +96,8 @@ export interface HistoryEventRecord {
   evidenceHref: string;
   sourceDatasetName: string;
   sourceRecordLocator: string | null;
+  sourceLabel: string | null;
+  regulator: string | null;
 }
 
 export interface RecentHistoryHighlight {
@@ -243,17 +269,90 @@ export function ownershipSummary(buyerName: string | null | undefined): string {
 }
 
 export function eventFamilyForType(type: HistoryEventType): HistoryEventFamily {
+  if (type.startsWith("STATE_")) return "state";
   if (type.includes("RATING")) return "rating";
   if (type.startsWith("STAFFING_")) return "staffing";
   if (type.startsWith("INSPECTION")) return "inspection";
   if (type.startsWith("PENALTY") || type.includes("ENFORCEMENT") || type.includes("FINE")) {
-    return type.startsWith("STATE_") ? "state" : "enforcement";
+    return "enforcement";
   }
-  if (type.startsWith("OWNERSHIP") || type === "STATE_OPERATOR_CHANGE") {
-    return type.startsWith("STATE_") ? "state" : "ownership";
-  }
-  if (type.startsWith("STATE_")) return "state";
+  if (type.startsWith("OWNERSHIP")) return "ownership";
   return "inspection";
+}
+
+export function stateEventPresentation(input: {
+  stateCode: "CA" | "NY" | "TX";
+  eventType: HistoryEventType;
+  eventDate: string;
+  detail?: string | null;
+  amount?: string | null;
+  classAssessed?: string | null;
+  deathRelated?: boolean;
+}): { title: string; summary: string; importance: HistoryImportance } {
+  const regulator = STATE_HISTORY_REGULATORS[input.stateCode];
+  const dateLabel = input.eventDate.slice(0, 10);
+  if (input.eventType === "STATE_FINE") {
+    const amount = input.amount ? ` of ${input.amount}` : "";
+    return {
+      title: "State fine recorded",
+      summary: `${regulator} recorded a state fine${amount} on ${dateLabel}.`,
+      importance: "HIGH",
+    };
+  }
+  if (input.eventType === "STATE_CLOSURE" || input.eventType === "STATE_CLOSURE_ACTION") {
+    return {
+      title: "State facility closure recorded",
+      summary: `${regulator} recorded a nursing-facility closure on ${dateLabel}.`,
+      importance: "HIGH",
+    };
+  }
+  if (input.eventType === "STATE_IMMEDIATE_JEOPARDY") {
+    return {
+      title: "State Immediate Jeopardy finding",
+      summary: `${regulator} reported an Immediate Jeopardy event on ${dateLabel}.`,
+      importance: "HIGH",
+    };
+  }
+  if (
+    input.eventType === "STATE_LICENSE_SUSPENSION" ||
+    input.eventType === "STATE_LICENSE_RESTRICTION"
+  ) {
+    return {
+      title: "State license action recorded",
+      summary: `${regulator} recorded a license restriction or suspension on ${dateLabel}.`,
+      importance: "HIGH",
+    };
+  }
+  if (input.eventType === "STATE_COMPLAINT_INSPECTION" || input.eventType === "STATE_COMPLAINT") {
+    return {
+      title: "State complaint inspection recorded",
+      summary: `${regulator} recorded a complaint-related inspection on ${dateLabel}.`,
+      importance: "MEDIUM",
+    };
+  }
+  if (input.eventType === "STATE_INSPECTION") {
+    return {
+      title: "State inspection completed",
+      summary: `${regulator} recorded a state inspection on ${dateLabel}.`,
+      importance: "LOW",
+    };
+  }
+  const classCode = (input.classAssessed ?? "").toUpperCase();
+  const highClass = classCode === "A" || classCode === "AA" || Boolean(input.deathRelated);
+  const detail = input.detail ? ` ${input.detail}.` : "";
+  return {
+    title: "State regulatory action recorded",
+    summary: `${regulator} recorded an enforcement action on ${dateLabel}.${detail}`,
+    importance: highClass ? "HIGH" : "MEDIUM",
+  };
+}
+
+export function shouldPublishStateHistoryEvent(input: {
+  identityState: string | null | undefined;
+  federalRelationship?: FederalRelationship | null;
+}): boolean {
+  if (input.identityState !== "VERIFIED") return false;
+  return input.federalRelationship !== "POSSIBLE_DUPLICATE";
 }
 
 export function evidenceHrefForFamily(family: HistoryEventFamily): string {

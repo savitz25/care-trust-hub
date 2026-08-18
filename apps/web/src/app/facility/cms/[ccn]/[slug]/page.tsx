@@ -21,6 +21,7 @@ import {
   isStaffingIntelligenceEnabled,
   isStateRegulatoryIntelligenceEnabled,
   isFacilityHistoryEnabled,
+  isStateEnforcementIntelligenceEnabled,
   isTrustParticipationEnabled,
   isVerifiedEnrichmentEnabled,
 } from "@/server/care/feature-flags";
@@ -81,7 +82,9 @@ export default async function RealFacilityPage({
       undefined)
     : undefined;
   const facilityHistory = isFacilityHistoryEnabled()
-    ? await getPublishedFacilityHistoryForPage(provider.ccn)
+    ? await getPublishedFacilityHistoryForPage(provider.ccn, {
+        includeStateEvents: isStateEnforcementIntelligenceEnabled(),
+      })
     : undefined;
   return (
     <RealProviderDetail

@@ -215,6 +215,8 @@ export interface CareFacilityHistoryEvent {
   evidenceHref: string;
   sourceDatasetName: string;
   sourceRecordLocator: string | null;
+  sourceLabel: string | null;
+  regulator: string | null;
 }
 
 export interface CareFacilityHistory {

@@ -31,24 +31,35 @@ interface HistoryRow {
   evidence_href: string;
   source_dataset_key: string;
   source_record_locator: string | null;
+  source_label: string | null;
+  regulator: string | null;
 }
 
 interface CountRow {
   total: string;
 }
 
-export async function getPublishedFacilityHistory(ccn: string): Promise<CareFacilityHistory> {
+export async function getPublishedFacilityHistory(
+  ccn: string,
+  options: { includeStateEvents?: boolean } = {},
+): Promise<CareFacilityHistory> {
   const identifier = validateCcn(ccn);
+  const includeState = options.includeStateEvents === true;
   const pool = getCareDatabasePool();
+  const stateClause = includeState
+    ? "AND (e.event_family <> 'state' OR coalesce(e.federal_relationship, '') <> 'POSSIBLE_DUPLICATE')"
+    : "AND e.event_family <> 'state'";
   const [events, count] = await Promise.all([
     pool.query<HistoryRow>(
       `SELECT e.id, e.event_type, e.event_family, e.event_date::text, e.date_precision,
               e.date_basis, e.importance, e.title, e.summary, e.previous_value, e.new_value,
-              e.evidence_href, e.source_dataset_key, e.source_record_locator
+              e.evidence_href, e.source_dataset_key, e.source_record_locator,
+              e.source_label, e.regulator
          FROM published_facility_history_event e
          JOIN provider_identifier pi ON pi.provider_id = e.provider_id
           AND pi.issuer = 'CMS' AND pi.identifier_type = 'CCN' AND pi.valid_to IS NULL
         WHERE pi.identifier_value = $1
+          ${stateClause}
         ORDER BY e.event_date DESC, e.importance ASC, e.id DESC
         LIMIT $2`,
       [identifier, HISTORY_READ_CAP],
@@ -58,7 +69,8 @@ export async function getPublishedFacilityHistory(ccn: string): Promise<CareFaci
          FROM published_facility_history_event e
          JOIN provider_identifier pi ON pi.provider_id = e.provider_id
           AND pi.issuer = 'CMS' AND pi.identifier_type = 'CCN' AND pi.valid_to IS NULL
-        WHERE pi.identifier_value = $1`,
+        WHERE pi.identifier_value = $1
+          ${stateClause}`,
       [identifier],
     ),
   ]);
@@ -77,6 +89,8 @@ export async function getPublishedFacilityHistory(ccn: string): Promise<CareFaci
     evidenceHref: row.evidence_href,
     sourceDatasetName: row.source_dataset_key,
     sourceRecordLocator: row.source_record_locator,
+    sourceLabel: row.source_label ?? (row.event_family === "state" ? "State regulator" : "CMS"),
+    regulator: row.regulator,
   }));
   const totalCount = Number(count.rows[0]?.total ?? mapped.length);
   return {

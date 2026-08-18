@@ -16,6 +16,7 @@ const FILTERS: Array<{ id: HistoryFilter; label: string }> = [
   { id: "inspection", label: "Inspections" },
   { id: "enforcement", label: "Enforcement" },
   { id: "ownership", label: "Ownership" },
+  { id: "state", label: "State" },
 ];
 
 function formatEventDate(
@@ -60,7 +61,8 @@ export function FacilityHistory({ history }: { history: CareFacilityHistory }) {
         <p className="eyebrow">Facility history</p>
         <h2 id="facility-history-title">Facility History</h2>
         <p>
-          {history.coverageLabel}. Dates and values come from published CMS evidence, not a score.
+          {history.coverageLabel}. Dates and values come from published CMS and official state
+          regulator evidence, not a score.
         </p>
       </div>
 
@@ -119,9 +121,12 @@ export function FacilityHistory({ history }: { history: CareFacilityHistory }) {
                       </p>
                     ) : null}
                     <p className="facility-history__source">
+                      {item.sourceLabel ??
+                        (item.eventFamily === "state" ? "State regulator" : "CMS")}
+                      {" · "}
                       {item.dateBasis === "reported_in_release"
-                        ? "Reported in a CMS release"
-                        : "CMS recorded event date"}
+                        ? "Reported in a source release"
+                        : "Recorded event date"}
                       {" · "}
                       <a href={item.evidenceHref}>View related evidence</a>
                     </p>

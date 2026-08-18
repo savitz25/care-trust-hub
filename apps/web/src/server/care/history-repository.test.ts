@@ -34,11 +34,20 @@ describe("published facility history reads", () => {
     const history = await getPublishedFacilityHistory("055001");
     expect(query).toHaveBeenCalledTimes(2);
     expect(query.mock.calls[0][0]).toContain("published_facility_history_event");
+    expect(query.mock.calls[0][0]).toContain("e.event_family <> 'state'");
     expect(query.mock.calls[0][0]).not.toContain("google_");
     expect(query.mock.calls[0][0]).not.toMatch(/overall_rating DESC/);
     expect(history.events).toHaveLength(1);
     expect(history.coverageLabel).toBe("1 historical event available");
     expect(JSON.stringify(history)).not.toMatch(/Trust Score|risk score/i);
+  });
+
+  it("includes published state events only when explicitly requested", async () => {
+    query.mockResolvedValueOnce({ rows: [] }).mockResolvedValueOnce({ rows: [{ total: "0" }] });
+    const { getPublishedFacilityHistory } = await import("./history-repository");
+    await getPublishedFacilityHistory("055001", { includeStateEvents: true });
+    expect(query.mock.calls[0][0]).toContain("POSSIBLE_DUPLICATE");
+    expect(query.mock.calls[0][0]).not.toMatch(/AND e.event_family <> 'state'\s*$/m);
   });
 
   it("returns an empty history safely for a valid CCN with no events", async () => {

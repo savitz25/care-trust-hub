@@ -84,6 +84,27 @@ describe("real provider UI feature flag", () => {
     ).toBe(true);
   });
 
+  it("keeps state enforcement history fail-closed without affecting CMS history", async () => {
+    const { isStateEnforcementIntelligenceEnabled, isFacilityHistoryEnabled } = await import(
+      "./feature-flags"
+    );
+    expect(isStateEnforcementIntelligenceEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(
+      false,
+    );
+    expect(
+      isFacilityHistoryEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_FACILITY_HISTORY: "true",
+      }),
+    ).toBe(true);
+    expect(
+      isStateEnforcementIntelligenceEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_STATE_ENFORCEMENT_INTELLIGENCE: "true",
+      }),
+    ).toBe(true);
+  });
+
   it("keeps facility history fail-closed without an explicit opt-in", async () => {
     const { isFacilityHistoryEnabled, isRealProviderUiEnabled } = await import("./feature-flags");
     expect(isFacilityHistoryEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(false);

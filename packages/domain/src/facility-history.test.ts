@@ -16,6 +16,8 @@ import {
   recentChangesFallback,
   selectRecentHighlights,
   shouldPublishInspectionType,
+  shouldPublishStateHistoryEvent,
+  stateEventPresentation,
   type HistoryEventRecord,
 } from "./facility-history";
 
@@ -34,6 +36,8 @@ const event = (overrides: Partial<HistoryEventRecord> = {}): HistoryEventRecord 
   evidenceHref: "#inspections",
   sourceDatasetName: "Nursing Home Inspection Dates",
   sourceRecordLocator: "row:1",
+  sourceLabel: "CMS",
+  regulator: null,
   ...overrides,
 });
 
@@ -153,5 +157,41 @@ describe("facility history derivation", () => {
     expect(filterHistoryEvents(events, "inspection")[0]?.eventFamily).toBe("inspection");
     expect(eventFamilyForType("PENALTY_RECORDED")).toBe("enforcement");
     expect(eventFamilyForType("STATE_FINE")).toBe("state");
+  });
+
+  it("labels state events as state evidence and keeps HIGH/MEDIUM recent-change eligible", () => {
+    const presented = stateEventPresentation({
+      stateCode: "CA",
+      eventType: "STATE_ENFORCEMENT_ACTION",
+      eventDate: "2026-05-12",
+      classAssessed: "A",
+    });
+    expect(presented.title).toBe("State regulatory action recorded");
+    expect(presented.summary).toContain("California Department of Public Health");
+    expect(presented.importance).toBe("HIGH");
+    expect(presented.summary).not.toMatch(/dangerous|unsafe|scandal/i);
+    expect(shouldPublishStateHistoryEvent({ identityState: "VERIFIED" })).toBe(true);
+    expect(shouldPublishStateHistoryEvent({ identityState: "PROBABLE" })).toBe(false);
+    expect(shouldPublishStateHistoryEvent({ identityState: "REVIEW_REQUIRED" })).toBe(false);
+    expect(shouldPublishStateHistoryEvent({ identityState: "UNRESOLVED" })).toBe(false);
+    expect(
+      shouldPublishStateHistoryEvent({
+        identityState: "VERIFIED",
+        federalRelationship: "POSSIBLE_DUPLICATE",
+      }),
+    ).toBe(false);
+    const highlights = selectRecentHighlights(
+      [
+        event({
+          eventFamily: "state",
+          eventType: "STATE_FINE",
+          title: "State fine recorded",
+          importance: "HIGH",
+          eventDate: "2026-07-12",
+        }),
+      ],
+      new Date("2026-08-18T00:00:00Z"),
+    );
+    expect(highlights[0]?.title).toBe("State fine recorded");
   });
 });

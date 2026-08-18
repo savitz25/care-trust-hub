@@ -112,6 +112,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Idempotently derive national facility-history events from existing CMS evidence",
     )
     history.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    enforcement = commands.add_parser(
+        "ingest-state-enforcement",
+        help="Ingest official CA/NY/TX state enforcement and inspection events",
+    )
+    enforcement.add_argument("state_code", choices=("CA", "NY", "TX", "ALL"))
+    enforcement.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    enforcement.add_argument("--timeout", type=float, default=180)
     return parser
 
 
@@ -152,6 +159,23 @@ def main(argv: list[str] | None = None) -> int:
         from .facility_history import derive_facility_history_json
 
         print(derive_facility_history_json(args.database_url), end="")
+        return 0
+    if args.command == "ingest-state-enforcement":
+        if not args.database_url:
+            parser.error("ingest-state-enforcement requires CARE_DATABASE_URL or --database-url")
+        from .state_enforcement import ingest_all_state_enforcement, ingest_state_enforcement
+
+        if args.state_code == "ALL":
+            print(
+                json.dumps(ingest_all_state_enforcement(args.database_url, args.timeout), indent=2)
+            )
+        else:
+            print(
+                ingest_state_enforcement(
+                    args.database_url, args.state_code, timeout=args.timeout
+                ).to_json(),
+                end="",
+            )
         return 0
     if args.command == "ingest-state":
         if not args.database_url:

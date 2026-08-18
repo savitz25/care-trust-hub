@@ -31,6 +31,8 @@ const history: CareFacilityHistory = {
       evidenceHref: "#inspections",
       sourceDatasetName: "nursing-home-inspection-dates",
       sourceRecordLocator: "row:1",
+      sourceLabel: "CMS",
+      regulator: null,
     },
     {
       id: "own",
@@ -47,6 +49,26 @@ const history: CareFacilityHistory = {
       evidenceHref: "#ownership",
       sourceDatasetName: "skilled-nursing-facility-enrollments",
       sourceRecordLocator: "row:2",
+      sourceLabel: "CMS",
+      regulator: null,
+    },
+    {
+      id: "state",
+      eventType: "STATE_FINE",
+      eventFamily: "state",
+      eventDate: "2026-07-12",
+      datePrecision: "day",
+      dateBasis: "occurred",
+      importance: "HIGH",
+      title: "State fine recorded",
+      summary: "California Department of Public Health recorded a state fine on 2026-07-12.",
+      previousValue: null,
+      newValue: "$12,000",
+      evidenceHref: "#state-license",
+      sourceDatasetName: "ca-cdph-state-enforcement-actions",
+      sourceRecordLocator: "ca:CA-1",
+      sourceLabel: "California Department of Public Health",
+      regulator: "California Department of Public Health",
     },
   ],
 };
@@ -98,6 +120,7 @@ describe("facility history", () => {
     expect(screen.getAllByText("Health inspection completed").length).toBeGreaterThan(0);
     expect(screen.getByText("2026")).toBeInTheDocument();
     expect(screen.getByText("2025")).toBeInTheDocument();
+    expect(screen.getAllByText(/California Department of Public Health/).length).toBeGreaterThan(0);
     expect(document.body.textContent).not.toMatch(/Trust Score|risk score|DANGEROUS/i);
   });
 
