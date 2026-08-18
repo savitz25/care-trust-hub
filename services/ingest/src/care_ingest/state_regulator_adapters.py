@@ -198,9 +198,7 @@ def parse_texas_records(payload: bytes) -> list[StateLicenseRecord]:
         address = _text(_get(row, "physical address", "address", "street"))
         if not name or not address:
             continue
-        license_id = _text(
-            _get(row, "license no", "license number", "license #", "facility id")
-        )
+        license_id = _text(_get(row, "license no", "license number", "license #", "facility id"))
         records.append(
             StateLicenseRecord(
                 state_code="TX",
@@ -368,9 +366,8 @@ def _fetch_ckan_all(resource_id: str, timeout: float) -> bytes:
     offset = 0
     page = 32000
     while True:
-        url = (
-            "https://data.chhs.ca.gov/api/3/action/datastore_search?"
-            + urlencode({"resource_id": resource_id, "limit": page, "offset": offset})
+        url = "https://data.chhs.ca.gov/api/3/action/datastore_search?" + urlencode(
+            {"resource_id": resource_id, "limit": page, "offset": offset}
         )
         payload = _fetch_json(url, timeout)
         if not payload.get("success"):

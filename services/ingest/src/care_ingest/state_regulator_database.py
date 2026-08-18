@@ -183,8 +183,7 @@ def ingest_state_source(
                 if (
                     provider_id
                     and match.state in {"VERIFIED", "PROBABLE", "REVIEW_REQUIRED"}
-                    and observation.observation_type
-                    not in {"STATE_PHONE", "STATE_ADDRESS"}
+                    and observation.observation_type not in {"STATE_PHONE", "STATE_ADDRESS"}
                 ):
                     claim_rows.append(
                         (
@@ -196,14 +195,13 @@ def ingest_state_source(
                             (
                                 0.99
                                 if match.state == "VERIFIED"
-                                else 0.8 if match.state == "PROBABLE" else 0.4
+                                else 0.8
+                                if match.state == "PROBABLE"
+                                else 0.4
                             ),
                             match.reason,
                             Jsonb(
-                                [
-                                    {"feature": item, "outcome": "match"}
-                                    for item in match.matched_on
-                                ]
+                                [{"feature": item, "outcome": "match"} for item in match.matched_on]
                             ),
                             resolver,
                             "decided" if match.state == "VERIFIED" else "open",
