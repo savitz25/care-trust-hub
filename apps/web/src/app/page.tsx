@@ -1,5 +1,16 @@
+import type { Metadata } from "next";
 import { TrustStrip, RealDataNotice, SyntheticDataNotice } from "@/components/evidence";
+import { JourneyNextStep } from "@/components/journey-next-step";
 import { brand } from "@/config/brand";
+import { productionOrigin } from "@/config/deployment";
+import {
+  parseNetworkJourney,
+  resolveSeniorJourneyModule,
+} from "@/lib/journey-handoff";
+
+export const metadata: Metadata = {
+  alternates: { canonical: productionOrigin.origin },
+};
 
 const paths = [
   {
@@ -32,10 +43,16 @@ const paths = [
   },
 ] as const;
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const navigatorEnabled = process.env.CARE_ENABLE_CARE_NEEDS_NAVIGATOR === "true";
   const plannerEnabled = process.env.CARE_ENABLE_SENIOR_CARE_COST_PLANNER === "true";
   const interviewBuilderEnabled = process.env.CARE_ENABLE_FACILITY_INTERVIEW_BUILDER === "true";
+  const sp = searchParams ? await searchParams : {};
+  const journeyModule = resolveSeniorJourneyModule(parseNetworkJourney(sp), "home");
   const entries = paths.map((path) =>
     path.number === "04" && navigatorEnabled
       ? {
@@ -170,6 +187,9 @@ export default function Home() {
             </a>
           </article>
         </section>
+      </div>
+      <div className="page-shell" style={{ paddingBlock: "0 3rem" }}>
+        <JourneyNextStep module={journeyModule} />
       </div>
       <TrustStrip />
     </>

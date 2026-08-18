@@ -4,6 +4,7 @@ import { brand } from "@/config/brand";
 import {
   ASK_NETWORK_OWNERSHIP_SHORT,
   ASK_NETWORK_STANDARD_URL,
+  ASK_NETWORK_STANDARD_VERSION,
   CURRENT_NETWORK_HUB_ID,
   NETWORK_HUBS,
 } from "@/config/network";
@@ -24,7 +25,7 @@ const brandStyles = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
-      <body style={brandStyles}>
+      <body style={brandStyles} data-network-standard={ASK_NETWORK_STANDARD_VERSION}>
         <a className="skip-link" href="#main-content">
           Skip to main content
         </a>

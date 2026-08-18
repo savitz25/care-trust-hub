@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CareNeedsNavigator } from "@/components/care-needs-navigator";
+import { JourneyNextStep } from "@/components/journey-next-step";
+import {
+  parseNetworkJourney,
+  resolveSeniorJourneyModule,
+} from "@/lib/journey-handoff";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import {
   isCareNeedsNavigatorEnabled,
@@ -25,14 +30,23 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function CareNeedsNavigatorPage() {
+export default async function CareNeedsNavigatorPage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   if (!isCareNeedsNavigatorEnabled()) notFound();
+  const journeyModule = resolveSeniorJourneyModule(
+    parseNetworkJourney(searchParams ? await searchParams : {}),
+    "planner",
+  );
   return (
     <div className="page-shell">
       <CareNeedsNavigator
         plannerEnabled={isSeniorCareCostPlannerEnabled()}
         interviewBuilderEnabled={isFacilityInterviewBuilderEnabled()}
       />
+      <JourneyNextStep module={journeyModule} />
     </div>
   );
 }

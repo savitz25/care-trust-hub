@@ -29,6 +29,11 @@ import {
   isFacilityInterviewBuilderEnabled,
 } from "@/server/care/feature-flags";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
+import { JourneyNextStep } from "@/components/journey-next-step";
+import {
+  parseNetworkJourney,
+  resolveSeniorJourneyModule,
+} from "@/lib/journey-handoff";
 
 export const dynamic = "force-dynamic";
 
@@ -53,8 +58,10 @@ export async function generateMetadata({
 
 export default async function RealFacilityPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ ccn: string; slug: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   if (!isRealProviderUiEnabled()) notFound();
   const { ccn, slug } = await params;
@@ -96,20 +103,29 @@ export default async function RealFacilityPage({
           chain,
         })
       : undefined;
+  const journeyModule = resolveSeniorJourneyModule(
+    parseNetworkJourney(searchParams ? await searchParams : {}),
+    "facility",
+  );
   return (
-    <RealProviderDetail
-      provider={provider}
-      regulatory={regulatory}
-      staffing={staffing}
-      ownership={ownership}
-      chain={chain ?? undefined}
-      providerContext={providerContext}
-      trustParticipation={trustParticipation}
-      publishedEnrichment={publishedEnrichment}
-      stateIntelligence={stateIntelligence}
-      facilityHistory={facilityHistory}
-      ownershipOperation={ownershipOperation}
-      interviewBuilderEnabled={isFacilityInterviewBuilderEnabled()}
-    />
+    <>
+      <RealProviderDetail
+        provider={provider}
+        regulatory={regulatory}
+        staffing={staffing}
+        ownership={ownership}
+        chain={chain ?? undefined}
+        providerContext={providerContext}
+        trustParticipation={trustParticipation}
+        publishedEnrichment={publishedEnrichment}
+        stateIntelligence={stateIntelligence}
+        facilityHistory={facilityHistory}
+        ownershipOperation={ownershipOperation}
+        interviewBuilderEnabled={isFacilityInterviewBuilderEnabled()}
+      />
+      <div className="page-shell" style={{ paddingBlock: "0 3rem" }}>
+        <JourneyNextStep module={journeyModule} />
+      </div>
+    </>
   );
 }

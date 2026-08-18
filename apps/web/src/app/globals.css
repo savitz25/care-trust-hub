@@ -144,6 +144,49 @@ summary {
   margin-inline: auto;
   padding-block: clamp(2rem, 6vw, 5rem);
 }
+.journey-next {
+  margin-block: 2rem 0;
+  padding: 1.25rem 1.35rem;
+  border: 1px solid var(--color-slate-200, #e2e8f0);
+  border-radius: 1rem;
+  background: #fff;
+}
+.journey-next__eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-slate-600, #475569);
+}
+.journey-next h2 {
+  margin: 0.4rem 0 0.5rem;
+  font-size: 1.15rem;
+}
+.journey-next__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 1rem 0 0;
+}
+.journey-next__primary,
+.journey-next__secondary {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0 1rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.journey-next__primary {
+  background: var(--color-senior-plum, #5b2a5d);
+  color: #fff;
+}
+.journey-next__secondary {
+  border: 1px solid var(--color-slate-300, #cbd5e1);
+  color: var(--color-trust-navy, #0a2540);
+}
 .narrow-shell {
   max-width: 62rem;
 }
