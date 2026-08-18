@@ -25,3 +25,4 @@ export function isAuthoritativeEvidence(assertion: EvidenceAssertion): boolean {
 export * from "./facilities";
 export * from "./facility-intelligence";
 export * from "./enrichment-publication";
+export * from "./state-regulator";

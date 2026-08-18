@@ -1,0 +1,23 @@
+{
+  "comment": "Official CDPH Open Data sample row retrieved 2026-08-18 via CKAN datastore_search limit=1. Not a production ingest.",
+  "source": "https://data.chhs.ca.gov/dataset/healthcare-facility-locations",
+  "record": {
+    "FACID": "010000001",
+    "CCN": "555120",
+    "FACNAME": "VINEYARD POST ACUTE",
+    "FAC_TYPE_CODE": "SNF",
+    "CAPACITY": 99,
+    "ADDRESS": "101 MONROE ST",
+    "CITY": "PETALUMA",
+    "ZIP": 94954,
+    "CONTACT_PHONE_NUMBER": "(707) 763-4109",
+    "COUNTY_NAME": "SONOMA",
+    "LICENSE_NUMBER": 10000102,
+    "BUSINESS_NAME": "PETALUMAIDENCE OPCO, LLC",
+    "LICENSE_STATUS_DESCRIPTION": "ACTIVE",
+    "FACADMIN": "BILLS, KEVAN",
+    "INITIAL_LICENSE_DATE": "1973-07-05T00:00:00",
+    "LICENSE_EXPIRATION_DATE": "2026-11-04T00:00:00",
+    "DATA_DATE": "2026-08-17T00:00:00"
+  }
+}
