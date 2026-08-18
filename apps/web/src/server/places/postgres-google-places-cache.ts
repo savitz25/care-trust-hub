@@ -19,7 +19,10 @@ type Queryable = {
 const sha256 = (value: string) => createHash("sha256").update(value).digest("hex");
 
 export class PostgresGooglePlacesCache implements GooglePlacesCache {
-  constructor(private readonly database: Queryable = getCareDatabasePool()) {}
+  constructor(
+    private readonly database: Queryable = getCareDatabasePool(),
+    private readonly intelligenceRunId?: string,
+  ) {}
 
   async get(operation: GooglePlacesOperation, cacheKey: string): Promise<unknown | null> {
     const result = await this.database.query<CacheRow>(
@@ -42,12 +45,12 @@ export class PostgresGooglePlacesCache implements GooglePlacesCache {
     await this.database.query(
       `INSERT INTO facility_external_request_cache
         (source_type,operation,cache_key,request_fingerprint,response_fingerprint,
-         response_payload,field_mask,retrieved_at,expires_at,adapter_version)
-       VALUES ('google_places',$1,$2,$3,$4,$5,$6,now(),$7,'google-places-v1')
+         response_payload,field_mask,retrieved_at,expires_at,adapter_version,intelligence_run_id)
+       VALUES ('google_places',$1,$2,$3,$4,$5,$6,now(),$7,'google-places-v1',$8)
        ON CONFLICT (source_type,operation,cache_key,field_mask,adapter_version)
        DO UPDATE SET response_fingerprint=EXCLUDED.response_fingerprint,
          response_payload=EXCLUDED.response_payload,retrieved_at=EXCLUDED.retrieved_at,
-         expires_at=EXCLUDED.expires_at`,
+         expires_at=EXCLUDED.expires_at,intelligence_run_id=EXCLUDED.intelligence_run_id`,
       [
         operation,
         cacheKey,
@@ -56,6 +59,7 @@ export class PostgresGooglePlacesCache implements GooglePlacesCache {
         value,
         googlePlacesFieldMasks[operation],
         expiresAt,
+        this.intelligenceRunId ?? null,
       ],
     );
   }

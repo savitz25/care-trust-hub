@@ -97,6 +97,27 @@ describe("Google Places server adapter", () => {
     ).rejects.toMatchObject({ code: "RATE_LIMIT", retryable: true });
   });
 
+  it("counts every retry against the hard request budget", async () => {
+    const request = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response("retry", { status: 503 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ places: [] }), { status: 200 }));
+    const events: Array<{ operation: string; attempt: number }> = [];
+    const budget = new GooglePlacesBudget(2, false);
+    await discoverGooglePlaceCandidates("bounded retry", {
+      environment,
+      fetchImplementation: request,
+      retryLimit: 1,
+      budget,
+      onRequest: (event) => events.push(event),
+    });
+    expect(budget.usedRequests).toBe(2);
+    expect(events).toEqual([
+      { operation: "search", attempt: 0 },
+      { operation: "search", attempt: 1 },
+    ]);
+  });
+
   it("parses bounded details separately from discovery", async () => {
     const request = vi.fn<typeof fetch>().mockResolvedValue(
       new Response(

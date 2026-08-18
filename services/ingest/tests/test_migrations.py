@@ -49,3 +49,9 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "facility_intelligence_append_only" in intelligence
     assert "CHECK (publication_eligible = false OR resolution_state = 'VERIFIED')" in intelligence
     assert "GOOGLE_PLACES_API_KEY" not in intelligence
+
+    pilot = (migrations / "0013_facility_identity_pilot_manifest.sql").read_text(encoding="utf-8")
+    assert "ADD COLUMN selection_metadata jsonb" in pilot
+    assert "ADD COLUMN verified_audit_status text" in pilot
+    assert "facility_run_provider_reason_codes_gin" in pilot
+    assert "GOOGLE_PLACES_API_KEY" not in pilot

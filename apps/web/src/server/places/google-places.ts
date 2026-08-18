@@ -96,6 +96,8 @@ export type GooglePlacesClientOptions = {
   cache?: GooglePlacesCache;
   cacheTtlMs?: number;
   retryLimit?: number;
+  onRequest?: (event: { operation: GooglePlacesOperation; attempt: number }) => void;
+  onCacheHit?: (operation: GooglePlacesOperation) => void;
 };
 
 function cacheFingerprint(value: string): string {
@@ -130,14 +132,16 @@ async function requestJson(
   fieldMask: string,
   init: RequestInit,
   options: GooglePlacesClientOptions,
+  operation: GooglePlacesOperation,
 ): Promise<unknown> {
   const apiKey = options.environment?.GOOGLE_PLACES_API_KEY ?? process.env.GOOGLE_PLACES_API_KEY;
   if (!apiKey?.trim())
     throw new GooglePlacesError("MISSING_CREDENTIAL", "Google Places server credential is missing");
-  options.budget?.reserve();
   const retries = Math.max(0, Math.min(options.retryLimit ?? 1, 2));
   for (let attempt = 0; ; attempt += 1) {
     try {
+      options.budget?.reserve();
+      options.onRequest?.({ operation, attempt });
       const response = await (options.fetchImplementation ?? fetch)(url, {
         ...init,
         headers: {
@@ -185,7 +189,10 @@ export async function discoverGooglePlaceCandidates(
     `${query.toLowerCase()}|${maximumCandidates}|${SEARCH_FIELD_MASK}`,
   );
   const cached = await options.cache?.get("search", cacheKey);
-  if (cached) return cached as GooglePlaceCandidate[];
+  if (cached) {
+    options.onCacheHit?.("search");
+    return cached as GooglePlaceCandidate[];
+  }
   const payload = await requestJson(
     searchEndpoint,
     SEARCH_FIELD_MASK,
@@ -194,6 +201,7 @@ export async function discoverGooglePlaceCandidates(
       body: JSON.stringify({ textQuery: query, maxResultCount: maximumCandidates }),
     },
     options,
+    "search",
   );
   const places = (payload as { places?: unknown } | null)?.places;
   if (places !== undefined && !Array.isArray(places))
@@ -217,12 +225,16 @@ export async function getGooglePlaceDetails(
   if (!/^[A-Za-z0-9_-]{8,255}$/.test(placeId)) throw new RangeError("Invalid Google Place ID");
   const cacheKey = cacheFingerprint(`${placeId}|${DETAILS_FIELD_MASK}`);
   const cached = await options.cache?.get("details", cacheKey);
-  if (cached) return cached as GooglePlaceCandidate;
+  if (cached) {
+    options.onCacheHit?.("details");
+    return cached as GooglePlaceCandidate;
+  }
   const payload = await requestJson(
     `https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}`,
     DETAILS_FIELD_MASK,
     { method: "GET" },
     options,
+    "details",
   );
   const candidate = parseCandidate(payload);
   if (!candidate)
