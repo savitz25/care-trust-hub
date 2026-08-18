@@ -5,7 +5,9 @@ import type {
   CareRegulatoryIntelligence,
   CareStaffingIntelligence,
   CareChainIntelligence,
+  CarePublishedFacilityEnrichment,
 } from "@/server/care/types";
+import { VerifiedPublicContact } from "./verified-public-contact";
 import { CMS_RATING_EXPLANATIONS, factualRatingObservations } from "@/server/care/consumer";
 import { formatFreshnessLabels } from "@/server/care/freshness";
 import { CmsStarRating, ParticipationFacts } from "./real-provider";
@@ -44,12 +46,14 @@ export function FacilitySourceRegister({
   staffing,
   ownership,
   chain,
+  publishedEnrichment,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
   staffing?: CareStaffingIntelligence;
   ownership?: CareOwnershipIntelligence;
   chain?: CareChainIntelligence;
+  publishedEnrichment?: CarePublishedFacilityEnrichment;
 }) {
   const sources: FacilitySourceEntry[] = [
     {
@@ -151,6 +155,27 @@ export function FacilitySourceRegister({
         supports: "Exact CMS chain affiliation",
       });
   }
+  if (
+    publishedEnrichment &&
+    (publishedEnrichment.website || publishedEnrichment.phone || publishedEnrichment.publicAlias)
+  ) {
+    const retrievedAt =
+      publishedEnrichment.website?.resolvedAt ??
+      publishedEnrichment.phone?.resolvedAt ??
+      publishedEnrichment.publicAlias?.resolvedAt ??
+      provider.source.freshness.retrievedAt;
+    sources.push({
+      key: "verified-public-listing",
+      sourceOrganization: "Public facility listing",
+      datasetName: "Verified public facility information",
+      datasetIdentifier: "commercial-corroboration:public-listing",
+      officialSourceUrl: "/sources",
+      sourceModifiedAt: retrievedAt,
+      retrievedAt,
+      supports:
+        "Independently verified public website, phone, or publicly used name. Not a CMS rating or regulatory status.",
+    });
+  }
   return (
     <div className="source-register__datasets">
       {sources.map((source) => (
@@ -185,7 +210,9 @@ export function FacilitySourceRegister({
             </div>
           </dl>
           <a href={source.officialSourceUrl} rel="noreferrer">
-            View official CMS source
+            {source.datasetIdentifier.startsWith("commercial-corroboration")
+              ? "How sources work"
+              : "View official CMS source"}
           </a>
         </details>
       ))}
@@ -201,6 +228,7 @@ export function RealProviderDetail({
   chain,
   providerContext = [],
   trustParticipation = false,
+  publishedEnrichment,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
@@ -215,6 +243,7 @@ export function RealProviderDetail({
     referencedSection: string | null;
   }>;
   trustParticipation?: boolean;
+  publishedEnrichment?: CarePublishedFacilityEnrichment;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
@@ -244,6 +273,9 @@ export function RealProviderDetail({
         <header className="facility-hero">
           <div>
             <h1>{provider.providerName}</h1>
+            {publishedEnrichment?.publicAlias ? (
+              <p className="lede">Also known publicly as {publishedEnrichment.publicAlias.value}</p>
+            ) : null}
             <p className="lede">
               {[provider.location.city, provider.location.state].filter(Boolean).join(", ")}
             </p>
@@ -298,6 +330,10 @@ export function RealProviderDetail({
           <ParticipationFacts provider={provider} />
         </section>
 
+        {publishedEnrichment ? (
+          <VerifiedPublicContact provider={provider} enrichment={publishedEnrichment} />
+        ) : null}
+
         <WhatToReview
           provider={provider}
           regulatory={regulatory}
@@ -314,6 +350,13 @@ export function RealProviderDetail({
           {regulatory && <a href="#penalties">Penalties</a>}
           {regulatory && <a href="#history">History</a>}
           {staffing && <a href="#staffing">Staffing</a>}
+          {publishedEnrichment &&
+          (publishedEnrichment.website ||
+            publishedEnrichment.phone ||
+            publishedEnrichment.publicAlias ||
+            provider.telephone) ? (
+            <a href="#contact">Contact</a>
+          ) : null}
           <a href="#sources">Sources</a>
         </nav>
 
@@ -445,6 +488,7 @@ export function RealProviderDetail({
             staffing={staffing}
             ownership={ownership}
             chain={chain}
+            publishedEnrichment={publishedEnrichment}
           />
           <p className="independence-statement">
             No paid placements. Facilities cannot pay to rank higher. We cite. You decide.

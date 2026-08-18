@@ -66,6 +66,18 @@ describe("real provider UI feature flag", () => {
     ).toBe(true);
   });
 
+  it("publishes verified enrichment with real-provider UI unless explicitly disabled", async () => {
+    const { isVerifiedEnrichmentEnabled } = await import("./feature-flags");
+    expect(isVerifiedEnrichmentEnabled({ NODE_ENV: "production" })).toBe(false);
+    expect(isVerifiedEnrichmentEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(true);
+    expect(
+      isVerifiedEnrichmentEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_VERIFIED_ENRICHMENT: "false",
+      }),
+    ).toBe(false);
+  });
+
   it("requires both real-provider and trust-participation opt-ins without billing state", async () => {
     const { isTrustParticipationEnabled } = await import("./feature-flags");
     expect(isTrustParticipationEnabled({ CARE_ENABLE_TRUST_PARTICIPATION: "true" })).toBe(false);

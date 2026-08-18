@@ -51,6 +51,19 @@ export interface CareProviderDetail extends CareProviderSummary {
   source: CareSourceDisclosure;
 }
 
+export interface CarePublishedEnrichmentField {
+  value: string;
+  resolvedAt: string;
+  claimType: "google_official_website" | "google_public_phone" | "google_public_name";
+}
+
+export interface CarePublishedFacilityEnrichment {
+  website: CarePublishedEnrichmentField | null;
+  phone: CarePublishedEnrichmentField | null;
+  publicAlias: CarePublishedEnrichmentField | null;
+  phoneMatchesCms: boolean;
+}
+
 export interface CareProviderSearchResult extends CareProviderSummary {
   ownershipType: string | null;
   participationType: string | null;

@@ -6,6 +6,7 @@ import { getProviderChainIntelligence } from "./chain-repository";
 import { getProviderRegulatoryIntelligence } from "./regulatory-repository";
 import { getProviderStaffingSummary } from "./staffing-repository";
 import { getApprovedProviderContext } from "./trust-participation";
+import { getPublishedFacilityEnrichment } from "./enrichment-publication";
 
 export const getProviderByCcnForPage = cache(getProviderByCcn);
 export const getProviderRegulatoryIntelligenceForPage = cache(getProviderRegulatoryIntelligence);
@@ -13,3 +14,4 @@ export const getProviderStaffingSummaryForPage = cache(getProviderStaffingSummar
 export const getProviderOwnershipIntelligenceForPage = cache(getProviderOwnershipIntelligence);
 export const getProviderChainIntelligenceForPage = cache(getProviderChainIntelligence);
 export const getApprovedProviderContextForPage = cache(getApprovedProviderContext);
+export const getPublishedFacilityEnrichmentForPage = cache(getPublishedFacilityEnrichment);

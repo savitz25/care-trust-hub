@@ -9,6 +9,7 @@ import {
   getProviderRegulatoryIntelligenceForPage,
   getProviderStaffingSummaryForPage,
   getApprovedProviderContextForPage,
+  getPublishedFacilityEnrichmentForPage,
 } from "@/server/care/cached-repository";
 import {
   isInspectionIntelligenceEnabled,
@@ -17,6 +18,7 @@ import {
   isRealProviderUiEnabled,
   isStaffingIntelligenceEnabled,
   isTrustParticipationEnabled,
+  isVerifiedEnrichmentEnabled,
 } from "@/server/care/feature-flags";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 
@@ -67,6 +69,9 @@ export default async function RealFacilityPage({
   const providerContext = trustParticipation
     ? await getApprovedProviderContextForPage(provider.ccn)
     : [];
+  const publishedEnrichment = isVerifiedEnrichmentEnabled()
+    ? await getPublishedFacilityEnrichmentForPage(provider.ccn, provider)
+    : undefined;
   return (
     <RealProviderDetail
       provider={provider}
@@ -76,6 +81,7 @@ export default async function RealFacilityPage({
       chain={chain ?? undefined}
       providerContext={providerContext}
       trustParticipation={trustParticipation}
+      publishedEnrichment={publishedEnrichment}
     />
   );
 }

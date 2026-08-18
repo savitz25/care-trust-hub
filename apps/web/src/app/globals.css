@@ -928,6 +928,23 @@ fieldset legend span {
   padding: var(--space-2) 0;
   background: transparent;
 }
+.verified-public-contact {
+  padding-block: var(--space-5);
+}
+.verified-public-contact__facts dd {
+  display: grid;
+  gap: var(--space-1);
+}
+.verified-public-contact__facts small {
+  display: block;
+  color: var(--color-slate-600);
+  font-size: 0.85rem;
+}
+.verified-public-contact__facts a {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+}
 .provider-section-nav {
   display: flex;
   overflow-x: auto;
