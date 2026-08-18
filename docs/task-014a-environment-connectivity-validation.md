@@ -148,3 +148,17 @@ Use an append-only, versioned resolution pipeline:
 8. Resolve conflicts by published source authority per field: CMS/regulator for healthcare identity and regulatory facts; legal/operator sources for entities; official website for self-published contact; Google only for corroboration. Surface unresolved conflict rather than inventing a winner.
 9. Promote only validated, versioned releases. Keep raw acquisition immutable, transformation releases reproducible, and consumer projections rollback-capable.
 10. Before any national run, reconcile the unresolved ownership/chain/staffing identifiers and add exact indexed audit queries for resolution backlog counts.
+
+## Database Credential Revalidation — 2026-08-17
+
+The database credential reset and Vercel redeploy were acknowledged and validated without exposing the credential.
+
+- **Local connectivity:** PASS. A read-only connection through the existing Node/PostgreSQL architecture succeeded with encrypted TLS using the documented managed-pooler `require` mode. The database contains 14,693 providers and 14,693 CMS CCNs.
+- **Environment loading:** Next.js automatically loads `apps/web/.env.local`, but Vitest, plain Node, pytest, and the Python CLI do not automatically load `.env.local`. The updated credential is currently in the ignored `services/ingest/.env.local`, so local test commands require explicit environment injection. No automatic Python loading was added because its seven integration tests truncate core tables and must only receive an isolated test database URL. CI behavior remains explicit and unchanged.
+- **Test setup change:** none. Preserving explicit injection is the safe behavior for destructive ingestion tests. Local developer documentation should continue to distinguish the web runtime env location from an explicitly exported isolated integration-test database URL.
+- **Web database integration:** 5 executed, 5 passed, 0 failed, 0 skipped. The complete web suite passed 73/73 with the credential explicitly injected.
+- **Python database integration (local):** 0 executed, 0 passed, 0 failed, 7 skipped because Docker/PostGIS is unavailable and the only configured URL is not an authorized destructive test target. The normal Python suite passed 39 tests and skipped those same 7 guarded integration tests. The existing CI migrations job provides an isolated PostGIS database and injects `CARE_DATABASE_URL` explicitly; its revalidation result is recorded in the task handoff.
+- **Representative data:** the expected facility universe and CCN count were present, and CCN `015019` resolved related staffing, inspection, deficiency, and ownership evidence.
+- **Production:** PASS. Homepage, search, a representative facility page, staffing/inspection content, and `/api/health` returned successfully; health reported the database reachable. No connection error or credential appeared in sampled responses.
+- **Security:** `CARE_DATABASE_URL` remains server-only and untracked. `.env.local` is ignored at root and service/app scopes. Exact-value scans found no credential in tracked files or `.next` build artifacts.
+- **Issue status before isolated CI rerun:** the credential rotation and web/database path are resolved. Final closure of the earlier Python skip is contingent on the safe isolated CI integration run, not on loading a production credential into destructive tests.
