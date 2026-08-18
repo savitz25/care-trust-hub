@@ -8,7 +8,8 @@
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --configLoader runner",
-    "pilot:identity": "tsx --conditions=react-server --tsconfig tsconfig.json scripts/facility-identity-pilot.ts"
+    "pilot:identity": "tsx --conditions=react-server --tsconfig tsconfig.json scripts/facility-identity-pilot.ts",
+    "pilot:resolver-v2": "tsx --conditions=react-server --tsconfig tsconfig.json scripts/resolver-v2-retest.ts"
   },
   "dependencies": {
     "@care/domain": "*",

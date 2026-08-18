@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { resolveIdentityCandidate, type MatchFeature } from "./facility-intelligence";
+import {
+  FACILITY_IDENTITY_RESOLVER_V2,
+  resolveIdentityCandidate,
+  resolveIdentityCandidateV2,
+  type IdentityResolutionContextV2,
+  type MatchFeature,
+} from "./facility-intelligence";
 
 const feature = (
   key: MatchFeature["key"],
@@ -33,5 +39,97 @@ describe("facility identity resolution", () => {
     ]);
     expect(decision.state).toBe("REVIEW_REQUIRED");
     expect(decision.conflicts).toHaveLength(1);
+  });
+});
+
+const safeContext: IdentityResolutionContextV2 = {
+  competingPlausibleCandidates: 1,
+  campusAmbiguity: false,
+  sharedPlaceScope: "facility_specific",
+  careTypeConflict: false,
+  rejectedCandidate: false,
+};
+
+describe("facility identity resolver v2", () => {
+  const strongIdentity = [
+    feature("facility_name", "match", 4),
+    feature("street_number", "match", 3),
+    feature("state", "match", 5),
+    feature("zip", "match", 3),
+    feature("coordinates", "match", 4),
+  ];
+
+  it("verifies entity identity while keeping a conflicting phone under review", () => {
+    const decision = resolveIdentityCandidateV2(
+      [...strongIdentity, feature("phone", "conflict", 4)],
+      safeContext,
+    );
+    expect(decision.state).toBe("VERIFIED");
+    expect(decision.fieldClaims.phone.state).toBe("REVIEW_REQUIRED");
+    expect(decision.thresholdVersion).toBe(FACILITY_IDENTITY_RESOLVER_V2);
+  });
+
+  it("accepts an alias only with strong independent location evidence", () => {
+    expect(resolveIdentityCandidateV2(strongIdentity, safeContext).state).toBe("VERIFIED");
+    expect(
+      resolveIdentityCandidateV2(
+        [feature("facility_name", "match", 4), feature("zip", "match", 3)],
+        safeContext,
+      ).state,
+    ).not.toBe("VERIFIED");
+  });
+
+  it.each([
+    ["care type", { careTypeConflict: true }],
+    ["hospital campus", { campusAmbiguity: true }],
+    ["shared Place", { sharedPlaceScope: "campus_level" as const }],
+    ["multiple candidates", { competingPlausibleCandidates: 2 }],
+  ])("keeps %s ambiguity under review", (_label, override) => {
+    expect(resolveIdentityCandidateV2(strongIdentity, { ...safeContext, ...override }).state).toBe(
+      "REVIEW_REQUIRED",
+    );
+  });
+
+  it("preserves rejected candidates as negative evidence", () => {
+    expect(
+      resolveIdentityCandidateV2(strongIdentity, { ...safeContext, rejectedCandidate: true }).state,
+    ).toBe("REJECTED");
+  });
+
+  it("retains the same campus identity only after an independent prior audit", () => {
+    const auditedCampus = {
+      ...safeContext,
+      campusAmbiguity: true,
+      priorIndependentAuditPass: true,
+    };
+    expect(resolveIdentityCandidateV2(strongIdentity, auditedCampus).state).toBe("VERIFIED");
+    expect(
+      resolveIdentityCandidateV2(strongIdentity, {
+        ...auditedCampus,
+        careTypeConflict: true,
+      }).state,
+    ).toBe("REVIEW_REQUIRED");
+  });
+
+  it("does not accept a same-market sibling with a conflicting address", () => {
+    const decision = resolveIdentityCandidateV2(
+      [
+        feature("facility_name", "match", 4),
+        feature("street_number", "conflict", 3),
+        feature("coordinates", "conflict", 4),
+        feature("state", "match", 5),
+      ],
+      safeContext,
+    );
+    expect(decision.state).toBe("REVIEW_REQUIRED");
+  });
+
+  it("keeps a corporate website separate from entity identity", () => {
+    const decision = resolveIdentityCandidateV2(
+      [...strongIdentity, feature("official_domain", "conflict", 2)],
+      safeContext,
+    );
+    expect(decision.state).toBe("VERIFIED");
+    expect(decision.fieldClaims.website.state).toBe("REVIEW_REQUIRED");
   });
 });

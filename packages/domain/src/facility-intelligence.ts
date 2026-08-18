@@ -63,6 +63,125 @@ export interface ResolutionDecision {
   reason: string;
 }
 
+export const FACILITY_IDENTITY_RESOLVER_V2 = "facility-identity-pilot-v2.2";
+
+export type WebsiteClassification =
+  | "FACILITY_OFFICIAL"
+  | "OPERATOR_FACILITY_PAGE"
+  | "HEALTH_SYSTEM_FACILITY_PAGE"
+  | "CHAIN_SITE"
+  | "CORPORATE_HOME"
+  | "THIRD_PARTY_DIRECTORY"
+  | "LEAD_GENERATION"
+  | "SOCIAL_MEDIA"
+  | "INSECURE_HTTP"
+  | "UNKNOWN";
+
+export interface IdentityResolutionContextV2 {
+  competingPlausibleCandidates: number;
+  campusAmbiguity: boolean;
+  sharedPlaceScope: "facility_specific" | "campus_level" | "organization_level" | "ambiguous";
+  careTypeConflict: boolean;
+  rejectedCandidate: boolean;
+  /** Applies only when the same candidate identity passed the separate V1 evidence audit. */
+  priorIndependentAuditPass?: boolean;
+}
+
+export interface ClaimResolutionV2 {
+  state: ResolutionState;
+  confidence: number;
+  reason: string;
+}
+
+export interface IdentityResolutionV2 extends ResolutionDecision {
+  fieldClaims: {
+    publicName: ClaimResolutionV2;
+    address: ClaimResolutionV2;
+    phone: ClaimResolutionV2;
+    website: ClaimResolutionV2;
+    businessStatus: ClaimResolutionV2;
+  };
+}
+
+function claimFromFeature(
+  feature: MatchFeature | undefined,
+  matchConfidence: number,
+): ClaimResolutionV2 {
+  if (!feature || feature.outcome === "missing")
+    return { state: "UNRESOLVED", confidence: 0, reason: feature?.reason ?? "No evidence" };
+  if (feature.outcome === "conflict")
+    return { state: "REVIEW_REQUIRED", confidence: 0, reason: feature.reason };
+  return { state: "VERIFIED", confidence: matchConfidence, reason: feature.reason };
+}
+
+export function resolveIdentityCandidateV2(
+  features: readonly MatchFeature[],
+  context: IdentityResolutionContextV2,
+): IdentityResolutionV2 {
+  const byKey = new Map(features.map((feature) => [feature.key, feature]));
+  const name = byKey.get("facility_name");
+  const state = byKey.get("state");
+  const street = byKey.get("street_number") ?? byKey.get("address");
+  const coordinates = byKey.get("coordinates");
+  const zip = byKey.get("zip");
+  const phone = byKey.get("phone");
+  const website = byKey.get("official_domain");
+  const identityFeatures = features.filter(
+    (feature) => !["phone", "official_domain"].includes(feature.key),
+  );
+  const considered = identityFeatures.filter((feature) => feature.outcome !== "missing");
+  const positive = considered.filter((feature) => feature.outcome === "match");
+  const conflicts = considered.filter((feature) => feature.outcome === "conflict");
+  const totalWeight = considered.reduce((sum, feature) => sum + Math.abs(feature.weight), 0);
+  const signedWeight = considered.reduce(
+    (sum, feature) =>
+      sum + (feature.outcome === "match" ? Math.abs(feature.weight) : -Math.abs(feature.weight)),
+    0,
+  );
+  const confidence = totalWeight ? Math.max(0, Math.min(1, signedWeight / totalWeight)) : 0;
+  const strongLocation = street?.outcome === "match" || coordinates?.outcome === "match";
+  const hardGate =
+    context.rejectedCandidate ||
+    context.careTypeConflict ||
+    (context.campusAmbiguity && !context.priorIndependentAuditPass) ||
+    context.competingPlausibleCandidates > 1 ||
+    context.sharedPlaceScope !== "facility_specific" ||
+    state?.outcome !== "match";
+  const strongIdentity =
+    name?.outcome === "match" && strongLocation && (zip?.outcome ?? "match") !== "conflict";
+  let identityState: ResolutionState;
+  if (context.rejectedCandidate) identityState = "REJECTED";
+  else if (hardGate) identityState = "REVIEW_REQUIRED";
+  else if (strongIdentity && confidence >= 0.9) identityState = "VERIFIED";
+  else if (strongIdentity && confidence >= 0.72) identityState = "PROBABLE";
+  else if (!considered.length) identityState = "UNRESOLVED";
+  else identityState = "REVIEW_REQUIRED";
+
+  return {
+    state: identityState,
+    confidence: Number(confidence.toFixed(6)),
+    thresholdVersion: FACILITY_IDENTITY_RESOLVER_V2,
+    matchingFeatures: [...features],
+    conflicts,
+    reason: `entity identity evaluated independently from phone/website; strongIdentity=${strongIdentity}; hardGate=${hardGate}; priorAudit=${Boolean(context.priorIndependentAuditPass)}`,
+    fieldClaims: {
+      publicName: claimFromFeature(name, 0.99),
+      address:
+        street?.outcome === "match" &&
+        (state?.outcome === "match" || coordinates?.outcome === "match")
+          ? { state: "VERIFIED", confidence: 0.99, reason: "Street/location evidence agrees" }
+          : claimFromFeature(street, 0.95),
+      phone: claimFromFeature(phone, 0.99),
+      website: claimFromFeature(website, 0.98),
+      businessStatus: {
+        state: "UNRESOLVED",
+        confidence: 0,
+        reason: "Commercial business status is resolved separately from regulatory status",
+      },
+    },
+  };
+}
+
 export function resolveIdentityCandidate(
   features: readonly MatchFeature[],
   thresholds: ResolutionThresholds = DEFAULT_RESOLUTION_THRESHOLDS,
