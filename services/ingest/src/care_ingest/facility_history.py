@@ -1,5 +1,8 @@
 """Idempotent national derivation of facility-history events."""
 
+# SQL event inserts are kept as readable set-based statements.
+# ruff: noqa: E501
+
 from __future__ import annotations
 
 import json
