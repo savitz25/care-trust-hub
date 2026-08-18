@@ -336,3 +336,72 @@ Website-present/absent and Google candidate/closure categories cannot be truthfu
 - national rollout requires precision review, cost projection, conflict analysis, and approved threshold version—not merely a high match rate.
 
 Task 014C should start in dry-run cohort mode, then receive an explicit reviewed request budget. It must not expand beyond the 200-CCN manifest without separate authorization.
+
+# Production Migration 0012 Validation — 2026-08-17
+
+## Pre-migration baseline
+
+Migration 0012 was absent before deployment. The production connection was confirmed as the intended populated SeniorTrustHub database, and client-side TLS was explicitly required. The repository has no custom backup/export workflow; recovery remains the managed database provider's operational responsibility. No destructive integration test was pointed at production.
+
+| Measure                            |  Before |
+| ---------------------------------- | ------: |
+| Canonical providers                |  14,693 |
+| Unique current CMS CCNs            |  14,693 |
+| Facility snapshots                 |  14,693 |
+| Ownership relationships            | 674,063 |
+| Unresolved ownership relationships | 109,612 |
+| Chain memberships                  |  10,231 |
+| Unresolved chain memberships       |   1,361 |
+| Staffing quarter summaries         |  57,873 |
+| Unresolved staffing summaries      |     136 |
+
+The leading-zero candidate sets were checked before mutation. Exactly 1,653 ownership relationships and 1,246 chain memberships mapped to one and only one current CMS identifier. Zero candidate rows had multiple canonical provider targets. No fuzzy-name, organization-name, or parent-company matching was used.
+
+## Migration result
+
+Migration `0012_facility_intelligence_evidence_identity.sql` was applied once to production on 2026-08-17 (local task date), from 2026-08-18T02:41:40.578065Z through 2026-08-18T02:42:01.452930Z. It completed successfully in **20.875 seconds**. PostgreSQL emitted one harmless notice because the migration's explicit `BEGIN` ran inside the migration client's transaction; the transaction committed successfully. The repository does not maintain a migration-version table, so the production schema version is identified by the complete set of Migration 0012 objects. No other migration was applied.
+
+## Schema and backfill validation
+
+All 11 Facility Intelligence tables exist: runs, run providers, observations, external identifiers, claims, claim-evidence links, identity candidates, external request cache, review items, review actions, and resolution audit events. Production has 28 relevant foreign keys, 16 primary/unique constraints, 28 indexes, four append-only triggers, and the expected source-authority, resolution-state, and review-state enums.
+
+The CMS-only backfill created:
+
+| Architecture record                   |  Count |
+| ------------------------------------- | -----: |
+| CMS facility-identity observations    | 14,693 |
+| Verified CMS CCN external identifiers | 14,693 |
+| Verified canonical-name claims        | 14,693 |
+| Supporting claim-observation links    | 14,693 |
+| Non-CMS observations                  |      0 |
+| External candidates                   |      0 |
+| Review items/actions                  |  0 / 0 |
+| Resolution audit events               |      0 |
+| Enrichment runs                       |      0 |
+| External cache rows                   |      0 |
+
+Every backfilled observation retains its source release, raw object, ingest run, source record locator, transformation version, and evidence fingerprint. There are zero duplicate observation fingerprints or duplicate CMS external identifiers.
+
+## Deterministic reconciliation and preservation
+
+Ownership evidence remained at 674,063 rows. Exactly **1,653** relationships were linked through an exact leading-zero CCN restoration, leaving **107,959** unresolved. Individual and organization entity types and all source relationship roles remain unchanged.
+
+Chain evidence remained at 10,231 rows. Exactly **1,246** memberships were linked, leaving **115** unresolved: 111 malformed/non-six-character source identifiers and four valid six-character identifiers absent from the current canonical universe. No name-derived membership was introduced.
+
+Staffing remained at 57,873 summaries. All **136** unresolved summaries across 64 historical CCNs remain preserved and unlinked. Canonical providers and unique current CMS CCNs remain 14,693/14,693, with zero duplicate CCNs, missing facility names, or missing state codes.
+
+## Provenance, idempotency, security, and external-call validation
+
+Representative facility, ownership, chain, staffing, inspection, deficiency, and penalty evidence retains source-release lineage; zero rows in those checked evidence tables lost their release relationship. The migration is forward-only and is not manually replayed in production. Migration tracking is enforced operationally by checking the schema objects before application. Observation fingerprints and external-identifier uniqueness produced zero duplicates, and the migration plus constraint/append-only tests passed in isolated PostGIS. A future migration should add an explicit logical uniqueness key for CMS backfill claims before any standalone claim-backfill replay is supported; this does not affect the one-time applied backfill or the 014C candidate pilot.
+
+No secret is stored in the new tables, the cache is empty, internal development routes return 404 in production, and no migration/startup/deployment hook invokes enrichment. Real Google Places requests during this task: **0**.
+
+## Production application and performance validation
+
+The homepage, state discovery, compare, sources, health, robots, sitemap index, three facility sitemap partitions, four representative CMS facility profiles, and a representative chain page all returned HTTP 200. The facility profiles rendered staffing, inspections, deficiencies, penalties, ownership, and source/provenance content without database errors. The three facility sitemap partitions still contain exactly 14,693 facility URLs. Observed HTTP response times ranged from 112 ms to 1,590 ms in this smoke run; no timeout, new N+1 path, or material regression was detected. Existing consumer queries do not join the new tables yet.
+
+Final validation passed: `npm run check` (72 normal web tests passed, 5 database tests skipped in the no-database run; 11 domain tests passed; formatting, ESLint, TypeScript, and production build passed), the five read-only web database integration tests passed separately against production, Ruff format/lint passed, and the normal Python suite passed 42 tests with eight destructive database tests correctly skipped. Migration 0012 and all eight database integration tests are validated against isolated PostGIS in CI, never production.
+
+## Final readiness
+
+Production is **READY FOR 014C WITH MINOR ISSUES**. The approximately 200-facility adversarial candidate pilot may begin after review. The minor follow-up is to add a logical uniqueness key for independently replayable CMS claim backfills before any such replay is introduced; Migration 0012 itself must not be edited or rerun.
