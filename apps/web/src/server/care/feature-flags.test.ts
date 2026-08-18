@@ -66,6 +66,24 @@ describe("real provider UI feature flag", () => {
     ).toBe(true);
   });
 
+  it("keeps state regulatory publication fail-closed without an explicit opt-in", async () => {
+    const { isStateRegulatoryIntelligenceEnabled } = await import("./feature-flags");
+    expect(isStateRegulatoryIntelligenceEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(
+      false,
+    );
+    expect(
+      isStateRegulatoryIntelligenceEnabled({
+        CARE_ENABLE_STATE_REGULATORY_INTELLIGENCE: "true",
+      }),
+    ).toBe(false);
+    expect(
+      isStateRegulatoryIntelligenceEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_STATE_REGULATORY_INTELLIGENCE: "true",
+      }),
+    ).toBe(true);
+  });
+
   it("publishes verified enrichment with real-provider UI unless explicitly disabled", async () => {
     const { isVerifiedEnrichmentEnabled } = await import("./feature-flags");
     expect(isVerifiedEnrichmentEnabled({ NODE_ENV: "production" })).toBe(false);

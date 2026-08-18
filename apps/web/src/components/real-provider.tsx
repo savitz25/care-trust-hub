@@ -155,7 +155,7 @@ export function ParticipationFacts({ provider }: { provider: CareProviderDetail 
   return (
     <dl className="ownership-facts real-fact-grid">
       <div>
-        <dt>Certified beds</dt>
+        <dt>CMS certified beds</dt>
         <dd>{formatMissingCmsValue(provider.certifiedBeds)}</dd>
       </div>
       <div>

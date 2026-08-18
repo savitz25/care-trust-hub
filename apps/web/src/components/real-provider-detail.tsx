@@ -7,7 +7,9 @@ import type {
   CareChainIntelligence,
   CarePublishedFacilityEnrichment,
 } from "@/server/care/types";
+import type { PublishedStateIntelligence } from "@care/domain";
 import { VerifiedPublicContact } from "./verified-public-contact";
+import { StateLicenseOversight } from "./state-license-oversight";
 import { CMS_RATING_EXPLANATIONS, factualRatingObservations } from "@/server/care/consumer";
 import { formatFreshnessLabels } from "@/server/care/freshness";
 import { CmsStarRating, ParticipationFacts } from "./real-provider";
@@ -40,6 +42,23 @@ const sourceDate = (value: string | null) =>
       )
     : "Not reported";
 
+function stateSourceSupports(intelligence: PublishedStateIntelligence): string {
+  const parts = [intelligence.licenseLabel.toLowerCase()];
+  if (intelligence.licenseStatus) parts.push("license status");
+  if (intelligence.licenseType) parts.push("license type");
+  if (intelligence.licensedCapacity) parts.push("state licensed capacity");
+  if (intelligence.licensee) parts.push("licensee");
+  if (intelligence.operator) parts.push("operator");
+  if (intelligence.managementCompany) parts.push("management company");
+  if (intelligence.administrator) parts.push("administrator");
+  if (parts.length === 1) {
+    const only = parts[0] ?? "state license";
+    return `${only[0].toUpperCase()}${only.slice(1)} from the official state regulator`;
+  }
+  const last = parts.pop();
+  return `${parts.join(", ")}, and ${last}. Separate from CMS certification, ratings, and ownership.`;
+}
+
 export function FacilitySourceRegister({
   provider,
   regulatory,
@@ -47,6 +66,7 @@ export function FacilitySourceRegister({
   ownership,
   chain,
   publishedEnrichment,
+  stateIntelligence,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
@@ -54,6 +74,7 @@ export function FacilitySourceRegister({
   ownership?: CareOwnershipIntelligence;
   chain?: CareChainIntelligence;
   publishedEnrichment?: CarePublishedFacilityEnrichment;
+  stateIntelligence?: PublishedStateIntelligence;
 }) {
   const sources: FacilitySourceEntry[] = [
     {
@@ -176,6 +197,19 @@ export function FacilitySourceRegister({
         "Independently verified public website, phone, or publicly used name. Not a CMS rating or regulatory status.",
     });
   }
+  if (stateIntelligence?.licenseId) {
+    sources.push({
+      key: `state-regulator-${stateIntelligence.stateCode}`,
+      sourceOrganization: stateIntelligence.regulator,
+      datasetName: stateIntelligence.datasetName,
+      datasetIdentifier: `state-regulator:${stateIntelligence.stateCode.toLowerCase()}`,
+      officialSourceUrl: stateIntelligence.officialUrl,
+      sourceModifiedAt: stateIntelligence.checkedAt,
+      retrievedAt: stateIntelligence.checkedAt ?? provider.source.freshness.retrievedAt,
+      coverage: `${stateIntelligence.licenseLabel} ${stateIntelligence.licenseId.value}`,
+      supports: stateSourceSupports(stateIntelligence),
+    });
+  }
   return (
     <div className="source-register__datasets">
       {sources.map((source) => (
@@ -212,7 +246,9 @@ export function FacilitySourceRegister({
           <a href={source.officialSourceUrl} rel="noreferrer">
             {source.datasetIdentifier.startsWith("commercial-corroboration")
               ? "How sources work"
-              : "View official CMS source"}
+              : source.datasetIdentifier.startsWith("state-regulator:")
+                ? "View official state source"
+                : "View official CMS source"}
           </a>
         </details>
       ))}
@@ -229,6 +265,7 @@ export function RealProviderDetail({
   providerContext = [],
   trustParticipation = false,
   publishedEnrichment,
+  stateIntelligence,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
@@ -244,6 +281,7 @@ export function RealProviderDetail({
   }>;
   trustParticipation?: boolean;
   publishedEnrichment?: CarePublishedFacilityEnrichment;
+  stateIntelligence?: PublishedStateIntelligence;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
@@ -334,6 +372,10 @@ export function RealProviderDetail({
           <VerifiedPublicContact provider={provider} enrichment={publishedEnrichment} />
         ) : null}
 
+        {stateIntelligence ? (
+          <StateLicenseOversight provider={provider} intelligence={stateIntelligence} />
+        ) : null}
+
         <WhatToReview
           provider={provider}
           regulatory={regulatory}
@@ -349,6 +391,7 @@ export function RealProviderDetail({
           {regulatory && <a href="#inspections">Inspections</a>}
           {regulatory && <a href="#penalties">Penalties</a>}
           {regulatory && <a href="#history">History</a>}
+          {stateIntelligence ? <a href="#state-license">State license</a> : null}
           {staffing && <a href="#staffing">Staffing</a>}
           {publishedEnrichment &&
           (publishedEnrichment.website ||
@@ -489,6 +532,7 @@ export function RealProviderDetail({
             ownership={ownership}
             chain={chain}
             publishedEnrichment={publishedEnrichment}
+            stateIntelligence={stateIntelligence}
           />
           <p className="independence-statement">
             No paid placements. Facilities cannot pay to rank higher. We cite. You decide.

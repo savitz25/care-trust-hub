@@ -945,6 +945,35 @@ fieldset legend span {
   display: inline-flex;
   align-items: center;
 }
+.state-license-oversight {
+  padding-block: var(--space-5);
+}
+.state-license-oversight__regulator {
+  margin: 0 0 var(--space-3);
+  font-weight: 750;
+}
+.state-license-oversight__facts {
+  grid-template-columns: minmax(0, 1fr);
+}
+.state-license-oversight__facts dd {
+  display: grid;
+  gap: var(--space-1);
+}
+.state-license-oversight__facts small {
+  display: block;
+  color: var(--color-slate-600);
+  font-size: 0.85rem;
+}
+.state-license-oversight__freshness,
+.state-license-oversight__source {
+  margin: var(--space-3) 0 0;
+  color: var(--color-slate-600);
+}
+.state-license-oversight__source a {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+}
 .provider-section-nav {
   display: flex;
   overflow-x: auto;
@@ -1706,6 +1735,9 @@ fieldset legend span {
   .real-fact-grid,
   .compare-detail-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .state-license-oversight__facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .standout {
     grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.45fr);
