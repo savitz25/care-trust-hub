@@ -30,3 +30,5 @@ export * from "./state-publication";
 export * from "./facility-history";
 export * from "./ownership-intelligence";
 export * from "./care-needs-navigator";
+export * from "./senior-care-cost-benchmarks";
+export * from "./senior-care-cost-planner";
