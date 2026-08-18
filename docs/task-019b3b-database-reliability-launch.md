@@ -1,30 +1,54 @@
 # Task 019B.3B — Database reliability verification
 
-Uses the 019B.3A web runtime: transaction-pooler preference, one `pg` client per Vercel instance, 4s connect / 5s idle, one retry for pool exhaustion.
+## Connection architecture deployed
 
-## Preview
+Web runtime from 019B.3A (`90fa37b`):
 
-A CLI Preview deploy from this monorepo was not usable (Root Directory vs local cwd; a full-root upload is too large). Verification ran against the GitHub Production deploy of `90fa37b` after CI passed.
+- Process-global `pg` Pool
+- Prefer Supabase **transaction** pooler (rewrite `*.pooler.supabase.com:5432` → `6543` unless `CARE_DATABASE_POOL_MODE=session`)
+- Per-instance `max=1` (hard cap 2)
+- 4s connect timeout, 5s idle timeout, `allowExitOnIdle`
+- One retry for `EMAXCONNSESSION` / connect timeout, logged as `DB_POOL_EXHAUSTED` or `DB_CONNECT_TIMEOUT`
 
-## Bounded concurrency
+Ingest/migrations may keep session or direct URLs.
+
+## Preview test matrix
+
+A CLI Preview deploy from this monorepo was not usable (Root Directory vs cwd; a full-root upload is huge). The same commit was verified on the GitHub Production deploy after CI passed.
 
 Mixed facility, search, and ownership URLs. No write routes. No Google enrichment.
 
-| Stage | Concurrency | Requests | 200 | 5xx | EMAXCONNSESSION |   p50 |   p95 |
-| ----- | ----------: | -------: | --: | --: | --------------: | ----: | ----: |
-| A     |           2 |       20 |  20 |   0 |               0 | 270ms | 533ms |
-| B     |           5 |       25 |  25 |   0 |               0 | 230ms | 347ms |
-| C     |          10 |       30 |  30 |   0 |               0 | 299ms | 994ms |
-| D     |          15 |       30 |  30 |   0 |               0 | 425ms | 917ms |
+| Stage | Concurrency | Requests | Successes | 5xx | EMAXCONNSESSION | p50   | p95   |
+| ----- | ----------: | -------: | --------: | --: | --------------: | ----- | ----- |
+| A     |           2 |       20 |        20 |   0 |               0 | 270ms | 533ms |
+| B     |           5 |       25 |        25 |   0 |               0 | 230ms | 347ms |
+| C     |          10 |       30 |        30 |   0 |               0 | 299ms | 994ms |
+| D     |          15 |       30 |        30 |   0 |               0 | 425ms | 917ms |
 
-## Production smoke
+## Connection behavior
 
-Homepage, Navigator, Cost Planner, CA facility (license + history + ownership), NY facility, search, and organization portfolio all 200. Page composition for Redlands still shows CMS identity, CA license, Facility History, and ownership sources.
+Not directly instrumented on Supabase. Behavior inferred from the client: one session per warm instance, idle release at 5s, no rising 5xx or `EMAXCONNSESSION` as concurrency went from 2 to 15. That is inconsistent with a leak that keeps opening dedicated session-pooler clients.
+
+## Error results
+
+**EMAXCONNSESSION: 0**
+
+**database-related 5xx: 0**
+
+## Production verification
+
+- Deployment Ready (`90fa37b`)
+- Smoke 200: homepage, Navigator, Cost Planner, CA facility (license + history + ownership), NY facility, search, organization portfolio
+- Small concurrent validation included in the table above (stages A–B are the production-safe set; C–D stayed clean)
+
+## Rollback
+
+Not used. Restore previous session-pooler URL behavior with `CARE_DATABASE_POOL_MODE=session` and a redeploy, or promote the prior Vercel deployment.
+
+## Remaining capacity
+
+Transaction pooling multiplexes many requests onto fewer Postgres backends. Extreme crawls can still stress the database. Do not raise the Supabase plan on theory alone. A later capacity change should be based on measured backend saturation, not session-pooler client count.
 
 ## Google
 
 Google Places API requests: 0
-
-## Remaining
-
-A dedicated Preview URL was not exercised. Extreme crawl bursts can still stress Postgres; the session-pooler 15-client trap is no longer the default web path.
