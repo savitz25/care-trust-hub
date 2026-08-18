@@ -21,6 +21,12 @@ describe("senior journey v2.1", () => {
     expect(mod?.primary.href).toContain("contractortrusthub.com");
   });
 
+  it("does not attach facility or health fields to CTA metadata", () => {
+    const mod = resolveSeniorJourneyModule({ journey: "relocate" }, "facility");
+    expect(JSON.stringify(mod)).not.toMatch(/ccn|diagnosis|facilityName/i);
+    expect(mod?.primary.destination_hub).toBe("move");
+  });
+
   it("parses only safe keys", () => {
     const ctx = parseNetworkJourney({
       src: "ask",

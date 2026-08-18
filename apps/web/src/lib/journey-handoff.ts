@@ -65,13 +65,28 @@ function url(origin: string, path: string, ctx: NetworkJourneyContext, journey: 
   return `${origin}${path}?${p.toString()}`;
 }
 
+export type JourneyCta = {
+  href: string;
+  label: string;
+  destination_hub: "move" | "contractor" | "insurance";
+  journey_id: string;
+  context_type: string;
+};
+
 export type JourneyModule = {
   eyebrow: string;
   heading: string;
   body: string;
-  primary: { href: string; label: string };
-  secondary?: { href: string; label: string };
+  primary: JourneyCta;
+  secondary?: JourneyCta;
+  surface: "senior_transition" | "senior_navigator_completion";
 };
+
+function analyticsSurface(
+  surface: "home" | "facility" | "planner",
+): JourneyModule["surface"] {
+  return surface === "planner" ? "senior_navigator_completion" : "senior_transition";
+}
 
 export function resolveSeniorJourneyModule(
   ctx: NetworkJourneyContext,
@@ -86,17 +101,24 @@ export function resolveSeniorJourneyModule(
 
   if (relocate) {
     return {
+      surface: analyticsSurface(surface),
       eyebrow: "Part of the Ask Trust Hub research network",
       heading: "Planning a move as part of the care transition?",
       body: "Research licensed movers when downsizing, relocating, or moving closer to family. This is not a placement or referral service.",
       primary: {
         href: url("https://www.movetrusthub.com", "/", ctx, "relocate"),
         label: "Plan the move",
+        destination_hub: "move",
+        journey_id: "relocate",
+        context_type: "senior_transition",
       },
       secondary: homeMod
         ? {
             href: url("https://www.contractortrusthub.com", "/", ctx, "contractor"),
             label: "Research contractors",
+            destination_hub: "contractor",
+            journey_id: "contractor",
+            context_type: "senior_transition",
           }
         : undefined,
     };
@@ -104,40 +126,55 @@ export function resolveSeniorJourneyModule(
 
   if (homeMod) {
     return {
+      surface: analyticsSurface(surface),
       eyebrow: "Part of the Ask Trust Hub research network",
       heading: "Staying at home?",
       body: "Research contractors for accessibility or safety modifications. We do not recommend a specific contractor.",
       primary: {
         href: url("https://www.contractortrusthub.com", "/", ctx, "contractor"),
         label: "Research contractors",
+        destination_hub: "contractor",
+        journey_id: "contractor",
+        context_type: "senior_transition",
       },
     };
   }
 
   if (coverage) {
     return {
+      surface: analyticsSurface(surface),
       eyebrow: "Part of the Ask Trust Hub research network",
       heading: "Research coverage questions separately",
       body: "Insurance Trust Hub is independent coverage research. It does not resolve Medicare or Medicaid eligibility for a facility choice, and this link does not send health details.",
       primary: {
         href: url("https://www.insurancetrusthub.com", "/destinations", ctx, "coverage"),
         label: "Research coverage questions",
+        destination_hub: "insurance",
+        journey_id: "coverage",
+        context_type: "senior_transition",
       },
     };
   }
 
   if (surface === "planner" && (ctx.src === "ask" || ctx.journey === "senior_care")) {
     return {
+      surface: analyticsSurface(surface),
       eyebrow: "Part of the Ask Trust Hub research network",
       heading: "Other decisions only if they apply",
       body: "A move, home modification, or coverage question is optional — not a required next step and not a referral.",
       primary: {
         href: url("https://www.movetrusthub.com", "/", ctx, "relocate"),
         label: "Plan the move",
+        destination_hub: "move",
+        journey_id: "relocate",
+        context_type: "senior_transition",
       },
       secondary: {
         href: url("https://www.contractortrusthub.com", "/", ctx, "contractor"),
         label: "Research contractors",
+        destination_hub: "contractor",
+        journey_id: "contractor",
+        context_type: "senior_transition",
       },
     };
   }
