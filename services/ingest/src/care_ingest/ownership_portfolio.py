@@ -452,9 +452,7 @@ def derive_ownership_portfolios(database_url: str) -> dict[str, Any]:
             UPSERT_MEMBERS_SQL, (DERIVATION_VERSION, DERIVATION_VERSION)
         )
         members_inserted, members_updated = _count_upsert(member_result.fetchall())
-        stale_members = connection.execute(
-            DELETE_STALE_MEMBERS_SQL, (DERIVATION_VERSION,)
-        ).rowcount
+        stale_members = connection.execute(DELETE_STALE_MEMBERS_SQL, (DERIVATION_VERSION,)).rowcount
         portfolio_result = connection.execute(
             UPSERT_PORTFOLIOS_SQL,
             (
