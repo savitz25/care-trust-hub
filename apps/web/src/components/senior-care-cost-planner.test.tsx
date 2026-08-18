@@ -68,6 +68,16 @@ describe("senior care cost planner", () => {
     expect(screen.getAllByText("$0").length).toBeGreaterThan(0);
   });
 
+  it("bridges to the interview builder with a cost concern and no dollar amounts", () => {
+    render(<SeniorCareCostPlanner interviewBuilderEnabled />);
+    const link = screen.getByRole("link", { name: /Questions to ask about pricing and fees/i });
+    expect(link).toHaveAttribute("href", "/tools/facility-tour-interview-builder");
+    fireEvent.click(link);
+    const seed = sessionStorage.getItem("sth-interview-builder-v1-seed");
+    expect(seed).toContain('"cost"');
+    expect(seed).not.toMatch(/\$|hourly|3200|dollar/i);
+  });
+
   it("maps navigator settings to planner scenarios without health payloads", () => {
     expect(mapNavigatorSettingsToPlanner(["memory_care", "aging_in_place"])).toEqual([
       "memory_care",

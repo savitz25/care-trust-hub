@@ -4,6 +4,7 @@ import { SeniorCareCostPlanner } from "@/components/senior-care-cost-planner";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import {
   isCareNeedsNavigatorEnabled,
+  isFacilityInterviewBuilderEnabled,
   isSeniorCareCostPlannerEnabled,
 } from "@/server/care/feature-flags";
 
@@ -28,7 +29,10 @@ export default function SeniorCareCostPlannerPage() {
   if (!isSeniorCareCostPlannerEnabled()) notFound();
   return (
     <div className="page-shell">
-      <SeniorCareCostPlanner navigatorEnabled={isCareNeedsNavigatorEnabled()} />
+      <SeniorCareCostPlanner
+        navigatorEnabled={isCareNeedsNavigatorEnabled()}
+        interviewBuilderEnabled={isFacilityInterviewBuilderEnabled()}
+      />
     </div>
   );
 }

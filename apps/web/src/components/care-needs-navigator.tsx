@@ -16,6 +16,11 @@ import {
   mapNavigatorSettingsToPlanner,
   storePlannerScenarios,
 } from "./cost-planner-bridge";
+import {
+  INTERVIEW_BUILDER_PATH,
+  mapNavigatorSettingToInterview,
+  storeInterviewBuilderSeed,
+} from "./interview-builder-bridge";
 
 type Phase = "start" | "questions" | "results";
 
@@ -31,7 +36,13 @@ function stepComplete(stepId: string, answers: CareNeedsAnswers): boolean {
   );
 }
 
-export function CareNeedsNavigator({ plannerEnabled = false }: { plannerEnabled?: boolean }) {
+export function CareNeedsNavigator({
+  plannerEnabled = false,
+  interviewBuilderEnabled = false,
+}: {
+  plannerEnabled?: boolean;
+  interviewBuilderEnabled?: boolean;
+}) {
   const headingId = useId();
   const headingRef = useRef<HTMLHeadingElement>(null);
   const [phase, setPhase] = useState<Phase>("start");
@@ -196,6 +207,23 @@ export function CareNeedsNavigator({ plannerEnabled = false }: { plannerEnabled?
               }
             >
               Compare the cost of these care options →
+            </Link>
+          </p>
+        ) : null}
+        {interviewBuilderEnabled ? (
+          <p>
+            <Link
+              className="button button--secondary"
+              href={INTERVIEW_BUILDER_PATH}
+              onClick={() =>
+                storeInterviewBuilderSeed({
+                  setting:
+                    mapNavigatorSettingToInterview(investigating.map((item) => item.setting)) ??
+                    undefined,
+                })
+              }
+            >
+              Build questions to ask providers →
             </Link>
           </p>
         ) : null}

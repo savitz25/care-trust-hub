@@ -197,6 +197,29 @@ describe("real provider UI feature flag", () => {
     );
   });
 
+  it("keeps the facility interview builder fail-closed and independent", async () => {
+    const {
+      isFacilityInterviewBuilderEnabled,
+      isCareNeedsNavigatorEnabled,
+      isSeniorCareCostPlannerEnabled,
+      isRealProviderUiEnabled,
+    } = await import("./feature-flags");
+    expect(isFacilityInterviewBuilderEnabled({})).toBe(false);
+    expect(
+      isFacilityInterviewBuilderEnabled({ CARE_ENABLE_FACILITY_INTERVIEW_BUILDER: "TRUE" }),
+    ).toBe(false);
+    expect(
+      isFacilityInterviewBuilderEnabled({ CARE_ENABLE_FACILITY_INTERVIEW_BUILDER: "true" }),
+    ).toBe(true);
+    expect(isCareNeedsNavigatorEnabled({ CARE_ENABLE_FACILITY_INTERVIEW_BUILDER: "true" })).toBe(
+      false,
+    );
+    expect(isSeniorCareCostPlannerEnabled({ CARE_ENABLE_FACILITY_INTERVIEW_BUILDER: "true" })).toBe(
+      false,
+    );
+    expect(isRealProviderUiEnabled({ CARE_ENABLE_FACILITY_INTERVIEW_BUILDER: "true" })).toBe(false);
+  });
+
   it("requires both real-provider and trust-participation opt-ins without billing state", async () => {
     const { isTrustParticipationEnabled } = await import("./feature-flags");
     expect(isTrustParticipationEnabled({ CARE_ENABLE_TRUST_PARTICIPATION: "true" })).toBe(false);

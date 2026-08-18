@@ -24,6 +24,7 @@ import { StaffingIntelligence } from "./staffing-intelligence";
 import { ChainIntelligence } from "./chain-intelligence";
 import { WhatToReview } from "./what-to-review";
 import { RealDataNotice } from "./evidence";
+import { facilityInterviewBuilderHref } from "./interview-builder-bridge";
 
 const additionalLayers = ["Ownership intelligence", "Chain / portfolio intelligence"];
 
@@ -272,6 +273,7 @@ export function RealProviderDetail({
   stateIntelligence,
   facilityHistory,
   ownershipOperation,
+  interviewBuilderEnabled = false,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
@@ -290,6 +292,7 @@ export function RealProviderDetail({
   stateIntelligence?: PublishedStateIntelligence;
   facilityHistory?: CareFacilityHistory;
   ownershipOperation?: CareOwnershipOperationSummary;
+  interviewBuilderEnabled?: boolean;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
@@ -329,6 +332,13 @@ export function RealProviderDetail({
               <span>CMS provider ID {provider.ccn}</span>
               <span>{freshness.sourceUpdated}</span>
             </div>
+            {interviewBuilderEnabled ? (
+              <p>
+                <Link href={facilityInterviewBuilderHref(provider.ccn)}>
+                  Build questions for this facility →
+                </Link>
+              </p>
+            ) : null}
           </div>
           <div className="facility-hero__actions">
             <Link className="button button--primary" href={`/compare?real=${provider.ccn}`}>

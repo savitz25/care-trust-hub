@@ -32,3 +32,4 @@ export * from "./ownership-intelligence";
 export * from "./care-needs-navigator";
 export * from "./senior-care-cost-benchmarks";
 export * from "./senior-care-cost-planner";
+export * from "./interview-builder";

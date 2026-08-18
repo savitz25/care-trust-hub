@@ -18,7 +18,9 @@ import {
   calculateShortTermRehab,
   calculateSkilledNursing,
   compareScenarioCosts,
+  isInterviewCareSetting,
   type CostScenarioResult,
+  type InterviewCareSetting,
   type SupportOffsets,
 } from "@care/domain";
 import { PrintButton } from "./print-button";
@@ -27,6 +29,7 @@ import {
   readPlannerScenarios,
   type PlannerScenarioId,
 } from "./cost-planner-bridge";
+import { INTERVIEW_BUILDER_PATH, storeInterviewBuilderSeed } from "./interview-builder-bridge";
 
 export const COST_PLANNER_DISCLAIMER =
   "SeniorTrustHub's Senior Care Cost Planner is educational planning information. It is not a provider quote, financial advice, or a determination of Medicare, Medicaid, VA, or long-term-care insurance benefits.";
@@ -64,8 +67,10 @@ function numberOrEmpty(value: string): number | undefined {
 
 export function SeniorCareCostPlanner({
   navigatorEnabled = false,
+  interviewBuilderEnabled = false,
 }: {
   navigatorEnabled?: boolean;
+  interviewBuilderEnabled?: boolean;
 }) {
   const headingId = useId();
   const storedSelection = useSyncExternalStore(
@@ -645,6 +650,25 @@ export function SeniorCareCostPlanner({
         ))}
 
         <h2>Questions to ask providers</h2>
+        {interviewBuilderEnabled ? (
+          <p>
+            <Link
+              className="button button--secondary"
+              href={INTERVIEW_BUILDER_PATH}
+              onClick={() =>
+                storeInterviewBuilderSeed({
+                  setting:
+                    selected.length === 1 && isInterviewCareSetting(selected[0] ?? "")
+                      ? (selected[0] as InterviewCareSetting)
+                      : undefined,
+                  concerns: ["cost"],
+                })
+              }
+            >
+              Questions to ask about pricing and fees →
+            </Link>
+          </p>
+        ) : null}
         {selected.includes("home_care") && (
           <>
             <h3>Home care</h3>

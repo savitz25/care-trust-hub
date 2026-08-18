@@ -35,6 +35,7 @@ const paths = [
 export default function Home() {
   const navigatorEnabled = process.env.CARE_ENABLE_CARE_NEEDS_NAVIGATOR === "true";
   const plannerEnabled = process.env.CARE_ENABLE_SENIOR_CARE_COST_PLANNER === "true";
+  const interviewBuilderEnabled = process.env.CARE_ENABLE_FACILITY_INTERVIEW_BUILDER === "true";
   const entries = paths.map((path) =>
     path.number === "04" && navigatorEnabled
       ? {
@@ -114,6 +115,22 @@ export default function Home() {
             </p>
             <a className="button button--secondary" href="/tools/senior-care-cost-planner">
               Compare senior care costs →
+            </a>
+          </section>
+        ) : null}
+        {interviewBuilderEnabled ? (
+          <section className="entry-section" aria-labelledby="interview-home-title">
+            <div className="section-heading">
+              <p className="eyebrow">Prepare for a facility tour</p>
+              <h2 id="interview-home-title">Take better questions to the visit or call</h2>
+            </div>
+            <p>
+              Build a short interview checklist for skilled nursing, rehabilitation, assisted
+              living, memory care, or a home-care agency. CMS facility pages can add published
+              evidence to the list.
+            </p>
+            <a className="button button--secondary" href="/tools/facility-tour-interview-builder">
+              Build your interview checklist →
             </a>
           </section>
         ) : null}

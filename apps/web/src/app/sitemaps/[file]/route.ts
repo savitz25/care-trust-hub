@@ -2,6 +2,7 @@ import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
 import { chainHref, organizationHref, providerSlug } from "@/server/care/consumer";
 import {
   isCareNeedsNavigatorEnabled,
+  isFacilityInterviewBuilderEnabled,
   isOwnershipIntelligenceV2Enabled,
   isSeniorCareCostPlannerEnabled,
 } from "@/server/care/feature-flags";
@@ -42,6 +43,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
       ...corePaths,
       ...(isCareNeedsNavigatorEnabled() ? ["/tools/care-needs-navigator"] : []),
       ...(isSeniorCareCostPlannerEnabled() ? ["/tools/senior-care-cost-planner"] : []),
+      ...(isFacilityInterviewBuilderEnabled() ? ["/tools/facility-tour-interview-builder"] : []),
     ];
     return response(
       urlset(

@@ -101,6 +101,13 @@ export function isSeniorCareCostPlannerEnabled(
   return environment.CARE_ENABLE_SENIOR_CARE_COST_PLANNER === "true";
 }
 
+/** Fail-closed Facility Tour & Interview Builder. Independent of other tools. */
+export function isFacilityInterviewBuilderEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return environment.CARE_ENABLE_FACILITY_INTERVIEW_BUILDER === "true";
+}
+
 /** Fail-closed CA/NY/TX state-license publication. Requires an explicit opt-in. */
 export function isStateRegulatoryIntelligenceEnabled(
   environment: Readonly<Record<string, string | undefined>> = process.env,

@@ -2448,17 +2448,102 @@ fieldset legend span {
     font-size: 0.85rem;
   }
 }
+.interview-builder {
+  min-width: 0;
+}
+.interview-builder__form,
+.interview-builder__group,
+.interview-builder__question {
+  min-width: 0;
+}
+.interview-builder__group ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-4);
+}
+.interview-builder__question {
+  border: 1px solid var(--color-warm-200);
+  border-radius: 0.75rem;
+  padding: var(--space-4);
+}
+.interview-builder__question-row {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+}
+.interview-builder__question-row input[type="checkbox"] {
+  width: 1.35rem;
+  height: 1.35rem;
+  margin-top: 0.2rem;
+}
+.interview-builder__category {
+  margin: 0 0 0.35rem;
+  color: var(--color-slate-600);
+  font-size: 0.9rem;
+}
+.interview-builder__prompt {
+  display: block;
+  font-weight: 600;
+}
+.interview-builder__evidence,
+.interview-builder__question details,
+.interview-builder__note {
+  margin-top: var(--space-3);
+}
+.interview-builder__note {
+  display: grid;
+  gap: 0.35rem;
+}
+.interview-builder__note textarea {
+  width: 100%;
+  min-height: 4.5rem;
+  resize: vertical;
+}
+.interview-builder__note-lines {
+  display: none;
+}
+.interview-builder__hide {
+  margin-top: var(--space-3);
+}
+.care-navigator__options input[type="checkbox"],
+.care-navigator__options input[type="radio"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 auto;
+}
 @media print {
   .what-to-review,
   .research-facility,
-  .shortlist-overview {
+  .shortlist-overview,
+  .interview-builder__question {
     break-inside: avoid;
     box-shadow: none;
   }
   .research-packet .button,
   .care-navigator__actions,
-  .care-navigator__progress {
+  .care-navigator__progress,
+  .interview-builder__hide,
+  .interview-builder__toolbar,
+  .interview-builder__note {
     display: none !important;
+  }
+  .interview-builder__note-lines {
+    display: grid;
+    gap: 0.85rem;
+    margin-top: var(--space-3);
+  }
+  .interview-builder__note-lines span {
+    border-bottom: 1px solid var(--color-warm-200);
+    min-height: 1.25rem;
+  }
+  .interview-builder__question details {
+    display: block;
+  }
+  .interview-builder__question details summary {
+    display: none;
   }
   a[href]::after {
     content: " (" attr(href) ")";

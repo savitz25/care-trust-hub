@@ -26,6 +26,7 @@ import {
   isOwnershipIntelligenceV2Enabled,
   isTrustParticipationEnabled,
   isVerifiedEnrichmentEnabled,
+  isFacilityInterviewBuilderEnabled,
 } from "@/server/care/feature-flags";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 
@@ -108,6 +109,7 @@ export default async function RealFacilityPage({
       stateIntelligence={stateIntelligence}
       facilityHistory={facilityHistory}
       ownershipOperation={ownershipOperation}
+      interviewBuilderEnabled={isFacilityInterviewBuilderEnabled()}
     />
   );
 }

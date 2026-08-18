@@ -36,8 +36,11 @@ function answerCurrentStep(answers: CareNeedsAnswers) {
   }
 }
 
-function completeNavigator(answers: CareNeedsAnswers) {
-  render(<CareNeedsNavigator />);
+function completeNavigator(
+  answers: CareNeedsAnswers,
+  props: { plannerEnabled?: boolean; interviewBuilderEnabled?: boolean } = {},
+) {
+  render(<CareNeedsNavigator {...props} />);
   fireEvent.click(screen.getByRole("button", { name: "Start Care Needs Navigator" }));
   for (let step = 0; step < 5; step += 1) {
     answerCurrentStep(answers);
@@ -94,6 +97,19 @@ describe("care needs navigator", () => {
     completeNavigator(MEMORY_SAFETY_PERSONA);
     expect(screen.getByRole("heading", { name: /Memory-supportive care/i })).toBeVisible();
     expect(screen.queryByText(/this person has dementia/i)).not.toBeInTheDocument();
+  });
+
+  it("offers the interview builder with a coarse setting only", () => {
+    completeNavigator(SKILLED_MEDICAL_PERSONA, { interviewBuilderEnabled: true });
+    const link = screen.getByRole("link", { name: /Build questions to ask providers/i });
+    expect(link).toHaveAttribute("href", "/tools/facility-tour-interview-builder");
+    fireEvent.click(link);
+    expect(sessionStorage.getItem("sth-interview-builder-v1-seed")).toBe(
+      JSON.stringify({ setting: "skilled_nursing", concerns: [] }),
+    );
+    expect(sessionStorage.getItem("sth-interview-builder-v1-seed")).not.toMatch(
+      /wandering|toileting|wound|medication/i,
+    );
   });
 
   it("bridges skilled-nursing results into existing facility search", () => {

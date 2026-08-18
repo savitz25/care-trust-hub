@@ -191,6 +191,9 @@ describe("real provider presentation", () => {
       "/shortlist",
     );
     expect(
+      screen.queryByRole("link", { name: /Build questions for this facility/i }),
+    ).not.toBeInTheDocument();
+    expect(
       screen.getByRole("navigation", { name: "Facility record sections" }),
     ).toBeInTheDocument();
     expect(screen.getByText("CMS reports a 5-star staffing rating.")).toBeInTheDocument();
@@ -233,6 +236,13 @@ describe("real provider presentation", () => {
     }
     expect(container.textContent).not.toMatch(/TrustHub staffing rating|staffing score/i);
     expect(container.textContent).not.toContain("raw_record");
+  });
+
+  it("adds a facility interview CTA without transferring health answers", () => {
+    render(<RealProviderDetail provider={detailProvider} interviewBuilderEnabled />);
+    expect(
+      screen.getByRole("link", { name: /Build questions for this facility/i }),
+    ).toHaveAttribute("href", "/tools/facility-tour-interview-builder?ccn=01A193");
   });
 
   it("keeps approved provider context separate from CMS evidence and offers free participation", () => {
