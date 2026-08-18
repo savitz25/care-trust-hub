@@ -18,17 +18,6 @@ import {
   type CostBenchmark,
 } from "./senior-care-cost-benchmarks";
 
-export {
-  COST_PLANNER_VERSION,
-  HIGH_HOME_CARE_WARNING,
-  HOME_HEALTH_CONTEXT,
-  MEDICARE_SNF_2026,
-  MEDICARE_SNF_CONTEXT,
-  MEMORY_CARE_CONTEXT,
-  WEEKS_PER_MONTH,
-  WEEKS_PER_YEAR,
-} from "./senior-care-cost-benchmarks";
-
 export interface GeographyRequest {
   stateCode?: string;
   metro?: string;
