@@ -3,6 +3,7 @@ import { RealProviderCard } from "@/components/real-provider";
 import { RealDataNotice } from "@/components/evidence";
 import { parseConsumerSearch } from "@/server/care/search-contract";
 import { resolveZipLocation, searchProvidersConsumer } from "@/server/care/repository";
+import { isFamilyComparisonWorkspaceEnabled } from "@/server/care/feature-flags";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 const states = [
@@ -263,6 +264,7 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
               key={provider.ccn}
               provider={provider}
               compareCcns={results.slice(0, 2).map((item) => item.ccn)}
+              workspaceEnabled={isFamilyComparisonWorkspaceEnabled()}
             />
           ))}
           {parsed.submitted && parsed.errors.length === 0 && results.length === 0 && (

@@ -245,6 +245,12 @@ describe("real provider presentation", () => {
     ).toHaveAttribute("href", "/tools/facility-tour-interview-builder?ccn=01A193");
   });
 
+  it("adds a family workspace control without a lead form", () => {
+    render(<RealProviderDetail provider={detailProvider} workspaceEnabled />);
+    expect(screen.getByRole("button", { name: "Add to Family Workspace" })).toBeVisible();
+    expect(screen.queryByLabelText(/email/i)).not.toBeInTheDocument();
+  });
+
   it("keeps approved provider context separate from CMS evidence and offers free participation", () => {
     render(
       <RealProviderDetail

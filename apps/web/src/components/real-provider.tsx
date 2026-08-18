@@ -7,6 +7,7 @@ import type {
 import { cmsRatingText, providerHref } from "@/server/care/consumer";
 import { formatFreshnessLabels, formatMissingCmsValue } from "@/server/care/freshness";
 import { ShortlistButton } from "./shortlist-button";
+import { WorkspaceAddButton } from "./workspace-add-button";
 
 export function CmsStarRating({ value }: { value: number | null }) {
   return (
@@ -72,9 +73,11 @@ export function RealSourceDisclosure({ source }: { source: CareSourceDisclosure 
 export function RealProviderCard({
   provider,
   compareCcns = [],
+  workspaceEnabled = false,
 }: {
   provider: CareProviderSearchResult;
   compareCcns?: string[];
+  workspaceEnabled?: boolean;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const compare = [...new Set([provider.ccn, ...compareCcns])].slice(0, 3);
@@ -138,6 +141,7 @@ export function RealProviderCard({
           View research
         </Link>
         <ShortlistButton ccn={provider.ccn} />
+        {workspaceEnabled ? <WorkspaceAddButton ccn={provider.ccn} compact /> : null}
         <Link className="button button--quiet" href={`/compare?real=${compare.join(",")}`}>
           Compare
         </Link>

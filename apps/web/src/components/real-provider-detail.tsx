@@ -25,6 +25,7 @@ import { ChainIntelligence } from "./chain-intelligence";
 import { WhatToReview } from "./what-to-review";
 import { RealDataNotice } from "./evidence";
 import { facilityInterviewBuilderHref } from "./interview-builder-bridge";
+import { WorkspaceAddButton } from "./workspace-add-button";
 
 const additionalLayers = ["Ownership intelligence", "Chain / portfolio intelligence"];
 
@@ -274,6 +275,7 @@ export function RealProviderDetail({
   facilityHistory,
   ownershipOperation,
   interviewBuilderEnabled = false,
+  workspaceEnabled = false,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
@@ -293,6 +295,7 @@ export function RealProviderDetail({
   facilityHistory?: CareFacilityHistory;
   ownershipOperation?: CareOwnershipOperationSummary;
   interviewBuilderEnabled?: boolean;
+  workspaceEnabled?: boolean;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
@@ -339,6 +342,7 @@ export function RealProviderDetail({
                 </Link>
               </p>
             ) : null}
+            {workspaceEnabled ? <WorkspaceAddButton ccn={provider.ccn} /> : null}
           </div>
           <div className="facility-hero__actions">
             <Link className="button button--primary" href={`/compare?real=${provider.ccn}`}>

@@ -220,6 +220,27 @@ describe("real provider UI feature flag", () => {
     expect(isRealProviderUiEnabled({ CARE_ENABLE_FACILITY_INTERVIEW_BUILDER: "true" })).toBe(false);
   });
 
+  it("keeps the family comparison workspace fail-closed and independent", async () => {
+    const {
+      isFamilyComparisonWorkspaceEnabled,
+      isFacilityInterviewBuilderEnabled,
+      isRealProviderUiEnabled,
+    } = await import("./feature-flags");
+    expect(isFamilyComparisonWorkspaceEnabled({})).toBe(false);
+    expect(
+      isFamilyComparisonWorkspaceEnabled({ CARE_ENABLE_FAMILY_COMPARISON_WORKSPACE: "TRUE" }),
+    ).toBe(false);
+    expect(
+      isFamilyComparisonWorkspaceEnabled({ CARE_ENABLE_FAMILY_COMPARISON_WORKSPACE: "true" }),
+    ).toBe(true);
+    expect(
+      isFacilityInterviewBuilderEnabled({ CARE_ENABLE_FAMILY_COMPARISON_WORKSPACE: "true" }),
+    ).toBe(false);
+    expect(isRealProviderUiEnabled({ CARE_ENABLE_FAMILY_COMPARISON_WORKSPACE: "true" })).toBe(
+      false,
+    );
+  });
+
   it("requires both real-provider and trust-participation opt-ins without billing state", async () => {
     const { isTrustParticipationEnabled } = await import("./feature-flags");
     expect(isTrustParticipationEnabled({ CARE_ENABLE_TRUST_PARTICIPATION: "true" })).toBe(false);

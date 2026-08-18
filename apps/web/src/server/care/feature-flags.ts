@@ -108,6 +108,13 @@ export function isFacilityInterviewBuilderEnabled(
   return environment.CARE_ENABLE_FACILITY_INTERVIEW_BUILDER === "true";
 }
 
+/** Fail-closed Family Comparison Workspace. Independent of other tools. */
+export function isFamilyComparisonWorkspaceEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return environment.CARE_ENABLE_FAMILY_COMPARISON_WORKSPACE === "true";
+}
+
 /** Fail-closed CA/NY/TX state-license publication. Requires an explicit opt-in. */
 export function isStateRegulatoryIntelligenceEnabled(
   environment: Readonly<Record<string, string | undefined>> = process.env,

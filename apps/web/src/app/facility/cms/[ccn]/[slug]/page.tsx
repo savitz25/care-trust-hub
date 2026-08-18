@@ -27,6 +27,7 @@ import {
   isTrustParticipationEnabled,
   isVerifiedEnrichmentEnabled,
   isFacilityInterviewBuilderEnabled,
+  isFamilyComparisonWorkspaceEnabled,
 } from "@/server/care/feature-flags";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import { JourneyNextStep } from "@/components/journey-next-step";
@@ -122,6 +123,7 @@ export default async function RealFacilityPage({
         facilityHistory={facilityHistory}
         ownershipOperation={ownershipOperation}
         interviewBuilderEnabled={isFacilityInterviewBuilderEnabled()}
+        workspaceEnabled={isFamilyComparisonWorkspaceEnabled()}
       />
       <div className="page-shell" style={{ paddingBlock: "0 3rem" }}>
         <JourneyNextStep module={journeyModule} />

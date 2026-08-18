@@ -2570,7 +2570,10 @@ fieldset legend span {
   .care-navigator__progress,
   .interview-builder__hide,
   .interview-builder__toolbar,
-  .interview-builder__note {
+  .interview-builder__note,
+  .family-workspace__toolbar,
+  .family-workspace__tabs button:not([aria-selected="true"]),
+  .family-workspace .text-link {
     display: none !important;
   }
   .interview-builder__note-lines {
@@ -2591,5 +2594,98 @@ fieldset legend span {
   a[href]::after {
     content: " (" attr(href) ")";
     font-size: 8pt;
+  }
+  .family-workspace__mobile,
+  .family-workspace__desktop {
+    display: block !important;
+  }
+}
+.family-workspace {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.family-workspace__hint,
+.workspace-add__note {
+  color: var(--color-slate-600);
+}
+.workspace-add {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+.family-workspace__research,
+.family-workspace__quote {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.family-workspace__research select,
+.family-workspace__research input,
+.family-workspace__research textarea {
+  width: 100%;
+  min-height: 2.75rem;
+}
+.family-workspace__differences ul {
+  padding-left: 1.25rem;
+}
+.family-workspace__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.family-workspace__tabs button {
+  min-height: 2.75rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--color-warm-200);
+  border-radius: 0.6rem;
+  background: var(--color-white);
+}
+.family-workspace__tabs button[aria-selected="true"] {
+  border-color: var(--color-evergreen-800);
+}
+.family-workspace__card,
+.family-workspace__table {
+  min-width: 0;
+}
+.family-workspace__card {
+  border: 1px solid var(--color-warm-200);
+  border-radius: 0.75rem;
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-3);
+}
+.family-workspace__table-wrap {
+  overflow-x: auto;
+}
+.family-workspace__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.family-workspace__table th,
+.family-workspace__table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.75rem 0.6rem;
+  border-bottom: 1px solid var(--color-warm-200);
+}
+.family-workspace__table thead span {
+  display: block;
+  font-weight: 500;
+  color: var(--color-slate-600);
+}
+.family-workspace__desktop {
+  display: none;
+}
+.family-workspace__print-path {
+  display: none;
+}
+@media (min-width: 64rem) {
+  .family-workspace__mobile {
+    display: none;
+  }
+  .family-workspace__desktop {
+    display: block;
   }
 }

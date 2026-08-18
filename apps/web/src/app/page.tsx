@@ -51,6 +51,7 @@ export default async function Home({
   const navigatorEnabled = process.env.CARE_ENABLE_CARE_NEEDS_NAVIGATOR === "true";
   const plannerEnabled = process.env.CARE_ENABLE_SENIOR_CARE_COST_PLANNER === "true";
   const interviewBuilderEnabled = process.env.CARE_ENABLE_FACILITY_INTERVIEW_BUILDER === "true";
+  const workspaceEnabled = process.env.CARE_ENABLE_FAMILY_COMPARISON_WORKSPACE === "true";
   const sp = searchParams ? await searchParams : {};
   const journeyModule = resolveSeniorJourneyModule(parseNetworkJourney(sp), "home");
   const entries = paths.map((path) =>
@@ -148,6 +149,21 @@ export default async function Home({
             </p>
             <a className="button button--secondary" href="/tools/facility-tour-interview-builder">
               Build your interview checklist →
+            </a>
+          </section>
+        ) : null}
+        {workspaceEnabled ? (
+          <section className="entry-section" aria-labelledby="workspace-home-title">
+            <div className="section-heading">
+              <p className="eyebrow">Compare the facilities you&apos;re considering</p>
+              <h2 id="workspace-home-title">Keep a private shortlist in this browser</h2>
+            </div>
+            <p>
+              The Family Comparison Workspace puts published staffing, inspections, ownership, and
+              your own notes in one place. It does not pick a winner.
+            </p>
+            <a className="button button--secondary" href="/workspace">
+              Open Family Workspace →
             </a>
           </section>
         ) : null}
