@@ -14,7 +14,11 @@ export function JourneyNextStep({ module }: { module: JourneyModule | null }) {
     });
   };
   return (
-    <aside className="journey-next" aria-labelledby="journey-next-heading" data-journey-handoff="senior">
+    <aside
+      className="journey-next"
+      aria-labelledby="journey-next-heading"
+      data-journey-handoff="senior"
+    >
       <p className="journey-next__eyebrow">{module.eyebrow}</p>
       <h2 id="journey-next-heading">{module.heading}</h2>
       <p>{module.body}</p>

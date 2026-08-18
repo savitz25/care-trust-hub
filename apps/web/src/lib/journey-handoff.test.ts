@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  parseNetworkJourney,
-  resolveSeniorJourneyModule,
-} from "./journey-handoff";
+import { parseNetworkJourney, resolveSeniorJourneyModule } from "./journey-handoff";
 
 describe("senior journey v2.1", () => {
   it("hides facility module without context", () => {

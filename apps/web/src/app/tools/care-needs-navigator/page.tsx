@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CareNeedsNavigator } from "@/components/care-needs-navigator";
 import { JourneyNextStep } from "@/components/journey-next-step";
-import {
-  parseNetworkJourney,
-  resolveSeniorJourneyModule,
-} from "@/lib/journey-handoff";
+import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-handoff";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import {
   isCareNeedsNavigatorEnabled,

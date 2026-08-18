@@ -1,7 +1,13 @@
 /** Network V2.1 — bounded inbound journey context for SeniorTrustHub. */
 
 export type JourneySrc = "ask" | "move" | "lender" | "insurance" | "contractor" | "senior";
-export type JourneyKind = "relocate" | "purchase" | "coverage" | "senior_care" | "contractor" | "unknown";
+export type JourneyKind =
+  | "relocate"
+  | "purchase"
+  | "coverage"
+  | "senior_care"
+  | "contractor"
+  | "unknown";
 export type JourneyIntent = "buy" | "rent" | "refi" | "unknown";
 
 export type NetworkJourneyContext = {
@@ -28,11 +34,7 @@ function first(v: string | string[] | undefined): string | undefined {
 }
 
 export function parseNetworkJourney(
-  searchParams:
-    | URLSearchParams
-    | Record<string, string | string[] | undefined>
-    | null
-    | undefined,
+  searchParams: URLSearchParams | Record<string, string | string[] | undefined> | null | undefined,
 ): NetworkJourneyContext {
   const get = (key: string): string | undefined => {
     if (!searchParams) return undefined;
@@ -57,7 +59,12 @@ export function parseNetworkJourney(
   };
 }
 
-function url(origin: string, path: string, ctx: NetworkJourneyContext, journey: JourneyKind): string {
+function url(
+  origin: string,
+  path: string,
+  ctx: NetworkJourneyContext,
+  journey: JourneyKind,
+): string {
   const p = new URLSearchParams();
   p.set("src", "senior");
   p.set("journey", journey);
@@ -82,9 +89,7 @@ export type JourneyModule = {
   surface: "senior_transition" | "senior_navigator_completion";
 };
 
-function analyticsSurface(
-  surface: "home" | "facility" | "planner",
-): JourneyModule["surface"] {
+function analyticsSurface(surface: "home" | "facility" | "planner"): JourneyModule["surface"] {
   return surface === "planner" ? "senior_navigator_completion" : "senior_transition";
 }
 

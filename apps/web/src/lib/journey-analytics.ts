@@ -2,15 +2,7 @@
 
 import { track } from "@vercel/analytics";
 
-const HUBS = new Set([
-  "ask",
-  "move",
-  "lender",
-  "insurance",
-  "contractor",
-  "senior",
-  "investor",
-]);
+const HUBS = new Set(["ask", "move", "lender", "insurance", "contractor", "senior", "investor"]);
 
 const FORBIDDEN = new Set([
   "name",
