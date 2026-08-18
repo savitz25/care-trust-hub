@@ -94,6 +94,13 @@ export function isCareNeedsNavigatorEnabled(
   return environment.CARE_ENABLE_CARE_NEEDS_NAVIGATOR === "true";
 }
 
+/** Fail-closed Senior Care Cost Planner. Independent of facility-evidence flags. */
+export function isSeniorCareCostPlannerEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return environment.CARE_ENABLE_SENIOR_CARE_COST_PLANNER === "true";
+}
+
 /** Fail-closed CA/NY/TX state-license publication. Requires an explicit opt-in. */
 export function isStateRegulatoryIntelligenceEnabled(
   environment: Readonly<Record<string, string | undefined>> = process.env,

@@ -2315,6 +2315,70 @@ fieldset legend span {
   background: var(--color-jade-50);
   border-radius: 0.75rem;
 }
+.cost-planner {
+  display: grid;
+  gap: var(--space-5);
+}
+.cost-planner__form,
+.cost-planner__results {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 52rem;
+}
+.cost-planner__field {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-3);
+}
+.cost-planner__field input,
+.cost-planner__field select {
+  min-height: 2.75rem;
+  padding-inline: 0.75rem;
+}
+.cost-planner__table-wrap {
+  overflow-x: auto;
+}
+.cost-planner table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.cost-planner th,
+.cost-planner td {
+  text-align: left;
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid var(--color-warm-200);
+}
+.cost-planner td,
+.cost-planner thead th:not(:first-child) {
+  text-align: right;
+}
+@media (max-width: 640px) {
+  .cost-planner thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  .cost-planner tr {
+    display: grid;
+    gap: 0.25rem;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-warm-200);
+  }
+  .cost-planner td,
+  .cost-planner th {
+    text-align: left;
+    border: 0;
+    padding: 0.15rem 0;
+  }
+  .cost-planner td::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--color-slate-600);
+    font-size: 0.85rem;
+  }
+}
 @media print {
   .what-to-review,
   .research-facility,

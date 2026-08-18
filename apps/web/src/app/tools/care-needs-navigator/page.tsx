@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CareNeedsNavigator } from "@/components/care-needs-navigator";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
-import { isCareNeedsNavigatorEnabled } from "@/server/care/feature-flags";
+import {
+  isCareNeedsNavigatorEnabled,
+  isSeniorCareCostPlannerEnabled,
+} from "@/server/care/feature-flags";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +28,7 @@ export default function CareNeedsNavigatorPage() {
   if (!isCareNeedsNavigatorEnabled()) notFound();
   return (
     <div className="page-shell">
-      <CareNeedsNavigator />
+      <CareNeedsNavigator plannerEnabled={isSeniorCareCostPlannerEnabled()} />
     </div>
   );
 }

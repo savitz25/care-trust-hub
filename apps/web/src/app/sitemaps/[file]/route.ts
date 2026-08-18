@@ -3,6 +3,7 @@ import { chainHref, organizationHref, providerSlug } from "@/server/care/consume
 import {
   isCareNeedsNavigatorEnabled,
   isOwnershipIntelligenceV2Enabled,
+  isSeniorCareCostPlannerEnabled,
 } from "@/server/care/feature-flags";
 import {
   getChainSitemapRows,
@@ -37,9 +38,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
   if (!isPublicLaunchEnabled()) return new Response("Not found", { status: 404 });
   const { file } = await params;
   if (file === "core.xml") {
-    const paths = isCareNeedsNavigatorEnabled()
-      ? [...corePaths, "/tools/care-needs-navigator"]
-      : corePaths;
+    const paths = [
+      ...corePaths,
+      ...(isCareNeedsNavigatorEnabled() ? ["/tools/care-needs-navigator"] : []),
+      ...(isSeniorCareCostPlannerEnabled() ? ["/tools/senior-care-cost-planner"] : []),
+    ];
     return response(
       urlset(
         paths

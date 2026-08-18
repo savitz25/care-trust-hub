@@ -181,6 +181,22 @@ describe("real provider UI feature flag", () => {
     expect(isRealProviderUiEnabled({ CARE_ENABLE_CARE_NEEDS_NAVIGATOR: "true" })).toBe(false);
   });
 
+  it("keeps the senior care cost planner fail-closed and independent", async () => {
+    const { isSeniorCareCostPlannerEnabled, isCareNeedsNavigatorEnabled } = await import(
+      "./feature-flags"
+    );
+    expect(isSeniorCareCostPlannerEnabled({})).toBe(false);
+    expect(isSeniorCareCostPlannerEnabled({ CARE_ENABLE_SENIOR_CARE_COST_PLANNER: "TRUE" })).toBe(
+      false,
+    );
+    expect(isSeniorCareCostPlannerEnabled({ CARE_ENABLE_SENIOR_CARE_COST_PLANNER: "true" })).toBe(
+      true,
+    );
+    expect(isCareNeedsNavigatorEnabled({ CARE_ENABLE_SENIOR_CARE_COST_PLANNER: "true" })).toBe(
+      false,
+    );
+  });
+
   it("requires both real-provider and trust-participation opt-ins without billing state", async () => {
     const { isTrustParticipationEnabled } = await import("./feature-flags");
     expect(isTrustParticipationEnabled({ CARE_ENABLE_TRUST_PARTICIPATION: "true" })).toBe(false);

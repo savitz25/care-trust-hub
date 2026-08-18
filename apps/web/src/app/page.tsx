@@ -34,6 +34,7 @@ const paths = [
 
 export default function Home() {
   const navigatorEnabled = process.env.CARE_ENABLE_CARE_NEEDS_NAVIGATOR === "true";
+  const plannerEnabled = process.env.CARE_ENABLE_SENIOR_CARE_COST_PLANNER === "true";
   const entries = paths.map((path) =>
     path.number === "04" && navigatorEnabled
       ? {
@@ -97,6 +98,22 @@ export default function Home() {
             </p>
             <a className="button button--secondary" href="/tools/care-needs-navigator">
               Use the Care Needs Navigator →
+            </a>
+          </section>
+        ) : null}
+        {plannerEnabled ? (
+          <section className="entry-section" aria-labelledby="planner-home-title">
+            <div className="section-heading">
+              <p className="eyebrow">Understand the cost of care</p>
+              <h2 id="planner-home-title">Compare published benchmarks and your own quotes</h2>
+            </div>
+            <p>
+              The Senior Care Cost Planner estimates home care, assisted living, memory care, and
+              skilled nursing using transparent assumptions. It is not a quote or eligibility
+              decision.
+            </p>
+            <a className="button button--secondary" href="/tools/senior-care-cost-planner">
+              Compare senior care costs →
             </a>
           </section>
         ) : null}

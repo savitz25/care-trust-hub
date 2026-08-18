@@ -11,6 +11,11 @@ import {
 } from "@care/domain";
 import { PrintButton } from "./print-button";
 import { NAVIGATOR_QUESTIONS, QUESTION_STEPS } from "./care-needs-navigator-questions";
+import {
+  COST_PLANNER_PATH,
+  mapNavigatorSettingsToPlanner,
+  storePlannerScenarios,
+} from "./cost-planner-bridge";
 
 type Phase = "start" | "questions" | "results";
 
@@ -26,7 +31,7 @@ function stepComplete(stepId: string, answers: CareNeedsAnswers): boolean {
   );
 }
 
-export function CareNeedsNavigator() {
+export function CareNeedsNavigator({ plannerEnabled = false }: { plannerEnabled?: boolean }) {
   const headingId = useId();
   const headingRef = useRef<HTMLHeadingElement>(null);
   const [phase, setPhase] = useState<Phase>("start");
@@ -178,6 +183,22 @@ export function CareNeedsNavigator() {
             </ul>
           </>
         )}
+
+        {plannerEnabled ? (
+          <p>
+            <Link
+              className="button button--secondary"
+              href={COST_PLANNER_PATH}
+              onClick={() =>
+                storePlannerScenarios(
+                  mapNavigatorSettingsToPlanner(investigating.map((item) => item.setting)),
+                )
+              }
+            >
+              Compare the cost of these care options →
+            </Link>
+          </p>
+        ) : null}
 
         <h2>Questions to ask a professional</h2>
         <ul>

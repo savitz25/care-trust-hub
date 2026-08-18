@@ -1,5 +1,8 @@
 import { PublicInformationPage } from "@/components/public-information-page";
-import { isCareNeedsNavigatorEnabled } from "@/server/care/feature-flags";
+import {
+  isCareNeedsNavigatorEnabled,
+  isSeniorCareCostPlannerEnabled,
+} from "@/server/care/feature-flags";
 export const metadata = { title: "Data methodology" };
 export default function Page() {
   return (
@@ -28,6 +31,17 @@ export default function Page() {
           <>
             {" "}
             <a href="/tools/care-needs-navigator">Open the Care Needs Navigator</a>.
+          </>
+        ) : null}
+      </p>
+      <h2>Senior Care Cost Planner</h2>
+      <p>
+        Cost estimates use versioned published benchmarks and user-entered amounts. They are not
+        quotes or eligibility decisions.
+        {isSeniorCareCostPlannerEnabled() ? (
+          <>
+            {" "}
+            <a href="/tools/senior-care-cost-planner">Open the Senior Care Cost Planner</a>.
           </>
         ) : null}
       </p>
