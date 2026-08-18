@@ -14,6 +14,7 @@ describe("ownership repository", () => {
           {
             id: "party-1",
             party_kind: "organization",
+            organization_id: "org-1",
             display_name: "EXAMPLE LLC",
             relationship_role_code: "34",
             relationship_role_text: "DIRECT OWNERSHIP",

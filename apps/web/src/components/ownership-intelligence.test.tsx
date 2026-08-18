@@ -18,6 +18,7 @@ const intelligence: CareOwnershipIntelligence = {
     {
       id: "party-1",
       kind: "organization",
+      organizationId: "org-1",
       displayName: "EXAMPLE MANAGEMENT LLC",
       roleCode: "72",
       roleText: "MANAGERIAL CONTROL",
@@ -31,6 +32,7 @@ const intelligence: CareOwnershipIntelligence = {
     {
       id: "party-2",
       kind: "individual",
+      organizationId: null,
       displayName: "PUBLIC, JANE",
       roleCode: "34",
       roleText: "5% OR GREATER DIRECT OWNERSHIP INTEREST",

@@ -9,6 +9,7 @@ import { getApprovedProviderContext } from "./trust-participation";
 import { getPublishedFacilityEnrichment } from "./enrichment-publication";
 import { getPublishedStateIntelligence } from "./state-publication";
 import { getPublishedFacilityHistory } from "./history-repository";
+import { getOwnershipOperationSummary } from "./ownership-v2";
 
 export const getProviderByCcnForPage = cache(getProviderByCcn);
 export const getProviderRegulatoryIntelligenceForPage = cache(getProviderRegulatoryIntelligence);
@@ -19,3 +20,4 @@ export const getApprovedProviderContextForPage = cache(getApprovedProviderContex
 export const getPublishedFacilityEnrichmentForPage = cache(getPublishedFacilityEnrichment);
 export const getPublishedStateIntelligenceForPage = cache(getPublishedStateIntelligence);
 export const getPublishedFacilityHistoryForPage = cache(getPublishedFacilityHistory);
+export const getOwnershipOperationSummaryForPage = cache(getOwnershipOperationSummary);

@@ -7,6 +7,7 @@ import type {
   CareChainIntelligence,
   CarePublishedFacilityEnrichment,
   CareFacilityHistory,
+  CareOwnershipOperationSummary,
 } from "@/server/care/types";
 import type { PublishedStateIntelligence } from "@care/domain";
 import { VerifiedPublicContact } from "./verified-public-contact";
@@ -17,6 +18,7 @@ import { formatFreshnessLabels } from "@/server/care/freshness";
 import { CmsStarRating, ParticipationFacts } from "./real-provider";
 import { PrintButton } from "./print-button";
 import { OwnershipIntelligence } from "./ownership-intelligence";
+import { OwnershipOperation } from "./ownership-v2";
 import { RegulatoryIntelligence } from "./regulatory-intelligence";
 import { StaffingIntelligence } from "./staffing-intelligence";
 import { ChainIntelligence } from "./chain-intelligence";
@@ -269,6 +271,7 @@ export function RealProviderDetail({
   publishedEnrichment,
   stateIntelligence,
   facilityHistory,
+  ownershipOperation,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
@@ -286,6 +289,7 @@ export function RealProviderDetail({
   publishedEnrichment?: CarePublishedFacilityEnrichment;
   stateIntelligence?: PublishedStateIntelligence;
   facilityHistory?: CareFacilityHistory;
+  ownershipOperation?: CareOwnershipOperationSummary;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
@@ -391,6 +395,7 @@ export function RealProviderDetail({
         <nav className="provider-section-nav" aria-label="Facility record sections">
           <a href="#overview">Overview</a>
           {ownership && <a href="#ownership">Ownership</a>}
+          {ownershipOperation?.portfolio && <a href="#related-facilities">Related facilities</a>}
           {chain && <a href="#chain">Chain</a>}
           {regulatory && <a href="#inspections">Inspections</a>}
           {regulatory && <a href="#penalties">Penalties</a>}
@@ -407,6 +412,7 @@ export function RealProviderDetail({
           <a href="#sources">Sources</a>
         </nav>
 
+        {ownershipOperation ? <OwnershipOperation summary={ownershipOperation} /> : null}
         {ownership && <OwnershipIntelligence intelligence={ownership} />}
         {chain && <ChainIntelligence chain={chain} facility />}
         {regulatory && (

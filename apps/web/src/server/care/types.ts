@@ -299,6 +299,7 @@ export interface CareOwnershipParty {
   id: string;
   kind: "organization" | "individual";
   displayName: string;
+  organizationId: string | null;
   roleCode: string | null;
   roleText: string;
   associationDate: string | null;
@@ -323,6 +324,57 @@ export interface CareOwnershipIntelligence {
   parties: CareOwnershipParty[];
   totalPartyCount: number;
   changes: CareOwnershipChange[];
+}
+
+export interface CareRelatedFacility {
+  ccn: string;
+  providerName: string;
+  city: string | null;
+  state: string;
+  overallRating: number | null;
+  staffingRating: number | null;
+  hadPenalty: boolean;
+  relationshipType: string;
+}
+
+export interface CareOwnershipPortfolio {
+  organizationId: string;
+  organizationName: string;
+  relationshipType: string;
+  facilityCount: number;
+  stateCount: number;
+  states: string[];
+  relatedFacilities: CareRelatedFacility[];
+  overallAverage: number | null;
+  overallSampleSize: number;
+  overallDistribution: Record<1 | 2 | 3 | 4 | 5, number>;
+  staffingAverage: number | null;
+  staffingSampleSize: number;
+  healthInspectionAverage: number | null;
+  healthInspectionSampleSize: number;
+  qualityMeasureAverage: number | null;
+  qualityMeasureSampleSize: number;
+  averageRnHprd: number | null;
+  rnSampleSize: number;
+  averageTotalNurseHprd: number | null;
+  totalNurseSampleSize: number;
+  facilitiesWithPenalty: number;
+  totalFineAmount: number | null;
+  facilitiesWithOwnershipChange: number;
+  facilitiesWithRecentStateEnforcement: number;
+}
+
+export interface CareOwnershipOperationSummary {
+  operator: { value: string; source: string } | null;
+  licensee: { value: string; source: string } | null;
+  managementCompany: { value: string; source: string } | null;
+  cmsOwnershipType: string | null;
+  organizationCount: number;
+  individualCount: number;
+  chainName: string | null;
+  ownershipChangeCount: number;
+  whoIsBehind: string[];
+  portfolio: CareOwnershipPortfolio | null;
 }
 export interface CareChainSnapshot {
   releaseMonth: string;

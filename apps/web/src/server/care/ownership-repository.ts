@@ -17,6 +17,7 @@ function validateCcn(ccn: string): string {
 interface PartyRow extends QueryResultRow {
   id: string;
   party_kind: "organization" | "individual";
+  organization_id: string | null;
   display_name: string;
   relationship_role_code: string | null;
   relationship_role_text: string;
@@ -81,7 +82,7 @@ export async function getProviderOwnershipIntelligence(
          SELECT provider_id FROM provider_identifier WHERE issuer='CMS' AND identifier_type='CCN'
            AND identifier_value=$1 AND valid_from IS NULL
        )
-       SELECT r.id, p.party_kind, count(*) OVER()::text total_party_count,
+       SELECT r.id, p.party_kind, p.organization_id, count(*) OVER()::text total_party_count,
          CASE sd.dataset_key
            WHEN 'skilled-nursing-facility-enrollments' THEN
              COALESCE(NULLIF(r.raw_record->>'ORGANIZATION NAME',''),p.display_name)
@@ -137,6 +138,7 @@ export async function getProviderOwnershipIntelligence(
   const parties: CareOwnershipParty[] = partyResult.rows.map((row) => ({
     id: row.id,
     kind: row.party_kind,
+    organizationId: row.organization_id,
     displayName: row.display_name,
     roleCode: row.relationship_role_code,
     roleText: row.relationship_role_text,

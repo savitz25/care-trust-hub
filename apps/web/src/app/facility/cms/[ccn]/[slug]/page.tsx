@@ -12,6 +12,7 @@ import {
   getPublishedFacilityEnrichmentForPage,
   getPublishedStateIntelligenceForPage,
   getPublishedFacilityHistoryForPage,
+  getOwnershipOperationSummaryForPage,
 } from "@/server/care/cached-repository";
 import {
   isInspectionIntelligenceEnabled,
@@ -22,6 +23,7 @@ import {
   isStateRegulatoryIntelligenceEnabled,
   isFacilityHistoryEnabled,
   isStateEnforcementIntelligenceEnabled,
+  isOwnershipIntelligenceV2Enabled,
   isTrustParticipationEnabled,
   isVerifiedEnrichmentEnabled,
 } from "@/server/care/feature-flags";
@@ -86,6 +88,13 @@ export default async function RealFacilityPage({
         includeStateEvents: isStateEnforcementIntelligenceEnabled(),
       })
     : undefined;
+  const ownershipOperation =
+    isOwnershipIntelligenceV2Enabled() && ownership
+      ? await getOwnershipOperationSummaryForPage(provider, ownership, {
+          stateIntelligence,
+          chain,
+        })
+      : undefined;
   return (
     <RealProviderDetail
       provider={provider}
@@ -98,6 +107,7 @@ export default async function RealFacilityPage({
       publishedEnrichment={publishedEnrichment}
       stateIntelligence={stateIntelligence}
       facilityHistory={facilityHistory}
+      ownershipOperation={ownershipOperation}
     />
   );
 }

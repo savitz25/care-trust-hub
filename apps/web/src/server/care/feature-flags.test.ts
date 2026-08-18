@@ -84,6 +84,31 @@ describe("real provider UI feature flag", () => {
     ).toBe(true);
   });
 
+  it("keeps ownership V2 fail-closed unless ownership intelligence is also on", async () => {
+    const { isOwnershipIntelligenceV2Enabled, isOwnershipIntelligenceEnabled } = await import(
+      "./feature-flags"
+    );
+    expect(
+      isOwnershipIntelligenceV2Enabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_OWNERSHIP_INTELLIGENCE: "true",
+      }),
+    ).toBe(false);
+    expect(
+      isOwnershipIntelligenceEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_OWNERSHIP_INTELLIGENCE: "true",
+      }),
+    ).toBe(true);
+    expect(
+      isOwnershipIntelligenceV2Enabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_OWNERSHIP_INTELLIGENCE: "true",
+        CARE_ENABLE_OWNERSHIP_INTELLIGENCE_V2: "true",
+      }),
+    ).toBe(true);
+  });
+
   it("keeps state enforcement history fail-closed without affecting CMS history", async () => {
     const { isStateEnforcementIntelligenceEnabled, isFacilityHistoryEnabled } = await import(
       "./feature-flags"

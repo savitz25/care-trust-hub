@@ -974,6 +974,34 @@ fieldset legend span {
   display: inline-flex;
   align-items: center;
 }
+.ownership-v2 {
+  padding-block: var(--space-5);
+}
+.ownership-v2 dd {
+  display: grid;
+  gap: var(--space-1);
+}
+.ownership-v2 small {
+  display: block;
+  color: var(--color-slate-600);
+  font-size: 0.85rem;
+}
+.ownership-v2__behind ul,
+.ownership-v2__related ul,
+.ownership-v2__distribution {
+  margin: var(--space-3) 0 0;
+  padding-left: 1.25rem;
+}
+.ownership-v2__related li {
+  display: grid;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+.ownership-v2__related a {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+}
 .provider-section-nav {
   display: flex;
   overflow-x: auto;
