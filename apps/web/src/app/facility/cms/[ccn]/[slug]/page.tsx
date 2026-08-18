@@ -31,10 +31,7 @@ import {
 } from "@/server/care/feature-flags";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import { JourneyNextStep } from "@/components/journey-next-step";
-import {
-  parseNetworkJourney,
-  resolveSeniorJourneyModule,
-} from "@/lib/journey-handoff";
+import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-handoff";
 
 export const dynamic = "force-dynamic";
 

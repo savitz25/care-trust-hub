@@ -3,10 +3,7 @@ import { TrustStrip, RealDataNotice, SyntheticDataNotice } from "@/components/ev
 import { JourneyNextStep } from "@/components/journey-next-step";
 import { brand } from "@/config/brand";
 import { productionOrigin } from "@/config/deployment";
-import {
-  parseNetworkJourney,
-  resolveSeniorJourneyModule,
-} from "@/lib/journey-handoff";
+import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-handoff";
 
 export const metadata: Metadata = {
   alternates: { canonical: productionOrigin.origin },
