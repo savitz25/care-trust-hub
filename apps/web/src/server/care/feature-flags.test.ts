@@ -84,6 +84,23 @@ describe("real provider UI feature flag", () => {
     ).toBe(true);
   });
 
+  it("disables only the state layer when the state flag is missing", async () => {
+    const {
+      isRealProviderUiEnabled,
+      isStateRegulatoryIntelligenceEnabled,
+      isVerifiedEnrichmentEnabled,
+      isInspectionIntelligenceEnabled,
+    } = await import("./feature-flags");
+    const env = {
+      CARE_ENABLE_REAL_PROVIDER_UI: "true",
+      CARE_ENABLE_INSPECTION_INTELLIGENCE: "true",
+    };
+    expect(isRealProviderUiEnabled(env)).toBe(true);
+    expect(isVerifiedEnrichmentEnabled(env)).toBe(true);
+    expect(isInspectionIntelligenceEnabled(env)).toBe(true);
+    expect(isStateRegulatoryIntelligenceEnabled(env)).toBe(false);
+  });
+
   it("publishes verified enrichment with real-provider UI unless explicitly disabled", async () => {
     const { isVerifiedEnrichmentEnabled } = await import("./feature-flags");
     expect(isVerifiedEnrichmentEnabled({ NODE_ENV: "production" })).toBe(false);

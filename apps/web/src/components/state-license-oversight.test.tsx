@@ -155,7 +155,15 @@ describe("state license oversight publication", () => {
     expect(screen.queryByText("License status")).not.toBeInTheDocument();
   });
 
-  it("keeps Texas management company distinct from licensee", () => {
+  it("labels the administrator separately and does not treat it as owner", () => {
+    render(<StateLicenseOversight provider={provider} intelligence={intelligence} />);
+    expect(screen.getByText("Administrator")).toBeInTheDocument();
+    expect(screen.getByText("BILLS, KEVAN")).toBeInTheDocument();
+    expect(screen.getByText("Named on the state license record")).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "BILLS, KEVAN" })).not.toBeInTheDocument();
+  });
+
+  it("renders VERIFIED Texas license identity without inventing status or overwriting CMS beds", () => {
     const tx: PublishedStateIntelligence = {
       ...intelligence,
       stateCode: "TX",
@@ -164,11 +172,40 @@ describe("state license oversight publication", () => {
       officialUrl:
         "https://www.hhs.texas.gov/providers/long-term-care-providers/nursing-facilities-nf",
       licenseStatus: null,
-      licensee: {
-        value: "EXAMPLE LICENSEE LLC",
-        resolvedAt: "2026-08-18T17:00:00.000Z",
-        claimType: "STATE_LICENSEE",
-      },
+      licensedCapacity: null,
+      licensee: null,
+      administrator: null,
+      managementCompany: null,
+    };
+    const texasProvider = { ...provider, certifiedBeds: 214, providerName: "Avir at Beaumont" };
+    render(<RealProviderDetail provider={texasProvider} stateIntelligence={tx} />);
+    expect(screen.getByRole("heading", { level: 1, name: "Avir at Beaumont" })).toBeVisible();
+    expect(
+      screen.getAllByText("Texas Health and Human Services Commission").length,
+    ).toBeGreaterThan(0);
+    expect(screen.getByText("CMS certified beds")).toBeInTheDocument();
+    expect(screen.queryByText("License status")).not.toBeInTheDocument();
+    expect(screen.queryByText("Licensee")).not.toBeInTheDocument();
+  });
+
+  it("renders unsupported-state facilities as CMS-only records", () => {
+    const florida = {
+      ...provider,
+      ccn: "105001",
+      providerName: "Lake Eustis Healthcare",
+      location: { ...provider.location, state: "FL", city: "Eustis" },
+    };
+    const { container } = render(<RealProviderDetail provider={florida} />);
+    expect(screen.getByRole("heading", { level: 1, name: "Lake Eustis Healthcare" })).toBeVisible();
+    expect(container.querySelector("#state-license")).not.toBeInTheDocument();
+    expect(screen.getByText("CMS certified beds")).toBeInTheDocument();
+  });
+
+  it("keeps a management company label distinct from owner and chain when a safe value is present", () => {
+    const withManagement: PublishedStateIntelligence = {
+      ...intelligence,
+      licenseStatus: null,
+      licensee: null,
       operator: null,
       administrator: null,
       managementCompany: {
@@ -177,9 +214,9 @@ describe("state license oversight publication", () => {
         claimType: "STATE_MANAGEMENT_ENTITY",
       },
     };
-    render(<StateLicenseOversight provider={provider} intelligence={tx} />);
-    expect(screen.getByText("EXAMPLE LICENSEE LLC")).toBeInTheDocument();
+    render(<StateLicenseOversight provider={provider} intelligence={withManagement} />);
+    expect(screen.getByText("Management company")).toBeInTheDocument();
     expect(screen.getByText("EXAMPLE MANAGEMENT INC")).toBeInTheDocument();
-    expect(screen.queryByText("License status")).not.toBeInTheDocument();
+    expect(screen.getByText(/not automatically the owner or chain/i)).toBeInTheDocument();
   });
 });

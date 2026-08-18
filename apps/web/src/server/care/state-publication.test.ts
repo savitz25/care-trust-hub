@@ -28,6 +28,20 @@ describe("published state intelligence reads", () => {
     const published = await getPublishedStateIntelligence("555120", "CA");
     expect(query.mock.calls[0][0]).toContain("published_state_claim");
     expect(query.mock.calls[0][0]).not.toContain("google_");
+    expect(query).toHaveBeenCalledTimes(1);
+    expect(query.mock.calls[0][0]).toContain("DISTINCT ON (c.claim_type)");
+    expect(query.mock.calls[0][0]).toContain("published_state_claim");
+    expect(query.mock.calls[0][0]).not.toContain("google_");
+    expect(query.mock.calls[0][1][1]).toEqual([
+      "STATE_LICENSE_ID",
+      "STATE_LICENSE_STATUS",
+      "STATE_LICENSE_TYPE",
+      "STATE_LICENSE_CAPACITY",
+      "STATE_LICENSEE",
+      "STATE_OPERATOR",
+      "STATE_ADMINISTRATOR",
+      "STATE_MANAGEMENT_ENTITY",
+    ]);
     expect(published?.licenseId?.value).toBe("10000102");
     expect(published?.licenseStatus?.value).toBe("ACTIVE");
     expect(published?.regulator).toContain("California");

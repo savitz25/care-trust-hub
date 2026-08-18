@@ -18,11 +18,32 @@ export const CONSUMER_PUBLISHABLE_STATE_CLAIMS = [
 
 export type ConsumerPublishableStateClaim = (typeof CONSUMER_PUBLISHABLE_STATE_CLAIMS)[number];
 
-const STATE_STATUS_ALLOWED: Record<PublishableStateCode, boolean> = {
-  CA: true,
-  NY: false,
-  TX: false,
+/** TX Excel column mapping is unsafe for entity/capacity fields. Publish identity + type only. */
+const STATE_FIELD_ALLOWED: Record<PublishableStateCode, ReadonlySet<string>> = {
+  CA: new Set(CONSUMER_PUBLISHABLE_STATE_CLAIMS),
+  NY: new Set(CONSUMER_PUBLISHABLE_STATE_CLAIMS.filter((type) => type !== "STATE_LICENSE_STATUS")),
+  TX: new Set(["STATE_LICENSE_ID", "STATE_LICENSE_TYPE"]),
 };
+
+const ENTITY_CLAIM_TYPES = new Set([
+  "STATE_LICENSEE",
+  "STATE_OPERATOR",
+  "STATE_ADMINISTRATOR",
+  "STATE_MANAGEMENT_ENTITY",
+]);
+
+export function isSafePublishedStateValue(claimType: string, value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+  if (claimType === "STATE_LICENSE_CAPACITY") {
+    return /^[1-9]\d*$/.test(trimmed);
+  }
+  if (ENTITY_CLAIM_TYPES.has(claimType)) {
+    if (trimmed.includes("@")) return false;
+    if (/^[A-Z]{2}$/i.test(trimmed)) return false;
+  }
+  return true;
+}
 
 export const STATE_REGULATOR_PUBLICATION = {
   CA: {
@@ -89,9 +110,12 @@ export function isPublishableStateCode(
 function field(
   claims: Map<string, StateClaimRecord>,
   type: ConsumerPublishableStateClaim,
+  stateCode: PublishableStateCode,
 ): PublishedStateField | null {
+  if (!STATE_FIELD_ALLOWED[stateCode].has(type)) return null;
   const claim = claims.get(type);
   if (!claim?.value?.trim() || claim.resolutionState !== "VERIFIED") return null;
+  if (!isSafePublishedStateValue(type, claim.value)) return null;
   return { value: claim.value.trim(), resolvedAt: claim.resolvedAt, claimType: type };
 }
 
@@ -114,13 +138,10 @@ export function selectPublishedStateIntelligence(input: {
       )
       .map((claim) => [claim.claimType, claim]),
   );
-  const licenseId = field(byType, "STATE_LICENSE_ID");
+  const licenseId = field(byType, "STATE_LICENSE_ID", input.stateCode);
   if (!licenseId) return null;
 
   const meta = STATE_REGULATOR_PUBLICATION[input.stateCode];
-  const licenseStatus = STATE_STATUS_ALLOWED[input.stateCode]
-    ? field(byType, "STATE_LICENSE_STATUS")
-    : null;
   const published: PublishedStateIntelligence = {
     stateCode: input.stateCode,
     regulator: meta.regulator,
@@ -128,13 +149,13 @@ export function selectPublishedStateIntelligence(input: {
     officialUrl: meta.officialUrl,
     licenseLabel: meta.licenseLabel,
     licenseId,
-    licenseStatus,
-    licenseType: field(byType, "STATE_LICENSE_TYPE"),
-    licensedCapacity: field(byType, "STATE_LICENSE_CAPACITY"),
-    licensee: field(byType, "STATE_LICENSEE"),
-    operator: field(byType, "STATE_OPERATOR"),
-    administrator: field(byType, "STATE_ADMINISTRATOR"),
-    managementCompany: field(byType, "STATE_MANAGEMENT_ENTITY"),
+    licenseStatus: field(byType, "STATE_LICENSE_STATUS", input.stateCode),
+    licenseType: field(byType, "STATE_LICENSE_TYPE", input.stateCode),
+    licensedCapacity: field(byType, "STATE_LICENSE_CAPACITY", input.stateCode),
+    licensee: field(byType, "STATE_LICENSEE", input.stateCode),
+    operator: field(byType, "STATE_OPERATOR", input.stateCode),
+    administrator: field(byType, "STATE_ADMINISTRATOR", input.stateCode),
+    managementCompany: field(byType, "STATE_MANAGEMENT_ENTITY", input.stateCode),
     checkedAt: licenseId.resolvedAt,
     checkedLabel: formatVerifiedCheckedLabel(licenseId.resolvedAt).replace(
       "Verified public information",
@@ -153,8 +174,8 @@ export function isConsumerPublishableStateClaim(
   if (!(CONSUMER_PUBLISHABLE_STATE_CLAIMS as readonly string[]).includes(claim.claimType)) {
     return false;
   }
-  if (claim.claimType === "STATE_LICENSE_STATUS" && !STATE_STATUS_ALLOWED[stateCode]) return false;
-  return Boolean(claim.value?.trim());
+  if (!STATE_FIELD_ALLOWED[stateCode].has(claim.claimType)) return false;
+  return isSafePublishedStateValue(claim.claimType, claim.value ?? "");
 }
 
 export type { StateClaimType };
