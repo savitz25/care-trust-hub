@@ -499,6 +499,10 @@ function candidateFingerprint(candidate: GooglePlaceCandidate): string {
   return sha256(JSON.stringify(candidate, Object.keys(candidate).sort()));
 }
 
+function safeHttpsUrl(value: string | null | undefined): string | null {
+  return value?.startsWith("https://") ? value : null;
+}
+
 async function persistCandidate(
   client: PoolClient,
   runId: string,
@@ -507,7 +511,7 @@ async function persistCandidate(
   evaluation: ReturnType<typeof evaluateCandidate>,
 ): Promise<string> {
   const fingerprint = candidateFingerprint(candidate);
-  const observation = await client.query<{ id: string }>(
+  let observation = await client.query<{ id: string }>(
     `INSERT INTO facility_source_observation
       (provider_id,canonical_ccn,source_type,source_authority,source_identifier,
        source_record_identifier,observation_type,observed_value,normalized_value,
@@ -520,7 +524,7 @@ async function persistCandidate(
          ELSE ST_SetSRID(ST_MakePoint($12,$11),4326)::geography END,
        now(),$13,$14,$15,$16,'google-places-v1')
      ON CONFLICT (source_type,source_identifier,source_record_identifier,observation_type,
-       release_identifier,evidence_fingerprint) DO UPDATE SET source_type=EXCLUDED.source_type
+       release_identifier,evidence_fingerprint) DO NOTHING
      RETURNING id`,
     [
       facility.providerId,
@@ -532,7 +536,7 @@ async function persistCandidate(
       candidate.name,
       candidate.address,
       candidate.phone ?? null,
-      candidate.website ?? null,
+      safeHttpsUrl(candidate.website),
       candidate.latitude,
       candidate.longitude,
       VERSION,
@@ -541,6 +545,16 @@ async function persistCandidate(
       fingerprint,
     ],
   );
+  if (!observation.rowCount) {
+    observation = await client.query<{ id: string }>(
+      `SELECT id FROM facility_source_observation
+       WHERE source_type=$1 AND source_identifier='google_places_api'
+         AND source_record_identifier=$2 AND observation_type='business_identity_candidate'
+         AND release_identifier=$3 AND evidence_fingerprint=$4`,
+      [GOOGLE_SOURCE, candidate.placeId, VERSION, fingerprint],
+    );
+  }
+  if (!observation.rowCount) throw new Error("Persisted Google observation could not be located");
   const candidateRow = await client.query<{ id: string }>(
     `INSERT INTO facility_identity_candidate
       (provider_id,canonical_ccn,source_type,external_identifier_namespace,
@@ -566,12 +580,12 @@ async function persistCandidate(
       candidate.name,
       candidate.address,
       candidate.phone ?? null,
-      candidate.website ?? null,
+      safeHttpsUrl(candidate.website),
       candidate.latitude,
       candidate.longitude,
       candidate.businessStatus ?? null,
-      evaluation.features,
-      evaluation.reasonCodes,
+      JSON.stringify(evaluation.features),
+      JSON.stringify(evaluation.reasonCodes),
       evaluation.decision.confidence,
       evaluation.decision.state,
       RESOLVER_VERSION,
@@ -681,7 +695,7 @@ async function processFacility(
     const discovered = await discoverGooglePlaceCandidates(queryFor(facility), options);
     if (!discovered.length) {
       await client.query(
-        `UPDATE facility_intelligence_run_provider SET status='unresolved',completed_at=now(),discovery_requests=$3,details_requests=$4,retry_requests=$5,cache_hits=$6,candidate_count=0,final_resolution_state='UNRESOLVED',reason_codes=ARRAY['NO_GOOGLE_RESULT'] WHERE run_id=$1 AND provider_id=$2`,
+        `UPDATE facility_intelligence_run_provider SET status='unresolved',completed_at=now(),discovery_requests=discovery_requests+$3,details_requests=details_requests+$4,retry_requests=retry_requests+$5,cache_hits=cache_hits+$6,candidate_count=0,final_resolution_state='UNRESOLVED',reason_codes=ARRAY['NO_GOOGLE_RESULT'] WHERE run_id=$1 AND provider_id=$2`,
         [runId, facility.providerId, stats.search, stats.details, stats.retries, stats.cacheHits],
       );
       return;
@@ -740,7 +754,7 @@ async function processFacility(
         [...reasonCodes],
       );
     await client.query(
-      `UPDATE facility_intelligence_run_provider SET status=$3,completed_at=now(),discovery_requests=$4,details_requests=$5,retry_requests=$6,cache_hits=$7,candidate_count=$8,final_resolution_state=$9,reason_codes=$10 WHERE run_id=$1 AND provider_id=$2`,
+      `UPDATE facility_intelligence_run_provider SET status=$3,completed_at=now(),last_error_code=NULL,discovery_requests=discovery_requests+$4,details_requests=details_requests+$5,retry_requests=retry_requests+$6,cache_hits=cache_hits+$7,candidate_count=$8,final_resolution_state=$9,reason_codes=$10 WHERE run_id=$1 AND provider_id=$2`,
       [
         runId,
         facility.providerId,
@@ -760,8 +774,19 @@ async function processFacility(
     );
   } catch (error) {
     const code = error instanceof GooglePlacesError ? error.code : "OTHER";
+    if (!(error instanceof GooglePlacesError)) {
+      const databaseCode =
+        typeof error === "object" && error !== null && "code" in error
+          ? String((error as { code: unknown }).code)
+          : "unknown";
+      const constraint =
+        typeof error === "object" && error !== null && "constraint" in error
+          ? String((error as { constraint: unknown }).constraint)
+          : "unknown";
+      console.error(`Pilot persistence failure code=${databaseCode} constraint=${constraint}`);
+    }
     await client.query(
-      `UPDATE facility_intelligence_run_provider SET status='failed',completed_at=now(),last_error_code=$3,discovery_requests=$4,details_requests=$5,retry_requests=$6,cache_hits=$7,final_resolution_state='UNRESOLVED',reason_codes=ARRAY['API_ERROR'] WHERE run_id=$1 AND provider_id=$2`,
+      `UPDATE facility_intelligence_run_provider SET status='failed',completed_at=now(),last_error_code=$3,discovery_requests=discovery_requests+$4,details_requests=details_requests+$5,retry_requests=retry_requests+$6,cache_hits=cache_hits+$7,final_resolution_state='UNRESOLVED',reason_codes=ARRAY['API_ERROR'] WHERE run_id=$1 AND provider_id=$2`,
       [
         runId,
         facility.providerId,
@@ -776,7 +801,7 @@ async function processFacility(
   }
 }
 
-async function runPilot(pool: Pool, runId: string): Promise<void> {
+async function runPilot(pool: Pool, runId: string, facilityLimit?: number): Promise<void> {
   const client = await pool.connect();
   try {
     const run = await client.query<{ maximum_requests: number; used_requests: number }>(
@@ -800,7 +825,7 @@ async function runPilot(pool: Pool, runId: string): Promise<void> {
       `SELECT provider_id,cms_ccn,selection_metadata FROM facility_intelligence_run_provider WHERE run_id=$1 AND status IN ('pending','running','failed') ORDER BY ordinal`,
       [runId],
     );
-    for (const row of rows.rows) {
+    for (const row of rows.rows.slice(0, facilityLimit)) {
       const metadata = row.selection_metadata as Record<string, unknown>;
       const facility: SelectedFacility = {
         providerId: row.provider_id,
@@ -837,7 +862,7 @@ async function runPilot(pool: Pool, runId: string): Promise<void> {
       }
     }
     await client.query(
-      `UPDATE facility_intelligence_run r SET status=CASE WHEN EXISTS(SELECT 1 FROM facility_intelligence_run_provider WHERE run_id=$1 AND status='failed' AND last_error_code='BUDGET_EXCEEDED') THEN 'budget_exhausted' ELSE 'succeeded' END,completed_at=now(),successes=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND status='succeeded'),failures=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND status='failed'),unresolved=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND final_resolution_state='UNRESOLVED'),review_required=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND final_resolution_state='REVIEW_REQUIRED'),release_fingerprint=$2 WHERE id=$1`,
+      `UPDATE facility_intelligence_run r SET status=CASE WHEN EXISTS(SELECT 1 FROM facility_intelligence_run_provider WHERE run_id=$1 AND status='failed' AND last_error_code='BUDGET_EXCEEDED') THEN 'budget_exhausted' WHEN EXISTS(SELECT 1 FROM facility_intelligence_run_provider WHERE run_id=$1 AND status IN ('pending','running','failed')) THEN 'running' ELSE 'succeeded' END,completed_at=CASE WHEN EXISTS(SELECT 1 FROM facility_intelligence_run_provider WHERE run_id=$1 AND status IN ('pending','running','failed')) THEN NULL ELSE now() END,successes=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND status='succeeded'),failures=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND status='failed'),unresolved=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND final_resolution_state='UNRESOLVED'),review_required=(SELECT count(*) FROM facility_intelligence_run_provider WHERE run_id=$1 AND final_resolution_state='REVIEW_REQUIRED'),release_fingerprint=$2 WHERE id=$1`,
       [runId, sha256(`${VERSION}|${RESOLVER_VERSION}|${budget.usedRequests}`)],
     );
   } finally {
@@ -896,7 +921,7 @@ async function independentAudit(pool: Pool, runId: string): Promise<void> {
         [row.candidate_id, nextState],
       );
       await client.query(
-        "UPDATE facility_intelligence_run_provider SET final_resolution_state=$3,verified_audit_status=$4,status=CASE WHEN $3='VERIFIED' THEN 'succeeded' ELSE 'review_required' END WHERE run_id=$1 AND provider_id=$2",
+        "UPDATE facility_intelligence_run_provider SET final_resolution_state=$3::facility_resolution_state,verified_audit_status=$4,status=CASE WHEN $3::facility_resolution_state='VERIFIED' THEN 'succeeded' ELSE 'review_required' END WHERE run_id=$1 AND provider_id=$2",
         [runId, row.provider_id, nextState, auditStatus],
       );
       await client.query(
@@ -947,6 +972,89 @@ async function independentAudit(pool: Pool, runId: string): Promise<void> {
   }
 }
 
+async function normalizeGoogleObservationScope(client: PoolClient, runId: string): Promise<number> {
+  const rows = await client.query<{
+    id: string;
+    external_identifier_value: string;
+    observed_value: unknown;
+    normalized_value: string | null;
+    observed_name: string | null;
+    observed_address: string | null;
+    observed_phone: string | null;
+    observed_url: string | null;
+    observed_location_wkt: string | null;
+    retrieved_at: Date;
+    evidence_fingerprint: string;
+  }>(
+    `
+    SELECT DISTINCT ON (c.external_identifier_value)
+      o.id,c.external_identifier_value,o.observed_value,o.normalized_value,o.observed_name,
+      o.observed_address,o.observed_phone,o.observed_url,
+      CASE WHEN o.observed_location IS NULL THEN NULL ELSE ST_AsText(o.observed_location::geometry) END observed_location_wkt,
+      o.retrieved_at,o.evidence_fingerprint
+    FROM facility_identity_candidate c
+    JOIN facility_source_observation o ON o.id=c.source_observation_id
+    JOIN facility_intelligence_run_provider rp ON rp.provider_id=c.provider_id AND rp.run_id=$1
+    WHERE c.source_type='google_places' AND o.provider_id IS NOT NULL
+    ORDER BY c.external_identifier_value,o.retrieved_at DESC`,
+    [runId],
+  );
+  let changed = 0;
+  for (const row of rows.rows) {
+    const fingerprint = sha256(`${row.evidence_fingerprint}|source-scoped-v2`);
+    const inserted = await client.query<{ id: string }>(
+      `
+      INSERT INTO facility_source_observation
+        (provider_id,canonical_ccn,source_type,source_authority,source_identifier,
+         source_record_identifier,observation_type,observed_value,normalized_value,
+         observed_name,observed_address,observed_phone,observed_url,observed_location,
+         retrieved_at,release_identifier,intelligence_run_id,provenance,evidence_fingerprint,
+         adapter_version,supersedes_observation_id)
+      VALUES (NULL,NULL,'google_places','commercial_corroboration','google_places_api',$1,
+        'business_identity_candidate',$2,$3,$4,$5,$6,$7,
+        CASE WHEN $8::text IS NULL THEN NULL ELSE ST_GeogFromText($8) END,
+        $9,$10,$11,$12,$13,'google-places-v2',$14)
+      ON CONFLICT (source_type,source_identifier,source_record_identifier,observation_type,
+        release_identifier,evidence_fingerprint) DO NOTHING RETURNING id`,
+      [
+        row.external_identifier_value,
+        row.observed_value,
+        row.normalized_value,
+        row.observed_name,
+        row.observed_address,
+        row.observed_phone,
+        row.observed_url,
+        row.observed_location_wkt,
+        row.retrieved_at,
+        VERSION,
+        runId,
+        { fieldScope: "source_identity_only", canonicalAssociation: "candidate_table" },
+        fingerprint,
+        row.id,
+      ],
+    );
+    const observationId =
+      inserted.rows[0]?.id ??
+      (
+        await client.query<{ id: string }>(
+          `SELECT id FROM facility_source_observation WHERE source_type='google_places' AND source_record_identifier=$1 AND release_identifier=$2 AND evidence_fingerprint=$3`,
+          [row.external_identifier_value, VERSION, fingerprint],
+        )
+      ).rows[0]?.id;
+    if (!observationId) throw new Error("Source-scoped Google observation could not be located");
+    await client.query(
+      "UPDATE facility_identity_candidate SET source_observation_id=$2 WHERE source_type='google_places' AND external_identifier_value=$1",
+      [row.external_identifier_value, observationId],
+    );
+    await client.query(
+      "UPDATE facility_external_identifier SET source_observation_id=$2 WHERE namespace='GOOGLE_PLACES' AND identifier_value=$1",
+      [row.external_identifier_value, observationId],
+    );
+    changed += 1;
+  }
+  return changed;
+}
+
 async function summary(client: PoolClient, runId: string): Promise<void> {
   const queries = [
     ["run", "SELECT row_to_json(r) FROM facility_intelligence_run r WHERE id=$1"],
@@ -964,7 +1072,7 @@ async function summary(client: PoolClient, runId: string): Promise<void> {
     ],
     [
       "reasons",
-      "SELECT reason,count(*) FROM facility_intelligence_run_provider,cross join unnest(reason_codes) reason WHERE run_id=$1 GROUP BY 1 ORDER BY 2 DESC",
+      "SELECT reason,count(*) FROM facility_intelligence_run_provider CROSS JOIN unnest(reason_codes) reason WHERE run_id=$1 GROUP BY 1 ORDER BY 2 DESC",
     ],
     [
       "states",
@@ -1013,7 +1121,13 @@ async function main(): Promise<void> {
         }
       }
     } else if (command === "run" && argument) {
-      await runPilot(pool, argument);
+      const limitArgument = process.argv[4];
+      const facilityLimit = limitArgument?.startsWith("--limit=")
+        ? Number(limitArgument.slice("--limit=".length))
+        : undefined;
+      if (facilityLimit !== undefined && (!Number.isInteger(facilityLimit) || facilityLimit < 1))
+        throw new Error("--limit must be a positive integer");
+      await runPilot(pool, argument, facilityLimit);
       const summaryClient = await pool.connect();
       try {
         await summary(summaryClient, argument);
@@ -1029,7 +1143,10 @@ async function main(): Promise<void> {
         summaryClient.release();
       }
     } else if (command === "summary" && argument) await summary(client, argument);
-    else
+    else if (command === "normalize-observations" && argument) {
+      const changed = await normalizeGoogleObservationScope(client, argument);
+      console.log(`source_scoped_google_observations=${changed}`);
+    } else
       throw new Error(
         "Usage: cohort --dry-run|--persist-dry-run|--persist, run <run-id>, audit <run-id>, summary <run-id>",
       );

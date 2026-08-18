@@ -56,7 +56,7 @@ export class PostgresGooglePlacesCache implements GooglePlacesCache {
         cacheKey,
         sha256(`${operation}|${cacheKey}|${googlePlacesFieldMasks[operation]}`),
         sha256(serialized),
-        value,
+        serialized,
         googlePlacesFieldMasks[operation],
         expiresAt,
         this.intelligenceRunId ?? null,
