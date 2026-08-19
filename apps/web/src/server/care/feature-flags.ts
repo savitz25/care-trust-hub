@@ -115,6 +115,13 @@ export function isFamilyComparisonWorkspaceEnabled(
   return environment.CARE_ENABLE_FAMILY_COMPARISON_WORKSPACE === "true";
 }
 
+/** Fail-closed assisted-living intelligence. Independent and unpublished until Task 022. */
+export function isAssistedLivingIntelligenceEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return environment.CARE_ENABLE_ASSISTED_LIVING_INTELLIGENCE === "true";
+}
+
 /** Fail-closed CA/NY/TX state-license publication. Requires an explicit opt-in. */
 export function isStateRegulatoryIntelligenceEnabled(
   environment: Readonly<Record<string, string | undefined>> = process.env,

@@ -35,3 +35,4 @@ export * from "./senior-care-cost-planner";
 export * from "./interview-builder";
 export * from "./family-workspace";
 export * from "./family-workspace-comparison";
+export * from "./assisted-living-identity";

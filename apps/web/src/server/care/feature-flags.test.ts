@@ -241,6 +241,22 @@ describe("real provider UI feature flag", () => {
     );
   });
 
+  it("keeps assisted-living intelligence fail-closed and unpublished", async () => {
+    const { isAssistedLivingIntelligenceEnabled, isRealProviderUiEnabled } = await import(
+      "./feature-flags"
+    );
+    expect(isAssistedLivingIntelligenceEnabled({})).toBe(false);
+    expect(
+      isAssistedLivingIntelligenceEnabled({ CARE_ENABLE_ASSISTED_LIVING_INTELLIGENCE: "TRUE" }),
+    ).toBe(false);
+    expect(
+      isAssistedLivingIntelligenceEnabled({ CARE_ENABLE_ASSISTED_LIVING_INTELLIGENCE: "true" }),
+    ).toBe(true);
+    expect(isRealProviderUiEnabled({ CARE_ENABLE_ASSISTED_LIVING_INTELLIGENCE: "true" })).toBe(
+      false,
+    );
+  });
+
   it("requires both real-provider and trust-participation opt-ins without billing state", async () => {
     const { isTrustParticipationEnabled } = await import("./feature-flags");
     expect(isTrustParticipationEnabled({ CARE_ENABLE_TRUST_PARTICIPATION: "true" })).toBe(false);
