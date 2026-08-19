@@ -1,0 +1,94 @@
+{
+  "retrieved_at": "2026-08-19T00:52:18.721922+00:00",
+  "google_places_requests": 0,
+  "idempotent": true,
+  "states": {
+    "CA": {
+      "state": "CA",
+      "raw_source_records": 12522,
+      "canonical_providers": 12522,
+      "verified": 12522,
+      "review_required": 0,
+      "unresolved": 0,
+      "active": 7939,
+      "closed_or_inactive": 3821,
+      "licenses": 12522,
+      "capacities": 12522,
+      "licensees": 12522,
+      "operators": 0,
+      "administrators": 12522,
+      "management_companies": 0,
+      "owners": 0,
+      "explicit_memory": 0,
+      "memory_designations": {
+        "not_reported": 12522
+      },
+      "status_values": {
+        "LICENSED": 7939,
+        "CLOSED": 3821,
+        "PENDING": 739,
+        "ON PROBATION": 23
+      },
+      "publication_eligible": 12522,
+      "inspection_enforcement_events": 0
+    },
+    "NY": {
+      "state": "NY",
+      "raw_source_records": 529,
+      "canonical_providers": 529,
+      "verified": 529,
+      "review_required": 0,
+      "unresolved": 0,
+      "active": 0,
+      "closed_or_inactive": 0,
+      "licenses": 529,
+      "capacities": 529,
+      "licensees": 0,
+      "operators": 529,
+      "administrators": 0,
+      "management_companies": 0,
+      "owners": 0,
+      "explicit_memory": 212,
+      "memory_designations": {
+        "not_reported": 317,
+        "explicit_memory_or_dementia_license": 212
+      },
+      "status_values": {
+        "missing": 529
+      },
+      "publication_eligible": 529,
+      "inspection_enforcement_events": 0
+    },
+    "TX": {
+      "state": "TX",
+      "raw_source_records": 1996,
+      "canonical_providers": 1996,
+      "verified": 1996,
+      "review_required": 0,
+      "unresolved": 0,
+      "active": 1996,
+      "closed_or_inactive": 0,
+      "licenses": 1996,
+      "capacities": 1996,
+      "licensees": 0,
+      "operators": 0,
+      "administrators": 1996,
+      "management_companies": 770,
+      "owners": 1995,
+      "explicit_memory": 732,
+      "memory_designations": {
+        "not_reported": 1264,
+        "specialty_endorsement": 732
+      },
+      "status_values": {
+        "LICENSED": 1996
+      },
+      "publication_eligible": 1996,
+      "inspection_enforcement_events": 0
+    }
+  },
+  "totals": {
+    "canonical_providers": 15047,
+    "publication_eligible": 15047
+  }
+}
