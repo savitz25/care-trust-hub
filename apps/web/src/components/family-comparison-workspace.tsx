@@ -143,131 +143,136 @@ function FacilityCard({
         </button>
       </header>
       {facility.kind === "assisted_living" && facility.assistedLiving ? (
-      <dl>
-        <div>
-          <dt>Official care type</dt>
-          <dd>{facility.assistedLiving.officialType}</dd>
-        </div>
-        <div>
-          <dt>Licensed capacity</dt>
-          <dd>
-            {facility.assistedLiving.licensedCapacity == null
-              ? "Not reported"
-              : facility.assistedLiving.licensedCapacity}
-          </dd>
-        </div>
-        <div>
-          <dt>Memory designation</dt>
-          <dd>{facility.assistedLiving.memoryLabel ?? "Not reported by the regulator"}</dd>
-        </div>
-        <div>
-          <dt>Regulator status</dt>
-          <dd>
-            {facility.assistedLiving.statusHeadline ?? facility.assistedLiving.statusDetail}
-          </dd>
-        </div>
-        <div>
-          <dt>License</dt>
-          <dd>{facility.assistedLiving.licenseId ?? "Not reported"}</dd>
-        </div>
-        <div>
-          <dt>Organization roles</dt>
-          <dd>
-            {facility.assistedLiving.organizations.length === 0
-              ? "Not reported"
-              : facility.assistedLiving.organizations
-                  .map((party) => `${party.role}: ${party.name}`)
-                  .join("; ")}
-          </dd>
-        </div>
-      </dl>
+        <dl>
+          <div>
+            <dt>Official care type</dt>
+            <dd>{facility.assistedLiving.officialType}</dd>
+          </div>
+          <div>
+            <dt>Licensed capacity</dt>
+            <dd>
+              {facility.assistedLiving.licensedCapacity == null
+                ? "Not reported"
+                : facility.assistedLiving.licensedCapacity}
+            </dd>
+          </div>
+          <div>
+            <dt>Memory designation</dt>
+            <dd>{facility.assistedLiving.memoryLabel ?? "Not reported by the regulator"}</dd>
+          </div>
+          <div>
+            <dt>Regulator status</dt>
+            <dd>
+              {facility.assistedLiving.statusHeadline ?? facility.assistedLiving.statusDetail}
+            </dd>
+          </div>
+          <div>
+            <dt>License</dt>
+            <dd>{facility.assistedLiving.licenseId ?? "Not reported"}</dd>
+          </div>
+          <div>
+            <dt>Organization roles</dt>
+            <dd>
+              {facility.assistedLiving.organizations.length === 0
+                ? "Not reported"
+                : facility.assistedLiving.organizations
+                    .map((party) => `${party.role}: ${party.name}`)
+                    .join("; ")}
+            </dd>
+          </div>
+        </dl>
       ) : (
-      <dl>
-        <div>
-          <dt>CMS overall</dt>
-          <dd>
-            <CmsStarRating value={facility.ratings.overall} />
-          </dd>
-        </div>
-        <div>
-          <dt>Staffing rating</dt>
-          <dd>
-            <CmsStarRating value={facility.ratings.staffing} />
-          </dd>
-        </div>
-        <div>
-          <dt>Current staffing</dt>
-          <dd>
-            {formatMetric(facility.staffing.totalNurseHprd)} nurse HPRD
-            {facility.staffing.quarter ? ` (${facility.staffing.quarter})` : ""}
-          </dd>
-        </div>
-        <div>
-          <dt>Recent staffing direction</dt>
-          <dd>{facility.staffing.direction}</dd>
-        </div>
-        <div>
-          <dt>Latest inspection</dt>
-          <dd>
-            {facility.inspections.latestDate ?? "Not reported"}
-            {facility.inspections.latestDeficiencyCount != null
-              ? ` · ${facility.inspections.latestDeficiencyCount} deficiencies`
-              : ""}
-          </dd>
-        </div>
-        <div>
-          <dt>CMS penalties</dt>
-          <dd>
-            {facility.penalties.recentCmsPenalty
-              ? (facility.penalties.recentSummary ?? "Recent CMS penalty recorded")
-              : facility.penalties.hasRecordedCmsPenalty
-                ? "CMS penalties are recorded"
-                : "No CMS penalty in this published snapshot"}
-          </dd>
-        </div>
-        <div>
-          <dt>Facility History</dt>
-          <dd>
-            {facility.history.recentImportantCount > 0
-              ? `${facility.history.recentImportantCount} recent changes worth reviewing`
-              : "No major recent changes identified"}
-          </dd>
-        </div>
-        <div>
-          <dt>Ownership</dt>
-          <dd>
-            <p>{facility.ownership.cmsOwnershipType ?? "Not reported"}</p>
-            {facility.ownership.chainName ? <p>CMS chain: {facility.ownership.chainName}</p> : null}
-            {facility.ownership.organizationName ? (
-              <p>Organization: {facility.ownership.organizationName}</p>
-            ) : null}
-            {facility.ownership.recentOwnershipChange ? (
-              <p>{facility.ownership.recentSummary ?? "Recent ownership change recorded"}</p>
-            ) : null}
-          </dd>
-        </div>
-        <div>
-          <dt>State oversight</dt>
-          <dd>
-            {facility.stateEvidence.licenseId
-              ? `${facility.stateEvidence.licenseLabel ?? "State license"} ${facility.stateEvidence.licenseId}`
-              : "No equivalent national state-license comparison. Published state fields appear only where SeniorTrustHub already shows them."}
-            {facility.stateEvidence.hasPublishedStateEnforcement
-              ? ` ${facility.stateEvidence.stateEnforcementSummary ?? "Published state enforcement evidence is available."}`
-              : ""}
-          </dd>
-        </div>
-      </dl>
+        <dl>
+          <div>
+            <dt>CMS overall</dt>
+            <dd>
+              <CmsStarRating value={facility.ratings.overall} />
+            </dd>
+          </div>
+          <div>
+            <dt>Staffing rating</dt>
+            <dd>
+              <CmsStarRating value={facility.ratings.staffing} />
+            </dd>
+          </div>
+          <div>
+            <dt>Current staffing</dt>
+            <dd>
+              {formatMetric(facility.staffing.totalNurseHprd)} nurse HPRD
+              {facility.staffing.quarter ? ` (${facility.staffing.quarter})` : ""}
+            </dd>
+          </div>
+          <div>
+            <dt>Recent staffing direction</dt>
+            <dd>{facility.staffing.direction}</dd>
+          </div>
+          <div>
+            <dt>Latest inspection</dt>
+            <dd>
+              {facility.inspections.latestDate ?? "Not reported"}
+              {facility.inspections.latestDeficiencyCount != null
+                ? ` · ${facility.inspections.latestDeficiencyCount} deficiencies`
+                : ""}
+            </dd>
+          </div>
+          <div>
+            <dt>CMS penalties</dt>
+            <dd>
+              {facility.penalties.recentCmsPenalty
+                ? (facility.penalties.recentSummary ?? "Recent CMS penalty recorded")
+                : facility.penalties.hasRecordedCmsPenalty
+                  ? "CMS penalties are recorded"
+                  : "No CMS penalty in this published snapshot"}
+            </dd>
+          </div>
+          <div>
+            <dt>Facility History</dt>
+            <dd>
+              {facility.history.recentImportantCount > 0
+                ? `${facility.history.recentImportantCount} recent changes worth reviewing`
+                : "No major recent changes identified"}
+            </dd>
+          </div>
+          <div>
+            <dt>Ownership</dt>
+            <dd>
+              <p>{facility.ownership.cmsOwnershipType ?? "Not reported"}</p>
+              {facility.ownership.chainName ? (
+                <p>CMS chain: {facility.ownership.chainName}</p>
+              ) : null}
+              {facility.ownership.organizationName ? (
+                <p>Organization: {facility.ownership.organizationName}</p>
+              ) : null}
+              {facility.ownership.recentOwnershipChange ? (
+                <p>{facility.ownership.recentSummary ?? "Recent ownership change recorded"}</p>
+              ) : null}
+            </dd>
+          </div>
+          <div>
+            <dt>State oversight</dt>
+            <dd>
+              {facility.stateEvidence.licenseId
+                ? `${facility.stateEvidence.licenseLabel ?? "State license"} ${facility.stateEvidence.licenseId}`
+                : "No equivalent national state-license comparison. Published state fields appear only where SeniorTrustHub already shows them."}
+              {facility.stateEvidence.hasPublishedStateEnforcement
+                ? ` ${facility.stateEvidence.stateEnforcementSummary ?? "Published state enforcement evidence is available."}`
+                : ""}
+            </dd>
+          </div>
+        </dl>
       )}
       {facility.kind === "cms" ? (
         <>
-      <EvidenceLink href={`${facility.facilityHref}#staffing`} label="View staffing" />
-      <EvidenceLink href={`${facility.facilityHref}#inspections`} label="View inspection history" />
-      <EvidenceLink href={facility.history.historyHref} label="View Facility History" />
-      <EvidenceLink
-        href={facility.ownership.organizationHref ?? `${facility.facilityHref}#ownership`}
-        label="Explore ownership"
-      />
+          <EvidenceLink href={`${facility.facilityHref}#staffing`} label="View staffing" />
+          <EvidenceLink
+            href={`${facility.facilityHref}#inspections`}
+            label="View inspection history"
+          />
+          <EvidenceLink href={facility.history.historyHref} label="View Facility History" />
+          <EvidenceLink
+            href={facility.ownership.organizationHref ?? `${facility.facilityHref}#ownership`}
+            label="Explore ownership"
+          />
         </>
       ) : (
         <EvidenceLink href={facility.facilityHref} label="View assisted-living record" />
@@ -408,11 +413,11 @@ export function FamilyComparisonWorkspace({
             </Link>
           </p>
           {assistedLivingEnabled ? (
-          <p>
-            <Link className="button button--secondary" href="/assisted-living">
-              Search assisted living →
-            </Link>
-          </p>
+            <p>
+              <Link className="button button--secondary" href="/assisted-living">
+                Search assisted living →
+              </Link>
+            </p>
           ) : null}
           {navigatorEnabled ? (
             <p>
