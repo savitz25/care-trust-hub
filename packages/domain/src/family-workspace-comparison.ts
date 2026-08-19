@@ -57,12 +57,43 @@ export interface PublishedWorkspaceFacilityInput {
   readonly stateIntelligence?: PublishedStateIntelligence | null;
 }
 
-export interface WorkspaceFacilitySnapshot {
-  readonly ccn: string;
+export interface WorkspaceAssistedLivingFacts {
+  readonly officialType: string;
+  readonly licensedCapacity: number | null;
+  readonly memoryLabel: string | null;
+  readonly statusHeadline: string | null;
+  readonly statusDetail: string;
+  readonly licenseId: string | null;
+  readonly regulator: string;
+  readonly organizations: readonly { readonly role: string; readonly name: string }[];
+}
+
+export interface PublishedWorkspaceAssistedLivingInput {
+  readonly id: string;
   readonly facilityName: string;
   readonly city: string | null;
   readonly state: string;
   readonly facilityHref: string;
+  readonly officialType: string;
+  readonly licensedCapacity: number | null;
+  readonly memoryLabel: string | null;
+  readonly statusHeadline: string | null;
+  readonly statusDetail: string;
+  readonly licenseId: string | null;
+  readonly regulator: string;
+  readonly organizations: readonly { readonly role: string; readonly name: string }[];
+}
+
+export interface WorkspaceFacilitySnapshot {
+  readonly kind: "cms" | "assisted_living";
+  readonly id: string;
+  readonly ccn: string;
+  readonly careSetting: "skilled_nursing" | "assisted_living";
+  readonly facilityName: string;
+  readonly city: string | null;
+  readonly state: string;
+  readonly facilityHref: string;
+  readonly assistedLiving: WorkspaceAssistedLivingFacts | null;
   readonly ratings: PublishedWorkspaceFacilityInput["ratings"];
   readonly staffing: {
     readonly quarter: string | null;
@@ -219,7 +250,11 @@ function snapshotFacility(
   }));
 
   return {
+    kind: "cms",
+    id: input.ccn,
     ccn: input.ccn,
+    careSetting: "skilled_nursing",
+    assistedLiving: null,
     facilityName: input.facilityName,
     city: input.city,
     state: input.state,
@@ -389,16 +424,101 @@ export function describeWorkspaceDifferences(
   return differences;
 }
 
+function snapshotAssistedLiving(
+  input: PublishedWorkspaceAssistedLivingInput,
+): WorkspaceFacilitySnapshot {
+  return {
+    kind: "assisted_living",
+    id: input.id,
+    ccn: "",
+    careSetting: "assisted_living",
+    facilityName: input.facilityName,
+    city: input.city,
+    state: input.state,
+    facilityHref: input.facilityHref,
+    assistedLiving: {
+      officialType: input.officialType,
+      licensedCapacity: input.licensedCapacity,
+      memoryLabel: input.memoryLabel,
+      statusHeadline: input.statusHeadline,
+      statusDetail: input.statusDetail,
+      licenseId: input.licenseId,
+      regulator: input.regulator,
+      organizations: input.organizations,
+    },
+    ratings: { overall: null, staffing: null, healthInspection: null, qualityMeasure: null },
+    staffing: {
+      quarter: null,
+      totalNurseHprd: null,
+      rnHprd: null,
+      direction: "insufficient comparable history",
+    },
+    inspections: {
+      latestDate: null,
+      latestDeficiencyCount: null,
+      recentComplaintInspection: false,
+      recentImportantSummary: null,
+    },
+    penalties: {
+      hasRecordedCmsPenalty: false,
+      recentCmsPenalty: false,
+      recentSummary: null,
+      latestFineAmount: null,
+    },
+    history: {
+      recentImportantCount: 0,
+      highlights: [],
+      coverageLabel: "State inspection and enforcement history is not yet integrated.",
+      historyHref: input.facilityHref,
+    },
+    ownership: {
+      cmsOwnershipType: null,
+      chainName: null,
+      chainFacilityCount: null,
+      organizationName: null,
+      organizationHref: null,
+      organizationFacilityCount: null,
+      recentOwnershipChange: false,
+      recentSummary: null,
+    },
+    stateEvidence: {
+      stateCode: input.state,
+      regulator: input.regulator,
+      licenseLabel: "State license",
+      licenseId: input.licenseId,
+      licenseType: input.officialType,
+      licenseStatus: input.statusHeadline,
+      hasPublishedStateEnforcement: false,
+      stateEnforcementSummary: null,
+      coverageIsNotNational: true,
+    },
+  };
+}
+
 export function buildFamilyWorkspaceComparison(
   inputs: readonly PublishedWorkspaceFacilityInput[],
   now = new Date(),
+  assistedLiving: readonly PublishedWorkspaceAssistedLivingInput[] = [],
 ): FamilyWorkspaceComparison {
-  const facilities = inputs.slice(0, 5).map((input) => snapshotFacility(input, now));
+  const cms = inputs.map((input) => snapshotFacility(input, now));
+  const al = assistedLiving.map(snapshotAssistedLiving);
+  const facilities = [...cms, ...al].slice(0, 5);
+  const mixed = cms.length > 0 && al.length > 0;
   return {
     version: FAMILY_WORKSPACE_COMPARISON_VERSION,
     workspaceVersion: FAMILY_WORKSPACE_VERSION,
     facilities,
-    differences: describeWorkspaceDifferences(facilities),
+    differences: [
+      ...(mixed
+        ? [
+            {
+              id: "mixed_care_settings",
+              text: "This workspace includes both nursing homes and assisted-living providers. They are regulated differently and are not ranked against one another.",
+            },
+          ]
+        : []),
+      ...describeWorkspaceDifferences(cms),
+    ],
     disclaimer: FAMILY_WORKSPACE_COMPARISON_DISCLAIMER,
   };
 }

@@ -5,6 +5,7 @@ import {
   FAMILY_WORKSPACE_MAX_FACILITIES,
   FAMILY_WORKSPACE_NOTE_LIMIT,
   FAMILY_WORKSPACE_VERSION,
+  addAssistedLivingToWorkspace,
   addWorkspaceFacility,
   emptyFamilyWorkspace,
   parseFamilyWorkspace,
@@ -88,6 +89,27 @@ describe("family workspace storage model", () => {
       quotedCadence: "daily",
     });
     expect(raw).not.toMatch(/diagnosis|wandering|toileting|wound care/i);
+  });
+
+  it("upgrades legacy CMS shortlists and stores assisted-living IDs separately", () => {
+    const restored = parseFamilyWorkspace(
+      JSON.stringify({ version: FAMILY_WORKSPACE_VERSION, entries: [{ ccn: "015009" }] }),
+    );
+    expect(restored.entries[0]).toMatchObject({ kind: "cms", id: "015009", ccn: "015009" });
+    const added = addAssistedLivingToWorkspace(
+      restored,
+      "11111111-1111-4111-8111-111111111111",
+      NOW,
+    );
+    expect(added.ok).toBe(true);
+    if (!added.ok) return;
+    expect(added.state.entries).toHaveLength(2);
+    expect(added.state.entries[1]).toMatchObject({
+      kind: "assisted_living",
+      id: "11111111-1111-4111-8111-111111111111",
+      ccn: null,
+    });
+    expect(workspaceCcns(added.state)).toEqual(["015009"]);
   });
 
   it("clips oversized notes and ignores invalid quotes", () => {

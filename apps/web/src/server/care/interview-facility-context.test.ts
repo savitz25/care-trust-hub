@@ -78,8 +78,8 @@ describe("interview facility context", () => {
     const context = await loadInterviewFacilityContext("01a193");
     expect(context?.facilityName).toBe("Example Manor");
     expect(context?.facilityHref).toBe("/facility/cms/01A193/example-manor");
-    expect(context?.evidence.latestStaffingChangeDirection).toBe("decrease");
-    expect(context?.evidence.cmsStaffingRating).toBe(2);
+    expect(context?.evidence?.latestStaffingChangeDirection).toBe("decrease");
+    expect(context?.evidence?.cmsStaffingRating).toBe(2);
     expect(getPublishedFacilityHistoryForPage).toHaveBeenCalledWith("01A193", {
       includeStateEvents: true,
     });
@@ -91,7 +91,7 @@ describe("interview facility context", () => {
     getPublishedFacilityHistoryForPage.mockResolvedValue({ events: [] });
     const { loadInterviewFacilityContext } = await import("./interview-facility-context");
     const context = await loadInterviewFacilityContext("01A193");
-    expect(context?.evidence.isMultiFacilityOrganization).toBe(false);
-    expect(context?.evidence.organizationFacilityCount).toBeNull();
+    expect(context?.evidence?.isMultiFacilityOrganization).toBe(false);
+    expect(context?.evidence?.organizationFacilityCount).toBeNull();
   });
 });

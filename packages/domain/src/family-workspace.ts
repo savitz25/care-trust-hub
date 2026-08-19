@@ -32,8 +32,16 @@ export const RESEARCH_STAGE_LABELS: Record<ResearchStage, string> = {
 
 export type QuoteCadence = "monthly" | "daily";
 
+export const WORKSPACE_PROVIDER_KINDS = ["cms", "assisted_living"] as const;
+export type WorkspaceProviderKind = (typeof WORKSPACE_PROVIDER_KINDS)[number];
+
+const ASSISTED_LIVING_ID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 export interface FamilyWorkspaceEntry {
-  readonly ccn: string;
+  readonly kind: WorkspaceProviderKind;
+  readonly id: string;
+  readonly ccn: string | null;
   readonly addedAt: string;
   readonly researchStage: ResearchStage | null;
   readonly notes: string;
@@ -51,7 +59,7 @@ export type WorkspaceAddResult =
   | { readonly ok: true; readonly state: FamilyWorkspaceState; readonly alreadyPresent: boolean }
   | {
       readonly ok: false;
-      readonly reason: "invalid_ccn" | "max_reached";
+      readonly reason: "invalid_ccn" | "invalid_identity" | "max_reached";
       readonly state: FamilyWorkspaceState;
     };
 
@@ -61,6 +69,15 @@ export function emptyFamilyWorkspace(): FamilyWorkspaceState {
 
 export function isValidWorkspaceCcn(value: string): boolean {
   return /^[A-Z0-9]{6}$/.test(value.trim().toUpperCase());
+}
+
+export function normalizeAssistedLivingWorkspaceId(value: string): string | null {
+  const id = value.trim().toLowerCase();
+  return ASSISTED_LIVING_ID.test(id) ? id : null;
+}
+
+export function workspaceEntryKey(entry: Pick<FamilyWorkspaceEntry, "kind" | "id">): string {
+  return `${entry.kind}:${entry.id}`;
 }
 
 export function normalizeWorkspaceCcn(value: string): string | null {
@@ -91,8 +108,7 @@ function parseCadence(value: unknown): QuoteCadence | null {
 function parseEntry(value: unknown): FamilyWorkspaceEntry | null {
   if (!value || typeof value !== "object") return null;
   const record = value as Record<string, unknown>;
-  const ccn = typeof record.ccn === "string" ? normalizeWorkspaceCcn(record.ccn) : null;
-  if (!ccn) return null;
+  const kind = record.kind === "assisted_living" ? "assisted_living" : "cms";
   const addedAt =
     typeof record.addedAt === "string" && /^\d{4}-\d{2}-\d{2}/.test(record.addedAt)
       ? record.addedAt
@@ -101,8 +117,7 @@ function parseEntry(value: unknown): FamilyWorkspaceEntry | null {
     typeof record.researchStage === "string" && isResearchStage(record.researchStage)
       ? record.researchStage
       : null;
-  return {
-    ccn,
+  const annotations = {
     addedAt,
     researchStage,
     notes: clipNote(record.notes),
@@ -110,6 +125,19 @@ function parseEntry(value: unknown): FamilyWorkspaceEntry | null {
     quotedAmount: parseQuotedAmount(record.quotedAmount),
     quotedCadence: parseCadence(record.quotedCadence),
   };
+  if (kind === "assisted_living") {
+    const id = typeof record.id === "string" ? normalizeAssistedLivingWorkspaceId(record.id) : null;
+    if (!id) return null;
+    return { kind, id, ccn: null, ...annotations };
+  }
+  const ccn =
+    typeof record.ccn === "string"
+      ? normalizeWorkspaceCcn(record.ccn)
+      : typeof record.id === "string"
+        ? normalizeWorkspaceCcn(record.id)
+        : null;
+  if (!ccn) return null;
+  return { kind: "cms", id: ccn, ccn, ...annotations };
 }
 
 export function parseFamilyWorkspace(raw: string | null | undefined): FamilyWorkspaceState {
@@ -127,8 +155,8 @@ export function parseFamilyWorkspace(raw: string | null | undefined): FamilyWork
     const entries: FamilyWorkspaceEntry[] = [];
     for (const item of source) {
       const entry = parseEntry(item);
-      if (!entry || seen.has(entry.ccn)) continue;
-      seen.add(entry.ccn);
+      if (!entry || seen.has(workspaceEntryKey(entry))) continue;
+      seen.add(workspaceEntryKey(entry));
       entries.push(entry);
       if (entries.length === FAMILY_WORKSPACE_MAX_FACILITIES) break;
     }
@@ -142,7 +170,9 @@ export function serializeFamilyWorkspace(state: FamilyWorkspaceState): string {
   return JSON.stringify({
     version: FAMILY_WORKSPACE_VERSION,
     entries: state.entries.map((entry) => ({
-      ccn: entry.ccn,
+      kind: entry.kind,
+      id: entry.id,
+      ...(entry.kind === "cms" ? { ccn: entry.id } : {}),
       addedAt: entry.addedAt,
       researchStage: entry.researchStage,
       notes: entry.notes,
@@ -160,7 +190,7 @@ export function addWorkspaceFacility(
 ): WorkspaceAddResult {
   const ccn = normalizeWorkspaceCcn(rawCcn);
   if (!ccn) return { ok: false, reason: "invalid_ccn", state };
-  if (state.entries.some((entry) => entry.ccn === ccn)) {
+  if (state.entries.some((entry) => entry.kind === "cms" && entry.id === ccn)) {
     return { ok: true, state, alreadyPresent: true };
   }
   if (state.entries.length >= FAMILY_WORKSPACE_MAX_FACILITIES) {
@@ -174,7 +204,45 @@ export function addWorkspaceFacility(
       entries: [
         ...state.entries,
         {
+          kind: "cms",
+          id: ccn,
           ccn,
+          addedAt: now.toISOString(),
+          researchStage: null,
+          notes: "",
+          visitNotes: "",
+          quotedAmount: null,
+          quotedCadence: null,
+        },
+      ],
+    },
+  };
+}
+
+export function addAssistedLivingToWorkspace(
+  state: FamilyWorkspaceState,
+  rawId: string,
+  now = new Date(),
+): WorkspaceAddResult {
+  const id = normalizeAssistedLivingWorkspaceId(rawId);
+  if (!id) return { ok: false, reason: "invalid_identity", state };
+  if (state.entries.some((entry) => entry.kind === "assisted_living" && entry.id === id)) {
+    return { ok: true, state, alreadyPresent: true };
+  }
+  if (state.entries.length >= FAMILY_WORKSPACE_MAX_FACILITIES) {
+    return { ok: false, reason: "max_reached", state };
+  }
+  return {
+    ok: true,
+    alreadyPresent: false,
+    state: {
+      version: FAMILY_WORKSPACE_VERSION,
+      entries: [
+        ...state.entries,
+        {
+          kind: "assisted_living",
+          id,
+          ccn: null,
           addedAt: now.toISOString(),
           researchStage: null,
           notes: "",
@@ -195,7 +263,23 @@ export function removeWorkspaceFacility(
   if (!ccn) return state;
   return {
     version: FAMILY_WORKSPACE_VERSION,
-    entries: state.entries.filter((entry) => entry.ccn !== ccn),
+    entries: state.entries.filter((entry) => !(entry.kind === "cms" && entry.id === ccn)),
+  };
+}
+
+export function removeWorkspaceEntry(
+  state: FamilyWorkspaceState,
+  kind: WorkspaceProviderKind,
+  rawId: string,
+): FamilyWorkspaceState {
+  if (kind === "cms") return removeWorkspaceFacility(state, rawId);
+  const id = normalizeAssistedLivingWorkspaceId(rawId);
+  if (!id) return state;
+  return {
+    version: FAMILY_WORKSPACE_VERSION,
+    entries: state.entries.filter(
+      (entry) => !(entry.kind === "assisted_living" && entry.id === id),
+    ),
   };
 }
 
@@ -214,7 +298,7 @@ export function updateWorkspaceAnnotation(
   return {
     version: FAMILY_WORKSPACE_VERSION,
     entries: state.entries.map((entry) => {
-      if (entry.ccn !== ccn) return entry;
+      if (!(entry.kind === "cms" && entry.id === ccn)) return entry;
       return {
         ...entry,
         researchStage:
@@ -239,5 +323,44 @@ export function updateWorkspaceAnnotation(
 }
 
 export function workspaceCcns(state: FamilyWorkspaceState): string[] {
-  return state.entries.map((entry) => entry.ccn);
+  return state.entries.filter((entry) => entry.kind === "cms").map((entry) => entry.id);
+}
+
+export function updateAssistedLivingWorkspaceAnnotation(
+  state: FamilyWorkspaceState,
+  rawId: string,
+  patch: Partial<
+    Pick<
+      FamilyWorkspaceEntry,
+      "researchStage" | "notes" | "visitNotes" | "quotedAmount" | "quotedCadence"
+    >
+  >,
+): FamilyWorkspaceState {
+  const id = normalizeAssistedLivingWorkspaceId(rawId);
+  if (!id) return state;
+  return {
+    version: FAMILY_WORKSPACE_VERSION,
+    entries: state.entries.map((entry) => {
+      if (!(entry.kind === "assisted_living" && entry.id === id)) return entry;
+      return {
+        ...entry,
+        researchStage:
+          patch.researchStage === undefined
+            ? entry.researchStage
+            : patch.researchStage && isResearchStage(patch.researchStage)
+              ? patch.researchStage
+              : null,
+        notes: patch.notes === undefined ? entry.notes : clipNote(patch.notes),
+        visitNotes: patch.visitNotes === undefined ? entry.visitNotes : clipNote(patch.visitNotes),
+        quotedAmount:
+          patch.quotedAmount === undefined
+            ? entry.quotedAmount
+            : parseQuotedAmount(patch.quotedAmount),
+        quotedCadence:
+          patch.quotedCadence === undefined
+            ? entry.quotedCadence
+            : parseCadence(patch.quotedCadence),
+      };
+    }),
+  };
 }

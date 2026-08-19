@@ -76,7 +76,7 @@ describe("facility interview builder", () => {
     createChecklist({ settingName: "Assisted living" });
     expect(
       screen.getByText(
-        /does not yet provide equivalent national provider evidence for assisted living\/memory care/i,
+        /publishes state-regulator licensing evidence for California, New York, and Texas/i,
       ),
     ).toBeVisible();
   });

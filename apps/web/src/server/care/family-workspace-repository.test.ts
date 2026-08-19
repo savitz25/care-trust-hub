@@ -11,17 +11,20 @@ const isFacilityHistoryEnabled = vi.fn();
 const isStateEnforcementIntelligenceEnabled = vi.fn();
 const isStateRegulatoryIntelligenceEnabled = vi.fn();
 const isOwnershipIntelligenceV2Enabled = vi.fn();
+const isAssistedLivingIntelligenceEnabled = vi.fn();
 
 vi.mock("server-only", () => ({}));
 vi.mock("./repository", () => ({ getProvidersByCcns, getDecisionSummariesByCcns }));
 vi.mock("./history-repository", () => ({ getPublishedFacilityHistoriesByCcns }));
 vi.mock("./db", () => ({ getCareDatabasePool: () => ({ query }) }));
+vi.mock("./assisted-living-publication", () => ({ getPublishedAssistedLivingProvider: vi.fn() }));
 vi.mock("./feature-flags", () => ({
   isRealProviderUiEnabled,
   isFacilityHistoryEnabled,
   isStateEnforcementIntelligenceEnabled,
   isStateRegulatoryIntelligenceEnabled,
   isOwnershipIntelligenceV2Enabled,
+  isAssistedLivingIntelligenceEnabled,
 }));
 
 const provider = {
@@ -48,6 +51,7 @@ describe("family workspace batch read", () => {
     isStateEnforcementIntelligenceEnabled.mockReturnValue(true);
     isStateRegulatoryIntelligenceEnabled.mockReturnValue(false);
     isOwnershipIntelligenceV2Enabled.mockReturnValue(false);
+    isAssistedLivingIntelligenceEnabled.mockReturnValue(false);
     getProvidersByCcns.mockResolvedValue([provider]);
     getDecisionSummariesByCcns.mockResolvedValue([
       {

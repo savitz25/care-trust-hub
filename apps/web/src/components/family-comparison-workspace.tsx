@@ -23,7 +23,9 @@ import {
   familyWorkspaceSnapshot,
   readFamilyWorkspace,
   removeFacilityFromWorkspace,
+  removeWorkspaceProvider,
   subscribeFamilyWorkspace,
+  updateAssistedLivingFacilityAnnotation,
   updateFacilityWorkspaceAnnotation,
 } from "./family-workspace-storage";
 import { COST_PLANNER_PATH } from "./cost-planner-bridge";
@@ -49,9 +51,9 @@ function ResearchEditor({
   onChange: (patch: Partial<FamilyWorkspaceEntry>) => void;
   idPrefix: string;
 }) {
-  const stageId = `${idPrefix}-stage-${entry.ccn}`;
-  const quoteId = `${idPrefix}-quote-${entry.ccn}`;
-  const notesId = `${idPrefix}-notes-${entry.ccn}`;
+  const stageId = `${idPrefix}-stage-${entry.id}`;
+  const quoteId = `${idPrefix}-quote-${entry.id}`;
+  const notesId = `${idPrefix}-notes-${entry.id}`;
   return (
     <div className="family-workspace__research">
       <label htmlFor={stageId}>Research stage</label>
@@ -127,7 +129,11 @@ function FacilityCard({
   return (
     <article className="family-workspace__card">
       <header>
-        <p className="kicker">CMS ID {facility.ccn}</p>
+        <p className="kicker">
+          {facility.kind === "assisted_living"
+            ? "Assisted living / residential care"
+            : `CMS ID ${facility.ccn}`}
+        </p>
         <h3>
           <Link href={facility.facilityHref}>{facility.facilityName}</Link>
         </h3>
@@ -136,6 +142,46 @@ function FacilityCard({
           Remove
         </button>
       </header>
+      {facility.kind === "assisted_living" && facility.assistedLiving ? (
+      <dl>
+        <div>
+          <dt>Official care type</dt>
+          <dd>{facility.assistedLiving.officialType}</dd>
+        </div>
+        <div>
+          <dt>Licensed capacity</dt>
+          <dd>
+            {facility.assistedLiving.licensedCapacity == null
+              ? "Not reported"
+              : facility.assistedLiving.licensedCapacity}
+          </dd>
+        </div>
+        <div>
+          <dt>Memory designation</dt>
+          <dd>{facility.assistedLiving.memoryLabel ?? "Not reported by the regulator"}</dd>
+        </div>
+        <div>
+          <dt>Regulator status</dt>
+          <dd>
+            {facility.assistedLiving.statusHeadline ?? facility.assistedLiving.statusDetail}
+          </dd>
+        </div>
+        <div>
+          <dt>License</dt>
+          <dd>{facility.assistedLiving.licenseId ?? "Not reported"}</dd>
+        </div>
+        <div>
+          <dt>Organization roles</dt>
+          <dd>
+            {facility.assistedLiving.organizations.length === 0
+              ? "Not reported"
+              : facility.assistedLiving.organizations
+                  .map((party) => `${party.role}: ${party.name}`)
+                  .join("; ")}
+          </dd>
+        </div>
+      </dl>
+      ) : (
       <dl>
         <div>
           <dt>CMS overall</dt>
@@ -212,6 +258,9 @@ function FacilityCard({
           </dd>
         </div>
       </dl>
+      )}
+      {facility.kind === "cms" ? (
+        <>
       <EvidenceLink href={`${facility.facilityHref}#staffing`} label="View staffing" />
       <EvidenceLink href={`${facility.facilityHref}#inspections`} label="View inspection history" />
       <EvidenceLink href={facility.history.historyHref} label="View Facility History" />
@@ -219,9 +268,19 @@ function FacilityCard({
         href={facility.ownership.organizationHref ?? `${facility.facilityHref}#ownership`}
         label="Explore ownership"
       />
+        </>
+      ) : (
+        <EvidenceLink href={facility.facilityHref} label="View assisted-living record" />
+      )}
       {interviewBuilderEnabled ? (
         <p>
-          <Link href={`${INTERVIEW_BUILDER_PATH}?ccn=${facility.ccn}`}>
+          <Link
+            href={
+              facility.kind === "assisted_living"
+                ? `${INTERVIEW_BUILDER_PATH}?al=${facility.id}&setting=assisted_living`
+                : `${INTERVIEW_BUILDER_PATH}?ccn=${facility.ccn}`
+            }
+          >
             Build questions for this facility →
           </Link>
         </p>
@@ -235,10 +294,12 @@ export function FamilyComparisonWorkspace({
   navigatorEnabled = false,
   plannerEnabled = false,
   interviewBuilderEnabled = false,
+  assistedLivingEnabled = false,
 }: {
   navigatorEnabled?: boolean;
   plannerEnabled?: boolean;
   interviewBuilderEnabled?: boolean;
+  assistedLivingEnabled?: boolean;
 }) {
   const headingId = useId();
   const raw = useSyncExternalStore(subscribeFamilyWorkspace, familyWorkspaceSnapshot, () => "");
@@ -247,16 +308,17 @@ export function FamilyComparisonWorkspace({
   const [activeCcn, setActiveCcn] = useState<string | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [generatedOn, setGeneratedOn] = useState("");
-  const ccnKey = workspace.entries.map((entry) => entry.ccn).join(",");
+  const ccnKey = workspace.entries.map((entry) => `${entry.kind}:${entry.id}`).join(",");
 
   useEffect(() => {
-    const ccns = ccnKey ? ccnKey.split(",") : [];
-    if (ccns.length === 0) return;
+    const items = workspace.entries.map((entry) => ({ kind: entry.kind, id: entry.id }));
+    const ccns = workspace.entries.filter((entry) => entry.kind === "cms").map((entry) => entry.id);
+    if (items.length === 0) return;
     let cancelled = false;
     fetch("/api/workspace/comparison", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ccns }),
+      body: JSON.stringify({ items, ccns }),
     })
       .then(async (response) => {
         if (!response.ok) throw new Error("unavailable");
@@ -271,7 +333,7 @@ export function FamilyComparisonWorkspace({
             new Date(),
           ),
         );
-        setActiveCcn((current) => current ?? payload.facilities[0]?.ccn ?? null);
+        setActiveCcn((current) => current ?? payload.facilities[0]?.id ?? null);
       })
       .catch(() => {
         if (!cancelled) setLoadError(true);
@@ -282,16 +344,20 @@ export function FamilyComparisonWorkspace({
   }, [ccnKey]);
 
   const entryByCcn = useMemo(
-    () => new Map(workspace.entries.map((entry) => [entry.ccn, entry])),
+    () => new Map(workspace.entries.map((entry) => [entry.id, entry])),
     [workspace.entries],
   );
   const activeFacility =
-    comparison?.facilities.find((item) => item.ccn === activeCcn) ??
+    comparison?.facilities.find((item) => item.id === activeCcn) ??
     comparison?.facilities[0] ??
     null;
 
-  function update(ccn: string, patch: Partial<FamilyWorkspaceEntry>) {
-    updateFacilityWorkspaceAnnotation(ccn, patch);
+  function update(facility: WorkspaceFacilitySnapshot, patch: Partial<FamilyWorkspaceEntry>) {
+    if (facility.kind === "assisted_living") {
+      updateAssistedLivingFacilityAnnotation(facility.id, patch);
+      return;
+    }
+    updateFacilityWorkspaceAnnotation(facility.ccn, patch);
   }
 
   function clearAll() {
@@ -333,14 +399,21 @@ export function FamilyComparisonWorkspace({
       {workspace.entries.length === 0 ? (
         <div className="empty-state">
           <p>
-            Start by researching a CMS-certified nursing facility and add it to your Family
-            Workspace.
+            Start by researching a CMS-certified nursing facility or a CA/NY/TX assisted-living
+            provider and add it to your Family Workspace.
           </p>
           <p>
             <Link className="button button--primary" href="/search">
               Search nursing facilities →
             </Link>
           </p>
+          {assistedLivingEnabled ? (
+          <p>
+            <Link className="button button--secondary" href="/assisted-living">
+              Search assisted living →
+            </Link>
+          </p>
+          ) : null}
           {navigatorEnabled ? (
             <p>
               <Link href="/tools/care-needs-navigator">Care Needs Navigator</Link>
@@ -375,11 +448,11 @@ export function FamilyComparisonWorkspace({
             <div className="family-workspace__tabs" role="tablist" aria-label="Saved facilities">
               {comparison.facilities.map((facility) => (
                 <button
-                  key={facility.ccn}
+                  key={facility.id}
                   type="button"
                   role="tab"
-                  aria-selected={facility.ccn === activeFacility?.ccn}
-                  onClick={() => setActiveCcn(facility.ccn)}
+                  aria-selected={facility.id === activeFacility?.id}
+                  onClick={() => setActiveCcn(facility.id)}
                 >
                   {facility.facilityName}
                 </button>
@@ -389,12 +462,16 @@ export function FamilyComparisonWorkspace({
               <FacilityCard
                 facility={activeFacility}
                 entry={
-                  entryByCcn.get(activeFacility.ccn) ??
-                  readFamilyWorkspace().entries.find((item) => item.ccn === activeFacility.ccn)
+                  entryByCcn.get(activeFacility.id) ??
+                  readFamilyWorkspace().entries.find((item) => item.id === activeFacility.id)
                 }
                 interviewBuilderEnabled={interviewBuilderEnabled}
-                onUpdate={(patch) => update(activeFacility.ccn, patch)}
-                onRemove={() => removeFacilityFromWorkspace(activeFacility.ccn)}
+                onUpdate={(patch) => update(activeFacility, patch)}
+                onRemove={() =>
+                  activeFacility.kind === "assisted_living"
+                    ? removeWorkspaceProvider("assisted_living", activeFacility.id)
+                    : removeFacilityFromWorkspace(activeFacility.ccn)
+                }
               />
             ) : null}
           </div>
@@ -406,11 +483,11 @@ export function FamilyComparisonWorkspace({
                 <tr>
                   <th scope="col">Topic</th>
                   {comparison.facilities.map((facility) => (
-                    <th key={facility.ccn} scope="col">
+                    <th key={facility.id} scope="col">
                       <Link href={facility.facilityHref}>{facility.facilityName}</Link>
                       <span>
-                        {[facility.city, facility.state].filter(Boolean).join(", ")} ·{" "}
-                        {facility.ccn}
+                        {[facility.city, facility.state].filter(Boolean).join(", ")}
+                        {facility.kind === "cms" ? ` · ${facility.ccn}` : " · Assisted living"}
                       </span>
                     </th>
                   ))}
@@ -420,15 +497,19 @@ export function FamilyComparisonWorkspace({
                 <tr>
                   <th scope="row">CMS overall</th>
                   {comparison.facilities.map((facility) => (
-                    <td key={facility.ccn}>
-                      <CmsStarRating value={facility.ratings.overall} />
+                    <td key={facility.id}>
+                      {facility.kind === "assisted_living" ? (
+                        "Not a CMS nursing facility"
+                      ) : (
+                        <CmsStarRating value={facility.ratings.overall} />
+                      )}
                     </td>
                   ))}
                 </tr>
                 <tr>
                   <th scope="row">Staffing</th>
                   {comparison.facilities.map((facility) => (
-                    <td key={facility.ccn}>
+                    <td key={facility.id}>
                       <CmsStarRating value={facility.ratings.staffing} />
                       <p>
                         {formatMetric(facility.staffing.totalNurseHprd)} HPRD
@@ -445,7 +526,7 @@ export function FamilyComparisonWorkspace({
                 <tr>
                   <th scope="row">Inspections &amp; enforcement</th>
                   {comparison.facilities.map((facility) => (
-                    <td key={facility.ccn}>
+                    <td key={facility.id}>
                       <p>{facility.inspections.latestDate ?? "Not reported"}</p>
                       {facility.inspections.recentComplaintInspection ? (
                         <p>Recent complaint inspection recorded</p>
@@ -473,7 +554,7 @@ export function FamilyComparisonWorkspace({
                 <tr>
                   <th scope="row">Facility History</th>
                   {comparison.facilities.map((facility) => (
-                    <td key={facility.ccn}>
+                    <td key={facility.id}>
                       <p>
                         {facility.history.recentImportantCount > 0
                           ? `${facility.history.recentImportantCount} recent changes worth reviewing`
@@ -489,7 +570,7 @@ export function FamilyComparisonWorkspace({
                 <tr>
                   <th scope="row">Ownership</th>
                   {comparison.facilities.map((facility) => (
-                    <td key={facility.ccn}>
+                    <td key={facility.id}>
                       <p>{facility.ownership.cmsOwnershipType ?? "Not reported"}</p>
                       {facility.ownership.chainName ? (
                         <p>CMS chain: {facility.ownership.chainName}</p>
@@ -513,7 +594,7 @@ export function FamilyComparisonWorkspace({
                 <tr>
                   <th scope="row">State oversight</th>
                   {comparison.facilities.map((facility) => (
-                    <td key={facility.ccn}>
+                    <td key={facility.id}>
                       {facility.stateEvidence.licenseId
                         ? `${facility.stateEvidence.licenseLabel ?? "State license"} ${facility.stateEvidence.licenseId}`
                         : "Published state-license fields appear only where SeniorTrustHub already shows them."}
@@ -523,19 +604,25 @@ export function FamilyComparisonWorkspace({
                 <tr>
                   <th scope="row">Your research</th>
                   {comparison.facilities.map((facility) => {
-                    const entry = entryByCcn.get(facility.ccn);
+                    const entry = entryByCcn.get(facility.id);
                     return (
-                      <td key={facility.ccn}>
+                      <td key={facility.id}>
                         {entry ? (
                           <ResearchEditor
                             idPrefix="table"
                             entry={entry}
-                            onChange={(patch) => update(facility.ccn, patch)}
+                            onChange={(patch) => update(facility, patch)}
                           />
                         ) : null}
                         {interviewBuilderEnabled ? (
                           <p>
-                            <Link href={`${INTERVIEW_BUILDER_PATH}?ccn=${facility.ccn}`}>
+                            <Link
+                              href={
+                                facility.kind === "assisted_living"
+                                  ? `${INTERVIEW_BUILDER_PATH}?al=${facility.id}&setting=assisted_living`
+                                  : `${INTERVIEW_BUILDER_PATH}?ccn=${facility.ccn}`
+                              }
+                            >
                               Build questions for this facility →
                             </Link>
                           </p>
@@ -543,7 +630,11 @@ export function FamilyComparisonWorkspace({
                         <button
                           className="text-link"
                           type="button"
-                          onClick={() => removeFacilityFromWorkspace(facility.ccn)}
+                          onClick={() =>
+                            facility.kind === "assisted_living"
+                              ? removeWorkspaceProvider("assisted_living", facility.id)
+                              : removeFacilityFromWorkspace(facility.ccn)
+                          }
                         >
                           Remove
                         </button>

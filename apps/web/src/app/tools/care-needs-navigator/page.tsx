@@ -5,6 +5,7 @@ import { JourneyNextStep } from "@/components/journey-next-step";
 import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-handoff";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import {
+  isAssistedLivingIntelligenceEnabled,
   isCareNeedsNavigatorEnabled,
   isFacilityInterviewBuilderEnabled,
   isSeniorCareCostPlannerEnabled,
@@ -42,6 +43,7 @@ export default async function CareNeedsNavigatorPage({
       <CareNeedsNavigator
         plannerEnabled={isSeniorCareCostPlannerEnabled()}
         interviewBuilderEnabled={isFacilityInterviewBuilderEnabled()}
+        assistedLivingEnabled={isAssistedLivingIntelligenceEnabled()}
       />
       <JourneyNextStep module={journeyModule} />
     </div>

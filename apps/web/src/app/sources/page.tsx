@@ -5,9 +5,12 @@ export default function Page() {
     <PublicInformationPage
       eyebrow="Sources"
       title="Published evidence used by SeniorTrustHub"
-      intro="Our nursing home research is grounded in CMS Provider Data Catalog and Medicare enrollment datasets."
+      intro="Nursing home research is grounded in CMS Provider Data Catalog and Medicare enrollment datasets. Assisted-living pages currently use official California, New York, and Texas regulator listings only."
     >
       <ul>
+        <li>California CDSS Community Care Licensing RCFE listing</li>
+        <li>New York State DOH Adult Care Facility / HFIS General Information</li>
+        <li>Texas HHSC Assisted Living Facility directory</li>
         <li>Provider Information</li>
         <li>Inspection Dates and Health Deficiencies</li>
         <li>Penalties and enforcement</li>

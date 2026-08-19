@@ -1,10 +1,13 @@
 import {
   FAMILY_WORKSPACE_STORAGE_KEY,
+  addAssistedLivingToWorkspace,
   addWorkspaceFacility,
   emptyFamilyWorkspace,
   parseFamilyWorkspace,
+  removeWorkspaceEntry,
   removeWorkspaceFacility,
   serializeFamilyWorkspace,
+  updateAssistedLivingWorkspaceAnnotation,
   updateWorkspaceAnnotation,
   workspaceCcns,
   type FamilyWorkspaceEntry,
@@ -12,6 +15,7 @@ import {
   type ResearchStage,
   type QuoteCadence,
   type WorkspaceAddResult,
+  type WorkspaceProviderKind,
 } from "@care/domain";
 
 export {
@@ -49,8 +53,36 @@ export function addFacilityToWorkspace(ccn: string, now = new Date()): Workspace
   return result;
 }
 
+export function addAssistedLivingProviderToWorkspace(
+  id: string,
+  now = new Date(),
+): WorkspaceAddResult {
+  const result = addAssistedLivingToWorkspace(readFamilyWorkspace(), id, now);
+  if (result.ok) writeWorkspace(result.state);
+  return result;
+}
+
 export function removeFacilityFromWorkspace(ccn: string): FamilyWorkspaceState {
   return writeWorkspace(removeWorkspaceFacility(readFamilyWorkspace(), ccn));
+}
+
+export function removeWorkspaceProvider(
+  kind: WorkspaceProviderKind,
+  id: string,
+): FamilyWorkspaceState {
+  return writeWorkspace(removeWorkspaceEntry(readFamilyWorkspace(), kind, id));
+}
+
+export function updateAssistedLivingFacilityAnnotation(
+  id: string,
+  patch: Partial<
+    Pick<
+      FamilyWorkspaceEntry,
+      "researchStage" | "notes" | "visitNotes" | "quotedAmount" | "quotedCadence"
+    >
+  >,
+): FamilyWorkspaceState {
+  return writeWorkspace(updateAssistedLivingWorkspaceAnnotation(readFamilyWorkspace(), id, patch));
 }
 
 export function updateFacilityWorkspaceAnnotation(

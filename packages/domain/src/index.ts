@@ -36,3 +36,4 @@ export * from "./interview-builder";
 export * from "./family-workspace";
 export * from "./family-workspace-comparison";
 export * from "./assisted-living-identity";
+export * from "./assisted-living-presentation";

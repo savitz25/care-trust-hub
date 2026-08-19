@@ -6,21 +6,39 @@ import {
   FAMILY_WORKSPACE_MAX_FACILITIES,
   FAMILY_WORKSPACE_PATH,
   parseFamilyWorkspace,
+  type WorkspaceProviderKind,
 } from "@care/domain";
 import {
+  addAssistedLivingProviderToWorkspace,
   addFacilityToWorkspace,
   familyWorkspaceSnapshot,
   subscribeFamilyWorkspace,
 } from "./family-workspace-storage";
 
-export function WorkspaceAddButton({ ccn, compact = false }: { ccn: string; compact?: boolean }) {
+export function WorkspaceAddButton({
+  ccn,
+  provider,
+  compact = false,
+}: {
+  ccn?: string;
+  provider?: { kind: WorkspaceProviderKind; id: string };
+  compact?: boolean;
+}) {
+  const target = provider ?? (ccn ? { kind: "cms" as const, id: ccn.trim().toUpperCase() } : null);
   const raw = useSyncExternalStore(subscribeFamilyWorkspace, familyWorkspaceSnapshot, () => "");
   const workspace = useMemo(() => parseFamilyWorkspace(raw || null), [raw]);
-  const present = workspace.entries.some((entry) => entry.ccn === ccn.trim().toUpperCase());
+  const present = Boolean(
+    target &&
+      workspace.entries.some((entry) => entry.kind === target.kind && entry.id === target.id),
+  );
   const [message, setMessage] = useState<string | null>(null);
 
   function add() {
-    const result = addFacilityToWorkspace(ccn);
+    if (!target) return;
+    const result =
+      target.kind === "assisted_living"
+        ? addAssistedLivingProviderToWorkspace(target.id)
+        : addFacilityToWorkspace(target.id);
     if (!result.ok && result.reason === "max_reached") {
       setMessage(
         `Workspace is full (${FAMILY_WORKSPACE_MAX_FACILITIES} of ${FAMILY_WORKSPACE_MAX_FACILITIES}).`,
@@ -35,6 +53,8 @@ export function WorkspaceAddButton({ ccn, compact = false }: { ccn: string; comp
       );
     }
   }
+
+  if (!target) return null;
 
   if (present) {
     return (

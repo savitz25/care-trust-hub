@@ -58,5 +58,5 @@ describe("family workspace browser storage", () => {
 });
 
 function parseReload(): string[] {
-  return readFamilyWorkspace().entries.map((entry) => entry.ccn);
+  return readFamilyWorkspace().entries.map((entry) => entry.id);
 }

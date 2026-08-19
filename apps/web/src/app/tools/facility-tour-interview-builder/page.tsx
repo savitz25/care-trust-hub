@@ -7,7 +7,10 @@ import {
   isFacilityInterviewBuilderEnabled,
   isSeniorCareCostPlannerEnabled,
 } from "@/server/care/feature-flags";
-import { loadInterviewFacilityContext } from "@/server/care/interview-facility-context";
+import {
+  loadAssistedLivingInterviewContext,
+  loadInterviewFacilityContext,
+} from "@/server/care/interview-facility-context";
 
 export const dynamic = "force-dynamic";
 
@@ -16,13 +19,13 @@ const BUILDER_PATH = "/tools/facility-tour-interview-builder";
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: Promise<{ ccn?: string }>;
+  searchParams: Promise<{ ccn?: string; al?: string }>;
 }): Promise<Metadata> {
   if (!isFacilityInterviewBuilderEnabled()) {
     return { title: "Tool not found", robots: publicRobots(false) };
   }
-  const { ccn } = await searchParams;
-  const facilitySpecific = Boolean(ccn?.trim());
+  const { ccn, al } = await searchParams;
+  const facilitySpecific = Boolean(ccn?.trim() || al?.trim());
   return {
     title: "Build your care-provider interview checklist",
     description:
@@ -35,11 +38,13 @@ export async function generateMetadata({
 export default async function FacilityTourInterviewBuilderPage({
   searchParams,
 }: {
-  searchParams: Promise<{ ccn?: string }>;
+  searchParams: Promise<{ ccn?: string; al?: string }>;
 }) {
   if (!isFacilityInterviewBuilderEnabled()) notFound();
-  const { ccn } = await searchParams;
-  const facility = await loadInterviewFacilityContext(ccn);
+  const { ccn, al } = await searchParams;
+  const facility = al
+    ? await loadAssistedLivingInterviewContext(al)
+    : await loadInterviewFacilityContext(ccn);
   return (
     <div className="page-shell">
       <FacilityInterviewBuilder
@@ -47,6 +52,7 @@ export default async function FacilityTourInterviewBuilderPage({
         facilityCcn={facility?.ccn ?? null}
         facilityHref={facility?.facilityHref ?? null}
         facilityEvidence={facility?.evidence ?? null}
+        assistedLivingEvidence={facility?.assistedLivingEvidence ?? null}
         navigatorEnabled={isCareNeedsNavigatorEnabled()}
         plannerEnabled={isSeniorCareCostPlannerEnabled()}
       />

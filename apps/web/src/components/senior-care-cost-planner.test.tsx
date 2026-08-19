@@ -39,7 +39,7 @@ describe("senior care cost planner", () => {
     fireEvent.click(screen.getByLabelText("Memory care"));
     expect(screen.getByText(/will not invent a memory-care premium/i)).toBeInTheDocument();
     expect(
-      screen.getByText(/does not yet have equivalent national provider-level/i),
+      screen.getByText(/does not publish facility-specific prices/i),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("link", { name: /Search nursing facilities near me/i }),

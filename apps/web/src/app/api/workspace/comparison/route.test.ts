@@ -42,7 +42,7 @@ describe("workspace comparison API", () => {
       }),
     );
     expect(response.status).toBe(200);
-    expect(loadFamilyWorkspaceComparison).toHaveBeenCalledWith(["015009", "015010"]);
+    expect(loadFamilyWorkspaceComparison).toHaveBeenCalledWith(["015009", "015010"], []);
     expect(response.headers.get("Cache-Control")).toBe("no-store");
   });
 });

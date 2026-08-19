@@ -39,9 +39,11 @@ function stepComplete(stepId: string, answers: CareNeedsAnswers): boolean {
 export function CareNeedsNavigator({
   plannerEnabled = false,
   interviewBuilderEnabled = false,
+  assistedLivingEnabled = false,
 }: {
   plannerEnabled?: boolean;
   interviewBuilderEnabled?: boolean;
+  assistedLivingEnabled?: boolean;
 }) {
   const headingId = useId();
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -234,6 +236,26 @@ export function CareNeedsNavigator({
             <li key={question}>{question}</li>
           ))}
         </ul>
+
+        {assistedLivingEnabled &&
+        investigating.some(
+          (item) => item.setting === "assisted_living" || item.setting === "memory_care",
+        ) ? (
+          <aside className="care-navigator__bridge">
+            <h2>Research assisted-living providers</h2>
+            <p>Current provider evidence: CA, NY, TX.</p>
+            <Link
+              className="button button--primary"
+              href={
+                investigating.some((item) => item.setting === "memory_care")
+                  ? "/assisted-living?search=1&memory=1"
+                  : "/assisted-living"
+              }
+            >
+              Research assisted-living providers →
+            </Link>
+          </aside>
+        ) : null}
 
         {result.showSkilledNursingBridge && (
           <aside className="care-navigator__bridge">

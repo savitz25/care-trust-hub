@@ -12,6 +12,7 @@ import {
   type InterviewChecklist,
   type InterviewChecklistQuestion,
   type InterviewConcernTag,
+  type AssistedLivingInterviewEvidence,
   type PublishedFacilityInterviewEvidence,
 } from "@care/domain";
 import { PrintButton } from "./print-button";
@@ -43,6 +44,7 @@ export interface FacilityInterviewBuilderProps {
   facilityCcn?: string | null;
   facilityHref?: string | null;
   facilityEvidence?: PublishedFacilityInterviewEvidence | null;
+  assistedLivingEvidence?: AssistedLivingInterviewEvidence | null;
   navigatorEnabled?: boolean;
   plannerEnabled?: boolean;
 }
@@ -192,12 +194,13 @@ export function FacilityInterviewBuilder({
   facilityCcn = null,
   facilityHref = null,
   facilityEvidence = null,
+  assistedLivingEvidence = null,
   navigatorEnabled = false,
   plannerEnabled = false,
 }: FacilityInterviewBuilderProps) {
   const headingId = useId();
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const facilityMode = Boolean(facilityEvidence);
+  const facilityMode = Boolean(facilityEvidence || assistedLivingEvidence);
   const seedJson = useSyncExternalStore(
     subscribeInterviewBuilderSeed,
     interviewBuilderSeedSnapshot,
@@ -207,9 +210,13 @@ export function FacilityInterviewBuilder({
   const [phase, setPhase] = useState<Phase>("setup");
   const [settingOverride, setSettingOverride] = useState<InterviewCareSetting | null>(null);
   const [concernsOverride, setConcernsOverride] = useState<InterviewConcernTag[] | null>(null);
-  const careSetting = facilityMode
+  const careSetting = facilityEvidence
     ? "skilled_nursing"
-    : (settingOverride ?? seed.setting ?? "skilled_nursing");
+    : assistedLivingEvidence
+      ? assistedLivingEvidence.explicitMemory
+        ? "memory_care"
+        : "assisted_living"
+      : (settingOverride ?? seed.setting ?? "skilled_nursing");
   const concerns = useMemo(
     () => concernsOverride ?? [...(seed.concerns ?? [])],
     [concernsOverride, seed.concerns],
@@ -228,9 +235,11 @@ export function FacilityInterviewBuilder({
     return buildInterviewChecklist({
       careSetting,
       concernTags: concerns,
-      facilityEvidence: facilityMode ? facilityEvidence : null,
+      facilityEvidence: facilityEvidence && facilityMode ? facilityEvidence : null,
+      assistedLivingEvidence:
+        assistedLivingEvidence && facilityMode ? assistedLivingEvidence : null,
     });
-  }, [phase, careSetting, concerns, facilityEvidence, facilityMode]);
+  }, [phase, careSetting, concerns, facilityEvidence, assistedLivingEvidence, facilityMode]);
 
   function toggleConcern(tag: InterviewConcernTag) {
     setConcernsOverride((current) => {

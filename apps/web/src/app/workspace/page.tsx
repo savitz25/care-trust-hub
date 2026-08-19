@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { FamilyComparisonWorkspace } from "@/components/family-comparison-workspace";
 import { publicRobots } from "@/config/deployment";
 import {
+  isAssistedLivingIntelligenceEnabled,
   isCareNeedsNavigatorEnabled,
   isFamilyComparisonWorkspaceEnabled,
   isFacilityInterviewBuilderEnabled,
@@ -31,6 +32,7 @@ export default function FamilyComparisonWorkspacePage() {
         navigatorEnabled={isCareNeedsNavigatorEnabled()}
         plannerEnabled={isSeniorCareCostPlannerEnabled()}
         interviewBuilderEnabled={isFacilityInterviewBuilderEnabled()}
+        assistedLivingEnabled={isAssistedLivingIntelligenceEnabled()}
       />
     </div>
   );

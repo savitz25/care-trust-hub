@@ -49,6 +49,7 @@ export default async function Home({
   const plannerEnabled = process.env.CARE_ENABLE_SENIOR_CARE_COST_PLANNER === "true";
   const interviewBuilderEnabled = process.env.CARE_ENABLE_FACILITY_INTERVIEW_BUILDER === "true";
   const workspaceEnabled = process.env.CARE_ENABLE_FAMILY_COMPARISON_WORKSPACE === "true";
+  const assistedLivingEnabled = process.env.CARE_ENABLE_ASSISTED_LIVING_INTELLIGENCE === "true";
   const sp = searchParams ? await searchParams : {};
   const journeyModule = resolveSeniorJourneyModule(parseNetworkJourney(sp), "home");
   const entries = paths.map((path) =>
@@ -146,6 +147,22 @@ export default async function Home({
             </p>
             <a className="button button--secondary" href="/tools/facility-tour-interview-builder">
               Build your interview checklist →
+            </a>
+          </section>
+        ) : null}
+        {assistedLivingEnabled ? (
+          <section className="entry-section" aria-labelledby="al-home-title">
+            <div className="section-heading">
+              <p className="eyebrow">Research assisted living</p>
+              <h2 id="al-home-title">State-verified listings in California, New York, and Texas</h2>
+            </div>
+            <p>
+              SeniorTrustHub publishes official assisted-living and residential-care identities for
+              California, New York, and Texas. This is not national coverage and it does not score
+              providers.
+            </p>
+            <a className="button button--secondary" href="/assisted-living">
+              Search assisted living →
             </a>
           </section>
         ) : null}

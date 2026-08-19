@@ -57,7 +57,9 @@ export type FacilityEvidenceTrigger =
   | "recent_penalty"
   | "ownership_change"
   | "multi_facility_org"
-  | "state_enforcement";
+  | "state_enforcement"
+  | "explicit_memory_designation"
+  | "ca_probation";
 
 export type InterviewEvidencePathHint =
   | "staffing"
@@ -647,6 +649,32 @@ export const INTERVIEW_QUESTION_LIBRARY: readonly InterviewQuestionDefinition[] 
     evidencePathHint: "state",
     evidenceSummaryTemplate:
       "A published state record includes an enforcement or complaint-inspection event.",
+  },
+  {
+    id: "al-explicit-memory",
+    careSettings: ["assisted_living", "memory_care"],
+    category: "memory",
+    text: "The regulator identifies this provider with a dementia/memory-care designation. Ask what staffing, training, supervision, and secured-care practices apply to residents receiving that service.",
+    whyAsk:
+      "An official memory designation is not the same as a quality score. Ask how the service is actually delivered.",
+    triggerTags: ["memory"],
+    defaultPriority: "MUST_ASK",
+    evidenceTrigger: "explicit_memory_designation",
+    evidencePathHint: "state",
+    evidenceSummaryTemplate: "The regulator publishes an explicit memory or dementia designation.",
+  },
+  {
+    id: "al-ca-probation",
+    careSettings: ["assisted_living", "memory_care"],
+    category: "inspections",
+    text: "The regulator currently lists this facility as On Probation. Ask what led to that status, what corrective actions are required, and how families can review the regulator's current information.",
+    whyAsk:
+      "Probation is an official California licensing status. It is not a SeniorTrustHub rating.",
+    triggerTags: ["inspections"],
+    defaultPriority: "MUST_ASK",
+    evidenceTrigger: "ca_probation",
+    evidencePathHint: "state",
+    evidenceSummaryTemplate: "California currently lists this facility as On Probation.",
   },
 ];
 

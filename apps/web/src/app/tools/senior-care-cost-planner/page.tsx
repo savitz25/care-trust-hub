@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { SeniorCareCostPlanner } from "@/components/senior-care-cost-planner";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import {
+  isAssistedLivingIntelligenceEnabled,
   isCareNeedsNavigatorEnabled,
   isFacilityInterviewBuilderEnabled,
   isSeniorCareCostPlannerEnabled,
@@ -32,6 +33,7 @@ export default function SeniorCareCostPlannerPage() {
       <SeniorCareCostPlanner
         navigatorEnabled={isCareNeedsNavigatorEnabled()}
         interviewBuilderEnabled={isFacilityInterviewBuilderEnabled()}
+        assistedLivingEnabled={isAssistedLivingIntelligenceEnabled()}
       />
     </div>
   );

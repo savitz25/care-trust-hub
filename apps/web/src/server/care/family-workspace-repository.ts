@@ -6,12 +6,19 @@ import {
   normalizeWorkspaceCcn,
   selectPublishedStateIntelligence,
   type FamilyWorkspaceComparison,
+  type PublishedWorkspaceAssistedLivingInput,
   type PublishedWorkspaceFacilityInput,
   type ResolutionState,
+  type WorkspaceProviderKind,
+  assistedLivingStatusCopy,
+  memoryCarePublicLabel,
+  publishedAssistedLivingPath,
+  regulatorDisplayName,
 } from "@care/domain";
 import { organizationHref, providerHref } from "./consumer";
 import { getCareDatabasePool } from "./db";
 import {
+  isAssistedLivingIntelligenceEnabled,
   isFacilityHistoryEnabled,
   isOwnershipIntelligenceV2Enabled,
   isRealProviderUiEnabled,
@@ -19,6 +26,7 @@ import {
   isStateRegulatoryIntelligenceEnabled,
 } from "./feature-flags";
 import { getPublishedFacilityHistoriesByCcns } from "./history-repository";
+import { getPublishedAssistedLivingProvider } from "./assisted-living-publication";
 import { getDecisionSummariesByCcns, getProvidersByCcns } from "./repository";
 
 interface StateClaimRow {
@@ -128,14 +136,19 @@ async function loadPublishedOrganizationsByCcns(
 
 export async function loadFamilyWorkspaceComparison(
   rawCcns: readonly string[],
+  rawItems: readonly { kind: WorkspaceProviderKind; id: string }[] = [],
 ): Promise<FamilyWorkspaceComparison> {
-  const ccns = normalizeCcns(rawCcns);
-  if (ccns.length === 0 || !isRealProviderUiEnabled()) {
+  const assistedIds = rawItems
+    .filter((item) => item.kind === "assisted_living")
+    .map((item) => item.id);
+  const itemCcns = rawItems.filter((item) => item.kind === "cms").map((item) => item.id);
+  const ccns = normalizeCcns([...rawCcns, ...itemCcns]);
+  if (ccns.length === 0 && assistedIds.length === 0) {
     return buildFamilyWorkspaceComparison([]);
   }
 
-  const providers = await getProvidersByCcns(ccns);
-  if (providers.length === 0) return buildFamilyWorkspaceComparison([]);
+  const providers =
+    ccns.length > 0 && isRealProviderUiEnabled() ? await getProvidersByCcns(ccns) : [];
 
   const found = providers.map((provider) => provider.ccn);
   const [summaries, histories, stateByCcn, organizations] = await Promise.all([
@@ -190,5 +203,33 @@ export async function loadFamilyWorkspaceComparison(
     };
   });
 
-  return buildFamilyWorkspaceComparison(inputs);
+  const assistedLiving: PublishedWorkspaceAssistedLivingInput[] = [];
+  if (isAssistedLivingIntelligenceEnabled()) {
+    for (const id of assistedIds.slice(0, FAMILY_WORKSPACE_MAX_FACILITIES)) {
+      const provider = await getPublishedAssistedLivingProvider(id);
+      if (!provider) continue;
+      const status = assistedLivingStatusCopy(provider);
+      assistedLiving.push({
+        id: provider.id,
+        facilityName: provider.officialName,
+        city: provider.officialCity,
+        state: provider.stateCode,
+        facilityHref: publishedAssistedLivingPath({
+          stateCode: provider.stateCode,
+          id: provider.id,
+          officialName: provider.officialName,
+        }),
+        officialType: provider.officialType,
+        licensedCapacity: provider.licensedCapacity,
+        memoryLabel: memoryCarePublicLabel(provider.memoryDesignation),
+        statusHeadline: status.headline,
+        statusDetail: status.detail,
+        licenseId: provider.licenseId ?? provider.sourceFacilityId,
+        regulator: regulatorDisplayName(provider.stateCode),
+        organizations: provider.organizations,
+      });
+    }
+  }
+
+  return buildFamilyWorkspaceComparison(inputs, new Date(), assistedLiving);
 }

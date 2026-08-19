@@ -13,8 +13,19 @@ export async function POST(request: Request) {
   } catch {
     return Response.json({ error: "invalid_request" }, { status: 400 });
   }
-  const rawCcns = body && typeof body === "object" && "ccns" in body ? body.ccns : [];
-  const ccns = Array.isArray(rawCcns) ? rawCcns.filter((value) => typeof value === "string") : [];
-  const comparison = await loadFamilyWorkspaceComparison(ccns);
+  const record = body && typeof body === "object" ? (body as Record<string, unknown>) : {};
+  const rawItems = Array.isArray(record.items) ? record.items : [];
+  const items = rawItems.flatMap((item) => {
+    if (!item || typeof item !== "object") return [];
+    const row = item as { kind?: unknown; id?: unknown };
+    if (typeof row.id !== "string") return [];
+    if (row.kind === "assisted_living" || row.kind === "cms") {
+      return [{ kind: row.kind as "assisted_living" | "cms", id: row.id }];
+    }
+    return [];
+  });
+  const rawCcns = Array.isArray(record.ccns) ? record.ccns : [];
+  const ccns = rawCcns.filter((value): value is string => typeof value === "string");
+  const comparison = await loadFamilyWorkspaceComparison(ccns, items);
   return Response.json(comparison, { headers: { "Cache-Control": "no-store" } });
 }

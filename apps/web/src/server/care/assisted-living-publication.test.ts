@@ -122,4 +122,16 @@ describe("assisted living consumer publication reads", () => {
     });
     expect(JSON.stringify(published)).not.toMatch(/raw_|ingest|fingerprint/i);
   });
+
+  it("filters memory-supportive search by explicit designation, not facility name", async () => {
+    isAssistedLivingIntelligenceEnabled.mockReturnValue(true);
+    query.mockResolvedValue({ rows: [] });
+    const { searchPublishedAssistedLivingProviders } = await import(
+      "./assisted-living-publication"
+    );
+    await searchPublishedAssistedLivingProviders({ explicitMemory: true, city: "Dallas" });
+    expect(query.mock.calls[0][0]).toContain("explicit_memory_or_dementia_license");
+    expect(query.mock.calls[0][0]).not.toMatch(/official_name.*memory|LIKE.*[Mm]emory/i);
+    expect(query.mock.calls[0][0]).not.toMatch(/google|places|geocode/i);
+  });
 });

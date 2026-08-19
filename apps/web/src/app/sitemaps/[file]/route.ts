@@ -1,11 +1,14 @@
 import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
 import { chainHref, organizationHref, providerSlug } from "@/server/care/consumer";
+import { publishedAssistedLivingPath } from "@care/domain";
 import {
+  isAssistedLivingIntelligenceEnabled,
   isCareNeedsNavigatorEnabled,
   isFacilityInterviewBuilderEnabled,
   isOwnershipIntelligenceV2Enabled,
   isSeniorCareCostPlannerEnabled,
 } from "@/server/care/feature-flags";
+import { getAssistedLivingSitemapPage } from "@/server/care/assisted-living-publication";
 import {
   getChainSitemapRows,
   getFacilitySitemapPage,
@@ -44,6 +47,14 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
       ...(isCareNeedsNavigatorEnabled() ? ["/tools/care-needs-navigator"] : []),
       ...(isSeniorCareCostPlannerEnabled() ? ["/tools/senior-care-cost-planner"] : []),
       ...(isFacilityInterviewBuilderEnabled() ? ["/tools/facility-tour-interview-builder"] : []),
+      ...(isAssistedLivingIntelligenceEnabled()
+        ? [
+            "/assisted-living",
+            "/assisted-living/california",
+            "/assisted-living/new-york",
+            "/assisted-living/texas",
+          ]
+        : []),
     ];
     return response(
       urlset(
@@ -76,6 +87,29 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
             (row) =>
               `<url><loc>${new URL(organizationHref({ organizationId: row.organization_id, organizationName: row.display_name }), productionOrigin).href}</loc><lastmod>${row.derived_at.toISOString().slice(0, 10)}</lastmod></url>`,
           )
+          .join(""),
+      ),
+    );
+  }
+  const assistedMatch = /^assisted-living-(\d+)\.xml$/.exec(file);
+  if (assistedMatch) {
+    if (!isAssistedLivingIntelligenceEnabled()) return new Response("Not found", { status: 404 });
+    const rows = await getAssistedLivingSitemapPage(Number(assistedMatch[1]));
+    if (!rows.length) return new Response("Not found", { status: 404 });
+    return response(
+      urlset(
+        rows
+          .map((row) => {
+            const loc = new URL(
+              publishedAssistedLivingPath({
+                stateCode: row.state_code,
+                id: row.id,
+                officialName: row.official_name,
+              }),
+              productionOrigin,
+            ).href;
+            return `<url><loc>${loc}</loc><lastmod>${row.retrieved_at.toISOString().slice(0, 10)}</lastmod></url>`;
+          })
           .join(""),
       ),
     );

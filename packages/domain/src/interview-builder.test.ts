@@ -400,12 +400,43 @@ describe("library and copy safety", () => {
       ),
     ).toBe(true);
     expect(
-      INTERVIEW_QUESTION_LIBRARY.filter((question) => question.evidenceTrigger).every((question) =>
+      INTERVIEW_QUESTION_LIBRARY.filter(
+        (question) =>
+          question.evidenceTrigger &&
+          question.evidenceTrigger !== "explicit_memory_designation" &&
+          question.evidenceTrigger !== "ca_probation",
+      ).every((question) =>
         question.careSettings.every(
           (setting) => setting === "skilled_nursing" || setting === "short_term_rehab",
         ),
       ),
     ).toBe(true);
+  });
+
+  it("adds assisted-living memory and probation questions from published evidence only", () => {
+    const checklist = buildInterviewChecklist({
+      careSetting: "assisted_living",
+      assistedLivingEvidence: {
+        providerId: "11111111-1111-4111-8111-111111111111",
+        facilityName: "Example Residence",
+        officialType: "Adult Home",
+        licensedCapacity: 80,
+        regulatorName: "New York State Department of Health",
+        memoryDesignation: "explicit_memory_or_dementia_license",
+        explicitMemory: true,
+        onProbation: true,
+        regulatorStatus: "ON PROBATION",
+      },
+    });
+    expect(checklist.firedEvidenceTriggers).toEqual(
+      expect.arrayContaining(["explicit_memory_designation", "ca_probation"]),
+    );
+    expect(
+      checklist.questions.some((question) =>
+        /dementia\/memory-care designation/i.test(question.text),
+      ),
+    ).toBe(true);
+    expect(checklist.questions.some((question) => /On Probation/i.test(question.text))).toBe(true);
   });
 
   it("does not dump one inspection into many what-went-wrong questions", () => {

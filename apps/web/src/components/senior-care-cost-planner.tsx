@@ -68,9 +68,11 @@ function numberOrEmpty(value: string): number | undefined {
 export function SeniorCareCostPlanner({
   navigatorEnabled = false,
   interviewBuilderEnabled = false,
+  assistedLivingEnabled = false,
 }: {
   navigatorEnabled?: boolean;
   interviewBuilderEnabled?: boolean;
+  assistedLivingEnabled?: boolean;
 }) {
   const headingId = useId();
   const storedSelection = useSyncExternalStore(
@@ -692,10 +694,17 @@ export function SeniorCareCostPlanner({
               <li>How often can rates change?</li>
             </ul>
             <p>
-              SeniorTrustHub does not yet have equivalent national provider-level assisted-living or
-              memory-care evidence coverage. Use these questions with local communities. This is not
-              the same as the CMS-certified nursing facility directory.
+              SeniorTrustHub does not publish facility-specific prices. Provider research for
+              assisted living currently covers California, New York, and Texas licensing evidence
+              only.
             </p>
+            {assistedLivingEnabled ? (
+              <p>
+                <Link className="button button--secondary" href="/assisted-living">
+                  Research providers →
+                </Link>
+              </p>
+            ) : null}
           </>
         )}
         {(selected.includes("skilled_nursing") || selected.includes("short_term_rehab")) && (

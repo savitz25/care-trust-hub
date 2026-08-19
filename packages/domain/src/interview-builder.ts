@@ -43,7 +43,22 @@ export const INTERVIEW_DISCLAIMER =
   "This checklist is educational. It does not rate a facility, recommend a provider, diagnose a condition, or determine that any setting is medically or financially appropriate. Checking a box does not create a score.";
 
 export const ASSISTED_LIVING_MEMORY_TRANSPARENCY =
-  "This checklist is general guidance; SeniorTrustHub does not yet provide equivalent national provider evidence for assisted living/memory care.";
+  "This checklist is general guidance. SeniorTrustHub publishes state-regulator licensing evidence for California, New York, and Texas assisted-living providers, not a national rating.";
+
+export const ASSISTED_LIVING_FACILITY_TRANSPARENCY =
+  "This checklist uses published state licensing evidence for this provider. State inspection and enforcement history is not yet integrated. That absence is not a clean record.";
+
+export interface AssistedLivingInterviewEvidence {
+  readonly providerId: string;
+  readonly facilityName: string;
+  readonly officialType: string;
+  readonly licensedCapacity: number | null;
+  readonly regulatorName: string;
+  readonly memoryDesignation: string;
+  readonly explicitMemory: boolean;
+  readonly onProbation: boolean;
+  readonly regulatorStatus: string | null;
+}
 
 export const HOME_CARE_TRANSPARENCY =
   "This checklist is general guidance for interviewing a home-care agency. SeniorTrustHub does not operate a verified national home-care directory and does not confirm that any agency is licensed or appropriate.";
@@ -376,9 +391,12 @@ function assignDisplayPriority(
 function transparencyNote(
   setting: InterviewCareSetting,
   mode: "general" | "facility",
+  assistedLivingEvidence?: AssistedLivingInterviewEvidence | null,
 ): string | null {
   if (setting === "assisted_living" || setting === "memory_care") {
-    return ASSISTED_LIVING_MEMORY_TRANSPARENCY;
+    return assistedLivingEvidence
+      ? ASSISTED_LIVING_FACILITY_TRANSPARENCY
+      : ASSISTED_LIVING_MEMORY_TRANSPARENCY;
   }
   if (setting === "home_care") return HOME_CARE_TRANSPARENCY;
   if (mode === "facility") return FACILITY_RECORD_NOTE;
@@ -389,14 +407,22 @@ export function buildInterviewChecklist(input: {
   careSetting: InterviewCareSetting;
   concernTags?: readonly InterviewConcernTag[];
   facilityEvidence?: PublishedFacilityInterviewEvidence | null;
+  assistedLivingEvidence?: AssistedLivingInterviewEvidence | null;
 }): InterviewChecklist {
   const concernTags = uniqueConcerns(input.concernTags ?? []);
   const facilityEvidence =
     input.careSetting === "skilled_nursing" || input.careSetting === "short_term_rehab"
       ? (input.facilityEvidence ?? null)
       : null;
+  const assistedLivingEvidence =
+    input.careSetting === "assisted_living" || input.careSetting === "memory_care"
+      ? (input.assistedLivingEvidence ?? null)
+      : null;
   const triggers = facilityEvidence ? firedEvidenceTriggers(facilityEvidence) : [];
-  const mode: "general" | "facility" = facilityEvidence ? "facility" : "general";
+  if (assistedLivingEvidence?.explicitMemory) triggers.push("explicit_memory_designation");
+  if (assistedLivingEvidence?.onProbation) triggers.push("ca_probation");
+  const mode: "general" | "facility" =
+    facilityEvidence || assistedLivingEvidence ? "facility" : "general";
 
   const evidenceDefinitions = INTERVIEW_QUESTION_LIBRARY.filter(
     (definition) =>
@@ -461,14 +487,14 @@ export function buildInterviewChecklist(input: {
     careSettingLabel: CARE_SETTING_LABELS[input.careSetting],
     concernTags,
     mode,
-    facilityName: facilityEvidence?.facilityName ?? null,
+    facilityName: facilityEvidence?.facilityName ?? assistedLivingEvidence?.facilityName ?? null,
     facilityCcn: facilityEvidence?.ccn ?? null,
     questions,
     mustAsk: questions.filter((question) => question.priority === "MUST_ASK"),
     important: questions.filter((question) => question.priority === "IMPORTANT"),
     additional: questions.filter((question) => question.priority === "OPTIONAL"),
     firedEvidenceTriggers: triggers,
-    transparencyNote: transparencyNote(input.careSetting, mode),
+    transparencyNote: transparencyNote(input.careSetting, mode, assistedLivingEvidence),
     disclaimer: INTERVIEW_DISCLAIMER,
   };
 }
