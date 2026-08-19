@@ -346,7 +346,7 @@ export function FamilyComparisonWorkspace({
     return () => {
       cancelled = true;
     };
-  }, [ccnKey]);
+  }, [ccnKey, workspace.entries]);
 
   const entryByCcn = useMemo(
     () => new Map(workspace.entries.map((entry) => [entry.id, entry])),

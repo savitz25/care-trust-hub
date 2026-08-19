@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { TrustStrip, RealDataNotice, SyntheticDataNotice } from "@/components/evidence";
 import { JourneyNextStep } from "@/components/journey-next-step";
 import { brand } from "@/config/brand";
@@ -161,9 +162,9 @@ export default async function Home({
               California, New York, and Texas. This is not national coverage and it does not score
               providers.
             </p>
-            <a className="button button--secondary" href="/assisted-living">
+            <Link className="button button--secondary" href="/assisted-living">
               Search assisted living →
-            </a>
+            </Link>
           </section>
         ) : null}
         {workspaceEnabled ? (
