@@ -97,6 +97,7 @@ jobs:
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0011_trust_participation.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0012_facility_intelligence_evidence_identity.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0013_facility_identity_pilot_manifest.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0020_assisted_living_pilot.sql
       - name: Verify migration objects
         run: |
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 <<'SQL'
@@ -113,6 +114,8 @@ jobs:
           SELECT to_regclass('public.facility_identity_candidate') IS NOT NULL AS facility_candidate_exists;
           SELECT to_regclass('public.facility_review_item') IS NOT NULL AS facility_review_exists;
           SELECT to_regclass('public.facility_external_request_cache') IS NOT NULL AS facility_cache_exists;
+          SELECT to_regclass('public.assisted_living_provider') IS NOT NULL AS assisted_living_provider_exists;
+          SELECT to_regclass('public.assisted_living_organization_party') IS NOT NULL AS assisted_living_party_exists;
           SELECT EXISTS (
             SELECT 1 FROM information_schema.columns
             WHERE table_name='facility_intelligence_run_provider'

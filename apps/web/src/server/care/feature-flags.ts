@@ -115,7 +115,7 @@ export function isFamilyComparisonWorkspaceEnabled(
   return environment.CARE_ENABLE_FAMILY_COMPARISON_WORKSPACE === "true";
 }
 
-/** Fail-closed assisted-living intelligence. Independent and unpublished until Task 022. */
+/** Fail-closed assisted-living intelligence. Independent and unpublished until Task 022B. */
 export function isAssistedLivingIntelligenceEnabled(
   environment: Readonly<Record<string, string | undefined>> = process.env,
 ): boolean {

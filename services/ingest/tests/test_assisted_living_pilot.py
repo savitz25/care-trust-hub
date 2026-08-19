@@ -1,5 +1,6 @@
 from care_ingest.assisted_living_pilot import (
     classify_memory,
+    classify_publication,
     ingest_pilot_states,
     parse_california_rcfe,
     parse_new_york_acf,
@@ -55,6 +56,8 @@ def test_california_parser_dedupes_and_keeps_licensee_separate() -> None:
     assert verified["licensed_capacity"] == 40
     assert verified["memory_designation"] == "not_reported"
     assert publication_eligible(verified) is True
+    assert verified["publication_state"] == "PUBLISHABLE_CURRENT"
+    assert verified["discovery_eligible"] is True
 
 
 def test_new_york_snalr_is_explicit_memory() -> None:
@@ -89,6 +92,11 @@ def test_new_york_snalr_is_explicit_memory() -> None:
     assert record["licensed_capacity"] == 80
     assert record["operator"] == "Example Operator Inc"
     assert record["licensee"] is None
+    assert record["license_status"] is None
+    assert record["license_status_reported"] is False
+    assert record["consumer_status"] is None
+    assert record["source_directory_context"] == "current_hfis_listing"
+    assert record["publication_state"] == "PUBLISHABLE_CURRENT"
 
 
 def test_texas_keeps_owner_and_management_separate() -> None:
@@ -116,6 +124,9 @@ def test_texas_keeps_owner_and_management_separate() -> None:
     assert record["owner"] == "EXAMPLE OWNER LLC"
     assert record["management_company"] == "EXAMPLE MGMT"
     assert record["memory_designation"] == "specialty_endorsement"
+    assert record["source_directory_context"] == "active_alf_directory"
+    assert record["publication_state"] == "PUBLISHABLE_CURRENT"
+    assert record["consumer_status"] == "LICENSED"
 
 
 def test_idempotent_pilot_ingest_and_no_google() -> None:
@@ -146,3 +157,63 @@ def test_idempotent_pilot_ingest_and_no_google() -> None:
     assert report["idempotent"] is True
     assert report["google_places_requests"] == 0
     assert report["states"]["CA"]["canonical_providers"] == 2
+    assert "discovery_eligible" in report["states"]["CA"]
+
+
+def _ready(state: str, **overrides: object) -> dict:
+    record = {
+        "state_code": state,
+        "identity_state": "VERIFIED",
+        "official_name": "Example Facility",
+        "official_street": "1 Main St",
+        "official_city": "Example",
+        "official_zip": "99999",
+        "consumer_category": "residential_care",
+        "retrieved_at": "2026-08-18T00:00:00Z",
+    }
+    record.update(overrides)
+    return record
+
+
+def test_california_publication_gates() -> None:
+    licensed = classify_publication(_ready("CA", license_status="LICENSED"))
+    assert licensed["publication_state"] == "PUBLISHABLE_CURRENT"
+    assert licensed["discovery_eligible"] is True
+    closed = classify_publication(_ready("CA", license_status="CLOSED"))
+    assert closed["publication_state"] == "HISTORICAL_ONLY"
+    assert closed["discovery_eligible"] is False
+    pending = classify_publication(_ready("CA", license_status="PENDING"))
+    assert pending["publication_state"] == "NOT_CURRENTLY_PUBLISHABLE"
+    assert pending["discovery_eligible"] is False
+    probation = classify_publication(_ready("CA", license_status="ON PROBATION"))
+    assert probation["publication_state"] == "PUBLISHABLE_WITH_STATUS"
+    assert probation["consumer_status"] == "ON PROBATION"
+    assert probation["discovery_eligible"] is True
+
+
+def test_new_york_does_not_invent_status() -> None:
+    decision = classify_publication(_ready("NY", license_status="Active"))
+    assert decision["license_status_reported"] is False
+    assert decision["consumer_status"] is None
+    assert decision["source_directory_context"] == "current_hfis_listing"
+    assert decision["publication_state"] == "PUBLISHABLE_CURRENT"
+
+
+def test_texas_preserves_active_directory_context() -> None:
+    decision = classify_publication(_ready("TX", license_status="LICENSED"))
+    assert decision["source_directory_context"] == "active_alf_directory"
+    assert decision["publication_state"] == "PUBLISHABLE_CURRENT"
+    assert decision["consumer_status"] == "LICENSED"
+
+
+def test_memory_name_only_stays_not_reported() -> None:
+    assert classify_memory(facility_name="Oak Memory Care Villa") == "not_reported"
+
+
+def test_qa_sample_flags_only_mismatched_identity_keys() -> None:
+    from care_ingest.assisted_living_pilot import qa_publication_sample
+
+    records = parse_california_rcfe(CA_CSV, retrieved_at="2026-08-18T00:00:00Z").records
+    report = qa_publication_sample(records)
+    assert report["critical_wrong_identities"] == 0
+    assert report["sample_size"]["CA"] >= 1

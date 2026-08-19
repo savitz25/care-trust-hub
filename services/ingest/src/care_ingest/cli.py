@@ -124,6 +124,16 @@ def build_parser() -> argparse.ArgumentParser:
     enforcement.add_argument("state_code", choices=("CA", "NY", "TX", "ALL"))
     enforcement.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     enforcement.add_argument("--timeout", type=float, default=180)
+    persist_al = commands.add_parser(
+        "persist-assisted-living",
+        help="Idempotently persist CA/NY/TX assisted-living pilot identities",
+    )
+    persist_al.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    persist_al.add_argument(
+        "--twice",
+        action="store_true",
+        help="Run persist a second time and report duplicate/update counts",
+    )
     return parser
 
 
@@ -188,6 +198,41 @@ def main(argv: list[str] | None = None) -> int:
                 ).to_json(),
                 end="",
             )
+        return 0
+    if args.command == "persist-assisted-living":
+        if not args.database_url:
+            parser.error("persist-assisted-living requires CARE_DATABASE_URL or --database-url")
+        from datetime import UTC, datetime
+
+        from .assisted_living_database import (
+            audit_assisted_living_database,
+            persist_assisted_living_records,
+        )
+        from .assisted_living_pilot import (
+            load_local_pilot_payloads,
+            parse_pilot_records,
+            qa_publication_sample,
+        )
+
+        retrieved = datetime.now(UTC).isoformat()
+        ca_csv, ny_general, ny_certs, tx_xlsx = load_local_pilot_payloads(data_root)
+        records = parse_pilot_records(ca_csv, ny_general, ny_certs, tx_xlsx, retrieved)
+        first = persist_assisted_living_records(args.database_url, records)
+        second = persist_assisted_living_records(args.database_url, records) if args.twice else None
+        print(
+            json.dumps(
+                {
+                    "retrieved_at": retrieved,
+                    "google_places_requests": 0,
+                    "first": first,
+                    "second": second,
+                    "audit": audit_assisted_living_database(args.database_url),
+                    "qa": qa_publication_sample(records),
+                },
+                indent=2,
+                default=str,
+            )
+        )
         return 0
     if args.command == "ingest-state":
         if not args.database_url:

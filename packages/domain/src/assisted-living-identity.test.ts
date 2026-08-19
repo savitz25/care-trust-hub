@@ -5,6 +5,7 @@ import {
   ASSISTED_LIVING_CANDIDATE_STATES,
   ASSISTED_LIVING_PILOT_STATES,
   assistedLivingExternalKey,
+  classifyAssistedLivingPublication,
   classifyMemoryCareDesignation,
   futureAssistedLivingPath,
   isCmsCcnIdentity,
@@ -139,6 +140,70 @@ describe("assisted living identity foundation", () => {
         officialName: "Example Adult Home",
       }),
     ).toBe("/assisted-living/ny/1234/example-adult-home");
+  });
+
+  it("applies California status gates without treating VERIFIED as currently operating", () => {
+    const ready = {
+      identityState: "VERIFIED" as const,
+      officialName: "Example RCFE",
+      officialStreet: "1 Main St",
+      officialCity: "Sacramento",
+      officialZip: "95814",
+      consumerCategory: "residential_care" as const,
+      retrievedAt: "2026-08-18T00:00:00.000Z",
+    };
+    expect(
+      classifyAssistedLivingPublication({ ...ready, stateCode: "CA", licenseStatus: "LICENSED" }),
+    ).toMatchObject({ publicationState: "PUBLISHABLE_CURRENT", discoveryEligible: true });
+    expect(
+      classifyAssistedLivingPublication({ ...ready, stateCode: "CA", licenseStatus: "CLOSED" }),
+    ).toMatchObject({ publicationState: "HISTORICAL_ONLY", discoveryEligible: false });
+    expect(
+      classifyAssistedLivingPublication({ ...ready, stateCode: "CA", licenseStatus: "PENDING" }),
+    ).toMatchObject({ publicationState: "NOT_CURRENTLY_PUBLISHABLE", discoveryEligible: false });
+    expect(
+      classifyAssistedLivingPublication({
+        ...ready,
+        stateCode: "CA",
+        licenseStatus: "ON PROBATION",
+      }),
+    ).toMatchObject({
+      publicationState: "PUBLISHABLE_WITH_STATUS",
+      consumerStatus: "ON PROBATION",
+      discoveryEligible: true,
+    });
+  });
+
+  it("does not invent New York or Texas status beyond the source", () => {
+    const ready = {
+      identityState: "VERIFIED" as const,
+      officialName: "Example Home",
+      officialStreet: "10 State St",
+      officialCity: "Albany",
+      officialZip: "12207",
+      consumerCategory: "adult_care_home" as const,
+      retrievedAt: "2026-08-18T00:00:00.000Z",
+    };
+    expect(classifyAssistedLivingPublication({ ...ready, stateCode: "NY" })).toMatchObject({
+      publicationState: "PUBLISHABLE_CURRENT",
+      licenseStatusReported: false,
+      consumerStatus: null,
+      sourceDirectoryContext: "current_hfis_listing",
+    });
+    expect(
+      classifyAssistedLivingPublication({
+        ...ready,
+        stateCode: "TX",
+        officialCity: "Austin",
+        officialZip: "78701",
+        consumerCategory: "assisted_living",
+        licenseStatus: "LICENSED",
+      }),
+    ).toMatchObject({
+      publicationState: "PUBLISHABLE_CURRENT",
+      sourceDirectoryContext: "active_alf_directory",
+      consumerStatus: "LICENSED",
+    });
   });
 
   it("has no Google Places dependency", () => {

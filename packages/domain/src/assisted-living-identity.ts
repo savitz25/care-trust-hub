@@ -426,6 +426,152 @@ export function isPublishableAssistedLivingRecord(input: {
   return hasPlace;
 }
 
+export const ASSISTED_LIVING_PUBLICATION_STATES = [
+  "PUBLISHABLE_CURRENT",
+  "PUBLISHABLE_WITH_STATUS",
+  "HISTORICAL_ONLY",
+  "NOT_CURRENTLY_PUBLISHABLE",
+  "REVIEW_REQUIRED",
+] as const;
+export type AssistedLivingPublicationState = (typeof ASSISTED_LIVING_PUBLICATION_STATES)[number];
+
+export interface AssistedLivingPublicationDecision {
+  readonly publicationState: AssistedLivingPublicationState;
+  readonly discoveryEligible: boolean;
+  readonly licenseStatusReported: boolean;
+  readonly sourceDirectoryContext: string;
+  readonly consumerStatus: string | null;
+}
+
+function normalizeOfficialStatus(value: string | null | undefined): string | null {
+  const status = value?.trim();
+  return status || null;
+}
+
+export function classifyAssistedLivingPublication(input: {
+  identityState: ResolutionState;
+  stateCode: string;
+  officialName?: string | null;
+  officialStreet?: string | null;
+  officialCity?: string | null;
+  officialZip?: string | null;
+  consumerCategory?: ConsumerCareCategory | null;
+  retrievedAt?: string | null;
+  licenseStatus?: string | null;
+}): AssistedLivingPublicationDecision {
+  const stateCode = input.stateCode.trim().toUpperCase();
+  const officialStatus = normalizeOfficialStatus(input.licenseStatus);
+  const identityReady = isPublishableAssistedLivingRecord({
+    identityState: input.identityState,
+    officialName: input.officialName,
+    officialStreet: input.officialStreet,
+    officialCity: input.officialCity,
+    officialZip: input.officialZip,
+    consumerCategory: input.consumerCategory,
+    retrievedAt: input.retrievedAt,
+  });
+
+  if (input.identityState === "REVIEW_REQUIRED") {
+    return {
+      publicationState: "REVIEW_REQUIRED",
+      discoveryEligible: false,
+      licenseStatusReported: Boolean(officialStatus),
+      sourceDirectoryContext:
+        stateCode === "TX"
+          ? "active_alf_directory"
+          : stateCode === "NY"
+            ? "current_hfis_listing"
+            : "ccl_listing",
+      consumerStatus: officialStatus,
+    };
+  }
+
+  if (stateCode === "CA") {
+    const caStatus = (officialStatus ?? "").toUpperCase();
+    if (caStatus === "CLOSED") {
+      return {
+        publicationState: "HISTORICAL_ONLY",
+        discoveryEligible: false,
+        licenseStatusReported: true,
+        sourceDirectoryContext: "ccl_listing",
+        consumerStatus: officialStatus,
+      };
+    }
+    if (caStatus === "PENDING") {
+      return {
+        publicationState: "NOT_CURRENTLY_PUBLISHABLE",
+        discoveryEligible: false,
+        licenseStatusReported: true,
+        sourceDirectoryContext: "ccl_listing",
+        consumerStatus: officialStatus,
+      };
+    }
+    if (caStatus === "ON PROBATION") {
+      return {
+        publicationState: identityReady ? "PUBLISHABLE_WITH_STATUS" : "NOT_CURRENTLY_PUBLISHABLE",
+        discoveryEligible: identityReady,
+        licenseStatusReported: true,
+        sourceDirectoryContext: "ccl_listing",
+        consumerStatus: officialStatus,
+      };
+    }
+    if (caStatus === "LICENSED" && identityReady) {
+      return {
+        publicationState: "PUBLISHABLE_CURRENT",
+        discoveryEligible: true,
+        licenseStatusReported: true,
+        sourceDirectoryContext: "ccl_listing",
+        consumerStatus: officialStatus,
+      };
+    }
+    return {
+      publicationState: "NOT_CURRENTLY_PUBLISHABLE",
+      discoveryEligible: false,
+      licenseStatusReported: Boolean(officialStatus),
+      sourceDirectoryContext: "ccl_listing",
+      consumerStatus: officialStatus,
+    };
+  }
+
+  if (stateCode === "NY") {
+    return {
+      publicationState: identityReady ? "PUBLISHABLE_CURRENT" : "NOT_CURRENTLY_PUBLISHABLE",
+      discoveryEligible: identityReady,
+      licenseStatusReported: false,
+      sourceDirectoryContext: "current_hfis_listing",
+      consumerStatus: null,
+    };
+  }
+
+  if (stateCode === "TX") {
+    return {
+      publicationState: identityReady ? "PUBLISHABLE_CURRENT" : "NOT_CURRENTLY_PUBLISHABLE",
+      discoveryEligible: identityReady,
+      licenseStatusReported: Boolean(officialStatus),
+      sourceDirectoryContext: "active_alf_directory",
+      consumerStatus: officialStatus,
+    };
+  }
+
+  return {
+    publicationState: "NOT_CURRENTLY_PUBLISHABLE",
+    discoveryEligible: false,
+    licenseStatusReported: Boolean(officialStatus),
+    sourceDirectoryContext: "unsupported_state",
+    consumerStatus: officialStatus,
+  };
+}
+
+export function isAssistedLivingDiscoveryEligible(
+  decision: AssistedLivingPublicationDecision,
+): boolean {
+  return (
+    decision.discoveryEligible &&
+    (decision.publicationState === "PUBLISHABLE_CURRENT" ||
+      decision.publicationState === "PUBLISHABLE_WITH_STATUS")
+  );
+}
+
 export const ASSISTED_LIVING_HISTORY_EVENTS = [
   "STATE_INSPECTION",
   "STATE_COMPLAINT",

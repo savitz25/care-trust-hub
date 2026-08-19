@@ -64,3 +64,14 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "CHECK (publication_eligible = false OR resolution_state = 'VERIFIED')" in portfolio
     assert "ALTER TABLE organization" not in portfolio
     assert "DROP TABLE" not in portfolio
+
+    assisted = (migrations / "0020_assisted_living_pilot.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE assisted_living_provider (" in assisted
+    assert "CREATE TABLE assisted_living_organization_party (" in assisted
+    assert "UNIQUE (state_code, regulator_code, source_facility_id)" in assisted
+    assert "REFERENCES provider(" not in assisted
+    assert "certified_beds" not in assisted
+    assert "GOOGLE_PLACES" not in assisted
+    assert "google" not in assisted.lower()
+    assert "PUBLISHABLE_WITH_STATUS" in assisted
+    assert "CHECK (discovery_eligible = false OR identity_state = 'VERIFIED')" in assisted

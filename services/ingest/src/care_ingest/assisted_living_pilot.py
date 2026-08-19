@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 from xml.etree import ElementTree
 
@@ -161,6 +162,101 @@ def publication_eligible(record: dict[str, Any]) -> bool:
     return has_place
 
 
+def classify_publication(record: dict[str, Any]) -> dict[str, Any]:
+    state = (record.get("state_code") or "").upper()
+    official_status = _text(record.get("license_status"))
+    identity_ready = publication_eligible(record)
+    if record.get("identity_state") == RESOLUTION_REVIEW:
+        return {
+            "publication_state": "REVIEW_REQUIRED",
+            "discovery_eligible": False,
+            "license_status_reported": bool(official_status),
+            "source_directory_context": (
+                "active_alf_directory"
+                if state == "TX"
+                else "current_hfis_listing"
+                if state == "NY"
+                else "ccl_listing"
+            ),
+            "consumer_status": official_status,
+        }
+    if state == "CA":
+        status = (official_status or "").upper()
+        if status == "CLOSED":
+            return {
+                "publication_state": "HISTORICAL_ONLY",
+                "discovery_eligible": False,
+                "license_status_reported": True,
+                "source_directory_context": "ccl_listing",
+                "consumer_status": official_status,
+            }
+        if status == "PENDING":
+            return {
+                "publication_state": "NOT_CURRENTLY_PUBLISHABLE",
+                "discovery_eligible": False,
+                "license_status_reported": True,
+                "source_directory_context": "ccl_listing",
+                "consumer_status": official_status,
+            }
+        if status == "ON PROBATION":
+            return {
+                "publication_state": (
+                    "PUBLISHABLE_WITH_STATUS" if identity_ready else "NOT_CURRENTLY_PUBLISHABLE"
+                ),
+                "discovery_eligible": identity_ready,
+                "license_status_reported": True,
+                "source_directory_context": "ccl_listing",
+                "consumer_status": official_status,
+            }
+        if status == "LICENSED" and identity_ready:
+            return {
+                "publication_state": "PUBLISHABLE_CURRENT",
+                "discovery_eligible": True,
+                "license_status_reported": True,
+                "source_directory_context": "ccl_listing",
+                "consumer_status": official_status,
+            }
+        return {
+            "publication_state": "NOT_CURRENTLY_PUBLISHABLE",
+            "discovery_eligible": False,
+            "license_status_reported": bool(official_status),
+            "source_directory_context": "ccl_listing",
+            "consumer_status": official_status,
+        }
+    if state == "NY":
+        return {
+            "publication_state": (
+                "PUBLISHABLE_CURRENT" if identity_ready else "NOT_CURRENTLY_PUBLISHABLE"
+            ),
+            "discovery_eligible": identity_ready,
+            "license_status_reported": False,
+            "source_directory_context": "current_hfis_listing",
+            "consumer_status": None,
+        }
+    if state == "TX":
+        return {
+            "publication_state": (
+                "PUBLISHABLE_CURRENT" if identity_ready else "NOT_CURRENTLY_PUBLISHABLE"
+            ),
+            "discovery_eligible": identity_ready,
+            "license_status_reported": bool(official_status),
+            "source_directory_context": "active_alf_directory",
+            "consumer_status": official_status,
+        }
+    return {
+        "publication_state": "NOT_CURRENTLY_PUBLISHABLE",
+        "discovery_eligible": False,
+        "license_status_reported": bool(official_status),
+        "source_directory_context": "unsupported_state",
+        "consumer_status": official_status,
+    }
+
+
+def attach_publication(record: dict[str, Any]) -> dict[str, Any]:
+    record.update(classify_publication(record))
+    return record
+
+
 @dataclass
 class IngestResult:
     state: str
@@ -204,6 +300,10 @@ class IngestResult:
             "memory_designations": dict(memory),
             "status_values": dict(statuses),
             "publication_eligible": sum(1 for item in records if publication_eligible(item)),
+            "discovery_eligible": sum(1 for item in records if item.get("discovery_eligible")),
+            "publication_states": dict(
+                Counter(item.get("publication_state") or "missing" for item in records)
+            ),
             "inspection_enforcement_events": sum(len(item.get("events") or []) for item in records),
         }
 
@@ -257,7 +357,11 @@ def parse_california_rcfe(text: str, *, retrieved_at: str) -> IngestResult:
             by_id[facility_id] = record
         else:
             extras.append(record)
-    return IngestResult(state="CA", raw_rows=len(rows), records=[*by_id.values(), *extras])
+    return IngestResult(
+        state="CA",
+        raw_rows=len(rows),
+        records=[attach_publication(item) for item in [*by_id.values(), *extras]],
+    )
 
 
 def parse_new_york_acf(
@@ -336,7 +440,11 @@ def parse_new_york_acf(
                 "events": [],
             }
         )
-    return IngestResult(state="NY", raw_rows=len(acf_rows), records=records)
+    return IngestResult(
+        state="NY",
+        raw_rows=len(acf_rows),
+        records=[attach_publication(item) for item in records],
+    )
 
 
 def _xlsx_rows(payload: bytes) -> list[list[str | None]]:
@@ -433,7 +541,11 @@ def parse_texas_records(rows: list[dict[str, Any]], *, retrieved_at: str) -> Ing
             or record["official_name"]
         )
         unique[str(key)] = record
-    return IngestResult(state="TX", raw_rows=len(rows), records=list(unique.values()))
+    return IngestResult(
+        state="TX",
+        raw_rows=len(rows),
+        records=[attach_publication(item) for item in unique.values()],
+    )
 
 
 def parse_texas_alf(payload: bytes, *, retrieved_at: str) -> IngestResult:
@@ -477,11 +589,14 @@ def ingest_pilot_states(
     retrieved = retrieved_at or datetime.now(UTC).isoformat()
     if live:
         ca_csv = _fetch(CA_RCFE_URL).decode("utf-8-sig", errors="replace")
-        where = "description in('Adult Home','Enriched Housing Program')"
-        adult = json.loads(_fetch(f"{NY_HFIS_URL}?$where={where}&$limit=50000"))
-        certs = json.loads(_fetch(f"{NY_CERT_URL}?$where={where}&$limit=50000"))
-        ny_general = adult
-        ny_certs = certs
+        query = urlencode(
+            {
+                "$where": "description in('Adult Home','Enriched Housing Program')",
+                "$limit": "50000",
+            }
+        )
+        ny_general = json.loads(_fetch(f"{NY_HFIS_URL}?{query}"))
+        ny_certs = json.loads(_fetch(f"{NY_CERT_URL}?{query}"))
         tx_xlsx = _fetch(TX_ALF_URL)
     if ca_csv is None or ny_general is None or ny_certs is None:
         raise ValueError("pilot ingest requires CA and NY payloads or live=True")
@@ -535,3 +650,117 @@ def ingest_pilot_states(
 
 def write_coverage(path: Path, report: dict[str, Any]) -> None:
     path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+
+
+def load_local_pilot_payloads(
+    data_root: Path,
+) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]], bytes]:
+    raw = data_root / "raw" / "assisted-living"
+    ca_path = raw / "ca-rcfe.csv"
+    tx_path = raw / "tx-alf.xlsx"
+    if not ca_path.is_file() or not tx_path.is_file():
+        raise FileNotFoundError(
+            "local CA CSV and TX XLSX are required under data/raw/assisted-living"
+        )
+    query = urlencode(
+        {
+            "$where": "description in('Adult Home','Enriched Housing Program')",
+            "$limit": "50000",
+        }
+    )
+    adult = json.loads(_fetch(f"{NY_HFIS_URL}?{query}"))
+    certs = json.loads(_fetch(f"{NY_CERT_URL}?{query}"))
+    return ca_path.read_text(encoding="utf-8-sig"), adult, certs, tx_path.read_bytes()
+
+
+def parse_pilot_records(
+    ca_csv: str,
+    ny_general: list[dict[str, Any]],
+    ny_certs: list[dict[str, Any]],
+    tx_xlsx: bytes,
+    retrieved_at: str,
+) -> list[dict[str, Any]]:
+    parsed = [
+        parse_california_rcfe(ca_csv, retrieved_at=retrieved_at),
+        parse_new_york_acf(ny_general, ny_certs, retrieved_at=retrieved_at),
+        parse_texas_alf(tx_xlsx, retrieved_at=retrieved_at),
+    ]
+    return [record for item in parsed for record in item.records]
+
+
+def qa_publication_sample(records: list[dict[str, Any]], limit: int = 30) -> dict[str, Any]:
+    by_state: dict[str, list[dict[str, Any]]] = {"CA": [], "NY": [], "TX": []}
+    for record in records:
+        state = record.get("state_code")
+        if state in by_state:
+            by_state[state].append(record)
+    samples: dict[str, list[dict[str, Any]]] = {}
+    critical = 0
+    for state, items in by_state.items():
+        selected: list[dict[str, Any]] = []
+        if state == "CA":
+            for status in ("LICENSED", "CLOSED", "PENDING", "ON PROBATION"):
+                selected.extend(
+                    [
+                        item
+                        for item in items
+                        if (item.get("license_status") or "").upper() == status
+                    ][:8]
+                )
+        elif state == "NY":
+            selected.extend(
+                [
+                    item
+                    for item in items
+                    if item.get("memory_designation") == "explicit_memory_or_dementia_license"
+                ][:10]
+            )
+            selected.extend([item for item in items if item.get("license_status") is None][:10])
+        else:
+            selected.extend(
+                [
+                    item
+                    for item in items
+                    if item.get("memory_designation") == "specialty_endorsement"
+                ][:10]
+            )
+            selected.extend([item for item in items if item.get("management_company")][:10])
+        names: dict[str, int] = {}
+        for item in items:
+            names[item.get("official_name") or ""] = (
+                names.get(item.get("official_name") or "", 0) + 1
+            )
+        duplicates = [item for item in items if names.get(item.get("official_name") or "", 0) > 1]
+        selected.extend(duplicates[:6])
+        unique: dict[str, dict[str, Any]] = {}
+        for item in selected:
+            unique[item.get("external_key") or item.get("official_name") or ""] = item
+        for item in items:
+            if len(unique) >= limit:
+                break
+            unique[item.get("external_key") or item.get("official_name") or ""] = item
+        picked = list(unique.values())[:limit]
+        samples[state] = []
+        for item in picked:
+            expected = None
+            if item.get("source_facility_id") and item.get("regulator_code"):
+                expected = f"{state}:{item['regulator_code']}:{item['source_facility_id']}"
+            wrong = item.get("external_key") != expected
+            if wrong:
+                critical += 1
+            samples[state].append(
+                {
+                    "external_key": item.get("external_key"),
+                    "official_name": item.get("official_name"),
+                    "license_status": item.get("license_status"),
+                    "publication_state": item.get("publication_state"),
+                    "discovery_eligible": item.get("discovery_eligible"),
+                    "memory_designation": item.get("memory_designation"),
+                    "identity_match": not wrong,
+                }
+            )
+    return {
+        "sample_size": {state: len(items) for state, items in samples.items()},
+        "critical_wrong_identities": critical,
+        "samples": samples,
+    }
