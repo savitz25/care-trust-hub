@@ -36,12 +36,10 @@ export async function generateMetadata({
     openGraph: {
       title: `${facility.name} — synthetic investigation`,
       description: "A fictional evidence-led care research demonstration.",
-      images: [],
     },
     twitter: {
       title: `${facility.name} — synthetic investigation`,
       description: "A fictional evidence-led care research demonstration.",
-      images: [],
     },
   };
 }
