@@ -18,6 +18,7 @@ import {
   TrendIndicator,
 } from "@/components/evidence";
 import { PrintButton } from "@/components/print-button";
+import { SHARE_HUB } from "@/config/share-hub";
 
 export function generateStaticParams() {
   return syntheticFacilities.map(({ slug }) => ({ slug }));
@@ -30,16 +31,27 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const facility = getFacility((await params).slug);
   if (!facility) return { title: "Facility not found" };
+  const title = `${facility.name} — synthetic investigation`;
+  const description = `Review fictional staffing, inspection, enforcement, ownership, and historical evidence for ${facility.name}.`;
+  const ogImage = {
+    url: `${SHARE_HUB.origin}${SHARE_HUB.ogImagePath}`,
+    width: SHARE_HUB.ogWidth,
+    height: SHARE_HUB.ogHeight,
+    alt: SHARE_HUB.ogAlt,
+  };
   return {
-    title: `${facility.name} — synthetic investigation`,
-    description: `Review fictional staffing, inspection, enforcement, ownership, and historical evidence for ${facility.name}.`,
+    title,
+    description,
     openGraph: {
-      title: `${facility.name} — synthetic investigation`,
+      title,
       description: "A fictional evidence-led care research demonstration.",
+      images: [ogImage],
     },
     twitter: {
-      title: `${facility.name} — synthetic investigation`,
+      card: SHARE_HUB.twitterCard,
+      title,
       description: "A fictional evidence-led care research demonstration.",
+      images: [{ url: ogImage.url, alt: SHARE_HUB.ogAlt }],
     },
   };
 }
