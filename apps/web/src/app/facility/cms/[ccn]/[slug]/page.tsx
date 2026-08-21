@@ -30,6 +30,7 @@ import {
   isFamilyComparisonWorkspaceEnabled,
 } from "@/server/care/feature-flags";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
+import { SHARE_HUB } from "@/config/share-hub";
 import { JourneyNextStep } from "@/components/journey-next-step";
 import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-handoff";
 
@@ -46,11 +47,28 @@ export async function generateMetadata({
   if (!provider) return { title: "Facility not found", robots: { index: false, follow: false } };
   const href = providerHref(provider);
   const location = [provider.location.city, provider.location.state].filter(Boolean).join(", ");
+  const image = {
+    url: `${SHARE_HUB.origin}${href}/share-og`,
+    width: SHARE_HUB.ogWidth,
+    height: SHARE_HUB.ogHeight,
+    alt: `${provider.providerName} — senior care research on SeniorTrustHub`,
+  };
   return {
     title: `${provider.providerName} Nursing Home Research`,
     description: `Research ${provider.providerName}${location ? ` in ${location}` : ""} using published CMS staffing, inspection, ownership, and enforcement evidence.`,
     alternates: canonicalUrl(href) ? { canonical: canonicalUrl(href) } : undefined,
     robots: publicRobots(true),
+    openGraph: {
+      title: `${provider.providerName} Nursing Home Research`,
+      description: `Research ${provider.providerName}${location ? ` in ${location}` : ""} using published CMS staffing, inspection, ownership, and enforcement evidence.`,
+      images: [image],
+    },
+    twitter: {
+      card: SHARE_HUB.twitterCard,
+      title: `${provider.providerName} Nursing Home Research`,
+      description: `Research ${provider.providerName}${location ? ` in ${location}` : ""} using published CMS staffing, inspection, ownership, and enforcement evidence.`,
+      images: [{ url: image.url, alt: image.alt }],
+    },
   };
 }
 
