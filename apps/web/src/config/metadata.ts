@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { brand } from "./brand";
-import { isPublicLaunchEnabled, productionOrigin } from "./deployment";
+import { isPublicLaunchEnabled } from "./deployment";
+import { SHARE_HUB, resolveShareOrigin } from "./share-hub";
 
 const localDevelopmentOrigin = "http://localhost:3000";
 
@@ -37,7 +38,8 @@ export function resolveSiteOrigin(
 }
 
 export const siteMetadata: Metadata = {
-  metadataBase: isPublicLaunchEnabled() ? productionOrigin : resolveSiteOrigin(),
+  metadataBase: new URL(resolveShareOrigin()),
+  alternates: { canonical: `${resolveShareOrigin()}/` },
   title: {
     default: `${brand.publicName} — Independent nursing home research`,
     template: `%s | ${brand.publicName}`,
@@ -50,13 +52,20 @@ export const siteMetadata: Metadata = {
     siteName: brand.publicName,
     title: brand.publicName,
     description: brand.description,
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: brand.publicName }],
+    images: [
+      {
+        url: `${SHARE_HUB.origin}${SHARE_HUB.ogImagePath}`,
+        width: SHARE_HUB.ogWidth,
+        height: SHARE_HUB.ogHeight,
+        alt: SHARE_HUB.ogAlt,
+      },
+    ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: SHARE_HUB.twitterCard,
     title: brand.publicName,
     description: brand.description,
-    images: ["/opengraph-image"],
+    images: [{ url: `${SHARE_HUB.origin}${SHARE_HUB.ogImagePath}`, alt: SHARE_HUB.ogAlt }],
   },
   robots: { index: isPublicLaunchEnabled(), follow: isPublicLaunchEnabled() },
 };

@@ -97,11 +97,26 @@ export default function OpenGraphImage() {
             </span>
           </div>
         </div>
-        <div style={{ marginTop: 58, fontSize: 42, fontWeight: 700 }}>
+        <div style={{ marginTop: 40, fontSize: 36, fontWeight: 700 }}>
           Research senior care without being sold senior care.
         </div>
-        <div style={{ marginTop: 20, fontSize: 27, color: "#455451" }}>
+        <div style={{ marginTop: 16, fontSize: 24, color: "#455451" }}>
           Independent nursing home research using published CMS evidence.
+        </div>
+        <div
+          style={{
+            marginTop: 36,
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+            fontSize: 20,
+            fontWeight: 700,
+            letterSpacing: 1,
+            color: "#681860",
+          }}
+        >
+          <span>ASK TRUST HUB NETWORK</span>
+          <span>seniortrusthub.com</span>
         </div>
       </div>
     ),
