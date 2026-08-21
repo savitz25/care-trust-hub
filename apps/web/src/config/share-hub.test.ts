@@ -35,6 +35,7 @@ describe("SHARE-002 SeniorTrustHub social baseline", () => {
       "utf8",
     );
     expect(source).not.toMatch(/images:\s*\[\]/);
-    expect(source).toContain("SHARE_HUB.ogImagePath");
+    expect(source).toContain("openGraph:");
+    expect(source).toContain("SHARE_HUB.twitterCard");
   });
 });

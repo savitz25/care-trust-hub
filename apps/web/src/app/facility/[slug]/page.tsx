@@ -33,11 +33,11 @@ export async function generateMetadata({
   if (!facility) return { title: "Facility not found" };
   const title = `${facility.name} — synthetic investigation`;
   const description = `Review fictional staffing, inspection, enforcement, ownership, and historical evidence for ${facility.name}.`;
-  const ogImage = {
-    url: `${SHARE_HUB.origin}${SHARE_HUB.ogImagePath}`,
+  const image = {
+    url: `${SHARE_HUB.origin}/facility/${facility.slug}/share-og`,
     width: SHARE_HUB.ogWidth,
     height: SHARE_HUB.ogHeight,
-    alt: SHARE_HUB.ogAlt,
+    alt: `${facility.name} — senior care research on SeniorTrustHub`,
   };
   return {
     title,
@@ -45,13 +45,13 @@ export async function generateMetadata({
     openGraph: {
       title,
       description: "A fictional evidence-led care research demonstration.",
-      images: [ogImage],
+      images: [image],
     },
     twitter: {
       card: SHARE_HUB.twitterCard,
       title,
       description: "A fictional evidence-led care research demonstration.",
-      images: [{ url: ogImage.url, alt: SHARE_HUB.ogAlt }],
+      images: [{ url: image.url, alt: image.alt }],
     },
   };
 }
