@@ -1,6 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none" role="img" aria-label="SeniorTrustHub">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none" role="img" aria-label="SeniorTrustHub mark">
   <title>SeniorTrustHub</title>
-  <rect width="36" height="36" rx="8" fill="#fff"/>
   <path d="M9 5H5v26h4" stroke="#681860" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M27 5h4v26h-4" stroke="#681860" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
   <line x1="18" y1="11.2" x2="18" y2="18" stroke="#082860" stroke-width="1.2"/>
