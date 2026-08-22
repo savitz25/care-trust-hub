@@ -1,0 +1,282 @@
+{
+  "desktop1440": {
+    "viewport": {
+      "w": 1440,
+      "h": 900
+    },
+    "overflowX": false,
+    "header": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 69
+    },
+    "lock": {
+      "x": 144,
+      "y": 16,
+      "w": 116,
+      "h": 36
+    },
+    "mark": {
+      "x": 144,
+      "y": 16,
+      "w": 36,
+      "h": 36
+    },
+    "switchHub": {
+      "x": 1167,
+      "y": 12,
+      "w": 129,
+      "h": 44
+    },
+    "menu": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "stackedBarPresent": false,
+    "h1": 60,
+    "h1Font": "Georgia, \"Times New Roman\", serif"
+  },
+  "w1280": {
+    "viewport": {
+      "w": 1280,
+      "h": 900
+    },
+    "overflowX": false,
+    "header": {
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 69
+    },
+    "lock": {
+      "x": 64,
+      "y": 16,
+      "w": 116,
+      "h": 36
+    },
+    "mark": {
+      "x": 64,
+      "y": 16,
+      "w": 36,
+      "h": 36
+    },
+    "switchHub": {
+      "x": 1087,
+      "y": 12,
+      "w": 129,
+      "h": 44
+    },
+    "menu": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "stackedBarPresent": false,
+    "h1": 56,
+    "h1Font": "Georgia, \"Times New Roman\", serif"
+  },
+  "w1024": {
+    "viewport": {
+      "w": 1024,
+      "h": 900
+    },
+    "overflowX": false,
+    "header": {
+      "x": 0,
+      "y": 0,
+      "w": 1024,
+      "h": 69
+    },
+    "lock": {
+      "x": 24,
+      "y": 16,
+      "w": 116,
+      "h": 36
+    },
+    "mark": {
+      "x": 24,
+      "y": 16,
+      "w": 36,
+      "h": 36
+    },
+    "switchHub": {
+      "x": 871,
+      "y": 12,
+      "w": 129,
+      "h": 44
+    },
+    "menu": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "stackedBarPresent": false,
+    "h1": 50,
+    "h1Font": "Georgia, \"Times New Roman\", serif"
+  },
+  "w768": {
+    "viewport": {
+      "w": 768,
+      "h": 900
+    },
+    "overflowX": false,
+    "header": {
+      "x": 0,
+      "y": 0,
+      "w": 768,
+      "h": 65
+    },
+    "lock": {
+      "x": 16,
+      "y": 16,
+      "w": 106,
+      "h": 33
+    },
+    "mark": {
+      "x": 16,
+      "y": 16,
+      "w": 33,
+      "h": 33
+    },
+    "switchHub": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "menu": {
+      "x": 708,
+      "y": 10,
+      "w": 44,
+      "h": 44
+    },
+    "stackedBarPresent": false,
+    "h1": 43,
+    "h1Font": "Georgia, \"Times New Roman\", serif"
+  },
+  "w430": {
+    "viewport": {
+      "w": 430,
+      "h": 900
+    },
+    "overflowX": false,
+    "header": {
+      "x": 0,
+      "y": 0,
+      "w": 430,
+      "h": 57
+    },
+    "lock": {
+      "x": 16,
+      "y": 13,
+      "w": 96,
+      "h": 30
+    },
+    "mark": {
+      "x": 16,
+      "y": 13,
+      "w": 30,
+      "h": 30
+    },
+    "switchHub": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "menu": {
+      "x": 370,
+      "y": 6,
+      "w": 44,
+      "h": 44
+    },
+    "stackedBarPresent": false,
+    "h1": 35,
+    "h1Font": "Georgia, \"Times New Roman\", serif"
+  },
+  "w375": {
+    "viewport": {
+      "w": 375,
+      "h": 900
+    },
+    "overflowX": false,
+    "header": {
+      "x": 0,
+      "y": 0,
+      "w": 375,
+      "h": 57
+    },
+    "lock": {
+      "x": 16,
+      "y": 13,
+      "w": 96,
+      "h": 30
+    },
+    "mark": {
+      "x": 16,
+      "y": 13,
+      "w": 30,
+      "h": 30
+    },
+    "switchHub": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "menu": {
+      "x": 315,
+      "y": 6,
+      "w": 44,
+      "h": 44
+    },
+    "stackedBarPresent": false,
+    "h1": 33,
+    "h1Font": "Georgia, \"Times New Roman\", serif"
+  },
+  "mobile390": {
+    "viewport": {
+      "w": 390,
+      "h": 844
+    },
+    "overflowX": false,
+    "header": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 57
+    },
+    "lock": {
+      "x": 16,
+      "y": 13,
+      "w": 96,
+      "h": 30
+    },
+    "mark": {
+      "x": 16,
+      "y": 13,
+      "w": 30,
+      "h": 30
+    },
+    "switchHub": {
+      "x": 0,
+      "y": 0,
+      "w": 0,
+      "h": 0
+    },
+    "menu": {
+      "x": 330,
+      "y": 6,
+      "w": 44,
+      "h": 44
+    },
+    "stackedBarPresent": false,
+    "h1": 34,
+    "h1Font": "Georgia, \"Times New Roman\", serif"
+  }
+}

@@ -39,7 +39,7 @@ describe("SeniorTrustHub public brand", () => {
     expect(footer).toContain("#F86008");
   });
 
-  it("keeps intentional clear space between the hub and two-line wordmark", () => {
+  it("ships a compact canonical lockup without slogan or padded canvas", () => {
     const desktop = readFileSync(
       join(process.cwd(), "public", "brand", "senior-trust-hub-logo.svg"),
       "utf8",
@@ -48,10 +48,18 @@ describe("SeniorTrustHub public brand", () => {
       join(process.cwd(), "public", "brand", "senior-trust-hub-logo-compact.svg"),
       "utf8",
     );
-    expect(desktop).toContain('viewBox="0 0 430 140"');
-    expect(desktop.match(/<text x="142"/g)).toHaveLength(2);
-    expect(compact).toContain('viewBox="0 0 350 114"');
-    expect(compact.match(/<text x="126"/g)).toHaveLength(2);
+    const mark = readFileSync(
+      join(process.cwd(), "public", "brand", "senior-trust-hub-mark.svg"),
+      "utf8",
+    );
+    expect(mark).toContain('viewBox="0 0 36 36"');
+    expect(mark).toContain('stroke-width="2.4"');
+    expect(desktop).toContain('viewBox="0 0 236 36"');
+    expect(desktop).toContain('stroke-width="2.4"');
+    expect(desktop.match(/<text x="46"/g)).toHaveLength(2);
+    expect(desktop).not.toContain("Research senior care");
+    expect(compact).toContain('viewBox="0 0 236 36"');
+    expect(compact.match(/<text x="46"/g)).toHaveLength(2);
   });
 
   it("ships Network V2 hub IDs and canonical origins", () => {

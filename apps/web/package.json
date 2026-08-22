@@ -7,7 +7,8 @@
     "build": "next build",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --configLoader runner",
+    "test": "vitest run --configLoader runner && node scripts/assert-visual-008.mjs",
+    "assert:visual": "node scripts/assert-visual-008.mjs",
     "pilot:identity": "tsx --conditions=react-server --tsconfig tsconfig.json scripts/facility-identity-pilot.ts",
     "pilot:resolver-v2": "tsx --conditions=react-server --tsconfig tsconfig.json scripts/resolver-v2-retest.ts"
   },

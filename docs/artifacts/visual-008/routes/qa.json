@@ -1,0 +1,61 @@
+{
+  "origin": "http://127.0.0.1:3018",
+  "report": [
+    {
+      "id": "home",
+      "path": "/",
+      "status": 200,
+      "headerH": 69,
+      "overflowX": false
+    },
+    {
+      "id": "search",
+      "path": "/search",
+      "status": 200,
+      "headerH": 69,
+      "overflowX": false
+    },
+    {
+      "id": "compare",
+      "path": "/compare",
+      "status": 200,
+      "headerH": 69,
+      "overflowX": false
+    },
+    {
+      "id": "facility",
+      "path": "/facility/harbor-pines",
+      "status": 200,
+      "headerH": 69,
+      "overflowX": false
+    },
+    {
+      "id": "navigator",
+      "path": "/tools/care-needs-navigator",
+      "status": 404,
+      "headerH": 69,
+      "overflowX": false
+    },
+    {
+      "id": "planner",
+      "path": "/tools/senior-care-cost-planner",
+      "status": 404,
+      "headerH": 69,
+      "overflowX": false
+    },
+    {
+      "id": "assisted",
+      "path": "/assisted-living",
+      "status": 404,
+      "headerH": 69,
+      "overflowX": false
+    },
+    {
+      "id": "methodology",
+      "path": "/methodology",
+      "status": 200,
+      "headerH": 69,
+      "overflowX": false
+    }
+  ]
+}

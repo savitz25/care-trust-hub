@@ -5,20 +5,6 @@ import type { SeniorShareCardModel } from "@/config/share-card-model";
 export const SENIOR_OG_SIZE = { width: 1200, height: 630 };
 export const SENIOR_OG_CONTENT_TYPE = "image/png";
 
-const node = (color: string, left: number, top: number) => (
-  <div
-    style={{
-      position: "absolute",
-      left,
-      top,
-      width: 18,
-      height: 18,
-      borderRadius: 18,
-      background: color,
-    }}
-  />
-);
-
 function SeniorFrame({ children, accent }: { children: ReactNode; accent: boolean }) {
   return (
     <div
@@ -49,38 +35,31 @@ function SeniorFrame({ children, accent }: { children: ReactNode; accent: boolea
       ) : null}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          <div style={{ position: "relative", width: 72, height: 72, display: "flex" }}>
-            <div
-              style={{
-                position: "absolute",
-                left: 0,
-                top: 4,
-                width: 16,
-                height: 64,
-                borderLeft: "6px solid #681860",
-                borderTop: "6px solid #681860",
-                borderBottom: "6px solid #681860",
-                borderRadius: 4,
-              }}
+          <svg width="64" height="64" viewBox="0 0 36 36" fill="none">
+            <path
+              d="M9 5H5v26h4"
+              stroke="#681860"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
-            <div
-              style={{
-                position: "absolute",
-                right: 0,
-                top: 4,
-                width: 16,
-                height: 64,
-                borderRight: "6px solid #681860",
-                borderTop: "6px solid #681860",
-                borderBottom: "6px solid #681860",
-                borderRadius: 4,
-              }}
+            <path
+              d="M27 5h4v26h-4"
+              stroke="#681860"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
-            {node("#F86008", 27, 4)}
-            {node("#18B8E0", 6, 27)}
-            {node("#88C828", 48, 27)}
-            {node("#8B5CF6", 27, 50)}
-          </div>
+            <line x1="18" y1="11.2" x2="18" y2="18" stroke="#082860" strokeWidth="1.2" />
+            <line x1="12.2" y1="18" x2="18" y2="18" stroke="#082860" strokeWidth="1.2" />
+            <line x1="23.8" y1="18" x2="18" y2="18" stroke="#082860" strokeWidth="1.2" />
+            <line x1="18" y1="24.8" x2="18" y2="18" stroke="#082860" strokeWidth="1.2" />
+            <circle cx="18" cy="18" r="2.1" fill="#082860" />
+            <circle cx="18" cy="10.2" r="2.5" fill="#F86008" />
+            <circle cx="11.2" cy="18" r="2.5" fill="#18B8E0" />
+            <circle cx="24.8" cy="18" r="2.5" fill="#88C828" />
+            <circle cx="18" cy="25.8" r="2.5" fill="#8B5CF6" />
+          </svg>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ color: "#681860", fontSize: 28, fontWeight: 800, letterSpacing: 2 }}>
               SENIOR

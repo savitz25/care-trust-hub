@@ -1,18 +1,29 @@
 import type { CSSProperties, ReactNode } from "react";
-import { Footer, Header } from "@care/ui";
+import { Inter } from "next/font/google";
+import { Footer } from "@care/ui";
 import { brand } from "@/config/brand";
 import {
   ASK_NETWORK_OWNERSHIP_SHORT,
   ASK_NETWORK_STANDARD_URL,
   ASK_NETWORK_STANDARD_VERSION,
-  CURRENT_NETWORK_HUB_ID,
   NETWORK_HUBS,
 } from "@/config/network";
 import { siteMetadata } from "@/config/metadata";
 import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
+import { TH_CHASSIS_VERSION } from "@/lib/design/trusthub-visual-standard";
 import { StructuredData } from "@/components/structured-data";
 import { PrivacyAnalytics } from "@/components/privacy-analytics";
+import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+  preload: true,
+  adjustFontFallback: true,
+  fallback: ["ui-sans-serif", "system-ui", "Segoe UI", "sans-serif"],
+});
 
 export const metadata = siteMetadata;
 export const viewport = { themeColor: brand.colors.primary, colorScheme: "light" };
@@ -25,16 +36,17 @@ const brandStyles = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
-      <body style={brandStyles} data-network-standard={ASK_NETWORK_STANDARD_VERSION}>
+      <body
+        className={inter.variable}
+        style={brandStyles}
+        data-hub="senior"
+        data-network-standard={ASK_NETWORK_STANDARD_VERSION}
+        data-th-chassis={TH_CHASSIS_VERSION}
+      >
         <a className="skip-link" href="#main-content">
-          Skip to main content
+          Skip to content
         </a>
-        <Header
-          productName={brand.publicName}
-          networkName={brand.networkName}
-          networkLinks={NETWORK_HUBS}
-          currentHubId={CURRENT_NETWORK_HUB_ID}
-        />
+        <SiteHeader />
         <main id="main-content" tabIndex={-1}>
           {isPublicLaunchEnabled() && (
             <StructuredData

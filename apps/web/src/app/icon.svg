@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="22" fill="#fff"/><path d="M36 10H18v100h18M84 10h18v100H84" fill="none" stroke="#681860" stroke-width="8" stroke-linecap="round"/><path d="M60 60V28M60 60H28M60 60H92M60 60V92" stroke="#082860" stroke-width="6" stroke-linecap="round"/><circle cx="60" cy="60" r="10" fill="#082860"/><circle cx="60" cy="23" r="8" fill="#F86008"/><circle cx="23" cy="60" r="8" fill="#18B8E0"/><circle cx="97" cy="60" r="8" fill="#88C828"/><circle cx="60" cy="97" r="8" fill="#8B5CF6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+  <rect width="36" height="36" rx="8" fill="#fff"/>
+  <path d="M9 5H5v26h4" stroke="#681860" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M27 5h4v26h-4" stroke="#681860" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="18" y1="11.2" x2="18" y2="18" stroke="#082860" stroke-width="1.2"/>
+  <line x1="12.2" y1="18" x2="18" y2="18" stroke="#082860" stroke-width="1.2"/>
+  <line x1="23.8" y1="18" x2="18" y2="18" stroke="#082860" stroke-width="1.2"/>
+  <line x1="18" y1="24.8" x2="18" y2="18" stroke="#082860" stroke-width="1.2"/>
+  <circle cx="18" cy="18" r="2.1" fill="#082860"/>
+  <circle cx="18" cy="10.2" r="2.5" fill="#F86008"/>
+  <circle cx="11.2" cy="18" r="2.5" fill="#18B8E0"/>
+  <circle cx="24.8" cy="18" r="2.5" fill="#88C828"/>
+  <circle cx="18" cy="25.8" r="2.5" fill="#8B5CF6"/>
+</svg>
