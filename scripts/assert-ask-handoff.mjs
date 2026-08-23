@@ -31,7 +31,11 @@ assert(unsupported.includes("Home care"), "unsupported home-care copy");
 assert(domain.includes("nursing_facility"), "nursing entity");
 assert(domain.includes("assisted_living"), "AL fail-closed");
 assert(domain.includes("ASK_HANDOFF_SORT = 'name'"), "name sort");
-assert(domain.includes("askHandoffUsesCommercialRanking(): boolean {\n  return false"), "no commercial ranking");
+// CRLF-safe: Windows worktrees may store \r\n
+assert(
+  /askHandoffUsesCommercialRanking\(\):\s*boolean\s*\{\s*return false;?\s*\}/.test(domain),
+  "no commercial ranking"
+);
 assert(!domain.includes("cms-overall-desc"), "domain never uses Five-Star sort");
 assert(search.includes("criteriaFromAskContext"), "search reuses Ask criteria");
 assert(search.includes("askHandoffBanner") || search.includes("AskHandoffBanner"), "Ask preload banner");
