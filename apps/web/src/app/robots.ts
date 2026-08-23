@@ -11,6 +11,7 @@ export default function robots(): MetadataRoute.Robots {
         "/api/",
         "/development/",
         "/search",
+        "/from-ask",
         "/shortlist",
         "/compare",
         "/research",

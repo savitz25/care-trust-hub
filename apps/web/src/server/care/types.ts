@@ -79,6 +79,11 @@ export interface ConsumerProviderSearch {
   query?: string;
   state?: string;
   city?: string;
+  /** Exact physical city (slug compare). Ask handoff only — ordinary search stays contains. */
+  cityExact?: boolean;
+  county?: string;
+  /** Ask receiving: name order only, no rating/radius ranking. */
+  askHandoff?: boolean;
   zip?: string;
   latitude?: number;
   longitude?: number;

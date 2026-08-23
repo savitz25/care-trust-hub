@@ -1,3 +1,4 @@
+import type { SeniorAskSearchContext } from "@care/domain";
 import type { ConsumerProviderSearch } from "./types";
 
 export interface ParsedConsumerSearch {
@@ -69,5 +70,24 @@ export function parseConsumerSearch(params: URLSearchParams): ParsedConsumerSear
       limit: 21,
       offset: (page - 1) * 20,
     },
+  };
+}
+
+/** Ask receiving: physical filters only, name order, no ratings / radius / free-text q. */
+export function criteriaFromAskContext(
+  ctx: SeniorAskSearchContext,
+  page = 1,
+): ConsumerProviderSearch {
+  const safePage = Number.isInteger(page) && page > 0 ? page : 1;
+  return {
+    state: ctx.state,
+    city: ctx.city,
+    cityExact: Boolean(ctx.city),
+    county: ctx.county,
+    zip: ctx.zip,
+    askHandoff: true,
+    sort: "name",
+    limit: 21,
+    offset: (safePage - 1) * 20,
   };
 }

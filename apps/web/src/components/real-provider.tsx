@@ -74,20 +74,23 @@ export function RealProviderCard({
   provider,
   compareCcns = [],
   workspaceEnabled = false,
+  hrefSuffix,
 }: {
   provider: CareProviderSearchResult;
   compareCcns?: string[];
   workspaceEnabled?: boolean;
+  hrefSuffix?: string;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const compare = [...new Set([provider.ccn, ...compareCcns])].slice(0, 3);
+  const href = hrefSuffix ? `${providerHref(provider)}?${hrefSuffix}` : providerHref(provider);
   return (
     <article className="facility-card real-provider-card">
       <div className="facility-card__heading">
         <div>
           <p className="kicker">CMS-certified nursing home</p>
           <h2>
-            <Link href={providerHref(provider)}>{provider.providerName}</Link>
+            <Link href={href}>{provider.providerName}</Link>
           </h2>
           <p>
             {[provider.location.city, provider.location.state, provider.location.zipCode]
@@ -137,7 +140,7 @@ export function RealProviderCard({
         </div>
       </dl>
       <div className="facility-card__actions">
-        <Link className="button button--primary" href={providerHref(provider)}>
+        <Link className="button button--primary" href={href}>
           View research
         </Link>
         <ShortlistButton ccn={provider.ccn} />

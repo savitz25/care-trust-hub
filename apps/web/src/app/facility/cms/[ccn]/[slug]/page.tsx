@@ -32,6 +32,8 @@ import {
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import { SHARE_HUB } from "@/config/share-hub";
 import { JourneyNextStep } from "@/components/journey-next-step";
+import { parseSeniorAskSearchContext } from "@care/domain";
+import { AskBackToResults } from "@/components/ask-back-to-results";
 import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-handoff";
 
 export const dynamic = "force-dynamic";
@@ -119,12 +121,19 @@ export default async function RealFacilityPage({
           chain,
         })
       : undefined;
+  const resolvedSearch = searchParams ? await searchParams : {};
+  const askContext = parseSeniorAskSearchContext(resolvedSearch);
   const journeyModule = resolveSeniorJourneyModule(
-    parseNetworkJourney(searchParams ? await searchParams : {}),
+    parseNetworkJourney(resolvedSearch),
     "facility",
   );
   return (
     <>
+      {askContext && !askContext.unsupported ? (
+        <div className="page-shell" style={{ paddingBlock: "1rem 0" }}>
+          <AskBackToResults context={askContext} />
+        </div>
+      ) : null}
       <RealProviderDetail
         provider={provider}
         regulatory={regulatory}

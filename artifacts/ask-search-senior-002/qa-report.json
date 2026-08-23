@@ -1,0 +1,10 @@
+{
+  "base": "http://127.0.0.1:3022",
+  "fails": [],
+  "notes": {
+    "miamiStatus": 307,
+    "miamiLocation": "/search?src=ask&search=1&sort=name&entity=nursing_facility&category=skilled_nursing_facility&state=FL&city=miami",
+    "alLocation": "/from-ask/unsupported?reason=assisted_living",
+    "playwrightError": "TypeError: Cannot read properties of undefined (reading 'launch')"
+  }
+}

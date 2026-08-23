@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { parseConsumerSearch } from "./search-contract";
+import { parseSeniorAskSearchContext } from "@care/domain";
+import { criteriaFromAskContext, parseConsumerSearch } from "./search-contract";
 
 describe("consumer provider search contract", () => {
   it("maps verified filters and fixes the result ceiling", () => {
@@ -50,5 +51,28 @@ describe("consumer provider search contract", () => {
     expect(
       parseConsumerSearch(new URLSearchParams("search=1&zip=33443&radius=30")).errors,
     ).not.toEqual([]);
+  });
+
+  it("Ask criteria use exact city, ZIP, and name sort without ratings or q", () => {
+    const ctx = parseSeniorAskSearchContext({
+      src: "ask",
+      entity: "nursing_facility",
+      state: "TX",
+      city: "austin",
+      zip: "78701",
+      q: "nursing homes Austin TX",
+    } as Record<string, string>)!;
+    const criteria = criteriaFromAskContext(ctx);
+    expect(criteria).toMatchObject({
+      state: "TX",
+      city: "austin",
+      cityExact: true,
+      zip: "78701",
+      askHandoff: true,
+      sort: "name",
+    });
+    expect(criteria.query).toBeUndefined();
+    expect(criteria.overallRating).toBeUndefined();
+    expect(criteria.radiusMiles).toBeUndefined();
   });
 });

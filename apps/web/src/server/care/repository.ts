@@ -307,18 +307,41 @@ export async function searchProvidersConsumer(
     conditions.push(`state_code=${parameter(state)}`);
   }
   if (criteria.city?.trim()) {
-    conditions.push(`city ILIKE ${parameter(escapedLike(criteria.city.trim()))} ESCAPE '\\'`);
+    if (criteria.cityExact) {
+      const citySlug = criteria.city
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+      conditions.push(
+        `trim(both '-' from regexp_replace(lower(coalesce(city,'')), '[^a-z0-9]+', '-', 'g'))=${parameter(citySlug)}`,
+      );
+    } else {
+      conditions.push(`city ILIKE ${parameter(escapedLike(criteria.city.trim()))} ESCAPE '\\'`);
+    }
+  }
+  if (criteria.county?.trim()) {
+    const countySlug = criteria.county
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+    conditions.push(
+      `trim(both '-' from regexp_replace(lower(coalesce(county_name,'')), '[^a-z0-9]+', '-', 'g'))=${parameter(countySlug)}`,
+    );
   }
   if (criteria.zip?.trim() && criteria.latitude === undefined) {
     const zip = criteria.zip.trim();
     if (!/^\d{5}$/.test(zip)) throw new RangeError("ZIP must contain five digits");
     conditions.push(`zip_code=${parameter(zip)}`);
   }
-  const ratings: Array<[number | undefined, string, string]> = [
-    [criteria.overallRating, "overall rating", "overall_rating"],
-    [criteria.staffingRating, "staffing rating", "staffing_rating"],
-    [criteria.healthInspectionRating, "health inspection rating", "health_inspection_rating"],
-  ];
+  const ratings: Array<[number | undefined, string, string]> = criteria.askHandoff
+    ? []
+    : [
+        [criteria.overallRating, "overall rating", "overall_rating"],
+        [criteria.staffingRating, "staffing rating", "staffing_rating"],
+        [criteria.healthInspectionRating, "health inspection rating", "health_inspection_rating"],
+      ];
   for (const [value, label, column] of ratings) {
     const rating = validateRating(value, label);
     if (rating !== undefined) conditions.push(`${column}=${parameter(rating)}`);
@@ -335,10 +358,11 @@ export async function searchProvidersConsumer(
     conditions.push(`participates_medicaid=${parameter(criteria.medicaid)}`);
   }
 
-  const radiusRequested =
-    criteria.latitude !== undefined ||
-    criteria.longitude !== undefined ||
-    criteria.radiusMiles !== undefined;
+  const radiusRequested = criteria.askHandoff
+    ? false
+    : criteria.latitude !== undefined ||
+      criteria.longitude !== undefined ||
+      criteria.radiusMiles !== undefined;
   let distanceExpression: string | null = null;
   if (radiusRequested) {
     const { latitude, longitude, radiusMiles } = criteria;
@@ -364,7 +388,9 @@ export async function searchProvidersConsumer(
     );
   }
 
-  const sort = criteria.sort ?? (distanceExpression ? "distance" : "name");
+  const sort = criteria.askHandoff
+    ? "name"
+    : (criteria.sort ?? (distanceExpression ? "distance" : "name"));
   if (!new Set(["name", "cms-overall-desc", "distance"]).has(sort)) {
     throw new RangeError("unsupported provider sort");
   }

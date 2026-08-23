@@ -123,4 +123,26 @@ describe("server-only care repository", () => {
     await expect(searchProvidersConsumer({ overallRating: 0 })).rejects.toThrow(RangeError);
     await expect(searchProvidersConsumer({ sort: "distance" })).rejects.toThrow(RangeError);
   });
+
+  it("Ask handoff matches exact physical city and orders by name", async () => {
+    query.mockResolvedValue({ rows: [row] });
+    const { searchProvidersConsumer } = await import("./repository");
+    await searchProvidersConsumer({
+      state: "TX",
+      city: "austin",
+      cityExact: true,
+      county: "travis",
+      askHandoff: true,
+      overallRating: 5,
+      sort: "cms-overall-desc",
+      limit: 21,
+    });
+    const sql = query.mock.calls[0][0];
+    expect(sql).toContain("regexp_replace(lower(coalesce(city,''))");
+    expect(sql).toContain("county_name");
+    expect(sql).toContain("provider_name, ccn");
+    expect(sql).not.toContain("overall_rating DESC");
+    expect(sql).not.toContain("ST_DWithin");
+    expect(query.mock.calls[0][1]).toEqual(["TX", "austin", "travis", 21, 0]);
+  });
 });

@@ -15,6 +15,7 @@
     "test": "npm run test --workspaces --if-present",
     "discovery:export-senior-pilot": "node scripts/export-senior-discovery-pilot.mjs",
     "assert:senior-discovery": "npm run test --workspace=@care/domain -- src/network-discovery.test.ts",
+    "assert:ask-handoff": "npm run test --workspace=@care/domain -- src/ask-handoff.test.ts && node scripts/assert-ask-handoff.mjs",
     "format:check": "prettier --check .",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
   },

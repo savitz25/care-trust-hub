@@ -1,7 +1,13 @@
 import Link from "next/link";
+import {
+  parseSeniorAskSearchContext,
+  serializeAskSearchContext,
+  titleCaseSlug,
+} from "@care/domain";
+import { AskHandoffBanner } from "@/components/ask-handoff-banner";
 import { RealProviderCard } from "@/components/real-provider";
 import { RealDataNotice } from "@/components/evidence";
-import { parseConsumerSearch } from "@/server/care/search-contract";
+import { criteriaFromAskContext, parseConsumerSearch } from "@/server/care/search-contract";
 import { resolveZipLocation, searchProvidersConsumer } from "@/server/care/repository";
 import { isFamilyComparisonWorkspaceEnabled } from "@/server/care/feature-flags";
 
@@ -71,9 +77,22 @@ const current = (params: URLSearchParams, key: string) => params.get(key) ?? "";
 
 export async function RealSearch({ searchParams }: { searchParams: SearchParams }) {
   const params = toParams(searchParams);
+  const ask = parseSeniorAskSearchContext(searchParams);
+  const askActive = Boolean(ask && !ask.unsupported && ask.entityType === "nursing_facility");
   const parsed = parseConsumerSearch(params);
+  if (askActive && ask) {
+    const pageValue = Number(params.get("page") ?? "1");
+    parsed.submitted = true;
+    parsed.errors = [];
+    parsed.criteria = criteriaFromAskContext(ask, pageValue);
+  }
   let locationResolved = false;
-  if (parsed.submitted && parsed.errors.length === 0 && parsed.criteria.zip) {
+  if (
+    !askActive &&
+    parsed.submitted &&
+    parsed.errors.length === 0 &&
+    parsed.criteria.zip
+  ) {
     const reference = await resolveZipLocation(parsed.criteria.zip);
     if (reference) {
       parsed.criteria.latitude = reference.latitude;
@@ -108,6 +127,18 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
       <div className="search-layout real-search-layout">
         <form className="search-panel" method="get" aria-label="Nursing home search">
           <input type="hidden" name="search" value="1" />
+          {askActive && ask ? (
+            <>
+              <input type="hidden" name="src" value="ask" />
+              {ask.entityType ? <input type="hidden" name="entity" value={ask.entityType} /> : null}
+              {ask.category ? <input type="hidden" name="category" value={ask.category} /> : null}
+              {ask.journey ? <input type="hidden" name="journey" value={ask.journey} /> : null}
+              {ask.intent ? <input type="hidden" name="intent" value={ask.intent} /> : null}
+              {ask.sid ? <input type="hidden" name="sid" value={ask.sid} /> : null}
+              {ask.county ? <input type="hidden" name="county" value={ask.county} /> : null}
+              <input type="hidden" name="sort" value="name" />
+            </>
+          ) : null}
           <div className="field">
             <label htmlFor="real-q">
               Facility name or CMS provider ID <small>(optional)</small>
@@ -130,7 +161,13 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
             <div className="filter-row">
               <div className="field">
                 <label htmlFor="real-city">City</label>
-                <input id="real-city" name="city" defaultValue={current(params, "city")} />
+                <input
+                  id="real-city"
+                  name="city"
+                  defaultValue={
+                    askActive && ask?.city ? titleCaseSlug(ask.city) : current(params, "city")
+                  }
+                />
               </div>
               <div className="field">
                 <label htmlFor="real-state">State</label>
@@ -142,21 +179,24 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
                 </select>
               </div>
             </div>
-            <div className="field">
-              <label htmlFor="real-radius">Distance</label>
-              <select
-                id="real-radius"
-                name="radius"
-                defaultValue={current(params, "radius") || "25"}
-              >
-                {radii.map((value) => (
-                  <option key={value} value={value}>
-                    {value} miles
-                  </option>
-                ))}
-              </select>
-            </div>
+            {askActive ? null : (
+              <div className="field">
+                <label htmlFor="real-radius">Distance</label>
+                <select
+                  id="real-radius"
+                  name="radius"
+                  defaultValue={current(params, "radius") || "25"}
+                >
+                  {radii.map((value) => (
+                    <option key={value} value={value}>
+                      {value} miles
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </fieldset>
+          {askActive && ask ? <AskHandoffBanner context={ask} resultCount={results.length} /> : null}
           <details className="search-advanced">
             <summary>More filters</summary>
             <div className="filter-row">
@@ -205,15 +245,17 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
               </div>
             </div>
           </details>
-          <div className="field">
-            <label htmlFor="real-sort">Sort results</label>
-            <select id="real-sort" name="sort" defaultValue={current(params, "sort")}>
-              <option value="">Automatic: distance for ZIP, name otherwise</option>
-              <option value="distance">Distance</option>
-              <option value="name">Facility name</option>
-              <option value="cms-overall-desc">CMS overall rating — highest first</option>
-            </select>
-          </div>
+          {askActive ? null : (
+            <div className="field">
+              <label htmlFor="real-sort">Sort results</label>
+              <select id="real-sort" name="sort" defaultValue={current(params, "sort")}>
+                <option value="">Automatic: distance for ZIP, name otherwise</option>
+                <option value="distance">Distance</option>
+                <option value="name">Facility name</option>
+                <option value="cms-overall-desc">CMS overall rating — highest first</option>
+              </select>
+            </div>
+          )}
           <button className="button button--primary" type="submit">
             Search nursing homes
           </button>
@@ -265,6 +307,7 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
               provider={provider}
               compareCcns={results.slice(0, 2).map((item) => item.ccn)}
               workspaceEnabled={isFamilyComparisonWorkspaceEnabled()}
+              hrefSuffix={askActive && ask ? serializeAskSearchContext(ask) : undefined}
             />
           ))}
           {parsed.submitted && parsed.errors.length === 0 && results.length === 0 && (
@@ -274,8 +317,12 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
                   ? `No nursing homes were found within ${radius} miles of ${parsed.criteria.zip}.`
                   : "No facility matched that search."}
               </h3>
-              <p>Try part of the facility name, add a city and state, or expand the distance.</p>
-              {locationResolved && radius < 100 && (
+              <p>
+                {askActive
+                  ? "No CMS-certified nursing facility matched this exact physical location. We did not widen the search to another city, county, or care type."
+                  : "Try part of the facility name, add a city and state, or expand the distance."}
+              </p>
+              {!askActive && locationResolved && radius < 100 && (
                 <Link
                   className="button button--secondary"
                   href={(() => {
