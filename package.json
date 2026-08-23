@@ -13,6 +13,8 @@
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
+    "discovery:export-senior-pilot": "node scripts/export-senior-discovery-pilot.mjs",
+    "assert:senior-discovery": "npm run test --workspace=@care/domain -- src/network-discovery.test.ts",
     "format:check": "prettier --check .",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
   },
