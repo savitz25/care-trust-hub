@@ -1537,6 +1537,12 @@ fieldset legend span {
 .staffing-section {
   display: grid;
   gap: 1.5rem;
+  min-width: 0;
+}
+
+.staffing-section > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .staffing-metrics {
