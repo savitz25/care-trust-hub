@@ -44,7 +44,10 @@ assert(css.includes("--th-header-mobile: 57px"), "57px mobile");
 assert(css.includes("--th-logo-desktop: 36px"), "36px logo");
 assert(css.includes("--th-control: 44px"), "44px controls");
 assert(css.includes("--th-shell-max: 1200px"), "1200 shell");
-assert(!/^\s*\.th-header[\s\S]{0,500}backdrop-filter/m.test(css), "no backdrop-filter on th-header");
+assert(
+  !/^\s*\.th-header[\s\S]{0,500}backdrop-filter/m.test(css),
+  "no backdrop-filter on th-header",
+);
 assert(!header.includes("AskNetworkBar"), "no AskNetworkBar");
 assert(header.includes("th-header"), "reference header class");
 assert(header.includes('variant="embedded"'), "Switch Hub in drawer");
@@ -54,7 +57,10 @@ assert(logo.includes("TRUST HUB"), "TRUST HUB wordmark");
 assert(switcher.includes("switcherEntries()"), "registry order");
 assert(switcher.includes("ASK TRUST HUB NETWORK"), "network panel title");
 assert(switcher.includes("aria-current"), "aria-current");
-assert(registry.includes('CURRENT_NETWORK_HUB_ID: NetworkHubId = "senior"'), "current hub is senior");
+assert(
+  registry.includes('CURRENT_NETWORK_HUB_ID: NetworkHubId = "senior"'),
+  "current hub is senior",
+);
 assert(layout.includes("data-th-chassis"), "chassis stamp");
 assert(layout.includes('id="main-content"'), "skip target");
 assert(layout.includes("Inter"), "Inter chrome font");

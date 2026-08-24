@@ -21,7 +21,12 @@ async function measure(page) {
     const r = (el) => {
       if (!el) return null;
       const b = el.getBoundingClientRect();
-      return { x: Math.round(b.x), y: Math.round(b.y), w: Math.round(b.width), h: Math.round(b.height) };
+      return {
+        x: Math.round(b.x),
+        y: Math.round(b.y),
+        w: Math.round(b.width),
+        h: Math.round(b.height),
+      };
     };
     const h1 = document.querySelector("h1");
     return {
@@ -37,7 +42,10 @@ async function measure(page) {
 }
 
 try {
-  const desk = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+  const desk = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    deviceScaleFactor: 1,
+  });
   const p = await desk.newPage();
   await p.goto(origin + "/", { waitUntil: "networkidle", timeout: 90000 });
   await p.waitForTimeout(600);
