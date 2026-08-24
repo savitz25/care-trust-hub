@@ -77,6 +77,7 @@ export function Footer({
   networkLinks = [],
   standardUrl = "https://www.asktrusthub.com/methodology",
   ownershipLine = "Common ownership · Separated research and listing order · No paid placements",
+  contactEmail = "hello@asktrusthub.com",
 }: {
   philosophy: string;
   networkName: string;
@@ -84,6 +85,7 @@ export function Footer({
   networkLinks?: readonly NetworkLink[];
   standardUrl?: string;
   ownershipLine?: string;
+  contactEmail?: string;
 }) {
   return (
     <footer className="site-footer">
@@ -112,6 +114,7 @@ export function Footer({
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
             <a href="/contact">Contact</a>
+            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
           </nav>
           {networkLinks.length > 0 ? (
             <nav className="footer-nav" aria-label="Ask Trust Hub network">

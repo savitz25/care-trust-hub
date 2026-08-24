@@ -58,6 +58,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
                     "@id": `${productionOrigin.href}#organization`,
                     name: brand.publicName,
                     url: productionOrigin.href,
+                    email: brand.publicContactEmail,
                     logo: new URL("/brand/senior-trust-hub-logo.svg", productionOrigin).href,
                     parentOrganization: {
                       "@type": "Organization",
@@ -86,6 +87,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           networkLinks={NETWORK_HUBS}
           standardUrl={ASK_NETWORK_STANDARD_URL}
           ownershipLine={ASK_NETWORK_OWNERSHIP_SHORT}
+          contactEmail={brand.publicContactEmail}
         />
         <PrivacyAnalytics />
       </body>

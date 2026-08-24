@@ -6,6 +6,7 @@ export const brand = {
   philosophy: "We cite. You decide.",
   description:
     "Independent senior care research using published government evidence. No paid placements.",
+  publicContactEmail: "hello@asktrusthub.com",
   locale: "en_US",
   colors: {
     primary: "#681860",

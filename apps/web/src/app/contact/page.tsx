@@ -1,5 +1,6 @@
 import { PublicInformationPage } from "@/components/public-information-page";
 import Link from "next/link";
+import { brand } from "@/config/brand";
 export const metadata = { title: "Contact SeniorTrustHub" };
 export default function Page() {
   return (
@@ -15,6 +16,9 @@ export default function Page() {
       </p>
       <p>
         <Link href="/trust/corrections">Read how corrections work</Link>
+      </p>
+      <p>
+        General questions: <a href={`mailto:${brand.publicContactEmail}`}>{brand.publicContactEmail}</a>
       </p>
     </PublicInformationPage>
   );
