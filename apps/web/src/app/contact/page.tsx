@@ -18,7 +18,8 @@ export default function Page() {
         <Link href="/trust/corrections">Read how corrections work</Link>
       </p>
       <p>
-        General questions: <a href={`mailto:${brand.publicContactEmail}`}>{brand.publicContactEmail}</a>
+        General questions:{" "}
+        <a href={`mailto:${brand.publicContactEmail}`}>{brand.publicContactEmail}</a>
       </p>
     </PublicInformationPage>
   );
