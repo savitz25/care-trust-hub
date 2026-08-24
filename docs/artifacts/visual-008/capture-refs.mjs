@@ -19,7 +19,10 @@ const report = {};
 async function shot(origin, dir) {
   const out = join(root, dir);
   mkdirSync(out, { recursive: true });
-  const desk = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+  const desk = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    deviceScaleFactor: 1,
+  });
   const p = await desk.newPage();
   await p.goto(origin + "/", { waitUntil: "domcontentloaded", timeout: 90000 });
   await p.waitForTimeout(700);

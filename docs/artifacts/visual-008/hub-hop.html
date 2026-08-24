@@ -1,52 +1,184 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>VISUAL-008 — Seven-Hub hop board</title>
-  <style>
-    :root { font-family: Inter, system-ui, sans-serif; color: #0A2540; background: #F8FAFC; }
-    body { margin: 24px; }
-    h1 { font-size: 28px; }
-    h2 { font-size: 18px; margin: 32px 0 12px; }
-    .grid7 { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-    figure { margin: 0; background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; overflow: hidden; }
-    figcaption { padding: 8px 8px; font-size: 11px; font-weight: 600; border-top: 1px solid #E2E8F0; }
-    img { display: block; width: 100%; }
-    table { border-collapse: collapse; background: #fff; }
-    th, td { padding: 8px 8px; border: 1px solid #E2E8F0; font-size: 12px; text-align: left; }
-    .ok { font-weight: 700; }
-  </style>
-</head>
-<body>
-  <h1>Ask ↔ Investor ↔ Lender ↔ Insurance ↔ Move ↔ Contractor ↔ Senior</h1>
-  <p>Frozen chassis. At 1440: header 69, mark 36 @ (144,16), Switch Hub 44×129 @ x=1167.</p>
-  <table>
-    <tr><th></th><th>Ask</th><th>Investor</th><th>Lender</th><th>Insurance</th><th>Move</th><th>Contractor</th><th>Senior</th><th>Delta</th></tr>
-    <tr><td>Header</td><td>69</td><td>69</td><td>69</td><td>69</td><td>69</td><td>69</td><td>69</td><td class="ok">0</td></tr>
-    <tr><td>Mark</td><td>36@(144,16)</td><td>36@(144,16)</td><td>36@(144,16)</td><td>36@(144,16)</td><td>36@(144,16)</td><td>36@(144,16)</td><td>36@(144,16)</td><td class="ok">0</td></tr>
-    <tr><td>Switch Hub</td><td>44@1167</td><td>44@1167</td><td>44@1167</td><td>44@1167</td><td>44@1167</td><td>44@1172*</td><td>44@1167</td><td class="ok">0h</td></tr>
-    <tr><td>Mobile</td><td>57</td><td>57</td><td>57</td><td>57</td><td>57</td><td>57</td><td>57</td><td class="ok">0</td></tr>
-  </table>
-  <p>* Contractor Switch Hub is 124px wide (wide compact wordmark); right edge still 1296.</p>
-  <h2>Desktop 1440 headers</h2>
-  <div class="grid7">
-    <figure><img src="ask-ref/header-desktop.png" alt="Ask" /><figcaption>ASK</figcaption></figure>
-    <figure><img src="investor-ref/header-desktop.png" alt="Investor" /><figcaption>INVESTOR</figcaption></figure>
-    <figure><img src="lender-ref/header-desktop.png" alt="Lender" /><figcaption>LENDER</figcaption></figure>
-    <figure><img src="insurance-ref/header-desktop.png" alt="Insurance" /><figcaption>INSURANCE</figcaption></figure>
-    <figure><img src="move-ref/header-desktop.png" alt="Move" /><figcaption>MOVE</figcaption></figure>
-    <figure><img src="contractor-ref/header-desktop.png" alt="Contractor" /><figcaption>CONTRACTOR</figcaption></figure>
-    <figure><img src="after/header-desktop.png" alt="Senior" /><figcaption>SENIOR</figcaption></figure>
-  </div>
-  <h2>Mobile 390</h2>
-  <div class="grid7">
-    <figure><img src="ask-ref/mobile-390.jpg" alt="Ask mobile" /><figcaption>ASK · 57/30</figcaption></figure>
-    <figure><img src="investor-ref/mobile-390.jpg" alt="Investor mobile" /><figcaption>INVESTOR · 57/30</figcaption></figure>
-    <figure><img src="lender-ref/mobile-390.jpg" alt="Lender mobile" /><figcaption>LENDER · 57/30</figcaption></figure>
-    <figure><img src="insurance-ref/mobile-390.jpg" alt="Insurance mobile" /><figcaption>INSURANCE · 57/30</figcaption></figure>
-    <figure><img src="move-ref/mobile-390.jpg" alt="Move mobile" /><figcaption>MOVE · 57/30</figcaption></figure>
-    <figure><img src="contractor-ref/mobile-390.jpg" alt="Contractor mobile" /><figcaption>CONTRACTOR · 57/30</figcaption></figure>
-    <figure><img src="after/mobile-390.jpg" alt="Senior mobile" /><figcaption>SENIOR · 57/30</figcaption></figure>
-  </div>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>VISUAL-008 — Seven-Hub hop board</title>
+    <style>
+      :root {
+        font-family: Inter, system-ui, sans-serif;
+        color: #0a2540;
+        background: #f8fafc;
+      }
+      body {
+        margin: 24px;
+      }
+      h1 {
+        font-size: 28px;
+      }
+      h2 {
+        font-size: 18px;
+        margin: 32px 0 12px;
+      }
+      .grid7 {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+      }
+      figure {
+        margin: 0;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      figcaption {
+        padding: 8px 8px;
+        font-size: 11px;
+        font-weight: 600;
+        border-top: 1px solid #e2e8f0;
+      }
+      img {
+        display: block;
+        width: 100%;
+      }
+      table {
+        border-collapse: collapse;
+        background: #fff;
+      }
+      th,
+      td {
+        padding: 8px 8px;
+        border: 1px solid #e2e8f0;
+        font-size: 12px;
+        text-align: left;
+      }
+      .ok {
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Ask ↔ Investor ↔ Lender ↔ Insurance ↔ Move ↔ Contractor ↔ Senior</h1>
+    <p>Frozen chassis. At 1440: header 69, mark 36 @ (144,16), Switch Hub 44×129 @ x=1167.</p>
+    <table>
+      <tr>
+        <th></th>
+        <th>Ask</th>
+        <th>Investor</th>
+        <th>Lender</th>
+        <th>Insurance</th>
+        <th>Move</th>
+        <th>Contractor</th>
+        <th>Senior</th>
+        <th>Delta</th>
+      </tr>
+      <tr>
+        <td>Header</td>
+        <td>69</td>
+        <td>69</td>
+        <td>69</td>
+        <td>69</td>
+        <td>69</td>
+        <td>69</td>
+        <td>69</td>
+        <td class="ok">0</td>
+      </tr>
+      <tr>
+        <td>Mark</td>
+        <td>36@(144,16)</td>
+        <td>36@(144,16)</td>
+        <td>36@(144,16)</td>
+        <td>36@(144,16)</td>
+        <td>36@(144,16)</td>
+        <td>36@(144,16)</td>
+        <td>36@(144,16)</td>
+        <td class="ok">0</td>
+      </tr>
+      <tr>
+        <td>Switch Hub</td>
+        <td>44@1167</td>
+        <td>44@1167</td>
+        <td>44@1167</td>
+        <td>44@1167</td>
+        <td>44@1167</td>
+        <td>44@1172*</td>
+        <td>44@1167</td>
+        <td class="ok">0h</td>
+      </tr>
+      <tr>
+        <td>Mobile</td>
+        <td>57</td>
+        <td>57</td>
+        <td>57</td>
+        <td>57</td>
+        <td>57</td>
+        <td>57</td>
+        <td>57</td>
+        <td class="ok">0</td>
+      </tr>
+    </table>
+    <p>* Contractor Switch Hub is 124px wide (wide compact wordmark); right edge still 1296.</p>
+    <h2>Desktop 1440 headers</h2>
+    <div class="grid7">
+      <figure>
+        <img src="ask-ref/header-desktop.png" alt="Ask" />
+        <figcaption>ASK</figcaption>
+      </figure>
+      <figure>
+        <img src="investor-ref/header-desktop.png" alt="Investor" />
+        <figcaption>INVESTOR</figcaption>
+      </figure>
+      <figure>
+        <img src="lender-ref/header-desktop.png" alt="Lender" />
+        <figcaption>LENDER</figcaption>
+      </figure>
+      <figure>
+        <img src="insurance-ref/header-desktop.png" alt="Insurance" />
+        <figcaption>INSURANCE</figcaption>
+      </figure>
+      <figure>
+        <img src="move-ref/header-desktop.png" alt="Move" />
+        <figcaption>MOVE</figcaption>
+      </figure>
+      <figure>
+        <img src="contractor-ref/header-desktop.png" alt="Contractor" />
+        <figcaption>CONTRACTOR</figcaption>
+      </figure>
+      <figure>
+        <img src="after/header-desktop.png" alt="Senior" />
+        <figcaption>SENIOR</figcaption>
+      </figure>
+    </div>
+    <h2>Mobile 390</h2>
+    <div class="grid7">
+      <figure>
+        <img src="ask-ref/mobile-390.jpg" alt="Ask mobile" />
+        <figcaption>ASK · 57/30</figcaption>
+      </figure>
+      <figure>
+        <img src="investor-ref/mobile-390.jpg" alt="Investor mobile" />
+        <figcaption>INVESTOR · 57/30</figcaption>
+      </figure>
+      <figure>
+        <img src="lender-ref/mobile-390.jpg" alt="Lender mobile" />
+        <figcaption>LENDER · 57/30</figcaption>
+      </figure>
+      <figure>
+        <img src="insurance-ref/mobile-390.jpg" alt="Insurance mobile" />
+        <figcaption>INSURANCE · 57/30</figcaption>
+      </figure>
+      <figure>
+        <img src="move-ref/mobile-390.jpg" alt="Move mobile" />
+        <figcaption>MOVE · 57/30</figcaption>
+      </figure>
+      <figure>
+        <img src="contractor-ref/mobile-390.jpg" alt="Contractor mobile" />
+        <figcaption>CONTRACTOR · 57/30</figcaption>
+      </figure>
+      <figure>
+        <img src="after/mobile-390.jpg" alt="Senior mobile" />
+        <figcaption>SENIOR · 57/30</figcaption>
+      </figure>
+    </div>
+  </body>
 </html>

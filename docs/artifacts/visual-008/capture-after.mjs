@@ -18,13 +18,20 @@ async function measure(page) {
     const sw = [...document.querySelectorAll("button")].find((b) =>
       /Switch Hub/i.test(b.textContent || ""),
     );
-    const menu = document.querySelector('button[aria-label="Open menu"], button[aria-label="Close menu"]');
+    const menu = document.querySelector(
+      'button[aria-label="Open menu"], button[aria-label="Close menu"]',
+    );
     const bar = /Ask Trust Hub network/i.test(document.body.innerText.slice(0, 800));
     const h1 = document.querySelector("h1");
     const r = (el) => {
       if (!el) return null;
       const b = el.getBoundingClientRect();
-      return { x: Math.round(b.x), y: Math.round(b.y), w: Math.round(b.width), h: Math.round(b.height) };
+      return {
+        x: Math.round(b.x),
+        y: Math.round(b.y),
+        w: Math.round(b.width),
+        h: Math.round(b.height),
+      };
     };
     return {
       viewport: { w: innerWidth, h: innerHeight },
@@ -42,7 +49,10 @@ async function measure(page) {
 }
 
 try {
-  const desk = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+  const desk = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    deviceScaleFactor: 1,
+  });
   const p = await desk.newPage();
   await p.goto(origin + "/", { waitUntil: "networkidle", timeout: 60000 });
   await p.waitForTimeout(600);
@@ -61,7 +71,10 @@ try {
   await desk.close();
 
   for (const w of [1280, 1024, 768, 430, 375]) {
-    const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, deviceScaleFactor: 1 });
+    const ctx = await browser.newContext({
+      viewport: { width: w, height: 900 },
+      deviceScaleFactor: 1,
+    });
     const page = await ctx.newPage();
     await page.goto(origin + "/", { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.waitForTimeout(500);

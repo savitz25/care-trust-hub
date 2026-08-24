@@ -20,17 +20,25 @@ const routes = [
 const browser = await chromium.launch({ headless: true });
 const report = [];
 try {
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
+  const ctx = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+    deviceScaleFactor: 1,
+  });
   const page = await ctx.newPage();
   for (const route of routes) {
-    const res = await page.goto(origin + route.path, { waitUntil: "domcontentloaded", timeout: 60000 });
+    const res = await page.goto(origin + route.path, {
+      waitUntil: "domcontentloaded",
+      timeout: 60000,
+    });
     await page.waitForTimeout(400);
     const status = res?.status() || 0;
     const headerH = await page.evaluate(() => {
       const el = document.querySelector("header");
       return el ? Math.round(el.getBoundingClientRect().height) : null;
     });
-    const overflowX = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
+    const overflowX = await page.evaluate(
+      () => document.documentElement.scrollWidth > innerWidth + 1,
+    );
     await page.screenshot({ path: join(out, `${route.id}.jpg`), type: "jpeg", quality: 60 });
     report.push({ ...route, status, headerH, overflowX });
   }
