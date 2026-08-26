@@ -22,6 +22,17 @@ def test_registry_has_only_implemented_sources_enabled() -> None:
         "nursing-home-chain-performance-measures",
         "nursing-home-mds-quality-measures",
         "nursing-home-fire-safety-deficiencies",
+        "home-health-care-agencies",
+        "home-health-patient-survey-hhcahps",
+        "home-health-zip-codes",
+        "home-health-agency-enrollments",
+        "home-health-agency-all-owners",
+        "hospice-general-information",
+        "hospice-provider-data",
+        "hospice-provider-cahps",
+        "hospice-zip-data",
+        "hospice-enrollments",
+        "hospice-all-owners",
     }
     assert all(source.implemented for source in implemented)
     assert all(

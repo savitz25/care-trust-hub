@@ -1,0 +1,166 @@
+{
+  "provider_types": {
+    "hospice": 6911,
+    "home_health": 12460,
+    "nursing_home": 14696
+  },
+  "nh_current": 0,
+  "hh_snapshots": 12460,
+  "hh_distinct": 12460,
+  "hh_states": 55,
+  "hospice_snapshots": 6669,
+  "hospice_distinct": 6669,
+  "hospice_states": 55,
+  "quality": {
+    "hh_hhcahps": 74760,
+    "hh_quality": 199360,
+    "hospice_cahps": 140049,
+    "hospice_quality": 453492
+  },
+  "quality_suppressed": {
+    "REPORTED": 867661
+  },
+  "hh_services": 74760,
+  "hh_zips": 565608,
+  "hospice_zips": 349759,
+  "npi_hh": 11254,
+  "npi_hospice": 5696,
+  "own_hh": 90712,
+  "own_hospice": 88499,
+  "orgs": 205082,
+  "nh_ccn_current": 14690,
+  "nh_known": 14696,
+  "mds": 1248650,
+  "fire": 200327,
+  "pbj": 5280805,
+  "db_bytes": 18740972691,
+  "freshness": [
+    {
+      "k": "home-health-agency-all-owners",
+      "band": "CURRENT",
+      "rel": "2026-08-19"
+    },
+    {
+      "k": "home-health-agency-enrollments",
+      "band": "CURRENT",
+      "rel": "2026-07-27"
+    },
+    {
+      "k": "home-health-care-agencies",
+      "band": "CURRENT",
+      "rel": "2026-05-27"
+    },
+    {
+      "k": "home-health-patient-survey-hhcahps",
+      "band": "CURRENT",
+      "rel": "2026-06-10"
+    },
+    {
+      "k": "home-health-zip-codes",
+      "band": "CURRENT",
+      "rel": "2026-05-27"
+    },
+    {
+      "k": "hospice-all-owners",
+      "band": "CURRENT",
+      "rel": "2026-08-19"
+    },
+    {
+      "k": "hospice-enrollments",
+      "band": "CURRENT",
+      "rel": "2026-07-27"
+    },
+    {
+      "k": "hospice-general-information",
+      "band": "CURRENT",
+      "rel": "2026-08-19"
+    },
+    {
+      "k": "hospice-provider-cahps",
+      "band": "CURRENT",
+      "rel": "2026-08-07"
+    },
+    {
+      "k": "hospice-provider-data",
+      "band": "CURRENT",
+      "rel": "2026-08-07"
+    },
+    {
+      "k": "hospice-zip-data",
+      "band": "CURRENT",
+      "rel": "2026-08-18"
+    },
+    {
+      "k": "nursing-home-chain-performance-measures",
+      "band": "CURRENT",
+      "rel": "2026-08-12"
+    },
+    {
+      "k": "nursing-home-fire-safety-deficiencies",
+      "band": "CURRENT",
+      "rel": "2026-08-01"
+    },
+    {
+      "k": "nursing-home-health-deficiencies",
+      "band": "CURRENT",
+      "rel": "2026-08-01"
+    },
+    {
+      "k": "nursing-home-inspection-dates",
+      "band": "CURRENT",
+      "rel": "2026-08-01"
+    },
+    {
+      "k": "nursing-home-mds-quality-measures",
+      "band": "CURRENT",
+      "rel": "2026-08-01"
+    },
+    {
+      "k": "nursing-home-ownership",
+      "band": "CURRENT",
+      "rel": "2026-08-01"
+    },
+    {
+      "k": "nursing-home-penalties",
+      "band": "CURRENT",
+      "rel": "2026-08-01"
+    },
+    {
+      "k": "nursing-home-provider-information",
+      "band": "CURRENT",
+      "rel": "2026-08-01"
+    },
+    {
+      "k": "payroll-based-journal-daily-nurse-staffing",
+      "band": "CURRENT",
+      "rel": "2026-07-29"
+    },
+    {
+      "k": "skilled-nursing-facility-all-owners",
+      "band": "CURRENT",
+      "rel": "2026-08-17"
+    },
+    {
+      "k": "skilled-nursing-facility-change-of-ownership",
+      "band": "CURRENT",
+      "rel": "2026-07-27"
+    },
+    {
+      "k": "skilled-nursing-facility-change-of-ownership-owner-information",
+      "band": "CURRENT",
+      "rel": "2026-07-27"
+    },
+    {
+      "k": "skilled-nursing-facility-enrollments",
+      "band": "CURRENT",
+      "rel": "2026-08-17"
+    }
+  ],
+  "dir_hh": {
+    "CURRENT_ACTIVE": 12460
+  },
+  "dir_hospice": {
+    "CURRENT_ACTIVE": 6669
+  },
+  "cross_pac": null
+}

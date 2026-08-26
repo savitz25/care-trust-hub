@@ -20,6 +20,8 @@ from .ownership import OWNERSHIP_KEYS, ingest_ownership_source
 from .ownership_database import audit_ownership_database, load_ownership_source
 from .pbj import PBJ_NURSE_KEY, ingest_pbj_source
 from .pbj_database import audit_pbj_database, load_pbj_source
+from .post_acute import POST_ACUTE_KEYS, ingest_post_acute_source
+from .post_acute_database import load_post_acute_source
 from .provider_information import ingest_provider_information
 from .quality import write_quality_report
 from .registry import get_source, load_registry
@@ -41,6 +43,7 @@ IMPLEMENTED_KEYS = (
     *OWNERSHIP_KEYS,
     CHAIN_KEY,
     MDS_KEY,
+    *POST_ACUTE_KEYS,
 )
 
 
@@ -375,6 +378,8 @@ def main(argv: list[str] | None = None) -> int:
         if args.dataset_key == CHAIN_KEY
         else ingest_ownership_source
         if args.dataset_key in OWNERSHIP_KEYS
+        else ingest_post_acute_source
+        if args.dataset_key in POST_ACUTE_KEYS
         else ingest_regulatory_source
     )
     if args.command == "validate":
@@ -422,6 +427,8 @@ def main(argv: list[str] | None = None) -> int:
             if args.dataset_key == CHAIN_KEY
             else load_ownership_source
             if args.dataset_key in OWNERSHIP_KEYS
+            else load_post_acute_source
+            if args.dataset_key in POST_ACUTE_KEYS
             else load_regulatory_source
         )
         result = loader(

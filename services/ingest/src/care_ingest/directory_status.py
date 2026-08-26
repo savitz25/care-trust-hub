@@ -96,3 +96,103 @@ def derive_directory_status(database_url: str) -> dict[str, Any]:
 
 def derive_directory_status_json(database_url: str) -> str:
     return json.dumps(derive_directory_status(database_url), indent=2, sort_keys=True) + "\n"
+
+
+AGENCY_DIRECTORY = {
+    "home-health-care-agencies": {
+        "identifier_type": "HOME_HEALTH_CCN",
+        "snapshot_table": "home_health_snapshot",
+        "absent": (
+            "This CMS Home Health certification number is not in the latest "
+            "Home Health Care Agencies extract. Absence is not proof the agency closed."
+        ),
+        "active": (
+            "This CMS Home Health certification number appears in the latest "
+            "Home Health Care Agencies extract of currently listed agencies."
+        ),
+    },
+    "hospice-general-information": {
+        "identifier_type": "HOSPICE_CCN",
+        "snapshot_table": "hospice_snapshot",
+        "absent": (
+            "This CMS Hospice certification number is not in the latest "
+            "Hospice General Information extract. Absence is not proof the provider closed."
+        ),
+        "active": (
+            "This CMS Hospice certification number appears in the latest "
+            "Hospice General Information extract of currently listed providers."
+        ),
+    },
+}
+
+
+def derive_agency_directory_status(database_url: str, dataset_key: str) -> dict[str, Any]:
+    spec = AGENCY_DIRECTORY[dataset_key]
+    snapshot_table = spec["snapshot_table"]
+    identifier_type = spec["identifier_type"]
+    with psycopg.connect(database_url) as connection:
+        connection.execute("SET statement_timeout = 0")
+        with connection.transaction():
+            current = connection.execute(
+                """
+                SELECT r.id, r.release_key, coalesce(r.source_modified_at, r.retrieved_at)
+                FROM source_release r
+                JOIN source_dataset d ON d.id = r.source_dataset_id
+                JOIN ingest_run ir ON ir.source_release_id = r.id AND ir.status = 'succeeded'
+                WHERE d.dataset_key = %s
+                ORDER BY r.source_modified_at DESC NULLS LAST, r.release_key DESC
+                LIMIT 1
+                """,
+                (dataset_key,),
+            ).fetchone()
+            if current is None:
+                raise RuntimeError(f"no successful {dataset_key} release")
+            release_id, release_key, observed_at = current
+            connection.execute(
+                f"""
+                INSERT INTO provider_directory_status (
+                  provider_id, ccn, directory_status, pi_source_release_id, observed_at,
+                  notes, transformation_version
+                )
+                SELECT pi.provider_id, pi.identifier_value,
+                  CASE WHEN snap.provider_id IS NULL
+                       THEN 'ABSENT_FROM_CURRENT_DIRECTORY'
+                       ELSE 'CURRENT_ACTIVE' END,
+                  %s, %s,
+                  CASE WHEN snap.provider_id IS NULL THEN %s ELSE %s END,
+                  %s
+                FROM provider_identifier pi
+                LEFT JOIN {snapshot_table} snap
+                  ON snap.provider_id = pi.provider_id AND snap.source_release_id = %s
+                WHERE pi.issuer = 'CMS' AND pi.identifier_type = %s AND pi.valid_from IS NULL
+                ON CONFLICT (ccn, pi_source_release_id) DO UPDATE
+                  SET directory_status = EXCLUDED.directory_status,
+                      notes = EXCLUDED.notes,
+                      observed_at = EXCLUDED.observed_at
+                """,
+                (
+                    release_id,
+                    observed_at,
+                    spec["absent"],
+                    spec["active"],
+                    TRANSFORMATION_VERSION,
+                    release_id,
+                    identifier_type,
+                ),
+            )
+            counts = connection.execute(
+                """
+                SELECT directory_status, count(*)::bigint
+                FROM provider_directory_status
+                WHERE pi_source_release_id = %s
+                GROUP BY 1
+                """,
+                (release_id,),
+            ).fetchall()
+    return {
+        "dataset_key": dataset_key,
+        "release": release_key,
+        "status_counts": {name: int(n) for name, n in counts},
+        "terminated_confirmed": 0,
+        "closure_inferred_from_missing_source": False,
+    }

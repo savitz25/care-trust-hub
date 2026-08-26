@@ -65,6 +65,15 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "ALTER TABLE organization" not in portfolio
     assert "DROP TABLE" not in portfolio
 
+    post_acute = (migrations / "0023_home_health_hospice_national.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE home_health_snapshot (" in post_acute
+    assert "CREATE TABLE hospice_snapshot (" in post_acute
+    assert "hh_hhcahps" in post_acute
+    assert "hospice_cahps" in post_acute
+    assert "certified_beds" not in post_acute
+    assert "DROP TABLE" not in post_acute
+    assert "home-health-care-agencies" in post_acute
+
     refresh = (migrations / "0022_cms_refresh_governance.sql").read_text(encoding="utf-8")
     assert "CREATE TABLE cms_refresh_run (" in refresh
     assert "CREATE TABLE cms_source_run (" in refresh
