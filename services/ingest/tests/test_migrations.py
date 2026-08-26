@@ -65,6 +65,16 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "ALTER TABLE organization" not in portfolio
     assert "DROP TABLE" not in portfolio
 
+    refresh = (migrations / "0022_cms_refresh_governance.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE cms_refresh_run (" in refresh
+    assert "CREATE TABLE cms_source_run (" in refresh
+    assert "CREATE TABLE cms_refresh_source_policy (" in refresh
+    assert "CREATE UNIQUE INDEX cms_source_run_active_lock" in refresh
+    assert "CREATE OR REPLACE VIEW cms_source_freshness" in refresh
+    assert "DROP TABLE" not in refresh
+    assert "nursing-home-provider-information" in refresh
+    assert "freshness_sla_days" in refresh
+
     assisted = (migrations / "0020_assisted_living_pilot.sql").read_text(encoding="utf-8")
     assert "CREATE TABLE assisted_living_provider (" in assisted
     assert "CREATE TABLE assisted_living_organization_party (" in assisted

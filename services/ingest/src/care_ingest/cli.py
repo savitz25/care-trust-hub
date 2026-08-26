@@ -145,6 +145,19 @@ def build_parser() -> argparse.ArgumentParser:
     ):
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    refresh = commands.add_parser(
+        "cms-refresh",
+        help="Registry-driven CMS check/refresh. Writes require CARE_CMS_REFRESH_WRITES=true",
+    )
+    refresh.add_argument("--mode", choices=("check", "refresh", "dry_run"), default="check")
+    refresh.add_argument("--source", default="all", help="all or one dataset_key")
+    refresh.add_argument("--trigger", choices=("scheduled", "manual", "dispatch"), default="manual")
+    refresh.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    freshness = commands.add_parser(
+        "cms-freshness",
+        help="Print per-source freshness from cms_source_freshness (not a global clock)",
+    )
+    freshness.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     return parser
 
 
@@ -157,6 +170,34 @@ def main(argv: list[str] | None = None) -> int:
     )
     data_root = args.data_root.resolve()
 
+    if args.command == "cms-refresh":
+        from .refresh import run_refresh
+        from .refresh_policy import topological_refresh_order
+
+        selected = None if args.source == "all" else [args.source]
+        if selected:
+            known = topological_refresh_order()
+            missing = [key for key in selected if key not in known]
+            if missing:
+                parser.error(f"unknown or unimplemented refresh source: {missing}")
+        report = run_refresh(
+            mode=args.mode,
+            database_url=args.database_url,
+            data_root=data_root,
+            trigger=args.trigger,
+            sources=selected,
+        )
+        print(report.to_json(), end="")
+        if args.mode == "refresh" and not report.writes_enabled:
+            logging.warning("CARE_CMS_REFRESH_WRITES is not true; no evidence writes occurred")
+        return 0 if report.health != "FAILED" else 1
+    if args.command == "cms-freshness":
+        if not args.database_url:
+            parser.error("cms-freshness requires CARE_DATABASE_URL or --database-url")
+        from .refresh import query_source_freshness
+
+        print(json.dumps(query_source_freshness(args.database_url), indent=2, default=str))
+        return 0
     if args.command == "apply-migration":
         if not args.database_url:
             parser.error("apply-migration requires CARE_DATABASE_URL or --database-url")

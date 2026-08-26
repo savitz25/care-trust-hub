@@ -99,6 +99,7 @@ jobs:
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0013_facility_identity_pilot_manifest.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0020_assisted_living_pilot.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0021_nursing_home_national_evidence.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0022_cms_refresh_governance.sql
       - name: Verify migration objects
         run: |
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 <<'SQL'
@@ -122,6 +123,10 @@ jobs:
           SELECT to_regclass('public.facility_quality_measure_observation') IS NOT NULL AS facility_qm_exists;
           SELECT to_regclass('public.provider_directory_status') IS NOT NULL AS directory_status_exists;
           SELECT to_regclass('public.fire_safety_citation') IS NOT NULL AS fire_safety_citation_exists;
+          SELECT to_regclass('public.cms_refresh_run') IS NOT NULL AS cms_refresh_run_exists;
+          SELECT to_regclass('public.cms_source_run') IS NOT NULL AS cms_source_run_exists;
+          SELECT to_regclass('public.cms_refresh_source_policy') IS NOT NULL AS cms_refresh_policy_exists;
+          SELECT to_regclass('public.cms_source_freshness') IS NOT NULL AS cms_source_freshness_exists;
           SELECT to_regclass('public.assisted_living_organization_party') IS NOT NULL AS assisted_living_party_exists;
           SELECT EXISTS (
             SELECT 1 FROM information_schema.columns

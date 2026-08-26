@@ -96,9 +96,7 @@ def test_nh7_mds_history_emits_two_period_observations() -> None:
     q1 = next(item for item in record["observations"] if item["period_component"] == "Q1")
     q2 = next(item for item in record["observations"] if item["period_component"] == "Q2")
     assert q1["score"] != q2["score"]
-    suppressed = next(
-        item for item in record["observations"] if item["period_component"] == "Q3"
-    )
+    suppressed = next(item for item in record["observations"] if item["period_component"] == "Q3")
     assert suppressed["suppressed"] is True
 
 
