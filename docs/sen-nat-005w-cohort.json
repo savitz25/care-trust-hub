@@ -1,0 +1,69 @@
+{
+  "fingerprint": "1f3e6a0ea0885bd536a62b06c43e2f549b9c3691de5e26482f68b63e5cdc9003",
+  "captured_at": "2026-08-26T20:18:02.920367+00:00",
+  "discovered": [
+    {
+      "dataset_key": "nursing-home-inspection-dates",
+      "status": "DISCOVERED",
+      "source_modified_at": "2026-08-01",
+      "version_identifier": null,
+      "previous_checksum": "d1163032b116a73e828ba43a68550fad36eec794f7d046d5ffc9ff6df705f942"
+    },
+    {
+      "dataset_key": "nursing-home-ownership",
+      "status": "DISCOVERED",
+      "source_modified_at": "2026-08-01",
+      "version_identifier": null,
+      "previous_checksum": "400b92e113e216cadebe22e77397572e1b8a8c71d7fc240a3bdeaf41fa939879"
+    },
+    {
+      "dataset_key": "nursing-home-penalties",
+      "status": "DISCOVERED",
+      "source_modified_at": "2026-08-01",
+      "version_identifier": null,
+      "previous_checksum": "beeadfdb2ad5a1c8324548e260929419960bfe3948b5fec3b4febce99b28cb5f"
+    },
+    {
+      "dataset_key": "nursing-home-provider-information",
+      "status": "DISCOVERED",
+      "source_modified_at": "2026-08-01",
+      "version_identifier": null,
+      "previous_checksum": "dd15b5c31a632e46f9f28260ed9ad89486e48bba5d0589b3ccaa68214e8b9ef1"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-all-owners",
+      "status": "DISCOVERED",
+      "source_modified_at": "2026-08-17",
+      "version_identifier": "9804c9c8-9a23-48dc-a6b1-20ef6f3545ca",
+      "previous_checksum": "b0f57a17e2d1eabe818ed574736ce9fe43345a9105768d54339abcaa5cd2a530"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-change-of-ownership",
+      "status": "DISCOVERED",
+      "source_modified_at": "2026-08-24",
+      "version_identifier": "1e1afa09-5699-46a5-ae9e-47017397c55c",
+      "previous_checksum": "67389bd582d2d8b9d7ed01a0eec541d09978fc9c7c6ee9970849a33ebb43721c"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-enrollments",
+      "status": "DISCOVERED",
+      "source_modified_at": "2026-08-17",
+      "version_identifier": "d756f18b-96d9-4abf-938c-4940c82e83a5",
+      "previous_checksum": "6ad13e7f19a839a6927d04db625f86f9dcbd6b5343e80f2ffae9314e94f4a841"
+    },
+    {
+      "dataset_key": "nursing-home-health-deficiencies",
+      "status": "DISCOVERED",
+      "source_modified_at": "2026-08-01",
+      "version_identifier": null,
+      "previous_checksum": "cba84cc4809cfa6baaecd10cb68305769e87d1120a77c4aa3cec465df4487c7f"
+    }
+  ],
+  "skipped": [
+    "nursing-home-chain-performance-measures",
+    "nursing-home-mds-quality-measures",
+    "payroll-based-journal-daily-nurse-staffing",
+    "nursing-home-fire-safety-deficiencies",
+    "skilled-nursing-facility-change-of-ownership-owner-information"
+  ]
+}

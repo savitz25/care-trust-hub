@@ -1,0 +1,618 @@
+{
+  "captured_at": "2026-08-26T20:44:50.648659+00:00",
+  "pi_releases": [
+    {
+      "release": "2026-07-29",
+      "ccns": 14693
+    },
+    {
+      "release": "2026-08-01",
+      "ccns": 14690
+    }
+  ],
+  "ccn_reconciliation": {
+    "prior_ccns": 14693,
+    "new_ccns": 14690,
+    "continuing": 14687,
+    "appearing": 3,
+    "absent": 6,
+    "known_ccns": 14696,
+    "directory_status": {
+      "ABSENT_FROM_CURRENT_DIRECTORY": 6,
+      "CURRENT_ACTIVE": 14690
+    }
+  },
+  "designations_by_release": [
+    {
+      "release": "2026-07-29",
+      "kind": "abuse_icon",
+      "status": "DESIGNATED",
+      "n": 1435
+    },
+    {
+      "release": "2026-07-29",
+      "kind": "abuse_icon",
+      "status": "NOT_DESIGNATED",
+      "n": 13258
+    },
+    {
+      "release": "2026-07-29",
+      "kind": "special_focus",
+      "status": "NOT_SFF",
+      "n": 14165
+    },
+    {
+      "release": "2026-07-29",
+      "kind": "special_focus",
+      "status": "SFF",
+      "n": 88
+    },
+    {
+      "release": "2026-07-29",
+      "kind": "special_focus",
+      "status": "SFF_CANDIDATE",
+      "n": 440
+    },
+    {
+      "release": "2026-08-01",
+      "kind": "abuse_icon",
+      "status": "DESIGNATED",
+      "n": 1426
+    },
+    {
+      "release": "2026-08-01",
+      "kind": "abuse_icon",
+      "status": "NOT_DESIGNATED",
+      "n": 13264
+    },
+    {
+      "release": "2026-08-01",
+      "kind": "special_focus",
+      "status": "NOT_SFF",
+      "n": 14165
+    },
+    {
+      "release": "2026-08-01",
+      "kind": "special_focus",
+      "status": "SFF",
+      "n": 84
+    },
+    {
+      "release": "2026-08-01",
+      "kind": "special_focus",
+      "status": "SFF_CANDIDATE",
+      "n": 441
+    }
+  ],
+  "current_designations": [
+    {
+      "kind": "abuse_icon",
+      "status": "DESIGNATED",
+      "n": 1426
+    },
+    {
+      "kind": "abuse_icon",
+      "status": "NOT_DESIGNATED",
+      "n": 13264
+    },
+    {
+      "kind": "special_focus",
+      "status": "NOT_SFF",
+      "n": 14165
+    },
+    {
+      "kind": "special_focus",
+      "status": "SFF",
+      "n": 84
+    },
+    {
+      "kind": "special_focus",
+      "status": "SFF_CANDIDATE",
+      "n": 441
+    }
+  ],
+  "sff_abuse_intersection": {
+    "sff_and_abuse": 30,
+    "candidate_and_abuse": 202
+  },
+  "sample_ccns": [
+    {
+      "ccn": "015463",
+      "sff": "SFF",
+      "abuse": "NOT_DESIGNATED"
+    },
+    {
+      "ccn": "035217",
+      "sff": "SFF",
+      "abuse": "DESIGNATED"
+    },
+    {
+      "ccn": "045421",
+      "sff": "SFF",
+      "abuse": "NOT_DESIGNATED"
+    },
+    {
+      "ccn": "055189",
+      "sff": "SFF",
+      "abuse": "NOT_DESIGNATED"
+    },
+    {
+      "ccn": "055858",
+      "sff": "SFF",
+      "abuse": "DESIGNATED"
+    },
+    {
+      "ccn": "055870",
+      "sff": "SFF",
+      "abuse": "NOT_DESIGNATED"
+    }
+  ],
+  "inspections_by_release": [
+    {
+      "release": "2026-07-01",
+      "rows": 149705,
+      "providers": 14693,
+      "earliest": "2016-07-28",
+      "latest": "2026-06-26"
+    },
+    {
+      "release": "2026-08-01",
+      "rows": 149978,
+      "providers": 14687,
+      "earliest": "2016-07-28",
+      "latest": "2026-07-24"
+    }
+  ],
+  "deficiencies_by_release": [
+    {
+      "release": "2026-07-01",
+      "rows": 418344,
+      "complaint_flagged": 130534,
+      "unlinked": 30374,
+      "providers": 14629
+    },
+    {
+      "release": "2026-08-01",
+      "rows": 419479,
+      "complaint_flagged": 131315,
+      "unlinked": 30267,
+      "providers": 14627
+    }
+  ],
+  "penalties_by_release": [
+    {
+      "release": "2026-07-01",
+      "fines": 13687,
+      "fine_ccns": 6576,
+      "fine_amount_sum": "464165281.00",
+      "payment_denials": 2479,
+      "payment_denial_ccns": 1913
+    },
+    {
+      "release": "2026-08-01",
+      "fines": 13254,
+      "fine_ccns": 6513,
+      "fine_amount_sum": "456736592.00",
+      "payment_denials": 2440,
+      "payment_denial_ccns": 1886
+    }
+  ],
+  "ownership_by_release": [
+    {
+      "dataset": "nursing-home-ownership",
+      "release": "2026-07-01",
+      "relationships": 246986,
+      "facilities": 14047
+    },
+    {
+      "dataset": "nursing-home-ownership",
+      "release": "2026-08-01",
+      "relationships": 248794,
+      "facilities": 14031
+    },
+    {
+      "dataset": "skilled-nursing-facility-all-owners",
+      "release": "2026-07-27",
+      "relationships": 293253,
+      "facilities": 10454
+    },
+    {
+      "dataset": "skilled-nursing-facility-all-owners",
+      "release": "2026-08-17",
+      "relationships": 295083,
+      "facilities": 12007
+    },
+    {
+      "dataset": "skilled-nursing-facility-change-of-ownership-owner-information",
+      "release": "2026-07-27",
+      "relationships": 119419,
+      "facilities": 3874
+    },
+    {
+      "dataset": "skilled-nursing-facility-enrollments",
+      "release": "2026-07-27",
+      "relationships": 14405,
+      "facilities": 14213
+    },
+    {
+      "dataset": "skilled-nursing-facility-enrollments",
+      "release": "2026-08-17",
+      "relationships": 14410,
+      "facilities": 14219
+    }
+  ],
+  "npi_by_release": [
+    {
+      "release": "2026-07-27",
+      "rows": 14236,
+      "npis": 14232,
+      "ccns": 14236
+    },
+    {
+      "release": "2026-08-17",
+      "rows": 14241,
+      "npis": 14238,
+      "ccns": 14241
+    }
+  ],
+  "current_ccns_without_confirmed_npi": 475,
+  "npi_reused_across_2plus_ccns": 2,
+  "chains": 676,
+  "chain_memberships": 20348,
+  "mds_observations": 1248650,
+  "fire_citations": 200327,
+  "pbj_days": 5280805,
+  "source_release_counts": {
+    "nursing-home-chain-performance-measures": 6,
+    "nursing-home-fire-safety-deficiencies": 1,
+    "nursing-home-health-deficiencies": 2,
+    "nursing-home-inspection-dates": 2,
+    "nursing-home-mds-quality-measures": 1,
+    "nursing-home-ownership": 2,
+    "nursing-home-penalties": 2,
+    "nursing-home-provider-information": 2,
+    "payroll-based-journal-daily-nurse-staffing": 4,
+    "skilled-nursing-facility-all-owners": 2,
+    "skilled-nursing-facility-change-of-ownership": 1,
+    "skilled-nursing-facility-change-of-ownership-owner-information": 1,
+    "skilled-nursing-facility-enrollments": 2
+  },
+  "parent_run": {
+    "id": "12746ec2-0fe7-4593-a581-c1121f046f7b",
+    "mode": "refresh",
+    "status": "HEALTHY",
+    "writes_enabled": true,
+    "trigger": "manual"
+  },
+  "source_runs": [
+    {
+      "dataset_key": "nursing-home-chain-performance-measures",
+      "status": "NO_CHANGE",
+      "record_count": null
+    },
+    {
+      "dataset_key": "nursing-home-fire-safety-deficiencies",
+      "status": "NO_CHANGE",
+      "record_count": null
+    },
+    {
+      "dataset_key": "nursing-home-health-deficiencies",
+      "status": "COMPLETE",
+      "record_count": 419479
+    },
+    {
+      "dataset_key": "nursing-home-inspection-dates",
+      "status": "COMPLETE",
+      "record_count": 149985
+    },
+    {
+      "dataset_key": "nursing-home-mds-quality-measures",
+      "status": "NO_CHANGE",
+      "record_count": null
+    },
+    {
+      "dataset_key": "nursing-home-ownership",
+      "status": "COMPLETE",
+      "record_count": 249452
+    },
+    {
+      "dataset_key": "nursing-home-penalties",
+      "status": "COMPLETE",
+      "record_count": 15696
+    },
+    {
+      "dataset_key": "nursing-home-provider-information",
+      "status": "COMPLETE",
+      "record_count": 14690
+    },
+    {
+      "dataset_key": "payroll-based-journal-daily-nurse-staffing",
+      "status": "NO_CHANGE",
+      "record_count": null
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-all-owners",
+      "status": "COMPLETE",
+      "record_count": 295083
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-change-of-ownership",
+      "status": "NO_CHANGE",
+      "record_count": null
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-change-of-ownership-owner-information",
+      "status": "NO_CHANGE",
+      "record_count": null
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-enrollments",
+      "status": "COMPLETE",
+      "record_count": 14410
+    }
+  ],
+  "freshness": [
+    {
+      "dataset_key": "nursing-home-chain-performance-measures",
+      "display_name": "Nursing Home Chain Performance Measures",
+      "cms_identifier": "97ecfad1-d3f1-4d42-b774-d74661d830bc",
+      "refresh_cadence": "MONTHLY",
+      "check_frequency": "DAILY",
+      "freshness_sla_days": 45,
+      "current_release": "2026-08-12",
+      "source_modified_at": "2026-08-12 00:00:00+00",
+      "source_period": "2026-07-01/2026-07-31",
+      "retrieved_at": "2026-08-16 00:32:14.534143+00",
+      "last_success_at": "2026-08-16 00:50:19.885827+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "14.9",
+      "last_source_run_status": "NO_CHANGE",
+      "last_failure_at": null,
+      "last_healthy_status": "NO_CHANGE",
+      "official_url": "https://data.cms.gov/quality-of-care/nursing-home-chain-performance-measures"
+    },
+    {
+      "dataset_key": "nursing-home-fire-safety-deficiencies",
+      "display_name": "Fire Safety Deficiencies",
+      "cms_identifier": "ifjz-ge4w",
+      "refresh_cadence": "MONTHLY",
+      "check_frequency": "DAILY",
+      "freshness_sla_days": 45,
+      "current_release": "2026-08-01",
+      "source_modified_at": "2026-08-01 00:00:00+00",
+      "source_period": null,
+      "retrieved_at": "2026-08-26 18:50:50.906114+00",
+      "last_success_at": "2026-08-26 19:19:05.452549+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "25.9",
+      "last_source_run_status": "NO_CHANGE",
+      "last_failure_at": null,
+      "last_healthy_status": "NO_CHANGE",
+      "official_url": "https://data.cms.gov/provider-data/dataset/ifjz-ge4w"
+    },
+    {
+      "dataset_key": "nursing-home-health-deficiencies",
+      "display_name": "Health Deficiencies",
+      "cms_identifier": "r5ix-sfxw",
+      "refresh_cadence": "MONTHLY",
+      "check_frequency": "DAILY",
+      "freshness_sla_days": 45,
+      "current_release": "2026-08-01",
+      "source_modified_at": "2026-08-01 00:00:00+00",
+      "source_period": null,
+      "retrieved_at": "2026-08-26 20:35:10.928852+00",
+      "last_success_at": "2026-08-26 20:39:46.309448+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "25.9",
+      "last_source_run_status": "COMPLETE",
+      "last_failure_at": null,
+      "last_healthy_status": "COMPLETE",
+      "official_url": "https://data.cms.gov/provider-data/dataset/r5ix-sfxw"
+    },
+    {
+      "dataset_key": "nursing-home-inspection-dates",
+      "display_name": "Inspection Dates",
+      "cms_identifier": "svdt-c123",
+      "refresh_cadence": "MONTHLY",
+      "check_frequency": "DAILY",
+      "freshness_sla_days": 45,
+      "current_release": "2026-08-01",
+      "source_modified_at": "2026-08-01 00:00:00+00",
+      "source_period": null,
+      "retrieved_at": "2026-08-26 20:18:10.260419+00",
+      "last_success_at": "2026-08-26 20:19:23.513108+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "25.9",
+      "last_source_run_status": "COMPLETE",
+      "last_failure_at": null,
+      "last_healthy_status": "COMPLETE",
+      "official_url": "https://data.cms.gov/provider-data/dataset/svdt-c123"
+    },
+    {
+      "dataset_key": "nursing-home-mds-quality-measures",
+      "display_name": "MDS Quality Measures",
+      "cms_identifier": "djen-97ju",
+      "refresh_cadence": "MONTHLY",
+      "check_frequency": "DAILY",
+      "freshness_sla_days": 45,
+      "current_release": "2026-08-01",
+      "source_modified_at": "2026-08-01 00:00:00+00",
+      "source_period": null,
+      "retrieved_at": "2026-08-26 18:50:46.12368+00",
+      "last_success_at": "2026-08-26 19:06:26.432372+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "25.9",
+      "last_source_run_status": "NO_CHANGE",
+      "last_failure_at": null,
+      "last_healthy_status": "NO_CHANGE",
+      "official_url": "https://data.cms.gov/provider-data/dataset/djen-97ju"
+    },
+    {
+      "dataset_key": "nursing-home-ownership",
+      "display_name": "Ownership",
+      "cms_identifier": "y2hd-n93e",
+      "refresh_cadence": "MONTHLY",
+      "check_frequency": "DAILY",
+      "freshness_sla_days": 45,
+      "current_release": "2026-08-01",
+      "source_modified_at": "2026-08-01 00:00:00+00",
+      "source_period": null,
+      "retrieved_at": "2026-08-26 20:19:47.315631+00",
+      "last_success_at": "2026-08-26 20:19:58.373836+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "25.9",
+      "last_source_run_status": "COMPLETE",
+      "last_failure_at": null,
+      "last_healthy_status": "COMPLETE",
+      "official_url": "https://data.cms.gov/provider-data/dataset/y2hd-n93e"
+    },
+    {
+      "dataset_key": "nursing-home-penalties",
+      "display_name": "Penalties",
+      "cms_identifier": "g6vv-u9sr",
+      "refresh_cadence": "MONTHLY",
+      "check_frequency": "DAILY",
+      "freshness_sla_days": 45,
+      "current_release": "2026-08-01",
+      "source_modified_at": "2026-08-01 00:00:00+00",
+      "source_period": null,
+      "retrieved_at": "2026-08-26 20:24:35.184131+00",
+      "last_success_at": "2026-08-26 20:24:44.085382+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "25.9",
+      "last_source_run_status": "COMPLETE",
+      "last_failure_at": null,
+      "last_healthy_status": "COMPLETE",
+      "official_url": "https://data.cms.gov/provider-data/dataset/g6vv-u9sr"
+    },
+    {
+      "dataset_key": "nursing-home-provider-information",
+      "display_name": "Provider Information",
+      "cms_identifier": "4pq5-n9py",
+      "refresh_cadence": "MONTHLY",
+      "check_frequency": "DAILY",
+      "freshness_sla_days": 45,
+      "current_release": "2026-08-01",
+      "source_modified_at": "2026-08-01 00:00:00+00",
+      "source_period": null,
+      "retrieved_at": "2026-08-26 20:24:52.158102+00",
+      "last_success_at": "2026-08-26 20:24:52.965453+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "25.9",
+      "last_source_run_status": "COMPLETE",
+      "last_failure_at": null,
+      "last_healthy_status": "COMPLETE",
+      "official_url": "https://data.cms.gov/provider-data/dataset/4pq5-n9py"
+    },
+    {
+      "dataset_key": "payroll-based-journal-daily-nurse-staffing",
+      "display_name": "Payroll Based Journal Daily Nurse Staffing",
+      "cms_identifier": "7e0d53ba-8f02-4c66-98a5-14a1c997c50d",
+      "refresh_cadence": "QUARTERLY",
+      "check_frequency": "WEEKLY",
+      "freshness_sla_days": 120,
+      "current_release": "2026-07-29",
+      "source_modified_at": "2026-07-29 00:00:00+00",
+      "source_period": "2026Q1",
+      "retrieved_at": "2026-08-15 04:29:10.416563+00",
+      "last_success_at": "2026-08-15 06:43:08.814352+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "28.9",
+      "last_source_run_status": "NO_CHANGE",
+      "last_failure_at": null,
+      "last_healthy_status": "NO_CHANGE",
+      "official_url": "https://data.cms.gov/quality-of-care/payroll-based-journal-daily-nurse-staffing"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-all-owners",
+      "display_name": "Skilled Nursing Facility All Owners",
+      "cms_identifier": "afe44b85-cc6d-40d7-b5df-00ae8910d1d2",
+      "refresh_cadence": "MONTHLY",
+      "check_frequency": "DAILY",
+      "freshness_sla_days": 45,
+      "current_release": "2026-08-17",
+      "source_modified_at": "2026-08-17 00:00:00+00",
+      "source_period": "2026-08-01/2026-08-31",
+      "retrieved_at": "2026-08-26 20:25:26.2514+00",
+      "last_success_at": "2026-08-26 20:25:47.700513+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "9.9",
+      "last_source_run_status": "COMPLETE",
+      "last_failure_at": null,
+      "last_healthy_status": "COMPLETE",
+      "official_url": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/skilled-nursing-facility-all-owners"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-change-of-ownership",
+      "display_name": "Skilled Nursing Facility Change of Ownership",
+      "cms_identifier": "f557a6ed-95b3-4a22-8433-4175db2dec1c",
+      "refresh_cadence": "QUARTERLY",
+      "check_frequency": "WEEKLY",
+      "freshness_sla_days": 120,
+      "current_release": "2026-07-27",
+      "source_modified_at": "2026-07-27 00:00:00+00",
+      "source_period": "2026-04-01/2026-06-30",
+      "retrieved_at": "2026-08-15 22:02:31.279443+00",
+      "last_success_at": "2026-08-15 23:13:31.066545+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "30.9",
+      "last_source_run_status": "NO_CHANGE",
+      "last_failure_at": null,
+      "last_healthy_status": "NO_CHANGE",
+      "official_url": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/skilled-nursing-facility-change-of-ownership"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-change-of-ownership-owner-information",
+      "display_name": "Skilled Nursing Facility Change of Ownership - Owner Information",
+      "cms_identifier": "a4358712-e910-4eaf-8f24-5e90ba3cf8d0",
+      "refresh_cadence": "QUARTERLY",
+      "check_frequency": "WEEKLY",
+      "freshness_sla_days": 120,
+      "current_release": "2026-07-27",
+      "source_modified_at": "2026-07-27 00:00:00+00",
+      "source_period": "2026-04-01/2026-06-30",
+      "retrieved_at": "2026-08-15 22:02:34.126768+00",
+      "last_success_at": "2026-08-15 23:15:26.325901+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "30.9",
+      "last_source_run_status": "NO_CHANGE",
+      "last_failure_at": null,
+      "last_healthy_status": "NO_CHANGE",
+      "official_url": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/skilled-nursing-facility-change-of-ownership-owner-information"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-enrollments",
+      "display_name": "Skilled Nursing Facility Enrollments",
+      "cms_identifier": "5f2c306f-3b1c-42cd-b037-187b2ce22126",
+      "refresh_cadence": "MONTHLY",
+      "check_frequency": "DAILY",
+      "freshness_sla_days": 45,
+      "current_release": "2026-08-17",
+      "source_modified_at": "2026-08-17 00:00:00+00",
+      "source_period": "2026-08-01/2026-08-31",
+      "retrieved_at": "2026-08-26 20:34:01.233098+00",
+      "last_success_at": "2026-08-26 20:34:41.049392+00",
+      "last_ingest_status": "succeeded",
+      "freshness_band": "CURRENT",
+      "age_days": "9.9",
+      "last_source_run_status": "COMPLETE",
+      "last_failure_at": null,
+      "last_healthy_status": "COMPLETE",
+      "official_url": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/skilled-nursing-facility-enrollments"
+    }
+  ],
+  "scheduled_workflow_has_unattended_write_guard": true,
+  "scheduled_default_mode_is_check": true
+}

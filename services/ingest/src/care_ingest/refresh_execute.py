@@ -133,6 +133,31 @@ def _normalized_path(data_root: Path, dataset_key: str, release: str) -> Path:
     return data_root / "normalized" / "cms" / dataset_key / release / name
 
 
+def _align_catalog_modified(database_url: str, dataset_key: str, manifest) -> None:
+    """Record a newer CMS catalog timestamp when the bytes did not change."""
+    modified = manifest.source_modified_at or manifest.source_release_date
+    if not modified:
+        return
+    import psycopg
+
+    with psycopg.connect(database_url) as connection:
+        connection.execute("SET statement_timeout = 0")
+        with connection.transaction():
+            connection.execute(
+                """
+                UPDATE source_release r
+                SET source_modified_at = CAST(%s AS timestamptz)
+                FROM source_dataset d
+                WHERE d.id = r.source_dataset_id
+                  AND d.dataset_key = %s
+                  AND r.content_sha256 = %s
+                  AND (r.source_modified_at IS NULL
+                       OR r.source_modified_at < CAST(%s AS timestamptz))
+                """,
+                (modified, dataset_key, manifest.sha256, modified),
+            )
+
+
 def execute_source_write(
     dataset_key: str,
     *,
@@ -155,8 +180,10 @@ def execute_source_write(
         )
     if on_status:
         on_status("FETCHED", {"estimated_bytes": estimated})
-    path, manifest = download_source(source, data_root)
+    timeout = 900 if dataset_key in LARGE_SOURCES or estimated >= 50_000_000 else 300
+    path, manifest = download_source(source, data_root, timeout=timeout)
     if previous_checksum and manifest.sha256 == previous_checksum:
+        _align_catalog_modified(database_url, dataset_key, manifest)
         return {
             "status": "NO_CHANGE",
             "checksum": manifest.sha256,

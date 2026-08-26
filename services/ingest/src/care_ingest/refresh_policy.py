@@ -161,14 +161,23 @@ def source_changed(
     previous_version: str | None = None,
     discovered_version: str | None = None,
 ) -> bool:
+    """Checksum is authoritative when both sides have one.
+
+    A stable CMS version UUID must not hide a newer source_modified_at. CHOW and
+    other data.json sources can bump catalog modified dates while keeping the
+    same version identifier; the write path then checksums the file and records
+    NO_CHANGE if bytes are identical.
+    """
     if discovered_checksum and previous_checksum:
         return discovered_checksum != previous_checksum
-    if discovered_version and previous_version:
-        return discovered_version != previous_version
+    version_known = bool(previous_version and discovered_version)
     previous_stamp = _stamp_key(previous_modified)
     discovered_stamp = _stamp_key(discovered_modified)
-    if previous_stamp and discovered_stamp:
-        return previous_stamp != discovered_stamp
+    modified_known = bool(previous_stamp and discovered_stamp)
+    if version_known or modified_known:
+        version_diff = version_known and previous_version != discovered_version
+        modified_diff = modified_known and previous_stamp != discovered_stamp
+        return version_diff or modified_diff
     return True
 
 

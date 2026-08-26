@@ -56,6 +56,25 @@ def test_modified_timestamps_compare_by_date_not_timezone_text() -> None:
     )
 
 
+def test_stable_version_id_does_not_hide_modified_date_change() -> None:
+    assert source_changed(
+        previous_checksum=None,
+        discovered_checksum=None,
+        previous_modified="2026-07-27",
+        discovered_modified="2026-08-24",
+        previous_version="f557a6ed-95b3-4a22-8433-4175db2dec1c",
+        discovered_version="f557a6ed-95b3-4a22-8433-4175db2dec1c",
+    )
+    assert not source_changed(
+        previous_checksum=None,
+        discovered_checksum=None,
+        previous_modified="2026-07-27",
+        discovered_modified="2026-07-27",
+        previous_version="f557a6ed-95b3-4a22-8433-4175db2dec1c",
+        discovered_version="f557a6ed-95b3-4a22-8433-4175db2dec1c",
+    )
+
+
 def test_checksum_beats_modified_for_change_detection() -> None:
     assert not source_changed(
         previous_checksum="a" * 64,
