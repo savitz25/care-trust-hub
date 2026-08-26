@@ -1,0 +1,97 @@
+{
+  "org_identifier_types": [
+    {
+      "issuer": "CMS_PROVIDER_DATA",
+      "identifier_type": "SOURCE_RECORD",
+      "n": 69524,
+      "distinct_values": 69524
+    },
+    {
+      "issuer": "CMS_PECOS",
+      "identifier_type": "PAC_ID",
+      "n": 45729,
+      "distinct_values": 45729
+    },
+    {
+      "issuer": "CMS_PECOS",
+      "identifier_type": "ENROLLMENT_ID",
+      "n": 14405,
+      "distinct_values": 14405
+    },
+    {
+      "issuer": "NPPES",
+      "identifier_type": "NPI",
+      "n": 14401,
+      "distinct_values": 14401
+    }
+  ],
+  "sff_values": [
+    {
+      "sff": "",
+      "n": 14165
+    },
+    {
+      "sff": "SFF Candidate",
+      "n": 440
+    },
+    {
+      "sff": "SFF",
+      "n": 88
+    }
+  ],
+  "abuse_icon": [
+    {
+      "abuse_icon": "N",
+      "n": 13258
+    },
+    {
+      "abuse_icon": "Y",
+      "n": 1435
+    }
+  ],
+  "ownership_changed_12mo": [
+    {
+      "v": "N",
+      "n": 14643
+    },
+    {
+      "v": "Y",
+      "n": 50
+    }
+  ],
+  "ownership_association_dates": [
+    {
+      "n": 674063,
+      "with_association_date": 659637
+    }
+  ],
+  "npi_orgs": [
+    {
+      "n": 14401,
+      "orgs": 12220
+    }
+  ],
+  "place_identity_latest": [
+    {
+      "resolution_state": "VERIFIED",
+      "n": 10312
+    },
+    {
+      "resolution_state": "REVIEW_REQUIRED",
+      "n": 4307
+    },
+    {
+      "resolution_state": "PROBABLE",
+      "n": 36
+    },
+    {
+      "resolution_state": "REJECTED",
+      "n": 25
+    }
+  ],
+  "providers_without_place_claim": [
+    {
+      "n": 13
+    }
+  ]
+}

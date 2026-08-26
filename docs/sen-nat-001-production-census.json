@@ -1,0 +1,1762 @@
+{
+  "audit": "SEN-NAT-001",
+  "read_only": true,
+  "pg_stat_user_tables": [
+    {
+      "table_name": "assisted_living_organization_party",
+      "est_live_tuples": 30334
+    },
+    {
+      "table_name": "assisted_living_provider",
+      "est_live_tuples": 15047
+    },
+    {
+      "table_name": "cms_chain",
+      "est_live_tuples": 671
+    },
+    {
+      "table_name": "cms_chain_organization",
+      "est_live_tuples": 8625
+    },
+    {
+      "table_name": "cms_chain_performance_snapshot",
+      "est_live_tuples": 3757
+    },
+    {
+      "table_name": "cms_chain_provider",
+      "est_live_tuples": 10231
+    },
+    {
+      "table_name": "deficiency_finding",
+      "est_live_tuples": 418327
+    },
+    {
+      "table_name": "evidence_assertion",
+      "est_live_tuples": 0
+    },
+    {
+      "table_name": "facility_claim",
+      "est_live_tuples": 121786
+    },
+    {
+      "table_name": "facility_claim_observation",
+      "est_live_tuples": 105380
+    },
+    {
+      "table_name": "facility_external_identifier",
+      "est_live_tuples": 17619
+    },
+    {
+      "table_name": "facility_external_request_cache",
+      "est_live_tuples": 28954
+    },
+    {
+      "table_name": "facility_history_event",
+      "est_live_tuples": 156797
+    },
+    {
+      "table_name": "facility_identity_candidate",
+      "est_live_tuples": 16046
+    },
+    {
+      "table_name": "facility_intelligence_run",
+      "est_live_tuples": 40
+    },
+    {
+      "table_name": "facility_intelligence_run_provider",
+      "est_live_tuples": 29986
+    },
+    {
+      "table_name": "facility_resolution_audit_event",
+      "est_live_tuples": 29822
+    },
+    {
+      "table_name": "facility_review_action",
+      "est_live_tuples": 1054
+    },
+    {
+      "table_name": "facility_review_item",
+      "est_live_tuples": 3549
+    },
+    {
+      "table_name": "facility_snapshot",
+      "est_live_tuples": 14693
+    },
+    {
+      "table_name": "facility_source_observation",
+      "est_live_tuples": 53903
+    },
+    {
+      "table_name": "ingest_run",
+      "est_live_tuples": 20
+    },
+    {
+      "table_name": "inspection_event",
+      "est_live_tuples": 149705
+    },
+    {
+      "table_name": "location_reference",
+      "est_live_tuples": 33791
+    },
+    {
+      "table_name": "organization",
+      "est_live_tuples": 115253
+    },
+    {
+      "table_name": "organization_identifier",
+      "est_live_tuples": 144059
+    },
+    {
+      "table_name": "organization_relationship",
+      "est_live_tuples": 0
+    },
+    {
+      "table_name": "ownership_change_event",
+      "est_live_tuples": 5227
+    },
+    {
+      "table_name": "ownership_party",
+      "est_live_tuples": 356879
+    },
+    {
+      "table_name": "ownership_portfolio",
+      "est_live_tuples": 105301
+    },
+    {
+      "table_name": "ownership_portfolio_member",
+      "est_live_tuples": 141524
+    },
+    {
+      "table_name": "ownership_source_notice",
+      "est_live_tuples": 646
+    },
+    {
+      "table_name": "pbj_staffing_day",
+      "est_live_tuples": 5280859
+    },
+    {
+      "table_name": "pbj_staffing_load_stage",
+      "est_live_tuples": 0
+    },
+    {
+      "table_name": "pbj_staffing_quarter_summary",
+      "est_live_tuples": 57873
+    },
+    {
+      "table_name": "penalty_enforcement",
+      "est_live_tuples": 16166
+    },
+    {
+      "table_name": "provider",
+      "est_live_tuples": 14693
+    },
+    {
+      "table_name": "provider_context_submission",
+      "est_live_tuples": 0
+    },
+    {
+      "table_name": "provider_identifier",
+      "est_live_tuples": 14693
+    },
+    {
+      "table_name": "provider_ownership_relationship",
+      "est_live_tuples": 674153
+    },
+    {
+      "table_name": "raw_object",
+      "est_live_tuples": 19
+    },
+    {
+      "table_name": "regulatory_load_stage",
+      "est_live_tuples": 0
+    },
+    {
+      "table_name": "source_dataset",
+      "est_live_tuples": 11
+    },
+    {
+      "table_name": "source_release",
+      "est_live_tuples": 19
+    },
+    {
+      "table_name": "trust_audit_event",
+      "est_live_tuples": 0
+    },
+    {
+      "table_name": "trust_request",
+      "est_live_tuples": 0
+    },
+    {
+      "table_name": "trust_request_evidence",
+      "est_live_tuples": 0
+    },
+    {
+      "table_name": "trust_request_status_history",
+      "est_live_tuples": 0
+    },
+    {
+      "table_name": "trusthub_manual_override",
+      "est_live_tuples": 0
+    }
+  ],
+  "row_counts": {
+    "source_dataset": 11,
+    "source_release": 19,
+    "raw_object": 19,
+    "ingest_run": 20,
+    "provider": 14693,
+    "provider_identifier": 14693,
+    "facility_snapshot": 14693,
+    "evidence_assertion": 0,
+    "inspection_event": 149705,
+    "deficiency_finding": 418344,
+    "penalty_enforcement": 16166,
+    "pbj_staffing_day": 5280805,
+    "pbj_staffing_quarter_summary": 57873,
+    "organization": 115253,
+    "organization_identifier": 144059,
+    "ownership_party": 356879,
+    "provider_ownership_relationship": 674063,
+    "organization_relationship": 0,
+    "ownership_change_event": 5227,
+    "ownership_source_notice": 646,
+    "ownership_portfolio": 105301,
+    "ownership_portfolio_member": 141524,
+    "cms_chain": 671,
+    "cms_chain_performance_snapshot": 3757,
+    "cms_chain_provider": 10231,
+    "cms_chain_organization": 8625,
+    "location_reference": 33791,
+    "facility_intelligence_run": 40,
+    "facility_source_observation": 53903,
+    "facility_external_identifier": 17619,
+    "facility_claim": 121786,
+    "facility_identity_candidate": 16133,
+    "facility_review_item": 3546,
+    "facility_history_event": 156797,
+    "assisted_living_provider": 15047,
+    "assisted_living_organization_party": 30334,
+    "trust_request": 0
+  },
+  "provider_types": [
+    {
+      "provider_type": "nursing_home",
+      "n": 14693
+    }
+  ],
+  "identifier_types": [
+    {
+      "issuer": "CMS",
+      "identifier_type": "CCN",
+      "n": 14693,
+      "distinct_values": 14693,
+      "distinct_providers": 14693
+    }
+  ],
+  "datasets": [
+    {
+      "dataset_key": "nursing-home-chain-performance-measures",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "display_name": "Nursing Home Chain Performance Measures",
+      "releases": 6
+    },
+    {
+      "dataset_key": "nursing-home-health-deficiencies",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "display_name": "Health Deficiencies",
+      "releases": 1
+    },
+    {
+      "dataset_key": "nursing-home-inspection-dates",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "display_name": "Inspection Dates",
+      "releases": 1
+    },
+    {
+      "dataset_key": "nursing-home-ownership",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "display_name": "Ownership",
+      "releases": 1
+    },
+    {
+      "dataset_key": "nursing-home-penalties",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "display_name": "Penalties",
+      "releases": 1
+    },
+    {
+      "dataset_key": "nursing-home-provider-information",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "display_name": "Provider Information",
+      "releases": 1
+    },
+    {
+      "dataset_key": "payroll-based-journal-daily-nurse-staffing",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "display_name": "Payroll Based Journal Daily Nurse Staffing",
+      "releases": 4
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-all-owners",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "display_name": "Skilled Nursing Facility All Owners",
+      "releases": 1
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-change-of-ownership",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "display_name": "Skilled Nursing Facility Change of Ownership",
+      "releases": 1
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-change-of-ownership-owner-information",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "display_name": "Skilled Nursing Facility Change of Ownership - Owner Information",
+      "releases": 1
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-enrollments",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "display_name": "Skilled Nursing Facility Enrollments",
+      "releases": 1
+    }
+  ],
+  "releases": [
+    {
+      "dataset_key": "nursing-home-chain-performance-measures",
+      "release_key": "2026-08-12",
+      "source_published_at": null,
+      "source_modified_at": "2026-08-12 00:00:00+00:00",
+      "source_period": "2026-07-01/2026-07-31",
+      "source_version_identifier": "da2db00a-0f3d-40a9-a535-588ff1220c55",
+      "retrieved_at": "2026-08-16 00:32:14.534143+00:00",
+      "source_release_date": "2026-08-12",
+      "status": "succeeded",
+      "transformation_version": "cms-chain-v1",
+      "rows_read": 634,
+      "valid_rows": 634,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-16 00:50:19.885827+00:00"
+    },
+    {
+      "dataset_key": "nursing-home-chain-performance-measures",
+      "release_key": "2026-07-15",
+      "source_published_at": null,
+      "source_modified_at": "2026-07-15 00:00:00+00:00",
+      "source_period": "2026-06-01/2026-06-30",
+      "source_version_identifier": "cb1f7877-e0ea-4f5d-8b1a-8dd1c8723358",
+      "retrieved_at": "2026-08-16 00:32:15.996159+00:00",
+      "source_release_date": "2026-07-15",
+      "status": "succeeded",
+      "transformation_version": "cms-chain-v1",
+      "rows_read": 635,
+      "valid_rows": 635,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-16 00:50:48.491986+00:00"
+    },
+    {
+      "dataset_key": "nursing-home-chain-performance-measures",
+      "release_key": "2026-06-10",
+      "source_published_at": null,
+      "source_modified_at": "2026-06-10 00:00:00+00:00",
+      "source_period": "2026-05-01/2026-05-31",
+      "source_version_identifier": "c51c7172-8406-4963-b4aa-48b695225033",
+      "retrieved_at": "2026-08-16 00:32:17.488326+00:00",
+      "source_release_date": "2026-06-10",
+      "status": "succeeded",
+      "transformation_version": "cms-chain-v1",
+      "rows_read": 635,
+      "valid_rows": 635,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-16 00:50:53.428068+00:00"
+    },
+    {
+      "dataset_key": "nursing-home-chain-performance-measures",
+      "release_key": "2026-05-15",
+      "source_published_at": null,
+      "source_modified_at": "2026-05-15 00:00:00+00:00",
+      "source_period": "2026-04-01/2026-04-30",
+      "source_version_identifier": "01f7745f-e553-4781-b07f-8514e9f6ec40",
+      "retrieved_at": "2026-08-16 00:32:18.971349+00:00",
+      "source_release_date": "2026-05-15",
+      "status": "succeeded",
+      "transformation_version": "cms-chain-v1",
+      "rows_read": 619,
+      "valid_rows": 619,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-16 00:50:57.900966+00:00"
+    },
+    {
+      "dataset_key": "nursing-home-chain-performance-measures",
+      "release_key": "2026-04-08",
+      "source_published_at": null,
+      "source_modified_at": "2026-04-08 00:00:00+00:00",
+      "source_period": "2026-03-01/2026-03-31",
+      "source_version_identifier": "d2d05d43-fea3-41db-b90d-ebcd88971af1",
+      "retrieved_at": "2026-08-16 00:32:20.354912+00:00",
+      "source_release_date": "2026-04-08",
+      "status": "succeeded",
+      "transformation_version": "cms-chain-v1",
+      "rows_read": 616,
+      "valid_rows": 616,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-16 00:51:02.214170+00:00"
+    },
+    {
+      "dataset_key": "nursing-home-chain-performance-measures",
+      "release_key": "2026-03-11",
+      "source_published_at": null,
+      "source_modified_at": "2026-03-11 00:00:00+00:00",
+      "source_period": "2026-02-01/2026-02-28",
+      "source_version_identifier": "664e1bbd-790c-4f8d-a997-e69063a957f1",
+      "retrieved_at": "2026-08-16 00:32:21.816733+00:00",
+      "source_release_date": "2026-03-11",
+      "status": "succeeded",
+      "transformation_version": "cms-chain-v1",
+      "rows_read": 618,
+      "valid_rows": 618,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-16 00:51:07.092737+00:00"
+    },
+    {
+      "dataset_key": "nursing-home-health-deficiencies",
+      "release_key": "2026-07-01",
+      "source_published_at": "2026-07-29 00:00:00+00:00",
+      "source_modified_at": "2026-07-01 00:00:00+00:00",
+      "source_period": null,
+      "source_version_identifier": null,
+      "retrieved_at": "2026-08-14 23:02:59.762102+00:00",
+      "source_release_date": "2026-07-01",
+      "status": "succeeded",
+      "transformation_version": "health-deficiencies-v1",
+      "rows_read": 418344,
+      "valid_rows": 418344,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-14 23:26:30.514935+00:00"
+    },
+    {
+      "dataset_key": "nursing-home-inspection-dates",
+      "release_key": "2026-07-01",
+      "source_published_at": "2026-07-29 00:00:00+00:00",
+      "source_modified_at": "2026-07-01 00:00:00+00:00",
+      "source_period": null,
+      "source_version_identifier": null,
+      "retrieved_at": "2026-08-14 23:02:49.602961+00:00",
+      "source_release_date": "2026-07-01",
+      "status": "succeeded",
+      "transformation_version": "inspection-dates-v1",
+      "rows_read": 149705,
+      "valid_rows": 149705,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-14 23:12:31.194290+00:00"
+    },
+    {
+      "dataset_key": "nursing-home-ownership",
+      "release_key": "2026-07-01",
+      "source_published_at": "2026-07-29 00:00:00+00:00",
+      "source_modified_at": "2026-07-01 00:00:00+00:00",
+      "source_period": null,
+      "source_version_identifier": null,
+      "retrieved_at": "2026-08-15 22:02:29.410021+00:00",
+      "source_release_date": "2026-07-01",
+      "status": "succeeded",
+      "transformation_version": "cms-ownership-v1",
+      "rows_read": 247632,
+      "valid_rows": 247632,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-15 23:07:14.332925+00:00"
+    },
+    {
+      "dataset_key": "nursing-home-penalties",
+      "release_key": "2026-07-01",
+      "source_published_at": "2026-07-29 00:00:00+00:00",
+      "source_modified_at": "2026-07-01 00:00:00+00:00",
+      "source_period": null,
+      "source_version_identifier": null,
+      "retrieved_at": "2026-08-14 23:03:02.950177+00:00",
+      "source_release_date": "2026-07-01",
+      "status": "succeeded",
+      "transformation_version": "penalties-v1",
+      "rows_read": 16166,
+      "valid_rows": 16166,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-14 23:28:53.592297+00:00"
+    },
+    {
+      "dataset_key": "nursing-home-provider-information",
+      "release_key": "2026-07-29",
+      "source_published_at": null,
+      "source_modified_at": "2026-07-29 00:00:00+00:00",
+      "source_period": null,
+      "source_version_identifier": null,
+      "retrieved_at": "2026-08-14 16:37:37.046106+00:00",
+      "source_release_date": "2026-07-29",
+      "status": "succeeded",
+      "transformation_version": "provider-information-v2",
+      "rows_read": 14693,
+      "valid_rows": 14693,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-14 17:53:42.983651+00:00"
+    },
+    {
+      "dataset_key": "payroll-based-journal-daily-nurse-staffing",
+      "release_key": "2026-07-29",
+      "source_published_at": null,
+      "source_modified_at": "2026-07-29 00:00:00+00:00",
+      "source_period": "2026Q1",
+      "source_version_identifier": "6e5d5e28-66fd-41bc-a36c-db54dcbffd3e",
+      "retrieved_at": "2026-08-15 04:29:10.416563+00:00",
+      "source_release_date": "2026-07-29",
+      "status": "succeeded",
+      "transformation_version": "pbj-daily-nurse-v1",
+      "rows_read": 1303830,
+      "valid_rows": 1303830,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-15 06:43:08.814352+00:00"
+    },
+    {
+      "dataset_key": "payroll-based-journal-daily-nurse-staffing",
+      "release_key": "2026-04-29",
+      "source_published_at": null,
+      "source_modified_at": "2026-04-29 00:00:00+00:00",
+      "source_period": "2025Q4",
+      "source_version_identifier": "bde06106-736e-4ac3-9406-c153fd4bc414",
+      "retrieved_at": "2026-08-15 18:10:10.023111+00:00",
+      "source_release_date": "2026-04-29",
+      "status": "succeeded",
+      "transformation_version": "pbj-daily-nurse-v1",
+      "rows_read": 1321304,
+      "valid_rows": 1321304,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-15 18:29:46.651163+00:00"
+    },
+    {
+      "dataset_key": "payroll-based-journal-daily-nurse-staffing",
+      "release_key": "2026-02-05",
+      "source_published_at": null,
+      "source_modified_at": "2026-02-05 00:00:00+00:00",
+      "source_period": "2025Q3",
+      "source_version_identifier": "2a3e7c33-817d-49cb-8b24-2c26ba5fd520",
+      "retrieved_at": "2026-08-15 17:29:17.327392+00:00",
+      "source_release_date": "2026-02-05",
+      "status": "succeeded",
+      "transformation_version": "pbj-daily-nurse-v1",
+      "rows_read": 1332804,
+      "valid_rows": 1332804,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-15 17:51:25.693028+00:00"
+    },
+    {
+      "dataset_key": "payroll-based-journal-daily-nurse-staffing",
+      "release_key": "2025-11-20",
+      "source_published_at": null,
+      "source_modified_at": "2025-11-20 00:00:00+00:00",
+      "source_period": "2025Q2",
+      "source_version_identifier": "a4227149-1ed3-41a5-adca-eaa98ea694e5",
+      "retrieved_at": "2026-08-15 16:10:29.002196+00:00",
+      "source_release_date": "2025-11-20",
+      "status": "succeeded",
+      "transformation_version": "pbj-daily-nurse-v1",
+      "rows_read": 1322867,
+      "valid_rows": 1322867,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-15 16:21:31.047470+00:00"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-all-owners",
+      "release_key": "2026-07-27",
+      "source_published_at": null,
+      "source_modified_at": "2026-07-27 00:00:00+00:00",
+      "source_period": "2026-07-01/2026-07-31",
+      "source_version_identifier": "f6b2b03d-0913-4703-a7da-5be260dd5137",
+      "retrieved_at": "2026-08-15 22:02:24.038098+00:00",
+      "source_release_date": "2026-07-27",
+      "status": "succeeded",
+      "transformation_version": "cms-ownership-v1",
+      "rows_read": 293253,
+      "valid_rows": 293253,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-15 22:56:42.439474+00:00"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-change-of-ownership",
+      "release_key": "2026-07-27",
+      "source_published_at": null,
+      "source_modified_at": "2026-07-27 00:00:00+00:00",
+      "source_period": "2026-04-01/2026-06-30",
+      "source_version_identifier": "1e1afa09-5699-46a5-ae9e-47017397c55c",
+      "retrieved_at": "2026-08-15 22:02:31.279443+00:00",
+      "source_release_date": "2026-07-27",
+      "status": "succeeded",
+      "transformation_version": "cms-ownership-v1",
+      "rows_read": 5227,
+      "valid_rows": 5227,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-15 23:13:31.066545+00:00"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-change-of-ownership-owner-information",
+      "release_key": "2026-07-27",
+      "source_published_at": null,
+      "source_modified_at": "2026-07-27 00:00:00+00:00",
+      "source_period": "2026-04-01/2026-06-30",
+      "source_version_identifier": "876393ce-c2a3-4500-a90d-f5112816e566",
+      "retrieved_at": "2026-08-15 22:02:34.126768+00:00",
+      "source_release_date": "2026-07-27",
+      "status": "succeeded",
+      "transformation_version": "cms-ownership-v1",
+      "rows_read": 119419,
+      "valid_rows": 119419,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-15 23:15:26.325901+00:00"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-enrollments",
+      "release_key": "2026-07-27",
+      "source_published_at": null,
+      "source_modified_at": "2026-07-27 00:00:00+00:00",
+      "source_period": "2026-07-01/2026-07-31",
+      "source_version_identifier": "d7e43564-13e5-4188-9f2f-553922c3b322",
+      "retrieved_at": "2026-08-15 22:02:19.803422+00:00",
+      "source_release_date": "2026-07-27",
+      "status": "succeeded",
+      "transformation_version": "cms-ownership-v1",
+      "rows_read": 14405,
+      "valid_rows": 14405,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-15 22:55:43.362593+00:00"
+    },
+    {
+      "dataset_key": "skilled-nursing-facility-enrollments",
+      "release_key": "2026-07-27",
+      "source_published_at": null,
+      "source_modified_at": "2026-07-27 00:00:00+00:00",
+      "source_period": "2026-07-01/2026-07-31",
+      "source_version_identifier": "d7e43564-13e5-4188-9f2f-553922c3b322",
+      "retrieved_at": "2026-08-15 22:02:19.803422+00:00",
+      "source_release_date": "2026-07-27",
+      "status": "succeeded",
+      "transformation_version": "cms-chain-membership-v1",
+      "rows_read": 10231,
+      "valid_rows": 10231,
+      "rejected_rows": 0,
+      "completed_at": "2026-08-16 00:59:06.516217+00:00"
+    }
+  ],
+  "current_pi_snapshot": [
+    {
+      "snapshots": 14693,
+      "providers": 14693,
+      "with_phone": 14693,
+      "with_beds": 14684,
+      "with_overall_rating": 14561,
+      "with_health_rating": 14561,
+      "with_staffing_rating": 14491,
+      "with_qm_rating": 14490,
+      "medicare": 14446,
+      "medicaid": 14152,
+      "with_location": 14693,
+      "states": 53
+    }
+  ],
+  "pi_participation_types": [
+    {
+      "participation_type": "Medicare and Medicaid",
+      "n": 13905
+    },
+    {
+      "participation_type": "Medicare",
+      "n": 541
+    },
+    {
+      "participation_type": "Medicaid",
+      "n": 247
+    }
+  ],
+  "ccn_uniqueness": [
+    {
+      "identifier_rows": 14693,
+      "distinct_ccns": 14693,
+      "distinct_providers": 14693,
+      "open_ended": 14693
+    }
+  ],
+  "ccn_duplicates": [],
+  "inspections": [
+    {
+      "events": 149705,
+      "facilities": 14693,
+      "survey_types": 5
+    }
+  ],
+  "inspection_survey_types": [
+    {
+      "survey_type": "Health Complaint",
+      "n": 58951,
+      "facilities": 12385
+    },
+    {
+      "survey_type": "Health Standard",
+      "n": 43922,
+      "facilities": 14693
+    },
+    {
+      "survey_type": "Fire Safety Standard",
+      "n": 43913,
+      "facilities": 14689
+    },
+    {
+      "survey_type": "Infection Control",
+      "n": 2128,
+      "facilities": 1694
+    },
+    {
+      "survey_type": "Fire Safety Complaint",
+      "n": 791,
+      "facilities": 693
+    }
+  ],
+  "deficiencies": [
+    {
+      "findings": 418344,
+      "facilities": 14629,
+      "complaint_flagged": 130534,
+      "infection_control": 1139,
+      "unlinked_to_inspection": 30374
+    }
+  ],
+  "penalties": [
+    {
+      "penalty_type": "Fine",
+      "n": 13687,
+      "facilities": 6576,
+      "fine_amount_sum": "464165281.00"
+    },
+    {
+      "penalty_type": "Payment Denial",
+      "n": 2479,
+      "facilities": 1913,
+      "fine_amount_sum": null
+    }
+  ],
+  "pbj_quarters": [
+    {
+      "source_quarter": "2025Q2",
+      "summaries": 14537,
+      "ccns": 14537
+    },
+    {
+      "source_quarter": "2025Q3",
+      "summaries": 14487,
+      "ccns": 14487
+    },
+    {
+      "source_quarter": "2025Q4",
+      "summaries": 14362,
+      "ccns": 14362
+    },
+    {
+      "source_quarter": "2026Q1",
+      "summaries": 14487,
+      "ccns": 14487
+    }
+  ],
+  "pbj_days": [
+    {
+      "days": 5280805,
+      "ccns": 14665
+    }
+  ],
+  "ownership": [
+    {
+      "organizations": 115253,
+      "parties": 356879,
+      "individuals": 246020,
+      "org_parties": 110859,
+      "relationships": 674063,
+      "facilities_with_owner_rel": 14380,
+      "change_events": 5227,
+      "facilities_with_chow": 5172,
+      "org_relationships": 0
+    }
+  ],
+  "ownership_roles": [
+    {
+      "relationship_role_text": "ADP OF THE SNF",
+      "n": 162929
+    },
+    {
+      "relationship_role_text": "OPERATIONAL/MANAGERIAL CONTROL",
+      "n": 142736
+    },
+    {
+      "relationship_role_text": "5% OR GREATER INDIRECT OWNERSHIP INTEREST",
+      "n": 69558
+    },
+    {
+      "relationship_role_text": "CORPORATE OFFICER",
+      "n": 67862
+    },
+    {
+      "relationship_role_text": "CORPORATE DIRECTOR",
+      "n": 64252
+    },
+    {
+      "relationship_role_text": "5% OR GREATER DIRECT OWNERSHIP INTEREST",
+      "n": 47518
+    },
+    {
+      "relationship_role_text": "MANAGING CONTROL - GOVERNING BODY",
+      "n": 24912
+    },
+    {
+      "relationship_role_text": "INDIRECT OWNERSHIP INTEREST",
+      "n": 19991
+    },
+    {
+      "relationship_role_text": "W-2 MANAGING EMPLOYEE",
+      "n": 19192
+    },
+    {
+      "relationship_role_text": "Medicare-enrolled legal organization",
+      "n": 14405
+    },
+    {
+      "relationship_role_text": "TRUSTEE OF THE SNF",
+      "n": 7791
+    },
+    {
+      "relationship_role_text": "DIRECT OWNERSHIP INTEREST",
+      "n": 7553
+    },
+    {
+      "relationship_role_text": "5% OR GREATER MORTGAGE INTEREST",
+      "n": 4830
+    },
+    {
+      "relationship_role_text": "5% OR GREATER SECURITY INTEREST",
+      "n": 4692
+    },
+    {
+      "relationship_role_text": "INDIVIDUAL IS AN OWNER, PARTNER OR TRUSTEE OF ANY ADP OF THE SNF",
+      "n": 4166
+    },
+    {
+      "relationship_role_text": "OTHER",
+      "n": 3957
+    },
+    {
+      "relationship_role_text": "CONTRACTED MANAGING EMPLOYEE",
+      "n": 3552
+    },
+    {
+      "relationship_role_text": "LIMITED PARTNERSHIP INTEREST",
+      "n": 2298
+    },
+    {
+      "relationship_role_text": "GENERAL PARTNERSHIP INTEREST",
+      "n": 1869
+    }
+  ],
+  "chains": [
+    {
+      "chains": 671,
+      "memberships": 10231,
+      "facilities_linked": 10116,
+      "performance_snapshots": 3757
+    }
+  ],
+  "identity_claims": [
+    {
+      "claim_type": "canonical_public_name",
+      "resolution_state": "VERIFIED",
+      "n": 14693,
+      "facilities": 14693
+    },
+    {
+      "claim_type": "google_business_status",
+      "resolution_state": "PROBABLE",
+      "n": 14196,
+      "facilities": 13830
+    },
+    {
+      "claim_type": "google_business_status",
+      "resolution_state": "REVIEW_REQUIRED",
+      "n": 47,
+      "facilities": 47
+    },
+    {
+      "claim_type": "google_business_status",
+      "resolution_state": "UNRESOLVED",
+      "n": 837,
+      "facilities": 803
+    },
+    {
+      "claim_type": "google_official_website",
+      "resolution_state": "VERIFIED",
+      "n": 399,
+      "facilities": 271
+    },
+    {
+      "claim_type": "google_official_website",
+      "resolution_state": "REVIEW_REQUIRED",
+      "n": 8194,
+      "facilities": 8110
+    },
+    {
+      "claim_type": "google_official_website",
+      "resolution_state": "UNRESOLVED",
+      "n": 6694,
+      "facilities": 6506
+    },
+    {
+      "claim_type": "google_physical_address",
+      "resolution_state": "VERIFIED",
+      "n": 14441,
+      "facilities": 14065
+    },
+    {
+      "claim_type": "google_physical_address",
+      "resolution_state": "REVIEW_REQUIRED",
+      "n": 469,
+      "facilities": 447
+    },
+    {
+      "claim_type": "google_physical_address",
+      "resolution_state": "UNRESOLVED",
+      "n": 170,
+      "facilities": 168
+    },
+    {
+      "claim_type": "google_place_identity",
+      "resolution_state": "VERIFIED",
+      "n": 10584,
+      "facilities": 10312
+    },
+    {
+      "claim_type": "google_place_identity",
+      "resolution_state": "PROBABLE",
+      "n": 36,
+      "facilities": 36
+    },
+    {
+      "claim_type": "google_place_identity",
+      "resolution_state": "REVIEW_REQUIRED",
+      "n": 4435,
+      "facilities": 4310
+    },
+    {
+      "claim_type": "google_place_identity",
+      "resolution_state": "REJECTED",
+      "n": 25,
+      "facilities": 25
+    },
+    {
+      "claim_type": "google_public_name",
+      "resolution_state": "VERIFIED",
+      "n": 11410,
+      "facilities": 11102
+    },
+    {
+      "claim_type": "google_public_name",
+      "resolution_state": "REVIEW_REQUIRED",
+      "n": 1123,
+      "facilities": 1091
+    },
+    {
+      "claim_type": "google_public_name",
+      "resolution_state": "UNRESOLVED",
+      "n": 2547,
+      "facilities": 2487
+    },
+    {
+      "claim_type": "google_public_phone",
+      "resolution_state": "VERIFIED",
+      "n": 12745,
+      "facilities": 12433
+    },
+    {
+      "claim_type": "google_public_phone",
+      "resolution_state": "REVIEW_REQUIRED",
+      "n": 1399,
+      "facilities": 1349
+    },
+    {
+      "claim_type": "google_public_phone",
+      "resolution_state": "UNRESOLVED",
+      "n": 936,
+      "facilities": 898
+    },
+    {
+      "claim_type": "STATE_ADMINISTRATOR",
+      "resolution_state": "VERIFIED",
+      "n": 1144,
+      "facilities": 1144
+    },
+    {
+      "claim_type": "STATE_ADMINISTRATOR",
+      "resolution_state": "PROBABLE",
+      "n": 1,
+      "facilities": 1
+    },
+    {
+      "claim_type": "STATE_LICENSE_CAPACITY",
+      "resolution_state": "VERIFIED",
+      "n": 2817,
+      "facilities": 2807
+    },
+    {
+      "claim_type": "STATE_LICENSE_CAPACITY",
+      "resolution_state": "PROBABLE",
+      "n": 22,
+      "facilities": 22
+    },
+    {
+      "claim_type": "STATE_LICENSE_EXPIRATION_DATE",
+      "resolution_state": "VERIFIED",
+      "n": 1158,
+      "facilities": 1158
+    },
+    {
+      "claim_type": "STATE_LICENSE_EXPIRATION_DATE",
+      "resolution_state": "PROBABLE",
+      "n": 1,
+      "facilities": 1
+    },
+    {
+      "claim_type": "STATE_LICENSE_ID",
+      "resolution_state": "VERIFIED",
+      "n": 2817,
+      "facilities": 2807
+    },
+    {
+      "claim_type": "STATE_LICENSE_ID",
+      "resolution_state": "PROBABLE",
+      "n": 22,
+      "facilities": 22
+    },
+    {
+      "claim_type": "STATE_LICENSE_ISSUE_DATE",
+      "resolution_state": "VERIFIED",
+      "n": 1502,
+      "facilities": 1492
+    },
+    {
+      "claim_type": "STATE_LICENSE_ISSUE_DATE",
+      "resolution_state": "PROBABLE",
+      "n": 22,
+      "facilities": 22
+    },
+    {
+      "claim_type": "STATE_LICENSE_STATUS",
+      "resolution_state": "VERIFIED",
+      "n": 1158,
+      "facilities": 1158
+    },
+    {
+      "claim_type": "STATE_LICENSE_STATUS",
+      "resolution_state": "PROBABLE",
+      "n": 1,
+      "facilities": 1
+    },
+    {
+      "claim_type": "STATE_LICENSE_TYPE",
+      "resolution_state": "VERIFIED",
+      "n": 2817,
+      "facilities": 2807
+    },
+    {
+      "claim_type": "STATE_LICENSE_TYPE",
+      "resolution_state": "PROBABLE",
+      "n": 22,
+      "facilities": 22
+    },
+    {
+      "claim_type": "STATE_LICENSEE",
+      "resolution_state": "VERIFIED",
+      "n": 2341,
+      "facilities": 2332
+    },
+    {
+      "claim_type": "STATE_LICENSEE",
+      "resolution_state": "PROBABLE",
+      "n": 1,
+      "facilities": 1
+    },
+    {
+      "claim_type": "STATE_MANAGEMENT_ENTITY",
+      "resolution_state": "VERIFIED",
+      "n": 14,
+      "facilities": 14
+    },
+    {
+      "claim_type": "STATE_OPERATOR",
+      "resolution_state": "VERIFIED",
+      "n": 525,
+      "facilities": 515
+    },
+    {
+      "claim_type": "STATE_OPERATOR",
+      "resolution_state": "PROBABLE",
+      "n": 21,
+      "facilities": 21
+    }
+  ],
+  "identity_latest_by_provider": [],
+  "observations": [
+    {
+      "source_type": "google_places",
+      "observation_type": "business_identity_candidate",
+      "n": 16299,
+      "entities": 14652
+    },
+    {
+      "source_type": "cms_provider_information",
+      "observation_type": "facility_identity",
+      "n": 14693,
+      "entities": 14693
+    },
+    {
+      "source_type": "ca-cdph-healthcare-facility-locations",
+      "observation_type": "STATE_LICENSE_CAPACITY",
+      "n": 1186,
+      "entities": 1159
+    },
+    {
+      "source_type": "ca-cdph-healthcare-facility-locations",
+      "observation_type": "STATE_LICENSE_EXPIRATION_DATE",
+      "n": 1186,
+      "entities": 1159
+    },
+    {
+      "source_type": "ca-cdph-healthcare-facility-locations",
+      "observation_type": "STATE_LICENSE_STATUS",
+      "n": 1186,
+      "entities": 1159
+    },
+    {
+      "source_type": "ca-cdph-healthcare-facility-locations",
+      "observation_type": "STATE_LICENSE_TYPE",
+      "n": 1186,
+      "entities": 1159
+    },
+    {
+      "source_type": "ca-cdph-healthcare-facility-locations",
+      "observation_type": "STATE_LICENSE_ID",
+      "n": 1186,
+      "entities": 1159
+    },
+    {
+      "source_type": "ca-cdph-healthcare-facility-locations",
+      "observation_type": "STATE_ADDRESS",
+      "n": 1186,
+      "entities": 1159
+    },
+    {
+      "source_type": "ca-cdph-healthcare-facility-locations",
+      "observation_type": "STATE_LICENSEE",
+      "n": 1185,
+      "entities": 1158
+    },
+    {
+      "source_type": "tx-hhsc-nursing-facility-directory",
+      "observation_type": "STATE_PHONE",
+      "n": 1175,
+      "entities": 1134
+    },
+    {
+      "source_type": "tx-hhsc-nursing-facility-directory",
+      "observation_type": "STATE_ADDRESS",
+      "n": 1175,
+      "entities": 1134
+    },
+    {
+      "source_type": "tx-hhsc-nursing-facility-directory",
+      "observation_type": "STATE_LICENSE_CAPACITY",
+      "n": 1175,
+      "entities": 1134
+    },
+    {
+      "source_type": "tx-hhsc-nursing-facility-directory",
+      "observation_type": "STATE_LICENSE_ID",
+      "n": 1175,
+      "entities": 1134
+    },
+    {
+      "source_type": "tx-hhsc-nursing-facility-directory",
+      "observation_type": "STATE_LICENSE_TYPE",
+      "n": 1175,
+      "entities": 1134
+    },
+    {
+      "source_type": "tx-hhsc-nursing-facility-directory",
+      "observation_type": "STATE_LICENSEE",
+      "n": 1174,
+      "entities": 1133
+    },
+    {
+      "source_type": "ca-cdph-healthcare-facility-locations",
+      "observation_type": "STATE_PHONE",
+      "n": 1170,
+      "entities": 1145
+    },
+    {
+      "source_type": "ca-cdph-healthcare-facility-locations",
+      "observation_type": "STATE_ADMINISTRATOR",
+      "n": 1122,
+      "entities": 1101
+    },
+    {
+      "source_type": "ca-cdph-healthcare-facility-locations",
+      "observation_type": "STATE_LICENSE_ISSUE_DATE",
+      "n": 997,
+      "entities": 978
+    },
+    {
+      "source_type": "ny-doh-hfis-general-information",
+      "observation_type": "STATE_OPERATOR",
+      "n": 596,
+      "entities": 536
+    },
+    {
+      "source_type": "ny-doh-hfis-general-information",
+      "observation_type": "STATE_LICENSE_ID",
+      "n": 594,
+      "entities": 536
+    },
+    {
+      "source_type": "ny-doh-hfis-general-information",
+      "observation_type": "STATE_LICENSE_ISSUE_DATE",
+      "n": 594,
+      "entities": 536
+    },
+    {
+      "source_type": "ny-doh-hfis-general-information",
+      "observation_type": "STATE_LICENSE_TYPE",
+      "n": 594,
+      "entities": 536
+    },
+    {
+      "source_type": "ny-doh-hfis-general-information",
+      "observation_type": "STATE_ADDRESS",
+      "n": 594,
+      "entities": 536
+    },
+    {
+      "source_type": "ny-doh-hfis-general-information",
+      "observation_type": "STATE_LICENSE_CAPACITY",
+      "n": 594,
+      "entities": 536
+    },
+    {
+      "source_type": "ny-doh-hfis-general-information",
+      "observation_type": "STATE_PHONE",
+      "n": 591,
+      "entities": 535
+    },
+    {
+      "source_type": "ny-doh-hfis-general-information",
+      "observation_type": "STATE_LICENSEE",
+      "n": 55,
+      "entities": 42
+    },
+    {
+      "source_type": "tx-hhsc-nursing-facility-directory",
+      "observation_type": "STATE_ADMINISTRATOR",
+      "n": 46,
+      "entities": 44
+    },
+    {
+      "source_type": "tx-hhsc-nursing-facility-directory",
+      "observation_type": "STATE_MANAGEMENT_ENTITY",
+      "n": 14,
+      "entities": 14
+    }
+  ],
+  "assisted_living": [
+    {
+      "state_code": "CA",
+      "identity_state": "VERIFIED",
+      "publication_state": "PUBLISHABLE_CURRENT",
+      "consumer_category": "residential_care",
+      "memory_designation": "not_reported",
+      "n": 7939,
+      "discovery": 7939
+    },
+    {
+      "state_code": "CA",
+      "identity_state": "VERIFIED",
+      "publication_state": "HISTORICAL_ONLY",
+      "consumer_category": "residential_care",
+      "memory_designation": "not_reported",
+      "n": 3821,
+      "discovery": 0
+    },
+    {
+      "state_code": "CA",
+      "identity_state": "VERIFIED",
+      "publication_state": "NOT_CURRENTLY_PUBLISHABLE",
+      "consumer_category": "residential_care",
+      "memory_designation": "not_reported",
+      "n": 739,
+      "discovery": 0
+    },
+    {
+      "state_code": "CA",
+      "identity_state": "VERIFIED",
+      "publication_state": "PUBLISHABLE_WITH_STATUS",
+      "consumer_category": "residential_care",
+      "memory_designation": "not_reported",
+      "n": 23,
+      "discovery": 23
+    },
+    {
+      "state_code": "NY",
+      "identity_state": "VERIFIED",
+      "publication_state": "PUBLISHABLE_CURRENT",
+      "consumer_category": "adult_care_home",
+      "memory_designation": "not_reported",
+      "n": 236,
+      "discovery": 236
+    },
+    {
+      "state_code": "NY",
+      "identity_state": "VERIFIED",
+      "publication_state": "PUBLISHABLE_CURRENT",
+      "consumer_category": "memory_supportive",
+      "memory_designation": "explicit_memory_or_dementia_license",
+      "n": 212,
+      "discovery": 212
+    },
+    {
+      "state_code": "NY",
+      "identity_state": "VERIFIED",
+      "publication_state": "PUBLISHABLE_CURRENT",
+      "consumer_category": "residential_care",
+      "memory_designation": "not_reported",
+      "n": 81,
+      "discovery": 81
+    },
+    {
+      "state_code": "TX",
+      "identity_state": "VERIFIED",
+      "publication_state": "PUBLISHABLE_CURRENT",
+      "consumer_category": "assisted_living",
+      "memory_designation": "not_reported",
+      "n": 1264,
+      "discovery": 1264
+    },
+    {
+      "state_code": "TX",
+      "identity_state": "VERIFIED",
+      "publication_state": "PUBLISHABLE_CURRENT",
+      "consumer_category": "assisted_living",
+      "memory_designation": "specialty_endorsement",
+      "n": 732,
+      "discovery": 732
+    }
+  ],
+  "assisted_living_totals": [
+    {
+      "state_code": "CA",
+      "n": 12522,
+      "discovery": 7962,
+      "verified": 12522
+    },
+    {
+      "state_code": "NY",
+      "n": 529,
+      "discovery": 529,
+      "verified": 529
+    },
+    {
+      "state_code": "TX",
+      "n": 1996,
+      "discovery": 1996,
+      "verified": 1996
+    }
+  ],
+  "al_parties": [
+    {
+      "role": "administrator",
+      "n": 14518
+    },
+    {
+      "role": "licensee",
+      "n": 12522
+    },
+    {
+      "role": "owner",
+      "n": 1995
+    },
+    {
+      "role": "management_company",
+      "n": 770
+    },
+    {
+      "role": "operator",
+      "n": 529
+    }
+  ],
+  "history_families": [
+    {
+      "event_family": "inspection",
+      "event_type": "INSPECTION_COMPLETED",
+      "n": 105792,
+      "facilities": 14693
+    },
+    {
+      "event_family": "enforcement",
+      "event_type": "PENALTY_RECORDED",
+      "n": 16166,
+      "facilities": 6844
+    },
+    {
+      "event_family": "staffing",
+      "event_type": "STAFFING_TOTAL_CHANGED",
+      "n": 11879,
+      "facilities": 7810
+    },
+    {
+      "event_family": "staffing",
+      "event_type": "STAFFING_RN_CHANGED",
+      "n": 8386,
+      "facilities": 6134
+    },
+    {
+      "event_family": "ownership",
+      "event_type": "OWNERSHIP_CHANGED",
+      "n": 5173,
+      "facilities": 5172
+    },
+    {
+      "event_family": "state",
+      "event_type": "STATE_COMPLAINT_INSPECTION",
+      "n": 4239,
+      "facilities": 510
+    },
+    {
+      "event_family": "state",
+      "event_type": "STATE_FINE",
+      "n": 4030,
+      "facilities": 628
+    },
+    {
+      "event_family": "state",
+      "event_type": "STATE_INSPECTION",
+      "n": 1053,
+      "facilities": 283
+    },
+    {
+      "event_family": "state",
+      "event_type": "STATE_ENFORCEMENT_ACTION",
+      "n": 79,
+      "facilities": 60
+    }
+  ],
+  "portfolios": [
+    {
+      "n": 105301
+    }
+  ],
+  "pi_raw_keys_sample": [
+    {
+      "key": "Abuse Icon"
+    },
+    {
+      "key": "Adjusted LPN Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Adjusted Nurse Aide Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Adjusted RN Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Adjusted Total Nurse Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Adjusted Weekend Total Nurse Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Administrator turnover footnote"
+    },
+    {
+      "key": "Automatic Sprinkler Systems in All Required Areas"
+    },
+    {
+      "key": "Average Number of Residents per Day"
+    },
+    {
+      "key": "Average Number of Residents per Day Footnote"
+    },
+    {
+      "key": "Case-Mix LPN Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Case-Mix Nurse Aide Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Case-Mix RN Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Case-Mix Total Nurse Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Case-Mix Weekend Total Nurse Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Chain Average Health Inspection Rating"
+    },
+    {
+      "key": "Chain Average Overall 5-star Rating"
+    },
+    {
+      "key": "Chain Average QM Rating"
+    },
+    {
+      "key": "Chain Average Staffing Rating"
+    },
+    {
+      "key": "Chain ID"
+    },
+    {
+      "key": "Chain Name"
+    },
+    {
+      "key": "City/Town"
+    },
+    {
+      "key": "CMS Certification Number (CCN)"
+    },
+    {
+      "key": "Continuing Care Retirement Community"
+    },
+    {
+      "key": "County/Parish"
+    },
+    {
+      "key": "Date First Approved to Provide Medicare and Medicaid Services"
+    },
+    {
+      "key": "Geocoding Footnote"
+    },
+    {
+      "key": "Health Inspection Rating"
+    },
+    {
+      "key": "Health Inspection Rating Footnote"
+    },
+    {
+      "key": "Latitude"
+    },
+    {
+      "key": "Legal Business Name"
+    },
+    {
+      "key": "Location"
+    },
+    {
+      "key": "Long-Stay QM Rating"
+    },
+    {
+      "key": "Long-Stay QM Rating Footnote"
+    },
+    {
+      "key": "Longitude"
+    },
+    {
+      "key": "Most Recent Health Inspection More Than 2 Years Ago"
+    },
+    {
+      "key": "Number of administrators who have left the nursing home"
+    },
+    {
+      "key": "Number of Certified Beds"
+    },
+    {
+      "key": "Number of Citations from Infection Control Inspections"
+    },
+    {
+      "key": "Number of Facilities in Chain"
+    },
+    {
+      "key": "Number of Fines"
+    },
+    {
+      "key": "Number of Payment Denials"
+    },
+    {
+      "key": "Nursing Case-Mix Index"
+    },
+    {
+      "key": "Nursing Case-Mix Index Ratio"
+    },
+    {
+      "key": "Overall Rating"
+    },
+    {
+      "key": "Overall Rating Footnote"
+    },
+    {
+      "key": "Ownership Type"
+    },
+    {
+      "key": "Physical Therapist Staffing Footnote"
+    },
+    {
+      "key": "Processing Date"
+    },
+    {
+      "key": "Provider Address"
+    },
+    {
+      "key": "Provider Changed Ownership in Last 12 Months"
+    },
+    {
+      "key": "Provider Name"
+    },
+    {
+      "key": "Provider Resides in Hospital"
+    },
+    {
+      "key": "Provider SSA County Code"
+    },
+    {
+      "key": "Provider Type"
+    },
+    {
+      "key": "QM Rating"
+    },
+    {
+      "key": "QM Rating Footnote"
+    },
+    {
+      "key": "Rating Cycle 1 Health Deficiency Score"
+    },
+    {
+      "key": "Rating Cycle 1 Health Revisit Score"
+    },
+    {
+      "key": "Rating Cycle 1 Number of Complaint Health Deficiencies"
+    },
+    {
+      "key": "Rating Cycle 1 Number of Health Revisits"
+    },
+    {
+      "key": "Rating Cycle 1 Number of Standard Health Deficiencies"
+    },
+    {
+      "key": "Rating Cycle 1 Standard Survey Health Date"
+    },
+    {
+      "key": "Rating Cycle 1 Total Health Score"
+    },
+    {
+      "key": "Rating Cycle 1 Total Number of Health Deficiencies"
+    },
+    {
+      "key": "Rating Cycle 2 Number of Standard Health Deficiencies"
+    },
+    {
+      "key": "Rating Cycle 2 Standard Health Survey Date"
+    },
+    {
+      "key": "Rating Cycle 2/3 Health Deficiency Score"
+    },
+    {
+      "key": "Rating Cycle 2/3 Health Revisit Score"
+    },
+    {
+      "key": "Rating Cycle 2/3 Number of Complaint Health Deficiencies"
+    },
+    {
+      "key": "Rating Cycle 2/3 Number of Health Revisits"
+    },
+    {
+      "key": "Rating Cycle 2/3 Total Health Score"
+    },
+    {
+      "key": "Rating Cycle 2/3 Total Number of Health Deficiencies"
+    },
+    {
+      "key": "Registered Nurse hours per resident per day on the weekend"
+    },
+    {
+      "key": "Registered Nurse turnover"
+    },
+    {
+      "key": "Registered Nurse turnover footnote"
+    },
+    {
+      "key": "Reported Licensed Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Reported LPN Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Reported Nurse Aide Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Reported Physical Therapist Staffing Hours per Resident Per Day"
+    },
+    {
+      "key": "Reported RN Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Reported Staffing Footnote"
+    },
+    {
+      "key": "Reported Total Nurse Staffing Hours per Resident per Day"
+    },
+    {
+      "key": "Short-Stay QM Rating"
+    },
+    {
+      "key": "Short-Stay QM Rating Footnote"
+    },
+    {
+      "key": "Special Focus Status"
+    },
+    {
+      "key": "Staffing Rating"
+    },
+    {
+      "key": "Staffing Rating Footnote"
+    },
+    {
+      "key": "State"
+    },
+    {
+      "key": "Telephone Number"
+    },
+    {
+      "key": "Total Amount of Fines in Dollars"
+    },
+    {
+      "key": "Total number of nurse staff hours per resident per day on the weekend"
+    },
+    {
+      "key": "Total Number of Penalties"
+    },
+    {
+      "key": "Total nursing staff turnover"
+    },
+    {
+      "key": "Total nursing staff turnover footnote"
+    },
+    {
+      "key": "Total Weighted Health Survey Score"
+    },
+    {
+      "key": "Urban"
+    },
+    {
+      "key": "With a Resident and Family Council"
+    },
+    {
+      "key": "ZIP Code"
+    }
+  ],
+  "npi_in_identifiers": []
+}
