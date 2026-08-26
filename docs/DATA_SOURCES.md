@@ -1,35 +1,39 @@
 # Authoritative source registry
 
-Verification date: **August 14, 2026**. Only official CMS pages and APIs were used. The machine-readable contract is `services/ingest/src/care_ingest/resources/cms_sources.json`. “Verified” means the official identity and purpose were checked; it does not mean ingestion is implemented.
+Machine-readable contract: `services/ingest/src/care_ingest/resources/cms_sources.json`.
 
-| Status                     | Official CMS source                        | CMS identifier                         | Format               | Cadence   | Official documentation                                                                                                                                                                       |
-| -------------------------- | ------------------------------------------ | -------------------------------------- | -------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **VERIFIED + IMPLEMENTED** | Provider Information                       | `4pq5-n9py`                            | CSV                  | Monthly   | [Dataset](https://data.cms.gov/provider-data/dataset/4pq5-n9py) · [Dictionary](https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/nursing_home/NH_Data_Dictionary.pdf) |
-| **VERIFIED, PLANNED**      | Ownership                                  | `y2hd-n93e`                            | CSV                  | Monthly   | [Dataset](https://data.cms.gov/provider-data/dataset/y2hd-n93e)                                                                                                                              |
-| **VERIFIED, PLANNED**      | Skilled Nursing Facility All Owners        | `afe44b85-cc6d-40d7-b5df-00ae8910d1d2` | CSV via CMS Data API | Monthly   | [Dataset/API](https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/skilled-nursing-facility-all-owners/api-docs)                                                     |
-| **VERIFIED, PLANNED**      | Nursing Home Chain Performance Measures    | `97ecfad1-d3f1-4d42-b774-d74661d830bc` | CSV via CMS Data API | Monthly   | [Dataset/API](https://data.cms.gov/quality-of-care/nursing-home-chain-performance-measures/api-docs)                                                                                         |
-| **VERIFIED, PLANNED**      | Health Deficiencies                        | `r5ix-sfxw`                            | CSV                  | Monthly   | [Dataset](https://data.cms.gov/provider-data/dataset/r5ix-sfxw) · [Dictionary](https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/nursing_home/NH_Data_Dictionary.pdf) |
-| **VERIFIED, PLANNED**      | Penalties                                  | `g6vv-u9sr`                            | CSV                  | Monthly   | [Dataset](https://data.cms.gov/provider-data/dataset/g6vv-u9sr)                                                                                                                              |
-| **VERIFIED, PLANNED**      | Inspection Dates                           | `svdt-c123`                            | CSV                  | Monthly   | [Dataset](https://data.cms.gov/provider-data/dataset/svdt-c123)                                                                                                                              |
-| **VERIFIED + IMPLEMENTED** | Payroll Based Journal Daily Nurse Staffing | `7e0d53ba-8f02-4c66-98a5-14a1c997c50d` | CSV via CMS Data API | Quarterly | [Dataset](https://data.cms.gov/quality-of-care/payroll-based-journal-daily-nurse-staffing) · [Methodology](https://data.cms.gov/resources/payroll-based-journal-methodology-0)               |
-| **VERIFIED, PLANNED**      | MDS Quality Measures                       | `djen-97ju`                            | CSV                  | Monthly   | [Dataset](https://data.cms.gov/provider-data/dataset/djen-97ju)                                                                                                                              |
+“Verified” means the official CMS identity was checked. “Implemented” means this repository can download, normalize, and load that source.
 
-Provider Information contains one row per currently active nursing home. Its current distribution URL is intentionally not committed: the downloader resolves the official CSV from the CMS metadata API at retrieval time. Release manifests capture the exact resulting URL, source modified date, retrieval time, filename, byte count, and SHA-256.
+Florida AHCA and other state assisted-living regulators are **not** part of this national CMS registry.
 
-Provider Data Catalog exposes archived nursing-home topic downloads. Coverage and semantics must be verified per release before use. The All Owners, chain, and PBJ products expose version lists through the CMS Data API. Unknown or unconfirmed identifiers remain `null`/“requires verification” in the registry.
+Refresh commands: [CMS-REFRESH-RUNBOOK.md](./CMS-REFRESH-RUNBOOK.md). There is **no scheduler**.
 
-Florida AHCA assisted-living data and other state regulators remain future state-adapter work and are not part of this registry.
+| Status | Official CMS source | CMS identifier | Cadence | Ingest command | Contribution | Limitations |
+| --- | --- | --- | --- | --- | --- | --- |
+| **VERIFIED + IMPLEMENTED** | Provider Information | `4pq5-n9py` | Monthly | `python -m care_ingest download nursing-home-provider-information` | Current NH identity, location, beds, participation, four star ratings, phone; raw SFF/abuse/turnover | Current-active listing only. Missing row ≠ closed |
+| **VERIFIED + IMPLEMENTED** | Ownership | `y2hd-n93e` | Monthly | `... nursing-home-ownership` | Care Compare ownership/control rows | Role text must be preserved; not a tenure graph |
+| **VERIFIED + IMPLEMENTED** | Skilled Nursing Facility All Owners | `afe44b85-cc6d-40d7-b5df-00ae8910d1d2` | Monthly | `... skilled-nursing-facility-all-owners` | PECOS 855A owners | Self-reported |
+| **VERIFIED + IMPLEMENTED** | SNF Enrollments | `5f2c306f-3b1c-42cd-b037-187b2ce22126` | Monthly | `... skilled-nursing-facility-enrollments` | Enrollment ID, PAC ID, organization NPI, CCN | NPI is enrollment-organization NPI, not a CCN replacement |
+| **VERIFIED + IMPLEMENTED** | SNF Change of Ownership | `f557a6ed-95b3-4a22-8433-4175db2dec1c` | Quarterly | `... skilled-nursing-facility-change-of-ownership` | Dated CHOW events | Not a complete operator history |
+| **VERIFIED + IMPLEMENTED** | SNF CHOW owner information | `a4358712-e910-4eaf-8f24-5e90ba3cf8d0` | Quarterly | `... skilled-nursing-facility-change-of-ownership-owner-information` | Buyer/seller parties | Linked by enrollment ID |
+| **VERIFIED + IMPLEMENTED** | Nursing Home Chain Performance Measures | `97ecfad1-d3f1-4d42-b774-d74661d830bc` | Monthly | `... nursing-home-chain-performance-measures` | Official CMS chain aggregates | Chain ID ≠ organization UUID |
+| **VERIFIED + IMPLEMENTED** | Health Deficiencies | `r5ix-sfxw` | Monthly | `... nursing-home-health-deficiencies` | Health citations, scope/severity, complaint flag | Some findings cannot link to an inspection |
+| **VERIFIED + IMPLEMENTED** | Penalties | `g6vv-u9sr` | Monthly | `... nursing-home-penalties` | Fines and payment denials | No proposed-vs-final disposition |
+| **VERIFIED + IMPLEMENTED** | Inspection Dates | `svdt-c123` | Monthly | `... nursing-home-inspection-dates` | Health, fire, complaint, infection survey dates | No shared CMS survey ID across files |
+| **VERIFIED + IMPLEMENTED** | Fire Safety Deficiencies | `ifjz-ge4w` | Monthly | `... nursing-home-fire-safety-deficiencies` | Fire-safety citations | Not health deficiencies; not a fire count |
+| **VERIFIED + IMPLEMENTED** | Payroll Based Journal Daily Nurse Staffing | `7e0d53ba-8f02-4c66-98a5-14a1c997c50d` | Quarterly | `... payroll-based-journal-daily-nurse-staffing` | Daily hours, HPRD, weekend, contract share | Paid hours; CMS exclusions apply |
+| **VERIFIED + IMPLEMENTED** | MDS Quality Measures | `djen-97ju` | Monthly | `... nursing-home-mds-quality-measures` | Individual MDS measures and quarterly scores | Not the QM star rating; suppressed values remain |
 
-# Regulatory source implementation status
+Provider Information contains one row per currently listed nursing home. Distribution URLs are resolved from CMS metadata at retrieval time. Release manifests capture URL, modified date, retrieval time, filename, bytes, and SHA-256.
 
-The following official CMS monthly sources are VERIFIED and IMPLEMENTED behind a separate review flag:
+# Derived national evidence (not separate CMS datasets)
 
-- Nursing Home Inspection Dates (`svdt-c123`): https://data.cms.gov/provider-data/dataset/svdt-c123
-- Nursing Home Health Deficiencies (`r5ix-sfxw`): https://data.cms.gov/provider-data/dataset/r5ix-sfxw
-- Nursing Home Penalties (`g6vv-u9sr`): https://data.cms.gov/provider-data/dataset/g6vv-u9sr
+| Command | Input | Output |
+| --- | --- | --- |
+| `derive-cms-designations` | Current PI `raw_record` | `cms_facility_designation` (SFF / candidate / abuse icon) |
+| `derive-facility-npi` | SNF enrollment rows | `provider_npi_relationship` (CONFIRMED same-row CCN+NPI only) |
+| `derive-directory-status` | Current PI membership | `provider_directory_status` (`CURRENT_ACTIVE` or `ABSENT_FROM_CURRENT_DIRECTORY`) |
 
-Release-specific filenames, dates, and checksums are recorded in immutable local manifests. See [INSPECTION_INTELLIGENCE.md](./INSPECTION_INTELLIGENCE.md).
+# Regulatory implementation notes
 
-## PBJ Daily Nurse Staffing
-
-The verified August 14, 2026 CMS catalog identifies the quarterly dataset type as `7e0d53ba-8f02-4c66-98a5-14a1c997c50d`. The latest catalog version is 2026 Q1, covering January 1–March 31, 2026, with catalog source-modified date July 29, 2026 and fixed API version `6e5d5e28-66fd-41bc-a36c-db54dcbffd3e`. CMS does not supply a distinct publication date for that version, so it remains unknown rather than being inferred from retrieval or HTTP metadata. Fixed quarterly history is available from 2017 Q1 onward. See [STAFFING_INTELLIGENCE.md](./STAFFING_INTELLIGENCE.md).
+Inspection, health-deficiency, fire-citation, and penalty records remain distinct. See [INSPECTION_INTELLIGENCE.md](./INSPECTION_INTELLIGENCE.md). PBJ: [STAFFING_INTELLIGENCE.md](./STAFFING_INTELLIGENCE.md).

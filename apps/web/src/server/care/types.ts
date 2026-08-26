@@ -430,3 +430,51 @@ export interface CareChainIntelligence {
     retrievedAt: string;
   };
 }
+
+export interface CareNhDesignation {
+  kind: "special_focus" | "abuse_icon";
+  officialStatus: string;
+  rawOfficialValue: string;
+  sourceField: string;
+  reportingPeriod: string | null;
+  observedAt: string | null;
+}
+
+export interface CareEnrollmentNpi {
+  npi: string;
+  enrollmentId: string | null;
+  multipleNpiFlag: boolean | null;
+}
+
+export interface CareMdsMeasure {
+  measureCode: string;
+  officialName: string;
+  stayType: string | null;
+  fourQuarterAverage: string | null;
+  suppressed: boolean;
+  footnote: string | null;
+  usedInFiveStarRating: boolean | null;
+  measurePeriod: string | null;
+}
+
+export interface CareFireSafetyCitation {
+  surveyDate: string;
+  tag: string;
+  description: string | null;
+  scopeSeverityCode: string;
+  complaintDeficiency: boolean | null;
+}
+
+export interface CareNhEvidence {
+  directoryStatus: string;
+  directoryNotes: string;
+  designations: CareNhDesignation[];
+  enrollmentNpis: CareEnrollmentNpi[];
+  mdsMeasures: CareMdsMeasure[];
+  fireCitations: CareFireSafetyCitation[];
+  freshness: {
+    providerInformationObservedAt: string | null;
+    mdsRelease: string | null;
+    fireRelease: string | null;
+  };
+}

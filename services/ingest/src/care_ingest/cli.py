@@ -13,6 +13,8 @@ from .chain_database import load_chain_membership, load_chain_source
 from .database import load_provider_information
 from .downloader import download_source, resolve_distribution
 from .manifest import ReleaseManifest, sha256_file
+from .mds import MDS_KEY, ingest_mds_source
+from .mds_database import load_mds_source
 from .migrations import apply_migration
 from .ownership import OWNERSHIP_KEYS, ingest_ownership_source
 from .ownership_database import audit_ownership_database, load_ownership_source
@@ -23,6 +25,7 @@ from .quality import write_quality_report
 from .registry import get_source, load_registry
 from .regulatory import (
     DEFICIENCIES_KEY,
+    FIRE_KEY,
     INSPECTIONS_KEY,
     PENALTIES_KEY,
     ingest_regulatory_source,
@@ -30,13 +33,14 @@ from .regulatory import (
 from .regulatory_database import audit_regulatory_database, load_regulatory_source
 
 PROVIDER_INFORMATION_KEY = "nursing-home-provider-information"
-REGULATORY_KEYS = (INSPECTIONS_KEY, DEFICIENCIES_KEY, PENALTIES_KEY)
+REGULATORY_KEYS = (INSPECTIONS_KEY, DEFICIENCIES_KEY, PENALTIES_KEY, FIRE_KEY)
 IMPLEMENTED_KEYS = (
     PROVIDER_INFORMATION_KEY,
     *REGULATORY_KEYS,
     PBJ_NURSE_KEY,
     *OWNERSHIP_KEYS,
     CHAIN_KEY,
+    MDS_KEY,
 )
 
 
@@ -134,6 +138,13 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Run persist a second time and report duplicate/update counts",
     )
+    for name, help_text in (
+        ("derive-cms-designations", "Derive SFF and abuse-icon observations from current PI"),
+        ("derive-facility-npi", "Attach CONFIRMED enrollment-organization NPIs to CCNs"),
+        ("derive-directory-status", "Mark CURRENT_ACTIVE vs ABSENT_FROM_CURRENT_DIRECTORY"),
+    ):
+        command = commands.add_parser(name, help=help_text)
+        command.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     return parser
 
 
@@ -167,6 +178,27 @@ def main(argv: list[str] | None = None) -> int:
         if not args.database_url:
             parser.error("audit-ownership requires CARE_DATABASE_URL or --database-url")
         print(json.dumps(audit_ownership_database(args.database_url), indent=2, sort_keys=True))
+        return 0
+    if args.command == "derive-cms-designations":
+        if not args.database_url:
+            parser.error("derive-cms-designations requires CARE_DATABASE_URL or --database-url")
+        from .cms_designations import derive_cms_designations_json
+
+        print(derive_cms_designations_json(args.database_url), end="")
+        return 0
+    if args.command == "derive-facility-npi":
+        if not args.database_url:
+            parser.error("derive-facility-npi requires CARE_DATABASE_URL or --database-url")
+        from .facility_npi import derive_facility_npi_json
+
+        print(derive_facility_npi_json(args.database_url), end="")
+        return 0
+    if args.command == "derive-directory-status":
+        if not args.database_url:
+            parser.error("derive-directory-status requires CARE_DATABASE_URL or --database-url")
+        from .directory_status import derive_directory_status_json
+
+        print(derive_directory_status_json(args.database_url), end="")
         return 0
     if args.command == "derive-facility-history":
         if not args.database_url:
@@ -294,6 +326,8 @@ def main(argv: list[str] | None = None) -> int:
     ingest_function = (
         ingest_provider_information
         if args.dataset_key == PROVIDER_INFORMATION_KEY
+        else ingest_mds_source
+        if args.dataset_key == MDS_KEY
         else ingest_pbj_source
         if args.dataset_key == PBJ_NURSE_KEY
         else ingest_chain_source
@@ -339,6 +373,8 @@ def main(argv: list[str] | None = None) -> int:
         loader = (
             load_provider_information
             if args.dataset_key == PROVIDER_INFORMATION_KEY
+            else load_mds_source
+            if args.dataset_key == MDS_KEY
             else load_pbj_source
             if args.dataset_key == PBJ_NURSE_KEY
             else load_chain_source

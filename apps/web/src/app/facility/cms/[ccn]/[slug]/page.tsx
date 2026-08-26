@@ -13,6 +13,7 @@ import {
   getPublishedStateIntelligenceForPage,
   getPublishedFacilityHistoryForPage,
   getOwnershipOperationSummaryForPage,
+  getNursingHomeEvidenceForPage,
 } from "@/server/care/cached-repository";
 import {
   isInspectionIntelligenceEnabled,
@@ -119,6 +120,7 @@ export default async function RealFacilityPage({
           chain,
         })
       : undefined;
+  const nhEvidence = await getNursingHomeEvidenceForPage(provider.ccn).catch(() => null);
   const journeyModule = resolveSeniorJourneyModule(
     parseNetworkJourney(searchParams ? await searchParams : {}),
     "facility",
@@ -139,6 +141,7 @@ export default async function RealFacilityPage({
         ownershipOperation={ownershipOperation}
         interviewBuilderEnabled={isFacilityInterviewBuilderEnabled()}
         workspaceEnabled={isFamilyComparisonWorkspaceEnabled()}
+        nhEvidence={nhEvidence}
       />
       <div className="page-shell" style={{ paddingBlock: "0 3rem" }}>
         <JourneyNextStep module={journeyModule} />

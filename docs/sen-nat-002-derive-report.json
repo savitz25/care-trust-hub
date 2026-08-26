@@ -1,0 +1,40 @@
+{
+  "migration": "0021_nursing_home_national_evidence.sql",
+  "designations": {
+    "pi_release": "2026-07-29",
+    "facilities": 14693,
+    "sff": 88,
+    "sff_candidate": 440,
+    "not_sff": 14165,
+    "abuse_icon_designated": 1435,
+    "abuse_icon_not_designated": 13258,
+    "candidate_collapsed_into_sff": 0,
+    "transformation_version": "cms-facility-designation-v1"
+  },
+  "npi": {
+    "enrollments_release": "2026-07-27",
+    "source_enrollment_rows": 14405,
+    "relationships": 14236,
+    "ccns_with_npi": 14236,
+    "distinct_npis": 14232,
+    "confirmed": 14236,
+    "high_confidence": 0,
+    "review_required": 0,
+    "ccns_with_1_npi": 14236,
+    "ccns_with_2plus_npi": 0,
+    "unresolved_ccns_without_confirmed_npi": 480,
+    "publication_language": "Medicare enrollment organization NPI associated with this CMS Certification Number (CCN). This is not a replacement for the facility CCN and is not assumed to be a facility-location NPI.",
+    "organization_npi_promoted_to_facility_npi": false,
+    "transformation_version": "facility-npi-v1"
+  },
+  "directory": {
+    "pi_release": "2026-07-29",
+    "status_counts": {
+      "CURRENT_ACTIVE": 14693
+    },
+    "terminated_confirmed": 0,
+    "closure_inferred_from_missing_pi": false,
+    "authoritative_termination_source": null,
+    "transformation_version": "directory-status-v1"
+  }
+}

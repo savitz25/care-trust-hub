@@ -8,7 +8,9 @@ import type {
   CarePublishedFacilityEnrichment,
   CareFacilityHistory,
   CareOwnershipOperationSummary,
+  CareNhEvidence,
 } from "@/server/care/types";
+import { NursingHomeEvidencePanel } from "./nh-evidence-panel";
 import type { PublishedStateIntelligence } from "@care/domain";
 import { VerifiedPublicContact } from "./verified-public-contact";
 import { StateLicenseOversight } from "./state-license-oversight";
@@ -27,7 +29,7 @@ import { RealDataNotice } from "./evidence";
 import { facilityInterviewBuilderHref } from "./interview-builder-bridge";
 import { WorkspaceAddButton } from "./workspace-add-button";
 
-const additionalLayers = ["Ownership intelligence", "Chain / portfolio intelligence"];
+const additionalLayers = ["Home health national spine", "Hospice national spine"];
 
 interface FacilitySourceEntry {
   key: string;
@@ -276,6 +278,7 @@ export function RealProviderDetail({
   ownershipOperation,
   interviewBuilderEnabled = false,
   workspaceEnabled = false,
+  nhEvidence = null,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
@@ -296,6 +299,7 @@ export function RealProviderDetail({
   ownershipOperation?: CareOwnershipOperationSummary;
   interviewBuilderEnabled?: boolean;
   workspaceEnabled?: boolean;
+  nhEvidence?: CareNhEvidence | null;
 }) {
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
@@ -397,6 +401,8 @@ export function RealProviderDetail({
         {stateIntelligence ? (
           <StateLicenseOversight provider={provider} intelligence={stateIntelligence} />
         ) : null}
+
+        {nhEvidence ? <NursingHomeEvidencePanel evidence={nhEvidence} /> : null}
 
         <WhatToReview
           provider={provider}

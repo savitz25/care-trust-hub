@@ -199,11 +199,28 @@
       "update_cadence": "Monthly",
       "provider_type": "nursing_home",
       "historical_archive_availability": "Provider Data Catalog archives available",
-      "schema_verification_state": "verified_2026-08-14",
+      "schema_verification_state": "verified_2026-08-26",
       "documentation_url": "https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/nursing_home/NH_Data_Dictionary.pdf",
-      "enabled": false,
-      "implemented": false,
-      "notes": "Resident-assessment quality measures; planned, not ingested in Task 003."
+      "enabled": true,
+      "implemented": true,
+      "notes": "One row per nursing home and MDS quality measure, with Q1–Q4 and four-quarter average scores. Individual measures are not CMS star ratings. SEN-NAT-002."
+    },
+    {
+      "dataset_key": "nursing-home-fire-safety-deficiencies",
+      "source_organization": "Centers for Medicare & Medicaid Services (CMS)",
+      "official_name": "Fire Safety Deficiencies",
+      "cms_identifier": "ifjz-ge4w",
+      "official_landing_page": "https://data.cms.gov/provider-data/dataset/ifjz-ge4w",
+      "metadata_url": "https://data.cms.gov/provider-data/api/1/metastore/schemas/dataset/items/ifjz-ge4w",
+      "expected_format": "text/csv",
+      "update_cadence": "Monthly",
+      "provider_type": "nursing_home",
+      "historical_archive_availability": "Provider Data Catalog archives available",
+      "schema_verification_state": "verified_2026-08-26",
+      "documentation_url": "https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/nursing_home/NH_Data_Dictionary.pdf",
+      "enabled": true,
+      "implemented": true,
+      "notes": "Fire-safety citations, one citation per row. Distinct from health deficiencies. CCN-keyed. SEN-NAT-002."
     }
   ]
 }

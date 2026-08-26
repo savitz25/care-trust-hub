@@ -23,6 +23,20 @@ export const CMS_REGULATORY_SOURCES = {
   },
 } as const;
 
+export const CMS_MDS_QUALITY_SOURCE = {
+  datasetKey: "nursing-home-mds-quality-measures",
+  organization: "Centers for Medicare & Medicaid Services",
+  datasetName: "MDS Quality Measures",
+  datasetIdentifier: "djen-97ju",
+} as const;
+
+export const CMS_FIRE_SAFETY_SOURCE = {
+  datasetKey: "nursing-home-fire-safety-deficiencies",
+  organization: "Centers for Medicare & Medicaid Services",
+  datasetName: "Fire Safety Deficiencies",
+  datasetIdentifier: "ifjz-ge4w",
+} as const;
+
 export const CMS_PBJ_NURSE_SOURCE = {
   datasetKey: "payroll-based-journal-daily-nurse-staffing",
   organization: "Centers for Medicare & Medicaid Services",

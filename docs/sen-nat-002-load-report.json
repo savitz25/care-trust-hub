@@ -1,0 +1,19 @@
+{
+  "mds_load": {
+    "dataset_key": "nursing-home-mds-quality-measures",
+    "release_key": "2026-08-01",
+    "source_rows": 249730,
+    "observations_loaded": 1248650,
+    "unmatched_ccns": 3,
+    "distinct_measures": 17,
+    "checksum": "5a705666930aca58df31808b7149bf82c2b7322726157b1985cb759dd0dcd3a4"
+  },
+  "fire_load": {
+    "dataset_key": "nursing-home-fire-safety-deficiencies",
+    "release_key": "2026-08-01",
+    "rows_read": 200327,
+    "rows_loaded": 200327,
+    "unmatched_ccns": 15,
+    "checksum": "2ad5bba98f77c3d6c982f4367823a328cc2da441e9ac4954fbaad50e89926cb4"
+  }
+}
