@@ -65,6 +65,13 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "ALTER TABLE organization" not in portfolio
     assert "DROP TABLE" not in portfolio
 
+    intel = (migrations / "0026_senior_intelligence.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE IF NOT EXISTS senior_intelligence_metric_definition (" in intel
+    assert "CREATE TABLE IF NOT EXISTS senior_intelligence_snapshot (" in intel
+    assert "CREATE TABLE IF NOT EXISTS senior_intelligence_metric_value (" in intel
+    assert "DROP TABLE" not in intel
+    assert "No combined senior-provider denominator" in intel
+
     chow = (migrations / "0025_ownership_change_intelligence.sql").read_text(encoding="utf-8")
     assert "CREATE TABLE ownership_change_event_party (" in chow
     assert "CREATE TABLE ownership_change_relationship_link (" in chow

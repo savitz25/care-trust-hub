@@ -147,6 +147,7 @@ def build_parser() -> argparse.ArgumentParser:
         ("derive-directory-status", "Mark CURRENT_ACTIVE vs ABSENT_FROM_CURRENT_DIRECTORY"),
         ("derive-ownership-graph", "Classify time-aware owner/operator/enrollment edges"),
         ("derive-ownership-change-events", "Classify SNF CHOW events without snapshot inference"),
+        ("derive-senior-intelligence", "Materialize National Senior Intelligence metrics"),
     ):
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
@@ -254,6 +255,13 @@ def main(argv: list[str] | None = None) -> int:
         from .ownership_change_database import derive_ownership_change_events_json
 
         print(derive_ownership_change_events_json(args.database_url), end="")
+        return 0
+    if args.command == "derive-senior-intelligence":
+        if not args.database_url:
+            parser.error("derive-senior-intelligence requires CARE_DATABASE_URL or --database-url")
+        from .senior_intelligence_database import materialize_senior_intelligence_json
+
+        print(materialize_senior_intelligence_json(args.database_url), end="")
         return 0
     if args.command == "derive-directory-status":
         if not args.database_url:
