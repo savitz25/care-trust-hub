@@ -14,6 +14,7 @@ import {
   getPublishedFacilityHistoryForPage,
   getOwnershipOperationSummaryForPage,
   getNursingHomeEvidenceForPage,
+  getNursingHomeProviderIntelligenceForPage,
 } from "@/server/care/cached-repository";
 import {
   isInspectionIntelligenceEnabled,
@@ -29,6 +30,7 @@ import {
   isVerifiedEnrichmentEnabled,
   isFacilityInterviewBuilderEnabled,
   isFamilyComparisonWorkspaceEnabled,
+  isNhProfileIntelEnabled,
 } from "@/server/care/feature-flags";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import { SHARE_HUB } from "@/config/share-hub";
@@ -54,20 +56,22 @@ export async function generateMetadata({
     height: SHARE_HUB.ogHeight,
     alt: `${provider.providerName} — senior care research on SeniorTrustHub`,
   };
+  const title = `${provider.providerName} — CMS Ratings, Ownership & Inspection Research | SeniorTrustHub`;
+  const description = `Research ${provider.providerName}${location ? ` in ${location}` : ""} using published CMS ratings, staffing, inspection, ownership, and ownership-change evidence. No Trust Hub score.`;
   return {
-    title: `${provider.providerName} Nursing Home Research`,
-    description: `Research ${provider.providerName}${location ? ` in ${location}` : ""} using published CMS staffing, inspection, ownership, and enforcement evidence.`,
+    title,
+    description,
     alternates: canonicalUrl(href) ? { canonical: canonicalUrl(href) } : undefined,
     robots: publicRobots(true),
     openGraph: {
-      title: `${provider.providerName} Nursing Home Research`,
-      description: `Research ${provider.providerName}${location ? ` in ${location}` : ""} using published CMS staffing, inspection, ownership, and enforcement evidence.`,
+      title,
+      description,
       images: [image],
     },
     twitter: {
       card: SHARE_HUB.twitterCard,
-      title: `${provider.providerName} Nursing Home Research`,
-      description: `Research ${provider.providerName}${location ? ` in ${location}` : ""} using published CMS staffing, inspection, ownership, and enforcement evidence.`,
+      title,
+      description,
       images: [{ url: image.url, alt: image.alt }],
     },
   };
@@ -121,6 +125,9 @@ export default async function RealFacilityPage({
         })
       : undefined;
   const nhEvidence = await getNursingHomeEvidenceForPage(provider.ccn).catch(() => null);
+  const nhIntel = isNhProfileIntelEnabled()
+    ? await getNursingHomeProviderIntelligenceForPage(provider.ccn).catch(() => null)
+    : null;
   const journeyModule = resolveSeniorJourneyModule(
     parseNetworkJourney(searchParams ? await searchParams : {}),
     "facility",
@@ -142,6 +149,7 @@ export default async function RealFacilityPage({
         interviewBuilderEnabled={isFacilityInterviewBuilderEnabled()}
         workspaceEnabled={isFamilyComparisonWorkspaceEnabled()}
         nhEvidence={nhEvidence}
+        nhIntel={nhIntel}
       />
       <div className="page-shell" style={{ paddingBlock: "0 3rem" }}>
         <JourneyNextStep module={journeyModule} />

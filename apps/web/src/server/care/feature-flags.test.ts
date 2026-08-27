@@ -257,6 +257,17 @@ describe("real provider UI feature flag", () => {
     );
   });
 
+  it("enables NH profile intel with real-provider UI unless disabled", async () => {
+    const { isNhProfileIntelEnabled } = await import("./feature-flags");
+    expect(isNhProfileIntelEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(true);
+    expect(
+      isNhProfileIntelEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_NH_PROFILE_INTEL: "false",
+      }),
+    ).toBe(false);
+  });
+
   it("requires both real-provider and trust-participation opt-ins without billing state", async () => {
     const { isTrustParticipationEnabled } = await import("./feature-flags");
     expect(isTrustParticipationEnabled({ CARE_ENABLE_TRUST_PARTICIPATION: "true" })).toBe(false);

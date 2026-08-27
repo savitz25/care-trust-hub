@@ -3153,3 +3153,59 @@ html {
     transition: none;
   }
 }
+
+.nh-intel {
+  display: grid;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+.nh-intel-banner,
+.nh-intel-kicker {
+  max-width: 46rem;
+}
+.nh-intel-banner {
+  border: 1px solid var(--color-warm-300);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  background: #faf7f2;
+}
+.nh-intel-kicker {
+  color: var(--color-slate-600);
+  font-size: 0.95rem;
+}
+.nh-intel-glance__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+.nh-intel-parties ul,
+.nh-intel-chow,
+.nh-intel-flags,
+.nh-intel-fresh {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+.nh-intel-parties li,
+.nh-intel-chow li {
+  min-width: 0;
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  overflow-wrap: anywhere;
+}
+.nh-intel-parties li span,
+.nh-intel-cap {
+  display: block;
+  color: var(--color-slate-600);
+  font-size: 0.88rem;
+}
+.nh-intel-fresh dt {
+  font-weight: 750;
+}
+@media (max-width: 39.99rem) {
+  .nh-intel-glance__grid {
+    grid-template-columns: 1fr;
+  }
+}
