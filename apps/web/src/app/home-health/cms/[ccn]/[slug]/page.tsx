@@ -3,11 +3,13 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { AgencyProfilePage } from "@/components/agency-profile-page";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import { getHomeHealthProviderIntelligenceForPage } from "@/server/care/cached-repository";
+import { homeHealthResearchDescription } from "@care/domain";
 import {
   homeHealthHref,
   homeHealthResearchDocumentTitle,
   providerSlug,
 } from "@/server/care/consumer";
+import { isAgencyProfileIndexableForPage } from "@/server/care/agency-publication";
 import { isHhProfileIntelEnabled } from "@/server/care/feature-flags";
 
 export const dynamic = "force-dynamic";
@@ -27,13 +29,24 @@ export async function generateMetadata({
   }
   const title = homeHealthResearchDocumentTitle(intel.common.display_name);
   const location = [intel.common.office.city, intel.common.office.state].filter(Boolean).join(", ");
-  const description = `Research ${intel.common.display_name}${location ? ` in ${location}` : ""} using published CMS Home Health quality, HHCAHPS, ownership, and coverage evidence. No Trust Hub score.`;
+  const description = homeHealthResearchDescription(
+    intel.common.display_name,
+    location,
+    intel.quality_summary.cms_quality_of_patient_care_star?.value != null,
+  );
   const href = homeHealthHref(intel.canonical_id, intel.common.display_name);
+  const indexable = isAgencyProfileIndexableForPage("home_health", {
+    ccn: intel.canonical_id,
+    name: intel.common.display_name,
+    city: intel.common.office.city,
+    state: intel.common.office.state,
+    directoryProjection: intel.directory.projection,
+  });
   return {
     title,
     description,
     alternates: canonicalUrl(href) ? { canonical: canonicalUrl(href) } : undefined,
-    robots: publicRobots(false),
+    robots: publicRobots(indexable),
     openGraph: { title, description },
     twitter: { title, description },
   };

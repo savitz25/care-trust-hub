@@ -152,6 +152,13 @@ export function isHospiceProfileIntelEnabled(
   );
 }
 
+/** Controlled HH/Hospice search indexation. Independent of profile render flags. */
+export function isAgencyProfileIndexEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return environment.CARE_ENABLE_AGENCY_PROFILE_INDEX === "true";
+}
+
 /** Fail-closed CA/NY/TX state-license publication. Requires an explicit opt-in. */
 export function isStateRegulatoryIntelligenceEnabled(
   environment: Readonly<Record<string, string | undefined>> = process.env,

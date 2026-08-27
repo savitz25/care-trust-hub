@@ -1,6 +1,9 @@
 import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
 import {
+  isAgencyProfileIndexEnabled,
   isAssistedLivingIntelligenceEnabled,
+  isHhProfileIntelEnabled,
+  isHospiceProfileIntelEnabled,
   isOwnershipIntelligenceV2Enabled,
 } from "@/server/care/feature-flags";
 import {
@@ -26,6 +29,8 @@ export async function GET() {
     ...(isOwnershipIntelligenceV2Enabled() ? ["organizations.xml"] : []),
     ...Array.from({ length: pages }, (_, index) => `facilities-${index}.xml`),
     ...Array.from({ length: assistedPages }, (_, index) => `assisted-living-${index}.xml`),
+    ...(isAgencyProfileIndexEnabled() && isHhProfileIntelEnabled() ? ["home-health.xml"] : []),
+    ...(isAgencyProfileIndexEnabled() && isHospiceProfileIntelEnabled() ? ["hospice.xml"] : []),
   ];
   const xml = `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((value) => `<sitemap><loc>${new URL(`/sitemaps/${value}`, productionOrigin).href}</loc></sitemap>`).join("")}</sitemapindex>`;
   return new Response(xml, {

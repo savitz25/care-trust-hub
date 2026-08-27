@@ -39,3 +39,4 @@ export * from "./assisted-living-identity";
 export * from "./assisted-living-presentation";
 export * from "./nh-evidence";
 export * from "./provider-intelligence";
+export * from "./agency-publication";

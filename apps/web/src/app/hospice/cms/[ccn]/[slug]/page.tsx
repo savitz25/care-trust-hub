@@ -3,7 +3,9 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { AgencyProfilePage } from "@/components/agency-profile-page";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import { getHospiceProviderIntelligenceForPage } from "@/server/care/cached-repository";
+import { hospiceResearchDescription } from "@care/domain";
 import { hospiceHref, hospiceResearchDocumentTitle, providerSlug } from "@/server/care/consumer";
+import { isAgencyProfileIndexableForPage } from "@/server/care/agency-publication";
 import { isHospiceProfileIntelEnabled } from "@/server/care/feature-flags";
 
 export const dynamic = "force-dynamic";
@@ -23,13 +25,24 @@ export async function generateMetadata({
   }
   const title = hospiceResearchDocumentTitle(intel.common.display_name);
   const location = [intel.common.office.city, intel.common.office.state].filter(Boolean).join(", ");
-  const description = `Research ${intel.common.display_name}${location ? ` in ${location}` : ""} using published CMS Hospice quality, CAHPS Hospice Survey, ownership, and coverage evidence. No Trust Hub score.`;
+  const description = hospiceResearchDescription(
+    intel.common.display_name,
+    location,
+    intel.quality_summary.families.length > 0,
+  );
   const href = hospiceHref(intel.canonical_id, intel.common.display_name);
+  const indexable = isAgencyProfileIndexableForPage("hospice", {
+    ccn: intel.canonical_id,
+    name: intel.common.display_name,
+    city: intel.common.office.city,
+    state: intel.common.office.state,
+    directoryProjection: intel.directory.projection,
+  });
   return {
     title,
     description,
     alternates: canonicalUrl(href) ? { canonical: canonicalUrl(href) } : undefined,
-    robots: publicRobots(false),
+    robots: publicRobots(indexable),
     openGraph: { title, description },
     twitter: { title, description },
   };

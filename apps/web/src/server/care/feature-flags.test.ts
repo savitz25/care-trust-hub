@@ -257,6 +257,21 @@ describe("real provider UI feature flag", () => {
     );
   });
 
+  it("keeps agency profile indexation fail-closed and independent of render flags", async () => {
+    const { isAgencyProfileIndexEnabled, isHhProfileIntelEnabled } = await import(
+      "./feature-flags"
+    );
+    expect(isAgencyProfileIndexEnabled({})).toBe(false);
+    expect(
+      isHhProfileIntelEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_HH_PROFILE_INTEL: "true",
+      }),
+    ).toBe(true);
+    expect(isAgencyProfileIndexEnabled({ CARE_ENABLE_HH_PROFILE_INTEL: "true" })).toBe(false);
+    expect(isAgencyProfileIndexEnabled({ CARE_ENABLE_AGENCY_PROFILE_INDEX: "true" })).toBe(true);
+  });
+
   it("keeps Home Health and Hospice profile intel fail-closed", async () => {
     const { isHhProfileIntelEnabled, isHospiceProfileIntelEnabled } = await import(
       "./feature-flags"
