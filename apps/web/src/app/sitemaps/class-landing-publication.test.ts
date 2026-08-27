@@ -27,6 +27,7 @@ describe("class landing publication", () => {
     const block = text.slice(start, end);
     expect([...block.matchAll(/"\/home-health"/g)]).toHaveLength(1);
     expect([...block.matchAll(/"\/hospice"/g)]).toHaveLength(1);
+    expect([...block.matchAll(/"\/florida"/g)]).toHaveLength(1);
     expect(block).not.toMatch(/\/search/);
   });
 });

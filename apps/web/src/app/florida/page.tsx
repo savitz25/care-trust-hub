@@ -3,18 +3,22 @@ import { TrustStrip, RealDataNotice } from "@/components/evidence";
 import { FloridaIntelligenceView } from "@/components/florida-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { brand } from "@/config/brand";
-import { productionOrigin } from "@/config/deployment";
+import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getFloridaIntelligence } from "@/server/care/florida-intelligence";
 
-export const metadata: Metadata = {
-  title: {
-    absolute:
-      "Florida Senior Care Research — Licensing, Inspections & Regulatory History | SeniorTrustHub",
-  },
-  description:
-    "Research Florida nursing homes, assisted living, adult family care homes, home health and hospice using official AHCA licensing, inspection, enforcement and CMS evidence. No score.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const canonical = canonicalUrl("/florida");
+  return {
+    title: {
+      absolute:
+        "Florida Senior Care Research — Licensing, Inspections & Regulatory History | SeniorTrustHub",
+    },
+    description:
+      "Research Florida nursing homes, assisted living, adult family care homes, home health and hospice using official AHCA licensing, inspection, enforcement and CMS evidence. No score.",
+    alternates: canonical ? { canonical } : undefined,
+    robots: publicRobots(true),
+  };
+}
 
 export default function FloridaPage() {
   const intel = getFloridaIntelligence();
