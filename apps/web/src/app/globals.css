@@ -1011,7 +1011,7 @@ fieldset legend span {
 .real-investigation-page .facility-hero__meta > span {
   min-width: 0;
   max-width: 100%;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 @media (max-width: 39.99rem) {
   .real-investigation-page,
@@ -1022,7 +1022,7 @@ fieldset legend span {
     box-sizing: border-box;
     min-width: 0;
     max-width: 100%;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
   .real-investigation-page .facility-hero__meta {
     display: grid;
@@ -3208,12 +3208,12 @@ html {
 .real-investigation-page .nh-intel .lede {
   min-width: 0;
   max-width: 100%;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 .real-investigation-page .nh-intel-kicker {
   min-width: 0;
   max-width: 100%;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 .nh-intel-glance__grid {
   display: grid;
@@ -3255,6 +3255,6 @@ html {
   .real-investigation-page .nh-intel .section-heading h2 {
     width: 100%;
     box-sizing: border-box;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
 }
