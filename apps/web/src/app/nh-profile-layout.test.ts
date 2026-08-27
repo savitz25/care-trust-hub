@@ -20,6 +20,9 @@ describe("NH profile wrap rules", () => {
     expect(body).not.toMatch(/text-overflow:\s*ellipsis/);
     expect(body).not.toMatch(/white-space:\s*nowrap/);
     expect(css).toMatch(
+      /@media \(max-width: 39\.99rem\)[\s\S]*\.real-investigation-page \*\s*\{[\s\S]*overflow-wrap:\s*anywhere/,
+    );
+    expect(css).toMatch(
       /@media \(max-width: 39\.99rem\)[\s\S]*\.real-investigation-page \.facility-hero__meta\s*\{[\s\S]*grid-template-columns:\s*minmax\(0,\s*1fr\)/,
     );
   });

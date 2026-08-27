@@ -1014,6 +1014,16 @@ fieldset legend span {
   overflow-wrap: anywhere;
 }
 @media (max-width: 39.99rem) {
+  .real-investigation-page,
+  .real-investigation-page .page-shell {
+    width: 100%;
+  }
+  .real-investigation-page * {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
   .real-investigation-page .facility-hero__meta {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
