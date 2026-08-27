@@ -132,6 +132,26 @@ export function isNhProfileIntelEnabled(
   );
 }
 
+/** Home Health profile UI. Fail-closed until explicitly enabled. */
+export function isHhProfileIntelEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return (
+    environment.CARE_ENABLE_REAL_PROVIDER_UI === "true" &&
+    environment.CARE_ENABLE_HH_PROFILE_INTEL === "true"
+  );
+}
+
+/** Hospice profile UI. Fail-closed until explicitly enabled. */
+export function isHospiceProfileIntelEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return (
+    environment.CARE_ENABLE_REAL_PROVIDER_UI === "true" &&
+    environment.CARE_ENABLE_HOSPICE_PROFILE_INTEL === "true"
+  );
+}
+
 /** Fail-closed CA/NY/TX state-license publication. Requires an explicit opt-in. */
 export function isStateRegulatoryIntelligenceEnabled(
   environment: Readonly<Record<string, string | undefined>> = process.env,

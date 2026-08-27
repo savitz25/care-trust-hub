@@ -2,6 +2,10 @@ import { describe, expect, it } from "vitest";
 import {
   cmsRatingText,
   factualRatingObservations,
+  homeHealthHref,
+  homeHealthResearchDocumentTitle,
+  hospiceHref,
+  hospiceResearchDocumentTitle,
   isCanonicalProviderSlug,
   isValidCmsChainId,
   isValidOrganizationId,
@@ -46,6 +50,17 @@ describe("real provider consumer mapping", () => {
     expect(nursingHomeResearchDocumentTitle("Country Drive Post Acute")).not.toMatch(
       /\bReviews\b|\bBest\b|\bTop\b|\bRecommended\b|Trust Score/i,
     );
+    expect(homeHealthResearchDocumentTitle("Example HH")).toBe(
+      "Example HH — CMS Home Health Quality, Ownership & Research",
+    );
+    expect(homeHealthResearchDocumentTitle("Example HH")).not.toMatch(/SeniorTrustHub/);
+    expect(hospiceResearchDocumentTitle("Example Hospice")).toBe(
+      "Example Hospice — CMS Hospice Quality, Ownership & Research",
+    );
+    expect(hospiceHref("017000", "Example Hospice")).toBe(
+      "/hospice/cms/017000/example-hospice",
+    );
+    expect(homeHealthHref("017000", "Example HH")).toBe("/home-health/cms/017000/example-hh");
   });
 
   it("preserves missing ratings without manufacturing a value or judgment", () => {

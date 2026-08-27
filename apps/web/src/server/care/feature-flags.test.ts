@@ -257,6 +257,26 @@ describe("real provider UI feature flag", () => {
     );
   });
 
+  it("keeps Home Health and Hospice profile intel fail-closed", async () => {
+    const { isHhProfileIntelEnabled, isHospiceProfileIntelEnabled } = await import(
+      "./feature-flags"
+    );
+    expect(isHhProfileIntelEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(false);
+    expect(isHospiceProfileIntelEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(false);
+    expect(
+      isHhProfileIntelEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_HH_PROFILE_INTEL: "true",
+      }),
+    ).toBe(true);
+    expect(
+      isHospiceProfileIntelEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_HOSPICE_PROFILE_INTEL: "true",
+      }),
+    ).toBe(true);
+  });
+
   it("enables NH profile intel with real-provider UI unless disabled", async () => {
     const { isNhProfileIntelEnabled } = await import("./feature-flags");
     expect(isNhProfileIntelEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(true);

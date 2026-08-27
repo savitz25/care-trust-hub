@@ -1,10 +1,15 @@
 import { describe, expect, it } from "vitest";
 import {
   PROVIDER_INTEL_VERSION,
+  agencyDirectoryBanner,
   chowAbsenceCopy,
+  chowUnsupportedCopy,
+  cmsMeasureAvailabilityCopy,
   cmsStarConsumerLabel,
   currentOwnedByStatement,
   directoryBanner,
+  isHomeHealthIntelV1,
+  isHospiceIntelV1,
   isProviderIntelV1,
   partyCapCopy,
 } from "./provider-intelligence";
@@ -30,6 +35,32 @@ describe("provider intelligence presentation", () => {
 
   it("does not say never changed ownership", () => {
     expect(chowAbsenceCopy().toLowerCase()).not.toContain("never changed ownership");
+  });
+
+  it("treats HH and Hospice CHOW as unsupported without calling it a sale or never-changed", () => {
+    const hh = chowUnsupportedCopy("home_health");
+    const hospice = chowUnsupportedCopy("hospice");
+    expect(hh.toLowerCase()).not.toContain("never changed ownership");
+    expect(hh.toLowerCase()).not.toContain("sold");
+    expect(hospice.toLowerCase()).not.toContain("closed");
+    expect(isHomeHealthIntelV1({ contract_version: "provider-intel-v1", provider_type: "nursing_home" })).toBe(
+      false,
+    );
+    expect(
+      isHospiceIntelV1({
+        contract_version: "provider-intel-v1",
+        provider_type: "hospice",
+        identifier_type: "HOSPICE_CCN",
+      }),
+    ).toBe(true);
+  });
+
+  it("does not convert missing or suppressed CMS measures to zero", () => {
+    expect(cmsMeasureAvailabilityCopy("NOT_AVAILABLE", null, null)).toBe("Not reported");
+    expect(cmsMeasureAvailabilityCopy("SUPPRESSED", 0, null)).toBe("Suppressed");
+    expect(cmsMeasureAvailabilityCopy("INSUFFICIENT_DATA", null, null)).toBe("Insufficient data");
+    expect(cmsMeasureAvailabilityCopy("REPORTED", null, null)).toBe("Not reported");
+    expect(agencyDirectoryBanner("hospice", "EVIDENCE_ONLY")?.toLowerCase()).not.toMatch(/\bclosed\b/);
   });
 
   it("reports party caps without implying a smaller total", () => {
