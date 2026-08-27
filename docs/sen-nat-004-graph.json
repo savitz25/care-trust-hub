@@ -1,0 +1,318 @@
+{
+  "first_load": {
+    "edges": 1421277,
+    "name_observations": 252572,
+    "organizations": 205082,
+    "ownership_parties": 664280,
+    "organization_relationships": 0,
+    "load_method": "batched INSERT...SELECT 8000 by relationship PK",
+    "autocommit_per_batch": true
+  },
+  "derive": {
+    "transformation_version": "ownership-graph-v1",
+    "chow_owner_dataset": "skilled-nursing-facility-change-of-ownership-owner-information",
+    "load_method": "batched INSERT...SELECT 8000 by relationship PK",
+    "batches": 178,
+    "failures": 3,
+    "inserted_edges": 0,
+    "updated_edges": 0,
+    "inserted_name_observations": 0,
+    "parent_subsidiary_edges": 0,
+    "pac_is_not_parent_company": true,
+    "name_is_not_canonical_identity": true,
+    "baseline_before": {
+      "edges": 1421277,
+      "organizations": 205082,
+      "name_observations": 252572,
+      "ownership_parties": 664280,
+      "organization_relationships": 0
+    },
+    "baseline_after": {
+      "edges": 1421277,
+      "organizations": 205082,
+      "name_observations": 252572,
+      "ownership_parties": 664280,
+      "organization_relationships": 0
+    },
+    "census": {
+      "edges": 1421277,
+      "temporal": {
+        "CURRENT": 747214,
+        "UNKNOWN": 554644,
+        "HISTORICAL": 119419
+      },
+      "confidence": {
+        "CONFIRMED": 1304085,
+        "UNRESOLVED": 117192
+      },
+      "chow_events": 5227,
+      "class_x_rel": [
+        {
+          "n": 29964,
+          "provider_type": "home_health",
+          "relationship_type": "AFFILIATED_WITH"
+        },
+        {
+          "n": 11254,
+          "provider_type": "home_health",
+          "relationship_type": "ENROLLED_UNDER"
+        },
+        {
+          "n": 14429,
+          "provider_type": "home_health",
+          "relationship_type": "MANAGED_BY"
+        },
+        {
+          "n": 5783,
+          "provider_type": "home_health",
+          "relationship_type": "OPERATED_BY"
+        },
+        {
+          "n": 29282,
+          "provider_type": "home_health",
+          "relationship_type": "OWNED_BY"
+        },
+        {
+          "n": 34241,
+          "provider_type": "hospice",
+          "relationship_type": "AFFILIATED_WITH"
+        },
+        {
+          "n": 5696,
+          "provider_type": "hospice",
+          "relationship_type": "ENROLLED_UNDER"
+        },
+        {
+          "n": 16065,
+          "provider_type": "hospice",
+          "relationship_type": "MANAGED_BY"
+        },
+        {
+          "n": 6409,
+          "provider_type": "hospice",
+          "relationship_type": "OPERATED_BY"
+        },
+        {
+          "n": 26088,
+          "provider_type": "hospice",
+          "relationship_type": "OWNED_BY"
+        },
+        {
+          "n": 604352,
+          "provider_type": "nursing_home",
+          "relationship_type": "AFFILIATED_WITH"
+        },
+        {
+          "n": 28432,
+          "provider_type": "nursing_home",
+          "relationship_type": "ENROLLED_UNDER"
+        },
+        {
+          "n": 28999,
+          "provider_type": "nursing_home",
+          "relationship_type": "MANAGED_BY"
+        },
+        {
+          "n": 238905,
+          "provider_type": "nursing_home",
+          "relationship_type": "OPERATED_BY"
+        },
+        {
+          "n": 224186,
+          "provider_type": "nursing_home",
+          "relationship_type": "OWNED_BY"
+        },
+        {
+          "n": 50013,
+          "provider_type": "unmatched",
+          "relationship_type": "AFFILIATED_WITH"
+        },
+        {
+          "n": 728,
+          "provider_type": "unmatched",
+          "relationship_type": "ENROLLED_UNDER"
+        },
+        {
+          "n": 8957,
+          "provider_type": "unmatched",
+          "relationship_type": "MANAGED_BY"
+        },
+        {
+          "n": 18841,
+          "provider_type": "unmatched",
+          "relationship_type": "OPERATED_BY"
+        },
+        {
+          "n": 38653,
+          "provider_type": "unmatched",
+          "relationship_type": "OWNED_BY"
+        }
+      ],
+      "edges_by_type": {
+        "OWNED_BY": 318209,
+        "MANAGED_BY": 68450,
+        "OPERATED_BY": 269938,
+        "ENROLLED_UNDER": 46110,
+        "AFFILIATED_WITH": 718570
+      },
+      "organizations": 205082,
+      "edges_by_class": {
+        "OTHER": 418322,
+        "OFFICER": 300248,
+        "OPERATOR": 269938,
+        "OWNERSHIP": 318209,
+        "ENROLLMENT": 46110,
+        "MANAGEMENT": 68450
+      },
+      "person_parties": 463114,
+      "class_x_temporal": [
+        {
+          "n": 90712,
+          "provider_type": "home_health",
+          "temporal_status": "CURRENT"
+        },
+        {
+          "n": 88499,
+          "provider_type": "hospice",
+          "temporal_status": "CURRENT"
+        },
+        {
+          "n": 558770,
+          "provider_type": "nursing_home",
+          "temporal_status": "CURRENT"
+        },
+        {
+          "n": 48032,
+          "provider_type": "nursing_home",
+          "temporal_status": "HISTORICAL"
+        },
+        {
+          "n": 518072,
+          "provider_type": "nursing_home",
+          "temporal_status": "UNKNOWN"
+        },
+        {
+          "n": 9233,
+          "provider_type": "unmatched",
+          "temporal_status": "CURRENT"
+        },
+        {
+          "n": 71387,
+          "provider_type": "unmatched",
+          "temporal_status": "HISTORICAL"
+        },
+        {
+          "n": 36572,
+          "provider_type": "unmatched",
+          "temporal_status": "UNKNOWN"
+        }
+      ],
+      "name_observations": 252572,
+      "org_relationships": 0,
+      "org_owned_by_edges": 194657,
+      "owned_by_providers": {
+        "hospice": 4399,
+        "home_health": 8884,
+        "nursing_home": 12566
+      },
+      "owner_organizations": 66444,
+      "organization_parties": 201166,
+      "person_equity_owners": 61377,
+      "person_owned_by_edges": 123552,
+      "edges_by_provider_type": {
+        "hospice": 88499,
+        "unmatched": 117192,
+        "home_health": 90712,
+        "nursing_home": 1124874
+      },
+      "owned_by_with_percentage": 253074,
+      "enrollment_only_organizations": 25049,
+      "providers_with_historical_edge": 3874
+    },
+    "cross_class": {
+      "nh_hh": 283,
+      "hh_only": 11088,
+      "nh_only": 178676,
+      "all_three": 305,
+      "hh_hospice": 1462,
+      "nh_hospice": 290,
+      "hospice_only": 5722
+    },
+    "network_size": {
+      "by_class": {
+        "hospice": {
+          "1": 6433,
+          "2_5": 893,
+          "6_10": 194,
+          "11_25": 129,
+          "26_50": 105,
+          "51_100": 24,
+          "101_plus": 1
+        },
+        "home_health": {
+          "1": 11607,
+          "2_5": 1069,
+          "6_10": 236,
+          "11_25": 117,
+          "26_50": 83,
+          "51_100": 24,
+          "101_plus": 2
+        },
+        "nursing_home": {
+          "1": 174408,
+          "2_5": 3186,
+          "6_10": 890,
+          "11_25": 690,
+          "26_50": 256,
+          "51_100": 92,
+          "101_plus": 32
+        }
+      },
+      "owned_by_only": {
+        "1": 59641,
+        "2_5": 2736,
+        "6_10": 879,
+        "11_25": 595,
+        "26_50": 247,
+        "51_100": 130,
+        "101_plus": 40
+      },
+      "all_relationships": {
+        "1": 189391,
+        "2_5": 5625,
+        "6_10": 1289,
+        "11_25": 916,
+        "26_50": 377,
+        "51_100": 178,
+        "101_plus": 50
+      }
+    },
+    "multi_state": {
+      "1": 194732,
+      "2_5": 2520,
+      "6_10": 362,
+      "11_plus": 212,
+      "unknown": 0
+    },
+    "collisions": {
+      "npi_multiple_orgs": 0,
+      "org_relationships": 0,
+      "pac_multiple_names": 0,
+      "pac_person_and_org": 0,
+      "same_name_many_pacs": 1902
+    },
+    "database_bytes_before": 19613412499,
+    "database_bytes_after": 19613420691,
+    "regression": {
+      "nh_known": 14696,
+      "nh_current_directory": 14690,
+      "hh_snapshots": 12460,
+      "hospice_gi_snapshots": 6669,
+      "hospice_typed_providers": 6911,
+      "quality_only_hospice_not_directory": 242,
+      "mds": 1248650,
+      "fire": 200327,
+      "pbj": 5280805
+    }
+  }
+}

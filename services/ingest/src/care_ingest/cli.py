@@ -145,6 +145,7 @@ def build_parser() -> argparse.ArgumentParser:
         ("derive-cms-designations", "Derive SFF and abuse-icon observations from current PI"),
         ("derive-facility-npi", "Attach CONFIRMED enrollment-organization NPIs to CCNs"),
         ("derive-directory-status", "Mark CURRENT_ACTIVE vs ABSENT_FROM_CURRENT_DIRECTORY"),
+        ("derive-ownership-graph", "Classify time-aware owner/operator/enrollment edges"),
     ):
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
@@ -236,6 +237,13 @@ def main(argv: list[str] | None = None) -> int:
         from .facility_npi import derive_facility_npi_json
 
         print(derive_facility_npi_json(args.database_url), end="")
+        return 0
+    if args.command == "derive-ownership-graph":
+        if not args.database_url:
+            parser.error("derive-ownership-graph requires CARE_DATABASE_URL or --database-url")
+        from .ownership_graph_database import derive_ownership_graph_json
+
+        print(derive_ownership_graph_json(args.database_url), end="")
         return 0
     if args.command == "derive-directory-status":
         if not args.database_url:
