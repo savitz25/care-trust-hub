@@ -1000,6 +1000,8 @@ fieldset legend span {
   color: var(--color-slate-500);
   font-size: 0.85rem;
 }
+.real-investigation-page,
+.real-investigation-page .page-shell,
 .real-investigation-page .facility-hero,
 .real-investigation-page .facility-hero > div,
 .real-investigation-page .facility-hero__meta {
@@ -1010,6 +1012,13 @@ fieldset legend span {
   min-width: 0;
   max-width: 100%;
   overflow-wrap: anywhere;
+}
+@media (max-width: 39.99rem) {
+  .real-investigation-page .facility-hero__meta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
 }
 .provider-overview {
   scroll-margin-top: var(--space-6);
@@ -3229,6 +3238,13 @@ html {
 }
 @media (max-width: 39.99rem) {
   .nh-intel-glance__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .real-investigation-page .nh-intel-kicker,
+  .real-investigation-page .nh-intel .lede,
+  .real-investigation-page .nh-intel .section-heading h2 {
+    width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
   }
 }
