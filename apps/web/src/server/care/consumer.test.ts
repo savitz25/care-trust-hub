@@ -5,6 +5,7 @@ import {
   isCanonicalProviderSlug,
   isValidCmsChainId,
   isValidOrganizationId,
+  nursingHomeResearchDocumentTitle,
   organizationHref,
   providerHref,
   providerSlug,
@@ -32,6 +33,18 @@ describe("real provider consumer mapping", () => {
     expect(isValidOrganizationId("not-an-org")).toBe(false);
     expect(organizationHref({ organizationId, organizationName: "Example Healthcare LLC" })).toBe(
       `/ownership/${organizationId}/example-healthcare-llc`,
+    );
+  });
+
+  it("keeps the nursing-home research title page-specific so the root template owns the brand", () => {
+    expect(nursingHomeResearchDocumentTitle("Country Drive Post Acute")).toBe(
+      "Country Drive Post Acute — CMS Ratings, Ownership & Inspection Research",
+    );
+    expect(nursingHomeResearchDocumentTitle("Country Drive Post Acute")).not.toMatch(
+      /SeniorTrustHub/,
+    );
+    expect(nursingHomeResearchDocumentTitle("Country Drive Post Acute")).not.toMatch(
+      /\bReviews\b|\bBest\b|\bTop\b|\bRecommended\b|Trust Score/i,
     );
   });
 

@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { RealProviderDetail } from "@/components/real-provider-detail";
-import { isCanonicalProviderSlug, providerHref } from "@/server/care/consumer";
+import {
+  isCanonicalProviderSlug,
+  nursingHomeResearchDocumentTitle,
+  providerHref,
+} from "@/server/care/consumer";
 import {
   getProviderByCcnForPage,
   getProviderChainIntelligenceForPage,
@@ -56,7 +60,7 @@ export async function generateMetadata({
     height: SHARE_HUB.ogHeight,
     alt: `${provider.providerName} — senior care research on SeniorTrustHub`,
   };
-  const title = `${provider.providerName} — CMS Ratings, Ownership & Inspection Research | SeniorTrustHub`;
+  const title = nursingHomeResearchDocumentTitle(provider.providerName);
   const description = `Research ${provider.providerName}${location ? ` in ${location}` : ""} using published CMS ratings, staffing, inspection, ownership, and ownership-change evidence. No Trust Hub score.`;
   return {
     title,

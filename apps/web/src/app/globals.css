@@ -1000,6 +1000,17 @@ fieldset legend span {
   color: var(--color-slate-500);
   font-size: 0.85rem;
 }
+.real-investigation-page .facility-hero,
+.real-investigation-page .facility-hero > div,
+.real-investigation-page .facility-hero__meta {
+  min-width: 0;
+  max-width: 100%;
+}
+.real-investigation-page .facility-hero__meta > span {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
 .provider-overview {
   scroll-margin-top: var(--space-6);
   border-block: 1px solid var(--color-warm-200);
@@ -3172,6 +3183,18 @@ html {
 .nh-intel-kicker {
   color: var(--color-slate-600);
   font-size: 0.95rem;
+}
+.real-investigation-page .nh-intel,
+.real-investigation-page .nh-intel-banner,
+.real-investigation-page .nh-intel .lede {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.real-investigation-page .nh-intel-kicker {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 .nh-intel-glance__grid {
   display: grid;

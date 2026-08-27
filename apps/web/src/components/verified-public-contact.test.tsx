@@ -119,7 +119,7 @@ describe("verified public contact publication", () => {
     expect(container.textContent).not.toContain("ChIJ");
     expect(container.textContent).not.toMatch(/Permanently closed|OPERATIONAL|CLOSED_PERMANENTLY/);
     expect(container.textContent).not.toContain("google_place_identity");
-    expect(screen.getByText("CMS provider ID 01A193")).toBeInTheDocument();
+    expect(screen.getByText("CMS CCN 01A193")).toBeInTheDocument();
   });
 
   it("keeps REVIEW_REQUIRED and PROBABLE facilities on CMS-only contact", () => {
