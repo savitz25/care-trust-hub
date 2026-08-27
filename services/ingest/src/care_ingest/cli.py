@@ -146,6 +146,7 @@ def build_parser() -> argparse.ArgumentParser:
         ("derive-facility-npi", "Attach CONFIRMED enrollment-organization NPIs to CCNs"),
         ("derive-directory-status", "Mark CURRENT_ACTIVE vs ABSENT_FROM_CURRENT_DIRECTORY"),
         ("derive-ownership-graph", "Classify time-aware owner/operator/enrollment edges"),
+        ("derive-ownership-change-events", "Classify SNF CHOW events without snapshot inference"),
     ):
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
@@ -244,6 +245,15 @@ def main(argv: list[str] | None = None) -> int:
         from .ownership_graph_database import derive_ownership_graph_json
 
         print(derive_ownership_graph_json(args.database_url), end="")
+        return 0
+    if args.command == "derive-ownership-change-events":
+        if not args.database_url:
+            parser.error(
+                "derive-ownership-change-events requires CARE_DATABASE_URL or --database-url"
+            )
+        from .ownership_change_database import derive_ownership_change_events_json
+
+        print(derive_ownership_change_events_json(args.database_url), end="")
         return 0
     if args.command == "derive-directory-status":
         if not args.database_url:

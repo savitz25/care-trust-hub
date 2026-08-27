@@ -65,6 +65,13 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "ALTER TABLE organization" not in portfolio
     assert "DROP TABLE" not in portfolio
 
+    chow = (migrations / "0025_ownership_change_intelligence.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE ownership_change_event_party (" in chow
+    assert "CREATE TABLE ownership_change_relationship_link (" in chow
+    assert "CREATE OR REPLACE VIEW provider_ownership_timeline AS" in chow
+    assert "DROP TABLE" not in chow
+    assert "UNKNOWN into divestiture" in chow
+
     graph = (migrations / "0024_ownership_graph.sql").read_text(encoding="utf-8")
     assert "CREATE TABLE provider_organization_edge (" in graph
     assert "CREATE TABLE organization_name_observation (" in graph
