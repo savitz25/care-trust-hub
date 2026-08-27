@@ -133,8 +133,8 @@ export function NationalHubIntelligence({ intel }: { intel: SeniorNationalIntell
               Quality of Patient Care stars stay separate from HHCAHPS. There is not yet a national
               Home Health name-search directory; profiles are researched by CCN.
             </p>
-            <Link className="text-link" href="/search?class=home_health">
-              Search Home Health agencies <span aria-hidden="true">→</span>
+            <Link className="text-link" href="/home-health">
+              Home Health research <span aria-hidden="true">→</span>
             </Link>
           </article>
           <article className="hub-card">
@@ -167,8 +167,8 @@ export function NationalHubIntelligence({ intel }: { intel: SeniorNationalIntell
               Hospice quality measures stay separate from CAHPS Hospice Survey. There is not yet a
               national Hospice name-search directory.
             </p>
-            <Link className="text-link" href="/search?class=hospice">
-              Search Hospice providers <span aria-hidden="true">→</span>
+            <Link className="text-link" href="/hospice">
+              Hospice research <span aria-hidden="true">→</span>
             </Link>
           </article>
         </div>
@@ -455,10 +455,10 @@ export function NationalHubIntelligence({ intel }: { intel: SeniorNationalIntell
           <Link className="hub-cta" href="/search">
             Research Nursing Homes
           </Link>
-          <Link className="hub-cta" href="/search?class=home_health">
+          <Link className="hub-cta" href="/home-health">
             Research Home Health agencies
           </Link>
-          <Link className="hub-cta" href="/search?class=hospice">
+          <Link className="hub-cta" href="/hospice">
             Research Hospice providers
           </Link>
           <Link className="hub-cta" href="#ownership">
