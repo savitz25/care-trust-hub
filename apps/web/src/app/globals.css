@@ -3382,4 +3382,8 @@ html {
   .home-page .home-hero h1 {
     max-width: none;
   }
+  .hub-table,
+  .hub-table--compact {
+    min-width: 24rem;
+  }
 }

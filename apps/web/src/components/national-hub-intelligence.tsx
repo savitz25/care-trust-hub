@@ -22,6 +22,7 @@ function StarTable({ id, title, dist }: { id: string; title: string; dist: StarD
     <figure className="hub-stars">
       <figcaption id={`${id}-caption`}>{title}</figcaption>
       <p className="hub-kicker">{dist.label}</p>
+      <div className="hub-table-scroll">
       <table className="hub-table hub-table--compact" aria-labelledby={`${id}-caption`}>
         <thead>
           <tr>
@@ -54,6 +55,7 @@ function StarTable({ id, title, dist }: { id: string; title: string; dist: StarD
           </tr>
         </tbody>
       </table>
+      </div>
     </figure>
   );
 }
