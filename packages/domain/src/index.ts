@@ -40,3 +40,4 @@ export * from "./assisted-living-presentation";
 export * from "./nh-evidence";
 export * from "./provider-intelligence";
 export * from "./agency-publication";
+export * from "./senior-hub-intelligence";

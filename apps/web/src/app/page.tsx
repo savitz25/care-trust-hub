@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { TrustStrip, RealDataNotice, SyntheticDataNotice } from "@/components/evidence";
+import { NationalHubIntelligence } from "@/components/national-hub-intelligence";
+import { StructuredData } from "@/components/structured-data";
 import { JourneyNextStep } from "@/components/journey-next-step";
 import { brand } from "@/config/brand";
 import { productionOrigin } from "@/config/deployment";
 import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-handoff";
+import { getSeniorHubIntelligence } from "@/server/care/senior-hub-intelligence";
 
 export const metadata: Metadata = {
+  title: {
+    absolute: `${brand.publicName} — CMS Senior Care Research, Ownership & Quality Data`,
+  },
+  description:
+    "Research current CMS Nursing Homes, Home Health agencies, and Hospice providers using published quality, ownership, staffing, and inspection evidence. Classes stay separate. No Trust Hub score.",
   alternates: { canonical: productionOrigin.origin },
 };
 
@@ -53,6 +61,7 @@ export default async function Home({
   const assistedLivingEnabled = process.env.CARE_ENABLE_ASSISTED_LIVING_INTELLIGENCE === "true";
   const sp = searchParams ? await searchParams : {};
   const journeyModule = resolveSeniorJourneyModule(parseNetworkJourney(sp), "home");
+  const intel = getSeniorHubIntelligence();
   const entries = paths.map((path) =>
     path.number === "04" && navigatorEnabled
       ? {
@@ -70,11 +79,29 @@ export default async function Home({
         ) : (
           <SyntheticDataNotice compact />
         )}
+        <StructuredData
+          value={{
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "@id": `${productionOrigin.href}#webpage`,
+            name: `${brand.publicName} — CMS Senior Care Research, Ownership & Quality Data`,
+            url: productionOrigin.href,
+            description:
+              "National research hub for current CMS Nursing Homes, Home Health agencies, and Hospice providers. No aggregate rating.",
+            isPartOf: { "@id": `${productionOrigin.href}#website` },
+            about: [
+              { "@type": "Thing", name: "CMS Nursing Homes" },
+              { "@type": "Thing", name: "CMS Home Health Agencies" },
+              { "@type": "Thing", name: "CMS Hospice Providers" },
+            ],
+          }}
+        />
         <section className="home-hero" aria-labelledby="home-title">
-          <p className="eyebrow">Independent care research</p>
-          <h1 id="home-title">{brand.tagline}</h1>
+          <p className="eyebrow">National senior care research hub</p>
+          <h1 id="home-title">Research CMS Nursing Homes, Home Health, and Hospice</h1>
           <p className="home-hero__lede">
-            Understand the facility. See who owns it. Review its history. Compare the evidence.
+            {brand.tagline} Compare published CMS quality, ownership, staffing, and inspection
+            evidence by provider class — not a ranking, and not a Trust Hub score.
           </p>
           <div className="home-hero__proof">
             <span className="proof-mark" aria-hidden="true">
@@ -86,6 +113,7 @@ export default async function Home({
             </p>
           </div>
         </section>
+        <NationalHubIntelligence intel={intel} />
         <section className="entry-section" aria-labelledby="start-title">
           <div className="section-heading">
             <p className="eyebrow">Start where you are</p>

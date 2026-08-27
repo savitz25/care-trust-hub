@@ -3258,3 +3258,128 @@ html {
     overflow-wrap: break-word;
   }
 }
+
+.national-hub {
+  min-width: 0;
+  max-width: 100%;
+}
+.national-hub h2,
+.national-hub h3,
+.national-hub p,
+.national-hub li {
+  overflow-wrap: break-word;
+}
+.hub-class-grid,
+.hub-stat-grid,
+.hub-cta-grid {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+.hub-class-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.hub-stat-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: var(--space-6);
+}
+.hub-cta-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.hub-card,
+.hub-stat,
+.hub-cta {
+  min-width: 0;
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  background: var(--color-white);
+}
+.hub-card h3,
+.hub-stat__value {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  overflow-wrap: anywhere;
+}
+.hub-stat__label,
+.hub-stat__note,
+.hub-kicker {
+  color: var(--color-slate-600);
+  font-size: 0.92rem;
+}
+.hub-card ul,
+.hub-plain-list {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0;
+  padding-left: 1.1rem;
+}
+.hub-cta {
+  display: block;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-slate-950);
+}
+.hub-cta:hover,
+.hub-cta:focus-visible {
+  border-color: var(--color-jade-500);
+  outline: 2px solid var(--color-jade-600);
+  outline-offset: 2px;
+}
+.hub-table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  margin: var(--space-4) 0;
+}
+.hub-table {
+  width: 100%;
+  min-width: 36rem;
+  border-collapse: collapse;
+}
+.hub-table--compact {
+  min-width: 28rem;
+}
+.hub-table th,
+.hub-table td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--color-warm-200);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.hub-table caption {
+  caption-side: top;
+  text-align: left;
+  font-weight: 700;
+  margin-bottom: var(--space-3);
+}
+.hub-stars {
+  margin: 0 0 var(--space-8);
+  min-width: 0;
+}
+.hub-bar {
+  display: block;
+  width: 100%;
+  min-width: 4rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: var(--color-warm-200);
+}
+.hub-bar__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-senior-plum, #681860);
+}
+@media (max-width: 39.99rem) {
+  .national-hub * {
+    overflow-wrap: break-word;
+  }
+  .hub-class-grid,
+  .hub-stat-grid,
+  .hub-cta-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .home-page .home-hero h1 {
+    max-width: none;
+  }
+}
