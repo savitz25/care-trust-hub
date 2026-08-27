@@ -259,6 +259,7 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
             <p className="hub-kicker">CMS overall star among reported Florida NH</p>
             <div className="hub-table-scroll">
               <table className="hub-table hub-table--compact">
+                <caption>CMS overall star among reported Florida nursing homes. Missing is not a zero score.</caption>
                 <thead>
                   <tr>
                     <th scope="col">CMS stars</th>
