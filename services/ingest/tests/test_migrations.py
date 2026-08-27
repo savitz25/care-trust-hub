@@ -65,6 +65,15 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "ALTER TABLE organization" not in portfolio
     assert "DROP TABLE" not in portfolio
 
+    florida29 = (migrations / "0029_florida_license_status_and_external_key.sql").read_text(
+        encoding="utf-8"
+    )
+    assert "CLOSED_IN_LOCATOR" in florida29
+    assert "REVOKED" not in florida29
+    assert "PENDING" not in florida29
+    assert "FL|AHCA|" in florida29
+    assert "DROP TABLE" not in florida29
+
     florida = (migrations / "0028_florida_state_licensed_provider.sql").read_text(encoding="utf-8")
     assert "CREATE TABLE state_licensed_provider (" in florida
     assert "CREATE TABLE state_license_credential (" in florida
