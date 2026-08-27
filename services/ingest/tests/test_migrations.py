@@ -65,6 +65,20 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "ALTER TABLE organization" not in portfolio
     assert "DROP TABLE" not in portfolio
 
+    florida = (migrations / "0028_florida_state_licensed_provider.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE state_licensed_provider (" in florida
+    assert "CREATE TABLE state_license_credential (" in florida
+    assert "CREATE TABLE state_provider_contact (" in florida
+    assert "CREATE TABLE state_service_geography (" in florida
+    assert "CREATE TABLE state_regulatory_event (" in florida
+    assert "REFERENCES provider(id)" in florida
+    assert "MEMORY_CARE" not in florida
+    assert "DROP TABLE" not in florida
+    assert "GOOGLE_PLACES" not in florida
+    assert "DROP TABLE assisted_living_provider" not in florida
+    assert "ALTER TABLE assisted_living_provider" not in florida
+    assert "AHCA file number is canonical" in florida
+
     profile = (migrations / "0027_provider_intelligence.sql").read_text(encoding="utf-8")
     assert "cms_agency_quality_provider_idx" in profile
     assert "DROP TABLE" not in profile
