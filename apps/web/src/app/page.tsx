@@ -114,6 +114,21 @@ export default async function Home({
           </div>
         </section>
         <NationalHubIntelligence intel={intel} />
+        <section className="entry-section" aria-labelledby="florida-home-title">
+          <div className="section-heading">
+            <p className="eyebrow">Florida research</p>
+            <h2 id="florida-home-title">AHCA licensing and regulatory evidence for Florida</h2>
+          </div>
+          <p>
+            Research current Florida nursing homes, assisted living, adult family care homes, home
+            health, and hospice using official AHCA identities and connected inspection and
+            enforcement evidence — plus national CMS context. Individual Florida provider pages are
+            not published yet. No score.
+          </p>
+          <Link className="button button--secondary" href="/florida">
+            Open Florida Senior Care Research →
+          </Link>
+        </section>
         <section className="entry-section" aria-labelledby="start-title">
           <div className="section-heading">
             <p className="eyebrow">Start where you are</p>

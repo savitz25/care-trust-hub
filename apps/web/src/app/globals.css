@@ -3420,6 +3420,9 @@ html {
 .class-research-page .hub-stat-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
+.florida-intel__classes {
+  grid-template-columns: repeat(auto-fit, minmax(16.5rem, 1fr));
+}
 @media (max-width: 39.99rem) {
   .real-search-layout,
   .agency-directory-card,
