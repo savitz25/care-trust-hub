@@ -104,6 +104,7 @@ jobs:
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0024_ownership_graph.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0025_ownership_change_intelligence.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0026_senior_intelligence.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0027_provider_intelligence.sql
       - name: Verify migration objects
         run: |
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 <<'SQL'
@@ -140,6 +141,7 @@ jobs:
           SELECT to_regclass('public.ownership_change_relationship_link') IS NOT NULL AS chow_link_exists;
           SELECT to_regclass('public.provider_ownership_timeline') IS NOT NULL AS chow_timeline_exists;
           SELECT to_regclass('public.senior_intelligence_snapshot') IS NOT NULL AS senior_intel_exists;
+          SELECT to_regclass('public.cms_agency_quality_provider_idx') IS NOT NULL AS profile_quality_idx;
           SELECT to_regclass('public.assisted_living_organization_party') IS NOT NULL AS assisted_living_party_exists;
           SELECT EXISTS (
             SELECT 1 FROM information_schema.columns

@@ -65,6 +65,11 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "ALTER TABLE organization" not in portfolio
     assert "DROP TABLE" not in portfolio
 
+    profile = (migrations / "0027_provider_intelligence.sql").read_text(encoding="utf-8")
+    assert "cms_agency_quality_provider_idx" in profile
+    assert "DROP TABLE" not in profile
+    assert "Not a materialization of measures" in profile
+
     intel = (migrations / "0026_senior_intelligence.sql").read_text(encoding="utf-8")
     assert "CREATE TABLE IF NOT EXISTS senior_intelligence_metric_definition (" in intel
     assert "CREATE TABLE IF NOT EXISTS senior_intelligence_snapshot (" in intel

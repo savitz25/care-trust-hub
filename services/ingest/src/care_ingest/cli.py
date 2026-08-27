@@ -151,6 +151,15 @@ def build_parser() -> argparse.ArgumentParser:
     ):
         command = commands.add_parser(name, help=help_text)
         command.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    profile = commands.add_parser(
+        "provider-intelligence",
+        help="Assemble one class-aware Provider Intelligence object (internal)",
+    )
+    profile.add_argument(
+        "--provider-type", required=True, choices=("nursing_home", "home_health", "hospice")
+    )
+    profile.add_argument("--canonical-id", required=True)
+    profile.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     refresh = commands.add_parser(
         "cms-refresh",
         help="Registry-driven CMS check/refresh. Writes require CARE_CMS_REFRESH_WRITES=true",
@@ -262,6 +271,16 @@ def main(argv: list[str] | None = None) -> int:
         from .senior_intelligence_database import materialize_senior_intelligence_json
 
         print(materialize_senior_intelligence_json(args.database_url), end="")
+        return 0
+    if args.command == "provider-intelligence":
+        if not args.database_url:
+            parser.error("provider-intelligence requires CARE_DATABASE_URL or --database-url")
+        from .provider_intelligence_database import provider_intelligence_json
+
+        print(
+            provider_intelligence_json(args.database_url, args.provider_type, args.canonical_id),
+            end="",
+        )
         return 0
     if args.command == "derive-directory-status":
         if not args.database_url:

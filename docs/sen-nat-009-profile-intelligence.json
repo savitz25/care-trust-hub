@@ -1,0 +1,167 @@
+{
+  "contract_version": "provider-intel-v1",
+  "materialization": "live_provider_scoped_queries",
+  "public_writes": 0,
+  "fixtures": [
+    {
+      "fixture": "nh_current_ordinary",
+      "canonical_id": "055885",
+      "provider_type": "nursing_home",
+      "status": "READY",
+      "directory": "CURRENT_DIRECTORY",
+      "chow_available": true,
+      "fingerprint": "4b04cb85b27110d1bcbe8119dd88238e0bd7924304f9dad31a9f0d66908efcef",
+      "fingerprint_match": true,
+      "query_ms": 789.74,
+      "cms_star_label": "CMS rating"
+    },
+    {
+      "fixture": "nh_with_chow",
+      "canonical_id": "056078",
+      "provider_type": "nursing_home",
+      "status": "READY",
+      "directory": "CURRENT_DIRECTORY",
+      "chow_available": true,
+      "fingerprint": "27d8356791310d5f16f74d9c1fca39fc87673d78daa62e0434d0348282ea663a",
+      "fingerprint_match": true,
+      "query_ms": 754.41,
+      "cms_star_label": "CMS rating"
+    },
+    {
+      "fixture": "nh_sff",
+      "canonical_id": "155131",
+      "provider_type": "nursing_home",
+      "status": "READY",
+      "directory": "CURRENT_DIRECTORY",
+      "chow_available": true,
+      "fingerprint": "884aa217bb3a3517229c71726e603d6ff3fe00ecd3fecfc51c0ce320df43eefc",
+      "fingerprint_match": true,
+      "query_ms": 741.51,
+      "cms_star_label": "CMS rating"
+    },
+    {
+      "fixture": "nh_missing_mds",
+      "canonical_id": "165490",
+      "provider_type": "nursing_home",
+      "status": "PARTIAL",
+      "directory": "KNOWN_NOT_CURRENT",
+      "chow_available": true,
+      "fingerprint": "f591dd822c9761dd98eef137b8e1f8c2189944d07c007ff139fbcea6cbb168f6",
+      "fingerprint_match": true,
+      "query_ms": 806.68,
+      "cms_star_label": "CMS rating"
+    },
+    {
+      "fixture": "nh_known_not_current",
+      "canonical_id": "145478",
+      "provider_type": "nursing_home",
+      "status": "PARTIAL",
+      "directory": "KNOWN_NOT_CURRENT",
+      "chow_available": true,
+      "fingerprint": "3211a582b16d4fe730bd934b0b54be39154e86c0ca14c9e62fd3b26f283d7943",
+      "fingerprint_match": true,
+      "query_ms": 735.45,
+      "cms_star_label": "CMS rating"
+    },
+    {
+      "fixture": "hh_current",
+      "canonical_id": "017000",
+      "provider_type": "home_health",
+      "status": "READY",
+      "directory": "CURRENT_DIRECTORY",
+      "chow_available": false,
+      "fingerprint": "0909f24aa1f36b83c55f237ed8fe75ae16fd5e9c17bba2db1fe3ba0ac199e0a9",
+      "fingerprint_match": true,
+      "query_ms": 682.18,
+      "cms_star_label": "CMS Quality of Patient Care star"
+    },
+    {
+      "fixture": "hh_many_zips",
+      "canonical_id": "453157",
+      "provider_type": "home_health",
+      "status": "READY",
+      "directory": "CURRENT_DIRECTORY",
+      "chow_available": false,
+      "fingerprint": "ac50df72eb0e7efd04d0a7f4569f4aaa4b9bf8195c9112228be479ed4e593a6d",
+      "fingerprint_match": true,
+      "query_ms": 665.96,
+      "cms_star_label": "CMS Quality of Patient Care star"
+    },
+    {
+      "fixture": "hospice_gi",
+      "canonical_id": "001500",
+      "provider_type": "hospice",
+      "status": "READY",
+      "directory": "CURRENT_DIRECTORY",
+      "chow_available": false,
+      "fingerprint": "f660d1ea796c88420e06e1f3bf164dcaf91e1d06276ae92fd5c079057093b086",
+      "fingerprint_match": true,
+      "query_ms": 606.11,
+      "cms_star_label": null
+    },
+    {
+      "fixture": "hospice_evidence_only",
+      "canonical_id": "B41636",
+      "provider_type": "hospice",
+      "status": "EVIDENCE_ONLY",
+      "directory": "EVIDENCE_ONLY",
+      "chow_available": false,
+      "fingerprint": "7ecdf7865485ec9c9415b63076009b011defd523a3f4623882e1e94d4befa559",
+      "fingerprint_match": true,
+      "query_ms": 611.06,
+      "cms_star_label": null
+    },
+    {
+      "fixture": "hospice_no_zip",
+      "canonical_id": "001581",
+      "provider_type": "hospice",
+      "status": "READY",
+      "directory": "CURRENT_DIRECTORY",
+      "chow_available": false,
+      "fingerprint": "057d9859cc135ba022591576f8dccbbed24ecf79028a4e88a870e68746b01e5b",
+      "fingerprint_match": true,
+      "query_ms": 665.86,
+      "cms_star_label": null
+    }
+  ],
+  "performance_ms": {
+    "nursing_home": {
+      "n": 5,
+      "p50": 754.41,
+      "p95": 789.74,
+      "worst": 806.68
+    },
+    "home_health": {
+      "n": 2,
+      "p50": 674.07,
+      "p95": 665.96,
+      "worst": 682.18
+    },
+    "hospice": {
+      "n": 3,
+      "p50": 611.06,
+      "p95": 611.06,
+      "worst": 665.86
+    }
+  },
+  "census": {
+    "nh_ready": 14690,
+    "nh_partial": 6,
+    "nh_known": 14696,
+    "hh_ready": 12460,
+    "hospice_ready": 6669,
+    "hospice_evidence_only": 242,
+    "regression": {
+      "nh_current": 14690,
+      "nh_known": 14696,
+      "hh_current": 12460,
+      "hospice_gi": 6669,
+      "hospice_typed": 6911,
+      "orgs": 205082,
+      "edges": 1421277,
+      "chow_events": 5227,
+      "unknown_edges": 554644,
+      "database_bytes": 19709324435
+    }
+  }
+}
