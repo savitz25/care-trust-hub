@@ -23,38 +23,38 @@ function StarTable({ id, title, dist }: { id: string; title: string; dist: StarD
       <figcaption id={`${id}-caption`}>{title}</figcaption>
       <p className="hub-kicker">{dist.label}</p>
       <div className="hub-table-scroll">
-      <table className="hub-table hub-table--compact" aria-labelledby={`${id}-caption`}>
-        <thead>
-          <tr>
-            <th scope="col">CMS stars</th>
-            <th scope="col">Providers</th>
-            <th scope="col">Share of reported</th>
-            <th scope="col">Distribution</th>
-          </tr>
-        </thead>
-        <tbody>
-          {(["5", "4", "3", "2", "1"] as const).map((star) => {
-            const percent = dist.percentsOfReported[star] ?? 0;
-            return (
-              <tr key={star}>
-                <th scope="row">{star} of 5 CMS stars</th>
-                <td>{formatHubCount(dist.counts[star])}</td>
-                <td>{percent.toFixed(1)}%</td>
-                <td>
-                  <span className="hub-bar" aria-hidden="true">
-                    <span className="hub-bar__fill" style={{ width: `${percent}%` }} />
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
-          <tr>
-            <th scope="row">Not reported</th>
-            <td>{formatHubCount(dist.missing)}</td>
-            <td colSpan={2}>Missing is not a zero score</td>
-          </tr>
-        </tbody>
-      </table>
+        <table className="hub-table hub-table--compact" aria-labelledby={`${id}-caption`}>
+          <thead>
+            <tr>
+              <th scope="col">CMS stars</th>
+              <th scope="col">Providers</th>
+              <th scope="col">Share of reported</th>
+              <th scope="col">Distribution</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(["5", "4", "3", "2", "1"] as const).map((star) => {
+              const percent = dist.percentsOfReported[star] ?? 0;
+              return (
+                <tr key={star}>
+                  <th scope="row">{star} of 5 CMS stars</th>
+                  <td>{formatHubCount(dist.counts[star])}</td>
+                  <td>{percent.toFixed(1)}%</td>
+                  <td>
+                    <span className="hub-bar" aria-hidden="true">
+                      <span className="hub-bar__fill" style={{ width: `${percent}%` }} />
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+            <tr>
+              <th scope="row">Not reported</th>
+              <td>{formatHubCount(dist.missing)}</td>
+              <td colSpan={2}>Missing is not a zero score</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </figure>
   );
@@ -133,8 +133,8 @@ export function NationalHubIntelligence({ intel }: { intel: SeniorNationalIntell
               Quality of Patient Care stars stay separate from HHCAHPS. There is not yet a national
               Home Health name-search directory; profiles are researched by CCN.
             </p>
-            <Link className="text-link" href="/home-health">
-              Home Health research spine <span aria-hidden="true">→</span>
+            <Link className="text-link" href="/search?class=home_health">
+              Search Home Health agencies <span aria-hidden="true">→</span>
             </Link>
           </article>
           <article className="hub-card">
@@ -167,8 +167,8 @@ export function NationalHubIntelligence({ intel }: { intel: SeniorNationalIntell
               Hospice quality measures stay separate from CAHPS Hospice Survey. There is not yet a
               national Hospice name-search directory.
             </p>
-            <Link className="text-link" href="/hospice">
-              Hospice research spine <span aria-hidden="true">→</span>
+            <Link className="text-link" href="/search?class=hospice">
+              Search Hospice providers <span aria-hidden="true">→</span>
             </Link>
           </article>
         </div>
@@ -455,10 +455,10 @@ export function NationalHubIntelligence({ intel }: { intel: SeniorNationalIntell
           <Link className="hub-cta" href="/search">
             Research Nursing Homes
           </Link>
-          <Link className="hub-cta" href="/home-health">
+          <Link className="hub-cta" href="/search?class=home_health">
             Research Home Health agencies
           </Link>
-          <Link className="hub-cta" href="/hospice">
+          <Link className="hub-cta" href="/search?class=hospice">
             Research Hospice providers
           </Link>
           <Link className="hub-cta" href="#ownership">

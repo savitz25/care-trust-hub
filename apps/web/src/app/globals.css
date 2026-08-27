@@ -3387,3 +3387,38 @@ html {
     min-width: 24rem;
   }
 }
+
+.hub-class-fieldset {
+  min-width: 0;
+  margin: 0 0 var(--space-4);
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+}
+.hub-class-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.hub-class-option {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.4rem;
+}
+.agency-directory-card h2,
+.agency-directory-card h2 a,
+.agency-directory-card .ccn-label {
+  overflow-wrap: anywhere;
+}
+.landing-search {
+  margin: var(--space-6) 0;
+}
+@media (max-width: 39.99rem) {
+  .real-search-layout,
+  .agency-directory-card,
+  .hub-class-fieldset {
+    min-width: 0;
+    max-width: 100%;
+  }
+}

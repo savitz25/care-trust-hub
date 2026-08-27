@@ -10,6 +10,7 @@ describe("consumer provider search contract", () => {
     );
     expect(parsed.errors).toEqual([]);
     expect(parsed.submitted).toBe(true);
+    expect(parsed.providerClass).toBe("nursing_home");
     expect(parsed.criteria).toMatchObject({
       query: "01a193",
       state: "AL",
@@ -21,6 +22,28 @@ describe("consumer provider search contract", () => {
       limit: 21,
       offset: 0,
     });
+  });
+
+  it("parses Home Health and Hospice class search without treating class as nursing-home ratings", () => {
+    const hh = parseConsumerSearch(
+      new URLSearchParams("search=1&class=home_health&q=centerwell&state=AL&zip=36330&hhstar=4"),
+    );
+    expect(hh.providerClass).toBe("home_health");
+    expect(hh.agency).toMatchObject({
+      providerClass: "home_health",
+      query: "centerwell",
+      state: "AL",
+      zip: "36330",
+      cmsStar: 4,
+    });
+    const hospice = parseConsumerSearch(
+      new URLSearchParams("search=1&class=hospice&q=001513&owned=yes"),
+    );
+    expect(hospice.providerClass).toBe("hospice");
+    expect(hospice.agency.ownershipAvailable).toBe(true);
+    expect(
+      parseConsumerSearch(new URLSearchParams("search=1&class=hospice&hhstar=5")).errors.length,
+    ).toBeGreaterThan(0);
   });
 
   it("rejects malformed consumer location filters", () => {
