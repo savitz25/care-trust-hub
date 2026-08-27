@@ -37,6 +37,8 @@ const corePaths = [
   "/terms",
   "/contact",
   "/trust/corrections",
+  "/home-health",
+  "/hospice",
 ];
 const response = (xml: string) =>
   new Response(xml, {
