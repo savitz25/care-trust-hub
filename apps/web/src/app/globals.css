@@ -3718,6 +3718,10 @@ html {
   .hub-table-scroll {
     max-width: 100%;
   }
+  .intel-home .hub-table,
+  .intel-home .hub-table--compact {
+    min-width: 0;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   html {

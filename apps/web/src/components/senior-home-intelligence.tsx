@@ -166,23 +166,25 @@ export function SeniorHomeIntelligence({
                     />
                   ))}
                 </div>
-                <table className="hub-table hub-table--compact">
-                  <caption className="visually-hidden">{finding.chart.caption}</caption>
-                  <thead>
-                    <tr>
-                      <th scope="col">Class / measure</th>
-                      <th scope="col">Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {finding.chart.series.map((series) => (
-                      <tr key={series.label}>
-                        <th scope="row">{series.label}</th>
-                        <td>{series.note ?? series.value.toLocaleString("en-US")}</td>
+                <div className="hub-table-scroll">
+                  <table className="hub-table hub-table--compact">
+                    <caption className="visually-hidden">{finding.chart.caption}</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Class / measure</th>
+                        <th scope="col">Value</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {finding.chart.series.map((series) => (
+                        <tr key={series.label}>
+                          <th scope="row">{series.label}</th>
+                          <td>{series.note ?? series.value.toLocaleString("en-US")}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </figure>
               <details className="intel-disclose">
                 <summary>Explain this chart</summary>
