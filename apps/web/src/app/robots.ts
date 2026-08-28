@@ -18,6 +18,7 @@ export default function robots(): MetadataRoute.Robots {
         "/trust/correction",
         "/trust/source-concern",
         "/trust/provider-context",
+        "/florida/internal",
       ],
     },
     sitemap: new URL("/sitemap.xml", productionOrigin).href,

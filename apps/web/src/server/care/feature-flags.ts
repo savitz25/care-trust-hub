@@ -159,6 +159,33 @@ export function isAgencyProfileIndexEnabled(
   return environment.CARE_ENABLE_AGENCY_PROFILE_INDEX === "true";
 }
 
+/** Fail-closed Phase 1 Florida ALF/AFCH public routes. Independent of indexation. */
+export function isFloridaAlfAfchPublicationEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return environment.CARE_ENABLE_FLORIDA_ALF_AFCH_PUBLICATION === "true";
+}
+
+/** Explicit indexation gate for the 25-profile Florida ALF/AFCH cohort. */
+export function isFloridaProviderIndexEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return (
+    environment.CARE_ENABLE_FLORIDA_ALF_AFCH_PUBLICATION === "true" &&
+    environment.CARE_ENABLE_FLORIDA_PROVIDER_INDEX === "true"
+  );
+}
+
+/** Preview-only Florida profile QA. Always false in Vercel production. */
+export function isFloridaProfileInternalQaEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return (
+    environment.CARE_ENABLE_FLORIDA_PROFILE_INTERNAL_QA === "true" &&
+    environment.VERCEL_ENV !== "production"
+  );
+}
+
 /** Fail-closed CA/NY/TX state-license publication. Requires an explicit opt-in. */
 export function isStateRegulatoryIntelligenceEnabled(
   environment: Readonly<Record<string, string | undefined>> = process.env,

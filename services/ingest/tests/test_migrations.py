@@ -65,6 +65,27 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "ALTER TABLE organization" not in portfolio
     assert "DROP TABLE" not in portfolio
 
+    florida30 = (migrations / "0030_florida_state_provider_profile.sql").read_text(
+        encoding="utf-8"
+    )
+    assert "CREATE TABLE state_provider_profile (" in florida30
+    assert "internal_only" in florida30
+    assert "fl-sen-provider-v1" in florida30
+    assert "DROP TABLE" not in florida30
+    assert "assisted_living_provider" not in florida30
+    assert "GOOGLE_PLACES" not in florida30
+    assert "MEMORY_CARE" not in florida30
+
+    florida31 = (migrations / "0031_florida_state_provider_profile_rls.sql").read_text(
+        encoding="utf-8"
+    )
+    assert "REVOKE ALL ON TABLE public.state_provider_profile FROM anon" in florida31
+    assert "REVOKE ALL ON TABLE public.state_provider_profile FROM authenticated" in florida31
+    assert "ENABLE ROW LEVEL SECURITY" in florida31
+    assert "FORCE ROW LEVEL SECURITY" not in florida31
+    assert "DROP TABLE" not in florida31
+    assert "GRANT SELECT ON TABLE public.state_provider_profile TO service_role" in florida31
+
     florida29 = (migrations / "0029_florida_license_status_and_external_key.sql").read_text(
         encoding="utf-8"
     )

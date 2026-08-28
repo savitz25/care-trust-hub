@@ -2,6 +2,7 @@ import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
 import {
   isAgencyProfileIndexEnabled,
   isAssistedLivingIntelligenceEnabled,
+  isFloridaProviderIndexEnabled,
   isHhProfileIntelEnabled,
   isHospiceProfileIntelEnabled,
   isOwnershipIntelligenceV2Enabled,
@@ -31,6 +32,7 @@ export async function GET() {
     ...Array.from({ length: assistedPages }, (_, index) => `assisted-living-${index}.xml`),
     ...(isAgencyProfileIndexEnabled() && isHhProfileIntelEnabled() ? ["home-health.xml"] : []),
     ...(isAgencyProfileIndexEnabled() && isHospiceProfileIntelEnabled() ? ["hospice.xml"] : []),
+    ...(isFloridaProviderIndexEnabled() ? ["florida-providers.xml"] : []),
   ];
   const xml = `<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((value) => `<sitemap><loc>${new URL(`/sitemaps/${value}`, productionOrigin).href}</loc></sitemap>`).join("")}</sitemapindex>`;
   return new Response(xml, {

@@ -25,3 +25,28 @@ describe("Florida page publication", () => {
     expect(block).not.toMatch(/state_licensed_provider|\/florida\/provider/);
   });
 });
+
+describe("Florida Phase 1 public provider route", () => {
+  it("fail-closes unpublished kinds and never emits rating structured data", () => {
+    const page = readFileSync(
+      join(here, "[kind]/[fileNumber]/[slug]/page.tsx"),
+      "utf8",
+    );
+    expect(page).toMatch(/loadPublishedFloridaProfile/);
+    expect(page).toMatch(/notFound\(\)/);
+    expect(page).toMatch(/publicRobots\(indexable\)/);
+    expect(page).not.toMatch(/aggregateRating|ratingValue|reviewCount/);
+    expect(page).not.toMatch(/CARE_ENABLE_FLORIDA_PROVIDER_INDEX === "true" &&[\s\S]*publicRobots\(true\)/);
+  });
+});
+
+describe("Florida intelligence snapshot stability", () => {
+  it("keeps the FL-SEN-005B fingerprint and does not invent county pages", () => {
+    const intel = JSON.parse(
+      readFileSync(join(here, "../../data/florida-intelligence.json"), "utf8"),
+    ) as { sourceFingerprint: string };
+    expect(intel.sourceFingerprint).toBe(
+      "1aff3a096a2ae790bfba2d9b6a4686f25051ee0577b74275106669ec96a6d2bb",
+    );
+  });
+});

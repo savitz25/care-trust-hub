@@ -12,12 +12,14 @@ import {
   isAssistedLivingIntelligenceEnabled,
   isCareNeedsNavigatorEnabled,
   isFacilityInterviewBuilderEnabled,
+  isFloridaProviderIndexEnabled,
   isHhProfileIntelEnabled,
   isHospiceProfileIntelEnabled,
   isOwnershipIntelligenceV2Enabled,
   isSeniorCareCostPlannerEnabled,
 } from "@/server/care/feature-flags";
 import { getAgencyIndexSitemapRows } from "@/server/care/agency-publication";
+import { getFloridaProviderSitemapPaths } from "@/server/care/florida-publication";
 import { getAssistedLivingSitemapPage } from "@/server/care/assisted-living-publication";
 import {
   getChainSitemapRows,
@@ -88,6 +90,14 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
           )
           .join(""),
       ),
+    );
+  }
+  if (file === "florida-providers.xml") {
+    if (!isFloridaProviderIndexEnabled()) return new Response("Not found", { status: 404 });
+    const paths = getFloridaProviderSitemapPaths();
+    if (!paths.length) return new Response("Not found", { status: 404 });
+    return response(
+      urlset(paths.map((path) => `<url><loc>${new URL(path, productionOrigin).href}</loc></url>`).join("")),
     );
   }
   if (file === "home-health.xml") {

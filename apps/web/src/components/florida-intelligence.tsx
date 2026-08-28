@@ -452,9 +452,11 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
           ))}
         </ul>
         <p>
-          Broader Florida state-provider profile pages are forthcoming. Individual Florida
-          identities remain unpublished. CMS Nursing Home, Home Health, and Hospice discovery
-          remains available nationally.
+          A small set of Florida assisted living and adult family care profiles is being published
+          in controlled stages. This page is not a ranked list of providers. Home Health, Hospice,
+          and Nursing Home Florida state-provider pages remain unpublished while AHCA↔CMS identity
+          stays unresolved. CMS Nursing Home, Home Health, and Hospice discovery remains available
+          nationally.
         </p>
         <div className="hub-cta-grid">
           <Link className="hub-cta" href="/search">
