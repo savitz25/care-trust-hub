@@ -3489,6 +3489,12 @@ html {
 .intel-home {
   display: grid;
   gap: var(--space-4);
+  min-width: 0;
+  width: 100%;
+}
+.intel-home > * {
+  min-width: 0;
+  max-width: 100%;
 }
 .intel-hero {
   max-width: 46rem;
@@ -3496,6 +3502,7 @@ html {
 }
 .intel-hero h1 {
   max-width: 16ch;
+  overflow-wrap: anywhere;
 }
 .intel-hero__lede {
   max-width: 42rem;
@@ -3589,6 +3596,7 @@ html {
 }
 .intel-bar__meta {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-3);
   font-size: 0.95rem;
@@ -3685,6 +3693,16 @@ html {
   }
   .intel-geo-grid {
     grid-template-columns: repeat(auto-fill, minmax(3.2rem, 1fr));
+  }
+  .intel-lookup,
+  .intel-metric,
+  .intel-finding,
+  .intel-florida,
+  .intel-checklist {
+    padding: var(--space-4);
+  }
+  .hub-table-scroll {
+    max-width: 100%;
   }
 }
 @media (prefers-reduced-motion: reduce) {
