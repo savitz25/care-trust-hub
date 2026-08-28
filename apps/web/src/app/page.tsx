@@ -1,53 +1,21 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { TrustStrip, RealDataNotice, SyntheticDataNotice } from "@/components/evidence";
-import { NationalHubIntelligence } from "@/components/national-hub-intelligence";
+import { SeniorHomeIntelligence } from "@/components/senior-home-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { JourneyNextStep } from "@/components/journey-next-step";
 import { brand } from "@/config/brand";
 import { productionOrigin } from "@/config/deployment";
 import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-handoff";
-import { getSeniorHubIntelligence } from "@/server/care/senior-hub-intelligence";
+import { getSeniorHomeIntel } from "@/server/care/senior-home-intel";
 
 export const metadata: Metadata = {
   title: {
-    absolute: `${brand.publicName} — CMS Senior Care Research, Ownership & Quality Data`,
+    absolute: `${brand.publicName} — Independent Senior-Care Intelligence`,
   },
   description:
-    "Research current CMS Nursing Homes, Home Health agencies, and Hospice providers using published quality, ownership, staffing, and inspection evidence. Classes stay separate. No Trust Hub score.",
+    "Research nursing homes, home health, and hospice through published government evidence. Classes stay separate. No Trust Hub score, ranking, or paid placement.",
   alternates: { canonical: productionOrigin.origin },
 };
-
-const paths = [
-  {
-    number: "01",
-    title: "I already have a list",
-    text: "I was given facility names and need to research them.",
-    href: "/shortlist",
-    action: "Research my list",
-  },
-  {
-    number: "02",
-    title: "Research a facility by name",
-    text: "I already know the facility I’m considering.",
-    href: "/search",
-    action: "Look up a facility",
-  },
-  {
-    number: "03",
-    title: "Search nursing homes near me",
-    text: "Show me facilities near a location.",
-    href: "/search",
-    action: "Explore nearby care",
-  },
-  {
-    number: "04",
-    title: "Help me understand my options",
-    text: "I’m not sure what type of care we need.",
-    href: "#planning",
-    action: "Understand care types",
-  },
-] as const;
 
 export default async function Home({
   searchParams,
@@ -56,21 +24,10 @@ export default async function Home({
 }) {
   const navigatorEnabled = process.env.CARE_ENABLE_CARE_NEEDS_NAVIGATOR === "true";
   const plannerEnabled = process.env.CARE_ENABLE_SENIOR_CARE_COST_PLANNER === "true";
-  const interviewBuilderEnabled = process.env.CARE_ENABLE_FACILITY_INTERVIEW_BUILDER === "true";
   const workspaceEnabled = process.env.CARE_ENABLE_FAMILY_COMPARISON_WORKSPACE === "true";
-  const assistedLivingEnabled = process.env.CARE_ENABLE_ASSISTED_LIVING_INTELLIGENCE === "true";
   const sp = searchParams ? await searchParams : {};
   const journeyModule = resolveSeniorJourneyModule(parseNetworkJourney(sp), "home");
-  const intel = getSeniorHubIntelligence();
-  const entries = paths.map((path) =>
-    path.number === "04" && navigatorEnabled
-      ? {
-          ...path,
-          href: "/tools/care-needs-navigator",
-          action: "Use the Care Needs Navigator",
-        }
-      : path,
-  );
+  const intel = getSeniorHomeIntel();
   return (
     <>
       <div className="page-shell home-page">
@@ -84,10 +41,10 @@ export default async function Home({
             "@context": "https://schema.org",
             "@type": "WebPage",
             "@id": `${productionOrigin.href}#webpage`,
-            name: `${brand.publicName} — CMS Senior Care Research, Ownership & Quality Data`,
+            name: `${brand.publicName} — Independent Senior-Care Intelligence`,
             url: productionOrigin.href,
             description:
-              "National research hub for current CMS Nursing Homes, Home Health agencies, and Hospice providers. No aggregate rating.",
+              "National senior-care research hub using published CMS evidence. No aggregate rating.",
             isPartOf: { "@id": `${productionOrigin.href}#website` },
             about: [
               { "@type": "Thing", name: "CMS Nursing Homes" },
@@ -96,171 +53,14 @@ export default async function Home({
             ],
           }}
         />
-        <section className="home-hero" aria-labelledby="home-title">
-          <p className="eyebrow">National senior care research hub</p>
-          <h1 id="home-title">Research CMS Nursing Homes, Home Health, and Hospice</h1>
-          <p className="home-hero__lede">
-            {brand.tagline} Compare published CMS quality, ownership, staffing, and inspection
-            evidence by provider class — not a ranking, and not a Trust Hub score.
-          </p>
-          <div className="home-hero__proof">
-            <span className="proof-mark" aria-hidden="true">
-              Not for sale
-            </span>
-            <p>
-              We don’t accept paid placement or sell your information to facilities.{" "}
-              <strong>{brand.philosophy}</strong>
-            </p>
-          </div>
-        </section>
-        <NationalHubIntelligence intel={intel} />
-        <section className="entry-section" aria-labelledby="florida-home-title">
-          <div className="section-heading">
-            <p className="eyebrow">Florida research</p>
-            <h2 id="florida-home-title">AHCA licensing and regulatory evidence for Florida</h2>
-          </div>
-          <p>
-            Research current Florida nursing homes, assisted living, adult family care homes, home
-            health, and hospice using official AHCA identities and connected inspection and
-            enforcement evidence — plus national CMS context. Individual Florida provider pages are
-            not published yet. No score.
-          </p>
-          <Link className="button button--secondary" href="/florida">
-            Open Florida Senior Care Research →
-          </Link>
-        </section>
-        <section className="entry-section" aria-labelledby="start-title">
-          <div className="section-heading">
-            <p className="eyebrow">Start where you are</p>
-            <h2 id="start-title">What would help right now?</h2>
-          </div>
-          <div className="entry-grid">
-            {entries.map((path) => (
-              <a className="entry-card" href={path.href} key={path.number}>
-                <span className="entry-card__number">{path.number}</span>
-                <h3>{path.title}</h3>
-                <p>{path.text}</p>
-                <span className="text-link">
-                  {path.action} <span aria-hidden="true">→</span>
-                </span>
-              </a>
-            ))}
-          </div>
-        </section>
-        {navigatorEnabled ? (
-          <section className="entry-section" aria-labelledby="navigator-home-title">
-            <div className="section-heading">
-              <p className="eyebrow">Not sure what kind of care you need?</p>
-              <h2 id="navigator-home-title">Start with the care landscape, not a facility list</h2>
-            </div>
-            <p>
-              The Care Needs Navigator explains which settings may be worth investigating based on
-              daily needs, safety, and support — without a score or a sales pitch.
-            </p>
-            <a className="button button--secondary" href="/tools/care-needs-navigator">
-              Use the Care Needs Navigator →
-            </a>
-          </section>
-        ) : null}
-        {plannerEnabled ? (
-          <section className="entry-section" aria-labelledby="planner-home-title">
-            <div className="section-heading">
-              <p className="eyebrow">Understand the cost of care</p>
-              <h2 id="planner-home-title">Compare published benchmarks and your own quotes</h2>
-            </div>
-            <p>
-              The Senior Care Cost Planner estimates home care, assisted living, memory care, and
-              skilled nursing using transparent assumptions. It is not a quote or eligibility
-              decision.
-            </p>
-            <a className="button button--secondary" href="/tools/senior-care-cost-planner">
-              Compare senior care costs →
-            </a>
-          </section>
-        ) : null}
-        {interviewBuilderEnabled ? (
-          <section className="entry-section" aria-labelledby="interview-home-title">
-            <div className="section-heading">
-              <p className="eyebrow">Prepare for a facility tour</p>
-              <h2 id="interview-home-title">Take better questions to the visit or call</h2>
-            </div>
-            <p>
-              Build a short interview checklist for skilled nursing, rehabilitation, assisted
-              living, memory care, or a home-care agency. CMS facility pages can add published
-              evidence to the list.
-            </p>
-            <a className="button button--secondary" href="/tools/facility-tour-interview-builder">
-              Build your interview checklist →
-            </a>
-          </section>
-        ) : null}
-        {assistedLivingEnabled ? (
-          <section className="entry-section" aria-labelledby="al-home-title">
-            <div className="section-heading">
-              <p className="eyebrow">Research assisted living</p>
-              <h2 id="al-home-title">State-verified listings in California, New York, and Texas</h2>
-            </div>
-            <p>
-              SeniorTrustHub publishes official assisted-living and residential-care identities for
-              California, New York, and Texas. This is not national coverage and it does not score
-              providers.
-            </p>
-            <Link className="button button--secondary" href="/assisted-living">
-              Search assisted living →
-            </Link>
-          </section>
-        ) : null}
-        {workspaceEnabled ? (
-          <section className="entry-section" aria-labelledby="workspace-home-title">
-            <div className="section-heading">
-              <p className="eyebrow">Compare the facilities you&apos;re considering</p>
-              <h2 id="workspace-home-title">Keep a private shortlist in this browser</h2>
-            </div>
-            <p>
-              The Family Comparison Workspace puts published staffing, inspections, ownership, and
-              your own notes in one place. It does not pick a winner.
-            </p>
-            <a className="button button--secondary" href="/workspace">
-              Open Family Workspace →
-            </a>
-          </section>
-        ) : null}
-        <section className="mode-grid" id="planning" aria-labelledby="mode-title">
-          <h2 id="mode-title" className="visually-hidden">
-            Choose your research pace
-          </h2>
-          <article className="mode-card mode-card--urgent">
-            <p className="eyebrow">I need help now</p>
-            <h3>Make sense of a hospital shortlist</h3>
-            <p>
-              When discharge is close and several names are on a sheet of paper, start with the
-              public record and the questions it raises.
-            </p>
-            <ul>
-              <li>Enter several facility names at once</li>
-              <li>Spot differences quickly</li>
-              <li>Take questions into your next call</li>
-            </ul>
-            <a className="button button--primary" href="/shortlist">
-              Start a crisis shortlist
-            </a>
-          </article>
-          <article className="mode-card">
-            <p className="eyebrow">I’m planning ahead</p>
-            <h3>Learn before a decision is urgent</h3>
-            <p>
-              Understand care types, ownership, staffing, inspections, and costs at your own pace.
-            </p>
-            <ul>
-              <li>Explore what different care types provide</li>
-              <li>Build a research vocabulary</li>
-              <li>Share evidence with family</li>
-            </ul>
-            <a className="button button--secondary" href="/search">
-              Explore the research prototype
-            </a>
-          </article>
-        </section>
+        <SeniorHomeIntelligence
+          intel={intel}
+          tools={{
+            navigator: navigatorEnabled,
+            planner: plannerEnabled,
+            workspace: workspaceEnabled,
+          }}
+        />
       </div>
       <div className="page-shell" style={{ paddingBlock: "0 3rem" }}>
         <JourneyNextStep module={journeyModule} />

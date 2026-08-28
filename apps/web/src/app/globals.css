@@ -3484,3 +3484,211 @@ html {
     overflow-x: auto;
   }
 }
+
+/* INTEL-002 national homepage */
+.intel-home {
+  display: grid;
+  gap: var(--space-4);
+}
+.intel-hero {
+  max-width: 46rem;
+  padding-block: clamp(1.75rem, 6vw, 4.5rem);
+}
+.intel-hero h1 {
+  max-width: 16ch;
+}
+.intel-hero__lede {
+  max-width: 42rem;
+  color: var(--color-slate-700);
+  font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+}
+.intel-hero__promise {
+  margin-top: var(--space-5);
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+}
+.intel-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+.intel-hero__actions .button,
+.intel-lookup button {
+  min-height: var(--th-control);
+  min-width: 11rem;
+}
+.intel-lookup {
+  margin-top: var(--space-10);
+  padding: var(--space-6);
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--th-radius-card);
+  background: var(--color-white);
+}
+.intel-lookup__grid {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+.intel-lookup label {
+  display: grid;
+  gap: var(--space-2);
+  font-weight: 600;
+}
+.intel-lookup input,
+.intel-lookup select {
+  min-height: var(--th-control);
+  width: 100%;
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--th-radius-control);
+  padding: 0 var(--space-3);
+  background: var(--color-warm-50);
+}
+.intel-section {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+  border-top: 1px solid var(--color-warm-200);
+}
+.intel-metric-rail,
+.intel-findings {
+  display: grid;
+  gap: var(--space-5);
+  margin-top: var(--space-8);
+}
+.intel-metric,
+.intel-finding,
+.intel-florida {
+  padding: var(--space-6);
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--th-radius-card);
+  background: var(--color-white);
+}
+.intel-metric__value {
+  margin: 0;
+  color: var(--color-senior-plum);
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+}
+.intel-metric h3,
+.intel-finding h3 {
+  margin: var(--space-2) 0 var(--space-3);
+  font-size: 1.2rem;
+}
+.intel-disclose {
+  margin-top: var(--space-4);
+}
+.intel-disclose summary {
+  min-height: var(--th-control);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--color-senior-plum);
+}
+.intel-bar + .intel-bar {
+  margin-top: var(--space-3);
+}
+.intel-bar__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: 0.95rem;
+}
+.intel-bar__track {
+  height: 0.7rem;
+  margin-top: 0.35rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-warm-100);
+}
+.intel-bar__fill {
+  display: block;
+  height: 100%;
+  background: var(--color-senior-plum);
+}
+.intel-legend {
+  margin: var(--space-4) 0;
+  color: var(--color-slate-700);
+}
+.intel-geo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(3.6rem, 1fr));
+  gap: 0.4rem;
+}
+.intel-geo-cell {
+  display: grid;
+  min-height: var(--th-control);
+  place-items: center;
+  border: 1px solid var(--color-warm-200);
+  border-radius: 0.4rem;
+  background: rgb(104 24 96 / calc(0.08 + (var(--intel-volume, 0) * 0.45)));
+  color: var(--color-slate-950);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.intel-geo-cell:hover,
+.intel-geo-cell:focus-visible {
+  outline: 2px solid var(--th-navy);
+  outline-offset: 1px;
+}
+.intel-florida {
+  margin-top: var(--space-8);
+}
+.intel-ask {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+.intel-journey {
+  max-width: 40rem;
+  padding-left: 1.2rem;
+}
+.intel-checklist {
+  margin: var(--space-4) 0 var(--space-8);
+  padding: var(--space-5);
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--th-radius-card);
+}
+.intel-checklist__list {
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.intel-checklist__list label {
+  display: flex;
+  min-height: var(--th-control);
+  align-items: center;
+  gap: var(--space-3);
+}
+.intel-checklist input {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+@media (min-width: 48rem) {
+  .intel-lookup__grid {
+    grid-template-columns: 1.4fr 0.8fr 1fr auto;
+    align-items: end;
+  }
+  .intel-metric-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 64rem) {
+  .intel-findings {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 39.99rem) {
+  .intel-hero h1 {
+    max-width: none;
+    font-size: 2rem;
+  }
+  .intel-geo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(3.2rem, 1fr));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
