@@ -58,6 +58,9 @@ export function SeniorHomeIntelligence({
           <a className="button button--primary" href="#record">
             Explore Senior Care Intelligence
           </a>
+          <a className="button button--secondary" href="/ask">
+            Ask SeniorTrustHub
+          </a>
           <a className="button button--secondary" href="#lookup">
             Research a provider
           </a>
