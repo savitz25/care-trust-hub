@@ -34,10 +34,50 @@ export interface AgencySearchResult {
   serviceEvidenceAvailable: boolean;
 }
 
+export interface AgencySourceClock {
+  datasetKey: string;
+  sourceFamily: string;
+  officialAsOf: string | null;
+}
+
 const TABLES = {
   home_health: "home_health_snapshot",
   hospice: "hospice_snapshot",
 } as const;
+
+const DATASET_KEYS = {
+  home_health: "home-health-care-agencies",
+  hospice: "hospice-general-information",
+} as const;
+
+export async function getCurrentAgencySourceClock(
+  providerClass: AgencySearchClass,
+): Promise<AgencySourceClock> {
+  const table = TABLES[providerClass];
+  const datasetKey = DATASET_KEYS[providerClass];
+  const result = await getCareDatabasePool().query<{
+    display_name: string;
+    source_organization: string;
+    source_modified_at: Date | null;
+  }>(
+    `SELECT sd.display_name, sd.source_organization, sr.source_modified_at
+     FROM ${table} snapshot
+     JOIN source_release sr ON sr.id=snapshot.source_release_id
+     JOIN source_dataset sd ON sd.id=sr.source_dataset_id
+     WHERE sd.dataset_key=$1
+     ORDER BY sr.source_modified_at DESC NULLS LAST, sr.retrieved_at DESC
+     LIMIT 1`,
+    [datasetKey],
+  );
+  const row = result.rows[0];
+  return {
+    datasetKey,
+    sourceFamily: row
+      ? `${row.display_name} (${row.source_organization})`
+      : `CMS Care Compare (${datasetKey})`,
+    officialAsOf: row?.source_modified_at?.toISOString() ?? null,
+  };
+}
 
 const QUALITY_FAMILY = {
   home_health: "hh_quality",
