@@ -2,7 +2,7 @@ import "server-only";
 import { getCareDatabasePool } from "./db";
 import { CMS_PROVIDER_INFORMATION_SOURCE, CMS_REGULATORY_SOURCES } from "./source-contracts";
 import { providerHref } from "./consumer";
-import { searchCurrentAgencies } from "./agency-search";
+import { getCurrentAgencySourceClock, searchCurrentAgencies } from "./agency-search";
 import { getProviderByCcn } from "./repository";
 import {
   ASK_PAGE_SIZE,
@@ -228,6 +228,12 @@ function nhFilters(query: SeniorResearchQuery, values: unknown[]) {
   if (query.geography?.type === "county") {
     conditions.push(`county_name ILIKE ${p(`%${query.geography.value}%`)} ESCAPE '\\'`);
   }
+  if (query.geography?.type === "city") {
+    conditions.push(`city ILIKE ${p(query.geography.value)} ESCAPE '\\'`);
+  }
+  if (query.geography?.type === "zip") {
+    conditions.push(`zip_code=${p(query.geography.value)}`);
+  }
   if (query.qualityFilters?.overallStars?.length) {
     conditions.push(`overall_rating = ANY(${p(query.qualityFilters.overallStars)}::int[])`);
   }
@@ -290,7 +296,7 @@ async function searchNursingHomes(
   const offset = p((query.page - 1) * ASK_PAGE_SIZE);
   const sql = `${NH_CTE}
     SELECT cs.ccn, cs.provider_name, cs.city, cs.state_code, cs.zip_code, cs.county_name,
-           cs.overall_rating, cs.staffing_rating, cs.health_inspection_rating,
+           cs.overall_rating, cs.staffing_rating, cs.health_inspection_rating, cs.ownership_type,
            cs.release_key, cs.source_modified_at${extraSelect}
     FROM current_snapshots cs
     ${extraJoin}
@@ -307,6 +313,7 @@ async function searchNursingHomes(
     overall_rating: number | null;
     staffing_rating: number | null;
     health_inspection_rating: number | null;
+    ownership_type: string | null;
     extra_n?: number | null;
     total_nurse_hprd?: string | null;
     source_quarter?: string | null;
@@ -320,6 +327,10 @@ async function searchNursingHomes(
       {
         label: "Health inspection stars",
         value: starText(row.health_inspection_rating, "Inspection"),
+      },
+      {
+        label: "Ownership category",
+        value: row.ownership_type ?? "Not available in the current indexed source",
       },
     ];
     if (row.extra_n != null) {
@@ -350,8 +361,15 @@ async function searchNursingHomes(
 }
 
 export async function executeSeniorResearchQuery(raw: string, page = 1): Promise<SeniorAskResult> {
-  const started = Date.now();
   const query = interpretSeniorAskQuery(raw, page);
+  return executeSeniorResearchPlan(query, raw);
+}
+
+export async function executeSeniorResearchPlan(
+  query: SeniorResearchQuery,
+  raw = "Structured specialist execution request",
+): Promise<SeniorAskResult> {
+  const started = Date.now();
   const interpretation = chips(query);
   const limitations: string[] = [
     "Ask does not invent provider facts. Results come from structured SeniorTrustHub production data.",
@@ -432,15 +450,17 @@ export async function executeSeniorResearchQuery(raw: string, page = 1): Promise
 
   if (query.providerClass === "hospice" && query.geography?.type === "county") {
     const { hospiceHref } = await import("./consumer");
-    const result = await getCareDatabasePool().query<{
-      cms_ccn: string;
-      provider_name: string;
-      city: string | null;
-      state_code: string;
-      zip_code: string | null;
-      county_name: string | null;
-    }>(
-      `WITH current_directory AS (
+    const [sourceClock, result] = await Promise.all([
+      getCurrentAgencySourceClock("hospice"),
+      getCareDatabasePool().query<{
+        cms_ccn: string;
+        provider_name: string;
+        city: string | null;
+        state_code: string;
+        zip_code: string | null;
+        county_name: string | null;
+      }>(
+        `WITH current_directory AS (
          SELECT DISTINCT ON (cms_ccn)
            cms_ccn, provider_name, city, state_code, zip_code, county_name
          FROM hospice_snapshot
@@ -451,8 +471,9 @@ export async function executeSeniorResearchQuery(raw: string, page = 1): Promise
        WHERE county_name ILIKE $1 ESCAPE '\\'
        ORDER BY provider_name, cms_ccn
        LIMIT $2 OFFSET $3`,
-      [`%${query.geography.value}%`, ASK_PAGE_SIZE + 1, (query.page - 1) * ASK_PAGE_SIZE],
-    );
+        [`%${query.geography.value}%`, ASK_PAGE_SIZE + 1, (query.page - 1) * ASK_PAGE_SIZE],
+      ),
+    ]);
     if (query.mode === "count") {
       const counted = await getCareDatabasePool().query<{ n: string }>(
         `SELECT count(DISTINCT cms_ccn)::text AS n FROM hospice_snapshot WHERE county_name ILIKE $1 ESCAPE '\\'`,
@@ -473,6 +494,8 @@ export async function executeSeniorResearchQuery(raw: string, page = 1): Promise
         pagination: { page: 1, pageSize: ASK_PAGE_SIZE, hasMore: false },
         provenance: {
           ...provenanceBase,
+          sourceFamily: sourceClock.sourceFamily,
+          officialAsOf: sourceClock.officialAsOf,
           geographyMeaning: query.geography.meaning,
           queryGrain: "hospice office/address county",
         },
@@ -505,6 +528,8 @@ export async function executeSeniorResearchQuery(raw: string, page = 1): Promise
       pagination: { page: query.page, pageSize: ASK_PAGE_SIZE, hasMore },
       provenance: {
         ...provenanceBase,
+        sourceFamily: sourceClock.sourceFamily,
+        officialAsOf: sourceClock.officialAsOf,
         geographyMeaning: query.geography.meaning,
         queryGrain: "hospice office/address county",
       },
@@ -513,19 +538,24 @@ export async function executeSeniorResearchQuery(raw: string, page = 1): Promise
   }
 
   if (query.providerClass === "home_health" || query.providerClass === "hospice") {
-    const agency = await searchCurrentAgencies({
-      providerClass: query.providerClass,
-      query:
-        query.metric === "hh_hhcahps" || query.metric === "hospice_cahps" ? undefined : undefined,
-      state: query.geography?.type === "state" ? query.geography.value : undefined,
-      cmsStar: query.qualityFilters?.qpcStars?.[0],
-      qualityAvailable:
-        query.metric === "hospice_cahps" || query.metric === "hh_hhcahps" ? true : undefined,
-      experienceAvailable:
-        query.metric === "hospice_cahps" || query.metric === "hh_hhcahps" ? true : undefined,
-      limit: ASK_PAGE_SIZE + 1,
-      offset: (query.page - 1) * ASK_PAGE_SIZE,
-    });
+    const [sourceClock, agency] = await Promise.all([
+      getCurrentAgencySourceClock(query.providerClass),
+      searchCurrentAgencies({
+        providerClass: query.providerClass,
+        query:
+          query.metric === "hh_hhcahps" || query.metric === "hospice_cahps" ? undefined : undefined,
+        state: query.geography?.type === "state" ? query.geography.value : undefined,
+        city: query.geography?.type === "city" ? query.geography.value : undefined,
+        zip: query.geography?.type === "zip" ? query.geography.value : undefined,
+        cmsStar: query.qualityFilters?.qpcStars?.[0],
+        qualityAvailable:
+          query.metric === "hospice_cahps" || query.metric === "hh_hhcahps" ? true : undefined,
+        experienceAvailable:
+          query.metric === "hospice_cahps" || query.metric === "hh_hhcahps" ? true : undefined,
+        limit: ASK_PAGE_SIZE + 1,
+        offset: (query.page - 1) * ASK_PAGE_SIZE,
+      }),
+    ]);
     const hasMore = agency.length > ASK_PAGE_SIZE;
     const entities: SeniorAskEntity[] = agency.slice(0, ASK_PAGE_SIZE).map((row) => ({
       providerClass: row.providerClass,
@@ -563,17 +593,36 @@ export async function executeSeniorResearchQuery(raw: string, page = 1): Promise
       whyMatched: `${row.providerName} matches because it is a current ${CLASS_LABEL[row.providerClass].slice(0, -1).toLowerCase()} in the CMS directory${query.geography?.type === "state" ? ` with recorded ${query.geography.value} office/location state` : ""}. Office location is not a verified service area.`,
     }));
     if (query.mode === "count") {
-      const { countCurrentAgencyDirectory } = await import("./agency-search");
-      let n = await countCurrentAgencyDirectory(query.providerClass);
-      if (query.geography?.type === "state") {
-        const table =
-          query.providerClass === "home_health" ? "home_health_snapshot" : "hospice_snapshot";
-        const counted = await getCareDatabasePool().query<{ n: string }>(
-          `SELECT count(DISTINCT cms_ccn)::text AS n FROM ${table} WHERE state_code=$1`,
-          [query.geography.value],
+      const table =
+        query.providerClass === "home_health" ? "home_health_snapshot" : "hospice_snapshot";
+      const values: string[] = [];
+      const conditions: string[] = [];
+      if (query.geography) {
+        values.push(
+          query.geography.type === "city"
+            ? `%${query.geography.value.replace(/[\\%_]/g, "\\$&")}%`
+            : query.geography.value,
         );
-        n = Number(counted.rows[0]?.n ?? 0);
+        const column =
+          query.geography.type === "state"
+            ? "state_code"
+            : query.geography.type === "city"
+              ? "city"
+              : "zip_code";
+        conditions.push(
+          query.geography.type === "city" ? `${column} ILIKE $1 ESCAPE '\\'` : `${column}=$1`,
+        );
       }
+      if (query.providerClass === "home_health" && query.qualityFilters?.qpcStars?.[0]) {
+        values.push(String(query.qualityFilters.qpcStars[0]));
+        conditions.push(`quality_of_patient_care_star=$${values.length}::numeric`);
+      }
+      const where = conditions.length ? ` WHERE ${conditions.join(" AND ")}` : "";
+      const counted = await getCareDatabasePool().query<{ n: string }>(
+        `SELECT count(DISTINCT cms_ccn)::text AS n FROM ${table}${where}`,
+        values,
+      );
+      const n = Number(counted.rows[0]?.n ?? 0);
       return {
         contract: SENIOR_ASK_CONTRACT,
         rawQuery: raw,
@@ -586,7 +635,11 @@ export async function executeSeniorResearchQuery(raw: string, page = 1): Promise
           grain: `Current ${CLASS_LABEL[query.providerClass]} directory identities. Not combined with other classes.`,
         },
         pagination: { page: 1, pageSize: ASK_PAGE_SIZE, hasMore: false },
-        provenance: provenanceBase,
+        provenance: {
+          ...provenanceBase,
+          sourceFamily: sourceClock.sourceFamily,
+          officialAsOf: sourceClock.officialAsOf,
+        },
         limitations,
       };
     }
@@ -599,7 +652,11 @@ export async function executeSeniorResearchQuery(raw: string, page = 1): Promise
       resultType: "entity",
       entities,
       pagination: { page: query.page, pageSize: ASK_PAGE_SIZE, hasMore },
-      provenance: provenanceBase,
+      provenance: {
+        ...provenanceBase,
+        sourceFamily: sourceClock.sourceFamily,
+        officialAsOf: sourceClock.officialAsOf,
+      },
       limitations,
     };
   }
