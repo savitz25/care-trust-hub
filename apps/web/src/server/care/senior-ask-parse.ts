@@ -352,7 +352,7 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
   }
 
   let sort: SeniorResearchQuery["sort"] = "name";
-  let mode: SeniorAskMode = "entity";
+  const mode: SeniorAskMode = "entity";
   if (/highest overall|highest cms rating/i.test(q)) sort = "overall_desc";
   if (/highest staffing rating/i.test(q)) sort = "staffing_desc";
   if (providerClass === "home_health" && /highest.*quality of patient care/i.test(q)) sort = "qpc_desc";

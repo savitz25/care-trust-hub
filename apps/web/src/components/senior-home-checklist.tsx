@@ -18,12 +18,16 @@ export function SeniorHomeChecklist() {
   const [checked, setChecked] = useState<string[]>([]);
 
   useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) setChecked(JSON.parse(raw) as string[]);
-    } catch {
-      setChecked([]);
-    }
+    const restore = window.setTimeout(() => {
+      try {
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (raw) setChecked(JSON.parse(raw) as string[]);
+      } catch {
+        // Keep the default empty checklist when stored state is unavailable or invalid.
+      }
+    }, 0);
+
+    return () => window.clearTimeout(restore);
   }, []);
 
   function toggle(id: string) {
@@ -38,8 +42,8 @@ export function SeniorHomeChecklist() {
   return (
     <div className="intel-checklist">
       <p id={labelId} className="intel-checklist__status">
-        You&apos;ve reviewed {done} of {AREAS.length} evidence areas. This tracks your research process,
-        not a provider&apos;s safety or quality.
+        You&apos;ve reviewed {done} of {AREAS.length} evidence areas. This tracks your research
+        process, not a provider&apos;s safety or quality.
       </p>
       <ul className="intel-checklist__list" aria-labelledby={labelId}>
         {AREAS.map((area) => (
