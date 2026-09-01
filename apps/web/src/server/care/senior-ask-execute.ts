@@ -77,6 +77,33 @@ export type SeniorAskResult = {
   failClosed?: { reason: string; alternatives: string[] };
 };
 
+async function getNursingHomeSourceClock(): Promise<{
+  sourceFamily: string;
+  officialAsOf: string | null;
+}> {
+  const result = await getCareDatabasePool().query<{
+    display_name: string;
+    source_organization: string;
+    source_modified_at: Date | null;
+  }>(
+    `SELECT sd.display_name, sd.source_organization, sr.source_modified_at
+     FROM source_dataset sd
+     JOIN source_release sr ON sr.source_dataset_id=sd.id
+     JOIN ingest_run ir ON ir.source_release_id=sr.id AND ir.status='succeeded'
+     WHERE sd.dataset_key=$1
+     ORDER BY sr.source_modified_at DESC NULLS LAST, ir.completed_at DESC
+     LIMIT 1`,
+    [CMS_PROVIDER_INFORMATION_SOURCE.datasetKey],
+  );
+  const row = result.rows[0];
+  return {
+    sourceFamily: row
+      ? `${row.display_name} (${row.source_organization})`
+      : `${CMS_PROVIDER_INFORMATION_SOURCE.datasetName} (${CMS_PROVIDER_INFORMATION_SOURCE.datasetIdentifier})`,
+    officialAsOf: row?.source_modified_at?.toISOString() ?? null,
+  };
+}
+
 const DEFINITIONS: Record<string, { title: string; body: string }> = {
   overall_star: {
     title: "CMS overall star rating (nursing homes)",
@@ -426,6 +453,12 @@ export async function executeSeniorResearchPlan(
 
   if (query.mode === "identifier" && query.identifier) {
     const entities = await lookupCcn(query.identifier.value);
+    const matchedClass = entities[0]?.providerClass;
+    const sourceClock = matchedClass
+      ? matchedClass === "nursing_home"
+        ? await getNursingHomeSourceClock()
+        : await getCurrentAgencySourceClock(matchedClass)
+      : null;
     return {
       contract: SENIOR_ASK_CONTRACT,
       rawQuery: raw,
@@ -436,8 +469,10 @@ export async function executeSeniorResearchPlan(
       pagination: { page: 1, pageSize: ASK_PAGE_SIZE, hasMore: false },
       provenance: {
         ...provenanceBase,
+        providerClass: matchedClass ? CLASS_LABEL[matchedClass] : provenanceBase.providerClass,
+        sourceFamily: sourceClock?.sourceFamily ?? provenanceBase.sourceFamily,
+        officialAsOf: sourceClock?.officialAsOf ?? null,
         identifierMethod: "Labeled CMS CCN exact match against current class directories",
-        officialAsOf: null,
       },
       limitations: [
         ...limitations,
