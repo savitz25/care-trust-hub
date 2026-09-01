@@ -1,0 +1,288 @@
+{
+  "contract_version": "fl-sen-pub-v1",
+  "seed": "fl-sen-pub-v1",
+  "algorithm": "sha256(seed|external_key) ascending within eligible Phase 1 class",
+  "eligible_classes": [
+    "FL_ALF",
+    "FL_AFCH"
+  ],
+  "indexable_default": false,
+  "n": 25,
+  "profiles": [
+    {
+      "provider_id": "f5573999-2cae-4e78-965f-031986ae8c61",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11966552",
+      "name_slug": "daniella-s-care-center-inc",
+      "future_path": "/florida/assisted-living/11966552/daniella-s-care-center-inc",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "dae3af37-d697-40ee-b3cc-54c52009e5ee",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11963817",
+      "name_slug": "tuscany-heights-senior-living",
+      "future_path": "/florida/assisted-living/11963817/tuscany-heights-senior-living",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "8400eb84-de43-44d5-b2de-91e9a31354cd",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11910630",
+      "name_slug": "finnish-american-village",
+      "future_path": "/florida/assisted-living/11910630/finnish-american-village",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "d0f0732c-d6e4-49c4-8ded-95f83f796379",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11953670",
+      "name_slug": "south-deering-retirement-home-inc",
+      "future_path": "/florida/assisted-living/11953670/south-deering-retirement-home-inc",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "b83e2229-ca91-4658-a126-72457e232b9e",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11970834",
+      "name_slug": "canary-homes-assisted-living",
+      "future_path": "/florida/assisted-living/11970834/canary-homes-assisted-living",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "8fcc3520-e81c-4e90-84bc-8ab729c1b6cb",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11968826",
+      "name_slug": "aurora-garden-care-llc",
+      "future_path": "/florida/assisted-living/11968826/aurora-garden-care-llc",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "2d852e0b-2e05-4d2e-83e7-a3d853203e71",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11967941",
+      "name_slug": "tropical-paradise-villa-assisted-living-and-retirement",
+      "future_path": "/florida/assisted-living/11967941/tropical-paradise-villa-assisted-living-and-retirement",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "8011d3a5-3248-49d7-9a5a-8a3a3cddeaa6",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11964914",
+      "name_slug": "carlisle-naples",
+      "future_path": "/florida/assisted-living/11964914/carlisle-naples",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "0896abb1-1fe3-417b-be85-a7e5900b9032",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11966425",
+      "name_slug": "aston-gardens-at-pelican-pointe",
+      "future_path": "/florida/assisted-living/11966425/aston-gardens-at-pelican-pointe",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "643cfefe-d3db-4684-8bb9-797240bfa9ae",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11968254",
+      "name_slug": "the-preserve-at-dunedin",
+      "future_path": "/florida/assisted-living/11968254/the-preserve-at-dunedin",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "70881cd2-a8a1-4ef1-8bcc-2a288a7e0b5b",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11968985",
+      "name_slug": "carmita-s-assisting-living-facility-iv-llc",
+      "future_path": "/florida/assisted-living/11968985/carmita-s-assisting-living-facility-iv-llc",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "6d1e5640-f55c-4d9e-8c2c-8621888de71d",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11970301",
+      "name_slug": "new-melody-sl-llc",
+      "future_path": "/florida/assisted-living/11970301/new-melody-sl-llc",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "51206534-11e5-48d7-bbdb-1b12c118af19",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11968740",
+      "name_slug": "stellar-alf-llc",
+      "future_path": "/florida/assisted-living/11968740/stellar-alf-llc",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "998d2338-3c51-4bfd-9c49-e1897390cecb",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11953544",
+      "name_slug": "palms-villa",
+      "future_path": "/florida/assisted-living/11953544/palms-villa",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "5d9d925e-4d5a-4ba8-b2ce-a93b2870ea4d",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11970363",
+      "name_slug": "a-and-g-marvelous-alf-llc",
+      "future_path": "/florida/assisted-living/11970363/a-and-g-marvelous-alf-llc",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "b0d998b4-0758-47df-bfcb-64e72a88d2d0",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11911216",
+      "name_slug": "brookdale-sarasota-midtown",
+      "future_path": "/florida/assisted-living/11911216/brookdale-sarasota-midtown",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "828b3a17-7bda-4a02-8596-2c3e919f8423",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11967676",
+      "name_slug": "caring-hearts-assisted-living",
+      "future_path": "/florida/assisted-living/11967676/caring-hearts-assisted-living",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "a072c878-4914-4f4e-9cf9-d4cb065fd135",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11922334",
+      "name_slug": "spring-haven-senior-living",
+      "future_path": "/florida/assisted-living/11922334/spring-haven-senior-living",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "fa19c538-863f-4639-85d9-9ade12a4130b",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11966115",
+      "name_slug": "angels-forever-inc",
+      "future_path": "/florida/assisted-living/11966115/angels-forever-inc",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "6ab98339-c92d-49e6-a90d-ab337bb1d7ee",
+      "provider_class": "FL_ALF",
+      "profile_kind": "assisted-living",
+      "ahca_file_number": "11911234",
+      "name_slug": "alf-bc-bethesda-llc",
+      "future_path": "/florida/assisted-living/11911234/alf-bc-bethesda-llc",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "16721ce6-6dec-4c77-8fd2-b1f69925c61a",
+      "provider_class": "FL_AFCH",
+      "profile_kind": "adult-family-care",
+      "ahca_file_number": "52963251",
+      "name_slug": "francoeur-marie-josee",
+      "future_path": "/florida/adult-family-care/52963251/francoeur-marie-josee",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "7d240080-949f-4a55-a3c3-50b329c06ea9",
+      "provider_class": "FL_AFCH",
+      "profile_kind": "adult-family-care",
+      "ahca_file_number": "52963348",
+      "name_slug": "bort-etta-lynn",
+      "future_path": "/florida/adult-family-care/52963348/bort-etta-lynn",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "c0631956-094f-4ec5-a005-a87fbbb5202e",
+      "provider_class": "FL_AFCH",
+      "profile_kind": "adult-family-care",
+      "ahca_file_number": "52963213",
+      "name_slug": "wolter-elsa-h",
+      "future_path": "/florida/adult-family-care/52963213/wolter-elsa-h",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "1ab45e5b-08f9-4b03-bb4f-eb937daaba4c",
+      "provider_class": "FL_AFCH",
+      "profile_kind": "adult-family-care",
+      "ahca_file_number": "52964213",
+      "name_slug": "brown-dorica",
+      "future_path": "/florida/adult-family-care/52964213/brown-dorica",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    },
+    {
+      "provider_id": "7e4dfd54-6726-47b8-93d6-9b0941d0857b",
+      "provider_class": "FL_AFCH",
+      "profile_kind": "adult-family-care",
+      "ahca_file_number": "52964203",
+      "name_slug": "steadman-antonio",
+      "future_path": "/florida/adult-family-care/52964203/steadman-antonio",
+      "publication_state": "phase1_manifest",
+      "indexable": false,
+      "manifest_version": "fl-sen-pub-v1"
+    }
+  ]
+}

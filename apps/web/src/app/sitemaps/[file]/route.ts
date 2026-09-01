@@ -1,13 +1,25 @@
 import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
-import { chainHref, organizationHref, providerSlug } from "@/server/care/consumer";
+import {
+  chainHref,
+  homeHealthHref,
+  hospiceHref,
+  organizationHref,
+  providerSlug,
+} from "@/server/care/consumer";
 import { publishedAssistedLivingPath } from "@care/domain";
 import {
+  isAgencyProfileIndexEnabled,
   isAssistedLivingIntelligenceEnabled,
   isCareNeedsNavigatorEnabled,
   isFacilityInterviewBuilderEnabled,
+  isFloridaProviderIndexEnabled,
+  isHhProfileIntelEnabled,
+  isHospiceProfileIntelEnabled,
   isOwnershipIntelligenceV2Enabled,
   isSeniorCareCostPlannerEnabled,
 } from "@/server/care/feature-flags";
+import { getAgencyIndexSitemapRows } from "@/server/care/agency-publication";
+import { getFloridaProviderSitemapPaths } from "@/server/care/florida-publication";
 import { getAssistedLivingSitemapPage } from "@/server/care/assisted-living-publication";
 import {
   getChainSitemapRows,
@@ -27,6 +39,9 @@ const corePaths = [
   "/terms",
   "/contact",
   "/trust/corrections",
+  "/home-health",
+  "/hospice",
+  "/florida",
 ];
 const response = (xml: string) =>
   new Response(xml, {
@@ -72,6 +87,50 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
           .map(
             (row) =>
               `<url><loc>${new URL(chainHref({ cmsChainId: row.cms_chain_id, chainName: row.chain_name }), productionOrigin).href}</loc><lastmod>${row.release_month.toISOString().slice(0, 10)}</lastmod></url>`,
+          )
+          .join(""),
+      ),
+    );
+  }
+  if (file === "florida-providers.xml") {
+    if (!isFloridaProviderIndexEnabled()) return new Response("Not found", { status: 404 });
+    const paths = getFloridaProviderSitemapPaths();
+    if (!paths.length) return new Response("Not found", { status: 404 });
+    return response(
+      urlset(
+        paths
+          .map((path) => `<url><loc>${new URL(path, productionOrigin).href}</loc></url>`)
+          .join(""),
+      ),
+    );
+  }
+  if (file === "home-health.xml") {
+    if (!isAgencyProfileIndexEnabled() || !isHhProfileIntelEnabled()) {
+      return new Response("Not found", { status: 404 });
+    }
+    const rows = getAgencyIndexSitemapRows("home_health");
+    return response(
+      urlset(
+        rows
+          .map(
+            (row) =>
+              `<url><loc>${new URL(homeHealthHref(row.ccn, row.name), productionOrigin).href}</loc></url>`,
+          )
+          .join(""),
+      ),
+    );
+  }
+  if (file === "hospice.xml") {
+    if (!isAgencyProfileIndexEnabled() || !isHospiceProfileIntelEnabled()) {
+      return new Response("Not found", { status: 404 });
+    }
+    const rows = getAgencyIndexSitemapRows("hospice");
+    return response(
+      urlset(
+        rows
+          .map(
+            (row) =>
+              `<url><loc>${new URL(hospiceHref(row.ccn, row.name), productionOrigin).href}</loc></url>`,
           )
           .join(""),
       ),

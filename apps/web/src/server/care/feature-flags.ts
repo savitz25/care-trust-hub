@@ -122,6 +122,70 @@ export function isAssistedLivingIntelligenceEnabled(
   return environment.CARE_ENABLE_ASSISTED_LIVING_INTELLIGENCE === "true";
 }
 
+/** Nursing Home Profile Intelligence UI. On with real provider UI unless disabled. */
+export function isNhProfileIntelEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return (
+    environment.CARE_ENABLE_REAL_PROVIDER_UI === "true" &&
+    environment.CARE_ENABLE_NH_PROFILE_INTEL !== "false"
+  );
+}
+
+/** Home Health profile UI. Fail-closed until explicitly enabled. */
+export function isHhProfileIntelEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return (
+    environment.CARE_ENABLE_REAL_PROVIDER_UI === "true" &&
+    environment.CARE_ENABLE_HH_PROFILE_INTEL === "true"
+  );
+}
+
+/** Hospice profile UI. Fail-closed until explicitly enabled. */
+export function isHospiceProfileIntelEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return (
+    environment.CARE_ENABLE_REAL_PROVIDER_UI === "true" &&
+    environment.CARE_ENABLE_HOSPICE_PROFILE_INTEL === "true"
+  );
+}
+
+/** Controlled HH/Hospice search indexation. Independent of profile render flags. */
+export function isAgencyProfileIndexEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return environment.CARE_ENABLE_AGENCY_PROFILE_INDEX === "true";
+}
+
+/** Fail-closed Phase 1 Florida ALF/AFCH public routes. Independent of indexation. */
+export function isFloridaAlfAfchPublicationEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return environment.CARE_ENABLE_FLORIDA_ALF_AFCH_PUBLICATION === "true";
+}
+
+/** Explicit indexation gate for the 25-profile Florida ALF/AFCH cohort. */
+export function isFloridaProviderIndexEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return (
+    environment.CARE_ENABLE_FLORIDA_ALF_AFCH_PUBLICATION === "true" &&
+    environment.CARE_ENABLE_FLORIDA_PROVIDER_INDEX === "true"
+  );
+}
+
+/** Preview-only Florida profile QA. Always false in Vercel production. */
+export function isFloridaProfileInternalQaEnabled(
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): boolean {
+  return (
+    environment.CARE_ENABLE_FLORIDA_PROFILE_INTERNAL_QA === "true" &&
+    environment.VERCEL_ENV !== "production"
+  );
+}
+
 /** Fail-closed CA/NY/TX state-license publication. Requires an explicit opt-in. */
 export function isStateRegulatoryIntelligenceEnabled(
   environment: Readonly<Record<string, string | undefined>> = process.env,

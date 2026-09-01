@@ -1,9 +1,19 @@
 import type { ConsumerProviderSearch } from "./types";
+import type { AgencySearchClass, AgencySearchCriteria } from "./agency-search";
+
+export type PublicProviderClass = "nursing_home" | AgencySearchClass;
 
 export interface ParsedConsumerSearch {
+  providerClass: PublicProviderClass;
   criteria: ConsumerProviderSearch;
+  agency: AgencySearchCriteria;
   errors: string[];
   submitted: boolean;
+}
+
+export function parseProviderClass(value: string | null | undefined): PublicProviderClass {
+  if (value === "home_health" || value === "hospice") return value;
+  return "nursing_home";
 }
 
 function text(params: URLSearchParams, key: string): string | undefined {
@@ -49,10 +59,16 @@ export function parseConsumerSearch(params: URLSearchParams): ParsedConsumerSear
   const sort = allowedSorts.find((candidate) => candidate === sortValue) ?? undefined;
   if (sortValue && !sort) errors.push("The selected sort is not supported.");
   if (sort === "distance" && !zip) errors.push("Distance sorting requires a ZIP code.");
+  const providerClass = parseProviderClass(text(params, "class"));
+  const cmsStar = rating(params, "hhstar", errors);
+  if (cmsStar !== undefined && providerClass !== "home_health") {
+    errors.push("CMS Quality of Patient Care star filter applies only to Home Health.");
+  }
 
   return {
     submitted: params.get("search") === "1",
     errors,
+    providerClass,
     criteria: {
       query: text(params, "q"),
       state,
@@ -66,6 +82,19 @@ export function parseConsumerSearch(params: URLSearchParams): ParsedConsumerSear
       medicaid: optionalBoolean(params, "medicaid"),
       radiusMiles: zip ? radiusMiles : undefined,
       sort,
+      limit: 21,
+      offset: (page - 1) * 20,
+    },
+    agency: {
+      providerClass: providerClass === "nursing_home" ? "home_health" : providerClass,
+      query: text(params, "q"),
+      state,
+      city: text(params, "city"),
+      zip,
+      qualityAvailable: optionalBoolean(params, "quality"),
+      experienceAvailable: optionalBoolean(params, "experience"),
+      ownershipAvailable: optionalBoolean(params, "owned"),
+      cmsStar: providerClass === "home_health" ? cmsStar : undefined,
       limit: 21,
       offset: (page - 1) * 20,
     },

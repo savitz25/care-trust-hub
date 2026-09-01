@@ -143,11 +143,18 @@ def load_ownership_source(
                 (release_id, OWNERSHIP_TRANSFORMATION_VERSION),
             ).fetchone()[0]
         )
+        identifier_type = {
+            "home-health-agency-enrollments": "HOME_HEALTH_CCN",
+            "home-health-agency-all-owners": "HOME_HEALTH_CCN",
+            "hospice-enrollments": "HOSPICE_CCN",
+            "hospice-all-owners": "HOSPICE_CCN",
+        }.get(source.dataset_key, "CCN")
         providers = {
             str(ccn): str(provider_id)
             for ccn, provider_id in cursor.execute(
                 "SELECT identifier_value,provider_id FROM provider_identifier "
-                "WHERE issuer='CMS' AND identifier_type='CCN' AND valid_from IS NULL"
+                "WHERE issuer='CMS' AND identifier_type=%s AND valid_from IS NULL",
+                (identifier_type,),
             ).fetchall()
         }
         enrollment_providers = _enrollment_providers(cursor)

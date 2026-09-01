@@ -24,6 +24,10 @@ describe("public launch isolation", () => {
   it("uses the approved www canonical after launch", () => {
     const environment = { VERCEL_ENV: "production", CARE_ENABLE_PUBLIC_LAUNCH: "true" };
     expect(canonicalUrl("/about", environment)).toBe("https://www.seniortrusthub.com/about");
+    expect(canonicalUrl("/home-health", environment)).toBe(
+      "https://www.seniortrusthub.com/home-health",
+    );
+    expect(canonicalUrl("/hospice", environment)).toBe("https://www.seniortrusthub.com/hospice");
     expect(publicRobots(true, environment)).toEqual({ index: true, follow: true });
   });
 });

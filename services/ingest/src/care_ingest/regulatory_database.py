@@ -22,6 +22,7 @@ from .manifest import ReleaseManifest, sha256_file
 from .registry import SourceDefinition
 from .regulatory import (
     DEFICIENCIES_KEY,
+    FIRE_KEY,
     INSPECTIONS_KEY,
     PENALTIES_KEY,
     TRANSFORMATION_VERSIONS,
@@ -274,6 +275,42 @@ def _insert_records(
             """,
             common,
         )
+    elif dataset_key == FIRE_KEY:
+        cursor.execute(
+            """
+            INSERT INTO fire_safety_citation (
+              provider_id, inspection_event_id, source_release_id, raw_object_id, ingest_run_id,
+              finding_key, ccn, survey_date, survey_type, inspection_cycle, deficiency_prefix,
+              deficiency_tag, tag_version, deficiency_category, official_description,
+              scope_severity_code, deficiency_corrected, correction_date, standard_deficiency,
+              complaint_deficiency, processing_date, source_record_locator, raw_record,
+              transformation_version
+            )
+            SELECT s.provider_id, matched.id, %s, %s, %s, s.normalized->>'finding_key', s.ccn,
+              (s.normalized->>'survey_date')::date, s.normalized->>'survey_type',
+              (s.normalized->>'inspection_cycle')::integer, s.normalized->>'deficiency_prefix',
+              s.normalized->>'deficiency_tag', s.normalized->>'tag_version',
+              s.normalized->>'deficiency_category', s.normalized->>'official_description',
+              s.normalized->>'scope_severity_code', s.normalized->>'deficiency_corrected',
+              (s.normalized->>'correction_date')::date, (s.normalized->>'standard')::boolean,
+              (s.normalized->>'complaint')::boolean, (s.normalized->>'processing_date')::date,
+              s.locator, s.raw_record, %s
+            FROM regulatory_stage s
+            LEFT JOIN LATERAL (
+              SELECT i.id FROM inspection_event i
+              WHERE i.provider_id = s.provider_id
+                AND i.survey_date = (s.normalized->>'survey_date')::date
+                AND i.survey_cycle = (s.normalized->>'inspection_cycle')::integer
+                AND i.survey_type = CASE
+                  WHEN (s.normalized->>'complaint')::boolean THEN 'Fire Safety Complaint'
+                  WHEN (s.normalized->>'standard')::boolean THEN 'Fire Safety Standard'
+                  ELSE NULL END
+              ORDER BY i.source_release_id DESC LIMIT 1
+            ) matched ON true
+            ON CONFLICT (source_release_id, finding_key) DO NOTHING
+            """,
+            common,
+        )
     else:
         raise ValueError(f"unsupported regulatory dataset: {dataset_key}")
     return cursor.rowcount
@@ -324,6 +361,7 @@ def load_regulatory_source(
     load_key = f"{source.dataset_key}:{manifest.sha256}"
     rows = _copy_transport_stage(database_url, normalized_file, load_key)
     with psycopg.connect(database_url) as connection:
+        connection.execute("SET statement_timeout = 0")
         with connection.transaction():
             with connection.cursor() as cursor:
                 release_id, _ = _verified_release(cursor, source, manifest)
@@ -363,13 +401,15 @@ def load_regulatory_source(
                 loaded = _insert_records(
                     cursor, source.dataset_key, release_id, raw_object_id, run_id, version
                 )
-                if loaded != rows - unmatched:
+                expected = rows if source.dataset_key == FIRE_KEY else rows - unmatched
+                if loaded != expected:
                     raise RuntimeError("regulatory load count mismatch")
                 report = {"rows_read": rows, "rows_loaded": loaded, "unmatched_ccns": unmatched}
+                rejected = 0 if source.dataset_key == FIRE_KEY else unmatched
                 cursor.execute(
                     "UPDATE ingest_run SET status='succeeded', completed_at=now(), rows_read=%s, "
                     "valid_rows=%s, rejected_rows=%s, report=%s WHERE id=%s",
-                    (rows, loaded, unmatched, Jsonb(report), run_id),
+                    (rows, min(loaded, rows), rejected, Jsonb(report), run_id),
                 )
                 cursor.execute("DELETE FROM regulatory_load_stage WHERE load_key=%s", (load_key,))
                 return RegulatoryLoadResult(

@@ -28,6 +28,27 @@ export function providerHref(provider: Pick<CareProviderDetail, "ccn" | "provide
   return `/facility/cms/${provider.ccn}/${providerSlug(provider.providerName)}`;
 }
 
+/** Page-specific document title. Root metadata template appends `| SeniorTrustHub`. */
+export function nursingHomeResearchDocumentTitle(providerName: string): string {
+  return `${providerName} — CMS Ratings, Ownership & Inspection Research`;
+}
+
+export function homeHealthResearchDocumentTitle(providerName: string): string {
+  return `${providerName} — CMS Home Health Quality, Ownership & Research`;
+}
+
+export function hospiceResearchDocumentTitle(providerName: string): string {
+  return `${providerName} — CMS Hospice Quality, Ownership & Research`;
+}
+
+export function homeHealthHref(ccn: string, name: string): string {
+  return `/home-health/cms/${ccn}/${providerSlug(name)}`;
+}
+
+export function hospiceHref(ccn: string, name: string): string {
+  return `/hospice/cms/${ccn}/${providerSlug(name)}`;
+}
+
 export function chainHref(chain: { cmsChainId: string; chainName: string }): string {
   return `/chain/${chain.cmsChainId}/${providerSlug(chain.chainName)}`;
 }

@@ -1,0 +1,52 @@
+{
+  "ccns": [
+    {
+      "n": 14693,
+      "distinct": 14693
+    }
+  ],
+  "npi_shared": [
+    {
+      "ccn_count": 1,
+      "npis": 14229
+    },
+    {
+      "ccn_count": 2,
+      "npis": 2
+    },
+    {
+      "ccn_count": 3,
+      "npis": 1
+    }
+  ],
+  "sff_abuse": [
+    {
+      "sff_and_abuse": 26,
+      "candidate_and_abuse": 212,
+      "sff": 88,
+      "candidate": 440,
+      "abuse": 1435
+    }
+  ],
+  "regulatory": [
+    {
+      "inspections": 149705,
+      "deficiencies": 418344,
+      "complaint_flagged": 130534,
+      "unlinked": 30374,
+      "fines": 13687,
+      "payment_denials": 2479,
+      "fire_citations": 0,
+      "mds_observations": 1248650
+    }
+  ],
+  "ownership": [
+    {
+      "providers": 14693,
+      "chains": 671,
+      "chain_facilities": 10116,
+      "ownership_rels": 674063,
+      "chow": 5227
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+# Local bulk evidence — not required to build the Next.js app.
+# Homepage/runtime uses apps/web/src/data/*.json (keep those).
+data/raw/
+data/normalized/
+data/rejected/
+data/reports/
+
+# Local QA caches and acquisition worktrees
+fl-sen-001-qa/
+fl-sen-002-qa/
+fl-sen-003-qa/
+fl-sen-004-qa/
+fl-sen-005-qa/
+sen-nat-012-qa/
+sen-nat-014-qa/
+sen-nat-015-qa/
+sen-nat-016-qa/
+
+# Agent/session/local caches
+terminals/
+.grok/
+.venv/
+__pycache__/
+coverage/
+.next/
+node_modules/

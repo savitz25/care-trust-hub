@@ -10,6 +10,7 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         "/api/",
         "/development/",
+        "/ask",
         "/search",
         "/shortlist",
         "/compare",
@@ -18,6 +19,7 @@ export default function robots(): MetadataRoute.Robots {
         "/trust/correction",
         "/trust/source-concern",
         "/trust/provider-context",
+        "/florida/internal",
       ],
     },
     sitemap: new URL("/sitemap.xml", productionOrigin).href,

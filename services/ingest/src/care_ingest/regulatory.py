@@ -18,10 +18,12 @@ from .provider_information import CCN_PATTERN, SchemaDriftError
 INSPECTIONS_KEY = "nursing-home-inspection-dates"
 DEFICIENCIES_KEY = "nursing-home-health-deficiencies"
 PENALTIES_KEY = "nursing-home-penalties"
+FIRE_KEY = "nursing-home-fire-safety-deficiencies"
 TRANSFORMATION_VERSIONS = {
     INSPECTIONS_KEY: "inspection-dates-v1",
     DEFICIENCIES_KEY: "health-deficiencies-v1",
     PENALTIES_KEY: "penalties-v1",
+    FIRE_KEY: "fire-safety-deficiencies-v1",
 }
 
 REQUIRED_COLUMNS = {
@@ -64,6 +66,24 @@ REQUIRED_COLUMNS = {
             "Fine Amount",
             "Payment Denial Start Date",
             "Payment Denial Length in Days",
+            "Processing Date",
+        }
+    ),
+    FIRE_KEY: frozenset(
+        {
+            "CMS Certification Number (CCN)",
+            "Survey Date",
+            "Survey Type",
+            "Deficiency Prefix",
+            "Deficiency Category",
+            "Deficiency Tag Number",
+            "Deficiency Description",
+            "Scope Severity Code",
+            "Deficiency Corrected",
+            "Correction Date",
+            "Inspection Cycle",
+            "Standard Deficiency",
+            "Complaint Deficiency",
             "Processing Date",
         }
     ),
@@ -290,6 +310,44 @@ def normalize_regulatory_row(
             ),
             "payment_denial_days": denial_days,
             "processing_date": _date(row.get("Processing Date"), "Processing Date"),
+        }
+    elif manifest.dataset_key == FIRE_KEY:
+        survey_date = _date(row.get("Survey Date"), "Survey Date", required=True)
+        prefix = _text(row.get("Deficiency Prefix"))
+        tag = _text(row.get("Deficiency Tag Number"))
+        code = (_text(row.get("Scope Severity Code")) or "").upper()
+        if not prefix or not tag:
+            raise ValueError("fire-safety prefix and tag are required")
+        if code not in SCOPE_SEVERITY:
+            raise ValueError(f"unknown CMS scope/severity code: {code!r}")
+        normalized = {
+            "finding_key": _key(
+                ccn,
+                survey_date,
+                row.get("Survey Type"),
+                prefix,
+                tag,
+                code,
+                row.get("Tag Version"),
+                row.get("Correction Date"),
+            ),
+            "survey_date": survey_date,
+            "survey_type": _text(row.get("Survey Type")),
+            "deficiency_prefix": prefix,
+            "deficiency_tag": tag,
+            "tag_version": _text(row.get("Tag Version")),
+            "deficiency_category": _text(row.get("Deficiency Category")),
+            "official_description": _text(row.get("Deficiency Description")),
+            "scope_severity_code": code,
+            "deficiency_corrected": _text(row.get("Deficiency Corrected")),
+            "correction_date": _date(row.get("Correction Date"), "Correction Date"),
+            "inspection_cycle": _integer(
+                row.get("Inspection Cycle"), "Inspection Cycle", required=True
+            ),
+            "standard": _yes_no(row.get("Standard Deficiency"), "Standard Deficiency"),
+            "complaint": _yes_no(row.get("Complaint Deficiency"), "Complaint Deficiency"),
+            "processing_date": _date(row.get("Processing Date"), "Processing Date"),
+            "evidence_class": "fire_safety_citation",
         }
     else:
         raise ValueError(f"unsupported regulatory dataset: {manifest.dataset_key}")

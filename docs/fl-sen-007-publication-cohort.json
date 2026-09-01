@@ -1,0 +1,259 @@
+{
+  "n": 25,
+  "classes": {
+    "assisted-living": 20,
+    "adult-family-care": 5
+  },
+  "qa": [
+    {
+      "provider_id": "f5573999-2cae-4e78-965f-031986ae8c61",
+      "kind": "assisted-living",
+      "file": "11966552",
+      "path": "/florida/assisted-living/11966552/daniella-s-care-center-inc",
+      "status": "LICENSED",
+      "events": 11,
+      "name": "DANIELLA'S CARE CENTER INC",
+      "selection_hash": "00046fb853a717140206ee9b3487b2d85769b30f860ca9306d362453721a6863"
+    },
+    {
+      "provider_id": "dae3af37-d697-40ee-b3cc-54c52009e5ee",
+      "kind": "assisted-living",
+      "file": "11963817",
+      "path": "/florida/assisted-living/11963817/tuscany-heights-senior-living",
+      "status": "LICENSED",
+      "events": 21,
+      "name": "TUSCANY HEIGHTS SENIOR LIVING",
+      "selection_hash": "0022fc23d11aea0ba40139be4c7045be98666ac3b307a48e6637c59077990307"
+    },
+    {
+      "provider_id": "8400eb84-de43-44d5-b2de-91e9a31354cd",
+      "kind": "assisted-living",
+      "file": "11910630",
+      "path": "/florida/assisted-living/11910630/finnish-american-village",
+      "status": "LICENSED",
+      "events": 15,
+      "name": "FINNISH-AMERICAN VILLAGE",
+      "selection_hash": "004e5759c8109de7e564bd3599d5ffb7ebd1cbd5090761ac64ffd09116936544"
+    },
+    {
+      "provider_id": "d0f0732c-d6e4-49c4-8ded-95f83f796379",
+      "kind": "assisted-living",
+      "file": "11953670",
+      "path": "/florida/assisted-living/11953670/south-deering-retirement-home-inc",
+      "status": "IN REVIEW",
+      "events": 30,
+      "name": "SOUTH DEERING RETIREMENT HOME, INC.",
+      "selection_hash": "0064f892723d68a524b3e3fdaa796d0eb881bc93a8e9c2caf13caee13722a55e"
+    },
+    {
+      "provider_id": "b83e2229-ca91-4658-a126-72457e232b9e",
+      "kind": "assisted-living",
+      "file": "11970834",
+      "path": "/florida/assisted-living/11970834/canary-homes-assisted-living",
+      "status": "LICENSED",
+      "events": 8,
+      "name": "CANARY HOMES ASSISTED LIVING",
+      "selection_hash": "0076da9b98943b733272de55f1564a7db21a69d4d938f54e1f4a60aff9fc852a"
+    },
+    {
+      "provider_id": "8fcc3520-e81c-4e90-84bc-8ab729c1b6cb",
+      "kind": "assisted-living",
+      "file": "11968826",
+      "path": "/florida/assisted-living/11968826/aurora-garden-care-llc",
+      "status": "LICENSED",
+      "events": 23,
+      "name": "AURORA GARDEN CARE, LLC",
+      "selection_hash": "009b2fdda04fdcb550c86f12fe3f930d9e471086e4ee6ce79ecd6ff24f19c844"
+    },
+    {
+      "provider_id": "2d852e0b-2e05-4d2e-83e7-a3d853203e71",
+      "kind": "assisted-living",
+      "file": "11967941",
+      "path": "/florida/assisted-living/11967941/tropical-paradise-villa-assisted-living-and-retirement",
+      "status": "LICENSED",
+      "events": 33,
+      "name": "TROPICAL PARADISE VILLA ASSISTED LIVING AND RETIREMENT",
+      "selection_hash": "009dc9a3579049278e596e42e1b29b904b9814a558ee442437aabff93f1f62ee"
+    },
+    {
+      "provider_id": "8011d3a5-3248-49d7-9a5a-8a3a3cddeaa6",
+      "kind": "assisted-living",
+      "file": "11964914",
+      "path": "/florida/assisted-living/11964914/carlisle-naples",
+      "status": "LICENSED",
+      "events": 18,
+      "name": "CARLISLE NAPLES",
+      "selection_hash": "009fe13c7a6fcead5bceffe8a4f8e2dab7f99f66c76ad080f068173c972a6de0"
+    },
+    {
+      "provider_id": "0896abb1-1fe3-417b-be85-a7e5900b9032",
+      "kind": "assisted-living",
+      "file": "11966425",
+      "path": "/florida/assisted-living/11966425/aston-gardens-at-pelican-pointe",
+      "status": "PROVISIONAL",
+      "events": 16,
+      "name": "ASTON GARDENS AT PELICAN POINTE",
+      "selection_hash": "00ad4ce7c90f1341d10189b950a53dfaf886789225beb1a3a1c00270a362161d"
+    },
+    {
+      "provider_id": "643cfefe-d3db-4684-8bb9-797240bfa9ae",
+      "kind": "assisted-living",
+      "file": "11968254",
+      "path": "/florida/assisted-living/11968254/the-preserve-at-dunedin",
+      "status": "LICENSED",
+      "events": 19,
+      "name": "THE PRESERVE AT DUNEDIN",
+      "selection_hash": "00b5544d851bde00bea8b622d4439b8fc6ccb6b15582ab1823a2d4c6000a2a19"
+    },
+    {
+      "provider_id": "70881cd2-a8a1-4ef1-8bcc-2a288a7e0b5b",
+      "kind": "assisted-living",
+      "file": "11968985",
+      "path": "/florida/assisted-living/11968985/carmita-s-assisting-living-facility-iv-llc",
+      "status": "IN REVIEW",
+      "events": 19,
+      "name": "CARMITA'S ASSISTING LIVING FACILITY IV LLC",
+      "selection_hash": "00d8df12efddf4a165c56f94c29069941a0956b704724e20410b9b6a2252c273"
+    },
+    {
+      "provider_id": "6d1e5640-f55c-4d9e-8c2c-8621888de71d",
+      "kind": "assisted-living",
+      "file": "11970301",
+      "path": "/florida/assisted-living/11970301/new-melody-sl-llc",
+      "status": "LICENSED",
+      "events": 13,
+      "name": "NEW MELODY SL LLC",
+      "selection_hash": "00ee20b60a4c314b1a30131ad75a0f31926bac2aecfc26e0562511c210efcaea"
+    },
+    {
+      "provider_id": "51206534-11e5-48d7-bbdb-1b12c118af19",
+      "kind": "assisted-living",
+      "file": "11968740",
+      "path": "/florida/assisted-living/11968740/stellar-alf-llc",
+      "status": "IN REVIEW",
+      "events": 16,
+      "name": "STELLAR ALF, LLC",
+      "selection_hash": "00f86815dfee3c7e22507e67dcc399d0cb42f4ed4a9e006136e0956df7e1107d"
+    },
+    {
+      "provider_id": "998d2338-3c51-4bfd-9c49-e1897390cecb",
+      "kind": "assisted-living",
+      "file": "11953544",
+      "path": "/florida/assisted-living/11953544/palms-villa",
+      "status": "LICENSED",
+      "events": 25,
+      "name": "PALMS VILLA",
+      "selection_hash": "00fc1f8541423d06a378116bcb8714d56b0b67d81c0e73016987b0685f7bcbd9"
+    },
+    {
+      "provider_id": "5d9d925e-4d5a-4ba8-b2ce-a93b2870ea4d",
+      "kind": "assisted-living",
+      "file": "11970363",
+      "path": "/florida/assisted-living/11970363/a-and-g-marvelous-alf-llc",
+      "status": "IN REVIEW",
+      "events": 3,
+      "name": "A & G MARVELOUS ALF, LLC",
+      "selection_hash": "0108160bf60eda65751b2f5f5fa80f2b657cb3482b2950dd3f07960bad44bcdb"
+    },
+    {
+      "provider_id": "b0d998b4-0758-47df-bfcb-64e72a88d2d0",
+      "kind": "assisted-living",
+      "file": "11911216",
+      "path": "/florida/assisted-living/11911216/brookdale-sarasota-midtown",
+      "status": "LICENSED",
+      "events": 21,
+      "name": "BROOKDALE SARASOTA MIDTOWN",
+      "selection_hash": "0111a827bab636c9791e325359293cbd2c94f1d4a3958763fabc4bd80ba77bf4"
+    },
+    {
+      "provider_id": "828b3a17-7bda-4a02-8596-2c3e919f8423",
+      "kind": "assisted-living",
+      "file": "11967676",
+      "path": "/florida/assisted-living/11967676/caring-hearts-assisted-living",
+      "status": "LICENSED",
+      "events": 14,
+      "name": "CARING HEARTS ASSISTED LIVING",
+      "selection_hash": "011863e2893dabada99c07eeeb2c02655bb50f136cce53c6dc229bf2eb369543"
+    },
+    {
+      "provider_id": "a072c878-4914-4f4e-9cf9-d4cb065fd135",
+      "kind": "assisted-living",
+      "file": "11922334",
+      "path": "/florida/assisted-living/11922334/spring-haven-senior-living",
+      "status": "LICENSED",
+      "events": 29,
+      "name": "SPRING HAVEN SENIOR LIVING",
+      "selection_hash": "012180e7a2f4582f400fad37f79fb41e22dc47791faa0d1a53399325c2df5620"
+    },
+    {
+      "provider_id": "fa19c538-863f-4639-85d9-9ade12a4130b",
+      "kind": "assisted-living",
+      "file": "11966115",
+      "path": "/florida/assisted-living/11966115/angels-forever-inc",
+      "status": "IN REVIEW",
+      "events": 32,
+      "name": "ANGELS FOREVER, INC",
+      "selection_hash": "012379911dbfc8918e0dbebe039deecaa7ef266d314ea7cf0f5101c3c2bd2e9c"
+    },
+    {
+      "provider_id": "6ab98339-c92d-49e6-a90d-ab337bb1d7ee",
+      "kind": "assisted-living",
+      "file": "11911234",
+      "path": "/florida/assisted-living/11911234/alf-bc-bethesda-llc",
+      "status": "LICENSED",
+      "events": 57,
+      "name": "ALF BC BETHESDA LLC",
+      "selection_hash": "013df6c06611e92cbb89dd6e5f1e37aac428b1ce1dab570c6f98737b36df39bd"
+    },
+    {
+      "provider_id": "16721ce6-6dec-4c77-8fd2-b1f69925c61a",
+      "kind": "adult-family-care",
+      "file": "52963251",
+      "path": "/florida/adult-family-care/52963251/francoeur-marie-josee",
+      "status": "LICENSED",
+      "events": 14,
+      "name": "FRANCOEUR, MARIE JOSEE",
+      "selection_hash": "007d8d33c7d48750f1a12feca486114ee383969005533c51b280432a548e3057"
+    },
+    {
+      "provider_id": "7d240080-949f-4a55-a3c3-50b329c06ea9",
+      "kind": "adult-family-care",
+      "file": "52963348",
+      "path": "/florida/adult-family-care/52963348/bort-etta-lynn",
+      "status": "LICENSED",
+      "events": 4,
+      "name": "BORT, ETTA-LYNN",
+      "selection_hash": "01dcdbfff1ea8e628159f240147105e0618c76d8070b935fbdc1d8729163b9da"
+    },
+    {
+      "provider_id": "c0631956-094f-4ec5-a005-a87fbbb5202e",
+      "kind": "adult-family-care",
+      "file": "52963213",
+      "path": "/florida/adult-family-care/52963213/wolter-elsa-h",
+      "status": "LICENSED",
+      "events": 6,
+      "name": "WOLTER, ELSA H",
+      "selection_hash": "02eb4bece0270e8471239fa80912e80901bc980791d8fda27cb882bd05cf64f5"
+    },
+    {
+      "provider_id": "1ab45e5b-08f9-4b03-bb4f-eb937daaba4c",
+      "kind": "adult-family-care",
+      "file": "52964213",
+      "path": "/florida/adult-family-care/52964213/brown-dorica",
+      "status": "LICENSED",
+      "events": 1,
+      "name": "BROWN, DORICA",
+      "selection_hash": "0393ee5781d8fc7ab8f3ce11bd45dccf2991e250af939bdba16dcf0db0502e60"
+    },
+    {
+      "provider_id": "7e4dfd54-6726-47b8-93d6-9b0941d0857b",
+      "kind": "adult-family-care",
+      "file": "52964203",
+      "path": "/florida/adult-family-care/52964203/steadman-antonio",
+      "status": "LICENSED",
+      "events": 6,
+      "name": "STEADMAN, ANTONIO",
+      "selection_hash": "03c61c9dddb020f0695586c54264ffc27098ba61502d35e93b51242a10d59d8d"
+    }
+  ]
+}

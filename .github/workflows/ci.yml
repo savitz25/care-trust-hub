@@ -98,6 +98,13 @@ jobs:
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0012_facility_intelligence_evidence_identity.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0013_facility_identity_pilot_manifest.sql
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0020_assisted_living_pilot.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0021_nursing_home_national_evidence.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0022_cms_refresh_governance.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0023_home_health_hospice_national.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0024_ownership_graph.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0025_ownership_change_intelligence.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0026_senior_intelligence.sql
+          psql -h localhost -U care -d care -v ON_ERROR_STOP=1 -f db/migrations/0027_provider_intelligence.sql
       - name: Verify migration objects
         run: |
           psql -h localhost -U care -d care -v ON_ERROR_STOP=1 <<'SQL'
@@ -115,6 +122,26 @@ jobs:
           SELECT to_regclass('public.facility_review_item') IS NOT NULL AS facility_review_exists;
           SELECT to_regclass('public.facility_external_request_cache') IS NOT NULL AS facility_cache_exists;
           SELECT to_regclass('public.assisted_living_provider') IS NOT NULL AS assisted_living_provider_exists;
+          SELECT to_regclass('public.cms_facility_designation') IS NOT NULL AS cms_facility_designation_exists;
+          SELECT to_regclass('public.provider_npi_relationship') IS NOT NULL AS provider_npi_relationship_exists;
+          SELECT to_regclass('public.quality_measure_definition') IS NOT NULL AS quality_measure_definition_exists;
+          SELECT to_regclass('public.facility_quality_measure_observation') IS NOT NULL AS facility_qm_exists;
+          SELECT to_regclass('public.provider_directory_status') IS NOT NULL AS directory_status_exists;
+          SELECT to_regclass('public.fire_safety_citation') IS NOT NULL AS fire_safety_citation_exists;
+          SELECT to_regclass('public.cms_refresh_run') IS NOT NULL AS cms_refresh_run_exists;
+          SELECT to_regclass('public.cms_source_run') IS NOT NULL AS cms_source_run_exists;
+          SELECT to_regclass('public.cms_refresh_source_policy') IS NOT NULL AS cms_refresh_policy_exists;
+          SELECT to_regclass('public.cms_source_freshness') IS NOT NULL AS cms_source_freshness_exists;
+          SELECT to_regclass('public.home_health_snapshot') IS NOT NULL AS home_health_snapshot_exists;
+          SELECT to_regclass('public.hospice_snapshot') IS NOT NULL AS hospice_snapshot_exists;
+          SELECT to_regclass('public.cms_agency_quality_observation') IS NOT NULL AS agency_quality_exists;
+          SELECT to_regclass('public.provider_organization_edge') IS NOT NULL AS ownership_graph_exists;
+          SELECT to_regclass('public.organization_name_observation') IS NOT NULL AS org_name_obs_exists;
+          SELECT to_regclass('public.ownership_change_event_party') IS NOT NULL AS chow_party_exists;
+          SELECT to_regclass('public.ownership_change_relationship_link') IS NOT NULL AS chow_link_exists;
+          SELECT to_regclass('public.provider_ownership_timeline') IS NOT NULL AS chow_timeline_exists;
+          SELECT to_regclass('public.senior_intelligence_snapshot') IS NOT NULL AS senior_intel_exists;
+          SELECT to_regclass('public.cms_agency_quality_provider_idx') IS NOT NULL AS profile_quality_idx;
           SELECT to_regclass('public.assisted_living_organization_party') IS NOT NULL AS assisted_living_party_exists;
           SELECT EXISTS (
             SELECT 1 FROM information_schema.columns

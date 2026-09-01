@@ -7,12 +7,16 @@ import { BrandLogo } from "@/components/brand-logo";
 import { SwitchHubMenu } from "@/components/switch-hub-menu";
 
 const PRIMARY_NAV = [
+  { href: "/ask", label: "Ask" },
   { href: "/search", label: "Find care" },
+  { href: "/florida", label: "Florida" },
   { href: "/compare", label: "Compare" },
 ] as const;
 
 const DRAWER_NAV = [
+  { href: "/ask", label: "Ask" },
   { href: "/search", label: "Find care" },
+  { href: "/florida", label: "Florida" },
   { href: "/compare", label: "Compare" },
   { href: "/assisted-living", label: "Assisted living" },
   { href: "/research", label: "Research" },

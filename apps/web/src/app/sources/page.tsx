@@ -20,7 +20,8 @@ export default function Page() {
       </ul>
       <p>
         Each facility and chain profile shows dataset-specific release and freshness details.
-        Different datasets do not share a fabricated common freshness date.
+        Different datasets do not share a fabricated common freshness date. Operators can query
+        per-source SLA bands and last ingest status at <code>/api/cms-source-freshness</code>.
       </p>
     </PublicInformationPage>
   );

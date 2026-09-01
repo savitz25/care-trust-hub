@@ -12,9 +12,19 @@ from typing import Any
 
 from .manifest import ReleaseManifest
 
-OWNERSHIP_KEYS = (
+ENROLLMENT_KEYS = (
     "skilled-nursing-facility-enrollments",
+    "home-health-agency-enrollments",
+    "hospice-enrollments",
+)
+ALL_OWNERS_KEYS = (
     "skilled-nursing-facility-all-owners",
+    "home-health-agency-all-owners",
+    "hospice-all-owners",
+)
+OWNERSHIP_KEYS = (
+    *ENROLLMENT_KEYS,
+    *ALL_OWNERS_KEYS,
     "nursing-home-ownership",
     "skilled-nursing-facility-change-of-ownership",
     "skilled-nursing-facility-change-of-ownership-owner-information",
@@ -108,7 +118,7 @@ def _classifications(row: dict[str, str], suffix: str = " - OWNER") -> dict[str,
 
 def normalize_ownership_row(dataset_key: str, row: dict[str, str], line: int) -> dict[str, Any]:
     locator = f"csv-row:{line}"
-    if dataset_key == "skilled-nursing-facility-enrollments":
+    if dataset_key in ENROLLMENT_KEYS:
         ccn = normalize_cms_ccn(_value(row, "CCN"))
         pac = _value(row, "ASSOCIATE ID")
         enrollment = _value(row, "ENROLLMENT ID")
@@ -133,7 +143,7 @@ def normalize_ownership_row(dataset_key: str, row: dict[str, str], line: int) ->
             "raw_record": row,
         }
     if dataset_key in {
-        "skilled-nursing-facility-all-owners",
+        *ALL_OWNERS_KEYS,
         "skilled-nursing-facility-change-of-ownership-owner-information",
     }:
         enrollment = _value(row, "ENROLLMENT ID")

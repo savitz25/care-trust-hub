@@ -41,17 +41,19 @@ export const siteMetadata: Metadata = {
   metadataBase: new URL(resolveShareOrigin()),
   alternates: { canonical: `${resolveShareOrigin()}/` },
   title: {
-    default: `${brand.publicName} — Independent nursing home research`,
+    default: `${brand.publicName} — CMS Senior Care Research, Ownership & Quality Data`,
     template: `%s | ${brand.publicName}`,
   },
-  description: brand.description,
+  description:
+    "Research current CMS Nursing Homes, Home Health agencies, and Hospice providers using published quality, ownership, staffing, and inspection evidence. No Trust Hub score.",
   applicationName: brand.publicName,
   openGraph: {
     type: "website",
     locale: brand.locale,
     siteName: brand.publicName,
-    title: brand.publicName,
-    description: brand.description,
+    title: `${brand.publicName} — CMS Senior Care Research, Ownership & Quality Data`,
+    description:
+      "Research current CMS Nursing Homes, Home Health agencies, and Hospice providers using published quality, ownership, staffing, and inspection evidence. No Trust Hub score.",
     images: [
       {
         url: `${SHARE_HUB.origin}${SHARE_HUB.ogImagePath}`,
@@ -63,8 +65,9 @@ export const siteMetadata: Metadata = {
   },
   twitter: {
     card: SHARE_HUB.twitterCard,
-    title: brand.publicName,
-    description: brand.description,
+    title: `${brand.publicName} — CMS Senior Care Research, Ownership & Quality Data`,
+    description:
+      "Research current CMS Nursing Homes, Home Health agencies, and Hospice providers using published quality, ownership, staffing, and inspection evidence. No Trust Hub score.",
     images: [{ url: `${SHARE_HUB.origin}${SHARE_HUB.ogImagePath}`, alt: SHARE_HUB.ogAlt }],
   },
   robots: { index: isPublicLaunchEnabled(), follow: isPublicLaunchEnabled() },

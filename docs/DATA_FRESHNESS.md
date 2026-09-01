@@ -11,6 +11,8 @@ Freshness dates describe different events and must remain separate.
 
 Avoid an ambiguous “Last updated.” Consumer surfaces should use centralized formatting such as “CMS source updated July 29, 2026,” with expandable details showing retrieval separately. If the source-modified date is absent, say it is not documented by CMS; do not substitute retrieval time.
 
+Operational per-source freshness (SLA band CURRENT / AGING / STALE, last source-run status, last success) is `cms_source_freshness` and `GET /api/cms-source-freshness`. That view is not a consumer “last updated” clock and must not be collapsed into one date for all evidence layers.
+
 The canonical formatter is `apps/web/src/server/care/freshness.ts`. Missing facts remain `null`; presentation language must not imply why CMS did not report a value.
 
 # Regulatory event and release dates

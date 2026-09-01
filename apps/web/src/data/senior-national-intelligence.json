@@ -1,0 +1,867 @@
+{
+  "contractVersion": "senior-hub-intel-v1",
+  "snapshotVersion": "senior-national-intel-v1",
+  "sourceFingerprint": "215b9d6301a9759f53dd92324930803089d319f95fe5e46739cbbd5f326c3294",
+  "generatedAt": "2026-08-27T03:03:01.752244+00:00",
+  "generationMs": 30484.0,
+  "score": null,
+  "ranking": null,
+  "combinedProviderDenominator": {
+    "status": "UNSUPPORTED",
+    "classRecordSum": 33819,
+    "semantics": "Sum of three distinct CMS class directories. Not unique organizations or unique companies. Not published as a headline total.",
+    "publishAsHeadline": false
+  },
+  "providerClasses": [
+    {
+      "id": "nursing_home",
+      "label": "Nursing Homes",
+      "current": 14690,
+      "known": 14696,
+      "identity": "CMS CCN",
+      "directory": "Nursing Home Provider Information"
+    },
+    {
+      "id": "home_health",
+      "label": "Home Health Agencies",
+      "current": 12460,
+      "known": null,
+      "identity": "CMS Home Health CCN",
+      "directory": "Home Health Care Agencies"
+    },
+    {
+      "id": "hospice",
+      "label": "Hospice Providers",
+      "current": 6669,
+      "known": 6911,
+      "evidenceOnly": 242,
+      "identity": "CMS Hospice CCN",
+      "directory": "Hospice General Information"
+    }
+  ],
+  "nursingHome": {
+    "current": 14690,
+    "known": 14696,
+    "starDistribution": {
+      "counts": {
+        "1": 3004,
+        "2": 2957,
+        "3": 2848,
+        "4": 2756,
+        "5": 2997,
+        "missing": 128
+      },
+      "percentsOfReported": {
+        "1": 20.63,
+        "2": 20.31,
+        "3": 19.56,
+        "4": 18.93,
+        "5": 20.58
+      },
+      "reported": 14562,
+      "missing": 128,
+      "directory": 14690,
+      "label": "CMS star rating among providers with a reported CMS star. Missing is not zero."
+    },
+    "coverage": {
+      "mdsQualityProviders": 14687,
+      "mdsQualityMissing": 3,
+      "staffingPbjProviders": 14596,
+      "inspectionProviders": 14687,
+      "fireSafetyProviders": 13909,
+      "ownedByProviders": 12562,
+      "chowHistoryProviders": 5172
+    },
+    "chow": {
+      "status": "SUPPORTED",
+      "events": 5227,
+      "providersWithHistory": 5172,
+      "sourceFamily": "Skilled Nursing Facility Change of Ownership"
+    }
+  },
+  "homeHealth": {
+    "current": 12460,
+    "starDistribution": {
+      "counts": {
+        "1": 775,
+        "2": 1755,
+        "3": 2676,
+        "4": 2367,
+        "5": 477,
+        "missing": 4410
+      },
+      "percentsOfReported": {
+        "1": 9.63,
+        "2": 21.8,
+        "3": 33.24,
+        "4": 29.4,
+        "5": 5.93
+      },
+      "reported": 8050,
+      "missing": 4410,
+      "directory": 12460,
+      "label": "CMS star rating among providers with a reported CMS star. Missing is not zero."
+    },
+    "coverage": {
+      "qualityOfPatientCareProviders": 12460,
+      "hhcahpsProviders": 12460,
+      "ownedByProviders": 8884,
+      "zipCoverageProviders": 12460
+    },
+    "chow": {
+      "status": "UNSUPPORTED",
+      "reason": "CMS does not publish a Home Health ownership-change event file."
+    }
+  },
+  "hospice": {
+    "current": 6669,
+    "typed": 6911,
+    "evidenceOnly": 242,
+    "coverage": {
+      "qualityMeasureProviders": 6669,
+      "cahpsProviders": 6669,
+      "ownedByProviders": 4399,
+      "zipCoverageProviders": 6610
+    },
+    "chow": {
+      "status": "UNSUPPORTED",
+      "reason": "CMS does not publish a Hospice ownership-change event file."
+    }
+  },
+  "ownership": {
+    "organizations": 205082,
+    "unknownEdges": 554644,
+    "unresolvedEdges": 117192,
+    "currentOwnedByProviders": {
+      "nursingHome": 12566,
+      "homeHealth": 8884,
+      "hospice": 4399
+    },
+    "networkSize": {
+      "1": 59641,
+      "2_5": 2736,
+      "6_10": 879,
+      "11_25": 595,
+      "26_50": 247,
+      "51_100": 130,
+      "101_plus": 40
+    },
+    "multiStateFootprint": {
+      "1": 194732,
+      "2_5": 2520,
+      "6_10": 362,
+      "11_plus": 212
+    },
+    "crossClassOrganizations": {
+      "nh_hh": 283,
+      "hh_only": 11088,
+      "nh_only": 178676,
+      "all_three": 305,
+      "hh_hospice": 1462,
+      "nh_hospice": 290,
+      "hospice_only": 5722
+    },
+    "personEquityOwners": 61377
+  },
+  "regulatory": {
+    "class": "nursing_home",
+    "inspection": {
+      "observations": 299683,
+      "currentProvidersWithObservation": 14687,
+      "dateMin": "2016-07-28",
+      "dateMax": "2026-07-24"
+    },
+    "deficiencies": {
+      "observations": 837823,
+      "currentProvidersWithObservation": 14629,
+      "complaintObservations": 261849
+    },
+    "enforcement": {
+      "observations": 31860,
+      "currentProvidersWithObservation": 6975,
+      "fines": 26941,
+      "paymentDenials": 4919,
+      "dateMin": "2023-07-17",
+      "dateMax": "2026-07-29"
+    }
+  },
+  "geography": [
+    {
+      "state": "AK",
+      "nursingHomes": 20,
+      "homeHealth": 14,
+      "hospice": 6
+    },
+    {
+      "state": "AL",
+      "nursingHomes": 224,
+      "homeHealth": 116,
+      "hospice": 85
+    },
+    {
+      "state": "AR",
+      "nursingHomes": 221,
+      "homeHealth": 92,
+      "hospice": 46
+    },
+    {
+      "state": "AZ",
+      "nursingHomes": 140,
+      "homeHealth": 177,
+      "hospice": 237
+    },
+    {
+      "state": "CA",
+      "nursingHomes": 1165,
+      "homeHealth": 3213,
+      "hospice": 1913
+    },
+    {
+      "state": "CO",
+      "nursingHomes": 210,
+      "homeHealth": 222,
+      "hospice": 88
+    },
+    {
+      "state": "CT",
+      "nursingHomes": 191,
+      "homeHealth": 72,
+      "hospice": 28
+    },
+    {
+      "state": "DC",
+      "nursingHomes": 17,
+      "homeHealth": 35,
+      "hospice": 5
+    },
+    {
+      "state": "DE",
+      "nursingHomes": 44,
+      "homeHealth": 22,
+      "hospice": 11
+    },
+    {
+      "state": "FL",
+      "nursingHomes": 694,
+      "homeHealth": 1146,
+      "hospice": 61
+    },
+    {
+      "state": "GA",
+      "nursingHomes": 356,
+      "homeHealth": 105,
+      "hospice": 261
+    },
+    {
+      "state": "GU",
+      "nursingHomes": 1,
+      "homeHealth": 3,
+      "hospice": 2
+    },
+    {
+      "state": "HI",
+      "nursingHomes": 43,
+      "homeHealth": 18,
+      "hospice": 11
+    },
+    {
+      "state": "IA",
+      "nursingHomes": 387,
+      "homeHealth": 125,
+      "hospice": 71
+    },
+    {
+      "state": "ID",
+      "nursingHomes": 80,
+      "homeHealth": 48,
+      "hospice": 56
+    },
+    {
+      "state": "IL",
+      "nursingHomes": 666,
+      "homeHealth": 530,
+      "hospice": 149
+    },
+    {
+      "state": "IN",
+      "nursingHomes": 507,
+      "homeHealth": 173,
+      "hospice": 102
+    },
+    {
+      "state": "KS",
+      "nursingHomes": 296,
+      "homeHealth": 108,
+      "hospice": 85
+    },
+    {
+      "state": "KY",
+      "nursingHomes": 267,
+      "homeHealth": 88,
+      "hospice": 23
+    },
+    {
+      "state": "LA",
+      "nursingHomes": 265,
+      "homeHealth": 176,
+      "hospice": 118
+    },
+    {
+      "state": "MA",
+      "nursingHomes": 341,
+      "homeHealth": 287,
+      "hospice": 77
+    },
+    {
+      "state": "MD",
+      "nursingHomes": 221,
+      "homeHealth": 51,
+      "hospice": 26
+    },
+    {
+      "state": "ME",
+      "nursingHomes": 78,
+      "homeHealth": 19,
+      "hospice": 17
+    },
+    {
+      "state": "MI",
+      "nursingHomes": 422,
+      "homeHealth": 371,
+      "hospice": 173
+    },
+    {
+      "state": "MN",
+      "nursingHomes": 338,
+      "homeHealth": 138,
+      "hospice": 81
+    },
+    {
+      "state": "MO",
+      "nursingHomes": 487,
+      "homeHealth": 120,
+      "hospice": 132
+    },
+    {
+      "state": "MP",
+      "nursingHomes": 0,
+      "homeHealth": 3,
+      "hospice": 1
+    },
+    {
+      "state": "MS",
+      "nursingHomes": 202,
+      "homeHealth": 42,
+      "hospice": 84
+    },
+    {
+      "state": "MT",
+      "nursingHomes": 61,
+      "homeHealth": 21,
+      "hospice": 32
+    },
+    {
+      "state": "NC",
+      "nursingHomes": 419,
+      "homeHealth": 166,
+      "hospice": 76
+    },
+    {
+      "state": "ND",
+      "nursingHomes": 72,
+      "homeHealth": 20,
+      "hospice": 13
+    },
+    {
+      "state": "NE",
+      "nursingHomes": 180,
+      "homeHealth": 62,
+      "hospice": 43
+    },
+    {
+      "state": "NH",
+      "nursingHomes": 73,
+      "homeHealth": 27,
+      "hospice": 23
+    },
+    {
+      "state": "NJ",
+      "nursingHomes": 348,
+      "homeHealth": 38,
+      "hospice": 61
+    },
+    {
+      "state": "NM",
+      "nursingHomes": 68,
+      "homeHealth": 70,
+      "hospice": 52
+    },
+    {
+      "state": "NV",
+      "nursingHomes": 66,
+      "homeHealth": 228,
+      "hospice": 183
+    },
+    {
+      "state": "NY",
+      "nursingHomes": 593,
+      "homeHealth": 100,
+      "hospice": 39
+    },
+    {
+      "state": "OH",
+      "nursingHomes": 922,
+      "homeHealth": 835,
+      "hospice": 169
+    },
+    {
+      "state": "OK",
+      "nursingHomes": 283,
+      "homeHealth": 212,
+      "hospice": 135
+    },
+    {
+      "state": "OR",
+      "nursingHomes": 128,
+      "homeHealth": 51,
+      "hospice": 66
+    },
+    {
+      "state": "PA",
+      "nursingHomes": 656,
+      "homeHealth": 415,
+      "hospice": 179
+    },
+    {
+      "state": "PR",
+      "nursingHomes": 9,
+      "homeHealth": 39,
+      "hospice": 42
+    },
+    {
+      "state": "RI",
+      "nursingHomes": 72,
+      "homeHealth": 22,
+      "hospice": 11
+    },
+    {
+      "state": "SC",
+      "nursingHomes": 187,
+      "homeHealth": 68,
+      "hospice": 88
+    },
+    {
+      "state": "SD",
+      "nursingHomes": 96,
+      "homeHealth": 23,
+      "hospice": 16
+    },
+    {
+      "state": "TN",
+      "nursingHomes": 303,
+      "homeHealth": 128,
+      "hospice": 61
+    },
+    {
+      "state": "TX",
+      "nursingHomes": 1177,
+      "homeHealth": 1854,
+      "hospice": 1053
+    },
+    {
+      "state": "UT",
+      "nursingHomes": 97,
+      "homeHealth": 82,
+      "hospice": 82
+    },
+    {
+      "state": "VA",
+      "nursingHomes": 289,
+      "homeHealth": 237,
+      "hospice": 110
+    },
+    {
+      "state": "VI",
+      "nursingHomes": 0,
+      "homeHealth": 3,
+      "hospice": 3
+    },
+    {
+      "state": "VT",
+      "nursingHomes": 33,
+      "homeHealth": 9,
+      "hospice": 9
+    },
+    {
+      "state": "WA",
+      "nursingHomes": 193,
+      "homeHealth": 74,
+      "hospice": 50
+    },
+    {
+      "state": "WI",
+      "nursingHomes": 323,
+      "homeHealth": 87,
+      "hospice": 85
+    },
+    {
+      "state": "WV",
+      "nursingHomes": 123,
+      "homeHealth": 43,
+      "hospice": 18
+    },
+    {
+      "state": "WY",
+      "nursingHomes": 36,
+      "homeHealth": 32,
+      "hospice": 21
+    }
+  ],
+  "sources": [
+    {
+      "datasetKey": "home-health-agency-all-owners",
+      "displayName": "Home Health Agency All Owners",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "fc009b2d-7846-44b1-b4a1-692f0c143879",
+      "sourceModifiedAt": "2026-08-19T00:00:00+00:00",
+      "sourcePeriod": "2026-07-01/2026-09-30",
+      "retrievedAt": "2026-08-26T22:20:17.790939+00:00",
+      "lastIngestSuccessAt": "2026-08-26T22:20:24.112877+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/home-health-agency-all-owners",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "home-health-agency-enrollments",
+      "displayName": "Home Health Agency Enrollments",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "15f64ab4-3172-4a27-b589-ebd67a6d28aa",
+      "sourceModifiedAt": "2026-07-27T00:00:00+00:00",
+      "sourcePeriod": "2026-07-01/2026-09-30",
+      "retrievedAt": "2026-08-26T22:15:26.409313+00:00",
+      "lastIngestSuccessAt": "2026-08-26T22:15:26.304121+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/home-health-agency-enrollments",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "home-health-care-agencies",
+      "displayName": "Home Health Care Agencies",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "6jpm-sxkc",
+      "sourceModifiedAt": "2026-05-27T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T21:08:16.274819+00:00",
+      "lastIngestSuccessAt": "2026-08-26T22:14:16.124775+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/6jpm-sxkc",
+      "refreshCadence": "QUARTERLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "home-health-patient-survey-hhcahps",
+      "displayName": "Home Health Care - Patient Survey (HHCAHPS) 2025Q1 to 2025Q4",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "ccn4-8vby",
+      "sourceModifiedAt": "2026-06-10T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T22:16:11.201145+00:00",
+      "lastIngestSuccessAt": "2026-08-26T22:16:11.776591+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/ccn4-8vby",
+      "refreshCadence": "QUARTERLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "home-health-zip-codes",
+      "displayName": "Home Health Care - Zip Codes",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "m5eg-upu5",
+      "sourceModifiedAt": "2026-05-27T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T22:16:28.439056+00:00",
+      "lastIngestSuccessAt": "2026-08-26T22:16:33.747927+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/m5eg-upu5",
+      "refreshCadence": "QUARTERLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "hospice-all-owners",
+      "displayName": "Hospice All Owners",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "e983965e-1603-4cb8-82b5-c40090e380d1",
+      "sourceModifiedAt": "2026-08-19T00:00:00+00:00",
+      "sourcePeriod": "2026-07-01/2026-09-30",
+      "retrievedAt": "2026-08-26T22:23:16.284554+00:00",
+      "lastIngestSuccessAt": "2026-08-26T22:23:20.676558+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/hospice-all-owners",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "hospice-enrollments",
+      "displayName": "Hospice Enrollments",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "25704213-e833-4b8b-9dbc-58dd17149209",
+      "sourceModifiedAt": "2026-07-27T00:00:00+00:00",
+      "sourcePeriod": "2026-07-01/2026-09-30",
+      "retrievedAt": "2026-08-26T22:17:16.776771+00:00",
+      "lastIngestSuccessAt": "2026-08-26T22:17:16.360058+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/hospice-enrollments",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "hospice-general-information",
+      "displayName": "Hospice - General Information",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "yc9t-dgbk",
+      "sourceModifiedAt": "2026-08-19T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T22:15:06.243039+00:00",
+      "lastIngestSuccessAt": "2026-08-26T22:15:05.812690+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/yc9t-dgbk",
+      "refreshCadence": "QUARTERLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "hospice-provider-cahps",
+      "displayName": "Hospice care - Provider CAHPS Hospice Survey Data",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "gxki-hrr8",
+      "sourceModifiedAt": "2026-08-07T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T22:17:51.459145+00:00",
+      "lastIngestSuccessAt": "2026-08-26T22:17:54.880696+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/gxki-hrr8",
+      "refreshCadence": "QUARTERLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "hospice-provider-data",
+      "displayName": "Hospice - Provider Data",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "252m-zfp9",
+      "sourceModifiedAt": "2026-08-07T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T22:18:23.639969+00:00",
+      "lastIngestSuccessAt": "2026-08-26T22:18:35.740707+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/252m-zfp9",
+      "refreshCadence": "QUARTERLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "hospice-zip-data",
+      "displayName": "Hospice - Zip Data",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "95rg-2usp",
+      "sourceModifiedAt": "2026-08-18T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T22:19:41.399581+00:00",
+      "lastIngestSuccessAt": "2026-08-26T22:19:45.328430+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/95rg-2usp",
+      "refreshCadence": "QUARTERLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "nursing-home-chain-performance-measures",
+      "displayName": "Nursing Home Chain Performance Measures",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "97ecfad1-d3f1-4d42-b774-d74661d830bc",
+      "sourceModifiedAt": "2026-08-12T00:00:00+00:00",
+      "sourcePeriod": "2026-07-01/2026-07-31",
+      "retrievedAt": "2026-08-16T00:32:14.534143+00:00",
+      "lastIngestSuccessAt": "2026-08-16T00:50:19.885827+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/quality-of-care/nursing-home-chain-performance-measures",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "nursing-home-fire-safety-deficiencies",
+      "displayName": "Fire Safety Deficiencies",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "ifjz-ge4w",
+      "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T18:50:50.906114+00:00",
+      "lastIngestSuccessAt": "2026-08-26T19:19:05.452549+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/ifjz-ge4w",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "nursing-home-health-deficiencies",
+      "displayName": "Health Deficiencies",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "r5ix-sfxw",
+      "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T20:35:10.928852+00:00",
+      "lastIngestSuccessAt": "2026-08-26T20:39:46.309448+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/r5ix-sfxw",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "nursing-home-inspection-dates",
+      "displayName": "Inspection Dates",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "svdt-c123",
+      "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T20:18:10.260419+00:00",
+      "lastIngestSuccessAt": "2026-08-26T20:19:23.513108+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/svdt-c123",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "nursing-home-mds-quality-measures",
+      "displayName": "MDS Quality Measures",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "djen-97ju",
+      "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T18:50:46.123680+00:00",
+      "lastIngestSuccessAt": "2026-08-26T19:06:26.432372+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/djen-97ju",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "nursing-home-ownership",
+      "displayName": "Ownership",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "y2hd-n93e",
+      "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T20:19:47.315631+00:00",
+      "lastIngestSuccessAt": "2026-08-26T20:19:58.373836+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/y2hd-n93e",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "nursing-home-penalties",
+      "displayName": "Penalties",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "g6vv-u9sr",
+      "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T20:24:35.184131+00:00",
+      "lastIngestSuccessAt": "2026-08-26T20:24:44.085382+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/g6vv-u9sr",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "nursing-home-provider-information",
+      "displayName": "Provider Information",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "4pq5-n9py",
+      "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+      "sourcePeriod": null,
+      "retrievedAt": "2026-08-26T20:24:52.158102+00:00",
+      "lastIngestSuccessAt": "2026-08-26T20:24:52.965453+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-data/dataset/4pq5-n9py",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "payroll-based-journal-daily-nurse-staffing",
+      "displayName": "Payroll Based Journal Daily Nurse Staffing",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "7e0d53ba-8f02-4c66-98a5-14a1c997c50d",
+      "sourceModifiedAt": "2026-07-29T00:00:00+00:00",
+      "sourcePeriod": "2026Q1",
+      "retrievedAt": "2026-08-15T04:29:10.416563+00:00",
+      "lastIngestSuccessAt": "2026-08-15T06:43:08.814352+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/quality-of-care/payroll-based-journal-daily-nurse-staffing",
+      "refreshCadence": "QUARTERLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "skilled-nursing-facility-all-owners",
+      "displayName": "Skilled Nursing Facility All Owners",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "afe44b85-cc6d-40d7-b5df-00ae8910d1d2",
+      "sourceModifiedAt": "2026-08-17T00:00:00+00:00",
+      "sourcePeriod": "2026-08-01/2026-08-31",
+      "retrievedAt": "2026-08-26T20:25:26.251400+00:00",
+      "lastIngestSuccessAt": "2026-08-26T20:25:47.700513+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/skilled-nursing-facility-all-owners",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "skilled-nursing-facility-change-of-ownership",
+      "displayName": "Skilled Nursing Facility Change of Ownership",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "f557a6ed-95b3-4a22-8433-4175db2dec1c",
+      "sourceModifiedAt": "2026-08-24T00:00:00+00:00",
+      "sourcePeriod": "2026-04-01/2026-06-30",
+      "retrievedAt": "2026-08-15T22:02:31.279443+00:00",
+      "lastIngestSuccessAt": "2026-08-15T23:13:31.066545+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/skilled-nursing-facility-change-of-ownership",
+      "refreshCadence": "QUARTERLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "skilled-nursing-facility-change-of-ownership-owner-information",
+      "displayName": "Skilled Nursing Facility Change of Ownership - Owner Information",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "a4358712-e910-4eaf-8f24-5e90ba3cf8d0",
+      "sourceModifiedAt": "2026-07-27T00:00:00+00:00",
+      "sourcePeriod": "2026-04-01/2026-06-30",
+      "retrievedAt": "2026-08-15T22:02:34.126768+00:00",
+      "lastIngestSuccessAt": "2026-08-15T23:15:26.325901+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/skilled-nursing-facility-change-of-ownership-owner-information",
+      "refreshCadence": "QUARTERLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    },
+    {
+      "datasetKey": "skilled-nursing-facility-enrollments",
+      "displayName": "Skilled Nursing Facility Enrollments",
+      "sourceAgency": "CMS",
+      "cmsIdentifier": "5f2c306f-3b1c-42cd-b037-187b2ce22126",
+      "sourceModifiedAt": "2026-08-17T00:00:00+00:00",
+      "sourcePeriod": "2026-08-01/2026-08-31",
+      "retrievedAt": "2026-08-26T20:34:01.233098+00:00",
+      "lastIngestSuccessAt": "2026-08-26T20:34:41.049392+00:00",
+      "freshnessBand": "CURRENT",
+      "officialUrl": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/skilled-nursing-facility-enrollments",
+      "refreshCadence": "MONTHLY",
+      "limitation": "Source modified/as-of dates are evidence freshness. Ingest success is operational, not a substitute for source freshness."
+    }
+  ],
+  "limitations": [
+    "Nursing Home, Home Health, and Hospice are different CMS provider classes with different measures.",
+    "Missing or suppressed evidence is not a zero quality score.",
+    "CMS stars are CMS ratings, not SeniorTrustHub scores.",
+    "Ownership evidence is not a quality inference. UNKNOWN is not a former owner. CHOW is not a sale.",
+    "CMS ZIP coverage records are not a verified county service area.",
+    "EVIDENCE_ONLY hospice identities are not current GI providers and are not proof of closure.",
+    "Assisted Living and Memory Care are not CMS national provider classes."
+  ]
+}

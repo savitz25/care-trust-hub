@@ -8,7 +8,9 @@ import type {
   CarePublishedFacilityEnrichment,
   CareFacilityHistory,
   CareOwnershipOperationSummary,
+  CareNhEvidence,
 } from "@/server/care/types";
+import { NursingHomeEvidencePanel } from "./nh-evidence-panel";
 import type { PublishedStateIntelligence } from "@care/domain";
 import { VerifiedPublicContact } from "./verified-public-contact";
 import { StateLicenseOversight } from "./state-license-oversight";
@@ -26,8 +28,10 @@ import { WhatToReview } from "./what-to-review";
 import { RealDataNotice } from "./evidence";
 import { facilityInterviewBuilderHref } from "./interview-builder-bridge";
 import { WorkspaceAddButton } from "./workspace-add-button";
+import { NhProfileIntelligence } from "./nh-profile-intelligence";
+import { isProviderIntelV1, type NursingHomeProviderIntelligence } from "@care/domain";
 
-const additionalLayers = ["Ownership intelligence", "Chain / portfolio intelligence"];
+const additionalLayers = ["Home health national spine", "Hospice national spine"];
 
 interface FacilitySourceEntry {
   key: string;
@@ -276,6 +280,8 @@ export function RealProviderDetail({
   ownershipOperation,
   interviewBuilderEnabled = false,
   workspaceEnabled = false,
+  nhEvidence = null,
+  nhIntel = null,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
@@ -296,7 +302,10 @@ export function RealProviderDetail({
   ownershipOperation?: CareOwnershipOperationSummary;
   interviewBuilderEnabled?: boolean;
   workspaceEnabled?: boolean;
+  nhEvidence?: CareNhEvidence | null;
+  nhIntel?: NursingHomeProviderIntelligence | null;
 }) {
+  const intel = nhIntel && isProviderIntelV1(nhIntel) ? nhIntel : null;
   const freshness = formatFreshnessLabels(provider.source.freshness);
   const ratings = [
     ["CMS overall rating", provider.ratings.overall, CMS_RATING_EXPLANATIONS.overall],
@@ -324,6 +333,7 @@ export function RealProviderDetail({
         </nav>
         <header className="facility-hero">
           <div>
+            <p className="eyebrow">CMS nursing home</p>
             <h1>{provider.providerName}</h1>
             {publishedEnrichment?.publicAlias ? (
               <p className="lede">Also known publicly as {publishedEnrichment.publicAlias.value}</p>
@@ -332,7 +342,15 @@ export function RealProviderDetail({
               {[provider.location.city, provider.location.state].filter(Boolean).join(", ")}
             </p>
             <div className="facility-hero__meta">
-              <span>CMS provider ID {provider.ccn}</span>
+              <span>CMS CCN {provider.ccn}</span>
+              {provider.telephone ? <span>{provider.telephone}</span> : null}
+              {intel ? (
+                <span>
+                  {intel.directory.projection === "KNOWN_NOT_CURRENT"
+                    ? "Not listed in the current CMS nursing-home directory"
+                    : "Listed in the current CMS nursing-home directory"}
+                </span>
+              ) : null}
               <span>{freshness.sourceUpdated}</span>
             </div>
             {interviewBuilderEnabled ? (
@@ -354,6 +372,8 @@ export function RealProviderDetail({
             <PrintButton />
           </div>
         </header>
+
+        {intel ? <NhProfileIntelligence intel={intel} /> : null}
 
         <section className="provider-overview" id="overview" aria-labelledby="cms-overview-title">
           <div className="section-heading">
@@ -398,6 +418,8 @@ export function RealProviderDetail({
           <StateLicenseOversight provider={provider} intelligence={stateIntelligence} />
         ) : null}
 
+        {nhEvidence ? <NursingHomeEvidencePanel evidence={nhEvidence} /> : null}
+
         <WhatToReview
           provider={provider}
           regulatory={regulatory}
@@ -407,7 +429,10 @@ export function RealProviderDetail({
         />
 
         <nav className="provider-section-nav" aria-label="Facility record sections">
+          {intel ? <a href="#at-a-glance">CMS snapshot</a> : null}
           <a href="#overview">Overview</a>
+          {intel ? <a href="#ownership-intel">Ownership</a> : null}
+          {intel ? <a href="#chow-history">Ownership changes</a> : null}
           {ownership && <a href="#ownership">Ownership</a>}
           {ownershipOperation?.portfolio && <a href="#related-facilities">Related facilities</a>}
           {chain && <a href="#chain">Chain</a>}
@@ -473,12 +498,9 @@ export function RealProviderDetail({
             </p>
           </div>
           <ul className="future-source-list">
-            {additionalLayers
-              .filter((layer) => !ownership || layer !== "Ownership intelligence")
-              .filter((layer) => !chain || layer !== "Chain / portfolio intelligence")
-              .map((layer) => (
-                <li key={layer}>{layer}</li>
-              ))}
+            {additionalLayers.map((layer) => (
+              <li key={layer}>{layer} remains a separate CMS provider class, not this profile.</li>
+            ))}
           </ul>
         </section>
 

@@ -257,6 +257,91 @@ describe("real provider UI feature flag", () => {
     );
   });
 
+  it("keeps agency profile indexation fail-closed and independent of render flags", async () => {
+    const { isAgencyProfileIndexEnabled, isHhProfileIntelEnabled } = await import(
+      "./feature-flags"
+    );
+    expect(isAgencyProfileIndexEnabled({})).toBe(false);
+    expect(
+      isHhProfileIntelEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_HH_PROFILE_INTEL: "true",
+      }),
+    ).toBe(true);
+    expect(isAgencyProfileIndexEnabled({ CARE_ENABLE_HH_PROFILE_INTEL: "true" })).toBe(false);
+    expect(isAgencyProfileIndexEnabled({ CARE_ENABLE_AGENCY_PROFILE_INDEX: "true" })).toBe(true);
+  });
+
+  it("keeps Home Health and Hospice profile intel fail-closed", async () => {
+    const { isHhProfileIntelEnabled, isHospiceProfileIntelEnabled } = await import(
+      "./feature-flags"
+    );
+    expect(isHhProfileIntelEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(false);
+    expect(isHospiceProfileIntelEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(false);
+    expect(
+      isHhProfileIntelEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_HH_PROFILE_INTEL: "true",
+      }),
+    ).toBe(true);
+    expect(
+      isHospiceProfileIntelEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_HOSPICE_PROFILE_INTEL: "true",
+      }),
+    ).toBe(true);
+  });
+
+  it("enables NH profile intel with real-provider UI unless disabled", async () => {
+    const { isNhProfileIntelEnabled } = await import("./feature-flags");
+    expect(isNhProfileIntelEnabled({ CARE_ENABLE_REAL_PROVIDER_UI: "true" })).toBe(true);
+    expect(
+      isNhProfileIntelEnabled({
+        CARE_ENABLE_REAL_PROVIDER_UI: "true",
+        CARE_ENABLE_NH_PROFILE_INTEL: "false",
+      }),
+    ).toBe(false);
+  });
+
+  it("keeps Florida ALF/AFCH publication and indexation independently fail-closed", async () => {
+    const { isFloridaAlfAfchPublicationEnabled, isFloridaProviderIndexEnabled } = await import(
+      "./feature-flags"
+    );
+    expect(isFloridaAlfAfchPublicationEnabled({})).toBe(false);
+    expect(isFloridaProviderIndexEnabled({ CARE_ENABLE_FLORIDA_PROVIDER_INDEX: "true" })).toBe(
+      false,
+    );
+    expect(
+      isFloridaAlfAfchPublicationEnabled({ CARE_ENABLE_FLORIDA_ALF_AFCH_PUBLICATION: "true" }),
+    ).toBe(true);
+    expect(
+      isFloridaProviderIndexEnabled({
+        CARE_ENABLE_FLORIDA_ALF_AFCH_PUBLICATION: "true",
+        CARE_ENABLE_FLORIDA_PROVIDER_INDEX: "true",
+      }),
+    ).toBe(true);
+  });
+
+  it("keeps Florida profile internal QA fail-closed and off in Vercel production", async () => {
+    const { isFloridaProfileInternalQaEnabled } = await import("./feature-flags");
+    expect(isFloridaProfileInternalQaEnabled({})).toBe(false);
+    expect(
+      isFloridaProfileInternalQaEnabled({ CARE_ENABLE_FLORIDA_PROFILE_INTERNAL_QA: "true" }),
+    ).toBe(true);
+    expect(
+      isFloridaProfileInternalQaEnabled({
+        CARE_ENABLE_FLORIDA_PROFILE_INTERNAL_QA: "true",
+        VERCEL_ENV: "production",
+      }),
+    ).toBe(false);
+    expect(
+      isFloridaProfileInternalQaEnabled({
+        CARE_ENABLE_FLORIDA_PROFILE_INTERNAL_QA: "TRUE",
+        VERCEL_ENV: "preview",
+      }),
+    ).toBe(false);
+  });
+
   it("requires both real-provider and trust-participation opt-ins without billing state", async () => {
     const { isTrustParticipationEnabled } = await import("./feature-flags");
     expect(isTrustParticipationEnabled({ CARE_ENABLE_TRUST_PARTICIPATION: "true" })).toBe(false);

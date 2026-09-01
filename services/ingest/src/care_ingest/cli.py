@@ -13,16 +13,21 @@ from .chain_database import load_chain_membership, load_chain_source
 from .database import load_provider_information
 from .downloader import download_source, resolve_distribution
 from .manifest import ReleaseManifest, sha256_file
+from .mds import MDS_KEY, ingest_mds_source
+from .mds_database import load_mds_source
 from .migrations import apply_migration
 from .ownership import OWNERSHIP_KEYS, ingest_ownership_source
 from .ownership_database import audit_ownership_database, load_ownership_source
 from .pbj import PBJ_NURSE_KEY, ingest_pbj_source
 from .pbj_database import audit_pbj_database, load_pbj_source
+from .post_acute import POST_ACUTE_KEYS, ingest_post_acute_source
+from .post_acute_database import load_post_acute_source
 from .provider_information import ingest_provider_information
 from .quality import write_quality_report
 from .registry import get_source, load_registry
 from .regulatory import (
     DEFICIENCIES_KEY,
+    FIRE_KEY,
     INSPECTIONS_KEY,
     PENALTIES_KEY,
     ingest_regulatory_source,
@@ -30,13 +35,15 @@ from .regulatory import (
 from .regulatory_database import audit_regulatory_database, load_regulatory_source
 
 PROVIDER_INFORMATION_KEY = "nursing-home-provider-information"
-REGULATORY_KEYS = (INSPECTIONS_KEY, DEFICIENCIES_KEY, PENALTIES_KEY)
+REGULATORY_KEYS = (INSPECTIONS_KEY, DEFICIENCIES_KEY, PENALTIES_KEY, FIRE_KEY)
 IMPLEMENTED_KEYS = (
     PROVIDER_INFORMATION_KEY,
     *REGULATORY_KEYS,
     PBJ_NURSE_KEY,
     *OWNERSHIP_KEYS,
     CHAIN_KEY,
+    MDS_KEY,
+    *POST_ACUTE_KEYS,
 )
 
 
@@ -134,6 +141,38 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Run persist a second time and report duplicate/update counts",
     )
+    for name, help_text in (
+        ("derive-cms-designations", "Derive SFF and abuse-icon observations from current PI"),
+        ("derive-facility-npi", "Attach CONFIRMED enrollment-organization NPIs to CCNs"),
+        ("derive-directory-status", "Mark CURRENT_ACTIVE vs ABSENT_FROM_CURRENT_DIRECTORY"),
+        ("derive-ownership-graph", "Classify time-aware owner/operator/enrollment edges"),
+        ("derive-ownership-change-events", "Classify SNF CHOW events without snapshot inference"),
+        ("derive-senior-intelligence", "Materialize National Senior Intelligence metrics"),
+    ):
+        command = commands.add_parser(name, help=help_text)
+        command.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    profile = commands.add_parser(
+        "provider-intelligence",
+        help="Assemble one class-aware Provider Intelligence object (internal)",
+    )
+    profile.add_argument(
+        "--provider-type", required=True, choices=("nursing_home", "home_health", "hospice")
+    )
+    profile.add_argument("--canonical-id", required=True)
+    profile.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    refresh = commands.add_parser(
+        "cms-refresh",
+        help="Registry-driven CMS check/refresh. Writes require CARE_CMS_REFRESH_WRITES=true",
+    )
+    refresh.add_argument("--mode", choices=("check", "refresh", "dry_run"), default="check")
+    refresh.add_argument("--source", default="all", help="all or one dataset_key")
+    refresh.add_argument("--trigger", choices=("scheduled", "manual", "dispatch"), default="manual")
+    refresh.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    freshness = commands.add_parser(
+        "cms-freshness",
+        help="Print per-source freshness from cms_source_freshness (not a global clock)",
+    )
+    freshness.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     return parser
 
 
@@ -146,6 +185,34 @@ def main(argv: list[str] | None = None) -> int:
     )
     data_root = args.data_root.resolve()
 
+    if args.command == "cms-refresh":
+        from .refresh import run_refresh
+        from .refresh_policy import topological_refresh_order
+
+        selected = None if args.source == "all" else [args.source]
+        if selected:
+            known = topological_refresh_order()
+            missing = [key for key in selected if key not in known]
+            if missing:
+                parser.error(f"unknown or unimplemented refresh source: {missing}")
+        report = run_refresh(
+            mode=args.mode,
+            database_url=args.database_url,
+            data_root=data_root,
+            trigger=args.trigger,
+            sources=selected,
+        )
+        print(report.to_json(), end="")
+        if args.mode == "refresh" and not report.writes_enabled:
+            logging.warning("CARE_CMS_REFRESH_WRITES is not true; no evidence writes occurred")
+        return 0 if report.health != "FAILED" else 1
+    if args.command == "cms-freshness":
+        if not args.database_url:
+            parser.error("cms-freshness requires CARE_DATABASE_URL or --database-url")
+        from .refresh import query_source_freshness
+
+        print(json.dumps(query_source_freshness(args.database_url), indent=2, default=str))
+        return 0
     if args.command == "apply-migration":
         if not args.database_url:
             parser.error("apply-migration requires CARE_DATABASE_URL or --database-url")
@@ -167,6 +234,60 @@ def main(argv: list[str] | None = None) -> int:
         if not args.database_url:
             parser.error("audit-ownership requires CARE_DATABASE_URL or --database-url")
         print(json.dumps(audit_ownership_database(args.database_url), indent=2, sort_keys=True))
+        return 0
+    if args.command == "derive-cms-designations":
+        if not args.database_url:
+            parser.error("derive-cms-designations requires CARE_DATABASE_URL or --database-url")
+        from .cms_designations import derive_cms_designations_json
+
+        print(derive_cms_designations_json(args.database_url), end="")
+        return 0
+    if args.command == "derive-facility-npi":
+        if not args.database_url:
+            parser.error("derive-facility-npi requires CARE_DATABASE_URL or --database-url")
+        from .facility_npi import derive_facility_npi_json
+
+        print(derive_facility_npi_json(args.database_url), end="")
+        return 0
+    if args.command == "derive-ownership-graph":
+        if not args.database_url:
+            parser.error("derive-ownership-graph requires CARE_DATABASE_URL or --database-url")
+        from .ownership_graph_database import derive_ownership_graph_json
+
+        print(derive_ownership_graph_json(args.database_url), end="")
+        return 0
+    if args.command == "derive-ownership-change-events":
+        if not args.database_url:
+            parser.error(
+                "derive-ownership-change-events requires CARE_DATABASE_URL or --database-url"
+            )
+        from .ownership_change_database import derive_ownership_change_events_json
+
+        print(derive_ownership_change_events_json(args.database_url), end="")
+        return 0
+    if args.command == "derive-senior-intelligence":
+        if not args.database_url:
+            parser.error("derive-senior-intelligence requires CARE_DATABASE_URL or --database-url")
+        from .senior_intelligence_database import materialize_senior_intelligence_json
+
+        print(materialize_senior_intelligence_json(args.database_url), end="")
+        return 0
+    if args.command == "provider-intelligence":
+        if not args.database_url:
+            parser.error("provider-intelligence requires CARE_DATABASE_URL or --database-url")
+        from .provider_intelligence_database import provider_intelligence_json
+
+        print(
+            provider_intelligence_json(args.database_url, args.provider_type, args.canonical_id),
+            end="",
+        )
+        return 0
+    if args.command == "derive-directory-status":
+        if not args.database_url:
+            parser.error("derive-directory-status requires CARE_DATABASE_URL or --database-url")
+        from .directory_status import derive_directory_status_json
+
+        print(derive_directory_status_json(args.database_url), end="")
         return 0
     if args.command == "derive-facility-history":
         if not args.database_url:
@@ -294,12 +415,16 @@ def main(argv: list[str] | None = None) -> int:
     ingest_function = (
         ingest_provider_information
         if args.dataset_key == PROVIDER_INFORMATION_KEY
+        else ingest_mds_source
+        if args.dataset_key == MDS_KEY
         else ingest_pbj_source
         if args.dataset_key == PBJ_NURSE_KEY
         else ingest_chain_source
         if args.dataset_key == CHAIN_KEY
         else ingest_ownership_source
         if args.dataset_key in OWNERSHIP_KEYS
+        else ingest_post_acute_source
+        if args.dataset_key in POST_ACUTE_KEYS
         else ingest_regulatory_source
     )
     if args.command == "validate":
@@ -339,12 +464,16 @@ def main(argv: list[str] | None = None) -> int:
         loader = (
             load_provider_information
             if args.dataset_key == PROVIDER_INFORMATION_KEY
+            else load_mds_source
+            if args.dataset_key == MDS_KEY
             else load_pbj_source
             if args.dataset_key == PBJ_NURSE_KEY
             else load_chain_source
             if args.dataset_key == CHAIN_KEY
             else load_ownership_source
             if args.dataset_key in OWNERSHIP_KEYS
+            else load_post_acute_source
+            if args.dataset_key in POST_ACUTE_KEYS
             else load_regulatory_source
         )
         result = loader(

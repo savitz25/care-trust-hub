@@ -1,0 +1,376 @@
+{
+  "contractVersion": "fl-sen-intel-v1",
+  "snapshotVersion": "fl-sen-intel-v1",
+  "sourceFingerprint": "1aff3a096a2ae790bfba2d9b6a4686f25051ee0577b74275106669ec96a6d2bb",
+  "generatedAt": "2026-08-27T21:15:00.000Z",
+  "asOf": "2026-08-27T20:42:55.791075+00:00",
+  "score": null,
+  "ranking": null,
+  "cmsConfirmedLinks": 0,
+  "publication": {
+    "individualProviders": "NOT_CURRENTLY_PUBLISHABLE",
+    "pageIndex": false
+  },
+  "providers": {
+    "current": 6983,
+    "withConnectedEvent": 5317,
+    "withoutConnectedEvent": 1666,
+    "byClass": {
+      "FL_ALF": 3016,
+      "FL_AFCH": 228,
+      "FL_HOME_HEALTH_LICENSE": 2971,
+      "FL_HOSPICE_LICENSE": 74,
+      "FL_NH_LICENSE": 694
+    }
+  },
+  "credentials": {
+    "observations": 15227,
+    "lmh": 702,
+    "lns": 389,
+    "ecc": 170
+  },
+  "contacts": {
+    "observations": 69903,
+    "streetAddressProviders": 6983,
+    "mailingAddressProviders": 6983,
+    "phoneProviders": 6964,
+    "ownerProviders": 6978,
+    "administratorProviders": 6908,
+    "financialOfficerProviders": 6906,
+    "websiteProviders": 4277
+  },
+  "geographyObservations": 32420,
+  "regulatory": {
+    "observations": 77219,
+    "families": {
+      "inspection": 19439,
+      "deficiency": 24083,
+      "legal_action": 4961,
+      "fine": 12951,
+      "final_order": 15712,
+      "emergency_action": 73
+    },
+    "coverage": {
+      "inspection": 4489,
+      "deficiency": 3736,
+      "legal_action": 892,
+      "fine": 3502,
+      "final_order": 3550,
+      "emergency_action": 67
+    },
+    "finality": {
+      "final": 33376,
+      "nonFinal": 321,
+      "unknown": 43522
+    },
+    "dateMin": "2003-12-22",
+    "dateMax": "2026-08-24",
+    "fineUsd": 39607312.57,
+    "chowHeld": 3716
+  },
+  "classes": {
+    "alf": {
+      "id": "FL_ALF",
+      "label": "Assisted Living Facilities",
+      "current": 3016,
+      "observations": 50555,
+      "inspectionProviders": 3016,
+      "deficiencyProviders": 2700,
+      "legalActionProviders": 217,
+      "fineProviders": 2029,
+      "finalOrderProviders": 2055,
+      "emergencyProviders": 37,
+      "identity": "AHCA file number within class",
+      "notes": [
+        "LMH, LNS, and ECC are add-on credentials, not provider classes and not Memory Care licenses."
+      ]
+    },
+    "afch": {
+      "id": "FL_AFCH",
+      "label": "Adult Family Care Homes",
+      "current": 228,
+      "observations": 2044,
+      "inspectionProviders": 226,
+      "deficiencyProviders": 164,
+      "legalActionProviders": 0,
+      "fineProviders": 60,
+      "finalOrderProviders": 60,
+      "emergencyProviders": 0,
+      "identity": "AHCA file number within class",
+      "notes": [
+        "AFCH evidence is shallower than ALF. Non-fine legal-action labels were not observed."
+      ]
+    },
+    "hha": {
+      "id": "FL_HOME_HEALTH_LICENSE",
+      "label": "Home Health Agencies",
+      "current": 2971,
+      "observations": 10026,
+      "inspectionProviders": 1194,
+      "deficiencyProviders": 824,
+      "legalActionProviders": 12,
+      "fineProviders": 746,
+      "finalOrderProviders": 746,
+      "emergencyProviders": 2,
+      "identity": "AHCA file number within class",
+      "notes": [
+        "2,971 is the AHCA state-license universe, not 1,146 Medicare-certified CMS Home Health agencies."
+      ]
+    },
+    "hospice": {
+      "id": "FL_HOSPICE_LICENSE",
+      "label": "Hospice",
+      "current": 74,
+      "observations": 602,
+      "inspectionProviders": 53,
+      "deficiencyProviders": 48,
+      "legalActionProviders": 2,
+      "fineProviders": 12,
+      "finalOrderProviders": 14,
+      "emergencyProviders": 0,
+      "identity": "AHCA file number within class",
+      "notes": [
+        "74 AHCA hospice licenses are not the same denominator as 61 CMS Hospice GI providers. No Hospice star is computed here."
+      ]
+    },
+    "nh": {
+      "id": "FL_NH_LICENSE",
+      "label": "Nursing Homes",
+      "current": 694,
+      "observations": 13992,
+      "inspectionProviders": 0,
+      "deficiencyProviders": 0,
+      "legalActionProviders": 661,
+      "fineProviders": 655,
+      "finalOrderProviders": 675,
+      "emergencyProviders": 28,
+      "identity": "AHCA file number overlay; CMS CCN remains canonical nationally",
+      "notes": [
+        "AHCA F/K inspection rows were excluded as federal CMS reposts. Inspection/deficiency research uses the national CMS layer. No row-level AHCA\u2194CMS link is confirmed (0 CONFIRMED)."
+      ]
+    }
+  },
+  "statusRaw": [
+    {
+      "label": "LICENSED",
+      "providers": 6041
+    },
+    {
+      "label": "IN REVIEW",
+      "providers": 782
+    },
+    {
+      "label": "PROVISIONAL",
+      "providers": 94
+    },
+    {
+      "label": "IN LITIGATION",
+      "providers": 50
+    },
+    {
+      "label": "INACTIVE",
+      "providers": 10
+    },
+    {
+      "label": "PROV LITIGATION",
+      "providers": 4
+    },
+    {
+      "label": "CONDITIONAL",
+      "providers": 1
+    },
+    {
+      "label": "SUSPENDED",
+      "providers": 1
+    }
+  ],
+  "capacity": {
+    "alf": 118744,
+    "afch": 1058,
+    "nh": 85548
+  },
+  "cmsOverlay": {
+    "nursingHome": {
+      "current": 694,
+      "starCounts": {
+        "1": 92,
+        "2": 141,
+        "3": 125,
+        "4": 159,
+        "5": 174,
+        "missing": 3
+      }
+    },
+    "homeHealth": {
+      "current": 1146,
+      "qualityStarMissing": 398
+    },
+    "hospiceGi": 61
+  },
+  "counties": {
+    "alfFacility": [
+      {
+        "county": "Miami-Dade",
+        "providers": 808
+      },
+      {
+        "county": "Hillsborough",
+        "providers": 264
+      },
+      {
+        "county": "Broward",
+        "providers": 252
+      },
+      {
+        "county": "Palm Beach",
+        "providers": 199
+      },
+      {
+        "county": "Pinellas",
+        "providers": 138
+      },
+      {
+        "county": "Brevard",
+        "providers": 128
+      },
+      {
+        "county": "Orange",
+        "providers": 119
+      },
+      {
+        "county": "St. Lucie",
+        "providers": 113
+      },
+      {
+        "county": "Volusia",
+        "providers": 88
+      },
+      {
+        "county": "Sarasota",
+        "providers": 86
+      },
+      {
+        "county": "Lee",
+        "providers": 81
+      },
+      {
+        "county": "Duval",
+        "providers": 69
+      }
+    ],
+    "hhaOffice": [
+      {
+        "county": "Miami-Dade",
+        "providers": 477
+      },
+      {
+        "county": "Broward",
+        "providers": 345
+      },
+      {
+        "county": "Palm Beach",
+        "providers": 302
+      },
+      {
+        "county": "Hillsborough",
+        "providers": 254
+      },
+      {
+        "county": "Orange",
+        "providers": 150
+      },
+      {
+        "county": "Pinellas",
+        "providers": 128
+      },
+      {
+        "county": "Duval",
+        "providers": 116
+      },
+      {
+        "county": "Lee",
+        "providers": 112
+      },
+      {
+        "county": "Sarasota",
+        "providers": 84
+      },
+      {
+        "county": "Lake",
+        "providers": 73
+      },
+      {
+        "county": "Collier",
+        "providers": 63
+      },
+      {
+        "county": "Pasco",
+        "providers": 55
+      }
+    ],
+    "servedCountyMappings": [
+      {
+        "raw": "Dade",
+        "canonical": "Miami-Dade",
+        "observations": 529
+      },
+      {
+        "raw": "Desoto",
+        "canonical": "DeSoto",
+        "observations": 210
+      },
+      {
+        "raw": "Hillsborou",
+        "canonical": "Hillsborough",
+        "observations": 5
+      }
+    ]
+  },
+  "sources": [
+    {
+      "name": "FloridaHealthFinder locator type=1 (Active/Open)",
+      "agency": "AHCA",
+      "asOf": "2026-08-27T19:13:36+00:00",
+      "retrievedAt": "2026-08-27T19:58:38.860610+00:00",
+      "role": "CURRENT P0 identities"
+    },
+    {
+      "name": "FloridaHealthFinder provider profiles",
+      "agency": "AHCA",
+      "asOf": "2026-08-27T19:13:36+00:00",
+      "retrievedAt": "2026-08-27T19:58:38.860610+00:00",
+      "role": "credentials, contacts, geography, Legal Sanctions"
+    },
+    {
+      "name": "AHCA facility inspection details (2008\u2013present)",
+      "agency": "AHCA",
+      "asOf": "2026-08-27T20:20:11+00:00",
+      "retrievedAt": "2026-08-27T20:42:55.791075+00:00",
+      "role": "state inspections and deficiencies for ALF, AFCH, HHA, Hospice"
+    },
+    {
+      "name": "AHCA Legal Sanctions + final-order locator",
+      "agency": "AHCA",
+      "asOf": "2026-08-27T20:20:11+00:00",
+      "retrievedAt": "2026-08-27T20:42:55.791075+00:00",
+      "role": "legal actions, fines, emergency actions, final orders"
+    },
+    {
+      "name": "CMS Nursing Home / Home Health / Hospice national directories",
+      "agency": "CMS",
+      "asOf": null,
+      "retrievedAt": "2026-08-27T03:03:01.752244+00:00",
+      "role": "Florida aggregate CMS context only; no forced AHCA identity link"
+    }
+  ],
+  "limitations": [
+    "CURRENT means present in the AHCA Active/Open locator, not good standing.",
+    "1,666 CURRENT providers have no connected Florida regulatory event in the acquired sources. That is not a clean record.",
+    "AHCA Nursing Home F/K survey rows were excluded as federal CMS reposts.",
+    "AHCA profiles did not provide a class-namespaced CMS CCN, so 0 CONFIRMED AHCA\u2194CMS links were created.",
+    "Historical/non-current Florida providers are not in this census.",
+    "3,716 CHOW-labeled source rows were held and are not regulatory events.",
+    "There is no statewide Memory Care provider-class denominator.",
+    "Individual Florida provider pages are not published."
+  ]
+}

@@ -2,20 +2,35 @@ import type { Metadata } from "next";
 import { SearchExperience } from "./search-experience";
 import { SyntheticDataNotice } from "@/components/evidence";
 import { isRealProviderUiEnabled } from "@/server/care/feature-flags";
+import { parseProviderClass } from "@/server/care/search-contract";
 import { RealSearch } from "./real-search";
 
 export const dynamic = "force-dynamic";
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}): Promise<Metadata> {
+  const params = await searchParams;
+  const providerClass = parseProviderClass(
+    typeof params.class === "string" ? params.class : undefined,
+  );
+  const titles = {
+    nursing_home: "Find nursing homes through CMS evidence",
+    home_health: "Find Home Health agencies through CMS evidence",
+    hospice: "Find Hospice providers through CMS evidence",
+  } as const;
   return isRealProviderUiEnabled()
     ? {
-        title: "Find nursing homes through CMS evidence",
-        description: "Search current CMS Nursing Home Provider Information fields.",
+        title: titles[providerClass],
+        description: "Search current CMS directories. Search result URLs are not indexed.",
         robots: { index: false, follow: false },
       }
     : {
         title: "Find care",
         description: "Explore fictional facilities through transparent evidence dimensions.",
+        robots: { index: false, follow: false },
       };
 }
 

@@ -25,7 +25,7 @@ const layout = read("src/app/layout.tsx");
 const icon = read("src/app/icon.svg");
 const share = read("src/og/senior-share-card.tsx");
 const hub = read("src/config/share-hub.ts");
-const home = read("src/app/page.tsx");
+const home = read("src/app/page.tsx") + read("src/components/senior-home-intelligence.tsx");
 
 assert(tokens.includes("2026.08.21-visual-v1"), "chassis version");
 assert(tokens.includes('senior: "#681860"'), "Senior plum accent");
@@ -65,7 +65,7 @@ assert(layout.includes("data-th-chassis"), "chassis stamp");
 assert(layout.includes('id="main-content"'), "skip target");
 assert(layout.includes("Inter"), "Inter chrome font");
 assert(css.includes("var(--font-serif)"), "Georgia/serif editorial exception");
-assert(home.includes("home-title") || home.includes("h1"), "homepage H1 preserved");
+assert(home.includes('id="home-title"') && home.includes("<h1"), "homepage H1 preserved");
 assert(hub.includes("https://www.seniortrusthub.com"), "canonical host");
 assert(icon.includes('stroke-width="2.4"'), "favicon SVG canonical");
 assert(share.includes('viewBox="0 0 36 36"'), "SHARE-003 canonical mark");

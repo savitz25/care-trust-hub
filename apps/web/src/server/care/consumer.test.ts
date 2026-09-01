@@ -2,9 +2,14 @@ import { describe, expect, it } from "vitest";
 import {
   cmsRatingText,
   factualRatingObservations,
+  homeHealthHref,
+  homeHealthResearchDocumentTitle,
+  hospiceHref,
+  hospiceResearchDocumentTitle,
   isCanonicalProviderSlug,
   isValidCmsChainId,
   isValidOrganizationId,
+  nursingHomeResearchDocumentTitle,
   organizationHref,
   providerHref,
   providerSlug,
@@ -33,6 +38,27 @@ describe("real provider consumer mapping", () => {
     expect(organizationHref({ organizationId, organizationName: "Example Healthcare LLC" })).toBe(
       `/ownership/${organizationId}/example-healthcare-llc`,
     );
+  });
+
+  it("keeps the nursing-home research title page-specific so the root template owns the brand", () => {
+    expect(nursingHomeResearchDocumentTitle("Country Drive Post Acute")).toBe(
+      "Country Drive Post Acute — CMS Ratings, Ownership & Inspection Research",
+    );
+    expect(nursingHomeResearchDocumentTitle("Country Drive Post Acute")).not.toMatch(
+      /SeniorTrustHub/,
+    );
+    expect(nursingHomeResearchDocumentTitle("Country Drive Post Acute")).not.toMatch(
+      /\bReviews\b|\bBest\b|\bTop\b|\bRecommended\b|Trust Score/i,
+    );
+    expect(homeHealthResearchDocumentTitle("Example HH")).toBe(
+      "Example HH — CMS Home Health Quality, Ownership & Research",
+    );
+    expect(homeHealthResearchDocumentTitle("Example HH")).not.toMatch(/SeniorTrustHub/);
+    expect(hospiceResearchDocumentTitle("Example Hospice")).toBe(
+      "Example Hospice — CMS Hospice Quality, Ownership & Research",
+    );
+    expect(hospiceHref("017000", "Example Hospice")).toBe("/hospice/cms/017000/example-hospice");
+    expect(homeHealthHref("017000", "Example HH")).toBe("/home-health/cms/017000/example-hh");
   });
 
   it("preserves missing ratings without manufacturing a value or judgment", () => {

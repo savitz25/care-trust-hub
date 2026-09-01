@@ -11,6 +11,12 @@ import { getPublishedStateIntelligence } from "./state-publication";
 import { getPublishedFacilityHistory } from "./history-repository";
 import { getOwnershipOperationSummary } from "./ownership-v2";
 import { getPublishedOrganizationPortfolio } from "./ownership-portfolio";
+import { getNursingHomeEvidence } from "./nh-evidence-repository";
+import { getNursingHomeProviderIntelligence } from "./nh-provider-intelligence";
+import {
+  getHomeHealthProviderIntelligence,
+  getHospiceProviderIntelligence,
+} from "./agency-provider-intelligence";
 
 export const getProviderByCcnForPage = cache(getProviderByCcn);
 export const getProviderRegulatoryIntelligenceForPage = cache(getProviderRegulatoryIntelligence);
@@ -23,3 +29,7 @@ export const getPublishedStateIntelligenceForPage = cache(getPublishedStateIntel
 export const getPublishedFacilityHistoryForPage = cache(getPublishedFacilityHistory);
 export const getOwnershipOperationSummaryForPage = cache(getOwnershipOperationSummary);
 export const getPublishedOrganizationPortfolioForPage = cache(getPublishedOrganizationPortfolio);
+export const getNursingHomeEvidenceForPage = cache(getNursingHomeEvidence);
+export const getNursingHomeProviderIntelligenceForPage = cache(getNursingHomeProviderIntelligence);
+export const getHomeHealthProviderIntelligenceForPage = cache(getHomeHealthProviderIntelligence);
+export const getHospiceProviderIntelligenceForPage = cache(getHospiceProviderIntelligence);

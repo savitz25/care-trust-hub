@@ -1,0 +1,234 @@
+{
+  "first": {
+    "transformation_version": "ownership-change-v1",
+    "source_dataset_key": "skilled-nursing-facility-change-of-ownership",
+    "source_dataset_id": "f557a6ed-95b3-4a22-8433-4175db2dec1c",
+    "hh_event_availability": "NOT AVAILABLE",
+    "hospice_event_availability": "NOT AVAILABLE",
+    "pending_status_supported": false,
+    "unknown_converted_to_historical": 0,
+    "effective_to_invented_from_snapshot": 0,
+    "sibling_event_propagation": 0,
+    "public_writes": 0,
+    "classified_event_writes": 5227,
+    "inserted_legal_parties": 10454,
+    "inserted_owner_info_parties": 105036,
+    "inserted_links": 41168,
+    "new_events": 0,
+    "new_parties": 115490,
+    "new_links": 41168,
+    "unknown_before": 554644,
+    "unknown_after": 554644,
+    "unknown_resolved": 0,
+    "effective_to_before": 0,
+    "effective_to_after": 0,
+    "census": {
+      "links": 41168,
+      "events": 5227,
+      "latest": "2026-02-01",
+      "repeat": {
+        "1": 5171,
+        "2": 1,
+        "3_5": 0,
+        "6_plus": 0
+      },
+      "by_type": {
+        "ACQUISITION_MERGER": 2,
+        "CHANGE_OF_OWNERSHIP": 5225
+      },
+      "by_year": {
+        "2016": 240,
+        "2017": 341,
+        "2018": 387,
+        "2019": 547,
+        "2020": 405,
+        "2021": 573,
+        "2022": 722,
+        "2023": 873,
+        "2024": 741,
+        "2025": 395,
+        "2026": 3
+      },
+      "parties": 115490,
+      "earliest": "2016-01-01",
+      "link_roles": {
+        "POST_EVENT_OWNER": 16889,
+        "EVENT_PARTICIPANT": 24279
+      },
+      "by_raw_type": [
+        {
+          "n": 5225,
+          "code": "CH",
+          "text": "CHANGE OF OWNERSHIP"
+        },
+        {
+          "n": 2,
+          "code": "AM",
+          "text": "ACQUISITION/MERGER"
+        }
+      ],
+      "parties_org": 50171,
+      "party_roles": {
+        "BUYER": 5227,
+        "SELLER": 5227,
+        "NEW_OWNER": 20447,
+        "PRIOR_OWNER": 23539,
+        "EVENT_PARTICIPANT": 61050
+      },
+      "completeness": {
+        "event_only": 0,
+        "event_plus_new": 0,
+        "event_plus_prior": 0,
+        "event_plus_percentage": 5208,
+        "event_plus_control_role": 5227,
+        "event_plus_prior_and_new": 5227
+      },
+      "unknown_edges": 554644,
+      "parties_person": 65319,
+      "effective_to_set": 0,
+      "events_confirmed": 5173,
+      "historical_edges": 119419,
+      "events_classified": 5227,
+      "org_relationships": 0,
+      "historical_overlap": {
+        "chow_only": 1315,
+        "historical_only": 17,
+        "chow_plus_historical": 3857
+      },
+      "parties_unresolved": 0,
+      "providers_with_events": 5172,
+      "unresolved_graph_edges": 117192,
+      "events_unresolved_provider": 54
+    },
+    "regression": {
+      "mds": 1248650,
+      "pbj": 5280805,
+      "fire": 200327,
+      "nh_known": 14696,
+      "hh_snapshots": 12460,
+      "hospice_gi_snapshots": 6669,
+      "nh_current_directory": 14690,
+      "hospice_typed_providers": 6911
+    },
+    "database_bytes_before": 19613568147,
+    "database_bytes_after": 19712560275,
+    "quality_only_hospice_not_directory": 242,
+    "fingerprint": "5fa2b11dde63a3d007218ffe1c7cd28f9b89a40103588273a6fd41db853be1aa"
+  },
+  "second": {
+    "transformation_version": "ownership-change-v1",
+    "source_dataset_key": "skilled-nursing-facility-change-of-ownership",
+    "source_dataset_id": "f557a6ed-95b3-4a22-8433-4175db2dec1c",
+    "hh_event_availability": "NOT AVAILABLE",
+    "hospice_event_availability": "NOT AVAILABLE",
+    "pending_status_supported": false,
+    "unknown_converted_to_historical": 0,
+    "effective_to_invented_from_snapshot": 0,
+    "sibling_event_propagation": 0,
+    "public_writes": 0,
+    "classified_event_writes": 0,
+    "inserted_legal_parties": 0,
+    "inserted_owner_info_parties": 0,
+    "inserted_links": 0,
+    "new_events": 0,
+    "new_parties": 0,
+    "new_links": 0,
+    "unknown_before": 554644,
+    "unknown_after": 554644,
+    "unknown_resolved": 0,
+    "effective_to_before": 0,
+    "effective_to_after": 0,
+    "census": {
+      "links": 41168,
+      "events": 5227,
+      "latest": "2026-02-01",
+      "repeat": {
+        "1": 5171,
+        "2": 1,
+        "3_5": 0,
+        "6_plus": 0
+      },
+      "by_type": {
+        "ACQUISITION_MERGER": 2,
+        "CHANGE_OF_OWNERSHIP": 5225
+      },
+      "by_year": {
+        "2016": 240,
+        "2017": 341,
+        "2018": 387,
+        "2019": 547,
+        "2020": 405,
+        "2021": 573,
+        "2022": 722,
+        "2023": 873,
+        "2024": 741,
+        "2025": 395,
+        "2026": 3
+      },
+      "parties": 115490,
+      "earliest": "2016-01-01",
+      "link_roles": {
+        "POST_EVENT_OWNER": 16889,
+        "EVENT_PARTICIPANT": 24279
+      },
+      "by_raw_type": [
+        {
+          "n": 5225,
+          "code": "CH",
+          "text": "CHANGE OF OWNERSHIP"
+        },
+        {
+          "n": 2,
+          "code": "AM",
+          "text": "ACQUISITION/MERGER"
+        }
+      ],
+      "parties_org": 50171,
+      "party_roles": {
+        "BUYER": 5227,
+        "SELLER": 5227,
+        "NEW_OWNER": 20447,
+        "PRIOR_OWNER": 23539,
+        "EVENT_PARTICIPANT": 61050
+      },
+      "completeness": {
+        "event_only": 0,
+        "event_plus_new": 0,
+        "event_plus_prior": 0,
+        "event_plus_percentage": 5208,
+        "event_plus_control_role": 5227,
+        "event_plus_prior_and_new": 5227
+      },
+      "unknown_edges": 554644,
+      "parties_person": 65319,
+      "effective_to_set": 0,
+      "events_confirmed": 5173,
+      "historical_edges": 119419,
+      "events_classified": 5227,
+      "org_relationships": 0,
+      "historical_overlap": {
+        "chow_only": 1315,
+        "historical_only": 17,
+        "chow_plus_historical": 3857
+      },
+      "parties_unresolved": 0,
+      "providers_with_events": 5172,
+      "unresolved_graph_edges": 117192,
+      "events_unresolved_provider": 54
+    },
+    "regression": {
+      "mds": 1248650,
+      "pbj": 5280805,
+      "fire": 200327,
+      "nh_known": 14696,
+      "hh_snapshots": 12460,
+      "hospice_gi_snapshots": 6669,
+      "nh_current_directory": 14690,
+      "hospice_typed_providers": 6911
+    },
+    "database_bytes_before": 19691588755,
+    "database_bytes_after": 19712584851,
+    "quality_only_hospice_not_directory": 242,
+    "fingerprint": "5fa2b11dde63a3d007218ffe1c7cd28f9b89a40103588273a6fd41db853be1aa"
+  }
+}
