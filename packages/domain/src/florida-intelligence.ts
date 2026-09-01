@@ -135,7 +135,10 @@ export function assertFloridaIntelligence(value: FloridaIntelligence): FloridaIn
   if (value.providers.current !== LOCKED_CURRENT) {
     throw new Error("Florida CURRENT P0 count drifted");
   }
-  if (value.providers.withConnectedEvent + value.providers.withoutConnectedEvent !== LOCKED_CURRENT) {
+  if (
+    value.providers.withConnectedEvent + value.providers.withoutConnectedEvent !==
+    LOCKED_CURRENT
+  ) {
     throw new Error("Event coverage must partition CURRENT providers");
   }
   if (value.publication.individualProviders !== "NOT_CURRENTLY_PUBLISHABLE") {

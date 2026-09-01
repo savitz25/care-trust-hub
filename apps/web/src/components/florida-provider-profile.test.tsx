@@ -68,9 +68,17 @@ describe("Florida public provider profile", () => {
     expect(document.body.textContent).toMatch(
       /No connected Florida regulatory event was observed in the acquired AHCA sources/,
     );
-    expect(document.body.textContent).not.toMatch(/clean record|no violations|Trust Score|top provider/i);
-    expect(document.body.textContent).not.toMatch(/controlling_interest|financial_officer|other_named_party/);
-    expect(document.body.textContent).toMatch(/not a ranked list|not a recommendation|not an endorsement/i);
-    expect(document.body.textContent).toMatch(/Historical\/non-current Florida identities are not represented/);
+    expect(document.body.textContent).not.toMatch(
+      /clean record|no violations|Trust Score|top provider/i,
+    );
+    expect(document.body.textContent).not.toMatch(
+      /controlling_interest|financial_officer|other_named_party/,
+    );
+    expect(document.body.textContent).toMatch(
+      /not a ranked list|not a recommendation|not an endorsement/i,
+    );
+    expect(document.body.textContent).toMatch(
+      /Historical\/non-current Florida identities are not represented/,
+    );
   });
 });

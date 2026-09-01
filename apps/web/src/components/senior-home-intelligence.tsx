@@ -22,7 +22,9 @@ function CoverageBar({
     <div className="intel-bar">
       <div className="intel-bar__meta">
         <span>{label}</span>
-        <span>{note ?? (max === 100 ? `${value.toFixed(1)}%` : value.toLocaleString("en-US"))}</span>
+        <span>
+          {note ?? (max === 100 ? `${value.toFixed(1)}%` : value.toLocaleString("en-US"))}
+        </span>
       </div>
       <div className="intel-bar__track" aria-hidden="true">
         <span className="intel-bar__fill" style={{ width: `${width}%` }} />
@@ -118,7 +120,8 @@ export function SeniorHomeIntelligence({
               <p className="intel-metric__value">{metric.display}</p>
               <h3>{metric.label}</h3>
               <p className="hub-kicker">
-                Official as-of {dateLabel(metric.officialAsOf)} · Retrieved {dateLabel(metric.retrievedAt)}
+                Official as-of {dateLabel(metric.officialAsOf)} · Retrieved{" "}
+                {dateLabel(metric.retrievedAt)}
               </p>
               <details className="intel-disclose">
                 <summary>Trace this number</summary>
@@ -148,7 +151,9 @@ export function SeniorHomeIntelligence({
         <div className="section-heading">
           <p className="eyebrow">What the data says</p>
           <h2 id="findings-title">Three national evidence stories</h2>
-          <p>Each story is a benchmark or a coverage gap. None is a ranking of providers or states.</p>
+          <p>
+            Each story is a benchmark or a coverage gap. None is a ranking of providers or states.
+          </p>
         </div>
         <div className="intel-findings">
           {intel.findings.map((finding) => (
@@ -294,8 +299,11 @@ export function SeniorHomeIntelligence({
                 <strong>{row.state}</strong>
                 <span className="visually-hidden">
                   {row.name}. Nursing Homes {row.nursingHomes.toLocaleString("en-US")}, Home Health{" "}
-                  {row.homeHealth.toLocaleString("en-US")}, Hospice {row.hospice.toLocaleString("en-US")}.
-                  {row.intelligenceHref ? " Opens Florida intelligence." : " Opens CMS Nursing Home search."}
+                  {row.homeHealth.toLocaleString("en-US")}, Hospice{" "}
+                  {row.hospice.toLocaleString("en-US")}.
+                  {row.intelligenceHref
+                    ? " Opens Florida intelligence."
+                    : " Opens CMS Nursing Home search."}
                 </span>
                 <span aria-hidden="true">{row.nursingHomes}</span>
               </a>
@@ -306,9 +314,7 @@ export function SeniorHomeIntelligence({
           <h3>{STATE_NAMES.FL} intelligence</h3>
           <p>{intel.floridaPreview.note}</p>
           <ul className="hub-plain-list">
-            <li>
-              AHCA identities: {intel.floridaPreview.ahcaIdentities.toLocaleString("en-US")}
-            </li>
+            <li>AHCA identities: {intel.floridaPreview.ahcaIdentities.toLocaleString("en-US")}</li>
             <li>
               State regulatory observations:{" "}
               {intel.floridaPreview.regulatoryObservations.toLocaleString("en-US")}
@@ -319,9 +325,7 @@ export function SeniorHomeIntelligence({
               {intel.floridaPreview.cmsHomeHealth.toLocaleString("en-US")} /{" "}
               {intel.floridaPreview.cmsHospice.toLocaleString("en-US")}
             </li>
-            <li>
-              Published ALF/AFCH profiles: {intel.floridaPreview.publishedAlfAfch}
-            </li>
+            <li>Published ALF/AFCH profiles: {intel.floridaPreview.publishedAlfAfch}</li>
           </ul>
           <Link className="button button--secondary" href={intel.floridaPreview.href}>
             Explore Florida Intelligence →
@@ -422,8 +426,8 @@ export function SeniorHomeIntelligence({
           <li>SeniorTrustHub research profile</li>
         </ol>
         <p className="hub-kicker">
-          Connected, unavailable, and review states stay class-specific. Internal identity candidates
-          are not shown on this page.
+          Connected, unavailable, and review states stay class-specific. Internal identity
+          candidates are not shown on this page.
         </p>
       </section>
 
@@ -485,8 +489,9 @@ export function SeniorHomeIntelligence({
           </Link>
         </p>
         <p className="hub-kicker">
-          Snapshot {intel.homepagePublicationVersion}. Payload {intel.payloadFingerprint.slice(0, 12)}…
-          Generated from {intel.contractVersion} / {intel.sourceFingerprint.slice(0, 12)}…
+          Snapshot {intel.homepagePublicationVersion}. Payload{" "}
+          {intel.payloadFingerprint.slice(0, 12)}… Generated from {intel.contractVersion} /{" "}
+          {intel.sourceFingerprint.slice(0, 12)}…
         </p>
       </section>
     </div>

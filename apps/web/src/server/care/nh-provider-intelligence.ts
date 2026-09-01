@@ -235,8 +235,7 @@ export async function getNursingHomeProviderIntelligence(
         availability: snap.overall_rating === null ? "NOT_REPORTED" : "AVAILABLE",
       }
     : null;
-  const status =
-    projection === "KNOWN_NOT_CURRENT" ? "PARTIAL" : snap ? "READY" : "PARTIAL";
+  const status = projection === "KNOWN_NOT_CURRENT" ? "PARTIAL" : snap ? "READY" : "PARTIAL";
   const intel: NursingHomeProviderIntelligence = {
     contract_version: PROVIDER_INTEL_VERSION,
     canonical_id: identity.identifier_value,

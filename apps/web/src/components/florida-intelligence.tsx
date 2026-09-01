@@ -14,7 +14,10 @@ function Stat({ label, value, note }: { label: string; value: string; note?: str
 function Bar({ percent }: { percent: number }) {
   return (
     <span className="hub-bar" aria-hidden="true">
-      <span className="hub-bar__fill" style={{ width: `${Math.min(100, Math.max(0, percent))}%` }} />
+      <span
+        className="hub-bar__fill"
+        style={{ width: `${Math.min(100, Math.max(0, percent))}%` }}
+      />
     </span>
   );
 }
@@ -31,7 +34,13 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
     ["Final order", r.families.final_order, r.coverage.final_order],
     ["Emergency action", r.families.emergency_action, r.coverage.emergency_action],
   ] as const;
-  const classCards = [intel.classes.nh, intel.classes.alf, intel.classes.afch, intel.classes.hha, intel.classes.hospice];
+  const classCards = [
+    intel.classes.nh,
+    intel.classes.alf,
+    intel.classes.afch,
+    intel.classes.hha,
+    intel.classes.hospice,
+  ];
   const eventShare = (100 * intel.providers.withConnectedEvent) / intel.providers.current;
 
   return (
@@ -41,10 +50,10 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
           <p className="eyebrow">CURRENT AHCA identities</p>
           <h2 id="fl-scale-title">Five Florida provider classes, not one senior-care total</h2>
           <p>
-            SeniorTrustHub tracks {formatHubCount(intel.providers.current)} CURRENT AHCA P0 identities.
-            CURRENT means the provider appears in the FloridaHealthFinder Active/Open locator. It does
-            not mean good standing, fully licensed, or no enforcement. Raw AHCA license status is a
-            separate field.
+            SeniorTrustHub tracks {formatHubCount(intel.providers.current)} CURRENT AHCA P0
+            identities. CURRENT means the provider appears in the FloridaHealthFinder Active/Open
+            locator. It does not mean good standing, fully licensed, or no enforcement. Raw AHCA
+            license status is a separate field.
           </p>
         </div>
         <div className="hub-stat-grid">
@@ -71,21 +80,11 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
               <h3>{formatHubCount(card.current)} current</h3>
               <p>{card.identity}</p>
               <ul>
-                <li>
-                  Florida regulatory observations: {formatHubCount(card.observations)}
-                </li>
-                <li>
-                  Providers with ≥1 inspection: {formatHubCount(card.inspectionProviders)}
-                </li>
-                <li>
-                  Providers with ≥1 deficiency: {formatHubCount(card.deficiencyProviders)}
-                </li>
-                <li>
-                  Providers with ≥1 final order: {formatHubCount(card.finalOrderProviders)}
-                </li>
-                <li>
-                  Providers with ≥1 fine: {formatHubCount(card.fineProviders)}
-                </li>
+                <li>Florida regulatory observations: {formatHubCount(card.observations)}</li>
+                <li>Providers with ≥1 inspection: {formatHubCount(card.inspectionProviders)}</li>
+                <li>Providers with ≥1 deficiency: {formatHubCount(card.deficiencyProviders)}</li>
+                <li>Providers with ≥1 final order: {formatHubCount(card.finalOrderProviders)}</li>
+                <li>Providers with ≥1 fine: {formatHubCount(card.fineProviders)}</li>
               </ul>
               {card.notes.map((note) => (
                 <p className="hub-stat__note" key={note}>
@@ -128,7 +127,9 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
         </div>
         <div className="hub-table-scroll">
           <table className="hub-table hub-table--compact">
-            <caption>Florida regulatory families: observations vs distinct CURRENT providers</caption>
+            <caption>
+              Florida regulatory families: observations vs distinct CURRENT providers
+            </caption>
             <thead>
               <tr>
                 <th scope="col">Evidence family</th>
@@ -148,8 +149,8 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
           </table>
         </div>
         <p>
-          {coverageShare(intel.providers.withConnectedEvent, intel.providers.current)} have at
-          least one connected Florida regulatory observation.
+          {coverageShare(intel.providers.withConnectedEvent, intel.providers.current)} have at least
+          one connected Florida regulatory observation.
         </p>
         <p>
           {formatHubCount(intel.providers.withoutConnectedEvent)} CURRENT providers have{" "}
@@ -178,8 +179,8 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
         <div className="section-heading">
           <h2 id="fl-status-title">Locator CURRENT vs raw AHCA license status</h2>
           <p>
-            Every row below is still CURRENT in the Active/Open locator. Raw status can still be
-            IN REVIEW, PROVISIONAL, IN LITIGATION, INACTIVE, SUSPENDED, or CONDITIONAL.
+            Every row below is still CURRENT in the Active/Open locator. Raw status can still be IN
+            REVIEW, PROVISIONAL, IN LITIGATION, INACTIVE, SUSPENDED, or CONDITIONAL.
           </p>
         </div>
         <div className="hub-table-scroll">
@@ -209,9 +210,9 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
           <p>
             Limited Mental Health (LMH), Limited Nursing Services (LNS), and Extended Congregate
             Care (ECC) are add-on credentials on ALF licenses. They are not provider classes and
-            they are not Memory Care licenses. SeniorTrustHub does not publish a Florida Memory
-            Care facility count because no authoritative statewide Memory Care class denominator
-            is stored.
+            they are not Memory Care licenses. SeniorTrustHub does not publish a Florida Memory Care
+            facility count because no authoritative statewide Memory Care class denominator is
+            stored.
           </p>
         </div>
         <div className="hub-stat-grid">
@@ -225,15 +226,27 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
         <div className="section-heading">
           <h2 id="fl-cap-title">Licensed capacity (not occupancy)</h2>
           <p>
-            Residential licensed-capacity sums from AHCA P0 rows. Home Health capacity is not
-            shown (source stores NULL). Hospice capacity is incomplete and is not shown as a
-            statewide total.
+            Residential licensed-capacity sums from AHCA P0 rows. Home Health capacity is not shown
+            (source stores NULL). Hospice capacity is incomplete and is not shown as a statewide
+            total.
           </p>
         </div>
         <div className="hub-stat-grid">
-          <Stat label="ALF licensed capacity" value={formatHubCount(intel.capacity.alf)} note="3,016 facilities" />
-          <Stat label="AFCH licensed capacity" value={formatHubCount(intel.capacity.afch)} note="228 homes" />
-          <Stat label="NH licensed beds (AHCA)" value={formatHubCount(intel.capacity.nh)} note="694 overlays" />
+          <Stat
+            label="ALF licensed capacity"
+            value={formatHubCount(intel.capacity.alf)}
+            note="3,016 facilities"
+          />
+          <Stat
+            label="AFCH licensed capacity"
+            value={formatHubCount(intel.capacity.afch)}
+            note="228 homes"
+          />
+          <Stat
+            label="NH licensed beds (AHCA)"
+            value={formatHubCount(intel.capacity.nh)}
+            note="694 overlays"
+          />
         </div>
       </section>
 
@@ -242,10 +255,10 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
           <p className="eyebrow">CMS / federal</p>
           <h2 id="fl-cms-title">National CMS Florida overlay (aggregate only)</h2>
           <p>
-            These CMS Florida denominators are independently established. They are not row-linked
-            to AHCA identities. Confirmed AHCA↔CMS links remain {intel.cmsConfirmedLinks}. Do not
-            add AHCA and CMS inspection totals; the AHCA Nursing Home F/K feed was a federal
-            repost and was excluded.
+            These CMS Florida denominators are independently established. They are not row-linked to
+            AHCA identities. Confirmed AHCA↔CMS links remain {intel.cmsConfirmedLinks}. Do not add
+            AHCA and CMS inspection totals; the AHCA Nursing Home F/K feed was a federal repost and
+            was excluded.
           </p>
         </div>
         <div className="hub-class-grid">
@@ -259,7 +272,10 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
             <p className="hub-kicker">CMS overall star among reported Florida NH</p>
             <div className="hub-table-scroll">
               <table className="hub-table hub-table--compact">
-                <caption>CMS overall star among reported Florida nursing homes. Missing is not a zero score.</caption>
+                <caption>
+                  CMS overall star among reported Florida nursing homes. Missing is not a zero
+                  score.
+                </caption>
                 <thead>
                   <tr>
                     <th scope="col">CMS stars</th>
@@ -300,8 +316,8 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
             <p>
               Not equivalent to {formatHubCount(intel.classes.hha.current)} AHCA Home Health
               licenses. Quality of Patient Care star is missing for{" "}
-              {formatHubCount(intel.cmsOverlay.homeHealth.qualityStarMissing)} CMS Florida
-              agencies. Missing is not zero.
+              {formatHubCount(intel.cmsOverlay.homeHealth.qualityStarMissing)} CMS Florida agencies.
+              Missing is not zero.
             </p>
             <Link className="text-link" href="/home-health">
               Research CMS Home Health <span aria-hidden="true">→</span>
@@ -326,13 +342,15 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
           <h2 id="fl-geo-title">Geography (kinds kept separate)</h2>
           <p>
             Facility county is a location. Office county is not a service area. Served-county
-            evidence is only shown where AHCA reported it. This is not a county Intelligence
-            product and not a market-activity ranking.
+            evidence is only shown where AHCA reported it. This is not a county Intelligence product
+            and not a market-activity ranking.
           </p>
         </div>
         <div className="hub-table-scroll">
           <table className="hub-table hub-table--compact">
-            <caption>ALF facility locations by county (top 12 of 55 counties with an ALF location)</caption>
+            <caption>
+              ALF facility locations by county (top 12 of 55 counties with an ALF location)
+            </caption>
             <thead>
               <tr>
                 <th scope="col">County</th>
@@ -402,8 +420,14 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
           </p>
         </div>
         <ul className="hub-plain-list">
-          <li>Street address: {coverageShare(intel.contacts.streetAddressProviders, intel.providers.current)}</li>
-          <li>Mailing address: {coverageShare(intel.contacts.mailingAddressProviders, intel.providers.current)}</li>
+          <li>
+            Street address:{" "}
+            {coverageShare(intel.contacts.streetAddressProviders, intel.providers.current)}
+          </li>
+          <li>
+            Mailing address:{" "}
+            {coverageShare(intel.contacts.mailingAddressProviders, intel.providers.current)}
+          </li>
           <li>Phone: {formatHubCount(intel.contacts.phoneProviders)} providers</li>
           <li>Owner/licensee: {formatHubCount(intel.contacts.ownerProviders)}</li>
           <li>Administrator: {formatHubCount(intel.contacts.administratorProviders)}</li>
@@ -416,8 +440,8 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
         <div className="section-heading">
           <h2 id="fl-method-title">Sources &amp; methodology</h2>
           <p>
-            Source as-of is the official page clock. Retrieved-at is when SeniorTrustHub fetched
-            the record. They are not the same.
+            Source as-of is the official page clock. Retrieved-at is when SeniorTrustHub fetched the
+            record. They are not the same.
           </p>
         </div>
         <div className="hub-table-scroll">

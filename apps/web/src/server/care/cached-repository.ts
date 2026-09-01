@@ -30,8 +30,6 @@ export const getPublishedFacilityHistoryForPage = cache(getPublishedFacilityHist
 export const getOwnershipOperationSummaryForPage = cache(getOwnershipOperationSummary);
 export const getPublishedOrganizationPortfolioForPage = cache(getPublishedOrganizationPortfolio);
 export const getNursingHomeEvidenceForPage = cache(getNursingHomeEvidence);
-export const getNursingHomeProviderIntelligenceForPage = cache(
-  getNursingHomeProviderIntelligence,
-);
+export const getNursingHomeProviderIntelligenceForPage = cache(getNursingHomeProviderIntelligence);
 export const getHomeHealthProviderIntelligenceForPage = cache(getHomeHealthProviderIntelligence);
 export const getHospiceProviderIntelligenceForPage = cache(getHospiceProviderIntelligence);

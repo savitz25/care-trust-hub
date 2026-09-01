@@ -97,7 +97,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
     const paths = getFloridaProviderSitemapPaths();
     if (!paths.length) return new Response("Not found", { status: 404 });
     return response(
-      urlset(paths.map((path) => `<url><loc>${new URL(path, productionOrigin).href}</loc></url>`).join("")),
+      urlset(
+        paths
+          .map((path) => `<url><loc>${new URL(path, productionOrigin).href}</loc></url>`)
+          .join(""),
+      ),
     );
   }
   if (file === "home-health.xml") {

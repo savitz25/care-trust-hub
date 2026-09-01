@@ -32,9 +32,7 @@ export function AgencyProfilePage({
               {intel.provider_type === "home_health" ? "CMS Home Health agency" : "CMS Hospice"}
             </p>
             <h1>{name}</h1>
-            <p className="lede">
-              {[office.city, office.state].filter(Boolean).join(", ")}
-            </p>
+            <p className="lede">{[office.city, office.state].filter(Boolean).join(", ")}</p>
             <div className="facility-hero__meta">
               <span>
                 {identifierLabel} {intel.canonical_id}

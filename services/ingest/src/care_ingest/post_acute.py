@@ -50,9 +50,7 @@ HH_AGENCY_REQUIRED = frozenset(
 )
 HH_HHCAHPS_REQUIRED = frozenset({"CMS Certification Number (CCN)"})
 ZIP_REQUIRED = frozenset({"CMS Certification Number (CCN)", "ZIP Code"})
-HOSPICE_GI_REQUIRED = frozenset(
-    {"CMS Certification Number (CCN)", "Facility Name", "State"}
-)
+HOSPICE_GI_REQUIRED = frozenset({"CMS Certification Number (CCN)", "Facility Name", "State"})
 LONG_QUALITY_REQUIRED = frozenset(
     {"CMS Certification Number (CCN)", "Measure Code", "Measure Name"}
 )
@@ -121,12 +119,16 @@ def parse_offered(raw: str | None) -> tuple[bool | None, str]:
     return None, value
 
 
-def classify_availability(score: str | None, footnote: str | None) -> tuple[str, Decimal | None, str | None]:
+def classify_availability(
+    score: str | None, footnote: str | None
+) -> tuple[str, Decimal | None, str | None]:
     text = (score or "").strip()
     note = (footnote or "").strip() or None
     if not text:
         lowered = (note or "").lower()
-        if note and any(token in lowered for token in ("suppressed", "too small", "not enough", "insufficient")):
+        if note and any(
+            token in lowered for token in ("suppressed", "too small", "not enough", "insufficient")
+        ):
             return "INSUFFICIENT_DATA", None, note
         if note:
             return "SUPPRESSED", None, note
@@ -341,7 +343,9 @@ def _hh_agency(
             "telephone": (row.get("Telephone Number") or "").strip() or None,
             "ownership_type": (row.get("Type of Ownership") or "").strip() or None,
             "certification_date": parse_date(row.get("Certification Date")),
-            "quality_of_patient_care_star": parse_star(row.get("Quality of patient care star rating")),
+            "quality_of_patient_care_star": parse_star(
+                row.get("Quality of patient care star rating")
+            ),
             "quality_of_patient_care_star_footnote": (
                 row.get("Footnote for quality of patient care star rating") or ""
             ).strip()
@@ -371,8 +375,12 @@ def _hh_agency(
     for official in HH_QUALITY_SCORES:
         footnote_key = f"Footnote for {official}"
         if official not in row and official.startswith("Changes in skin"):
-            footnote_key = "Footnote Changes in skin integrity post-acute care: pressure ulcer/injury"
-        availability, score, footnote = classify_availability(row.get(official), row.get(footnote_key))
+            footnote_key = (
+                "Footnote Changes in skin integrity post-acute care: pressure ulcer/injury"
+            )
+        availability, score, footnote = classify_availability(
+            row.get(official), row.get(footnote_key)
+        )
         records.append(
             {
                 "record_kind": "quality",
@@ -394,7 +402,9 @@ def _hh_agency(
     return records
 
 
-def _hhcahps(row: dict[str, str], ccn: str, locator: str, manifest: ReleaseManifest) -> list[dict[str, Any]]:
+def _hhcahps(
+    row: dict[str, str], ccn: str, locator: str, manifest: ReleaseManifest
+) -> list[dict[str, Any]]:
     del manifest
     records: list[dict[str, Any]] = []
     summary_star = parse_star(row.get("HHCAHPS Survey Summary Star Rating"))
@@ -448,7 +458,9 @@ def _hhcahps(row: dict[str, str], ccn: str, locator: str, manifest: ReleaseManif
         ),
     ]
     for code, official, footnote_key in percent_fields:
-        availability, score, footnote = classify_availability(row.get(official), row.get(footnote_key))
+        availability, score, footnote = classify_availability(
+            row.get(official), row.get(footnote_key)
+        )
         records.append(
             {
                 "record_kind": "quality",

@@ -3,7 +3,12 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { TrustStrip } from "@/components/evidence";
 import { FloridaProviderProfileView } from "@/components/florida-provider-profile";
 import { StructuredData } from "@/components/structured-data";
-import { canonicalUrl, isPublicLaunchEnabled, productionOrigin, publicRobots } from "@/config/deployment";
+import {
+  canonicalUrl,
+  isPublicLaunchEnabled,
+  productionOrigin,
+  publicRobots,
+} from "@/config/deployment";
 import {
   isFloridaCohortIndexable,
   loadPublishedFloridaProfile,
@@ -72,7 +77,12 @@ export default async function FloridaPublishedProviderPage({ params }: Props) {
                       name: "Florida",
                       item: new URL("/florida", productionOrigin).href,
                     },
-                    { "@type": "ListItem", position: 3, name: payload.identity.official_name, item: pageUrl },
+                    {
+                      "@type": "ListItem",
+                      position: 3,
+                      name: payload.identity.official_name,
+                      item: pageUrl,
+                    },
                   ],
                 },
                 {

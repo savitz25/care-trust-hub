@@ -8,10 +8,7 @@ import {
 import { isPublicLaunchEnabled } from "@/config/deployment";
 import manifest from "@/data/florida-provider-publication.json";
 import { getCareDatabasePool } from "./db";
-import {
-  isFloridaAlfAfchPublicationEnabled,
-  isFloridaProviderIndexEnabled,
-} from "./feature-flags";
+import { isFloridaAlfAfchPublicationEnabled, isFloridaProviderIndexEnabled } from "./feature-flags";
 
 export type FloridaPublicationEntry = (typeof manifest.profiles)[number];
 
@@ -126,7 +123,10 @@ export function resolveFloridaPublicationRoute(input: {
   fileNumber: string;
   slug: string;
   publicationEnabled: boolean;
-}): { status: "not_found" } | { status: "redirect"; path: string } | { status: "ok"; entry: FloridaPublicationEntry } {
+}):
+  | { status: "not_found" }
+  | { status: "redirect"; path: string }
+  | { status: "ok"; entry: FloridaPublicationEntry } {
   if (!input.publicationEnabled) return { status: "not_found" };
   if (!isFloridaPhase1PublicKind(input.kind)) return { status: "not_found" };
   const entry = findFloridaPublicationEntry(input.kind, input.fileNumber);

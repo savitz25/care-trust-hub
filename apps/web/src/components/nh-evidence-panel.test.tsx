@@ -50,7 +50,9 @@ describe("NursingHomeEvidencePanel", () => {
     render(<NursingHomeEvidencePanel evidence={evidence} />);
     expect(screen.getByText("Special Focus Facility candidate")).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Special Focus Facility" })).toBeNull();
-    expect(screen.getByText(/not the same as being designated a Special Focus Facility/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/not the same as being designated a Special Focus Facility/),
+    ).toBeInTheDocument();
   });
 
   it("does not call the abuse icon an abusive facility", () => {

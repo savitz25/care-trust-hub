@@ -66,7 +66,9 @@ function familyTitle(family: AgencyQualityFamily["family"]): string {
 
 function FamilyList({ families }: { families: AgencyQualityFamily[] }) {
   if (families.length === 0) {
-    return <p>CMS measure observations are not reported for this provider in the loaded extracts.</p>;
+    return (
+      <p>CMS measure observations are not reported for this provider in the loaded extracts.</p>
+    );
   }
   return (
     <>
@@ -89,9 +91,7 @@ function FamilyList({ families }: { families: AgencyQualityFamily[] }) {
                     measure.score_text,
                   )}
                 </span>
-                {measure.star_rating != null ? (
-                  <CmsStarRating value={measure.star_rating} />
-                ) : null}
+                {measure.star_rating != null ? <CmsStarRating value={measure.star_rating} /> : null}
               </li>
             ))}
           </ul>
@@ -204,8 +204,12 @@ export function HomeHealthProfileIntelligence({
   const star =
     intel.home_health?.cms_quality_of_patient_care_star ??
     intel.quality_summary.cms_quality_of_patient_care_star;
-  const qualityFamily = intel.quality_summary.families.filter((item) => item.family === "hh_quality");
-  const surveyFamily = intel.quality_summary.families.filter((item) => item.family === "hh_hhcahps");
+  const qualityFamily = intel.quality_summary.families.filter(
+    (item) => item.family === "hh_quality",
+  );
+  const surveyFamily = intel.quality_summary.families.filter(
+    (item) => item.family === "hh_hhcahps",
+  );
   return (
     <div className="nh-intel">
       {banner ? (
@@ -278,7 +282,11 @@ export function HomeHealthProfileIntelligence({
             {intel.services.map((service) => (
               <li key={service.code}>
                 {service.official_field}:{" "}
-                {service.offered == null ? "Not reported" : service.offered ? "Offered" : "Not offered"}
+                {service.offered == null
+                  ? "Not reported"
+                  : service.offered
+                    ? "Offered"
+                    : "Not offered"}
               </li>
             ))}
           </ul>

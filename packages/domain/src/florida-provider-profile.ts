@@ -78,7 +78,9 @@ export function isPublicCandidateContactKind(kind: string): boolean {
   return (PUBLIC_CANDIDATE_CONTACTS as readonly string[]).includes(kind);
 }
 
-export function publicFloridaContacts<T extends { contact_kind: string }>(contacts: readonly T[]): T[] {
+export function publicFloridaContacts<T extends { contact_kind: string }>(
+  contacts: readonly T[],
+): T[] {
   return contacts.filter((contact) => isPublicCandidateContactKind(contact.contact_kind));
 }
 

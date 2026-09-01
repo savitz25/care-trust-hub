@@ -21,10 +21,7 @@ export function findFloridaQaProfile(
 ): FloridaQaProfile | null {
   return (
     qaCohort.profiles.find(
-      (p) =>
-        p.profile_kind === kind &&
-        p.ahca_file_number === fileNumber &&
-        p.name_slug === slug,
+      (p) => p.profile_kind === kind && p.ahca_file_number === fileNumber && p.name_slug === slug,
     ) ?? null
   );
 }

@@ -27,14 +27,14 @@ python -m care_ingest derive-directory-status
 
 ## PI raw-field classification (this task)
 
-| Field | Decision |
-| --- | --- |
-| Special Focus Status | **P0 — normalized** |
-| Abuse Icon | **P0 — normalized** |
+| Field                                           | Decision                                                                    |
+| ----------------------------------------------- | --------------------------------------------------------------------------- |
+| Special Focus Status                            | **P0 — normalized**                                                         |
+| Abuse Icon                                      | **P0 — normalized**                                                         |
 | Turnover / RN turnover / administrator turnover | **P1** — keep raw; PBJ already covers staffing history with clearer periods |
-| Chain ID / chain name on PI | **LOW VALUE / REDUNDANT** — official chain dataset already ingested |
-| Reported HPRD columns on PI | **LOW VALUE / REDUNDANT** vs PBJ |
-| Date first approved | **P1** |
+| Chain ID / chain name on PI                     | **LOW VALUE / REDUNDANT** — official chain dataset already ingested         |
+| Reported HPRD columns on PI                     | **LOW VALUE / REDUNDANT** vs PBJ                                            |
+| Date first approved                             | **P1**                                                                      |
 
 ## Terminated / missing policy
 

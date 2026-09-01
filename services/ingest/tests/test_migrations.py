@@ -65,9 +65,7 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "ALTER TABLE organization" not in portfolio
     assert "DROP TABLE" not in portfolio
 
-    florida30 = (migrations / "0030_florida_state_provider_profile.sql").read_text(
-        encoding="utf-8"
-    )
+    florida30 = (migrations / "0030_florida_state_provider_profile.sql").read_text(encoding="utf-8")
     assert "CREATE TABLE state_provider_profile (" in florida30
     assert "internal_only" in florida30
     assert "fl-sen-provider-v1" in florida30

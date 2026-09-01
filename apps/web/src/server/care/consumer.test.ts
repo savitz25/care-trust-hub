@@ -57,9 +57,7 @@ describe("real provider consumer mapping", () => {
     expect(hospiceResearchDocumentTitle("Example Hospice")).toBe(
       "Example Hospice — CMS Hospice Quality, Ownership & Research",
     );
-    expect(hospiceHref("017000", "Example Hospice")).toBe(
-      "/hospice/cms/017000/example-hospice",
-    );
+    expect(hospiceHref("017000", "Example Hospice")).toBe("/hospice/cms/017000/example-hospice");
     expect(homeHealthHref("017000", "Example HH")).toBe("/home-health/cms/017000/example-hh");
   });
 

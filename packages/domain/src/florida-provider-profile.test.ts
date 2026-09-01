@@ -69,7 +69,9 @@ describe("Florida provider profile contract", () => {
         { contact_kind: "other_named_party" },
       ]).map((c) => c.contact_kind),
     ).toEqual(["phone"]);
-    expect(inspectionDisplayLabel("inspection", "Complaint")).toBe("Complaint-triggered inspection");
+    expect(inspectionDisplayLabel("inspection", "Complaint")).toBe(
+      "Complaint-triggered inspection",
+    );
     expect(inspectionDisplayLabel("inspection", "Complaint")).not.toMatch(/substantiated/i);
   });
 });

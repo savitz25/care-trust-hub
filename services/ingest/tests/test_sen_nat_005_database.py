@@ -118,7 +118,8 @@ def test_freshness_view_is_queryable() -> None:
     with _connect() as connection:
         count = connection.execute("SELECT count(*) FROM cms_refresh_source_policy").fetchone()[0]
         connection.execute("SELECT dataset_key, freshness_band FROM cms_source_freshness LIMIT 1")
-    assert count == 13
+    # 13 nursing-home policies plus 11 accepted Home Health/Hospice policies.
+    assert count == 24
 
 
 def test_check_mode_persists_parent_and_source_runs(tmp_path) -> None:

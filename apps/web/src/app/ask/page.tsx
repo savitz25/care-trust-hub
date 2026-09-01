@@ -37,14 +37,25 @@ export default async function SeniorAskPage({
         <p className="eyebrow">Ask SeniorTrustHub</p>
         <h1>Structured senior-care research</h1>
         <p className="lede">
-          Natural language becomes a deterministic query over published CMS directories. Classes stay
-          separate. This is not a chatbot and not a “best nursing home” ranking.
+          Natural language becomes a deterministic query over published CMS directories. Classes
+          stay separate. This is not a chatbot and not a “best nursing home” ranking.
         </p>
       </header>
-      <form className="senior-ask__form" action="/ask" method="get" role="search" aria-label="Ask SeniorTrustHub">
+      <form
+        className="senior-ask__form"
+        action="/ask"
+        method="get"
+        role="search"
+        aria-label="Ask SeniorTrustHub"
+      >
         <label htmlFor="senior-ask-q">What do you want to research?</label>
         <div className="senior-ask__form-row">
-          <input id="senior-ask-q" name="q" defaultValue={q} placeholder="Show nursing homes in Florida." />
+          <input
+            id="senior-ask-q"
+            name="q"
+            defaultValue={q}
+            placeholder="Show nursing homes in Florida."
+          />
           <button className="button button--primary" type="submit">
             Research
           </button>

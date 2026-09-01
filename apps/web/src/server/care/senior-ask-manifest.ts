@@ -16,7 +16,16 @@ export const SENIOR_ASK_CAPABILITY_MANIFEST = {
     },
   },
   evidence: {
-    nursing_home: ["cms_overall_stars", "staffing_stars", "inspection_stars", "deficiencies", "penalties", "ownership", "chow", "pbj_hprd"],
+    nursing_home: [
+      "cms_overall_stars",
+      "staffing_stars",
+      "inspection_stars",
+      "deficiencies",
+      "penalties",
+      "ownership",
+      "chow",
+      "pbj_hprd",
+    ],
     home_health: ["quality_of_patient_care_stars", "hhcahps", "ownership_presence"],
     hospice: ["cahps", "hospice_quality_presence"],
   },

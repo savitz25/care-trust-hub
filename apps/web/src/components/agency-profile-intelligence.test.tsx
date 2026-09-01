@@ -179,7 +179,9 @@ describe("agency profile intelligence", () => {
     expect(screen.getAllByText("Not reported").length).toBeGreaterThan(0);
     expect(screen.queryByText(/Trust Score/i)).toBeNull();
     expect(screen.queryByText(/was sold/i)).toBeNull();
-    expect(screen.getAllByText(/not proof that ownership never changed/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/not proof that ownership never changed/i).length).toBeGreaterThan(
+      0,
+    );
     expect(screen.getByText(/LONG EXAMPLE HOME HEALTH HOLDINGS LLC/)).toBeTruthy();
   });
 

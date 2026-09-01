@@ -43,9 +43,9 @@ describe("provider intelligence presentation", () => {
     expect(hh.toLowerCase()).not.toContain("never changed ownership");
     expect(hh.toLowerCase()).not.toContain("sold");
     expect(hospice.toLowerCase()).not.toContain("closed");
-    expect(isHomeHealthIntelV1({ contract_version: "provider-intel-v1", provider_type: "nursing_home" })).toBe(
-      false,
-    );
+    expect(
+      isHomeHealthIntelV1({ contract_version: "provider-intel-v1", provider_type: "nursing_home" }),
+    ).toBe(false);
     expect(
       isHospiceIntelV1({
         contract_version: "provider-intel-v1",
@@ -60,13 +60,13 @@ describe("provider intelligence presentation", () => {
     expect(cmsMeasureAvailabilityCopy("SUPPRESSED", 0, null)).toBe("Suppressed");
     expect(cmsMeasureAvailabilityCopy("INSUFFICIENT_DATA", null, null)).toBe("Insufficient data");
     expect(cmsMeasureAvailabilityCopy("REPORTED", null, null)).toBe("Not reported");
-    expect(agencyDirectoryBanner("hospice", "EVIDENCE_ONLY")?.toLowerCase()).not.toMatch(/\bclosed\b/);
+    expect(agencyDirectoryBanner("hospice", "EVIDENCE_ONLY")?.toLowerCase()).not.toMatch(
+      /\bclosed\b/,
+    );
   });
 
   it("reports party caps without implying a smaller total", () => {
-    expect(partyCapCopy(25, 47)).toBe(
-      "Showing 25 of 47 relationships from CMS/PECOS evidence.",
-    );
+    expect(partyCapCopy(25, 47)).toBe("Showing 25 of 47 relationships from CMS/PECOS evidence.");
     expect(partyCapCopy(3, 3)).toBeNull();
   });
 

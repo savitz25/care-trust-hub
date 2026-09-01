@@ -54,11 +54,7 @@ function PartyList({
   );
 }
 
-export function NhProfileIntelligence({
-  intel,
-}: {
-  intel: NursingHomeProviderIntelligence;
-}) {
+export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderIntelligence }) {
   if (intel.contract_version !== "provider-intel-v1") return null;
   const stars = intel.quality_summary.cms_stars;
   const flags = intel.quality_summary.nh_evidence_flags;

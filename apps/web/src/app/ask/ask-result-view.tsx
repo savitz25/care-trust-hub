@@ -159,7 +159,9 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
           </div>
           <div>
             <dt>Official as-of</dt>
-            <dd>{result.provenance.officialAsOf ?? "See specialist snapshot on the linked report"}</dd>
+            <dd>
+              {result.provenance.officialAsOf ?? "See specialist snapshot on the linked report"}
+            </dd>
           </div>
           <div>
             <dt>Geography meaning</dt>

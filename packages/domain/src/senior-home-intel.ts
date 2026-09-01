@@ -13,7 +13,12 @@ export const HOME_SNAPSHOT_CONTRACT = "trusthub-intel-snapshot-v1";
 
 export type HomeStoryType = "BENCHMARK" | "CHANGE" | "GAP";
 export type HomeChartType = "composition" | "coverage" | "distribution";
-export type CoverageStatus = "strong" | "partial" | "limited" | "unavailable" | "not_yet_researched";
+export type CoverageStatus =
+  | "strong"
+  | "partial"
+  | "limited"
+  | "unavailable"
+  | "not_yet_researched";
 
 export interface HomeTraceMetric {
   id: string;
@@ -23,7 +28,13 @@ export interface HomeTraceMetric {
   unit: "count" | "percent" | "label";
   numerator: number | null;
   denominator: number | null;
-  providerClass: "nursing_home" | "home_health" | "hospice" | "ownership_graph" | "cross_class" | "florida_state";
+  providerClass:
+    | "nursing_home"
+    | "home_health"
+    | "hospice"
+    | "ownership_graph"
+    | "cross_class"
+    | "florida_state";
   definition: string;
   components: Array<{ label: string; value: string; payloadKey: string }>;
   sourceIds: string[];
@@ -139,7 +150,10 @@ function share(part: number, whole: number): string {
   return `${part.toLocaleString("en-US")} of ${whole.toLocaleString("en-US")} (${pct(part, whole).toFixed(1)}%)`;
 }
 
-function sourceDate(sources: HubSourceRow[], key: string): { officialAsOf: string | null; retrievedAt: string | null } {
+function sourceDate(
+  sources: HubSourceRow[],
+  key: string,
+): { officialAsOf: string | null; retrievedAt: string | null } {
   const row = sources.find((item) => item.datasetKey === key);
   return {
     officialAsOf: row?.sourceModifiedAt?.slice(0, 10) ?? row?.sourcePeriod ?? null,
@@ -184,7 +198,11 @@ export function buildSeniorHomeIntel(input: {
     hospice: 0,
   };
   const nhMax = Math.max(...national.geography.map((row) => row.nursingHomes), 1);
-  const officialAsOf = latest([nhDates.officialAsOf, hhDates.officialAsOf, hospiceDates.officialAsOf]);
+  const officialAsOf = latest([
+    nhDates.officialAsOf,
+    hhDates.officialAsOf,
+    hospiceDates.officialAsOf,
+  ]);
   const retrievedAt = latest([nhDates.retrievedAt, hhDates.retrievedAt, hospiceDates.retrievedAt]);
 
   const stateOfRecord: HomeTraceMetric[] = [
@@ -197,10 +215,19 @@ export function buildSeniorHomeIntel(input: {
       numerator: nh.current,
       denominator: null,
       providerClass: "nursing_home",
-      definition: "Current CMS Nursing Home Provider Information directory identities. Identity is CMS CCN.",
+      definition:
+        "Current CMS Nursing Home Provider Information directory identities. Identity is CMS CCN.",
       components: [
-        { label: "Current directory", value: nh.current.toLocaleString("en-US"), payloadKey: "nursingHome.current" },
-        { label: "Known CCNs in research graph", value: nh.known.toLocaleString("en-US"), payloadKey: "nursingHome.known" },
+        {
+          label: "Current directory",
+          value: nh.current.toLocaleString("en-US"),
+          payloadKey: "nursingHome.current",
+        },
+        {
+          label: "Known CCNs in research graph",
+          value: nh.known.toLocaleString("en-US"),
+          payloadKey: "nursingHome.known",
+        },
       ],
       sourceIds: ["nursing-home-provider-information"],
       officialAsOf: nhDates.officialAsOf,
@@ -223,9 +250,14 @@ export function buildSeniorHomeIntel(input: {
       numerator: hh.current,
       denominator: null,
       providerClass: "home_health",
-      definition: "Current CMS Home Health Care Agencies directory identities. Identity is CMS Home Health CCN.",
+      definition:
+        "Current CMS Home Health Care Agencies directory identities. Identity is CMS Home Health CCN.",
       components: [
-        { label: "Current directory", value: hh.current.toLocaleString("en-US"), payloadKey: "homeHealth.current" },
+        {
+          label: "Current directory",
+          value: hh.current.toLocaleString("en-US"),
+          payloadKey: "homeHealth.current",
+        },
       ],
       sourceIds: ["home-health-care-agencies"],
       officialAsOf: hhDates.officialAsOf,
@@ -243,10 +275,19 @@ export function buildSeniorHomeIntel(input: {
       numerator: hospice.current,
       denominator: null,
       providerClass: "hospice",
-      definition: "Current CMS Hospice General Information directory identities. Identity is CMS Hospice CCN.",
+      definition:
+        "Current CMS Hospice General Information directory identities. Identity is CMS Hospice CCN.",
       components: [
-        { label: "Current GI directory", value: hospice.current.toLocaleString("en-US"), payloadKey: "hospice.current" },
-        { label: "Typed hospice identities", value: hospice.typed.toLocaleString("en-US"), payloadKey: "hospice.typed" },
+        {
+          label: "Current GI directory",
+          value: hospice.current.toLocaleString("en-US"),
+          payloadKey: "hospice.current",
+        },
+        {
+          label: "Typed hospice identities",
+          value: hospice.typed.toLocaleString("en-US"),
+          payloadKey: "hospice.typed",
+        },
         {
           label: "Quality-file-only identities",
           value: hospice.evidenceOnly.toLocaleString("en-US"),
@@ -258,7 +299,9 @@ export function buildSeniorHomeIntel(input: {
       retrievedAt: hospiceDates.retrievedAt,
       method: "GI current count. Typed minus GI equals evidence-only identities.",
       payloadKey: "hospice.current",
-      limitations: ["Evidence-only identities are not current GI providers and are not proof of closure."],
+      limitations: [
+        "Evidence-only identities are not current GI providers and are not proof of closure.",
+      ],
     },
     {
       id: "ownership-orgs",
@@ -287,7 +330,9 @@ export function buildSeniorHomeIntel(input: {
       retrievedAt: ownDates.retrievedAt,
       method: "Count of canonical organization nodes in senior-hub-intel-v1.",
       payloadKey: "ownership.organizations",
-      limitations: ["Organization count is not a provider-class universe and is not a quality finding."],
+      limitations: [
+        "Organization count is not a provider-class universe and is not a quality finding.",
+      ],
     },
     {
       id: "nh-chow",
@@ -300,7 +345,11 @@ export function buildSeniorHomeIntel(input: {
       providerClass: "nursing_home",
       definition: "CMS Skilled Nursing Facility Change of Ownership events in the research graph.",
       components: [
-        { label: "CHOW events", value: nh.chow.events.toLocaleString("en-US"), payloadKey: "nursingHome.chow.events" },
+        {
+          label: "CHOW events",
+          value: nh.chow.events.toLocaleString("en-US"),
+          payloadKey: "nursingHome.chow.events",
+        },
         {
           label: "Providers with CHOW history",
           value: nh.chow.providersWithHistory.toLocaleString("en-US"),
@@ -327,7 +376,8 @@ export function buildSeniorHomeIntel(input: {
       summary: `CMS currently lists ${nh.current.toLocaleString("en-US")} Nursing Homes, ${hh.current.toLocaleString("en-US")} Home Health agencies, and ${hospice.current.toLocaleString("en-US")} Hospice providers in separate directories. They use different identifiers and measures.`,
       chartType: "composition",
       chart: {
-        caption: "Current CMS directory identities by provider class. These are not one population.",
+        caption:
+          "Current CMS directory identities by provider class. These are not one population.",
         series: [
           { label: "Nursing Homes", value: nh.current, note: "CMS CCN" },
           { label: "Home Health", value: hh.current, note: "Home Health CCN" },
@@ -359,7 +409,8 @@ export function buildSeniorHomeIntel(input: {
       summary: `${share(nh.starDistribution.reported, nh.current)} current Nursing Homes have a CMS overall star. ${share(hh.starDistribution.reported, hh.current)} current Home Health agencies have a Quality of Patient Care star. Hospice has no CMS overall star in this directory.`,
       chartType: "coverage",
       chart: {
-        caption: "Share of the current class directory with a published CMS star of that class’s type.",
+        caption:
+          "Share of the current class directory with a published CMS star of that class’s type.",
         series: [
           {
             label: "Nursing Home overall star",
@@ -371,7 +422,11 @@ export function buildSeniorHomeIntel(input: {
             value: pct(hh.starDistribution.reported, hh.current),
             note: share(hh.starDistribution.reported, hh.current),
           },
-          { label: "Hospice overall star", value: 0, note: "Not a CMS overall-star program in this directory" },
+          {
+            label: "Hospice overall star",
+            value: 0,
+            note: "Not a CMS overall-star program in this directory",
+          },
         ],
         unit: "percent",
         max: 100,
@@ -466,7 +521,9 @@ export function buildSeniorHomeIntel(input: {
       display: share(hh.current, hh.current),
       status: "strong",
       method: "Current CMS Home Health directory.",
-      limitations: ["No national Home Health name-search directory is published on this hub yet; CCN research remains."],
+      limitations: [
+        "No national Home Health name-search directory is published on this hub yet; CCN research remains.",
+      ],
     },
     {
       family: "Identity",
@@ -544,9 +601,14 @@ export function buildSeniorHomeIntel(input: {
       numerator: national.regulatory.inspection.currentProvidersWithObservation,
       denominator: nh.current,
       display: share(national.regulatory.inspection.currentProvidersWithObservation, nh.current),
-      status: coverageStatus(national.regulatory.inspection.currentProvidersWithObservation, nh.current),
+      status: coverageStatus(
+        national.regulatory.inspection.currentProvidersWithObservation,
+        nh.current,
+      ),
       method: "Current Nursing Homes with at least one inspection observation.",
-      limitations: ["Inspection files are Nursing Home datasets, not Home Health or Hospice enforcement files."],
+      limitations: [
+        "Inspection files are Nursing Home datasets, not Home Health or Hospice enforcement files.",
+      ],
     },
     {
       family: "Regulatory history",
@@ -718,7 +780,9 @@ export function buildSeniorHomeIntel(input: {
   };
 }
 
-export function fingerprintHomeIntel(value: Omit<SeniorHomeIntel, "payloadFingerprint"> | SeniorHomeIntel): string {
+export function fingerprintHomeIntel(
+  value: Omit<SeniorHomeIntel, "payloadFingerprint"> | SeniorHomeIntel,
+): string {
   const copy = JSON.parse(JSON.stringify(value)) as Record<string, unknown>;
   delete copy.payloadFingerprint;
   if (copy.snapshotFoundation && typeof copy.snapshotFoundation === "object") {

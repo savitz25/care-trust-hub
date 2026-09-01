@@ -28,15 +28,14 @@ describe("Florida page publication", () => {
 
 describe("Florida Phase 1 public provider route", () => {
   it("fail-closes unpublished kinds and never emits rating structured data", () => {
-    const page = readFileSync(
-      join(here, "[kind]/[fileNumber]/[slug]/page.tsx"),
-      "utf8",
-    );
+    const page = readFileSync(join(here, "[kind]/[fileNumber]/[slug]/page.tsx"), "utf8");
     expect(page).toMatch(/loadPublishedFloridaProfile/);
     expect(page).toMatch(/notFound\(\)/);
     expect(page).toMatch(/publicRobots\(indexable\)/);
     expect(page).not.toMatch(/aggregateRating|ratingValue|reviewCount/);
-    expect(page).not.toMatch(/CARE_ENABLE_FLORIDA_PROVIDER_INDEX === "true" &&[\s\S]*publicRobots\(true\)/);
+    expect(page).not.toMatch(
+      /CARE_ENABLE_FLORIDA_PROVIDER_INDEX === "true" &&[\s\S]*publicRobots\(true\)/,
+    );
   });
 });
 

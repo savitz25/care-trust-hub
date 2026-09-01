@@ -156,7 +156,10 @@ export function FloridaProviderProfileView({
             }
           />
         </dl>
-        <p>Licensed capacity is a license figure. It is not occupancy, current residents, or available beds.</p>
+        <p>
+          Licensed capacity is a license figure. It is not occupancy, current residents, or
+          available beds.
+        </p>
       </section>
 
       <section aria-labelledby="fl-credentials">
@@ -174,8 +177,8 @@ export function FloridaProviderProfileView({
           </ul>
         )}
         <p className="hub-stat__note">
-          LMH, LNS, and ECC are specialty credentials. They are not Memory Care licenses, Memory Care
-          certification, or a Memory Care facility class.
+          LMH, LNS, and ECC are specialty credentials. They are not Memory Care licenses, Memory
+          Care certification, or a Memory Care facility class.
         </p>
       </section>
 
@@ -201,7 +204,10 @@ export function FloridaProviderProfileView({
 
       <section aria-labelledby="fl-geo">
         <h2 id="fl-geo">Facility location</h2>
-        <p>Facility county is location evidence. Mailing county and AHCA field office are not the facility location.</p>
+        <p>
+          Facility county is location evidence. Mailing county and AHCA field office are not the
+          facility location.
+        </p>
         <dl className="florida-profile-qa__facts">
           <Fact label="Street address" value={asText(street)} />
           <Fact
@@ -230,7 +236,10 @@ export function FloridaProviderProfileView({
             <Fact label="Connected observations" value={String(regulatory.observation_count)} />
             <Fact label="Inspection observations" value={String(regulatory.counts.inspection)} />
             <Fact label="Deficiency observations" value={String(regulatory.counts.deficiency)} />
-            <Fact label="Legal action observations" value={String(regulatory.counts.legal_action)} />
+            <Fact
+              label="Legal action observations"
+              value={String(regulatory.counts.legal_action)}
+            />
             <Fact label="Florida AHCA fine observations" value={String(regulatory.counts.fine)} />
             <Fact label="Final order observations" value={String(regulatory.counts.final_order)} />
             <Fact
@@ -300,7 +309,10 @@ export function FloridaProviderProfileView({
         </p>
         <dl className="florida-profile-qa__facts">
           <Fact label="Canonical research path" value={path} />
-          <Fact label="Provider source as of" value={asText(payload.sources.provider_source_as_of)} />
+          <Fact
+            label="Provider source as of"
+            value={asText(payload.sources.provider_source_as_of)}
+          />
           <Fact label="Retrieved at" value={asText(payload.sources.provider_retrieved_at)} />
           <Fact label="Adapter" value={asText(payload.sources.adapter_version)} />
         </dl>

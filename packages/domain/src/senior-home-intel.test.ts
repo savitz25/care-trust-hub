@@ -9,7 +9,10 @@ import {
   fingerprintHomeIntel,
   type SeniorHomeIntel,
 } from "./senior-home-intel";
-import { assertSeniorHubIntelligence, type SeniorNationalIntelligence } from "./senior-hub-intelligence";
+import {
+  assertSeniorHubIntelligence,
+  type SeniorNationalIntelligence,
+} from "./senior-hub-intelligence";
 
 const dir = dirname(fileURLToPath(import.meta.url));
 const national = assertSeniorHubIntelligence(
@@ -56,14 +59,20 @@ describe("senior-home-intel-v1", () => {
 
   it("uses benchmark/gap stories without ranking language", () => {
     const intel = build();
-    expect(intel.findings.map((item) => item.storyType).sort()).toEqual(["BENCHMARK", "GAP", "GAP"]);
+    expect(intel.findings.map((item) => item.storyType).sort()).toEqual([
+      "BENCHMARK",
+      "GAP",
+      "GAP",
+    ]);
     expect(JSON.stringify(intel)).not.toMatch(HOME_PROHIBITED_LANGUAGE);
     expect(intel.floridaPreview.href).toBe("/florida");
     expect(intel.floridaPreview.publishedAlfAfch).toBe(25);
     expect(intel.askMarket).toHaveLength(6);
     expect(intel.geography.some((row) => row.intelligenceHref === "/florida")).toBe(true);
-    expect(intel.geography.filter((row) => row.state !== "FL").every((row) => row.intelligenceHref === null)).toBe(
-      true,
-    );
+    expect(
+      intel.geography
+        .filter((row) => row.state !== "FL")
+        .every((row) => row.intelligenceHref === null),
+    ).toBe(true);
   });
 });

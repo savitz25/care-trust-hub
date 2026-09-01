@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FloridaProfileQaDetail } from "@/components/florida-profile-qa";
-import {
-  findFloridaQaProfile,
-  floridaInternalQaAllowed,
-} from "@/server/care/florida-internal-qa";
+import { findFloridaQaProfile, floridaInternalQaAllowed } from "@/server/care/florida-internal-qa";
 
 export const dynamic = "force-dynamic";
 

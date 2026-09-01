@@ -29,11 +29,15 @@ describe("senior homepage intelligence", () => {
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
       /understand senior care through public evidence/i,
     );
-    expect(document.body.textContent).toMatch(/Research senior care without being sold senior care/i);
+    expect(document.body.textContent).toMatch(
+      /Research senior care without being sold senior care/i,
+    );
     expect(screen.getAllByText("14,690").length).toBeGreaterThan(0);
     expect(screen.getAllByText("12,460").length).toBeGreaterThan(0);
     expect(screen.getAllByText("6,669").length).toBeGreaterThan(0);
-    expect(screen.getAllByRole("heading", { name: /three national evidence stories/i })).toHaveLength(1);
+    expect(
+      screen.getAllByRole("heading", { name: /three national evidence stories/i }),
+    ).toHaveLength(1);
     expect(screen.getAllByText(/explain this chart/i)).toHaveLength(3);
     expect(screen.getAllByText(/trace this number/i).length).toBeGreaterThanOrEqual(5);
     expect(document.body.textContent).toMatch(/where the record is incomplete/i);

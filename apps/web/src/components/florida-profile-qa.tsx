@@ -28,8 +28,8 @@ function asText(value: unknown, fallback = "Not recorded in acquired AHCA source
 export function FloridaProfileQaBanner() {
   return (
     <p className="florida-profile-qa__banner" role="status">
-      Internal QA only. These snapshots are not published, not in the sitemap, and not a ranking
-      or score.
+      Internal QA only. These snapshots are not published, not in the sitemap, and not a ranking or
+      score.
     </p>
   );
 }
@@ -100,7 +100,8 @@ export function FloridaProfileQaDetail({ profile }: { profile: FloridaQaProfile 
         <h1>{identity.official_name}</h1>
         <p className="lede">
           Locator status is CURRENT because the provider appears in the AHCA Active/Open locator.
-          CURRENT is not good standing. Raw AHCA status remains {asText(identity.license_status_raw)}.
+          CURRENT is not good standing. Raw AHCA status remains{" "}
+          {asText(identity.license_status_raw)}.
         </p>
       </header>
 
@@ -158,8 +159,8 @@ export function FloridaProfileQaDetail({ profile }: { profile: FloridaQaProfile 
           </ul>
         )}
         <p className="hub-stat__note">
-          LMH, LNS, and ECC remain specialty credentials. License numbers remain credentials.
-          Memory Care is not a Florida provider class.
+          LMH, LNS, and ECC remain specialty credentials. License numbers remain credentials. Memory
+          Care is not a Florida provider class.
         </p>
       </section>
 
@@ -243,7 +244,10 @@ export function FloridaProfileQaDetail({ profile }: { profile: FloridaQaProfile 
       <section aria-labelledby="qa-sources">
         <h2 id="qa-sources">Sources, freshness, and limitations</h2>
         <dl className="florida-profile-qa__facts">
-          <Fact label="Provider source as of" value={asText(payload.sources.provider_source_as_of)} />
+          <Fact
+            label="Provider source as of"
+            value={asText(payload.sources.provider_source_as_of)}
+          />
           <Fact label="Retrieved at" value={asText(payload.sources.provider_retrieved_at)} />
           <Fact label="Adapter" value={asText(payload.sources.adapter_version)} />
         </dl>
@@ -257,11 +261,7 @@ export function FloridaProfileQaDetail({ profile }: { profile: FloridaQaProfile 
   );
 }
 
-function ContactList({
-  contacts,
-}: {
-  contacts: FloridaQaProfile["payload"]["contacts"];
-}) {
+function ContactList({ contacts }: { contacts: FloridaQaProfile["payload"]["contacts"] }) {
   if (contacts.length === 0) {
     return <p>None in this tier.</p>;
   }

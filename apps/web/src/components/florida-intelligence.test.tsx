@@ -18,7 +18,9 @@ describe("Florida intelligence page", () => {
     expect(document.body.textContent).toMatch(/not Memory Care/i);
     expect(document.body.textContent).toMatch(/federal CMS reposts/i);
     expect(document.body.textContent).toMatch(/0 CONFIRMED/i);
-    expect(document.body.textContent).not.toMatch(/best nursing homes|2971 Medicare|Florida Memory Care Facilities =/i);
+    expect(document.body.textContent).not.toMatch(
+      /best nursing homes|2971 Medicare|Florida Memory Care Facilities =/i,
+    );
     expect(document.body.textContent).toMatch(/not “no violations,”/i);
     expect(screen.getByRole("table", { name: /observations vs distinct/i })).toBeInTheDocument();
   });

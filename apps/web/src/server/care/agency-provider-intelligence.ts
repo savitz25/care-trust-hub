@@ -273,7 +273,8 @@ export async function getHomeHealthProviderIntelligence(
     canonical_id: core.identity.identifier_value,
     provider_type: "home_health",
     identifier_type: "HOME_HEALTH_CCN",
-    profile_intelligence_status: projection === "KNOWN_NOT_CURRENT" ? "PARTIAL" : snap ? "READY" : "PARTIAL",
+    profile_intelligence_status:
+      projection === "KNOWN_NOT_CURRENT" ? "PARTIAL" : snap ? "READY" : "PARTIAL",
     directory: { official_status: core.official, projection },
     common: {
       display_name: snap?.provider_name ?? null,
