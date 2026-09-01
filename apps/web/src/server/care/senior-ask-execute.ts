@@ -469,6 +469,7 @@ export async function executeSeniorResearchPlan(
       pagination: { page: 1, pageSize: ASK_PAGE_SIZE, hasMore: false },
       provenance: {
         ...provenanceBase,
+        providerClass: matchedClass ? CLASS_LABEL[matchedClass] : provenanceBase.providerClass,
         sourceFamily: sourceClock?.sourceFamily ?? provenanceBase.sourceFamily,
         officialAsOf: sourceClock?.officialAsOf ?? null,
         identifierMethod: "Labeled CMS CCN exact match against current class directories",
