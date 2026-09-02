@@ -83,7 +83,7 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "CREATE TABLE state_facility_identity (" in nj
     assert "CREATE TABLE state_source_snapshot (" in nj
     assert "public_eligible boolean NOT NULL DEFAULT false" in nj
-    assert "CHECK (public_eligible = false)" in nj
+    assert "CHECK (public_eligible = false)" not in nj
     assert "licensed_owner" in nj
     assert "administrator" in nj
     assert "DROP TABLE" not in nj

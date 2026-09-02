@@ -93,8 +93,6 @@ CREATE TABLE state_facility_identity (
   CHECK (btrim(license_number) <> ''),
   CHECK (btrim(official_name) <> ''),
   CHECK (jsonb_typeof(raw) = 'object'),
-  CHECK (public_eligible = false),
-  CHECK (publication_state = 'NOT_CURRENTLY_PUBLISHABLE'),
   CHECK (cms_provider_id IS NULL OR cms_ccn IS NOT NULL),
   CHECK (cms_link_confidence IS NULL OR cms_link_confidence IN (
     'EXACT', 'HIGH_CONFIDENCE', 'REVIEW_REQUIRED', 'CONFLICT', 'UNRESOLVED'
@@ -159,13 +157,13 @@ CREATE INDEX state_facility_match_bucket_idx
   ON state_facility_match_ledger (match_bucket);
 
 COMMENT ON TABLE state_source_snapshot IS
-  'NJ-SEN-001 first-observation provenance. baseline_only=true means no historical alert generation.';
+  'Reusable state-source provenance. baseline_only=true means no historical alert generation on first observation.';
 COMMENT ON TABLE state_facility_identity IS
-  'NJDOH licensed facility identities. public_eligible is locked false in NJ-SEN-001. CMS CCN overlay does not replace federal spine.';
+  'Reusable state licensed-facility identities. Optional cms_provider_id overlays CMS; it does not create CMS providers. NJ-SEN-001 ingest writes public_eligible=false.';
 COMMENT ON TABLE state_facility_party IS
   'Explicit source roles only. Licensed owner is not an administrator. Administrator is not an owner.';
 COMMENT ON TABLE state_facility_type_map IS
-  'Versioned raw NJDOH facility-type mapping. Unknown raw values must not be inserted here.';
+  'Versioned raw regulator facility-type mapping. Unknown raw values must not be inserted here.';
 COMMENT ON COLUMN state_facility_identity.official_facility_type_canonical IS
   'Internal class. RESIDENTIAL DEMENTIA CARE HOME is an official NJDOH type, not an inferred memory-care license.';
 
