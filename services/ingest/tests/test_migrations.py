@@ -95,6 +95,8 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "CREATE TABLE state_facility_action (" in nj_docs
     assert "CREATE TABLE state_facility_document_match_ledger (" in nj_docs
     assert "CREATE TABLE state_facility_monitor_event (" in nj_docs
+    assert "CREATE TABLE state_facility_document_occurrence (" in nj_docs
+    assert "corpus_scope" in nj_docs
     assert "REFERENCES state_source_snapshot(id)" in nj_docs
     assert "REFERENCES state_facility_identity(id)" in nj_docs
     assert "facility_id uuid REFERENCES state_facility_identity(id)," in nj_docs

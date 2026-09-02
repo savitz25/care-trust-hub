@@ -144,6 +144,8 @@ def test_index_parsing_year_sections_and_dirty_dates() -> None:
 
 
 def test_pdf_url_normalization() -> None:
+    from care_ingest.nj_doh_enforcement import encode_url_path
+
     relative = normalize_pdf_url("/health/healthfacilities/surveys-insp/ea-x-09012026.pdf")
     assert relative == "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-x-09012026.pdf"
     http = normalize_pdf_url("http://www.nj.gov/health/healthfacilities/surveys-insp/ea-x.pdf")
@@ -151,6 +153,11 @@ def test_pdf_url_normalization() -> None:
     spaced = normalize_pdf_url("/health/healthfacilities/surveys-insp/ea-aster-creek%20nursing-1224.pdf ")
     assert " " not in spaced
     assert "aster-creek%20nursing" in spaced
+    already = encode_url_path("/health/ea%20file.pdf")
+    assert already == "/health/ea%20file.pdf"
+    assert "%2520" not in already
+    with_query = normalize_pdf_url("https://www.nj.gov/health/x.pdf?download=1")
+    assert with_query.endswith("x.pdf?download=1")
 
 
 def test_document_hashing_and_stable_event_id() -> None:
@@ -410,3 +417,100 @@ def test_existing_cms_and_florida_behavior_unchanged() -> None:
     assert implemented == {"CA", "NY", "TX"}
     nj = next(source for source in sources if source.state_code == "NJ")
     assert nj.implemented is False
+
+
+def test_scope_and_proposed_versus_final() -> None:
+    from care_ingest.nj_doh_enforcement import (
+        DocumentMatch,
+        classify_document_class,
+        classify_scope,
+        is_proposed_penalty,
+    )
+
+    assert classify_document_class("NOTICE_OF_ASSESSMENT_OF_PENALTIES") == "penalty_letter"
+    assert classify_document_class("ADMISSION_CURTAILMENT") == "admission_curtailment"
+    assert classify_document_class("CONDITIONAL_LICENSE") == "conditional_license"
+    assert is_proposed_penalty("Notice of Assessment of Penalties") is True
+    assert is_proposed_penalty("Final Order") is False
+    exact = DocumentMatch("EXACT", "facid", "x", "NJ1", 1)
+    assert classify_scope(match=exact, facility_name="X", canonical="NOTICE_OF_ASSESSMENT_OF_PENALTIES", downloaded=True) == "NJ_LTC_FACILITY_MATCHED"
+    none = DocumentMatch("UNRESOLVED", "no_overlap", "x", None, 0)
+    assert classify_scope(match=none, facility_name="East Orange General Hospital", canonical="DIRECTED_PLAN_OF_CORRECTION", downloaded=True) == "NJ_ACUTE_OR_OTHER_HEALTH_FACILITY"
+    assert classify_scope(match=none, facility_name="Jane Doe", canonical="PERSON_OR_PROGRAM_CREDENTIAL", downloaded=True) == "NON_FACILITY_OR_AGENCY_DOCUMENT"
+    assert classify_scope(match=none, facility_name="X", canonical="NOTICE_OF_ASSESSMENT_OF_PENALTIES", downloaded=False) == "SOURCE_DOCUMENT_UNAVAILABLE"
+
+
+def test_existing_hashed_pdf_is_skipped(tmp_path: Path) -> None:
+    from care_ingest.nj_doh_enforcement import IndexRow
+    from care_ingest.nj_doh_enforcement_acquire import acquire_pdfs
+
+    pdf_dir = tmp_path / "pdfs"
+    pdf_dir.mkdir()
+    (pdf_dir / "ea-x.pdf").write_bytes(b"%PDF-1.4 existing")
+    rows = [
+        IndexRow(
+            year_section="2026",
+            date_raw="1/1/2026",
+            document_date=__import__("datetime").date(2026, 1, 1),
+            facility_name="Example",
+            action_raw="Notice of Assessment of Penalties",
+            href="/health/healthfacilities/surveys-insp/ea-x.pdf",
+            source_document_url="https://www.nj.gov/health/healthfacilities/surveys-insp/ea-x.pdf",
+            source_document_id="ea-x.pdf",
+        )
+    ]
+    report = acquire_pdfs(rows, pdf_dir, retry_missing_only=True, pause_seconds=0)
+    assert report.skipped_existing == 1
+    assert report.attempted == 0
+    assert report.records[0].final_acquisition_status == "EXISTING_HASH_VERIFIED"
+
+
+def test_http_404_remains_in_index(monkeypatch, tmp_path: Path) -> None:
+    from care_ingest.nj_doh_enforcement import IndexRow
+    from care_ingest.nj_doh_enforcement_acquire import FetchResult, acquire_pdfs
+
+    def boom(url: str, timeout: float = 90) -> FetchResult:
+        return FetchResult("HTTP_404_SOURCE_DOCUMENT_UNAVAILABLE", http_status=404, error_category="http_404", error_detail="404")
+
+    monkeypatch.setattr("care_ingest.nj_doh_enforcement_acquire.fetch_pdf", boom)
+    rows = [
+        IndexRow(
+            year_section="2018",
+            date_raw="1/1/2018",
+            document_date=__import__("datetime").date(2018, 1, 1),
+            facility_name="Missing Facility",
+            action_raw="Notice of Assessment of Penalties",
+            href="/health/missing.pdf",
+            source_document_url="https://www.nj.gov/health/missing.pdf",
+            source_document_id="missing.pdf",
+        )
+    ]
+    report = acquire_pdfs(rows, tmp_path, retry_missing_only=True, pause_seconds=0)
+    assert report.http_404 == 1
+    assert report.records[0].source_listed_facility_name == "Missing Facility"
+    assert report.records[0].final_acquisition_status == "HTTP_404_SOURCE_DOCUMENT_UNAVAILABLE"
+
+
+def test_duplicate_content_across_urls_shares_event_identity() -> None:
+    identities = _identities()
+    rows, _ = parse_penalty_index(INDEX_HTML)
+    payload = b"%PDF-1.4 same-bytes"
+    docs = assemble_documents(
+        rows,
+        identities,
+        pdf_payloads={
+            "ea-oceanview-care-center-09012026.pdf": payload,
+            "ea-shore-dementia-home-08152026.pdf": payload,
+        },
+    )
+    hashed = [item for item in docs if item.content_sha256]
+    assert len({item.content_sha256 for item in hashed}) == 1
+    assert all(item.event_identity.startswith(item.content_sha256 or "") for item in hashed)
+
+
+def test_non_pdf_and_image_only_extraction() -> None:
+    from care_ingest.nj_doh_enforcement import extract_pdf_text
+
+    assert extract_pdf_text(b"<html>not a pdf</html>")[2] == "failed"
+    text, pages, status = extract_pdf_text(b"%PDF-1.4\n1 0 obj<<>>endobj\n")
+    assert status in {"failed", "corrupt", "no_text_layer", "extracted", "partial"}

@@ -48,11 +48,26 @@ CREATE TABLE state_facility_document (
   page_count integer CHECK (page_count IS NULL OR page_count >= 0),
   text_extraction_status text NOT NULL CHECK (text_extraction_status IN (
     'extracted',
+    'partial',
     'no_text_layer',
+    'encrypted',
+    'corrupt',
     'not_downloaded',
     'failed',
     'not_applicable'
   )),
+  corpus_scope text CHECK (
+    corpus_scope IS NULL OR corpus_scope IN (
+      'NJ_LTC_FACILITY_MATCHED',
+      'LIKELY_NJ_LTC_REVIEW_REQUIRED',
+      'NJ_ACUTE_OR_OTHER_HEALTH_FACILITY',
+      'NON_FACILITY_OR_AGENCY_DOCUMENT',
+      'UNRESOLVED_SCOPE',
+      'SOURCE_DOCUMENT_UNAVAILABLE'
+    )
+  ),
+  document_class text,
+  is_proposed boolean,
   document_fingerprint text NOT NULL,
   extraction_confidence text NOT NULL CHECK (extraction_confidence IN (
     'high', 'medium', 'low', 'none'
@@ -160,6 +175,33 @@ CREATE TABLE state_facility_monitor_event (
   CHECK (btrim(event_identity) <> '')
 );
 
+CREATE UNIQUE INDEX state_facility_document_hash_idx
+  ON state_facility_document (content_sha256)
+  WHERE content_sha256 IS NOT NULL;
+
+CREATE TABLE state_facility_document_occurrence (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  document_id uuid NOT NULL REFERENCES state_facility_document(id) ON DELETE CASCADE,
+  source_index_url text NOT NULL,
+  original_href text,
+  resolved_url text NOT NULL,
+  source_document_id text NOT NULL,
+  printed_facility_name text,
+  document_date date,
+  action_raw text,
+  acquisition_status text NOT NULL,
+  http_status integer,
+  retry_count integer NOT NULL DEFAULT 0,
+  last_error_category text,
+  last_error_detail text,
+  baseline_only boolean NOT NULL DEFAULT true,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (resolved_url),
+  CHECK (btrim(resolved_url) <> ''),
+  CHECK (btrim(source_document_id) <> ''),
+  CHECK (btrim(acquisition_status) <> '')
+);
+
 CREATE INDEX state_facility_document_kind_idx
   ON state_facility_document (state_code, document_kind, document_date DESC);
 CREATE INDEX state_facility_document_facility_idx
@@ -184,5 +226,11 @@ COMMENT ON COLUMN state_facility_document.facility_id IS
   'Nullable. Unmatched official documents are retained.';
 COMMENT ON COLUMN state_facility_document.is_final IS
   'Null unless the source expressly calls the document a final order or equivalent.';
+COMMENT ON TABLE state_facility_document_occurrence IS
+  'Every index URL/occurrence. Duplicate content hashes share one canonical document.';
+COMMENT ON COLUMN state_facility_document.corpus_scope IS
+  'LTC matched versus acute/other/non-facility. Non-LTC rows are not unresolved LTC failures.';
+COMMENT ON COLUMN state_facility_document.is_proposed IS
+  'True when the source is a notice/proposal, not a final order.';
 
 COMMIT;

@@ -188,7 +188,13 @@ def build_parser() -> argparse.ArgumentParser:
         "ingest-nj-doh-enforcement",
         help="Acquire/normalize NJDOH penalty letters and state enforcement documents (NJ-SEN-002)",
     )
-    njenf.add_argument("--index-html", type=Path, help="Local penalty-letters HTML path")
+    njenf.add_argument(
+        "--index-html",
+        "--input-index",
+        type=Path,
+        dest="index_html",
+        help="Local penalty-letters HTML path",
+    )
     njenf.add_argument("--download-index", action="store_true", help="Download the official index")
     njenf.add_argument("--identity-xlsx", type=Path, help="Local All_LTC.xlsx identity spine")
     njenf.add_argument("--pdf-dir", type=Path, help="Directory of preserved penalty-letter PDFs")
@@ -204,6 +210,11 @@ def build_parser() -> argparse.ArgumentParser:
     njenf.add_argument("--dry-run", action="store_true", help="Parse and match without writing")
     njenf.add_argument("--execute", action="store_true", help="Write documents to the database")
     njenf.add_argument("--inspect-only", action="store_true", help="Print source inspection JSON")
+    njenf.add_argument(
+        "--write-reports",
+        type=Path,
+        help="Write acquisition ledger and corpus summary JSON",
+    )
     njenf.add_argument("--timeout", type=float, default=120)
     njenf.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     return parser
@@ -316,18 +327,45 @@ def main(argv: list[str] | None = None) -> int:
         if args.execute and not args.database_url:
             parser.error("execute mode requires CARE_DATABASE_URL or --database-url")
         pdf_dir = args.pdf_dir or (archive / "pdfs")
+        retry_payload = None
+        if args.download_pdfs:
+            from .nj_doh_enforcement import parse_penalty_index
+            from .nj_doh_enforcement_acquire import acquire_pdfs
+
+            index_rows, _modified = parse_penalty_index(html)
+            retry_payload = acquire_pdfs(index_rows, pdf_dir, timeout=args.timeout)
+            print(retry_payload.to_json(), end="")
         report = ingest_nj_doh_enforcement(
             html,
             identities=identities,
             database_url=args.database_url,
             dry_run=not args.execute,
             pdf_dir=pdf_dir,
-            download_pdfs=args.download_pdfs,
+            download_pdfs=False,
             pdf_limit=args.pdf_limit,
             inspection_gate=inspection_gate,
             extra_documents=extra,
         )
         print(report.to_json(), end="")
+        if args.write_reports:
+            from .nj_doh_enforcement import parse_penalty_index
+            from .nj_doh_enforcement_acquire import (
+                acquire_pdfs,
+                build_corpus_summary,
+                complete_ledger,
+                dedupe_hashes,
+                write_reports,
+            )
+
+            index_rows, _modified = parse_penalty_index(html)
+            retry_for_ledger = retry_payload or acquire_pdfs(
+                index_rows, pdf_dir, retry_missing_only=False, timeout=args.timeout
+            )
+            ledger = complete_ledger(index_rows, retry_for_ledger, pdf_dir)
+            summary = build_corpus_summary(html, identities, pdf_dir, ledger)
+            dedupe = dedupe_hashes(ledger)
+            paths = write_reports(ledger, summary, dedupe, retry_for_ledger, args.write_reports)
+            print(json.dumps(paths, indent=2))
         return 0
     if args.command == "cms-freshness":
         if not args.database_url:

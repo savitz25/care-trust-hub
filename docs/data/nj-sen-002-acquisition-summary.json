@@ -1,0 +1,319 @@
+{
+  "retry": {
+    "attempted": 208,
+    "http_404": 2,
+    "http_410": 0,
+    "invalid_url": 0,
+    "non_pdf": 0,
+    "other": 0,
+    "other_http": 0,
+    "recovered": 206,
+    "redirect_failure": 0,
+    "skipped_existing": 938,
+    "timeout": 0,
+    "validation_failure": 0
+  },
+  "dedupe": {
+    "downloaded_url_occurrences": 1144,
+    "unique_hashes": 1131,
+    "duplicate_content_groups": 10,
+    "largest_duplicate_group": 5,
+    "changed_content_urls": 0
+  },
+  "duplicate_groups_preview": [
+    {
+      "sha256": "e7bfc76a4a8dcb4acf746569ecabe8932741e7ca2528a9cee88c31fe2d3f7cd2",
+      "count": 5,
+      "urls": [
+        "https://www.nj.gov/health/healthfacilities/documents/EA_facilities/2020/EA_20200320%20Brighton%20Gardens%20Curtailment%20of%20Admissions%20Order%20-%20Copy.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-canterbury-at-cedar-grove-03202020.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-family-of-caring-montclair-03202020.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-laurel-brook-rehab-03202020.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-st-josephs-seniors-home-nursing-center-03202020.pdf"
+      ],
+      "names": [
+        "Brighton Gardens",
+        "Canterbury at Cedar Grove",
+        "Family of Caring Montclair",
+        "Laurel Brook Rehab",
+        "St. Joseph's Seniors Home"
+      ]
+    },
+    {
+      "sha256": "b675ce5e8230e375528edd6d62d0800a4b9785cc4c32b7d0195319169df46a0f",
+      "count": 2,
+      "urls": [
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-revised-wynwood-rehabilitation-and-healthcare-center-05072026.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-wynwood-rehabilitation-and-healthcare-center-08072024.pdf"
+      ],
+      "names": [
+        "Wynwood Rehabilitation and Healthcare Center"
+      ]
+    },
+    {
+      "sha256": "50ccb07ad19e3645b0c0d1d8d3a9599e65b909a9f7b0865812982bb47893023e",
+      "count": 2,
+      "urls": [
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/X24027CrystalLakeHealthcareandRehabilitationNoticeofAssessmentofPenalties.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/EA-Crystal-Lake-Healthcare-and-Rehabilitation-02292024.pdf"
+      ],
+      "names": [
+        "Crystal Lake Healthcare and Rehabilitation"
+      ]
+    },
+    {
+      "sha256": "f13929ad9ec52460c4acdc1b7a34e9aa6b610537b1b6bdee095dfc45ba68a90e",
+      "count": 2,
+      "urls": [
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/EA-Atrium-Post-Acute-Care-of-Wayne-02252025.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/EA-Atrium-Post-Acute-Care-of-Wayne-18022025.pdf"
+      ],
+      "names": [
+        "Atrium Post Acute Care of Wayne"
+      ]
+    },
+    {
+      "sha256": "8e3f7f869728f8bfd172252dd48493280c9b780da82c5dfbc4901c28ca50b9d5",
+      "count": 2,
+      "urls": [
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/X23014AtriaTintonFallsOrderLiftingCurtailmentofAdmissionsandDPOC.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/EA-Atria-Tinton-Falls-06192023.pdf"
+      ],
+      "names": [
+        "Atria Tinton Falls"
+      ]
+    },
+    {
+      "sha256": "28261bd7a7629143b187a0393ed7a3709a0a3a6fa0aa1cd0446a8ec2ac7d8165",
+      "count": 2,
+      "urls": [
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/X23017CaringHandsHospiceCurtailmentofAdmissionsOrder5_31_2023.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/EA-Caring-Hands-Hospice-05312023.pdf"
+      ],
+      "names": [
+        "Caring Hands Hospice"
+      ]
+    },
+    {
+      "sha256": "b4ad64f007cc7a14f258fcc8260ecc8eab9e360166beda13af99241a4f9ee4d3",
+      "count": 2,
+      "urls": [
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/X23024PalaceRehabilitationandCareCenterNoticeofAssessmentofPenalties.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-palace-rehabilitation-and-care-center-06272023.pdf"
+      ],
+      "names": [
+        "Palace Rehabilitation and Care Center"
+      ]
+    },
+    {
+      "sha256": "1681c5c3e2753d6a661828ba8db008a41c0dc20d48122c573a3ee3c0f212644e",
+      "count": 2,
+      "urls": [
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/X23025HammontonCenterforRehabilitationandHealthcareNoticeofAssessmentofPenalties.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-hammonton-center-for-rehabilitation-and-healthcare-06272023.pdf"
+      ],
+      "names": [
+        "Hammonton Center for Rehabilitation & Healthcare",
+        "Hammonton Center for Rehabilitation and Healthcare"
+      ]
+    },
+    {
+      "sha256": "f7e05722fd3c1f3584d6c3eb32ed1fbcbcb034b917d3ad357e5348cdcdcdb751",
+      "count": 2,
+      "urls": [
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-silver-healthcare-center-01262024pdf.pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-silver-healthcare-center-6282023.pdf"
+      ],
+      "names": [
+        "Silver Healthcare Center"
+      ]
+    },
+    {
+      "sha256": "0c30953f5fff26b378d45b5982b9a485e4af425da546e83d3bdf2898150f2fce",
+      "count": 2,
+      "urls": [
+        "https://www.nj.gov/health/healthfacilities/documents/EA_facilities/2020/EA_20200407Alaris%20Health%20at%20Belgrove%20Lifting%20Curtailment%20(003).pdf",
+        "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-alaris-health-at-belgrove-04072020.pdf"
+      ],
+      "names": [
+        "Alaris Health at Belgrove"
+      ]
+    }
+  ],
+  "corpus": {
+    "agency": "New Jersey Department of Health",
+    "adapter": "nj-doh-enforcement-v1",
+    "baseline_only": true,
+    "index_rows": 1149,
+    "unique_index_urls": 1146,
+    "duplicate_index_rows": 3,
+    "acquisition": {
+      "EXISTING_HASH_VERIFIED": 938,
+      "RECOVERED_AFTER_URL_NORMALIZATION": 206,
+      "HTTP_404_SOURCE_DOCUMENT_UNAVAILABLE": 2
+    },
+    "extraction": {
+      "TEXT_EXTRACTED": 511,
+      "IMAGE_ONLY_OCR_REQUIRED": 632,
+      "not_downloaded": 2,
+      "PARTIAL_TEXT": 1
+    },
+    "document_class": {
+      "penalty_letter": 660,
+      "directed_plan_of_correction": 100,
+      "admission_curtailment": 221,
+      "license_revocation": 4,
+      "other_expressly_identified_njdoh_action": 113,
+      "unclassified_regulatory_document": 30,
+      "license_suspension": 12,
+      "civil_monetary_penalty": 5,
+      "corrective_action": 1
+    },
+    "corpus_scope": {
+      "NJ_LTC_FACILITY_MATCHED": 376,
+      "LIKELY_NJ_LTC_REVIEW_REQUIRED": 294,
+      "UNRESOLVED_SCOPE": 346,
+      "NJ_ACUTE_OR_OTHER_HEALTH_FACILITY": 119,
+      "NON_FACILITY_OR_AGENCY_DOCUMENT": 9,
+      "SOURCE_DOCUMENT_UNAVAILABLE": 2
+    },
+    "match_buckets": {
+      "EXACT": 300,
+      "UNSAFE_REJECTED": 291,
+      "UNRESOLVED": 476,
+      "REVIEW_REQUIRED": 3,
+      "HIGH_CONFIDENCE": 76
+    },
+    "unique_ltc_facilities_with_evidence": 224,
+    "facilities_by_licensed_type": {
+      "NJ_NF_SNF": 181,
+      "NJ_NF_SNF_DP": 4,
+      "NJ_ADHS": 5,
+      "NJ_ALR": 16,
+      "NJ_ALP": 1,
+      "NJ_NF_SNF_HOSPITAL": 2,
+      "NJ_NF_SNF_HOME_FOR_AGED": 9,
+      "NJ_LTC_UNSPECIFIED": 3,
+      "NJ_CPCH": 1,
+      "NJ_NF_SNF_SUBACUTE_HOSPITAL": 1,
+      "NJ_ADHS_IN_LTC": 1
+    },
+    "by_year": {
+      "2016": {
+        "indexed_urls": 1,
+        "downloaded": 1,
+        "source_unavailable": 0,
+        "unique_hashes": 1,
+        "parsed": 1,
+        "matched_ltc": 0,
+        "non_ltc": 0,
+        "unresolved": 1
+      },
+      "2017": {
+        "indexed_urls": 22,
+        "downloaded": 21,
+        "source_unavailable": 1,
+        "unique_hashes": 21,
+        "parsed": 22,
+        "matched_ltc": 1,
+        "non_ltc": 10,
+        "unresolved": 10
+      },
+      "2018": {
+        "indexed_urls": 35,
+        "downloaded": 35,
+        "source_unavailable": 0,
+        "unique_hashes": 35,
+        "parsed": 35,
+        "matched_ltc": 2,
+        "non_ltc": 11,
+        "unresolved": 22
+      },
+      "2019": {
+        "indexed_urls": 21,
+        "downloaded": 21,
+        "source_unavailable": 0,
+        "unique_hashes": 21,
+        "parsed": 21,
+        "matched_ltc": 1,
+        "non_ltc": 5,
+        "unresolved": 15
+      },
+      "2020": {
+        "indexed_urls": 64,
+        "downloaded": 64,
+        "source_unavailable": 0,
+        "unique_hashes": 59,
+        "parsed": 64,
+        "matched_ltc": 8,
+        "non_ltc": 2,
+        "unresolved": 54
+      },
+      "2021": {
+        "indexed_urls": 39,
+        "downloaded": 39,
+        "source_unavailable": 0,
+        "unique_hashes": 39,
+        "parsed": 39,
+        "matched_ltc": 6,
+        "non_ltc": 8,
+        "unresolved": 25
+      },
+      "2022": {
+        "indexed_urls": 60,
+        "downloaded": 60,
+        "source_unavailable": 0,
+        "unique_hashes": 60,
+        "parsed": 60,
+        "matched_ltc": 1,
+        "non_ltc": 11,
+        "unresolved": 48
+      },
+      "2023": {
+        "indexed_urls": 110,
+        "downloaded": 110,
+        "source_unavailable": 0,
+        "unique_hashes": 110,
+        "parsed": 110,
+        "matched_ltc": 2,
+        "non_ltc": 14,
+        "unresolved": 94
+      },
+      "2024": {
+        "indexed_urls": 241,
+        "downloaded": 240,
+        "source_unavailable": 1,
+        "unique_hashes": 240,
+        "parsed": 241,
+        "matched_ltc": 46,
+        "non_ltc": 42,
+        "unresolved": 152
+      },
+      "2025": {
+        "indexed_urls": 306,
+        "downloaded": 306,
+        "source_unavailable": 0,
+        "unique_hashes": 305,
+        "parsed": 306,
+        "matched_ltc": 178,
+        "non_ltc": 18,
+        "unresolved": 110
+      },
+      "2026": {
+        "indexed_urls": 247,
+        "downloaded": 247,
+        "source_unavailable": 0,
+        "unique_hashes": 247,
+        "parsed": 247,
+        "matched_ltc": 131,
+        "non_ltc": 7,
+        "unresolved": 109
+      }
+    },
+    "notes": [
+      "Documents discovered from the NJDOH public enforcement indexes, with source availability varying by year.",
+      "First corpus is baseline-only. No historical monitoring alerts.",
+      "Penalty dollars are not a rating. Name-only matches are never auto-attached."
+    ]
+  }
+}

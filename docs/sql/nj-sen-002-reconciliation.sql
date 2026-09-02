@@ -47,3 +47,16 @@ SELECT event_kind, baseline_only, COUNT(*)
 FROM state_facility_monitor_event
 GROUP BY 1, 2
 ORDER BY 1, 2;
+
+-- Occurrences versus canonical documents
+SELECT COUNT(*) AS occurrences FROM state_facility_document_occurrence;
+SELECT COUNT(DISTINCT content_sha256) AS unique_hashes
+FROM state_facility_document
+WHERE regulator_code = 'NJ_DOH' AND content_sha256 IS NOT NULL;
+
+-- Corpus scope
+SELECT corpus_scope, COUNT(*)
+FROM state_facility_document
+WHERE regulator_code = 'NJ_DOH'
+GROUP BY 1
+ORDER BY 2 DESC;

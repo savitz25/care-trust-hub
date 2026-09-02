@@ -249,7 +249,17 @@ def _upsert_document(
         "match_reason": document.match.reason,
     }
     with connection.cursor() as cursor:
-        cursor.execute(
+        existing_hash = None
+        if document.content_sha256:
+            cursor.execute(
+                "SELECT id::text FROM state_facility_document WHERE content_sha256 = %s LIMIT 1",
+                (document.content_sha256,),
+            )
+            existing_hash = cursor.fetchone()
+        if existing_hash:
+            document_id = existing_hash[0]
+        else:
+            cursor.execute(
             """
             INSERT INTO state_facility_document (
               external_key, state_code, regulator_code, dataset_key,
@@ -329,8 +339,40 @@ def _upsert_document(
                 retrieved,
                 Jsonb(raw),
             ),
+            )
+            document_id = cursor.fetchone()[0]
+        cursor.execute(
+            """
+            UPDATE state_facility_document
+            SET corpus_scope = %s, document_class = %s, is_proposed = %s
+            WHERE id = %s::uuid
+            """,
+            (document.corpus_scope, document.document_class, document.is_proposed, document_id),
         )
-        document_id = cursor.fetchone()[0]
+        cursor.execute(
+            """
+            INSERT INTO state_facility_document_occurrence (
+              document_id, source_index_url, original_href, resolved_url, source_document_id,
+              printed_facility_name, document_date, action_raw, acquisition_status,
+              retry_count, baseline_only
+            ) VALUES (
+              %s::uuid, %s, %s, %s, %s, %s, %s, %s, %s, 0, %s
+            )
+            ON CONFLICT (resolved_url) DO NOTHING
+            """,
+            (
+                document_id,
+                PENALTY_LETTERS_URL,
+                document.source_document_url,
+                document.source_document_url,
+                document.source_document_id,
+                document.printed_facility_name,
+                document.document_date,
+                document.remedy_type_raw,
+                "DOWNLOADED_HASH_VERIFIED" if document.content_sha256 else "NOT_ATTEMPTED",
+                baseline_only,
+            ),
+        )
         cursor.execute(
             """
             INSERT INTO state_facility_action (

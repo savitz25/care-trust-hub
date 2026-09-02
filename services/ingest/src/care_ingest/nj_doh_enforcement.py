@@ -196,6 +196,11 @@ class ParsedDocument:
     match: DocumentMatch
     year_section: str | None
     raw: dict[str, Any]
+    document_class: str = "unclassified_regulatory_document"
+    corpus_scope: str = "UNRESOLVED_SCOPE"
+    is_proposed: bool | None = None
+    classification_method: str = "index_action"
+    extraction_status: str = "not_downloaded"
 
 
 @dataclass(slots=True)
@@ -312,7 +317,12 @@ def fetch_bytes(url: str, timeout: float = 120) -> tuple[int, bytes, str | None]
         return int(response.getcode() or 0), response.read(), response.headers.get("Content-Type")
 
 
-def normalize_pdf_url(href: str | None) -> str | None:
+def encode_url_path(path: str) -> str:
+    """Percent-encode unescaped characters without double-encoding %20."""
+    return quote(unquote(path), safe="/-_.()~")
+
+
+def normalize_pdf_url(href: str | None, *, base: str | None = None) -> str | None:
     if not href:
         return None
     text = href.strip()
@@ -320,14 +330,17 @@ def normalize_pdf_url(href: str | None) -> str | None:
         return None
     if text.startswith("http://"):
         text = "https://" + text[len("http://") :]
+    origin = base or (PDF_BASE + "/health/healthfacilities/surveys-insp/")
     if text.startswith("/"):
         text = PDF_BASE + text
     elif not text.startswith("https://"):
-        text = urljoin(PDF_BASE + "/health/healthfacilities/surveys-insp/", text)
+        text = urljoin(origin if origin.endswith("/") else origin + "/", text)
     parsed = urlparse(text)
-    path = unquote(parsed.path).strip()
-    path = quote(path, safe="/-_.()")
-    return parsed._replace(path=path, query="", fragment="").geturl()
+    if not parsed.netloc:
+        return None
+    path = encode_url_path(parsed.path.strip())
+    query = parsed.query
+    return parsed._replace(path=path, query=query, fragment="").geturl()
 
 
 def filename_from_url(url: str | None) -> str | None:
@@ -362,6 +375,85 @@ def parse_named_date(value: str | None) -> date | None:
 def normalize_licensed_name(value: object | None) -> str:
     cleaned = re.sub(r"\s*\([A-Z0-9]+\)$", "", str(value or "").strip(), flags=re.I)
     return normalize_name(cleaned)
+
+
+DOCUMENT_CLASS_MAP: dict[str, str] = {
+    "NOTICE_OF_ASSESSMENT_OF_PENALTIES": "penalty_letter",
+    "REVISED_NOTICE_OF_ASSESSMENT_OF_PENALTIES": "penalty_letter",
+    "AMENDED_NOTICE_OF_ASSESSMENT_OF_PENALTIES": "penalty_letter",
+    "CORRECTED_NOTICE_OF_ASSESSMENT_OF_PENALTIES": "penalty_letter",
+    "CIVIL_MONETARY_PENALTY": "civil_monetary_penalty",
+    "ADMISSION_CURTAILMENT": "admission_curtailment",
+    "ADMISSION_CURTAILMENT_AND_DPOC": "admission_curtailment",
+    "ORDER_LIFTING_CURTAILMENT": "admission_curtailment",
+    "ORDER_LIFTING_CURTAILMENT_AND_DPOC": "admission_curtailment",
+    "CONDITIONAL_LICENSE": "conditional_license",
+    "DIRECTED_PLAN_OF_CORRECTION": "directed_plan_of_correction",
+    "ORDER_LIFTING_DPOC": "directed_plan_of_correction",
+    "LICENSE_SUSPENSION": "license_suspension",
+    "NOTICE_OF_INTENT_TO_SUSPEND": "license_suspension",
+    "ORDER_LIFTING_SUSPENSION": "license_suspension",
+    "LICENSE_REVOCATION": "license_revocation",
+    "LICENSE_SURRENDER": "license_surrender",
+    "CORRECTIVE_ACTION": "corrective_action",
+    "PERSON_OR_PROGRAM_CREDENTIAL": "other_expressly_identified_njdoh_action",
+    "CEASE_AND_DESIST": "other_expressly_identified_njdoh_action",
+    "ORDER_LIFTING_CEASE_AND_DESIST": "other_expressly_identified_njdoh_action",
+    "EMERGENCY_CLOSURE": "other_expressly_identified_njdoh_action",
+    "ORDER_LIFTING_EMERGENCY_CLOSURE": "other_expressly_identified_njdoh_action",
+    "INFORMATION_REQUIREMENT_ORDER": "other_expressly_identified_njdoh_action",
+    "RESCISSION": "other_expressly_identified_njdoh_action",
+}
+
+ACUTE_NAME_RE = re.compile(
+    r"\b(hospital|medical center|surgical|surgery center|endoscop|imaging|radiolog|"
+    r"urolog|psychiatric clinic|ltach|ambulatory|asc\b|perioperative|mri\b)\b",
+    re.I,
+)
+
+EXTRACTION_STATUS_MAP = {
+    "extracted": "TEXT_EXTRACTED",
+    "partial": "PARTIAL_TEXT",
+    "no_text_layer": "IMAGE_ONLY_OCR_REQUIRED",
+    "encrypted": "ENCRYPTED_OR_RESTRICTED",
+    "corrupt": "CORRUPT_PDF",
+    "failed": "EXTRACTION_FAILED",
+    "not_downloaded": "not_downloaded",
+    "not_applicable": "not_applicable",
+}
+
+
+def classify_document_class(canonical: str) -> str:
+    return DOCUMENT_CLASS_MAP.get(canonical, "unclassified_regulatory_document")
+
+
+def is_proposed_penalty(action: str, text: str = "") -> bool | None:
+    blob = f"{action} {text}".lower()
+    if re.search(r"\bfinal order\b|\bfinal agency decision\b", blob):
+        return False
+    if re.search(r"\bproposed\b|notice of assessment|notice of intent", blob):
+        return True
+    return None
+
+
+def classify_scope(
+    *,
+    match: DocumentMatch,
+    facility_name: str,
+    canonical: str,
+    downloaded: bool,
+) -> str:
+    if not downloaded:
+        return "SOURCE_DOCUMENT_UNAVAILABLE"
+    if match.bucket in {"EXACT", "HIGH_CONFIDENCE"}:
+        return "NJ_LTC_FACILITY_MATCHED"
+    if match.bucket in {"REVIEW_REQUIRED", "CONFLICT", "UNSAFE_REJECTED"}:
+        return "LIKELY_NJ_LTC_REVIEW_REQUIRED"
+    if canonical == "PERSON_OR_PROGRAM_CREDENTIAL":
+        return "NON_FACILITY_OR_AGENCY_DOCUMENT"
+    if ACUTE_NAME_RE.search(facility_name or ""):
+        return "NJ_ACUTE_OR_OTHER_HEALTH_FACILITY"
+    return "UNRESOLVED_SCOPE"
 
 
 def classify_remedy(action: str) -> str:
@@ -452,18 +544,34 @@ def extract_pdf_fields(text: str) -> dict[str, Any]:
 
 
 def extract_pdf_text(payload: bytes) -> tuple[str, int, str]:
+    if not payload.startswith(b"%PDF"):
+        return "", 0, "failed"
     try:
         from pypdf import PdfReader
     except ImportError:
         return "", 0, "failed"
     try:
         reader = PdfReader(io_bytes(payload))
+        if getattr(reader, "is_encrypted", False):
+            try:
+                reader.decrypt("")
+            except Exception:  # noqa: BLE001
+                return "", len(getattr(reader, "pages", []) or []), "encrypted"
         pages = list(reader.pages)
-        text = "\n".join((page.extract_text() or "") for page in pages)
-        if re.sub(r"\s+", "", text) == "":
+        texts = [(page.extract_text() or "") for page in pages]
+        text = "\n".join(texts)
+        nonempty = sum(1 for item in texts if re.sub(r"\s+", "", item))
+        if nonempty == 0:
             return "", len(pages), "no_text_layer"
+        if nonempty < len(pages) and len(pages) > 1:
+            return text, len(pages), "partial"
         return text, len(pages), "extracted"
-    except Exception:  # noqa: BLE001 - scanned/corrupt PDFs must not abort the corpus
+    except Exception as exc:  # noqa: BLE001 - scanned/corrupt PDFs must not abort the corpus
+        message = str(exc).lower()
+        if "encrypt" in message or "password" in message:
+            return "", 0, "encrypted"
+        if "eof" in message or "corrupt" in message or "invalid" in message:
+            return "", 0, "corrupt"
         return "", 0, "failed"
 
 
@@ -498,9 +606,18 @@ def document_fingerprint(
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
-def event_identity(source_document_id: str, document_date: date | None, fingerprint: str) -> str:
+def event_identity(
+    source_document_id: str,
+    document_date: date | None,
+    fingerprint: str,
+    *,
+    content_sha256: str | None = None,
+    canonical: str | None = None,
+) -> str:
+    dated = document_date.isoformat() if document_date else "undated"
+    if content_sha256:
+        return f"{content_sha256}|{canonical or 'action'}"
     if source_document_id:
-        dated = document_date.isoformat() if document_date else "undated"
         return f"{source_document_id}|{dated}"
     return fingerprint
 
@@ -713,6 +830,9 @@ def assemble_documents(
             continue
         canonical = classify_remedy(row.action_raw)
         payload = payloads.get(row.source_document_id)
+        if payload is None and row.source_document_id:
+            wanted = row.source_document_id.casefold()
+            payload = next((value for key, value in payloads.items() if key.casefold() == wanted), None)
         text = injected.get(row.source_document_id, "")
         page_count = None
         content_sha = None
@@ -766,16 +886,24 @@ def assemble_documents(
             printed_city=fields.get("printed_city"),
             identities=identities,
         )
-        if extract_status == "extracted" and fields.get("printed_source_facility_id"):
+        if extract_status in {"extracted", "partial"} and fields.get("printed_source_facility_id"):
             confidence = "high"
-        elif extract_status == "extracted" and (
+        elif extract_status in {"extracted", "partial"} and (
             fields.get("printed_street") or fields.get("penalty_amount_cents")
         ):
             confidence = "medium"
-        elif extract_status == "extracted":
+        elif extract_status in {"extracted", "partial"}:
             confidence = "low"
         else:
             confidence = "none"
+        document_class = classify_document_class(canonical)
+        is_proposed = is_proposed_penalty(row.action_raw, text)
+        corpus_scope = classify_scope(
+            match=match,
+            facility_name=row.facility_name,
+            canonical=canonical,
+            downloaded=payload is not None or bool(text.strip()),
+        )
         fingerprint = document_fingerprint(
             source_document_id=row.source_document_id,
             source_document_url=row.source_document_url,
@@ -820,7 +948,11 @@ def assemble_documents(
                 is_final=is_final,
                 evidence_track="STATE_FORM",
                 event_identity=event_identity(
-                    row.source_document_id, row.document_date, fingerprint
+                    row.source_document_id,
+                    row.document_date,
+                    fingerprint,
+                    content_sha256=content_sha,
+                    canonical=canonical,
                 ),
                 match=match,
                 year_section=row.year_section,
@@ -828,7 +960,15 @@ def assemble_documents(
                     "date_raw": row.date_raw,
                     "year_section": row.year_section,
                     "named_dates": fields.get("named_dates") or [],
+                    "is_proposed": is_proposed,
+                    "document_class": document_class,
+                    "corpus_scope": corpus_scope,
                 },
+                document_class=document_class,
+                corpus_scope=corpus_scope,
+                is_proposed=is_proposed,
+                classification_method="index_action",
+                extraction_status=EXTRACTION_STATUS_MAP.get(extract_status, extract_status),
             )
         )
     return documents
@@ -957,7 +1097,9 @@ def load_local_pdfs(pdf_dir: Path) -> dict[str, bytes]:
         return {}
     payloads: dict[str, bytes] = {}
     for path in pdf_dir.glob("*.pdf"):
-        payloads[path.name] = path.read_bytes()
+        data = path.read_bytes()
+        payloads[path.name] = data
+        payloads[path.name.casefold()] = data
     return payloads
 
 
@@ -969,28 +1111,15 @@ def incremental_download_pdfs(
     limit: int | None = None,
     pause_seconds: float = 0.35,
 ) -> tuple[int, int, int]:
-    import time
+    from .nj_doh_enforcement_acquire import acquire_pdfs
 
-    pdf_dir.mkdir(parents=True, exist_ok=True)
-    unique, _ = dedupe_index_rows(rows)
-    downloaded = skipped = failed = 0
-    count = 0
-    for row in unique:
-        if not row.source_document_url or not row.source_document_id:
-            continue
-        dest = pdf_dir / row.source_document_id
-        if dest.exists() and dest.stat().st_size > 0:
-            skipped += 1
-            continue
-        if limit is not None and count >= limit:
-            break
-        try:
-            _status, body, _ctype = fetch_bytes(row.source_document_url, timeout=timeout)
-            dest.write_bytes(body)
-            downloaded += 1
-            count += 1
-            time.sleep(pause_seconds)
-        except Exception:  # noqa: BLE001
-            failed += 1
-            time.sleep(max(pause_seconds, 1.0))
-    return downloaded, skipped, failed
+    report = acquire_pdfs(
+        rows,
+        pdf_dir,
+        timeout=timeout,
+        pause_seconds=pause_seconds,
+        retry_missing_only=True,
+    )
+    if limit is not None and report.recovered > limit:
+        return limit, report.skipped_existing, report.attempted - limit
+    return report.recovered, report.skipped_existing, report.attempted - report.recovered
