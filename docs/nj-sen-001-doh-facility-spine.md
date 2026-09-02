@@ -13,4 +13,4 @@ python -m care_ingest ingest-nj-doh-ltc --input data/raw/nj-doh-ltc/All_LTC.xlsx
 ```
 
 First snapshot is baseline-only. `public_eligible` stays false. No `/new-jersey` page.
-Enforcement, SOD/POC, and penalty letters are NJ-SEN-002.
+Enforcement, SOD/POC, and penalty letters are NJ-SEN-002 (`ingest-nj-doh-enforcement`).

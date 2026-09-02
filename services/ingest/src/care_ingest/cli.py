@@ -184,6 +184,28 @@ def build_parser() -> argparse.ArgumentParser:
     nj.add_argument("--inspect-only", action="store_true", help="Print source inspection JSON")
     nj.add_argument("--timeout", type=float, default=120)
     nj.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    njenf = commands.add_parser(
+        "ingest-nj-doh-enforcement",
+        help="Acquire/normalize NJDOH penalty letters and state enforcement documents (NJ-SEN-002)",
+    )
+    njenf.add_argument("--index-html", type=Path, help="Local penalty-letters HTML path")
+    njenf.add_argument("--download-index", action="store_true", help="Download the official index")
+    njenf.add_argument("--identity-xlsx", type=Path, help="Local All_LTC.xlsx identity spine")
+    njenf.add_argument("--pdf-dir", type=Path, help="Directory of preserved penalty-letter PDFs")
+    njenf.add_argument(
+        "--download-pdfs", action="store_true", help="Incrementally download public PDFs"
+    )
+    njenf.add_argument("--pdf-limit", type=int, help="Max new PDFs to download this run")
+    njenf.add_argument(
+        "--sample-inspections",
+        action="store_true",
+        help="Probe the documented FacID inspection/SOD sample",
+    )
+    njenf.add_argument("--dry-run", action="store_true", help="Parse and match without writing")
+    njenf.add_argument("--execute", action="store_true", help="Write documents to the database")
+    njenf.add_argument("--inspect-only", action="store_true", help="Print source inspection JSON")
+    njenf.add_argument("--timeout", type=float, default=120)
+    njenf.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     return parser
 
 
@@ -241,6 +263,69 @@ def main(argv: list[str] | None = None) -> int:
             payload,
             database_url=args.database_url,
             dry_run=not args.execute,
+        )
+        print(report.to_json(), end="")
+        return 0
+    if args.command == "ingest-nj-doh-enforcement":
+        from .nj_doh_enforcement import (
+            PENALTY_LETTERS_URL,
+            fetch_bytes,
+            inspect_index,
+        )
+        from .nj_doh_enforcement_database import (
+            ingest_nj_doh_enforcement,
+            load_identities_from_db,
+            load_identities_from_xlsx,
+        )
+
+        archive = data_root / "raw" / "nj-doh-enforcement"
+        archive.mkdir(parents=True, exist_ok=True)
+        if args.index_html:
+            html = Path(args.index_html).read_text(encoding="utf-8", errors="replace")
+        elif args.download_index:
+            _status, body, _ctype = fetch_bytes(PENALTY_LETTERS_URL, timeout=args.timeout)
+            (archive / "penalty_letters.html").write_bytes(body)
+            html = body.decode("utf-8", errors="replace")
+        elif (archive / "penalty_letters.html").is_file():
+            html = (archive / "penalty_letters.html").read_text(encoding="utf-8", errors="replace")
+        else:
+            parser.error("ingest-nj-doh-enforcement requires --index-html or --download-index")
+        if args.inspect_only:
+            print(json.dumps(inspect_index(html), indent=2, default=str))
+            return 0
+        identities = []
+        if args.identity_xlsx:
+            identities = load_identities_from_xlsx(Path(args.identity_xlsx).read_bytes())
+        elif args.database_url and not args.dry_run:
+            with __import__("psycopg").connect(args.database_url) as connection:
+                identities = load_identities_from_db(connection)
+        elif (data_root / "raw" / "nj-doh-ltc" / "All_LTC.xlsx").is_file():
+            identities = load_identities_from_xlsx(
+                (data_root / "raw" / "nj-doh-ltc" / "All_LTC.xlsx").read_bytes()
+            )
+        inspection_gate: dict = {}
+        extra = []
+        if args.sample_inspections:
+            from .nj_doh_inspection import probe_inspection_sample
+
+            inspection_gate, extra = probe_inspection_sample(
+                timeout=min(args.timeout, 45), identities=identities
+            )
+        if not args.execute:
+            args.dry_run = True
+        if args.execute and not args.database_url:
+            parser.error("execute mode requires CARE_DATABASE_URL or --database-url")
+        pdf_dir = args.pdf_dir or (archive / "pdfs")
+        report = ingest_nj_doh_enforcement(
+            html,
+            identities=identities,
+            database_url=args.database_url,
+            dry_run=not args.execute,
+            pdf_dir=pdf_dir,
+            download_pdfs=args.download_pdfs,
+            pdf_limit=args.pdf_limit,
+            inspection_gate=inspection_gate,
+            extra_documents=extra,
         )
         print(report.to_json(), end="")
         return 0

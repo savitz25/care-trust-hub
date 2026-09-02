@@ -89,6 +89,23 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "DROP TABLE" not in nj
     assert "MEMORY_CARE" not in nj
     assert "CHECK (state_code = 'FL')" not in nj
+
+    nj_docs = (migrations / "0033_state_facility_documents.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE state_facility_document (" in nj_docs
+    assert "CREATE TABLE state_facility_action (" in nj_docs
+    assert "CREATE TABLE state_facility_document_match_ledger (" in nj_docs
+    assert "CREATE TABLE state_facility_monitor_event (" in nj_docs
+    assert "REFERENCES state_source_snapshot(id)" in nj_docs
+    assert "REFERENCES state_facility_identity(id)" in nj_docs
+    assert "facility_id uuid REFERENCES state_facility_identity(id)," in nj_docs
+    assert "public_eligible boolean NOT NULL DEFAULT false" in nj_docs
+    assert "CHECK (public_eligible = false)" not in nj_docs
+    assert "penalty_amount_cents" in nj_docs
+    assert "DROP TABLE" not in nj_docs
+    assert "MEMORY_CARE" not in nj_docs
+    assert "CREATE TABLE state_licensed_provider" not in nj_docs
+    assert "ALTER TABLE state_regulatory_event" not in nj_docs
+    assert "CREATE TABLE trust_score" not in nj_docs.lower()
     assert "REVOKE ALL ON TABLE public.state_provider_profile FROM authenticated" in florida31
     assert "ENABLE ROW LEVEL SECURITY" in florida31
     assert "FORCE ROW LEVEL SECURITY" not in florida31

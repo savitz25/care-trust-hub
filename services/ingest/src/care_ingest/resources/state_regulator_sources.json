@@ -120,7 +120,7 @@
       "cms_reconciliation": "MODERATE",
       "assisted_living_same_ecosystem": true,
       "implemented": false,
-      "notes": "NJ-SEN-001 uses ingest-nj-doh-ltc against All_LTC.xlsx. ingest-state remains CA/NY/TX SNF-only. Enforcement/SOD/penalty pages are NJ-SEN-002."
+      "notes": "NJ-SEN-001 uses ingest-nj-doh-ltc against All_LTC.xlsx. NJ-SEN-002 uses ingest-nj-doh-enforcement against the penalty-letter index. ingest-state remains CA/NY/TX SNF-only."
     }
   ]
 }
