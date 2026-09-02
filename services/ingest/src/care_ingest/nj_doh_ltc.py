@@ -4,6 +4,8 @@ Organizes official licensed types. Does not rank facilities.
 Does not infer memory care. Does not replace the CMS federal spine.
 """
 
+# ruff: noqa: E501
+
 from __future__ import annotations
 
 import hashlib
@@ -14,7 +16,6 @@ import zipfile
 from collections import Counter
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, date, datetime, timedelta
-from pathlib import Path
 from typing import Any
 from urllib.request import Request, urlopen
 from xml.etree import ElementTree
@@ -308,7 +309,9 @@ def record_fingerprint(row: dict[str, str]) -> str:
     return hashlib.sha256(material.encode("utf-8")).hexdigest()
 
 
-def parse_xlsx(payload: bytes) -> tuple[list[str], list[dict[str, str]], list[str]]:
+def parse_xlsx(
+    payload: bytes, required: tuple[str, ...] | None = None
+) -> tuple[list[str], list[dict[str, str]], list[str]]:
     namespace = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
         workbook = ElementTree.fromstring(archive.read("xl/workbook.xml"))
@@ -358,7 +361,7 @@ def parse_xlsx(payload: bytes) -> tuple[list[str], list[dict[str, str]], list[st
     if not matrix:
         raise NjDohSchemaError("NJDOH workbook has no rows")
     headers = [str(item).strip() for item in matrix[0]]
-    missing = [name for name in REQUIRED_COLUMNS if name not in headers]
+    missing = [name for name in (required or REQUIRED_COLUMNS) if name not in headers]
     if missing:
         raise NjDohSchemaError(
             "NJDOH workbook schema drifted; missing columns: " + ", ".join(missing)
