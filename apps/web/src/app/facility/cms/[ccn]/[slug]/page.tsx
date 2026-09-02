@@ -40,6 +40,9 @@ import { canonicalUrl, publicRobots } from "@/config/deployment";
 import { SHARE_HUB } from "@/config/share-hub";
 import { JourneyNextStep } from "@/components/journey-next-step";
 import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-handoff";
+import { SeniorCustomerLayer } from "@/components/senior-customer-layer";
+import { seniorClaimProfile, claimCtaEnabledFor } from "@/server/customer-integration/eligibility";
+import { fetchCustomerLayer } from "@/server/customer-integration/public";
 
 export const dynamic = "force-dynamic";
 
@@ -136,6 +139,10 @@ export default async function RealFacilityPage({
     parseNetworkJourney(searchParams ? await searchParams : {}),
     "facility",
   );
+  const claimProfile = await seniorClaimProfile("nursing_home", provider.ccn).catch(() => null);
+  const customer = claimProfile
+    ? await fetchCustomerLayer(claimProfile.nativeProfileId)
+    : { profile: null, replies: null };
   return (
     <>
       <RealProviderDetail
@@ -158,6 +165,12 @@ export default async function RealFacilityPage({
       <div className="page-shell" style={{ paddingBlock: "0 3rem" }}>
         <JourneyNextStep module={journeyModule} />
       </div>
+      <SeniorCustomerLayer
+        providerClass="nursing_home"
+        ccn={provider.ccn}
+        enabled={!!claimProfile && claimCtaEnabledFor(claimProfile.nativeProfileId)}
+        {...customer}
+      />
     </>
   );
 }

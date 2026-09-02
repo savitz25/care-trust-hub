@@ -11,6 +11,9 @@ import {
 } from "@/server/care/consumer";
 import { isAgencyProfileIndexableForPage } from "@/server/care/agency-publication";
 import { isHhProfileIntelEnabled } from "@/server/care/feature-flags";
+import { SeniorCustomerLayer } from "@/components/senior-customer-layer";
+import { seniorClaimProfile, claimCtaEnabledFor } from "@/server/customer-integration/eligibility";
+import { fetchCustomerLayer } from "@/server/customer-integration/public";
 
 export const dynamic = "force-dynamic";
 
@@ -64,5 +67,19 @@ export default async function HomeHealthProfileRoute({
   if (providerSlug(intel.common.display_name) !== slug) {
     permanentRedirect(homeHealthHref(intel.canonical_id, intel.common.display_name));
   }
-  return <AgencyProfilePage intel={intel} />;
+  const claimProfile = await seniorClaimProfile("home_health", ccn).catch(() => null);
+  const customer = claimProfile
+    ? await fetchCustomerLayer(claimProfile.nativeProfileId)
+    : { profile: null, replies: null };
+  return (
+    <>
+      <AgencyProfilePage intel={intel} />
+      <SeniorCustomerLayer
+        providerClass="home_health"
+        ccn={ccn}
+        enabled={!!claimProfile && claimCtaEnabledFor(claimProfile.nativeProfileId)}
+        {...customer}
+      />
+    </>
+  );
 }

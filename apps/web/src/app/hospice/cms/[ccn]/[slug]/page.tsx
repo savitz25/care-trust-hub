@@ -7,6 +7,9 @@ import { hospiceResearchDescription } from "@care/domain";
 import { hospiceHref, hospiceResearchDocumentTitle, providerSlug } from "@/server/care/consumer";
 import { isAgencyProfileIndexableForPage } from "@/server/care/agency-publication";
 import { isHospiceProfileIntelEnabled } from "@/server/care/feature-flags";
+import { SeniorCustomerLayer } from "@/components/senior-customer-layer";
+import { seniorClaimProfile, claimCtaEnabledFor } from "@/server/customer-integration/eligibility";
+import { fetchCustomerLayer } from "@/server/customer-integration/public";
 
 export const dynamic = "force-dynamic";
 
@@ -60,5 +63,19 @@ export default async function HospiceProfileRoute({
   if (providerSlug(intel.common.display_name) !== slug) {
     permanentRedirect(hospiceHref(intel.canonical_id, intel.common.display_name));
   }
-  return <AgencyProfilePage intel={intel} />;
+  const claimProfile = await seniorClaimProfile("hospice", ccn).catch(() => null);
+  const customer = claimProfile
+    ? await fetchCustomerLayer(claimProfile.nativeProfileId)
+    : { profile: null, replies: null };
+  return (
+    <>
+      <AgencyProfilePage intel={intel} />
+      <SeniorCustomerLayer
+        providerClass="hospice"
+        ccn={ccn}
+        enabled={!!claimProfile && claimCtaEnabledFor(claimProfile.nativeProfileId)}
+        {...customer}
+      />
+    </>
+  );
 }

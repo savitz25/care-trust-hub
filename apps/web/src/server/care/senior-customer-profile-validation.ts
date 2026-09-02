@@ -232,6 +232,18 @@ async function currentProfile(
   };
 }
 
+export async function getSeniorClaimProfile(providerClass: SeniorProviderClass, cmsCcn: string) {
+  const profile = await currentProfile(providerClass, cmsCcn);
+  if (!profile) return null;
+  await validateSeniorCustomerProfile({
+    providerClass: profile.providerClass,
+    cmsCcn: profile.cmsCcn,
+    nativeProfileId: profile.nativeProfileId,
+    canonicalProfileUrl: profile.canonicalProfileUrl,
+  });
+  return profile;
+}
+
 async function classForCcn(ccn: string): Promise<SeniorProviderClass | null> {
   for (const providerClass of ["nursing_home", "home_health", "hospice"] as const)
     if (await currentProfile(providerClass, ccn)) return providerClass;
