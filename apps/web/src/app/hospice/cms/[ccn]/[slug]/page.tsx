@@ -64,7 +64,8 @@ export default async function HospiceProfileRoute({
     permanentRedirect(hospiceHref(intel.canonical_id, intel.common.display_name));
   }
   const claimProfile = await seniorClaimProfile("hospice", ccn).catch(() => null);
-  const customer = claimProfile
+  const customerEnabled = !!claimProfile && claimCtaEnabledFor(claimProfile.nativeProfileId);
+  const customer = customerEnabled
     ? await fetchCustomerLayer(claimProfile.nativeProfileId)
     : { profile: null, replies: null };
   return (
@@ -73,7 +74,7 @@ export default async function HospiceProfileRoute({
       <SeniorCustomerLayer
         providerClass="hospice"
         ccn={ccn}
-        enabled={!!claimProfile && claimCtaEnabledFor(claimProfile.nativeProfileId)}
+        enabled={customerEnabled}
         {...customer}
       />
     </>

@@ -68,7 +68,8 @@ export default async function HomeHealthProfileRoute({
     permanentRedirect(homeHealthHref(intel.canonical_id, intel.common.display_name));
   }
   const claimProfile = await seniorClaimProfile("home_health", ccn).catch(() => null);
-  const customer = claimProfile
+  const customerEnabled = !!claimProfile && claimCtaEnabledFor(claimProfile.nativeProfileId);
+  const customer = customerEnabled
     ? await fetchCustomerLayer(claimProfile.nativeProfileId)
     : { profile: null, replies: null };
   return (
@@ -77,7 +78,7 @@ export default async function HomeHealthProfileRoute({
       <SeniorCustomerLayer
         providerClass="home_health"
         ccn={ccn}
-        enabled={!!claimProfile && claimCtaEnabledFor(claimProfile.nativeProfileId)}
+        enabled={customerEnabled}
         {...customer}
       />
     </>

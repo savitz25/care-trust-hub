@@ -140,7 +140,8 @@ export default async function RealFacilityPage({
     "facility",
   );
   const claimProfile = await seniorClaimProfile("nursing_home", provider.ccn).catch(() => null);
-  const customer = claimProfile
+  const customerEnabled = !!claimProfile && claimCtaEnabledFor(claimProfile.nativeProfileId);
+  const customer = customerEnabled
     ? await fetchCustomerLayer(claimProfile.nativeProfileId)
     : { profile: null, replies: null };
   return (
@@ -168,7 +169,7 @@ export default async function RealFacilityPage({
       <SeniorCustomerLayer
         providerClass="nursing_home"
         ccn={provider.ccn}
-        enabled={!!claimProfile && claimCtaEnabledFor(claimProfile.nativeProfileId)}
+        enabled={customerEnabled}
         {...customer}
       />
     </>
