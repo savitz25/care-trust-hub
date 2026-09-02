@@ -97,6 +97,18 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "CREATE TABLE state_facility_monitor_event (" in nj_docs
     assert "CREATE TABLE state_facility_document_occurrence (" in nj_docs
     assert "corpus_scope" in nj_docs
+
+    metrics = (migrations / "0034_state_program_metrics.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE state_facility_metric_observation (" in metrics
+    assert "CREATE TABLE state_program_participation (" in metrics
+    assert "CREATE TABLE state_program_organization (" in metrics
+    assert "CREATE TABLE state_program_location (" in metrics
+    assert "CREATE TABLE state_program_service_area (" in metrics
+    assert "CREATE TABLE state_program_status_event (" in metrics
+    assert "is_default_unlisted_rate = false" in metrics
+    assert "pbj_staffing" not in metrics
+    assert "MEMORY_CARE" not in metrics
+    assert "DROP TABLE" not in metrics
     assert "REFERENCES state_source_snapshot(id)" in nj_docs
     assert "REFERENCES state_facility_identity(id)" in nj_docs
     assert "facility_id uuid REFERENCES state_facility_identity(id)," in nj_docs

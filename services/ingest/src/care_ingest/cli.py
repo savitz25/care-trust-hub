@@ -217,6 +217,43 @@ def build_parser() -> argparse.ArgumentParser:
     )
     njenf.add_argument("--timeout", type=float, default=120)
     njenf.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    staff = commands.add_parser(
+        "ingest-nj-nh-staffing",
+        help="NJDOH quarterly nursing-home staffing ratios (NJ-SEN-003)",
+    )
+    staff.add_argument("--input", type=Path, help="Local quarterly report HTML")
+    staff.add_argument("--year", type=int)
+    staff.add_argument("--quarter", choices=("Q1", "Q2", "Q3", "Q4"))
+    staff.add_argument("--download", action="store_true")
+    staff.add_argument("--identity-xlsx", type=Path)
+    staff.add_argument("--inspect-only", action="store_true")
+    staff.add_argument("--dry-run", action="store_true")
+    staff.add_argument("--execute", action="store_true")
+    staff.add_argument("--timeout", type=float, default=180)
+    staff.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    rates = commands.add_parser(
+        "ingest-nj-assisted-living-rates",
+        help="NJ Medicaid assisted-living listed provider rates (NJ-SEN-003)",
+    )
+    rates.add_argument("--input", type=Path, help="Local rate-schedule PDF")
+    rates.add_argument("--download", action="store_true")
+    rates.add_argument("--identity-xlsx", type=Path)
+    rates.add_argument("--inspect-only", action="store_true")
+    rates.add_argument("--dry-run", action="store_true")
+    rates.add_argument("--execute", action="store_true")
+    rates.add_argument("--timeout", type=float, default=120)
+    rates.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    pace = commands.add_parser(
+        "ingest-nj-pace",
+        help="NJ PACE organizations, centers, and service areas (NJ-SEN-003)",
+    )
+    pace.add_argument("--input", type=Path, help="Local DoAS PACE HTML")
+    pace.add_argument("--download", action="store_true")
+    pace.add_argument("--inspect-only", action="store_true")
+    pace.add_argument("--dry-run", action="store_true")
+    pace.add_argument("--execute", action="store_true")
+    pace.add_argument("--timeout", type=float, default=60)
+    pace.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     return parser
 
 
@@ -366,6 +403,132 @@ def main(argv: list[str] | None = None) -> int:
             dedupe = dedupe_hashes(ledger)
             paths = write_reports(ledger, summary, dedupe, retry_for_ledger, args.write_reports)
             print(json.dumps(paths, indent=2))
+        return 0
+    if args.command == "ingest-nj-nh-staffing":
+        from .nj_doh_enforcement_database import load_identities_from_xlsx
+        from .nj_doh_staffing import (
+            build_staffing_report,
+            fetch_form,
+            parse_staffing_html,
+            post_staffing_report,
+        )
+
+        identities = []
+        if args.identity_xlsx:
+            identities = load_identities_from_xlsx(Path(args.identity_xlsx).read_bytes())
+        elif (data_root / "raw" / "nj-doh-ltc" / "All_LTC.xlsx").is_file():
+            identities = load_identities_from_xlsx(
+                (data_root / "raw" / "nj-doh-ltc" / "All_LTC.xlsx").read_bytes()
+            )
+        if args.input:
+            html = Path(args.input).read_text(encoding="utf-8", errors="replace")
+        elif args.download:
+            if not args.year or not args.quarter:
+                parser.error("download mode requires --year and --quarter")
+            form = fetch_form(timeout=args.timeout).decode("utf-8", errors="replace")
+            payload = post_staffing_report(form, str(args.year), args.quarter, timeout=args.timeout)
+            archive = data_root / "raw" / "nj-doh-staffing"
+            archive.mkdir(parents=True, exist_ok=True)
+            dest = archive / f"report_{args.year}_{args.quarter}.html"
+            dest.write_bytes(payload)
+            html = payload.decode("utf-8", errors="replace")
+        else:
+            parser.error("ingest-nj-nh-staffing requires --input or --download")
+        rows = parse_staffing_html(html, year=args.year, quarter=args.quarter)
+        if args.inspect_only:
+            period = {
+                "rows": len(rows),
+                "year": rows[0].year if rows else None,
+                "quarter": rows[0].quarter if rows else None,
+            }
+            print(json.dumps(period, indent=2))
+            return 0
+        if args.execute and not args.database_url:
+            parser.error("execute mode requires CARE_DATABASE_URL or --database-url")
+        report = build_staffing_report(rows, identities, html=html, dry_run=not args.execute)
+        print(report.to_json(), end="")
+        return 0
+    if args.command == "ingest-nj-assisted-living-rates":
+        from .nj_doh_enforcement import fetch_bytes
+        from .nj_doh_enforcement_database import load_identities_from_xlsx
+        from .nj_medicaid_al_rates import (
+            OFFICIAL_SFY_2026_URL,
+            build_rate_report,
+            match_rate_row,
+            parse_rate_pdf,
+        )
+
+        identities = []
+        if args.identity_xlsx:
+            identities = load_identities_from_xlsx(Path(args.identity_xlsx).read_bytes())
+        elif (data_root / "raw" / "nj-doh-ltc" / "All_LTC.xlsx").is_file():
+            identities = load_identities_from_xlsx(
+                (data_root / "raw" / "nj-doh-ltc" / "All_LTC.xlsx").read_bytes()
+            )
+        if args.input:
+            payload = Path(args.input).read_bytes()
+            url = str(args.input)
+        elif args.download:
+            _status, payload, _ctype = fetch_bytes(OFFICIAL_SFY_2026_URL, timeout=args.timeout)
+            archive = data_root / "raw" / "nj-medicaid-al"
+            archive.mkdir(parents=True, exist_ok=True)
+            (archive / "SFY_2026_Assisted_Living_Rates.pdf").write_bytes(payload)
+            url = OFFICIAL_SFY_2026_URL
+        else:
+            parser.error("ingest-nj-assisted-living-rates requires --input or --download")
+        schedule = parse_rate_pdf(payload, official_url=url, source_class="OFFICIAL")
+        if args.inspect_only:
+            print(
+                json.dumps(
+                    {
+                        "fiscal_year": schedule.fiscal_year,
+                        "rows": len(schedule.rows),
+                        "sha256": schedule.content_sha256,
+                    },
+                    indent=2,
+                )
+            )
+            return 0
+        if args.execute and not args.database_url:
+            parser.error("execute mode requires CARE_DATABASE_URL or --database-url")
+        matches = [match_rate_row(row, identities) for row in schedule.rows]
+        print(build_rate_report(schedule, matches, dry_run=not args.execute).to_json(), end="")
+        return 0
+    if args.command == "ingest-nj-pace":
+        from datetime import UTC, datetime
+
+        from .nj_doh_enforcement import fetch_bytes, sha256_bytes
+        from .nj_pace import DOAS_URL, build_pace_report, parse_doas_page
+
+        if args.input:
+            html = Path(args.input).read_text(encoding="utf-8", errors="replace")
+        elif args.download:
+            _status, body, _ctype = fetch_bytes(DOAS_URL, timeout=args.timeout)
+            archive = data_root / "raw" / "nj-pace"
+            archive.mkdir(parents=True, exist_ok=True)
+            (archive / "doas_pace.html").write_bytes(body)
+            html = body.decode("utf-8", errors="replace")
+        else:
+            parser.error("ingest-nj-pace requires --input or --download")
+        corpus = parse_doas_page(
+            html,
+            retrieved=datetime.now(tz=UTC).isoformat(),
+            sha256=sha256_bytes(html.encode("utf-8")),
+        )
+        if args.inspect_only:
+            print(
+                json.dumps(
+                    {
+                        "organizations": len(corpus.organizations),
+                        "centers": len(corpus.centers),
+                    },
+                    indent=2,
+                )
+            )
+            return 0
+        if args.execute and not args.database_url:
+            parser.error("execute mode requires CARE_DATABASE_URL or --database-url")
+        print(build_pace_report(corpus, dry_run=not args.execute).to_json(), end="")
         return 0
     if args.command == "cms-freshness":
         if not args.database_url:
