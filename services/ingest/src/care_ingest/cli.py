@@ -254,6 +254,45 @@ def build_parser() -> argparse.ArgumentParser:
     pace.add_argument("--execute", action="store_true")
     pace.add_argument("--timeout", type=float, default=60)
     pace.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    acute = commands.add_parser(
+        "ingest-nj-doh-acute",
+        help="Acquire/normalize NJDOH All_Acute facility identity spine (NJ-SEN-004)",
+    )
+    acute.add_argument("--input", type=Path, help="Local All_Acute.xlsx path")
+    acute.add_argument("--download", action="store_true", help="Download the official workbook")
+    acute.add_argument("--dry-run", action="store_true", help="Parse and match without writing")
+    acute.add_argument("--execute", action="store_true", help="Write identities to the database")
+    acute.add_argument("--inspect-only", action="store_true", help="Print source inspection JSON")
+    acute.add_argument("--probe-service-area", action="store_true")
+    acute.add_argument("--timeout", type=float, default=120)
+    acute.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    rematch = commands.add_parser(
+        "rematch-nj-doh-enforcement",
+        help="Rerun NJDOH enforcement identity attachment against All_LTC + All_Acute",
+    )
+    rematch.add_argument("--ltc-xlsx", type=Path)
+    rematch.add_argument("--acute-xlsx", type=Path)
+    rematch.add_argument("--index-html", type=Path)
+    rematch.add_argument("--pdf-dir", type=Path)
+    rematch.add_argument("--dry-run", action="store_true")
+    staff_recon = commands.add_parser(
+        "reconcile-nj-staffing-facids",
+        help="Classify staffing FacIDs that do not match current All_LTC",
+    )
+    staff_recon.add_argument("--staffing-dir", type=Path)
+    staff_recon.add_argument("--ltc-xlsx", type=Path)
+    staff_recon.add_argument("--acute-xlsx", type=Path)
+    staff_recon.add_argument("--output", type=Path)
+    ccrc = commands.add_parser("discover-nj-ccrc", help="Inspect DCA CCRC sources (NJ-SEN-004)")
+    ccrc.add_argument("--input", type=Path)
+    ccrc.add_argument("--download", action="store_true")
+    ccrc.add_argument("--timeout", type=float, default=45)
+    snap = commands.add_parser(
+        "nj-sen-004-snapshot", help="Write the internal NJ state snapshot and metric contract"
+    )
+    snap.add_argument("--acute-xlsx", type=Path)
+    snap.add_argument("--ltc-xlsx", type=Path)
+    snap.add_argument("--output", type=Path)
     return parser
 
 
@@ -529,6 +568,152 @@ def main(argv: list[str] | None = None) -> int:
         if args.execute and not args.database_url:
             parser.error("execute mode requires CARE_DATABASE_URL or --database-url")
         print(build_pace_report(corpus, dry_run=not args.execute).to_json(), end="")
+        return 0
+    if args.command == "ingest-nj-doh-acute":
+        from .nj_doh_acute import fetch_official_workbook, inspect_payload, probe_service_area_page
+        from .nj_doh_acute_database import ingest_nj_doh_acute
+
+        if args.input:
+            payload = Path(args.input).read_bytes()
+        elif args.download:
+            payload = fetch_official_workbook(timeout=args.timeout)
+            archive = data_root / "raw" / "nj-doh-acute"
+            archive.mkdir(parents=True, exist_ok=True)
+            (archive / "All_Acute.xlsx").write_bytes(payload)
+        else:
+            parser.error("ingest-nj-doh-acute requires --input or --download")
+        if args.inspect_only:
+            print(json.dumps(inspect_payload(payload), indent=2, default=str))
+            return 0
+        service_area_status = "SOURCE_ACCESS_BLOCKED"
+        if args.probe_service_area:
+            from .nj_doh_acute import parse_acute_rows, parse_acute_xlsx
+
+            _headers, rows, _sheets = parse_acute_xlsx(payload)
+            parsed, _ = parse_acute_rows(rows)
+            sample = next(
+                (
+                    row.source_facility_id
+                    for row in parsed
+                    if row.facility_type_canonical == "NJ_HHA"
+                ),
+                None,
+            )
+            if sample:
+                probe = probe_service_area_page(sample, timeout=min(args.timeout, 20))
+                service_area_status = (
+                    "ACQUIRED_CURRENT_SNAPSHOT"
+                    if not probe.blocked
+                    else "SOURCE_ACCESS_BLOCKED"
+                )
+                print(json.dumps({
+                    "facid": probe.facid,
+                    "url": probe.url,
+                    "http_status": probe.http_status,
+                    "blocked": probe.blocked,
+                    "barrier": probe.barrier,
+                    "counties_served": probe.counties_served,
+                }, indent=2))
+        if not args.execute:
+            args.dry_run = True
+        if args.execute and not args.database_url:
+            parser.error("execute mode requires CARE_DATABASE_URL or --database-url")
+        report = ingest_nj_doh_acute(
+            payload,
+            database_url=args.database_url,
+            dry_run=not args.execute,
+            service_area_status=service_area_status,
+        )
+        print(report.to_json(), end="")
+        return 0
+    if args.command == "rematch-nj-doh-enforcement":
+        from .nj_doh_enforcement import assemble_documents, load_local_pdfs, parse_penalty_index
+        from .nj_sen_004 import load_identities_from_paths, rematch_documents
+
+        ltc_path = args.ltc_xlsx or (data_root / "raw" / "nj-doh-ltc" / "All_LTC.xlsx")
+        acute_path = args.acute_xlsx or (data_root / "raw" / "nj-doh-acute" / "All_Acute.xlsx")
+        ltc, acute = load_identities_from_paths(ltc_path, acute_path)
+        documents: list[dict] = []
+        if args.index_html and args.index_html.is_file():
+            html = args.index_html.read_text(encoding="utf-8", errors="replace")
+            rows, _modified = parse_penalty_index(html)
+            pdf_dir = args.pdf_dir or (data_root / "raw" / "nj-doh-enforcement" / "pdfs")
+            payloads = load_local_pdfs(pdf_dir) if pdf_dir.is_dir() else {}
+            assembled = assemble_documents(rows, identities=ltc + acute, pdf_payloads=payloads)
+            documents = [
+                {
+                    "printed_license_number": item.printed_license_number,
+                    "printed_source_facility_id": item.printed_source_facility_id,
+                    "printed_facility_name": item.printed_facility_name,
+                    "printed_street": item.printed_street,
+                    "printed_city": item.printed_city,
+                }
+                for item in assembled
+            ]
+        report = rematch_documents(documents, ltc, acute)
+        print(report.to_json(), end="")
+        return 0
+    if args.command == "reconcile-nj-staffing-facids":
+        from .nj_sen_004 import (
+            audit_staffing_facids,
+            load_identities_from_paths,
+            write_staffing_audit_csv,
+        )
+
+        ltc_path = args.ltc_xlsx or (data_root / "raw" / "nj-doh-ltc" / "All_LTC.xlsx")
+        acute_path = args.acute_xlsx or (data_root / "raw" / "nj-doh-acute" / "All_Acute.xlsx")
+        staffing_dir = args.staffing_dir or (data_root / "raw" / "nj-doh-staffing")
+        ltc, acute = load_identities_from_paths(ltc_path, acute_path)
+        audits = audit_staffing_facids(staffing_dir, ltc, acute)
+        dest = args.output or Path("artifacts/nj-sen-004-staffing-facid-reconciliation.csv")
+        write_staffing_audit_csv(audits, dest)
+        print(json.dumps({"rows": len(audits), "path": str(dest)}, indent=2))
+        return 0
+    if args.command == "discover-nj-ccrc":
+        from datetime import UTC
+        from datetime import datetime as dt
+
+        from .nj_sen_004 import CCRC_LANDING_URL, discover_ccrc, fetch_url
+
+        if args.input:
+            html = Path(args.input).read_text(encoding="utf-8", errors="replace")
+        elif args.download:
+            _status, body, _ctype = fetch_url(CCRC_LANDING_URL, timeout=args.timeout)
+            archive = data_root / "raw" / "nj-ccrc"
+            archive.mkdir(parents=True, exist_ok=True)
+            (archive / "ccrc.shtml.html").write_bytes(body)
+            html = body.decode("utf-8", errors="replace")
+        else:
+            parser.error("discover-nj-ccrc requires --input or --download")
+        print(json.dumps(discover_ccrc(html, retrieved_at=dt.now(tz=UTC).isoformat()), indent=2))
+        return 0
+    if args.command == "nj-sen-004-snapshot":
+        from datetime import UTC
+        from datetime import datetime as dt
+
+        from .nj_doh_acute import inspect_payload
+        from .nj_sen_004 import (
+            build_internal_snapshot,
+            default_coverage,
+            load_identities_from_paths,
+        )
+
+        acute_path = args.acute_xlsx or (data_root / "raw" / "nj-doh-acute" / "All_Acute.xlsx")
+        ltc_path = args.ltc_xlsx or (data_root / "raw" / "nj-doh-ltc" / "All_LTC.xlsx")
+        inspect = inspect_payload(acute_path.read_bytes()) if acute_path.is_file() else {}
+        ltc, _acute = load_identities_from_paths(ltc_path, acute_path)
+        snapshot = build_internal_snapshot(
+            acute_inspect=inspect,
+            ltc_rows=len(ltc),
+            rematch=None,
+            staffing_audits=[],
+            coverage=default_coverage(),
+            retrieved_at=dt.now(tz=UTC).isoformat(),
+        )
+        dest = args.output or Path("artifacts/nj-sen-004-audited-state-snapshot.json")
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_text(json.dumps(snapshot, indent=2, default=str) + "\n", encoding="utf-8")
+        print(json.dumps({"path": str(dest)}, indent=2))
         return 0
     if args.command == "cms-freshness":
         if not args.database_url:

@@ -1,0 +1,125 @@
+{
+  "ticket": "NJ-SEN-004",
+  "internal_only": true,
+  "public_new_jersey_route": false,
+  "retrieved_at": "2026-09-02T18:26:47.150495+00:00",
+  "all_acute": {
+    "landing_url": "https://healthapps.nj.gov/facilities/acSearch.aspx",
+    "download_url": "https://healthapps.nj.gov/facilities/documents2/All_Acute.xlsx",
+    "source_as_of": "2026-08-31",
+    "sha256": "271569d4b4113747e161df8911ccd9dc93bc2057c27e2b9c9a6eb5f879ed6e12",
+    "file_size_bytes": 376195,
+    "sheets": ["All_Acute"],
+    "rows": 1430,
+    "columns": 25,
+    "schema_fingerprint": "e8136d9e808cd4f913a86a4e3beb3d660afe27adec81378250cecdbf9a5acabf",
+    "home_health_agencies": 39,
+    "hospice_programs": 68,
+    "hospice_branches": 27,
+    "hospice_inpatient": 9,
+    "other_acute_classes": 1287,
+    "unknown_quarantined": 0,
+    "invalid_county_rows": 18,
+    "expired_before_rundate": 80,
+    "geo_anomalies": 138,
+    "duplicate_facids": 0,
+    "duplicate_licenses": 0
+  },
+  "coverage": [
+    {
+      "source_family": "nj_doh_all_ltc",
+      "coverage_state": "ACQUIRED_CURRENT_SNAPSHOT",
+      "notes": "Official All_LTC workbook current snapshot. 893 identities."
+    },
+    {
+      "source_family": "nj_doh_all_acute",
+      "coverage_state": "ACQUIRED_CURRENT_SNAPSHOT",
+      "notes": "Official All_Acute workbook current snapshot. 1430 identities."
+    },
+    {
+      "source_family": "nj_doh_enforcement",
+      "coverage_state": "ACQUIRED_PARTIAL_HISTORY",
+      "notes": "1146 indexed occurrences, 1144 downloaded, 1131 canonical hashes, 2 source-unavailable."
+    },
+    {
+      "source_family": "nj_doh_nh_staffing",
+      "coverage_state": "ACQUIRED_PARTIAL_HISTORY",
+      "notes": "Quarterly HTML reports 2019 Q1 through 2026 Q2. 2026 Q3/Q4 not populated."
+    },
+    {
+      "source_family": "nj_medicaid_al_rates",
+      "coverage_state": "ACQUIRED_CURRENT_SNAPSHOT",
+      "notes": "SFY 2026 listed-provider rate PDF. No provider-ID crosswalk."
+    },
+    {
+      "source_family": "nj_pace",
+      "coverage_state": "ACQUIRED_CURRENT_SNAPSHOT",
+      "notes": "DoAS PACE page plus 2026-01-08 press status history."
+    },
+    {
+      "source_family": "nj_hha_hospice_service_area",
+      "coverage_state": "SOURCE_ACCESS_BLOCKED",
+      "notes": "Counties served are on facility listings behind the ASP.NET search POST. Direct FacID GET URLs are not public."
+    },
+    {
+      "source_family": "nj_ccrc",
+      "coverage_state": "SOURCE_AVAILABLE_BY_REQUEST",
+      "notes": "DCA program page has no public Certificate of Authority roster or disclosure index. Do not publish a zero CCRC count."
+    },
+    {
+      "source_family": "nj_medicaid_al_identity_bridge",
+      "coverage_state": "SOURCE_AVAILABLE_BY_REQUEST",
+      "notes": "NJMMIS listed-rate PDF has names and rates only."
+    },
+    {
+      "source_family": "nj_pace_cms_identifier",
+      "coverage_state": "PARTIAL_SOURCE_COVERAGE",
+      "notes": "CMS PACE contract identifiers exist nationally; NJ legal-name joins remain review-required without an official dual-identifier file."
+    }
+  ],
+  "populations": {
+    "nj_doh_all_ltc_source_identities": 893,
+    "nj_doh_all_acute_source_identities": 1430,
+    "home_health_agencies": 39,
+    "hospice_programs": 68,
+    "hospice_branches": 27,
+    "hospice_inpatient": 9,
+    "cms_classes_not_summed": true,
+    "nj_counties": 21
+  },
+  "staffing_facid_reconciliation": {
+    "records": 21,
+    "by_class": {
+      "NON_NURSING_FACILITY": 1,
+      "RENAMED_LTC_FACILITY": 8,
+      "CLOSED_OR_NO_LONGER_IN_CURRENT_WORKBOOK": 12
+    },
+    "attach_staffing": 0,
+    "artifact": "artifacts/nj-sen-004-staffing-facid-reconciliation.csv"
+  },
+  "home_health_identity_dry_run_without_cms_universe": {
+    "source_rows": 39,
+    "exact": 0,
+    "high_confidence": 0,
+    "note": "All_Acute does not publish CCN. Class-scoped CMS joins require CARE_DATABASE_URL home_health_snapshot."
+  },
+  "hospice_identity_dry_run_without_cms_universe": {
+    "programs": 68,
+    "branches": 27,
+    "inpatient": 9,
+    "branch_review_required": 27,
+    "note": "Branches do not inherit a parent CCN. CMS joins require CARE_DATABASE_URL hospice_snapshot."
+  },
+  "publication_gates": {
+    "care_database_url": false,
+    "migrations_applied": false,
+    "production_derived_metrics": false,
+    "public_route_allowed": false
+  },
+  "notes": [
+    "Do not sum CMS nursing home, Home Health, and Hospice into providers.",
+    "Do not show zero CCRCs; the roster is SOURCE_AVAILABLE_BY_REQUEST.",
+    "Physical office county is not Home Health or Hospice service area.",
+    "This snapshot is internal and not production-derived until NJ-SEN-005 executes against CARE_DATABASE_URL."
+  ]
+}

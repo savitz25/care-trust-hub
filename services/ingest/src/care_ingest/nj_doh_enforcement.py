@@ -134,6 +134,8 @@ class IdentityRecord:
     zip_code: str | None
     licensed_owner: str | None
     canonical_type: str | None
+    dataset_key: str | None = None
+    facility_type_raw: str | None = None
 
 
 @dataclass(slots=True)
@@ -634,6 +636,8 @@ def identity_from_ltc(row: NjDohFacilityRow) -> IdentityRecord:
         zip_code=row.zip_code,
         licensed_owner=row.licensed_owner,
         canonical_type=row.facility_type_canonical,
+        dataset_key="nj-doh-all-ltc",
+        facility_type_raw=row.facility_type_raw,
     )
 
 

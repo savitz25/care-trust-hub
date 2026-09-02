@@ -109,6 +109,24 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "pbj_staffing" not in metrics
     assert "MEMORY_CARE" not in metrics
     assert "DROP TABLE" not in metrics
+
+    acute = (migrations / "0035_state_service_area_regulated_org.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE state_facility_service_area (" in acute
+    assert "CREATE TABLE state_regulated_organization (" in acute
+    assert "CREATE TABLE state_regulated_community (" in acute
+    assert "CREATE TABLE state_regulatory_certificate (" in acute
+    assert "CREATE TABLE state_disclosure_filing (" in acute
+    assert "CREATE TABLE state_organization_facility_link (" in acute
+    assert "CREATE TABLE state_source_coverage (" in acute
+    assert "PHYSICAL_LOCATION" in acute
+    assert "SOURCE_AVAILABLE_BY_REQUEST" in acute
+    assert "dataset_key" in acute
+    assert "CREATE TABLE nj_acute_facilities" not in acute
+    assert "CREATE TABLE nj_home_health" not in acute
+    assert "CREATE TABLE nj_hospice" not in acute
+    assert "CREATE TABLE nj_ccrc" not in acute
+    assert "DROP TABLE" not in acute
+    assert "public_eligible boolean NOT NULL DEFAULT false" in acute
     assert "REFERENCES state_source_snapshot(id)" in nj_docs
     assert "REFERENCES state_facility_identity(id)" in nj_docs
     assert "facility_id uuid REFERENCES state_facility_identity(id)," in nj_docs
