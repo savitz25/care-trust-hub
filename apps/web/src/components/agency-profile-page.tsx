@@ -3,6 +3,7 @@ import {
   HomeHealthProfileIntelligence,
   HospiceProfileIntelligence,
 } from "./agency-profile-intelligence";
+import { NjProfileEvidenceModule } from "./nj-profile-evidence";
 
 export function AgencyProfilePage({
   intel,
@@ -47,6 +48,7 @@ export function AgencyProfilePage({
         ) : (
           <HospiceProfileIntelligence intel={intel} />
         )}
+        <NjProfileEvidenceModule ccn={intel.canonical_id} state={office.state} />
       </div>
     </div>
   );

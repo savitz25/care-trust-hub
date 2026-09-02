@@ -12,3 +12,7 @@ __pycache__
 package-lock.json
 *.sql
 data
+apps/web/src/data/nj-facility-inventory.json
+apps/web/src/data/nj-medicaid-rate-rows.json
+packages/domain/src/nj-public-snapshot.ts
+artifacts/nj-sen-005-public-snapshot.json

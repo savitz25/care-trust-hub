@@ -67,12 +67,15 @@ describe("senior-home-intel-v1", () => {
     expect(JSON.stringify(intel)).not.toMatch(HOME_PROHIBITED_LANGUAGE);
     expect(intel.floridaPreview.href).toBe("/florida");
     expect(intel.floridaPreview.publishedAlfAfch).toBe(25);
-    expect(intel.askMarket).toHaveLength(6);
+    expect(intel.askMarket).toHaveLength(7);
     expect(intel.geography.some((row) => row.intelligenceHref === "/florida")).toBe(true);
+    expect(intel.geography.some((row) => row.intelligenceHref === "/new-jersey")).toBe(true);
     expect(
       intel.geography
-        .filter((row) => row.state !== "FL")
+        .filter((row) => row.state !== "FL" && row.state !== "NJ")
         .every((row) => row.intelligenceHref === null),
     ).toBe(true);
+    expect(intel.newJerseyPreview.href).toBe("/new-jersey");
+    expect(intel.newJerseyPreview.ltcIdentities).toBe(893);
   });
 });

@@ -1,0 +1,2202 @@
+{
+  "version": "nj-sen-005-public-v1",
+  "asOf": "2026-09-02",
+  "ltcAsOf": "2026-08-31",
+  "acuteAsOf": "2026-08-31",
+  "ltc": {
+    "rows": 893,
+    "uniqueFacIds": 893,
+    "uniqueLicenses": 893,
+    "types": 19,
+    "counties": 21,
+    "quarantined": 0,
+    "byType": [
+      {
+        "label": "LONG TERM CARE FACILITY SNF/NF",
+        "count": 303
+      },
+      {
+        "label": "ASSISTED LIVING RESIDENCE",
+        "count": 256
+      },
+      {
+        "label": "ADULT DAY HEALTH SERVICES FACILITY",
+        "count": 159
+      },
+      {
+        "label": "COMPREHENSIVE PERSONAL CARE HOME",
+        "count": 32
+      },
+      {
+        "label": "RESIDENTIAL DEMENTIA CARE HOME",
+        "count": 31
+      },
+      {
+        "label": "LONG TERM CARE FACILITY - HOME FOR THE AGED SNF/NF",
+        "count": 23
+      },
+      {
+        "label": "ASSISTED LIVING PROGRAM",
+        "count": 17
+      },
+      {
+        "label": "LONG TERM CARE FACILITY",
+        "count": 15
+      },
+      {
+        "label": "PEDIATRIC DAY HEALTH SERVICES FACILITY",
+        "count": 13
+      },
+      {
+        "label": "RESIDENTIAL HEALTH CARE in a LONG-TERM CARE FACILITY",
+        "count": 10
+      },
+      {
+        "label": "LONG TERM CARE FACILITY S/NF DP",
+        "count": 7
+      },
+      {
+        "label": "ADULT DAY HEALTH SERVICES in a LONG-TERM CARE FACILITY",
+        "count": 6
+      },
+      {
+        "label": "HOSPITAL BASED - LONG TERM CARE FACILITY SNF/NF",
+        "count": 6
+      },
+      {
+        "label": "LONG TERM CARE FACILITY LTC-PRIV",
+        "count": 5
+      },
+      {
+        "label": "HOSPITAL BASED - LONG TERM CARE SUB ACUTE FACILITY SNF",
+        "count": 4
+      },
+      {
+        "label": "ALTERNATE FAMILY CARE",
+        "count": 3
+      },
+      {
+        "label": "ADULT DAY HEALTH SERVICES in an ASSISTED LIVING RESIDENCE",
+        "count": 1
+      },
+      {
+        "label": "HOSPITAL BASED - ADULT DAY HEALTH SERVICES",
+        "count": 1
+      },
+      {
+        "label": "LONG TERM CARE FACILITY - HOME FOR THE AGED LTC-PRIV",
+        "count": 1
+      }
+    ],
+    "source": "https://healthapps.nj.gov/facilities/documents2/All_LTC.xlsx",
+    "sha256": "d77ed7c9536a9c1d3c4a84286f49dad05ae9b4207f01b8aa10a9a31c6e4def1e"
+  },
+  "acute": {
+    "rows": 1430,
+    "types": 26,
+    "counties": 21,
+    "hha": 39,
+    "hospiceProgram": 68,
+    "hospiceBranch": 27,
+    "hospiceInpatient": 9,
+    "other": 1287,
+    "quarantined": 0,
+    "invalidCountyRows": 18,
+    "byType": [
+      {
+        "label": "AMBULATORY CARE FACILITY",
+        "count": 372
+      },
+      {
+        "label": "AMBULATORY SURGICAL CENTER",
+        "count": 248
+      },
+      {
+        "label": "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY STHSPOFF",
+        "count": 220
+      },
+      {
+        "label": "END STAGE RENAL DIALYSIS",
+        "count": 185
+      },
+      {
+        "label": "GENERAL ACUTE CARE HOSPITAL",
+        "count": 69
+      },
+      {
+        "label": "HOSPICE CARE PROGRAM",
+        "count": 68
+      },
+      {
+        "label": "FEDERALLY QUALIFIED HEALTH CENTERS",
+        "count": 48
+      },
+      {
+        "label": "HOME HEALTH AGENCY",
+        "count": 39
+      },
+      {
+        "label": "AMBULATORY SURGICAL CENTER ASC-ST",
+        "count": 30
+      },
+      {
+        "label": "AMBULATORY CARE FACILITY - SATELLITE",
+        "count": 29
+      },
+      {
+        "label": "HOSPICE CARE BRANCH",
+        "count": 27
+      },
+      {
+        "label": "SURGICAL PRACTICE",
+        "count": 15
+      },
+      {
+        "label": "COMPREHENSIVE REHABILITATION HOSPITAL",
+        "count": 12
+      },
+      {
+        "label": "SPECIAL HOSPITAL HOSP-LT",
+        "count": 12
+      },
+      {
+        "label": "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY CTR ST",
+        "count": 10
+      },
+      {
+        "label": "PSYCHIATRIC HOSPITAL",
+        "count": 10
+      },
+      {
+        "label": "HOSPICE CARE - INPATIENT",
+        "count": 9
+      },
+      {
+        "label": "COMPREHENSIVE OUTPATIENT REHAB",
+        "count": 8
+      },
+      {
+        "label": "SURGICAL PRACTICE ASC-P-C",
+        "count": 6
+      },
+      {
+        "label": "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY",
+        "count": 3
+      },
+      {
+        "label": "MATERNAL AND CHILD HEALTH CONSORTIUM",
+        "count": 3
+      },
+      {
+        "label": "CHILDREN REHABILITATION HOSPITAL",
+        "count": 2
+      },
+      {
+        "label": "SPECIAL HOSPITAL HOSP-ACU",
+        "count": 2
+      },
+      {
+        "label": "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY CORF",
+        "count": 1
+      },
+      {
+        "label": "SPECIAL HOSPITAL",
+        "count": 1
+      },
+      {
+        "label": "SPECIAL HOSPITAL - PSYCHIATRIC",
+        "count": 1
+      }
+    ],
+    "source": "https://healthapps.nj.gov/facilities/documents2/All_Acute.xlsx",
+    "sha256": "271569d4b4113747e161df8911ccd9dc93bc2057c27e2b9c9a6eb5f879ed6e12"
+  },
+  "counties": [
+    {
+      "county": "Atlantic",
+      "ltc": 28,
+      "acute": 64,
+      "nfSnf": 10,
+      "alr": 11,
+      "cpch": 0,
+      "alp": 1,
+      "hha": 2,
+      "hospiceProgram": 3,
+      "hospiceBranch": 4,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Bergen",
+      "ltc": 91,
+      "acute": 167,
+      "nfSnf": 24,
+      "alr": 28,
+      "cpch": 3,
+      "alp": 1,
+      "hha": 5,
+      "hospiceProgram": 7,
+      "hospiceBranch": 0,
+      "hospiceInpatient": 1
+    },
+    {
+      "county": "Burlington",
+      "ltc": 43,
+      "acute": 77,
+      "nfSnf": 11,
+      "alr": 15,
+      "cpch": 3,
+      "alp": 3,
+      "hha": 3,
+      "hospiceProgram": 6,
+      "hospiceBranch": 2,
+      "hospiceInpatient": 1
+    },
+    {
+      "county": "Camden",
+      "ltc": 52,
+      "acute": 88,
+      "nfSnf": 19,
+      "alr": 13,
+      "cpch": 3,
+      "alp": 3,
+      "hha": 3,
+      "hospiceProgram": 6,
+      "hospiceBranch": 2,
+      "hospiceInpatient": 1
+    },
+    {
+      "county": "Cape May",
+      "ltc": 12,
+      "acute": 16,
+      "nfSnf": 6,
+      "alr": 2,
+      "cpch": 2,
+      "alp": 0,
+      "hha": 1,
+      "hospiceProgram": 0,
+      "hospiceBranch": 1,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Cumberland",
+      "ltc": 16,
+      "acute": 32,
+      "nfSnf": 5,
+      "alr": 4,
+      "cpch": 1,
+      "alp": 0,
+      "hha": 1,
+      "hospiceProgram": 2,
+      "hospiceBranch": 0,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Essex",
+      "ltc": 76,
+      "acute": 125,
+      "nfSnf": 29,
+      "alr": 15,
+      "cpch": 4,
+      "alp": 1,
+      "hha": 4,
+      "hospiceProgram": 5,
+      "hospiceBranch": 2,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Gloucester",
+      "ltc": 33,
+      "acute": 49,
+      "nfSnf": 7,
+      "alr": 14,
+      "cpch": 3,
+      "alp": 2,
+      "hha": 0,
+      "hospiceProgram": 0,
+      "hospiceBranch": 0,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Hudson",
+      "ltc": 30,
+      "acute": 88,
+      "nfSnf": 11,
+      "alr": 1,
+      "cpch": 1,
+      "alp": 0,
+      "hha": 3,
+      "hospiceProgram": 1,
+      "hospiceBranch": 0,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Hunterdon",
+      "ltc": 8,
+      "acute": 14,
+      "nfSnf": 4,
+      "alr": 2,
+      "cpch": 0,
+      "alp": 0,
+      "hha": 1,
+      "hospiceProgram": 1,
+      "hospiceBranch": 0,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Mercer",
+      "ltc": 42,
+      "acute": 59,
+      "nfSnf": 13,
+      "alr": 12,
+      "cpch": 1,
+      "alp": 3,
+      "hha": 1,
+      "hospiceProgram": 2,
+      "hospiceBranch": 1,
+      "hospiceInpatient": 1
+    },
+    {
+      "county": "Middlesex",
+      "ltc": 81,
+      "acute": 109,
+      "nfSnf": 23,
+      "alr": 16,
+      "cpch": 1,
+      "alp": 1,
+      "hha": 2,
+      "hospiceProgram": 6,
+      "hospiceBranch": 0,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Monmouth",
+      "ltc": 86,
+      "acute": 99,
+      "nfSnf": 32,
+      "alr": 33,
+      "cpch": 1,
+      "alp": 0,
+      "hha": 2,
+      "hospiceProgram": 5,
+      "hospiceBranch": 3,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Morris",
+      "ltc": 64,
+      "acute": 86,
+      "nfSnf": 21,
+      "alr": 23,
+      "cpch": 2,
+      "alp": 0,
+      "hha": 3,
+      "hospiceProgram": 4,
+      "hospiceBranch": 2,
+      "hospiceInpatient": 1
+    },
+    {
+      "county": "Ocean",
+      "ltc": 63,
+      "acute": 95,
+      "nfSnf": 29,
+      "alr": 19,
+      "cpch": 2,
+      "alp": 1,
+      "hha": 3,
+      "hospiceProgram": 5,
+      "hospiceBranch": 7,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Passaic",
+      "ltc": 47,
+      "acute": 84,
+      "nfSnf": 13,
+      "alr": 10,
+      "cpch": 0,
+      "alp": 0,
+      "hha": 2,
+      "hospiceProgram": 2,
+      "hospiceBranch": 0,
+      "hospiceInpatient": 1
+    },
+    {
+      "county": "Salem",
+      "ltc": 10,
+      "acute": 10,
+      "nfSnf": 4,
+      "alr": 3,
+      "cpch": 1,
+      "alp": 0,
+      "hha": 0,
+      "hospiceProgram": 0,
+      "hospiceBranch": 1,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Somerset",
+      "ltc": 45,
+      "acute": 51,
+      "nfSnf": 12,
+      "alr": 21,
+      "cpch": 0,
+      "alp": 0,
+      "hha": 1,
+      "hospiceProgram": 4,
+      "hospiceBranch": 1,
+      "hospiceInpatient": 0
+    },
+    {
+      "county": "Sussex",
+      "ltc": 10,
+      "acute": 15,
+      "nfSnf": 4,
+      "alr": 4,
+      "cpch": 1,
+      "alp": 0,
+      "hha": 0,
+      "hospiceProgram": 1,
+      "hospiceBranch": 1,
+      "hospiceInpatient": 1
+    },
+    {
+      "county": "Union",
+      "ltc": 46,
+      "acute": 74,
+      "nfSnf": 19,
+      "alr": 8,
+      "cpch": 3,
+      "alp": 1,
+      "hha": 1,
+      "hospiceProgram": 4,
+      "hospiceBranch": 0,
+      "hospiceInpatient": 2
+    },
+    {
+      "county": "Warren",
+      "ltc": 10,
+      "acute": 10,
+      "nfSnf": 7,
+      "alr": 2,
+      "cpch": 0,
+      "alp": 0,
+      "hha": 0,
+      "hospiceProgram": 0,
+      "hospiceBranch": 0,
+      "hospiceInpatient": 0
+    }
+  ],
+  "staffing": {
+    "populatedQuarters": 30,
+    "first": "2019 Q1",
+    "latest": "2026 Q2",
+    "trend": [
+      {
+        "year": 2019,
+        "quarter": "Q1",
+        "label": "2019 Q1",
+        "dayRn": 29.4,
+        "dayLpn": 22.6,
+        "dayCna": 8.8,
+        "facilities": 371
+      },
+      {
+        "year": 2019,
+        "quarter": "Q2",
+        "label": "2019 Q2",
+        "dayRn": 29.7,
+        "dayLpn": 22.4,
+        "dayCna": 8.8,
+        "facilities": 370
+      },
+      {
+        "year": 2019,
+        "quarter": "Q3",
+        "label": "2019 Q3",
+        "dayRn": 29.8,
+        "dayLpn": 22.4,
+        "dayCna": 8.9,
+        "facilities": 370
+      },
+      {
+        "year": 2019,
+        "quarter": "Q4",
+        "label": "2019 Q4",
+        "dayRn": 29.7,
+        "dayLpn": 22.2,
+        "dayCna": 8.9,
+        "facilities": 370
+      },
+      {
+        "year": 2020,
+        "quarter": "Q1",
+        "label": "2020 Q1",
+        "dayRn": 30.0,
+        "dayLpn": 22.1,
+        "dayCna": 9.1,
+        "facilities": 371
+      },
+      {
+        "year": 2020,
+        "quarter": "Q2",
+        "label": "2020 Q2",
+        "dayRn": 26.6,
+        "dayLpn": 19.5,
+        "dayCna": 8.7,
+        "facilities": 370
+      },
+      {
+        "year": 2020,
+        "quarter": "Q3",
+        "label": "2020 Q3",
+        "dayRn": 27.0,
+        "dayLpn": 19.9,
+        "dayCna": 8.7,
+        "facilities": 370
+      },
+      {
+        "year": 2020,
+        "quarter": "Q4",
+        "label": "2020 Q4",
+        "dayRn": 27.4,
+        "dayLpn": 20.1,
+        "dayCna": 8.9,
+        "facilities": 370
+      },
+      {
+        "year": 2021,
+        "quarter": "Q1",
+        "label": "2021 Q1",
+        "dayRn": 27.9,
+        "dayLpn": 20.1,
+        "dayCna": 8.8,
+        "facilities": 368
+      },
+      {
+        "year": 2021,
+        "quarter": "Q2",
+        "label": "2021 Q2",
+        "dayRn": 29.3,
+        "dayLpn": 20.6,
+        "dayCna": 8.8,
+        "facilities": 364
+      },
+      {
+        "year": 2021,
+        "quarter": "Q3",
+        "label": "2021 Q3",
+        "dayRn": 31.0,
+        "dayLpn": 21.1,
+        "dayCna": 9.0,
+        "facilities": 364
+      },
+      {
+        "year": 2021,
+        "quarter": "Q4",
+        "label": "2021 Q4",
+        "dayRn": 31.6,
+        "dayLpn": 21.2,
+        "dayCna": 8.9,
+        "facilities": 363
+      },
+      {
+        "year": 2022,
+        "quarter": "Q1",
+        "label": "2022 Q1",
+        "dayRn": 32.4,
+        "dayLpn": 21.0,
+        "dayCna": 8.8,
+        "facilities": 361
+      },
+      {
+        "year": 2022,
+        "quarter": "Q2",
+        "label": "2022 Q2",
+        "dayRn": 32.7,
+        "dayLpn": 20.8,
+        "dayCna": 8.7,
+        "facilities": 361
+      },
+      {
+        "year": 2022,
+        "quarter": "Q3",
+        "label": "2022 Q3",
+        "dayRn": 34.4,
+        "dayLpn": 21.1,
+        "dayCna": 9.1,
+        "facilities": 360
+      },
+      {
+        "year": 2022,
+        "quarter": "Q4",
+        "label": "2022 Q4",
+        "dayRn": 35.0,
+        "dayLpn": 20.8,
+        "dayCna": 8.9,
+        "facilities": 362
+      },
+      {
+        "year": 2023,
+        "quarter": "Q1",
+        "label": "2023 Q1",
+        "dayRn": 34.5,
+        "dayLpn": 20.6,
+        "dayCna": 9.0,
+        "facilities": 362
+      },
+      {
+        "year": 2023,
+        "quarter": "Q2",
+        "label": "2023 Q2",
+        "dayRn": 35.3,
+        "dayLpn": 20.6,
+        "dayCna": 8.9,
+        "facilities": 358
+      },
+      {
+        "year": 2023,
+        "quarter": "Q3",
+        "label": "2023 Q3",
+        "dayRn": 37.0,
+        "dayLpn": 20.7,
+        "dayCna": 9.0,
+        "facilities": 359
+      },
+      {
+        "year": 2023,
+        "quarter": "Q4",
+        "label": "2023 Q4",
+        "dayRn": 37.2,
+        "dayLpn": 20.8,
+        "dayCna": 8.9,
+        "facilities": 361
+      },
+      {
+        "year": 2024,
+        "quarter": "Q1",
+        "label": "2024 Q1",
+        "dayRn": 37.8,
+        "dayLpn": 21.0,
+        "dayCna": 9.1,
+        "facilities": 360
+      },
+      {
+        "year": 2024,
+        "quarter": "Q2",
+        "label": "2024 Q2",
+        "dayRn": 38.0,
+        "dayLpn": 21.0,
+        "dayCna": 8.8,
+        "facilities": 361
+      },
+      {
+        "year": 2024,
+        "quarter": "Q3",
+        "label": "2024 Q3",
+        "dayRn": 38.3,
+        "dayLpn": 21.1,
+        "dayCna": 8.7,
+        "facilities": 362
+      },
+      {
+        "year": 2024,
+        "quarter": "Q4",
+        "label": "2024 Q4",
+        "dayRn": 39.7,
+        "dayLpn": 20.9,
+        "dayCna": 8.6,
+        "facilities": 361
+      },
+      {
+        "year": 2025,
+        "quarter": "Q1",
+        "label": "2025 Q1",
+        "dayRn": 39.8,
+        "dayLpn": 21.1,
+        "dayCna": 8.6,
+        "facilities": 361
+      },
+      {
+        "year": 2025,
+        "quarter": "Q2",
+        "label": "2025 Q2",
+        "dayRn": 39.6,
+        "dayLpn": 20.9,
+        "dayCna": 8.4,
+        "facilities": 361
+      },
+      {
+        "year": 2025,
+        "quarter": "Q3",
+        "label": "2025 Q3",
+        "dayRn": 40.3,
+        "dayLpn": 21.0,
+        "dayCna": 8.3,
+        "facilities": 361
+      },
+      {
+        "year": 2025,
+        "quarter": "Q4",
+        "label": "2025 Q4",
+        "dayRn": 40.5,
+        "dayLpn": 20.9,
+        "dayCna": 8.3,
+        "facilities": 361
+      },
+      {
+        "year": 2026,
+        "quarter": "Q1",
+        "label": "2026 Q1",
+        "dayRn": 40.8,
+        "dayLpn": 21.4,
+        "dayCna": 8.5,
+        "facilities": 361
+      },
+      {
+        "year": 2026,
+        "quarter": "Q2",
+        "label": "2026 Q2",
+        "dayRn": 40.5,
+        "dayLpn": 21.0,
+        "dayCna": 8.3,
+        "facilities": 361
+      }
+    ],
+    "semantics": "Official values are residents per one staff member (1RN:#Res). Missing codes are not zero.",
+    "notAttachedTo": [
+      "ALR",
+      "CPCH",
+      "ALP",
+      "Home Health",
+      "Hospice",
+      "PACE",
+      "CCRC"
+    ]
+  },
+  "enforcement": {
+    "indexed": 1146,
+    "downloaded": 1144,
+    "uniqueHashes": 1131,
+    "unavailable": 2,
+    "byClass": {
+      "penalty_letter": 660,
+      "directed_plan_of_correction": 100,
+      "admission_curtailment": 221,
+      "license_revocation": 4,
+      "other_expressly_identified_njdoh_action": 113,
+      "unclassified_regulatory_document": 30,
+      "license_suspension": 12,
+      "civil_monetary_penalty": 5,
+      "corrective_action": 1
+    },
+    "byYear": {
+      "2016": 1,
+      "2017": 22,
+      "2018": 35,
+      "2019": 21,
+      "2020": 64,
+      "2021": 39,
+      "2022": 60,
+      "2023": 110,
+      "2024": 241,
+      "2025": 306,
+      "2026": 247
+    },
+    "matchBuckets": {
+      "EXACT": 300,
+      "UNSAFE_REJECTED": 291,
+      "UNRESOLVED": 476,
+      "REVIEW_REQUIRED": 3,
+      "HIGH_CONFIDENCE": 76
+    },
+    "exactFacilities": 224,
+    "coverage": "ACQUIRED_PARTIAL_HISTORY"
+  },
+  "medicaid": {
+    "listedRows": 236,
+    "minRate": 81.1,
+    "maxRate": 126.1,
+    "bySubtype": [
+      {
+        "label": "UNKNOWN_NOT_PRINTED",
+        "count": 221
+      },
+      {
+        "label": "ALR",
+        "count": 7
+      },
+      {
+        "label": "ALP",
+        "count": 6
+      },
+      {
+        "label": "CPCH",
+        "count": 2
+      }
+    ],
+    "defaults": {
+      "ALP": 99.1,
+      "ALR": 91.1,
+      "CPCH": 81.1
+    },
+    "effectiveOn": "2025-07-01",
+    "fiscalYear": "SFY_2026",
+    "source": "https://www.njmmis.com/downloadDocuments/SFY_2026_Assisted_Living_Rates.pdf",
+    "rows": [
+      {
+        "name": "ACTORS FUND HOME, ALR",
+        "subtype": "ALR",
+        "rate": 121.1
+      },
+      {
+        "name": "ACTORS FUND HOME, CPCH",
+        "subtype": "CPCH",
+        "rate": 81.1
+      },
+      {
+        "name": "ALARIS HEALTH AT THE ATRIUM",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "ALL AMERICAN ASSISTED LIVING AT HILLSBOROUGH",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ALL AMERICAN ASSISTED LIVING AT WASHINGTON TOWNSHIP",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ALLEGRIA ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 81.1
+      },
+      {
+        "name": "ALLEGRIA AT THE FOUNTAINS",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "ALLENDALE SENIOR LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 81.1
+      },
+      {
+        "name": "ALTERRA CLARE BRIDGE HAMILTON (BROOKDALE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ALTERRA CLARE BRIDGE WESTAMPTON (BROOKDALE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "ALTERRA STERLING HOUSE FLORENCE (BROOKDALE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "AMBER COURT OF UNION LLC (ELIZABETH)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 121.1
+      },
+      {
+        "name": "ARBOR TERRACE MORRIS PLAINS",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ARBOR TERRACE MOUNT LAUREL",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ARBOR TERRACE MOUNTAINSIDE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ARBOR TERRACE NORWOOD",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ARBOR TERRACE OF MIDDLETOWN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ARBOR TERRACE SHREWSBURY",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ARTIS SENIOR LIVING OF BRICK",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ARTIS SENIOR LIVING OF EATONTOWN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ARTIS SENIOR LIVING OF EVESHAM, LLC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ARTIS SENIOR LIVING OF PRINCETON JUNCTION",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ASSISTED LIVING, INC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 99.1
+      },
+      {
+        "name": "ATRIA CRANFORD",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 81.1
+      },
+      {
+        "name": "ATRIA ROSELAND (ARBOR TERRACE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ATRIA TINTON FALLS",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "AVALON AT BRIDGEWATER",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "AVALON AT HILLSBOROUGH, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BAKER PLACE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BAYSIDE MANOR",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "BEAR CREEK ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BENTLEY COMPREHENSIVE CARE LLC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 99.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT BRANDALL ESTATES",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT GOVERNOR'S CROSSING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT HADDONFIELD",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT HOWELL",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT LIVINGSTON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT MAHWAH",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT MIDDLEBROOK CROSSING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT MOORESTOWN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT MOUNTAIN RIDGE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT PENNINGTON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT PRINCETON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT REFLECTIONS",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT REFLECTIONS AT COLTS NECK",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT THE GABLES",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT THE SYCAMORE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT TOMS RIVER",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT VOORHEES",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "BRANDYWINE LIVING AT WALL",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHT SIDE MANOR",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 111.1
+      },
+      {
+        "name": "BRIGHTON GARDENS OF EDISON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTON GARDENS OF FLORHAM PARK",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTON GARDENS OF LEISURE PARK",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTON GARDENS OF MIDDLETOWN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTON GARDENS OF MOUNTAINSIDE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTON GARDENS OF WEST ORANGE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTVIEW GREENTREE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTVIEW MOUNT LAUREL",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTVIEW PARAMUS",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTVIEW RANDOLPH, LLC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTVIEW TENAFLY",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTVIEW WARREN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTVIEW WAYNE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRIGHTVIEW WOODBURY LAKE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 81.1
+      },
+      {
+        "name": "BRISTAL AT ENGLEWOOD, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRISTAL AT SOMERSET, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRISTAL AT WALDWICK, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRISTAL AT WAYNE, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRISTAL AT WOODCLIFF LAKE, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BRISTOL GLEN (UNITED METHODIST COMMUNITIES)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BROOKDALE CAPE MAY",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BROOKDALE ECHELON LAKE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 96.1
+      },
+      {
+        "name": "BROOKDALE EMERSON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BROOKDALE EVESHAM",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "BROOKDALE HILLSBOROUGH",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CAMBRIDGE ENHANCED SENIOR LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CAPITAL HEALTH ASSISTED LIVING PROGRAM",
+        "subtype": "ALP",
+        "rate": 99.1
+      },
+      {
+        "name": "CARDINAL VILLAGE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "CARE ONE AT EVESHAM ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CARE ONE AT HAMILTON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CARE ONE AT JACKSON (HARMONY VILLAGE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CARE ONE AT LIVINGSTON ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CARE ONE AT MOORESTOWN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CARE ONE AT MORRIS LLC (PARSIPPANY)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CARE ONE AT SOMERSET VALLEY ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CARE ONE AT THE CUPOLA",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CARE ONE AT WAYNE - ALR",
+        "subtype": "ALR",
+        "rate": 91.1
+      },
+      {
+        "name": "CARE ONE HARMONY VILLAGE AT MORRIS (CAREONE STANWICK)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CARE ONE HARMONY VILLAGE AT PARAMUS",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CARING SENIOR LIVING, INC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 99.1
+      },
+      {
+        "name": "CARNEGIE ASSISTED LIVING AT PRINCETON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CENTER FOR HOPE HOSPICE  INC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 99.1
+      },
+      {
+        "name": "CHELSEA AT FANWOOD (MIRA VIE AT FANWOOD)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "CHELSEA AT MANALAPAN (MIRA VIE AT MANALAPAN)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "CHELSEA AT SHREWSBURY, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CHELSEA AT SPARTA, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CHESTNUT HILL RESIDENCES BY COMPLETE CARE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 121.1
+      },
+      {
+        "name": "CHRISTIAN HEALTH CARE CENTER",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CIEL SENIOR LIVING OF PRINCETON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "CLARE ESTATE, THE, ALP",
+        "subtype": "ALP",
+        "rate": 99.1
+      },
+      {
+        "name": "CLARE ESTATE, THE, ALR",
+        "subtype": "ALR",
+        "rate": 91.1
+      },
+      {
+        "name": "CLIFFS AT EAGLE ROCK, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "COMPLETE CARE AT ARBORS HAVEN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "COMPLETE CARE AT BEY LEA, LLC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "COMPLETE CARE AT HOLMDEL LLC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "COMPLETE CARE AT SHORROCK HAVEN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 106.1
+      },
+      {
+        "name": "COMPLETE CARE AT VICTORIA COMMONS, LLC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 96.1
+      },
+      {
+        "name": "COMPLETE CARE AT WHISPERING WOODS",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "DELAIRE NURSING AND CONVALESCENT (ARISTACARE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 96.1
+      },
+      {
+        "name": "DELANEY OF BRIDGEWATER, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "DPSP HEALTH CARE, LLC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 99.1
+      },
+      {
+        "name": "EMERITUS AT PARAMUS (JUNIPER VILLAGE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "EVERMAY AT BRANCHVILLE, LLC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "FIVE STAR PREMIER RESIDENCES OF TEANECK",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "FOX TRAIL AT DEPTFORD (TYLERS MILL SENIOR LIVING)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "GARDENS AT WAYNE (BROOKDALE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "GARDENS AT WEST ORANGE (BROOKDALE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "GEORGETOWN COMMONS AT THE PINES (PINES VILLAGE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "GRANVILLE PLACE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "GREENFIELD SENIOR LIVING CROSS KEYS (TRADITIONS OF)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "HARBOUR VIEW SENIOR LIVING CORP",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 96.1
+      },
+      {
+        "name": "HCP MANAHAWKIN NJ OPCO LLC (RESIDENCE AT STAFFORD)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "HERITAGE ASSISTED LIVING, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 121.1
+      },
+      {
+        "name": "HERITAGE OF CLARA BARTON, ALR",
+        "subtype": "ALR",
+        "rate": 106.1
+      },
+      {
+        "name": "HOMESTEAD AT HAMILTON (VOLANTE AT HAMILTON)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "INDEPENDENCE MANOR AT HUNTERDON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "IVY STONE SENIOR LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 81.1
+      },
+      {
+        "name": "IVYSTONE COMMUNITY LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 126.1
+      },
+      {
+        "name": "JEWISH COMMUNITY HOUSING ASSISTED LIVING PROGRAM",
+        "subtype": "ALP",
+        "rate": 99.1
+      },
+      {
+        "name": "JEWISH HOME ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "JUNIPER VILLAGE AT CHATHAM",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "JUNIPER VILLAGE AT WILLIAMSTOWN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "LAKEWOOD COURTYARD, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "LANDING OF WASHINGTON SQUARE, THE (JUNIPER VILLAGE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "LINDSAY PLACE (THE ADDISON OF)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "LIONS GATE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "MAGNOLIA GARDENS",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 121.1
+      },
+      {
+        "name": "MARTIN AND EDITH STEIN ASSISTED LIVING RESIDENCE",
+        "subtype": "ALR",
+        "rate": 101.1
+      },
+      {
+        "name": "MASONIC VILLAGE AT BURLINGTON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 81.1
+      },
+      {
+        "name": "MATTISON CROSSING AT MANALAPAN AVE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "MC PROPERTIES ASSOCIATES, ALP",
+        "subtype": "ALP",
+        "rate": 99.1
+      },
+      {
+        "name": "MERION GARDENS ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "MERRY HEART ASSISTED LIVING, LLC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "MILL GARDENS AT MIDLAND PARK",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "MIRA VIE AT BRICK",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "MIRA VIE AT BROOKFIELD",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "MIRA VIE AT CLIFTON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "MIRA VIE AT EAST BRUNSWICK",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "MIRA VIE AT FORSGATE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 106.1
+      },
+      {
+        "name": "MIRA VIE AT GREEN KNOLL",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "MIRA VIE AT MONTVILLE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 106.1
+      },
+      {
+        "name": "MIRA VIE AT TINTON FALLS",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "MIRA VIE AT TOMS RIVER",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "MIRA VIE AT WARREN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "MIRA VIE AT WEST MILFORD",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "MONARCH BELLA TERRA TENANT",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "MONMOUTH CROSSING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "MONROE VILLAGE ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "MT ARLINGTON SENIOR LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "MULLICA GARDENS ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "NEW STANDARD SENIOR LIVING AT EGG HARBOR TOWNSHIP",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 126.1
+      },
+      {
+        "name": "NEW STANDARD SENIOR LIVING AT HAMMONTON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 126.1
+      },
+      {
+        "name": "NEW STANDARD SENIOR LIVING AT MILLVILLE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 126.1
+      },
+      {
+        "name": "OAKS AT DENVILLE, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ORCHARDS AT BARTLEY, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "PARAGON SENIOR LIVING, LLC (BENTLEY COMMONS)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "PARKER AT STONEGATE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "PORTABLE ASSISTED LIVING SERVICES (PALS)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 99.1
+      },
+      {
+        "name": "PREMIER CADBURY OF CHERRY HILL",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 106.1
+      },
+      {
+        "name": "PRESBYTERIAN HOME AT MEADOW LAKES",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "RESIDENCE AT PARK RIDGE LLC",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "RESORT AT OCEANVIEW, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 111.1
+      },
+      {
+        "name": "RIVERVIEW ESTATES REHAB & SENIOR LIVING CTR",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ROSE HILL ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "ROSEVILLE MANOR",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 81.1
+      },
+      {
+        "name": "SEASHORE GARDENS LIVING CENTER",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "SHORES AT WESLEY MANOR (UNITED METHODIST COMMUNITIES)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SOLANA MARLBORO (SENIOR LIVING RESIDENCES MARLBORO)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SOMERS PLACE (THE ADDISON OF)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SPRING HILLS AT MORRISTOWN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 126.1
+      },
+      {
+        "name": "SPRING HILLS AT SOMERSET",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SPRING HILLS CHERRY HILL",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SPRING HOME AT GALLOWAY",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SPRING OAK ASSISTED LIVING AT FORKED RIVER",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "SPRING OAK ASSISTED LIVING AT VINELAND",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "SPRING OAK ASSISTED LIVING AT VOORHEES",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "SPRING OAK OF TOMS RIVER (ALP)",
+        "subtype": "ALP",
+        "rate": 99.1
+      },
+      {
+        "name": "SPRINGPOINT LIVING AT MANALAPAN",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "ST JOSEPH'S SENIORS' HOME",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 81.1
+      },
+      {
+        "name": "STONEBRIDGE AT MONTGOMERY HEALTH CARE CENTER",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUMMIT PLACE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNNYSIDE MANOR",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE ASSISTED LIVING AT WEST ESSEX",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE ASSISTED LIVING OF EAST BRUNSWICK",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE ASSISTED LIVING OF JACKSON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE ASSISTED LIVING OF LINCROFT",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE ASSISTED LIVING OF MARLBORO",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE ASSISTED LIVING OF RANDOLPH",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE ASSISTED LIVING OF WALL",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE OF BASKING RIDGE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE OF BRIDGEWATER",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE OF CRESSKILL",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE OF EDGEWATER",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE OF FRANKLIN LAKES",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE OF MADISON",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE OF MOUNTAIN LAKES",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE OF SHREWSBURY",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "SUNRISE OF SUMMIT",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "TERRACES AT PARKE PLACE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "TERRACES AT SEACREST VILLAGE, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "THE RESIDENCE AT CHERRY HILL",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "THE RESIDENCE AT TOMS RIVER (SPRING OAK)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "THE RESIDENCE AT VOORHEES",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "THE TERRACES AT LAWRENCE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 81.1
+      },
+      {
+        "name": "THE VILLAGE AT MEADOWBROOK",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "THRIVE AT MONTVALE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "V CARE ASSISTED LIVING PROGRAM",
+        "subtype": "ALP",
+        "rate": 99.1
+      },
+      {
+        "name": "VAN DYK'S SENIOR RESIDENCE OF HAWTHORNE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "VICTORIA MEWS ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "VILLA RAFFAELLA ASSISTED LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "VILLAS, THE",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "VOORHEES SENIOR LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "WASHINGTON TOWNSHIP SENIOR LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "WELLINGTON ESTATES",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 101.1
+      },
+      {
+        "name": "WELLSPRING AT WILLIAMSTOWN (JUNIPER VILLAGE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "WESTON ASSISTED LIVING RESIDENCE",
+        "subtype": "ALR",
+        "rate": 101.1
+      },
+      {
+        "name": "WESTWIND MANOR, ALR",
+        "subtype": "ALR",
+        "rate": 101.1
+      },
+      {
+        "name": "WESTWIND MANOR, CPCH",
+        "subtype": "CPCH",
+        "rate": 96.1
+      },
+      {
+        "name": "WILDWOOD HOUSING AUTHORITIES",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 99.1
+      },
+      {
+        "name": "WINCHESTER GARDENS ASSISTED LIVING CENTER",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "WOODBURY MEWS SENIOR LIVING",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "WOODVIEW ESTATES",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "WRP OPERATING HAMILTON NJ (JUNIPER VILLAGE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "WYNNWOOD AT FLORHAM PARK (BROOKDALE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      },
+      {
+        "name": "WYNNWOOD AT FORSGATE (BROOKDALE)",
+        "subtype": "UNKNOWN_NOT_PRINTED",
+        "rate": 91.1
+      }
+    ]
+  },
+  "pace": {
+    "organizations": 8,
+    "operatingOrganizations": 6,
+    "awardedOrganizations": 2,
+    "operatingCenters": 10,
+    "operatingCounties": 13,
+    "partialCounties": 3,
+    "zipRecords": 38,
+    "awardedFutureCounties": 8,
+    "organizationsList": [
+      {
+        "name": "Capital Health LIFE",
+        "status": "OPERATING"
+      },
+      {
+        "name": "Trinity Health LIFE New Jersey",
+        "status": "OPERATING"
+      },
+      {
+        "name": "Lutheran Senior LIFE",
+        "status": "OPERATING"
+      },
+      {
+        "name": "Inspira LIFE",
+        "status": "OPERATING"
+      },
+      {
+        "name": "BoldAge PACE",
+        "status": "OPERATING"
+      },
+      {
+        "name": "AtlantiCare LIFE Connection",
+        "status": "OPERATING"
+      },
+      {
+        "name": "WelbeHealth",
+        "status": "AWARDED"
+      },
+      {
+        "name": "Senior LIFE",
+        "status": "AWARDED"
+      }
+    ],
+    "centers": [
+      {
+        "org": "Capital Health LIFE",
+        "name": "Capital Health LIFE Bordentown",
+        "city": "Bordentown",
+        "county": "Burlington",
+        "status": "OPERATING"
+      },
+      {
+        "org": "Trinity Health LIFE New Jersey",
+        "name": "Trinity Health LIFE Pennsauken",
+        "city": "Pennsauken",
+        "county": "Camden",
+        "status": "OPERATING"
+      },
+      {
+        "org": "Lutheran Senior LIFE",
+        "name": "Lutheran Senior LIFE at Jersey City",
+        "city": "Jersey City",
+        "county": "Hudson",
+        "status": "OPERATING"
+      },
+      {
+        "org": "Lutheran Senior LIFE",
+        "name": "Lutheran Senior LIFE at Union",
+        "city": "Plainfield",
+        "county": "Union",
+        "status": "OPERATING"
+      },
+      {
+        "org": "Inspira LIFE",
+        "name": "Inspira LIFE Vineland",
+        "city": "Vineland",
+        "county": "Cumberland",
+        "status": "OPERATING"
+      },
+      {
+        "org": "Inspira LIFE",
+        "name": "Inspira LIFE Williamstown",
+        "city": "Williamstown",
+        "county": "Gloucester",
+        "status": "OPERATING"
+      },
+      {
+        "org": "BoldAge PACE",
+        "name": "BoldAge PACE Lakehurst",
+        "city": "Lakehurst",
+        "county": "Ocean",
+        "status": "OPERATING"
+      },
+      {
+        "org": "BoldAge PACE",
+        "name": "BoldAge PACE Oceanport",
+        "city": "Oceanport",
+        "county": "Monmouth",
+        "status": "OPERATING"
+      },
+      {
+        "org": "BoldAge PACE",
+        "name": "BoldAge PACE East Brunswick",
+        "city": "East Brunswick",
+        "county": "Middlesex",
+        "status": "OPERATING"
+      },
+      {
+        "org": "AtlantiCare LIFE Connection",
+        "name": "AtlantiCare LIFE Connection Atlantic City",
+        "city": "Atlantic City",
+        "county": "Atlantic",
+        "status": "OPERATING"
+      },
+      {
+        "org": "WelbeHealth",
+        "name": "WelbeHealth Newark (awarded)",
+        "city": "Newark",
+        "county": "Essex",
+        "status": "IN_DEVELOPMENT"
+      },
+      {
+        "org": "WelbeHealth",
+        "name": "WelbeHealth Paramus (awarded)",
+        "city": "Paramus",
+        "county": "Bergen",
+        "status": "IN_DEVELOPMENT"
+      },
+      {
+        "org": "Senior LIFE",
+        "name": "Senior LIFE Bridgewater (awarded)",
+        "city": "Bridgewater",
+        "county": "Somerset",
+        "status": "IN_DEVELOPMENT"
+      },
+      {
+        "org": "Senior LIFE",
+        "name": "Senior LIFE Wayne (awarded)",
+        "city": "Wayne",
+        "county": "Passaic",
+        "status": "IN_DEVELOPMENT"
+      }
+    ],
+    "notes": [
+      "Current DoAS listing is the operating source. January 8, 2026 announcement is historical/awarded evidence.",
+      "East Brunswick/Middlesex and Plainfield/Union moved from in-development (2026-01-08) to operating on the current DoAS page. Open date remains unknown.",
+      "Camden is 'most communities' plus listed Burlington ZIPs \u2014 not full-county.",
+      "Hudson and Burlington remain ZIP-listed partial counties.",
+      "Eight agencies on the DoAS page is a source phrase; organizations and centers are counted separately.",
+      "PACE eligibility is program metadata, not person records.",
+      "First snapshot is baseline-only."
+    ]
+  },
+  "cmsOverlay": {
+    "nursingHomes": 348,
+    "homeHealth": 38,
+    "hospice": 61,
+    "source": "senior-national-intelligence.json geography NJ",
+    "asOf": "2026-08-27"
+  },
+  "ccrc": {
+    "coverage": "SOURCE_AVAILABLE_BY_REQUEST",
+    "countPublished": null
+  },
+  "profileAttachments": [],
+  "gaps": [
+    "A complete CCRC Certificate of Authority roster was not acquired from public files.",
+    "The Medicaid assisted-living schedule lacks stable identifiers for many listed rows; name-only matching is withheld from profiles.",
+    "NJDOH Home Health and Hospice physical office counties are not service areas.",
+    "CMS Home Health/Hospice crosswalks for NJDOH rows remain incomplete without production CMS joins.",
+    "Some NJDOH enforcement documents remain unresolved to a specific facility.",
+    "Home Health/Hospice counties-served listings are behind an ASP.NET search POST (SOURCE_ACCESS_BLOCKED)."
+  ],
+  "fingerprint": "92e0742f77f2f55a5ccd6217c5caa779f3281fd26b1d91c14e2df11ae144011a"
+}

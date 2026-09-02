@@ -45,3 +45,4 @@ export * from "./senior-home-intel";
 export * from "./florida-county";
 export * from "./florida-intelligence";
 export * from "./florida-provider-profile";
+export * from "./nj-intelligence";

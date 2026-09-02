@@ -332,12 +332,11 @@ def test_metric_contract_has_trace_fields() -> None:
 
 
 def test_no_public_new_jersey_route_or_vercel_relink() -> None:
+    """NJ-SEN-005 publishes /new-jersey. Do not relink Vercel. CA/NY/TX remain the DB-backed state regulators."""
     web = ROOT / "apps" / "web" / "src" / "app"
-    assert not (web / "new-jersey").exists()
-    sitemap_files = list((web / "sitemaps").rglob("*.ts")) + list((web / "sitemap.xml").rglob("*.ts"))
-    for path in sitemap_files:
-        text = path.read_text(encoding="utf-8")
-        assert "new-jersey" not in text
+    assert (web / "new-jersey" / "page.tsx").is_file()
+    sitemap = (web / "sitemaps" / "[file]" / "route.ts").read_text(encoding="utf-8")
+    assert '"/new-jersey"' in sitemap
     assert not (ROOT / ".vercel" / "project.json").exists()
     sources = load_state_regulator_sources()
     implemented = {source.state_code for source in sources if source.implemented}

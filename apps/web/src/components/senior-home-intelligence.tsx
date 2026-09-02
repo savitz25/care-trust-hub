@@ -278,8 +278,8 @@ export function SeniorHomeIntelligence({
           <h2 id="explore-title">Explore senior-care intelligence by state</h2>
           <p>
             Color intensity encodes current CMS Nursing Home directory volume in that jurisdiction.
-            It does not encode quality, safety, or risk. Florida is the only state intelligence page
-            on this hub today.
+            It does not encode quality, safety, or risk. Florida and New Jersey currently have state
+            intelligence pages.
           </p>
         </div>
         <p className="intel-legend">
@@ -302,7 +302,7 @@ export function SeniorHomeIntelligence({
                   {row.homeHealth.toLocaleString("en-US")}, Hospice{" "}
                   {row.hospice.toLocaleString("en-US")}.
                   {row.intelligenceHref
-                    ? " Opens Florida intelligence."
+                    ? ` Opens ${row.name} state intelligence.`
                     : " Opens CMS Nursing Home search."}
                 </span>
                 <span aria-hidden="true">{row.nursingHomes}</span>
@@ -331,13 +331,37 @@ export function SeniorHomeIntelligence({
             Explore Florida Intelligence →
           </Link>
         </article>
+        <article className="intel-florida">
+          <p className="eyebrow">New Jersey preview</p>
+          <h3>{STATE_NAMES.NJ} intelligence</h3>
+          <p>{intel.newJerseyPreview.note}</p>
+          <ul className="hub-plain-list">
+            <li>
+              NJDOH All_LTC identities:{" "}
+              {intel.newJerseyPreview.ltcIdentities.toLocaleString("en-US")}
+            </li>
+            <li>
+              NJDOH All_Acute identities:{" "}
+              {intel.newJerseyPreview.acuteIdentities.toLocaleString("en-US")}
+            </li>
+            <li>
+              CMS Nursing Homes / Home Health / Hospice:{" "}
+              {intel.newJerseyPreview.cmsNursingHomes.toLocaleString("en-US")} /{" "}
+              {intel.newJerseyPreview.cmsHomeHealth.toLocaleString("en-US")} /{" "}
+              {intel.newJerseyPreview.cmsHospice.toLocaleString("en-US")}
+            </li>
+          </ul>
+          <Link className="button button--secondary" href={intel.newJerseyPreview.href}>
+            Explore New Jersey Intelligence →
+          </Link>
+        </article>
         <details className="intel-disclose">
           <summary>Accessible state list</summary>
           <div className="hub-table-scroll">
             <table className="hub-table">
               <caption>
-                Current CMS directory counts by jurisdiction. Florida links to state intelligence;
-                other jurisdictions open Nursing Home search.
+                Current CMS directory counts by jurisdiction. Florida and New Jersey link to state
+                intelligence; other jurisdictions open Nursing Home search.
               </caption>
               <thead>
                 <tr>

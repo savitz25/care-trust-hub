@@ -6,6 +6,7 @@ import {
   type HubSourceRow,
   type SeniorNationalIntelligence,
 } from "./senior-hub-intelligence";
+import { NJ_LOCKED, NJ_PUBLIC_PATH } from "./nj-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -34,7 +35,8 @@ export interface HomeTraceMetric {
     | "hospice"
     | "ownership_graph"
     | "cross_class"
-    | "florida_state";
+    | "florida_state"
+    | "new_jersey_state";
   definition: string;
   components: Array<{ label: string; value: string; payloadKey: string }>;
   sourceIds: string[];
@@ -83,7 +85,7 @@ export interface HomeGeoRow {
   homeHealth: number;
   hospice: number;
   nhVolumeShare: number;
-  enrichment: "florida_state_intelligence" | "cms_directory_only";
+  enrichment: "florida_state_intelligence" | "new_jersey_state_intelligence" | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
 }
@@ -133,6 +135,15 @@ export interface SeniorHomeIntel {
     cmsHomeHealth: number;
     cmsHospice: number;
     publishedAlfAfch: number;
+    note: string;
+  };
+  newJerseyPreview: {
+    href: string;
+    ltcIdentities: number;
+    acuteIdentities: number;
+    cmsNursingHomes: number;
+    cmsHomeHealth: number;
+    cmsHospice: number;
     note: string;
   };
   askMarket: HomeAskItem[];
@@ -193,6 +204,12 @@ export function buildSeniorHomeIntel(input: {
   const chowDates = sourceDate(sources, "skilled-nursing-facility-change-of-ownership");
   const flGeo = national.geography.find((row) => row.state === "FL") ?? {
     state: "FL",
+    nursingHomes: 0,
+    homeHealth: 0,
+    hospice: 0,
+  };
+  const njGeo = national.geography.find((row) => row.state === "NJ") ?? {
+    state: "NJ",
     nursingHomes: 0,
     homeHealth: 0,
     hospice: 0,
@@ -643,6 +660,20 @@ export function buildSeniorHomeIntel(input: {
         "Most states have no SeniorTrustHub state-intelligence page yet.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "New Jersey NJDOH (state enrichment)",
+      numerator: NJ_LOCKED.ltcRows,
+      denominator: null,
+      display: `${NJ_LOCKED.ltcRows.toLocaleString("en-US")} All_LTC identities; ${NJ_LOCKED.acuteRows.toLocaleString("en-US")} All_Acute identities (not a combined total)`,
+      status: "partial",
+      method:
+        "New Jersey state-license universes on /new-jersey. All_LTC and All_Acute stay separate.",
+      limitations: [
+        "Do not add All_LTC and All_Acute into one senior-provider denominator.",
+        "CMS class overlays are independent and are not exact NJDOH joins in this snapshot.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -652,8 +683,13 @@ export function buildSeniorHomeIntel(input: {
     homeHealth: row.homeHealth,
     hospice: row.hospice,
     nhVolumeShare: pct(row.nursingHomes, nhMax),
-    enrichment: row.state === "FL" ? "florida_state_intelligence" : "cms_directory_only",
-    intelligenceHref: row.state === "FL" ? "/florida" : null,
+    enrichment:
+      row.state === "FL"
+        ? "florida_state_intelligence"
+        : row.state === "NJ"
+          ? "new_jersey_state_intelligence"
+          : "cms_directory_only",
+    intelligenceHref: row.state === "FL" ? "/florida" : row.state === "NJ" ? NJ_PUBLIC_PATH : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 
@@ -684,7 +720,7 @@ export function buildSeniorHomeIntel(input: {
     findings,
     coverage,
     gaps: [
-      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida is the current state example.",
+      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida and New Jersey currently have state intelligence pages.",
       "CMS stars, staffing, inspections, and penalties are not interchangeable across Nursing Home, Home Health, and Hospice.",
       `${national.ownership.unknownEdges.toLocaleString("en-US")} ownership edges are UNKNOWN. UNKNOWN is not historical ownership.`,
       "Home Health and Hospice have no CMS CHOW event file in this research graph.",
@@ -707,6 +743,15 @@ export function buildSeniorHomeIntel(input: {
       cmsHospice: flGeo.hospice,
       publishedAlfAfch: input.publishedAlfAfch,
       note: "Florida state intelligence is AHCA licensing and regulatory evidence plus CMS class context. It is not a ranking and does not publish HHA, Hospice, or Nursing Home state profile routes.",
+    },
+    newJerseyPreview: {
+      href: NJ_PUBLIC_PATH,
+      ltcIdentities: NJ_LOCKED.ltcRows,
+      acuteIdentities: NJ_LOCKED.acuteRows,
+      cmsNursingHomes: njGeo.nursingHomes,
+      cmsHomeHealth: njGeo.homeHealth,
+      cmsHospice: njGeo.hospice,
+      note: "New Jersey state intelligence is NJDOH licensing, staffing, enforcement, Medicaid listed rates, and PACE evidence plus CMS class context. All_LTC and All_Acute are not added into one senior-provider total.",
     },
     askMarket: [
       {
@@ -751,9 +796,16 @@ export function buildSeniorHomeIntel(input: {
       {
         id: "florida-differs",
         question: "How does Florida’s research coverage differ?",
-        answer: `Florida currently has a state intelligence page with ${input.floridaIdentities.toLocaleString("en-US")} AHCA identities and ${input.floridaRegulatoryObservations.toLocaleString("en-US")} regulatory observations, plus CMS class counts. Other states on this homepage are CMS directory counts only.`,
+        answer: `Florida currently has a state intelligence page with ${input.floridaIdentities.toLocaleString("en-US")} AHCA identities and ${input.floridaRegulatoryObservations.toLocaleString("en-US")} regulatory observations, plus CMS class counts. New Jersey has a separate NJDOH state intelligence page. Other states on this homepage are CMS directory counts only.`,
         href: "/florida",
         hrefLabel: "Open Florida intelligence",
+      },
+      {
+        id: "new-jersey-differs",
+        question: "How does New Jersey’s research coverage differ?",
+        answer: `New Jersey currently has a state intelligence page with ${NJ_LOCKED.ltcRows.toLocaleString("en-US")} NJDOH All_LTC identities and ${NJ_LOCKED.acuteRows.toLocaleString("en-US")} All_Acute identities, plus CMS class counts. All_LTC and All_Acute are not one senior-provider total.`,
+        href: NJ_PUBLIC_PATH,
+        hrefLabel: "Open New Jersey intelligence",
       },
     ],
     sources,
@@ -764,7 +816,7 @@ export function buildSeniorHomeIntel(input: {
       "Inspection findings describe conditions at points in time.",
       "Ownership can change, and UNKNOWN is not a former owner.",
       "Nursing Home, Home Health, and Hospice evidence is not directly comparable.",
-      "State evidence availability differs. Florida is not a national template yet.",
+      "State evidence availability differs. Florida and New Jersey are not a national template yet.",
       "Source publication schedules differ. This page is not live data.",
     ],
   };

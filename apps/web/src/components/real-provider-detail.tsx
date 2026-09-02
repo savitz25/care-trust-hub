@@ -29,6 +29,7 @@ import { RealDataNotice } from "./evidence";
 import { facilityInterviewBuilderHref } from "./interview-builder-bridge";
 import { WorkspaceAddButton } from "./workspace-add-button";
 import { NhProfileIntelligence } from "./nh-profile-intelligence";
+import { NjProfileEvidenceModule } from "./nj-profile-evidence";
 import { isProviderIntelV1, type NursingHomeProviderIntelligence } from "@care/domain";
 
 const additionalLayers = ["Home health national spine", "Hospice national spine"];
@@ -417,6 +418,8 @@ export function RealProviderDetail({
         {stateIntelligence ? (
           <StateLicenseOversight provider={provider} intelligence={stateIntelligence} />
         ) : null}
+
+        <NjProfileEvidenceModule ccn={provider.ccn} state={provider.location.state} />
 
         {nhEvidence ? <NursingHomeEvidencePanel evidence={nhEvidence} /> : null}
 
