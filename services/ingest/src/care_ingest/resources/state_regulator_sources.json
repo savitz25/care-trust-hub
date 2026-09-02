@@ -112,15 +112,15 @@
       "dataset_key": "nj-doh-ltc-facility-search",
       "regulator": "New Jersey Department of Health",
       "official_name": "Long Term Care Facilities Search",
-      "official_landing_page": "https://www.nj.gov/health/healthfacilities/",
-      "download_or_api_url": "https://healthapps.nj.gov/facilities/fsSearch.aspx",
-      "access_mechanism": "html_search",
+      "official_landing_page": "https://healthapps.nj.gov/facilities/fssearch.aspx",
+      "download_or_api_url": "https://healthapps.nj.gov/facilities/documents2/All_LTC.xlsx",
+      "access_mechanism": "xlsx_download",
       "update_cadence": "unknown",
-      "automation_difficulty": "HIGH",
+      "automation_difficulty": "LOW",
       "cms_reconciliation": "MODERATE",
       "assisted_living_same_ecosystem": true,
       "implemented": false,
-      "notes": "Session-bound facility search. Enforcement actions are a separate official page. No bulk license API found."
+      "notes": "NJ-SEN-001 uses ingest-nj-doh-ltc against All_LTC.xlsx. ingest-state remains CA/NY/TX SNF-only. Enforcement/SOD/penalty pages are NJ-SEN-002."
     }
   ]
 }

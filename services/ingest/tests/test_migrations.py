@@ -78,6 +78,17 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
         encoding="utf-8"
     )
     assert "REVOKE ALL ON TABLE public.state_provider_profile FROM anon" in florida31
+
+    nj = (migrations / "0032_nj_doh_facility_identity.sql").read_text(encoding="utf-8")
+    assert "CREATE TABLE state_facility_identity (" in nj
+    assert "CREATE TABLE state_source_snapshot (" in nj
+    assert "public_eligible boolean NOT NULL DEFAULT false" in nj
+    assert "CHECK (public_eligible = false)" in nj
+    assert "licensed_owner" in nj
+    assert "administrator" in nj
+    assert "DROP TABLE" not in nj
+    assert "MEMORY_CARE" not in nj
+    assert "CHECK (state_code = 'FL')" not in nj
     assert "REVOKE ALL ON TABLE public.state_provider_profile FROM authenticated" in florida31
     assert "ENABLE ROW LEVEL SECURITY" in florida31
     assert "FORCE ROW LEVEL SECURITY" not in florida31

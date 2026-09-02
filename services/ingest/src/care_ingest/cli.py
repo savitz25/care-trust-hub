@@ -173,6 +173,17 @@ def build_parser() -> argparse.ArgumentParser:
         help="Print per-source freshness from cms_source_freshness (not a global clock)",
     )
     freshness.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
+    nj = commands.add_parser(
+        "ingest-nj-doh-ltc",
+        help="Acquire/normalize NJDOH All_LTC facility identity spine (NJ-SEN-001)",
+    )
+    nj.add_argument("--input", type=Path, help="Local All_LTC.xlsx path")
+    nj.add_argument("--download", action="store_true", help="Download the official workbook")
+    nj.add_argument("--dry-run", action="store_true", help="Parse and match without writing")
+    nj.add_argument("--execute", action="store_true", help="Write identities to the database")
+    nj.add_argument("--inspect-only", action="store_true", help="Print source inspection JSON")
+    nj.add_argument("--timeout", type=float, default=120)
+    nj.add_argument("--database-url", default=os.environ.get("CARE_DATABASE_URL"))
     return parser
 
 
@@ -206,6 +217,33 @@ def main(argv: list[str] | None = None) -> int:
         if args.mode == "refresh" and not report.writes_enabled:
             logging.warning("CARE_CMS_REFRESH_WRITES is not true; no evidence writes occurred")
         return 0 if report.health != "FAILED" else 1
+    if args.command == "ingest-nj-doh-ltc":
+        from .nj_doh_ltc import fetch_official_workbook, inspect_payload
+        from .nj_doh_ltc_database import ingest_nj_doh_ltc
+
+        if args.input:
+            payload = Path(args.input).read_bytes()
+        elif args.download:
+            payload = fetch_official_workbook(timeout=args.timeout)
+            archive = data_root / "raw" / "nj-doh-ltc"
+            archive.mkdir(parents=True, exist_ok=True)
+            (archive / "All_LTC.xlsx").write_bytes(payload)
+        else:
+            parser.error("ingest-nj-doh-ltc requires --input or --download")
+        if args.inspect_only:
+            print(json.dumps(inspect_payload(payload), indent=2, default=str))
+            return 0
+        if not args.execute:
+            args.dry_run = True
+        if args.execute and not args.database_url:
+            parser.error("execute mode requires CARE_DATABASE_URL or --database-url")
+        report = ingest_nj_doh_ltc(
+            payload,
+            database_url=args.database_url,
+            dry_run=not args.execute,
+        )
+        print(report.to_json(), end="")
+        return 0
     if args.command == "cms-freshness":
         if not args.database_url:
             parser.error("cms-freshness requires CARE_DATABASE_URL or --database-url")
