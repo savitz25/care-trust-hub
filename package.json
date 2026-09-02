@@ -13,6 +13,7 @@
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
+    "check:sen-cust-cap-001": "npm --workspace=@care/web exec -- vitest run --configLoader runner src/server/care/senior-customer-profile-validation.test.ts src/app/api/customer-profile-validation/v1/route.test.ts",
     "format:check": "prettier --check .",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
   },
