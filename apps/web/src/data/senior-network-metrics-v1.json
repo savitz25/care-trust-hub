@@ -1,0 +1,1697 @@
+{
+  "schemaVersion": "senior-network-metrics-v1",
+  "generatedAt": "2026-09-03T21:14:46.951490Z",
+  "canonicalSnapshotFingerprint": "215b9d6301a9759f53dd92324930803089d319f95fe5e46739cbbd5f326c3294",
+  "newestSourceAsOf": {
+    "value": "2026-08-24",
+    "semantics": "Newest official CMS source-modified date among PUBLIC metrics. Not a single network clock and not a deployment date."
+  },
+  "combinedProviderDenominator": {
+    "status": "UNSUPPORTED",
+    "classRecordSum": 33819,
+    "publishAsHeadline": false,
+    "semantics": "Sum of three distinct CMS class directories. Not unique organizations or unique companies. Not published as a headline total."
+  },
+  "combinedEvidenceDepth": {
+    "status": "REJECTED",
+    "publishAsHeadline": false,
+    "candidateCurrentReleaseSum": 2053842,
+    "enumeratedGrains": [
+      "mds_observation",
+      "fire_citation",
+      "inspection_event",
+      "health_deficiency",
+      "enforcement_record",
+      "pbj_quarter_summary",
+      "chow_event"
+    ],
+    "reason": "A combined 'indexed senior-care evidence records' headline would mix incompatible CMS grains, including observations, citations, inspections, deficiencies, enforcement rows, staffing summaries, and CHOW events. Deficiencies are not independent of inspections. The candidate sum is reconstructable from enumerated current-release components but is not stable enough, or clear enough, to publish."
+  },
+  "providerUniverses": {
+    "nursingHome": {
+      "current": 14690,
+      "known": 14696,
+      "absentFromCurrentDirectory": 6,
+      "identity": "CMS CCN",
+      "directory": "Nursing Home Provider Information",
+      "publicationGate": "Latest provider_directory_status CURRENT_ACTIVE"
+    },
+    "homeHealth": {
+      "current": 12460,
+      "known": 12460,
+      "identity": "CMS Home Health CCN",
+      "directory": "Home Health Care Agencies",
+      "publicationGate": "home_health_snapshot current directory row with office identity"
+    },
+    "hospice": {
+      "current": 6669,
+      "typed": 6911,
+      "evidenceOnly": 242,
+      "identity": "CMS Hospice CCN",
+      "directory": "Hospice General Information",
+      "publicationGate": "hospice_snapshot GI directory; quality-only CCNs excluded"
+    }
+  },
+  "evidenceFamilies": {
+    "mds_observations": {
+      "key": "mds_observations",
+      "grain": "mds_observation",
+      "currentReleaseCount": 1248650,
+      "allIngestedReleasesCount": 1248650,
+      "publicationStatus": "PUBLIC"
+    },
+    "fire_citations": {
+      "key": "fire_citations",
+      "grain": "fire_citation",
+      "currentReleaseCount": 200327,
+      "allIngestedReleasesCount": 200327,
+      "publicationStatus": "PUBLIC"
+    },
+    "inspection_events": {
+      "key": "inspection_events",
+      "grain": "inspection_event",
+      "currentReleaseCount": 149978,
+      "allIngestedReleasesCount": 299683,
+      "publicationStatus": "PUBLIC"
+    },
+    "health_deficiencies": {
+      "key": "health_deficiencies",
+      "grain": "health_deficiency",
+      "currentReleaseCount": 419479,
+      "allIngestedReleasesCount": 837823,
+      "publicationStatus": "PUBLIC"
+    },
+    "enforcement_records": {
+      "key": "enforcement_records",
+      "grain": "enforcement_record",
+      "currentReleaseCount": 15694,
+      "allIngestedReleasesCount": 31860,
+      "publicationStatus": "PUBLIC"
+    },
+    "pbj_quarter_summaries": {
+      "key": "pbj_quarter_summaries",
+      "grain": "pbj_quarter_summary",
+      "currentReleaseCount": 14487,
+      "allIngestedReleasesCount": 57873,
+      "publicationStatus": "PUBLIC"
+    },
+    "pbj_staffing_days": {
+      "key": "pbj_staffing_days_current_release",
+      "grain": "pbj_staffing_day",
+      "currentReleaseCount": 1303830,
+      "allIngestedReleasesCount": 5280805,
+      "publicationStatus": "INTERNAL"
+    },
+    "chow_events": {
+      "key": "chow_events",
+      "grain": "chow_event",
+      "currentReleaseCount": 5227,
+      "allIngestedReleasesCount": 5227,
+      "publicationStatus": "PUBLIC"
+    },
+    "hh_quality_observations": {
+      "key": "hh_quality_observations",
+      "grain": "quality_observation",
+      "currentReleaseCount": 199360,
+      "allIngestedReleasesCount": 199360,
+      "publicationStatus": "PUBLIC"
+    },
+    "hh_hhcahps_observations": {
+      "key": "hh_hhcahps_observations",
+      "grain": "quality_observation",
+      "currentReleaseCount": 74760,
+      "allIngestedReleasesCount": 74760,
+      "publicationStatus": "PUBLIC"
+    },
+    "hospice_quality_observations": {
+      "key": "hospice_quality_observations",
+      "grain": "quality_observation",
+      "currentReleaseCount": 453492,
+      "allIngestedReleasesCount": 453492,
+      "publicationStatus": "PUBLIC"
+    },
+    "hospice_cahps_observations": {
+      "key": "hospice_cahps_observations",
+      "grain": "quality_observation",
+      "currentReleaseCount": 140049,
+      "allIngestedReleasesCount": 140049,
+      "publicationStatus": "PUBLIC"
+    },
+    "canonical_organizations": {
+      "key": "canonical_organizations",
+      "grain": "organization",
+      "currentReleaseCount": 205082,
+      "allIngestedReleasesCount": 205082,
+      "publicationStatus": "INTERNAL"
+    },
+    "ownership_graph_edges": {
+      "key": "ownership_graph_edges",
+      "grain": "ownership_edge",
+      "currentReleaseCount": 1421277,
+      "allIngestedReleasesCount": 1421277,
+      "publicationStatus": "INTERNAL"
+    }
+  },
+  "geography": {
+    "states": [
+      {
+        "state": "AK",
+        "nursingHomes": 20,
+        "homeHealth": 14,
+        "hospice": 6
+      },
+      {
+        "state": "AL",
+        "nursingHomes": 224,
+        "homeHealth": 116,
+        "hospice": 85
+      },
+      {
+        "state": "AR",
+        "nursingHomes": 221,
+        "homeHealth": 92,
+        "hospice": 46
+      },
+      {
+        "state": "AZ",
+        "nursingHomes": 140,
+        "homeHealth": 177,
+        "hospice": 237
+      },
+      {
+        "state": "CA",
+        "nursingHomes": 1165,
+        "homeHealth": 3213,
+        "hospice": 1913
+      },
+      {
+        "state": "CO",
+        "nursingHomes": 210,
+        "homeHealth": 222,
+        "hospice": 88
+      },
+      {
+        "state": "CT",
+        "nursingHomes": 191,
+        "homeHealth": 72,
+        "hospice": 28
+      },
+      {
+        "state": "DC",
+        "nursingHomes": 17,
+        "homeHealth": 35,
+        "hospice": 5
+      },
+      {
+        "state": "DE",
+        "nursingHomes": 44,
+        "homeHealth": 22,
+        "hospice": 11
+      },
+      {
+        "state": "FL",
+        "nursingHomes": 694,
+        "homeHealth": 1146,
+        "hospice": 61
+      },
+      {
+        "state": "GA",
+        "nursingHomes": 356,
+        "homeHealth": 105,
+        "hospice": 261
+      },
+      {
+        "state": "GU",
+        "nursingHomes": 1,
+        "homeHealth": 3,
+        "hospice": 2
+      },
+      {
+        "state": "HI",
+        "nursingHomes": 43,
+        "homeHealth": 18,
+        "hospice": 11
+      },
+      {
+        "state": "IA",
+        "nursingHomes": 387,
+        "homeHealth": 125,
+        "hospice": 71
+      },
+      {
+        "state": "ID",
+        "nursingHomes": 80,
+        "homeHealth": 48,
+        "hospice": 56
+      },
+      {
+        "state": "IL",
+        "nursingHomes": 666,
+        "homeHealth": 530,
+        "hospice": 149
+      },
+      {
+        "state": "IN",
+        "nursingHomes": 507,
+        "homeHealth": 173,
+        "hospice": 102
+      },
+      {
+        "state": "KS",
+        "nursingHomes": 296,
+        "homeHealth": 108,
+        "hospice": 85
+      },
+      {
+        "state": "KY",
+        "nursingHomes": 267,
+        "homeHealth": 88,
+        "hospice": 23
+      },
+      {
+        "state": "LA",
+        "nursingHomes": 265,
+        "homeHealth": 176,
+        "hospice": 118
+      },
+      {
+        "state": "MA",
+        "nursingHomes": 341,
+        "homeHealth": 287,
+        "hospice": 77
+      },
+      {
+        "state": "MD",
+        "nursingHomes": 221,
+        "homeHealth": 51,
+        "hospice": 26
+      },
+      {
+        "state": "ME",
+        "nursingHomes": 78,
+        "homeHealth": 19,
+        "hospice": 17
+      },
+      {
+        "state": "MI",
+        "nursingHomes": 422,
+        "homeHealth": 371,
+        "hospice": 173
+      },
+      {
+        "state": "MN",
+        "nursingHomes": 338,
+        "homeHealth": 138,
+        "hospice": 81
+      },
+      {
+        "state": "MO",
+        "nursingHomes": 487,
+        "homeHealth": 120,
+        "hospice": 132
+      },
+      {
+        "state": "MP",
+        "nursingHomes": 0,
+        "homeHealth": 3,
+        "hospice": 1
+      },
+      {
+        "state": "MS",
+        "nursingHomes": 202,
+        "homeHealth": 42,
+        "hospice": 84
+      },
+      {
+        "state": "MT",
+        "nursingHomes": 61,
+        "homeHealth": 21,
+        "hospice": 32
+      },
+      {
+        "state": "NC",
+        "nursingHomes": 419,
+        "homeHealth": 166,
+        "hospice": 76
+      },
+      {
+        "state": "ND",
+        "nursingHomes": 72,
+        "homeHealth": 20,
+        "hospice": 13
+      },
+      {
+        "state": "NE",
+        "nursingHomes": 180,
+        "homeHealth": 62,
+        "hospice": 43
+      },
+      {
+        "state": "NH",
+        "nursingHomes": 73,
+        "homeHealth": 27,
+        "hospice": 23
+      },
+      {
+        "state": "NJ",
+        "nursingHomes": 348,
+        "homeHealth": 38,
+        "hospice": 61
+      },
+      {
+        "state": "NM",
+        "nursingHomes": 68,
+        "homeHealth": 70,
+        "hospice": 52
+      },
+      {
+        "state": "NV",
+        "nursingHomes": 66,
+        "homeHealth": 228,
+        "hospice": 183
+      },
+      {
+        "state": "NY",
+        "nursingHomes": 593,
+        "homeHealth": 100,
+        "hospice": 39
+      },
+      {
+        "state": "OH",
+        "nursingHomes": 922,
+        "homeHealth": 835,
+        "hospice": 169
+      },
+      {
+        "state": "OK",
+        "nursingHomes": 283,
+        "homeHealth": 212,
+        "hospice": 135
+      },
+      {
+        "state": "OR",
+        "nursingHomes": 128,
+        "homeHealth": 51,
+        "hospice": 66
+      },
+      {
+        "state": "PA",
+        "nursingHomes": 656,
+        "homeHealth": 415,
+        "hospice": 179
+      },
+      {
+        "state": "PR",
+        "nursingHomes": 9,
+        "homeHealth": 39,
+        "hospice": 42
+      },
+      {
+        "state": "RI",
+        "nursingHomes": 72,
+        "homeHealth": 22,
+        "hospice": 11
+      },
+      {
+        "state": "SC",
+        "nursingHomes": 187,
+        "homeHealth": 68,
+        "hospice": 88
+      },
+      {
+        "state": "SD",
+        "nursingHomes": 96,
+        "homeHealth": 23,
+        "hospice": 16
+      },
+      {
+        "state": "TN",
+        "nursingHomes": 303,
+        "homeHealth": 128,
+        "hospice": 61
+      },
+      {
+        "state": "TX",
+        "nursingHomes": 1177,
+        "homeHealth": 1854,
+        "hospice": 1053
+      },
+      {
+        "state": "UT",
+        "nursingHomes": 97,
+        "homeHealth": 82,
+        "hospice": 82
+      },
+      {
+        "state": "VA",
+        "nursingHomes": 289,
+        "homeHealth": 237,
+        "hospice": 110
+      },
+      {
+        "state": "VI",
+        "nursingHomes": 0,
+        "homeHealth": 3,
+        "hospice": 3
+      },
+      {
+        "state": "VT",
+        "nursingHomes": 33,
+        "homeHealth": 9,
+        "hospice": 9
+      },
+      {
+        "state": "WA",
+        "nursingHomes": 193,
+        "homeHealth": 74,
+        "hospice": 50
+      },
+      {
+        "state": "WI",
+        "nursingHomes": 323,
+        "homeHealth": 87,
+        "hospice": 85
+      },
+      {
+        "state": "WV",
+        "nursingHomes": 123,
+        "homeHealth": 43,
+        "hospice": 18
+      },
+      {
+        "state": "WY",
+        "nursingHomes": 36,
+        "homeHealth": 32,
+        "hospice": 21
+      }
+    ],
+    "note": "State counts are office/facility geography from each class directory. They are not one senior-provider map and are not service-area counts."
+  },
+  "freshness": {
+    "sources": [
+      {
+        "datasetKey": "home-health-agency-all-owners",
+        "sourceAsOf": "2026-08-19",
+        "retrievedAt": "2026-08-26T22:20:17.790939+00:00",
+        "sourcePeriod": "2026-07-01/2026-09-30",
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "home-health-agency-enrollments",
+        "sourceAsOf": "2026-07-27",
+        "retrievedAt": "2026-08-26T22:15:26.409313+00:00",
+        "sourcePeriod": "2026-07-01/2026-09-30",
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "home-health-care-agencies",
+        "sourceAsOf": "2026-05-27",
+        "retrievedAt": "2026-08-26T21:08:16.274819+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "home-health-patient-survey-hhcahps",
+        "sourceAsOf": "2026-06-10",
+        "retrievedAt": "2026-08-26T22:16:11.201145+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "home-health-zip-codes",
+        "sourceAsOf": "2026-05-27",
+        "retrievedAt": "2026-08-26T22:16:28.439056+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "hospice-all-owners",
+        "sourceAsOf": "2026-08-19",
+        "retrievedAt": "2026-08-26T22:23:16.284554+00:00",
+        "sourcePeriod": "2026-07-01/2026-09-30",
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "hospice-enrollments",
+        "sourceAsOf": "2026-07-27",
+        "retrievedAt": "2026-08-26T22:17:16.776771+00:00",
+        "sourcePeriod": "2026-07-01/2026-09-30",
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "hospice-general-information",
+        "sourceAsOf": "2026-08-19",
+        "retrievedAt": "2026-08-26T22:15:06.243039+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "hospice-provider-cahps",
+        "sourceAsOf": "2026-08-07",
+        "retrievedAt": "2026-08-26T22:17:51.459145+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "hospice-provider-data",
+        "sourceAsOf": "2026-08-07",
+        "retrievedAt": "2026-08-26T22:18:23.639969+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "hospice-zip-data",
+        "sourceAsOf": "2026-08-18",
+        "retrievedAt": "2026-08-26T22:19:41.399581+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "nursing-home-chain-performance-measures",
+        "sourceAsOf": "2026-08-12",
+        "retrievedAt": "2026-08-16T00:32:14.534143+00:00",
+        "sourcePeriod": "2026-07-01/2026-07-31",
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "nursing-home-fire-safety-deficiencies",
+        "sourceAsOf": "2026-08-01",
+        "retrievedAt": "2026-08-26T18:50:50.906114+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "nursing-home-health-deficiencies",
+        "sourceAsOf": "2026-08-01",
+        "retrievedAt": "2026-08-26T20:35:10.928852+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "nursing-home-inspection-dates",
+        "sourceAsOf": "2026-08-01",
+        "retrievedAt": "2026-08-26T20:18:10.260419+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "nursing-home-mds-quality-measures",
+        "sourceAsOf": "2026-08-01",
+        "retrievedAt": "2026-08-26T18:50:46.123680+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "nursing-home-ownership",
+        "sourceAsOf": "2026-08-01",
+        "retrievedAt": "2026-08-26T20:19:47.315631+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "nursing-home-penalties",
+        "sourceAsOf": "2026-08-01",
+        "retrievedAt": "2026-08-26T20:24:35.184131+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "nursing-home-provider-information",
+        "sourceAsOf": "2026-08-01",
+        "retrievedAt": "2026-08-26T20:24:52.158102+00:00",
+        "sourcePeriod": null,
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "payroll-based-journal-daily-nurse-staffing",
+        "sourceAsOf": "2026-07-29",
+        "retrievedAt": "2026-08-15T04:29:10.416563+00:00",
+        "sourcePeriod": "2026Q1",
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "skilled-nursing-facility-all-owners",
+        "sourceAsOf": "2026-08-17",
+        "retrievedAt": "2026-08-26T20:25:26.251400+00:00",
+        "sourcePeriod": "2026-08-01/2026-08-31",
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "skilled-nursing-facility-change-of-ownership",
+        "sourceAsOf": "2026-08-24",
+        "retrievedAt": "2026-08-15T22:02:31.279443+00:00",
+        "sourcePeriod": "2026-04-01/2026-06-30",
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "skilled-nursing-facility-change-of-ownership-owner-information",
+        "sourceAsOf": "2026-07-27",
+        "retrievedAt": "2026-08-15T22:02:34.126768+00:00",
+        "sourcePeriod": "2026-04-01/2026-06-30",
+        "freshnessBand": "CURRENT"
+      },
+      {
+        "datasetKey": "skilled-nursing-facility-enrollments",
+        "sourceAsOf": "2026-08-17",
+        "retrievedAt": "2026-08-26T20:34:01.233098+00:00",
+        "sourcePeriod": "2026-08-01/2026-08-31",
+        "freshnessBand": "CURRENT"
+      }
+    ],
+    "note": "sourceAsOf is the official CMS/source-modified date. generatedAt is when this manifest was recomputed. Ingest success is operational, not a substitute for source freshness."
+  },
+  "metrics": [
+    {
+      "key": "current_nursing_homes",
+      "label": "Current nursing homes",
+      "value": 14690,
+      "unit": "count",
+      "grain": "current_directory_provider",
+      "denominator": "Current CMS Nursing Home Provider Information directory",
+      "providerClass": "nursing_home",
+      "description": "Current CMS Nursing Home directory identities. Identity is CMS CCN.",
+      "coverage": {
+        "numerator": 14690,
+        "denominator": 14690,
+        "display": "14,690 current of 14,690 current directory"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-provider-information"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "Latest provider_directory_status per CCN where directory_status='CURRENT_ACTIVE' and provider_type='nursing_home'.",
+        "payloadKey": "providerUniverses.nursingHome.current",
+        "components": [
+          {
+            "label": "Current directory",
+            "value": "14,690",
+            "payloadKey": "providerUniverses.nursingHome.current"
+          },
+          {
+            "label": "Known CCNs",
+            "value": "14,696",
+            "payloadKey": "providerUniverses.nursingHome.known"
+          }
+        ],
+        "limitations": [
+          "Known CCNs are not added into current.",
+          "Absence from the current directory is not proof of closure."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "current_home_health_agencies",
+      "label": "Current home health agencies",
+      "value": 12460,
+      "unit": "count",
+      "grain": "current_directory_provider",
+      "denominator": "Current CMS Home Health Care Agencies directory",
+      "providerClass": "home_health",
+      "description": "Current CMS Home Health Care Agencies directory identities. Identity is CMS Home Health CCN.",
+      "coverage": {
+        "numerator": 12460,
+        "denominator": 12460,
+        "display": "12,460 current of 12,460 current directory"
+      },
+      "contributingSourceSystems": [
+        "home-health-care-agencies"
+      ],
+      "sourceAsOf": "2026-05-27",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "Distinct provider_id rows in home_health_snapshot (current CMS agency directory).",
+        "payloadKey": "providerUniverses.homeHealth.current",
+        "components": [
+          {
+            "label": "Current directory",
+            "value": "12,460",
+            "payloadKey": "providerUniverses.homeHealth.current"
+          }
+        ],
+        "limitations": [
+          "An office address is not a verified service area."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "current_hospice_providers",
+      "label": "Current hospice providers",
+      "value": 6669,
+      "unit": "count",
+      "grain": "current_directory_provider",
+      "denominator": "Current CMS Hospice General Information directory",
+      "providerClass": "hospice",
+      "description": "Current CMS Hospice General Information directory identities. Identity is CMS Hospice CCN.",
+      "coverage": {
+        "numerator": 6669,
+        "denominator": 6669,
+        "display": "6,669 GI current of 6,911 typed identities"
+      },
+      "contributingSourceSystems": [
+        "hospice-general-information"
+      ],
+      "sourceAsOf": "2026-08-19",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "Distinct provider_id rows in hospice_snapshot (GI directory). Quality-file-only CCNs are excluded.",
+        "payloadKey": "providerUniverses.hospice.current",
+        "components": [
+          {
+            "label": "Current GI directory",
+            "value": "6,669",
+            "payloadKey": "providerUniverses.hospice.current"
+          },
+          {
+            "label": "Typed identities",
+            "value": "6,911",
+            "payloadKey": "providerUniverses.hospice.typed"
+          },
+          {
+            "label": "Evidence-only identities",
+            "value": "242",
+            "payloadKey": "providerUniverses.hospice.evidenceOnly"
+          }
+        ],
+        "limitations": [
+          "Evidence-only identities are not current GI providers and are not proof of closure."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "known_nursing_home_ccns",
+      "label": "Known nursing-home CCNs",
+      "value": 14696,
+      "unit": "count",
+      "grain": "known_ccn_identity",
+      "denominator": "Typed nursing_home providers in the research graph",
+      "providerClass": "nursing_home",
+      "description": "Typed nursing-home CCNs regardless of current-directory status.",
+      "coverage": {
+        "numerator": 14696,
+        "denominator": 14696,
+        "display": "14,696 known CCNs"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-provider-information"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM provider WHERE provider_type='nursing_home'.",
+        "payloadKey": "providerUniverses.nursingHome.known",
+        "components": [
+          {
+            "label": "Known CCNs",
+            "value": "14,696",
+            "payloadKey": "providerUniverses.nursingHome.known"
+          },
+          {
+            "label": "Current directory",
+            "value": "14,690",
+            "payloadKey": "providerUniverses.nursingHome.current"
+          }
+        ],
+        "limitations": [
+          "Known CCNs are not current providers."
+        ]
+      },
+      "publicationStatus": "INTERNAL"
+    },
+    {
+      "key": "nursing_homes_absent_from_current_directory",
+      "label": "Nursing homes absent from the current directory",
+      "value": 6,
+      "unit": "count",
+      "grain": "directory_exclusion",
+      "denominator": "Typed nursing_home providers minus CURRENT_ACTIVE",
+      "providerClass": "nursing_home",
+      "description": "Latest directory status ABSENT_FROM_CURRENT_DIRECTORY. Not a closure finding.",
+      "coverage": {
+        "numerator": 6,
+        "denominator": 14696,
+        "display": "6 of 14,696 known CCNs"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-provider-information"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "Latest provider_directory_status per CCN where directory_status='ABSENT_FROM_CURRENT_DIRECTORY'.",
+        "payloadKey": "providerUniverses.nursingHome.absentFromCurrentDirectory",
+        "components": [
+          {
+            "label": "Absent from current directory",
+            "value": "6",
+            "payloadKey": "providerUniverses.nursingHome.absentFromCurrentDirectory"
+          }
+        ],
+        "limitations": [
+          "Absence is not termination and is not a current-provider total."
+        ]
+      },
+      "publicationStatus": "INTERNAL"
+    },
+    {
+      "key": "hospice_typed_identities",
+      "label": "Typed hospice identities",
+      "value": 6911,
+      "unit": "count",
+      "grain": "known_ccn_identity",
+      "denominator": "All providers typed hospice",
+      "providerClass": "hospice",
+      "description": "All typed hospice identities, including quality-file-only CCNs.",
+      "coverage": {
+        "numerator": 6911,
+        "denominator": 6911,
+        "display": "6,911 typed hospice identities"
+      },
+      "contributingSourceSystems": [
+        "hospice-general-information",
+        "hospice-provider-data"
+      ],
+      "sourceAsOf": "2026-08-19",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM provider WHERE provider_type='hospice'.",
+        "payloadKey": "providerUniverses.hospice.typed",
+        "components": [
+          {
+            "label": "Typed identities",
+            "value": "6,911",
+            "payloadKey": "providerUniverses.hospice.typed"
+          }
+        ],
+        "limitations": [
+          "Typed identities are not the current GI directory."
+        ]
+      },
+      "publicationStatus": "INTERNAL"
+    },
+    {
+      "key": "hospice_evidence_only",
+      "label": "Hospice evidence-only identities",
+      "value": 242,
+      "unit": "count",
+      "grain": "evidence_only_identity",
+      "denominator": "Typed hospice minus GI directory",
+      "providerClass": "hospice",
+      "description": "Typed hospice CCNs that appear in quality files but not the current GI directory.",
+      "coverage": {
+        "numerator": 242,
+        "denominator": 6911,
+        "display": "242 of 6,911 typed identities"
+      },
+      "contributingSourceSystems": [
+        "hospice-general-information",
+        "hospice-provider-data"
+      ],
+      "sourceAsOf": "2026-08-19",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "Typed hospice providers minus distinct hospice_snapshot providers.",
+        "payloadKey": "providerUniverses.hospice.evidenceOnly",
+        "components": [
+          {
+            "label": "Evidence-only identities",
+            "value": "242",
+            "payloadKey": "providerUniverses.hospice.evidenceOnly"
+          }
+        ],
+        "limitations": [
+          "Do not promote these CCNs into the current hospice provider count."
+        ]
+      },
+      "publicationStatus": "INTERNAL"
+    },
+    {
+      "key": "mds_observations",
+      "label": "MDS observations",
+      "value": 1248650,
+      "unit": "count",
+      "grain": "mds_observation",
+      "denominator": "Current CMS MDS Quality Measures release",
+      "providerClass": "nursing_home",
+      "description": "Facility-measure-period MDS quality-measure observations in the current CMS release.",
+      "coverage": {
+        "numerator": 1248650,
+        "denominator": null,
+        "display": "1,248,650 MDS observations"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-mds-quality-measures"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM facility_quality_measure_observation in the current cms_source_freshness release.",
+        "payloadKey": "evidenceFamilies.mds_observations.currentReleaseCount",
+        "components": [
+          {
+            "label": "Current-release MDS observations",
+            "value": "1,248,650",
+            "payloadKey": "evidenceFamilies.mds_observations.currentReleaseCount"
+          }
+        ],
+        "limitations": [
+          "An MDS observation is not an inspection and is not a provider.",
+          "Measure-period rows are not star ratings."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "fire_citations",
+      "label": "Fire citations",
+      "value": 200327,
+      "unit": "count",
+      "grain": "fire_citation",
+      "denominator": "Current CMS Fire Safety Deficiencies release",
+      "providerClass": "nursing_home",
+      "description": "Fire-safety citation rows in the current CMS Fire Safety Deficiencies release.",
+      "coverage": {
+        "numerator": 200327,
+        "denominator": null,
+        "display": "200,327 fire citations"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-fire-safety-deficiencies"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM fire_safety_citation in the current cms_source_freshness release.",
+        "payloadKey": "evidenceFamilies.fire_citations.currentReleaseCount",
+        "components": [
+          {
+            "label": "Current-release fire citations",
+            "value": "200,327",
+            "payloadKey": "evidenceFamilies.fire_citations.currentReleaseCount"
+          }
+        ],
+        "limitations": [
+          "A fire citation is not a provider and is not a health deficiency."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "inspection_events",
+      "label": "Inspections",
+      "value": 149978,
+      "unit": "count",
+      "grain": "inspection_event",
+      "denominator": "Current CMS Inspection Dates release",
+      "providerClass": "nursing_home",
+      "description": "Inspection events in the current CMS Inspection Dates release. Not stacked historical ingest copies.",
+      "coverage": {
+        "numerator": 149978,
+        "denominator": null,
+        "display": "149,978 inspection events"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-inspection-dates"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM inspection_event constrained to the current cms_source_freshness release.",
+        "payloadKey": "evidenceFamilies.inspection_events.currentReleaseCount",
+        "components": [
+          {
+            "label": "Current-release inspection events",
+            "value": "149,978",
+            "payloadKey": "evidenceFamilies.inspection_events.currentReleaseCount"
+          },
+          {
+            "label": "All ingested releases (internal)",
+            "value": "299,683",
+            "payloadKey": "evidenceFamilies.inspection_events.allIngestedReleasesCount"
+          }
+        ],
+        "limitations": [
+          "An inspection is not a deficiency and is not an enforcement action.",
+          "Stacked historical ingest copies are not added into this public count."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "health_deficiencies",
+      "label": "Health deficiencies",
+      "value": 419479,
+      "unit": "count",
+      "grain": "health_deficiency",
+      "denominator": "Current CMS Health Deficiencies release",
+      "providerClass": "nursing_home",
+      "description": "Health deficiency findings in the current CMS Health Deficiencies release.",
+      "coverage": {
+        "numerator": 419479,
+        "denominator": null,
+        "display": "419,479 health deficiencies"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-health-deficiencies"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM deficiency_finding constrained to the current cms_source_freshness release.",
+        "payloadKey": "evidenceFamilies.health_deficiencies.currentReleaseCount",
+        "components": [
+          {
+            "label": "Current-release health deficiencies",
+            "value": "419,479",
+            "payloadKey": "evidenceFamilies.health_deficiencies.currentReleaseCount"
+          }
+        ],
+        "limitations": [
+          "A deficiency is not automatically an enforcement action."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "enforcement_records",
+      "label": "Enforcement records",
+      "value": 15694,
+      "unit": "count",
+      "grain": "enforcement_record",
+      "denominator": "Current CMS Penalties release",
+      "providerClass": "nursing_home",
+      "description": "CMS penalty_enforcement rows in the current Penalties release, including fines and payment denials.",
+      "coverage": {
+        "numerator": 15694,
+        "denominator": null,
+        "display": "15,694 enforcement records"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-penalties"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM penalty_enforcement constrained to the current cms_source_freshness release.",
+        "payloadKey": "evidenceFamilies.enforcement_records.currentReleaseCount",
+        "components": [
+          {
+            "label": "Current-release enforcement records",
+            "value": "15,694",
+            "payloadKey": "evidenceFamilies.enforcement_records.currentReleaseCount"
+          },
+          {
+            "label": "Civil monetary penalties",
+            "value": "13,254",
+            "payloadKey": "metrics.civil_monetary_penalties.value"
+          },
+          {
+            "label": "Payment denials",
+            "value": "2,440",
+            "payloadKey": "metrics.payment_denials.value"
+          }
+        ],
+        "limitations": [
+          "Every CMS row is not a regulatory action of the same kind. Fines and payment denials stay separate grains."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "civil_monetary_penalties",
+      "label": "Civil monetary penalties",
+      "value": 13254,
+      "unit": "count",
+      "grain": "civil_monetary_penalty",
+      "denominator": "Current CMS Penalties release, penalty_type='Fine'",
+      "providerClass": "nursing_home",
+      "description": "Fine rows in the current CMS Penalties release.",
+      "coverage": {
+        "numerator": 13254,
+        "denominator": 15694,
+        "display": "13,254 of 15,694 current-release enforcement records"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-penalties"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM penalty_enforcement WHERE penalty_type='Fine' in the current release.",
+        "payloadKey": "metrics.civil_monetary_penalties.value",
+        "components": [
+          {
+            "label": "Fines",
+            "value": "13,254",
+            "payloadKey": "metrics.civil_monetary_penalties.value"
+          }
+        ],
+        "limitations": [
+          "A fine is not a payment denial."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "payment_denials",
+      "label": "Payment denials",
+      "value": 2440,
+      "unit": "count",
+      "grain": "payment_denial",
+      "denominator": "Current CMS Penalties release, penalty_type='Payment Denial'",
+      "providerClass": "nursing_home",
+      "description": "Payment-denial rows in the current CMS Penalties release.",
+      "coverage": {
+        "numerator": 2440,
+        "denominator": 15694,
+        "display": "2,440 of 15,694 current-release enforcement records"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-penalties"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM penalty_enforcement WHERE penalty_type='Payment Denial' in the current release.",
+        "payloadKey": "metrics.payment_denials.value",
+        "components": [
+          {
+            "label": "Payment denials",
+            "value": "2,440",
+            "payloadKey": "metrics.payment_denials.value"
+          }
+        ],
+        "limitations": [
+          "A payment denial is not a civil monetary penalty."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "pbj_quarter_summaries",
+      "label": "Staffing records",
+      "value": 14487,
+      "unit": "count",
+      "grain": "pbj_quarter_summary",
+      "denominator": "Current PBJ Daily Nurse Staffing release, quarterly summaries",
+      "providerClass": "nursing_home",
+      "description": "PBJ quarterly staffing summaries in the current CMS staffing release. Not daily hour rows and not facilities.",
+      "coverage": {
+        "numerator": 14487,
+        "denominator": null,
+        "display": "14,487 PBJ quarterly summaries"
+      },
+      "contributingSourceSystems": [
+        "payroll-based-journal-daily-nurse-staffing"
+      ],
+      "sourceAsOf": "2026-07-29",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM pbj_staffing_quarter_summary in the current cms_source_freshness release.",
+        "payloadKey": "evidenceFamilies.pbj_quarter_summaries.currentReleaseCount",
+        "components": [
+          {
+            "label": "Current-release quarterly summaries",
+            "value": "14,487",
+            "payloadKey": "evidenceFamilies.pbj_quarter_summaries.currentReleaseCount"
+          },
+          {
+            "label": "Current-release daily rows (internal)",
+            "value": "1,303,830",
+            "payloadKey": "evidenceFamilies.pbj_staffing_days.currentReleaseCount"
+          }
+        ],
+        "limitations": [
+          "A staffing observation is not a facility.",
+          "Daily PBJ hour rows are a different grain and are not the public staffing count."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "chow_events",
+      "label": "Nursing Home CHOW events",
+      "value": 5227,
+      "unit": "count",
+      "grain": "chow_event",
+      "denominator": "CMS Skilled Nursing Facility Change of Ownership events",
+      "providerClass": "nursing_home",
+      "description": "SNF change-of-ownership events in the research graph.",
+      "coverage": {
+        "numerator": 5227,
+        "denominator": null,
+        "display": "5,227 CHOW events"
+      },
+      "contributingSourceSystems": [
+        "skilled-nursing-facility-change-of-ownership"
+      ],
+      "sourceAsOf": "2026-08-24",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM ownership_change_event.",
+        "payloadKey": "evidenceFamilies.chow_events.currentReleaseCount",
+        "components": [
+          {
+            "label": "CHOW events",
+            "value": "5,227",
+            "payloadKey": "evidenceFamilies.chow_events.currentReleaseCount"
+          },
+          {
+            "label": "Providers with CHOW history",
+            "value": "5,172",
+            "payloadKey": "nursingHome.chow.providersWithHistory"
+          }
+        ],
+        "limitations": [
+          "A CHOW record is not a sale and is not a quality finding.",
+          "CMS does not publish Home Health or Hospice CHOW event files."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "hh_quality_observations",
+      "label": "Home Health quality observations",
+      "value": 199360,
+      "unit": "count",
+      "grain": "quality_observation",
+      "denominator": "CMS Home Health quality-of-patient-care observations",
+      "providerClass": "home_health",
+      "description": "Home Health QRP quality observations. Not a Nursing Home MDS observation.",
+      "coverage": {
+        "numerator": 199360,
+        "denominator": null,
+        "display": "199,360 Home Health quality observations"
+      },
+      "contributingSourceSystems": [
+        "home-health-care-agencies"
+      ],
+      "sourceAsOf": "2026-05-27",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM cms_agency_quality_observation WHERE measure_family='hh_quality'.",
+        "payloadKey": "evidenceFamilies.hh_quality_observations.currentReleaseCount",
+        "components": [
+          {
+            "label": "HH quality observations",
+            "value": "199,360",
+            "payloadKey": "evidenceFamilies.hh_quality_observations.currentReleaseCount"
+          }
+        ],
+        "limitations": [
+          "Home Health quality observations are not Nursing Home MDS observations."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "hh_hhcahps_observations",
+      "label": "Home Health HHCAHPS observations",
+      "value": 74760,
+      "unit": "count",
+      "grain": "quality_observation",
+      "denominator": "CMS Home Health HHCAHPS observations",
+      "providerClass": "home_health",
+      "description": "HHCAHPS survey observations for Home Health agencies.",
+      "coverage": {
+        "numerator": 74760,
+        "denominator": null,
+        "display": "74,760 HHCAHPS observations"
+      },
+      "contributingSourceSystems": [
+        "home-health-patient-survey-hhcahps"
+      ],
+      "sourceAsOf": "2026-06-10",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM cms_agency_quality_observation WHERE measure_family='hh_hhcahps'.",
+        "payloadKey": "evidenceFamilies.hh_hhcahps_observations.currentReleaseCount",
+        "components": [
+          {
+            "label": "HHCAHPS observations",
+            "value": "74,760",
+            "payloadKey": "evidenceFamilies.hh_hhcahps_observations.currentReleaseCount"
+          }
+        ],
+        "limitations": [
+          "HHCAHPS is a survey family, not a CMS Quality of Patient Care star."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "hospice_quality_observations",
+      "label": "Hospice quality observations",
+      "value": 453492,
+      "unit": "count",
+      "grain": "quality_observation",
+      "denominator": "CMS Hospice quality observations",
+      "providerClass": "hospice",
+      "description": "Hospice quality-measure observations. Hospice has no overall CMS star in this directory.",
+      "coverage": {
+        "numerator": 453492,
+        "denominator": null,
+        "display": "453,492 Hospice quality observations"
+      },
+      "contributingSourceSystems": [
+        "hospice-provider-data"
+      ],
+      "sourceAsOf": "2026-08-07",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM cms_agency_quality_observation WHERE measure_family='hospice_quality'.",
+        "payloadKey": "evidenceFamilies.hospice_quality_observations.currentReleaseCount",
+        "components": [
+          {
+            "label": "Hospice quality observations",
+            "value": "453,492",
+            "payloadKey": "evidenceFamilies.hospice_quality_observations.currentReleaseCount"
+          }
+        ],
+        "limitations": [
+          "Hospice quality observations are not an overall CMS star."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "hospice_cahps_observations",
+      "label": "Hospice CAHPS observations",
+      "value": 140049,
+      "unit": "count",
+      "grain": "quality_observation",
+      "denominator": "CMS CAHPS Hospice Survey observations",
+      "providerClass": "hospice",
+      "description": "CAHPS Hospice Survey observations.",
+      "coverage": {
+        "numerator": 140049,
+        "denominator": null,
+        "display": "140,049 CAHPS Hospice observations"
+      },
+      "contributingSourceSystems": [
+        "hospice-provider-cahps"
+      ],
+      "sourceAsOf": "2026-08-07",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM cms_agency_quality_observation WHERE measure_family='hospice_cahps'.",
+        "payloadKey": "evidenceFamilies.hospice_cahps_observations.currentReleaseCount",
+        "components": [
+          {
+            "label": "CAHPS Hospice observations",
+            "value": "140,049",
+            "payloadKey": "evidenceFamilies.hospice_cahps_observations.currentReleaseCount"
+          }
+        ],
+        "limitations": [
+          "CAHPS Hospice Survey evidence is not an overall CMS star."
+        ]
+      },
+      "publicationStatus": "PUBLIC"
+    },
+    {
+      "key": "inspection_events_all_ingested_releases",
+      "label": "Inspection events across ingested releases",
+      "value": 299683,
+      "unit": "count",
+      "grain": "inspection_event",
+      "denominator": "All ingested CMS Inspection Dates releases retained in canonical storage",
+      "providerClass": "nursing_home",
+      "description": "Internal stacked ingest count. Not the public inspection metric.",
+      "coverage": {
+        "numerator": 299683,
+        "denominator": null,
+        "display": "299,683 ingested inspection rows"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-inspection-dates"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM inspection_event with no current-release constraint.",
+        "payloadKey": "evidenceFamilies.inspection_events.allIngestedReleasesCount",
+        "components": [
+          {
+            "label": "All ingested inspection rows",
+            "value": "299,683",
+            "payloadKey": "evidenceFamilies.inspection_events.allIngestedReleasesCount"
+          }
+        ],
+        "limitations": [
+          "Stacked historical copies are not a current CMS file count."
+        ]
+      },
+      "publicationStatus": "INTERNAL"
+    },
+    {
+      "key": "health_deficiencies_all_ingested_releases",
+      "label": "Health deficiencies across ingested releases",
+      "value": 837823,
+      "unit": "count",
+      "grain": "health_deficiency",
+      "denominator": "All ingested CMS Health Deficiencies releases retained in canonical storage",
+      "providerClass": "nursing_home",
+      "description": "Internal stacked ingest count. Not the public deficiency metric.",
+      "coverage": {
+        "numerator": 837823,
+        "denominator": null,
+        "display": "837,823 ingested deficiency rows"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-health-deficiencies"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM deficiency_finding with no current-release constraint.",
+        "payloadKey": "evidenceFamilies.health_deficiencies.allIngestedReleasesCount",
+        "components": [
+          {
+            "label": "All ingested deficiency rows",
+            "value": "837,823",
+            "payloadKey": "evidenceFamilies.health_deficiencies.allIngestedReleasesCount"
+          }
+        ],
+        "limitations": [
+          "Stacked historical copies are not a current CMS file count."
+        ]
+      },
+      "publicationStatus": "INTERNAL"
+    },
+    {
+      "key": "enforcement_records_all_ingested_releases",
+      "label": "Enforcement records across ingested releases",
+      "value": 31860,
+      "unit": "count",
+      "grain": "enforcement_record",
+      "denominator": "All ingested CMS Penalties releases retained in canonical storage",
+      "providerClass": "nursing_home",
+      "description": "Internal stacked ingest count. Not the public enforcement metric.",
+      "coverage": {
+        "numerator": 31860,
+        "denominator": null,
+        "display": "31,860 ingested enforcement rows"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-penalties"
+      ],
+      "sourceAsOf": "2026-08-01",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM penalty_enforcement with no current-release constraint.",
+        "payloadKey": "evidenceFamilies.enforcement_records.allIngestedReleasesCount",
+        "components": [
+          {
+            "label": "All ingested enforcement rows",
+            "value": "31,860",
+            "payloadKey": "evidenceFamilies.enforcement_records.allIngestedReleasesCount"
+          }
+        ],
+        "limitations": [
+          "Stacked historical copies are not a current CMS file count."
+        ]
+      },
+      "publicationStatus": "INTERNAL"
+    },
+    {
+      "key": "pbj_staffing_days_current_release",
+      "label": "PBJ daily staffing rows",
+      "value": 1303830,
+      "unit": "count",
+      "grain": "pbj_staffing_day",
+      "denominator": "Current PBJ Daily Nurse Staffing release, daily rows",
+      "providerClass": "nursing_home",
+      "description": "Daily PBJ hour rows in the current staffing release. Internal because this grain is not a staffing-record count for families.",
+      "coverage": {
+        "numerator": 1303830,
+        "denominator": null,
+        "display": "1,303,830 daily PBJ rows"
+      },
+      "contributingSourceSystems": [
+        "payroll-based-journal-daily-nurse-staffing"
+      ],
+      "sourceAsOf": "2026-07-29",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM pbj_staffing_day in the current cms_source_freshness release.",
+        "payloadKey": "evidenceFamilies.pbj_staffing_days.currentReleaseCount",
+        "components": [
+          {
+            "label": "Current-release daily rows",
+            "value": "1,303,830",
+            "payloadKey": "evidenceFamilies.pbj_staffing_days.currentReleaseCount"
+          }
+        ],
+        "limitations": [
+          "Daily hour rows are not facilities and are not the public staffing-record count."
+        ]
+      },
+      "publicationStatus": "INTERNAL"
+    },
+    {
+      "key": "canonical_organizations",
+      "label": "Canonical organizations",
+      "value": 205082,
+      "unit": "count",
+      "grain": "organization",
+      "denominator": "Ownership graph organization nodes",
+      "providerClass": "ownership_graph",
+      "description": "Distinct organizations in the CMS/PECOS ownership graph.",
+      "coverage": {
+        "numerator": 205082,
+        "denominator": null,
+        "display": "205,082 organizations"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-ownership",
+        "skilled-nursing-facility-all-owners"
+      ],
+      "sourceAsOf": "2026-08-17",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM organization.",
+        "payloadKey": "evidenceFamilies.canonical_organizations.currentReleaseCount",
+        "components": [
+          {
+            "label": "Organizations",
+            "value": "205,082",
+            "payloadKey": "evidenceFamilies.canonical_organizations.currentReleaseCount"
+          }
+        ],
+        "limitations": [
+          "Organization count is not a provider-class universe."
+        ]
+      },
+      "publicationStatus": "INTERNAL"
+    },
+    {
+      "key": "ownership_graph_edges",
+      "label": "Ownership graph edges",
+      "value": 1421277,
+      "unit": "count",
+      "grain": "ownership_edge",
+      "denominator": "provider_organization_edge rows",
+      "providerClass": "ownership_graph",
+      "description": "Ownership-graph relationship edges. Not current providers and not CHOW events.",
+      "coverage": {
+        "numerator": 1421277,
+        "denominator": null,
+        "display": "1,421,277 ownership edges"
+      },
+      "contributingSourceSystems": [
+        "nursing-home-ownership",
+        "skilled-nursing-facility-all-owners"
+      ],
+      "sourceAsOf": "2026-08-17",
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "count(*) FROM provider_organization_edge.",
+        "payloadKey": "evidenceFamilies.ownership_graph_edges.currentReleaseCount",
+        "components": [
+          {
+            "label": "Ownership edges",
+            "value": "1,421,277",
+            "payloadKey": "evidenceFamilies.ownership_graph_edges.currentReleaseCount"
+          }
+        ],
+        "limitations": [
+          "An ownership edge is not a facility and is not a CHOW event."
+        ]
+      },
+      "publicationStatus": "INTERNAL"
+    },
+    {
+      "key": "combined_cms_senior_providers",
+      "label": "Combined CMS senior providers",
+      "value": null,
+      "unit": "count",
+      "grain": "combined_provider_classes",
+      "denominator": "Not a published denominator",
+      "providerClass": "cross_class",
+      "description": "Intentionally not computed. Nursing Home, Home Health, and Hospice remain separate universes.",
+      "coverage": {
+        "numerator": null,
+        "denominator": null,
+        "display": "Unsupported"
+      },
+      "contributingSourceSystems": [],
+      "sourceAsOf": null,
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "Not computed. Classes stay separate.",
+        "payloadKey": "combinedProviderDenominator",
+        "components": [
+          {
+            "label": "Unsupported class-record sum",
+            "value": "33,819",
+            "payloadKey": "combinedProviderDenominator.classRecordSum"
+          }
+        ],
+        "limitations": [
+          "Do not publish NH + Home Health + Hospice as one senior-provider total."
+        ]
+      },
+      "publicationStatus": "UNSUPPORTED"
+    },
+    {
+      "key": "combined_indexed_evidence_records",
+      "label": "Combined indexed senior-care evidence records",
+      "value": null,
+      "unit": "count",
+      "grain": "combined_incompatible_evidence_grains",
+      "denominator": "Not a published denominator",
+      "providerClass": "cross_class",
+      "description": "Rejected. Component grains are not additive for a public combined evidence headline.",
+      "coverage": {
+        "numerator": null,
+        "denominator": null,
+        "display": "Rejected"
+      },
+      "contributingSourceSystems": [],
+      "sourceAsOf": null,
+      "generatedAt": "2026-09-03T21:14:46.951490Z",
+      "trace": {
+        "method": "Candidate current-release sum is retained only to prove the rejection is reconstructable.",
+        "payloadKey": "combinedEvidenceDepth",
+        "components": [
+          {
+            "label": "Candidate current-release sum",
+            "value": "2,053,842",
+            "payloadKey": "combinedEvidenceDepth.candidateCurrentReleaseSum"
+          }
+        ],
+        "limitations": [
+          "MDS observations, fire citations, inspections, deficiencies, enforcement, staffing summaries, and CHOW events are different grains.",
+          "Deficiencies overlap conceptually with inspections. The sum is not a stable public metric."
+        ]
+      },
+      "publicationStatus": "REJECTED"
+    }
+  ],
+  "sourceFingerprint": "36a042ec89322dd9b7d91440221928a4f617f9761f275bae22491f97d476a84e"
+}

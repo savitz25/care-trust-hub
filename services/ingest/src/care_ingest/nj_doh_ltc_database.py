@@ -76,7 +76,12 @@ def ingest_nj_doh_ltc(
                 universe = load_cms_universe(connection, "NJ")
                 existing_licenses = _existing_license_ids(connection)
         matches = [match_cms(row, universe) for row in parsed]
-        enriched = sum(1 for row, match in zip(parsed, matches, strict=True) if row.license_number in existing_licenses and match.bucket in {"EXACT", "HIGH_CONFIDENCE"})
+        enriched = sum(
+            1
+            for row, match in zip(parsed, matches, strict=True)
+            if row.license_number in existing_licenses
+            and match.bucket in {"EXACT", "HIGH_CONFIDENCE"}
+        )
         return build_report(
             parsed,
             quarantined,
@@ -220,7 +225,9 @@ def _upsert_facility(
     elif match.bucket == "HIGH_CONFIDENCE":
         confidence = "HIGH_CONFIDENCE"
     elif match.bucket in {"REVIEW_REQUIRED", "CONFLICT", "UNRESOLVED", "UNSAFE_REJECTED"}:
-        confidence = "UNRESOLVED" if match.bucket in {"UNRESOLVED", "UNSAFE_REJECTED"} else match.bucket
+        confidence = (
+            "UNRESOLVED" if match.bucket in {"UNRESOLVED", "UNSAFE_REJECTED"} else match.bucket
+        )
         cms_ccn = None
         cms_provider_id = None
     else:
@@ -369,7 +376,9 @@ def _upsert_facility(
 def _replace_parties(
     connection: psycopg.Connection[Any], facility_id: str, row: NjDohFacilityRow
 ) -> None:
-    connection.execute("DELETE FROM state_facility_party WHERE facility_id = %s::uuid", (facility_id,))
+    connection.execute(
+        "DELETE FROM state_facility_party WHERE facility_id = %s::uuid", (facility_id,)
+    )
     if row.licensed_owner:
         connection.execute(
             """

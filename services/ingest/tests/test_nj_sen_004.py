@@ -116,7 +116,9 @@ def test_home_health_cms_match_rules() -> None:
     assert high.bucket == "HIGH_CONFIDENCE"
     nameless = replace(hha, street=None, phone=None, city="Pompton Plains")
     assert match_home_health(nameless, [_hh()]).bucket == "UNSAFE_REJECTED"
-    hospital = next(row for row in parsed if row.facility_type_canonical == "NJ_HOSPITAL_GENERAL_ACUTE")
+    hospital = next(
+        row for row in parsed if row.facility_type_canonical == "NJ_HOSPITAL_GENERAL_ACUTE"
+    )
     assert match_home_health(hospital, [_hh()]).bucket == "UNRESOLVED"
     assert match_home_health(hha, [_hospice()]).bucket != "EXACT"
 
@@ -137,7 +139,15 @@ def test_hospice_program_branch_inpatient_separation() -> None:
     assert match_hospice(nameless, [_hospice()]).bucket == "UNSAFE_REJECTED"
     assert match_hospice(program, [_hh()]).bucket != "HIGH_CONFIDENCE"
     assert match_home_health(program, [_hh()]).method == "non_cms_class"
-    nh = CanonicalCmsFacility("315001", program.official_name, program.street, program.city, "NJ", program.zip_code, program.phone)
+    nh = CanonicalCmsFacility(
+        "315001",
+        program.official_name,
+        program.street,
+        program.city,
+        "NJ",
+        program.zip_code,
+        program.phone,
+    )
     assert match_hospice(inpatient, [nh]).bucket != "EXACT"
     links = branch_parent_links(parsed)
     assert any(item.bucket == "REVIEW_REQUIRED" for item in links)
@@ -159,7 +169,9 @@ def test_all_ltc_identities_remain_separate() -> None:
     ltc_keys = set(LTC_TYPE_MAP)
     acute_keys = set(TYPE_MAP)
     assert ltc_keys.isdisjoint(acute_keys)
-    hospital = next(row for row in parsed if row.facility_type_canonical == "NJ_HOSPITAL_GENERAL_ACUTE")
+    hospital = next(
+        row for row in parsed if row.facility_type_canonical == "NJ_HOSPITAL_GENERAL_ACUTE"
+    )
     assert hospital.senior_relevant is False
     assert TYPE_MAP[hospital.facility_type_raw].cms_crosswalk_class == "none"
 
@@ -242,38 +254,137 @@ def test_enforcement_rematch_preserves_history_and_attaches_acute() -> None:
 
 def test_staffing_facid_reconciliation_classes() -> None:
     ltc = [
-        IdentityRecord("061701", "061701", "FRIENDS VILLAGE AT WOODSTOWN (061701)", None, "1 ST", "WOODSTOWN", "SALEM", "08098", None, "NJ_LTC_UNSPECIFIED", "nj-doh-all-ltc", "LONG TERM CARE FACILITY"),
-        IdentityRecord("NJ0182510", "0182510", "RENAISSANCE PAVILION (NJ0182510)", None, "2 ST", "NEWARK", "ESSEX", "07102", None, "NJ_NF_SNF", "nj-doh-all-ltc", "LONG TERM CARE FACILITY SNF/NF"),
-        IdentityRecord("NJ060904", "060904", "OPTIMA CARE RIVERVIEW (NJ060904)", None, "3 ST", "WEST NEW YORK", "HUDSON", "07093", None, "NJ_NF_SNF", "nj-doh-all-ltc", "LONG TERM CARE FACILITY SNF/NF"),
+        IdentityRecord(
+            "061701",
+            "061701",
+            "FRIENDS VILLAGE AT WOODSTOWN (061701)",
+            None,
+            "1 ST",
+            "WOODSTOWN",
+            "SALEM",
+            "08098",
+            None,
+            "NJ_LTC_UNSPECIFIED",
+            "nj-doh-all-ltc",
+            "LONG TERM CARE FACILITY",
+        ),
+        IdentityRecord(
+            "NJ0182510",
+            "0182510",
+            "RENAISSANCE PAVILION (NJ0182510)",
+            None,
+            "2 ST",
+            "NEWARK",
+            "ESSEX",
+            "07102",
+            None,
+            "NJ_NF_SNF",
+            "nj-doh-all-ltc",
+            "LONG TERM CARE FACILITY SNF/NF",
+        ),
+        IdentityRecord(
+            "NJ060904",
+            "060904",
+            "OPTIMA CARE RIVERVIEW (NJ060904)",
+            None,
+            "3 ST",
+            "WEST NEW YORK",
+            "HUDSON",
+            "07093",
+            None,
+            "NJ_NF_SNF",
+            "nj-doh-all-ltc",
+            "LONG TERM CARE FACILITY SNF/NF",
+        ),
     ]
     acute = [
-        identity_from_acute(next(row for row in _parsed()[0] if row.facility_type_canonical == "NJ_HOSPITAL_GENERAL_ACUTE"))
+        identity_from_acute(
+            next(
+                row
+                for row in _parsed()[0]
+                if row.facility_type_canonical == "NJ_HOSPITAL_GENERAL_ACUTE"
+            )
+        )
     ]
-    current = classify_staffing_facid(facid="61701", name="Friends Village At Woodstown, Inc.", ltc_identities=ltc, acute_identities=acute, last_quarter="2021_Q4")
+    current = classify_staffing_facid(
+        facid="61701",
+        name="Friends Village At Woodstown, Inc.",
+        ltc_identities=ltc,
+        acute_identities=acute,
+        last_quarter="2021_Q4",
+    )
     assert current.classification in {"CURRENT_ALL_LTC_MATCH", "NON_NURSING_FACILITY"}
     assert current.attach_staffing is False
-    renamed = classify_staffing_facid(facid="NJ018251", name="Renaissance Pavilion", ltc_identities=ltc, acute_identities=acute, last_quarter="2022_Q4")
+    renamed = classify_staffing_facid(
+        facid="NJ018251",
+        name="Renaissance Pavilion",
+        ltc_identities=ltc,
+        acute_identities=acute,
+        last_quarter="2022_Q4",
+    )
     assert renamed.classification == "RENAMED_LTC_FACILITY"
     assert renamed.attach_staffing is False
-    closed = classify_staffing_facid(facid="NJ60312", name="Sterling Manor", ltc_identities=ltc, acute_identities=acute, last_quarter="2024_Q3")
+    closed = classify_staffing_facid(
+        facid="NJ60312",
+        name="Sterling Manor",
+        ltc_identities=ltc,
+        acute_identities=acute,
+        last_quarter="2024_Q3",
+    )
     assert closed.classification == "CLOSED_OR_NO_LONGER_IN_CURRENT_WORKBOOK"
-    hospital = classify_staffing_facid(facid="NJ07011", name="CLARA MAASS MEDICAL CENTER (NJ10701)", ltc_identities=ltc, acute_identities=acute, last_quarter="2023_Q1")
+    hospital = classify_staffing_facid(
+        facid="NJ07011",
+        name="CLARA MAASS MEDICAL CENTER (NJ10701)",
+        ltc_identities=ltc,
+        acute_identities=acute,
+        last_quarter="2023_Q1",
+    )
     assert hospital.classification == "ALL_ACUTE_MATCH"
     assert hospital.attach_staffing is False
-    statewide = classify_staffing_facid(facid=None, name="Statewide Average", ltc_identities=ltc, acute_identities=acute, last_quarter="2026_Q1", statewide=True)
+    statewide = classify_staffing_facid(
+        facid=None,
+        name="Statewide Average",
+        ltc_identities=ltc,
+        acute_identities=acute,
+        last_quarter="2026_Q1",
+        statewide=True,
+    )
     assert statewide.classification == "SOURCE_COMPARATOR_OR_NON_FACILITY"
-    malformed = classify_staffing_facid(facid="NJJWOWMI", name="Southern Ocean Medical Center", ltc_identities=ltc, acute_identities=acute, last_quarter="2021_Q4")
-    assert malformed.classification in {"INVALID_OR_MALFORMED_FACID", "CLOSED_OR_NO_LONGER_IN_CURRENT_WORKBOOK", "ALL_ACUTE_MATCH"}
+    malformed = classify_staffing_facid(
+        facid="NJJWOWMI",
+        name="Southern Ocean Medical Center",
+        ltc_identities=ltc,
+        acute_identities=acute,
+        last_quarter="2021_Q4",
+    )
+    assert malformed.classification in {
+        "INVALID_OR_MALFORMED_FACID",
+        "CLOSED_OR_NO_LONGER_IN_CURRENT_WORKBOOK",
+        "ALL_ACUTE_MATCH",
+    }
     assert NURSING_TYPES.isdisjoint({"NJ_ALR", "NJ_HHA", "NJ_HOSPICE_PROGRAM"})
 
 
 def test_medicaid_rate_bridge_rules() -> None:
     row = RateRow("SUNRISE OF SUMMIT", "ALR", 91.10, "$91.10", "SFY_2026", None, 1)
     identities = [
-        IdentityRecord("ALR001", "ALR001", "SUNRISE OF SUMMIT", None, "1 ST", "SUMMIT", "UNION", "07901", None, "NJ_ALR")
+        IdentityRecord(
+            "ALR001",
+            "ALR001",
+            "SUNRISE OF SUMMIT",
+            None,
+            "1 ST",
+            "SUMMIT",
+            "UNION",
+            "07901",
+            None,
+            "NJ_ALR",
+        )
     ]
     assert match_rate_row(row, identities).bucket == "UNSAFE_REJECTED"
-    exact = upgrade_medicaid_match(row, identities, medicaid_provider_id="1234567", license_number="ALR001")
+    exact = upgrade_medicaid_match(
+        row, identities, medicaid_provider_id="1234567", license_number="ALR001"
+    )
     assert exact.bucket == "EXACT"
     high = upgrade_medicaid_match(row, identities, street="1 ST")
     assert high.bucket in {"HIGH_CONFIDENCE", "EXACT"}
@@ -290,13 +401,24 @@ def test_pace_cms_bridge_and_status_history() -> None:
     assert exact.bucket == "EXACT"
     alias = match_pace_cms(org, [CmsPaceRow("H5080", "Beacon Care Ventures LLC DBA BoldAge PACE")])
     assert alias.bucket in {"REVIEW_REQUIRED", "UNRESOLVED"}
-    event = PaceStatusEvent("Capital Health LIFE", "East Brunswick", "IN_DEVELOPMENT", None, "press", "pace:east-brunswick:in-development")
+    event = PaceStatusEvent(
+        "Capital Health LIFE",
+        "East Brunswick",
+        "IN_DEVELOPMENT",
+        None,
+        "press",
+        "pace:east-brunswick:in-development",
+    )
     assert event.event_type == "IN_DEVELOPMENT"
     assert event.baseline_only is True
 
 
 def test_ccrc_not_njdoh_and_missing_roster_is_not_zero() -> None:
-    html = Path(ROOT / "data/raw/nj-ccrc/ccrc.shtml.html").read_text(encoding="utf-8") if (ROOT / "data/raw/nj-ccrc/ccrc.shtml.html").is_file() else "<html>Continuing Care Retirement Communities Disclosure Statement Certificate of Authority</html>"
+    html = (
+        Path(ROOT / "data/raw/nj-ccrc/ccrc.shtml.html").read_text(encoding="utf-8")
+        if (ROOT / "data/raw/nj-ccrc/ccrc.shtml.html").is_file()
+        else "<html>Continuing Care Retirement Communities Disclosure Statement Certificate of Authority</html>"
+    )
     discovery = discover_ccrc(html, retrieved_at="2026-09-02T00:00:00Z")
     assert discovery["registry_acquired"] is False
     assert discovery["coverage_state"] == "SOURCE_AVAILABLE_BY_REQUEST"
@@ -356,7 +478,9 @@ def test_real_acute_workbook_when_archived_locally() -> None:
     assert inspect["hospice_inpatient"] >= 1
     assert inspect["unknown_types"] == {}
     parsed, quarantined = parse_acute_rows(
-        __import__("care_ingest.nj_doh_acute", fromlist=["parse_acute_xlsx"]).parse_acute_xlsx(path.read_bytes())[1]
+        __import__("care_ingest.nj_doh_acute", fromlist=["parse_acute_xlsx"]).parse_acute_xlsx(
+            path.read_bytes()
+        )[1]
     )
     assert quarantined == []
     assert ADAPTER_VERSION == "nj-doh-acute-v1"
@@ -364,13 +488,19 @@ def test_real_acute_workbook_when_archived_locally() -> None:
 
 
 def test_florida_and_cms_class_tables_unchanged() -> None:
-    florida = (ROOT / "db" / "migrations" / "0028_florida_state_licensed_provider.sql").read_text(encoding="utf-8")
+    florida = (ROOT / "db" / "migrations" / "0028_florida_state_licensed_provider.sql").read_text(
+        encoding="utf-8"
+    )
     assert "CHECK (state_code = 'FL')" in florida
-    hh = (ROOT / "db" / "migrations" / "0023_home_health_hospice_national.sql").read_text(encoding="utf-8")
+    hh = (ROOT / "db" / "migrations" / "0023_home_health_hospice_national.sql").read_text(
+        encoding="utf-8"
+    )
     assert "CREATE TABLE home_health_snapshot" in hh
     assert "CREATE TABLE hospice_snapshot" in hh
     assert "nj_home_health" not in hh
-    migration = (ROOT / "db" / "migrations" / "0035_state_service_area_regulated_org.sql").read_text(encoding="utf-8")
+    migration = (
+        ROOT / "db" / "migrations" / "0035_state_service_area_regulated_org.sql"
+    ).read_text(encoding="utf-8")
     assert "CREATE TABLE state_facility_service_area" in migration
     assert "CREATE TABLE state_regulated_organization" in migration
     assert "CREATE TABLE nj_acute_facilities" not in migration

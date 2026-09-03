@@ -377,7 +377,9 @@ def parse_xlsx(
     return headers, records, sheet_names
 
 
-def parse_facility_rows(rows: list[dict[str, str]]) -> tuple[list[NjDohFacilityRow], list[dict[str, str]]]:
+def parse_facility_rows(
+    rows: list[dict[str, str]],
+) -> tuple[list[NjDohFacilityRow], list[dict[str, str]]]:
     parsed: list[NjDohFacilityRow] = []
     quarantined: list[dict[str, str]] = []
     for row in rows:
@@ -418,7 +420,9 @@ def parse_facility_rows(rows: list[dict[str, str]]) -> tuple[list[NjDohFacilityR
                 owner_entity_type_raw=_text(row.get("OWNDESC")),
                 run_date=excel_serial_date(row.get("RunDate")),
                 source_record_identifier=fac_id,
-                record_fingerprint=record_fingerprint({key: str(row.get(key) or "") for key in sorted(row)}),
+                record_fingerprint=record_fingerprint(
+                    {key: str(row.get(key) or "") for key in sorted(row)}
+                ),
                 raw={key: str(row.get(key) or "") for key in row},
             )
         )
@@ -427,14 +431,34 @@ def parse_facility_rows(rows: list[dict[str, str]]) -> tuple[list[NjDohFacilityR
 
 def match_cms(row: NjDohFacilityRow, universe: list[CanonicalCmsFacility]) -> NjMatch:
     in_state = [item for item in universe if item.state.upper() == "NJ"]
-    published_ccn = normalize_ccn(row.raw.get("CCN") or row.raw.get("CMS_CCN") or row.raw.get("Medicare"))
+    published_ccn = normalize_ccn(
+        row.raw.get("CCN") or row.raw.get("CMS_CCN") or row.raw.get("Medicare")
+    )
     if published_ccn:
         exact = [item for item in in_state if item.cms_ccn == published_ccn]
         if len(exact) == 1:
-            return NjMatch("EXACT", "source_ccn", "NJDOH published a CCN present in the CMS universe", published_ccn, 1)
+            return NjMatch(
+                "EXACT",
+                "source_ccn",
+                "NJDOH published a CCN present in the CMS universe",
+                published_ccn,
+                1,
+            )
         if len(exact) > 1:
-            return NjMatch("CONFLICT", "source_ccn", "Published CCN matched more than one CMS facility", None, len(exact))
-        return NjMatch("UNRESOLVED", "source_ccn", "Published CCN is not in the current CMS universe", published_ccn, 0)
+            return NjMatch(
+                "CONFLICT",
+                "source_ccn",
+                "Published CCN matched more than one CMS facility",
+                None,
+                len(exact),
+            )
+        return NjMatch(
+            "UNRESOLVED",
+            "source_ccn",
+            "Published CCN is not in the current CMS universe",
+            published_ccn,
+            0,
+        )
 
     if not row.cms_nursing_eligible:
         return NjMatch(
@@ -450,7 +474,13 @@ def match_cms(row: NjDohFacilityRow, universe: list[CanonicalCmsFacility]) -> Nj
     phone = row.phone
     name_hits = [item for item in in_state if name and normalize_name(item.name) == name]
     if name_hits and not address:
-        return NjMatch("UNSAFE_REJECTED", "name_only", "Name-only matching is never auto-attached", None, len(name_hits))
+        return NjMatch(
+            "UNSAFE_REJECTED",
+            "name_only",
+            "Name-only matching is never auto-attached",
+            None,
+            len(name_hits),
+        )
 
     high: list[CanonicalCmsFacility] = []
     review: list[CanonicalCmsFacility] = []
@@ -503,7 +533,9 @@ def match_cms(row: NjDohFacilityRow, universe: list[CanonicalCmsFacility]) -> Nj
             None,
             len(unique_review),
         )
-    return NjMatch("UNRESOLVED", "no_overlap", "No overlapping CMS nursing-home identity evidence", None, 0)
+    return NjMatch(
+        "UNRESOLVED", "no_overlap", "No overlapping CMS nursing-home identity evidence", None, 0
+    )
 
 
 def identity_state_for(match: NjMatch) -> str:
@@ -519,7 +551,9 @@ def identity_state_for(match: NjMatch) -> str:
 
 
 def fetch_official_workbook(timeout: float = 120) -> bytes:
-    request = Request(SOURCE_URL, headers={"User-Agent": "SeniorTrustHub/NJ-SEN-001 (research ingest)"})
+    request = Request(
+        SOURCE_URL, headers={"User-Agent": "SeniorTrustHub/NJ-SEN-001 (research ingest)"}
+    )
     with urlopen(request, timeout=timeout) as response:  # noqa: S310 - official HTTPS
         return response.read()
 
@@ -583,7 +617,11 @@ def build_report(
         rows_by_raw_type=dict(Counter(item.facility_type_raw for item in parsed)),
         rows_by_canonical_type=dict(Counter(item.facility_type_canonical or "" for item in parsed)),
         unknown_types=dict(
-            Counter(str(item.get("FACILITY_TYPE") or "") for item in quarantined if item.get("_reason", "").startswith("unknown"))
+            Counter(
+                str(item.get("FACILITY_TYPE") or "")
+                for item in quarantined
+                if item.get("_reason", "").startswith("unknown")
+            )
         ),
         quarantined_rows=len(quarantined),
         exact=buckets.get("EXACT", 0),

@@ -46,10 +46,10 @@ All figures below use one of two grains. They are not interchangeable.
 5. **Scope level (occurrence grain)**  
    1,146 = 376 LTC matched + 294 LTC review-required + 119 acute/other + 9 non-facility + 346 unresolved + 2 source-unavailable.
 
-6. **Facility identity (occurrence grain)**  
-   - 376 LTC matched scope = 300 EXACT + 76 HIGH_CONFIDENCE.  
-   - 294 LTC review-required scope = 3 REVIEW_REQUIRED match-bucket + 291 UNSAFE_REJECTED (name-only against the 893-row spine).  
+6. **Facility identity (occurrence grain)**
+   - 376 LTC matched scope = 300 EXACT + 76 HIGH_CONFIDENCE.
+   - 294 LTC review-required scope = 3 REVIEW_REQUIRED match-bucket + 291 UNSAFE_REJECTED (name-only against the 893-row spine).
    - 476 unresolved match-bucket = 346 unresolved-scope + 119 acute/other + 9 non-facility + 2 unavailable.  
-   Non-LTC rows are not unresolved LTC identity failures.
+     Non-LTC rows are not unresolved LTC identity failures.
 
 Public eligibility remains false. First corpus is baseline-only.

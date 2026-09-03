@@ -42,6 +42,7 @@ export * from "./provider-intelligence";
 export * from "./agency-publication";
 export * from "./senior-hub-intelligence";
 export * from "./senior-home-intel";
+export * from "./senior-network-metrics";
 export * from "./florida-county";
 export * from "./florida-intelligence";
 export * from "./florida-provider-profile";

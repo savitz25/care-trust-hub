@@ -7,6 +7,7 @@ import { brand } from "@/config/brand";
 import { productionOrigin } from "@/config/deployment";
 import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-handoff";
 import { getSeniorHomeIntel } from "@/server/care/senior-home-intel";
+import { getSeniorNetworkMetrics } from "@/server/care/senior-network-metrics";
 
 export const metadata: Metadata = {
   title: {
@@ -28,6 +29,7 @@ export default async function Home({
   const sp = searchParams ? await searchParams : {};
   const journeyModule = resolveSeniorJourneyModule(parseNetworkJourney(sp), "home");
   const intel = getSeniorHomeIntel();
+  const networkMetrics = getSeniorNetworkMetrics();
   return (
     <>
       <div className="page-shell home-page">
@@ -55,6 +57,7 @@ export default async function Home({
         />
         <SeniorHomeIntelligence
           intel={intel}
+          networkMetrics={networkMetrics}
           tools={{
             navigator: navigatorEnabled,
             planner: plannerEnabled,

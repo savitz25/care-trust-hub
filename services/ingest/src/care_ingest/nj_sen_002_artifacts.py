@@ -41,13 +41,17 @@ def write_reconciliation_and_ocr(ledger_path: Path, out_dir: Path) -> dict[str, 
                 if digest and first.get(digest) == index
                 else ("DUPLICATE_CONTENT" if digest else "NO_CONTENT")
             ),
-            "extraction_status": "SOURCE_UNAVAILABLE" if not downloaded else "SEE_CORPUS_SUMMARY_GRAIN",
+            "extraction_status": "SOURCE_UNAVAILABLE"
+            if not downloaded
+            else "SEE_CORPUS_SUMMARY_GRAIN",
             "character_count": "",
             "image_only_flag": "",
             "ocr_backlog_flag": "true" if downloaded else "false",
             "raw_source_document_type": action,
             "normalized_document_classification": classified,
-            "classification_method": "INDEX_METADATA" if classified != "unclassified_regulatory_document" else "UNCLASSIFIED",
+            "classification_method": "INDEX_METADATA"
+            if classified != "unclassified_regulatory_document"
+            else "UNCLASSIFIED",
             "classification_confidence": "index_action",
             "corpus_scope": "SOURCE_DOCUMENT_UNAVAILABLE" if not downloaded else "",
             "facility_match_status": "",
@@ -84,7 +88,9 @@ def write_reconciliation_and_ocr(ledger_path: Path, out_dir: Path) -> dict[str, 
                 "index_classification": classified,
                 "facility_name": occ["source_listed_facility_name"],
                 "ocr_priority": priority,
-                "already_classifiable_from_index": "true" if classified != "unclassified_regulatory_document" else "false",
+                "already_classifiable_from_index": "true"
+                if classified != "unclassified_regulatory_document"
+                else "false",
                 "reason": reason,
                 "public_eligibility": "false",
             }

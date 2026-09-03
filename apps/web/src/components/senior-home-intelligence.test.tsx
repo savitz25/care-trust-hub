@@ -3,10 +3,13 @@ import { describe, expect, it } from "vitest";
 import {
   HOME_PROHIBITED_LANGUAGE,
   assertSeniorHomeIntel,
+  assertSeniorNetworkMetrics,
   buildSeniorHomeIntel,
   type SeniorNationalIntelligence,
+  type SeniorNetworkMetricsV1,
 } from "@care/domain";
 import payload from "@/data/senior-national-intelligence.json";
+import networkPayload from "@/data/senior-network-metrics-v1.json";
 import { SeniorHomeIntelligence } from "./senior-home-intelligence";
 
 const intel = assertSeniorHomeIntel(
@@ -17,12 +20,14 @@ const intel = assertSeniorHomeIntel(
     publishedAlfAfch: 25,
   }),
 );
+const networkMetrics = assertSeniorNetworkMetrics(networkPayload as SeniorNetworkMetricsV1);
 
 describe("senior homepage intelligence", () => {
   it("leads with intelligence and keeps classes separate", () => {
     render(
       <SeniorHomeIntelligence
         intel={intel}
+        networkMetrics={networkMetrics}
         tools={{ navigator: true, planner: true, workspace: true }}
       />,
     );
@@ -35,6 +40,16 @@ describe("senior homepage intelligence", () => {
     expect(screen.getAllByText("14,690").length).toBeGreaterThan(0);
     expect(screen.getAllByText("12,460").length).toBeGreaterThan(0);
     expect(screen.getAllByText("6,669").length).toBeGreaterThan(0);
+    expect(
+      screen.getByRole("heading", { name: /evidence depth by source-native grain/i }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("1,248,650").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("200,327").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("149,978").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("14,487").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("15,694").length).toBeGreaterThan(0);
+    expect(document.body.textContent).not.toMatch(/33,819/);
+    expect(document.body.textContent).not.toMatch(/1\.6M\+/);
     expect(
       screen.getAllByRole("heading", { name: /three national evidence stories/i }),
     ).toHaveLength(1);

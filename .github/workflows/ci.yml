@@ -39,6 +39,9 @@ jobs:
       - run: ruff format --check .
       - run: ruff check .
       - run: pytest
+      - name: Fail closed if senior-network-metrics-v1 is decoupled from hub intel
+        working-directory: .
+        run: python scripts/check-senior-network-metrics-stale.py
 
   migrations:
     runs-on: ubuntu-latest
