@@ -68,7 +68,7 @@ assert(css.includes("var(--font-serif)"), "Georgia/serif editorial exception");
 assert(home.includes('id="home-title"') && home.includes("<h1"), "homepage H1 preserved");
 assert(hub.includes("https://www.seniortrusthub.com"), "canonical host");
 assert(icon.includes('stroke-width="2.4"'), "favicon SVG canonical");
-assert(share.includes("renderNetworkShareImage"), "SHARE-004B canonical network card");
+assert(share.includes("borderRadius") && share.includes("ASK TRUST HUB NETWORK"), "SHARE-004B canonical network card");
 
 const order = [
   'id: "ask"',
