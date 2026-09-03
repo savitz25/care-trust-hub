@@ -68,6 +68,10 @@ jobs:
           SOURCE="${{ github.event_name == 'workflow_dispatch' && github.event.inputs.source || 'all' }}"
           TRIGGER="${{ github.event_name == 'schedule' && 'scheduled' || 'dispatch' }}"
           python -m care_ingest cms-refresh --mode "$MODE" --source "$SOURCE" --trigger "$TRIGGER" | tee "$RUNNER_TEMP/cms-refresh.json"
+      - name: Fail closed if published senior network metrics are stale
+        if: always() && env.CARE_DATABASE_URL != ''
+        working-directory: .
+        run: python scripts/check-senior-network-metrics-stale.py
       - name: Summarize
         if: always()
         run: |

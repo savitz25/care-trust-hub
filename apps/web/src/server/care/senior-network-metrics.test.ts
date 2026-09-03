@@ -23,4 +23,14 @@ describe("senior-network-metrics-v1 publication", () => {
     expect(loader).toMatch(/assertNetworkMetricsMatchHubIntel/);
     expect(loader).not.toMatch(/ask-trust-hub|AskTrustHub|consumers-trust-hub/i);
   });
+
+  it("regenerates from sen-nat-013 and fails closed in CMS refresh/CI if stale", () => {
+    const hubSnapshot = source("../../../../../scripts/sen-nat-013-hub-snapshot.py");
+    const refresh = source("../../../../../.github/workflows/cms-refresh.yml");
+    const ci = source("../../../../../.github/workflows/ci.yml");
+    expect(hubSnapshot).toMatch(/build-senior-network-metrics\.py/);
+    expect(hubSnapshot).toMatch(/check-senior-network-metrics-stale\.py/);
+    expect(refresh).toMatch(/check-senior-network-metrics-stale\.py/);
+    expect(ci).toMatch(/check-senior-network-metrics-stale\.py/);
+  });
 });

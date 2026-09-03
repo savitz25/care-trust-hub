@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
+import sys
 import time
 from collections import Counter
 from pathlib import Path
@@ -423,4 +425,12 @@ print(
         },
         indent=2,
     )
+)
+
+print("regenerating senior-network-metrics-v1 from canonical state", flush=True)
+subprocess.check_call(
+    [sys.executable, str(ROOT / "scripts" / "build-senior-network-metrics.py")]
+)
+subprocess.check_call(
+    [sys.executable, str(ROOT / "scripts" / "check-senior-network-metrics-stale.py")]
 )

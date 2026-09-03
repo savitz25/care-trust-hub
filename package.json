@@ -15,6 +15,7 @@
     "test": "npm run test --workspaces --if-present",
     "check:ath-cust-net-002a": "npm exec --workspace=@care/web vitest -- run --configLoader runner src/server/customer-integration/customer-integration.test.ts",
     "check:sen-cust-cap-001": "npm --workspace=@care/web exec -- vitest run --configLoader runner src/server/care/senior-customer-profile-validation.test.ts src/app/api/customer-profile-validation/v1/route.test.ts",
+    "check:senior-network-metrics": "npm --workspace=@care/domain exec -- vitest run src/senior-network-metrics.test.ts && npm --workspace=@care/web exec -- vitest run --configLoader runner src/server/care/senior-network-metrics.test.ts src/components/senior-home-intelligence.test.tsx src/components/class-research-landing.test.tsx src/app/page.test.tsx",
     "format:check": "prettier --check .",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
   },
