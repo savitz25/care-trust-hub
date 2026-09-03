@@ -78,8 +78,8 @@ export function NjFacilityInventory({
             ? `, filtered to ${defaultCounty} County physical location.`
             : "."}{" "}
           This is not one combined senior-provider denominator: All_LTC and All_Acute stay labeled.
-          Rows are state-only. They are not CMS profile links unless an exact CCN join exists —
-          none are activated in this snapshot.
+          Rows are state-only. They are not CMS profile links unless an exact CCN join exists — none
+          are activated in this snapshot.
         </p>
       </div>
       <form

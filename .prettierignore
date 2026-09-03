@@ -22,4 +22,4 @@ apps/web/src/data/nj-county-local/*.json
 artifacts/nj-sen-005-public-snapshot.json
 artifacts/nj-sen-county-001/*.json
 artifacts/ca-sen-001-public-snapshot.json
-services/ingest/tests/fixtures/nj_doh_staffing_2026_q1.html
+services/ingest/tests/fixtures/*.html

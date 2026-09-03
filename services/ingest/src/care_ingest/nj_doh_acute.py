@@ -101,22 +101,46 @@ TYPE_MAP: dict[str, AcuteTypeSpec] = {
         "NJ_HHA", "home_health", True, True, "Home Health Agency. Not hospice."
     ),
     "HOSPICE CARE PROGRAM": AcuteTypeSpec(
-        "NJ_HOSPICE_PROGRAM", "hospice", True, True, "Hospice Care Program. Not a branch or inpatient unit."
+        "NJ_HOSPICE_PROGRAM",
+        "hospice",
+        True,
+        True,
+        "Hospice Care Program. Not a branch or inpatient unit.",
     ),
     "HOSPICE CARE BRANCH": AcuteTypeSpec(
-        "NJ_HOSPICE_BRANCH", "hospice", True, True, "Hospice Care Branch. Does not inherit a parent CCN without official evidence."
+        "NJ_HOSPICE_BRANCH",
+        "hospice",
+        True,
+        True,
+        "Hospice Care Branch. Does not inherit a parent CCN without official evidence.",
     ),
     "HOSPICE CARE - INPATIENT": AcuteTypeSpec(
-        "NJ_HOSPICE_INPATIENT", "hospice", True, True, "Hospice Care – Inpatient. Not a nursing home."
+        "NJ_HOSPICE_INPATIENT",
+        "hospice",
+        True,
+        True,
+        "Hospice Care – Inpatient. Not a nursing home.",
     ),
     "GENERAL ACUTE CARE HOSPITAL": AcuteTypeSpec(
-        "NJ_HOSPITAL_GENERAL_ACUTE", "none", False, True, "General Acute Care Hospital. Not a nursing facility."
+        "NJ_HOSPITAL_GENERAL_ACUTE",
+        "none",
+        False,
+        True,
+        "General Acute Care Hospital. Not a nursing facility.",
     ),
     "COMPREHENSIVE REHABILITATION HOSPITAL": AcuteTypeSpec(
-        "NJ_HOSPITAL_COMP_REHAB", "none", True, True, "Comprehensive Rehabilitation Hospital. Not a nursing facility."
+        "NJ_HOSPITAL_COMP_REHAB",
+        "none",
+        True,
+        True,
+        "Comprehensive Rehabilitation Hospital. Not a nursing facility.",
     ),
     "CHILDREN REHABILITATION HOSPITAL": AcuteTypeSpec(
-        "NJ_HOSPITAL_CHILD_REHAB", "none", False, True, "Children Rehabilitation Hospital. Distinct official subtype."
+        "NJ_HOSPITAL_CHILD_REHAB",
+        "none",
+        False,
+        True,
+        "Children Rehabilitation Hospital. Distinct official subtype.",
     ),
     "PSYCHIATRIC HOSPITAL": AcuteTypeSpec(
         "NJ_HOSPITAL_PSYCH", "none", False, True, "Psychiatric Hospital. Not a nursing facility."
@@ -125,43 +149,83 @@ TYPE_MAP: dict[str, AcuteTypeSpec] = {
         "NJ_HOSPITAL_SPECIAL", "none", False, True, "Special Hospital. Distinct official label."
     ),
     "SPECIAL HOSPITAL HOSP-LT": AcuteTypeSpec(
-        "NJ_HOSPITAL_SPECIAL_LT", "none", True, True, "Special Hospital HOSP-LT. Not merged into comprehensive rehab or nursing."
+        "NJ_HOSPITAL_SPECIAL_LT",
+        "none",
+        True,
+        True,
+        "Special Hospital HOSP-LT. Not merged into comprehensive rehab or nursing.",
     ),
     "SPECIAL HOSPITAL HOSP-ACU": AcuteTypeSpec(
-        "NJ_HOSPITAL_SPECIAL_ACU", "none", False, True, "Special Hospital HOSP-ACU. Distinct official subtype."
+        "NJ_HOSPITAL_SPECIAL_ACU",
+        "none",
+        False,
+        True,
+        "Special Hospital HOSP-ACU. Distinct official subtype.",
     ),
     "SPECIAL HOSPITAL - PSYCHIATRIC": AcuteTypeSpec(
-        "NJ_HOSPITAL_SPECIAL_PSYCH", "none", False, True, "Special Hospital – Psychiatric. Not merged into Psychiatric Hospital."
+        "NJ_HOSPITAL_SPECIAL_PSYCH",
+        "none",
+        False,
+        True,
+        "Special Hospital – Psychiatric. Not merged into Psychiatric Hospital.",
     ),
     "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY": AcuteTypeSpec(
-        "NJ_HOSP_OFFSITE_ACF", "none", False, True, "Hospital-based off-site ambulatory care. Not home health."
+        "NJ_HOSP_OFFSITE_ACF",
+        "none",
+        False,
+        True,
+        "Hospital-based off-site ambulatory care. Not home health.",
     ),
     "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY STHSPOFF": AcuteTypeSpec(
-        "NJ_HOSP_OFFSITE_ACF_STHSPOFF", "none", False, True, "Hospital-based off-site ACF STHSPOFF. Distinct official subtype."
+        "NJ_HOSP_OFFSITE_ACF_STHSPOFF",
+        "none",
+        False,
+        True,
+        "Hospital-based off-site ACF STHSPOFF. Distinct official subtype.",
     ),
     "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY CTR ST": AcuteTypeSpec(
-        "NJ_HOSP_OFFSITE_ACF_CTR_ST", "none", False, True, "Hospital-based off-site ACF CTR ST. Distinct official subtype."
+        "NJ_HOSP_OFFSITE_ACF_CTR_ST",
+        "none",
+        False,
+        True,
+        "Hospital-based off-site ACF CTR ST. Distinct official subtype.",
     ),
     "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY CORF": AcuteTypeSpec(
-        "NJ_HOSP_OFFSITE_ACF_CORF", "none", False, True, "Hospital-based off-site ACF CORF. Distinct official subtype."
+        "NJ_HOSP_OFFSITE_ACF_CORF",
+        "none",
+        False,
+        True,
+        "Hospital-based off-site ACF CORF. Distinct official subtype.",
     ),
     "AMBULATORY CARE FACILITY": AcuteTypeSpec(
         "NJ_ACF", "none", False, True, "Freestanding ambulatory care facility. Not home health."
     ),
     "AMBULATORY CARE FACILITY - SATELLITE": AcuteTypeSpec(
-        "NJ_ACF_SATELLITE", "none", False, True, "Ambulatory care satellite. Distinct from the parent ACF license."
+        "NJ_ACF_SATELLITE",
+        "none",
+        False,
+        True,
+        "Ambulatory care satellite. Distinct from the parent ACF license.",
     ),
     "AMBULATORY SURGICAL CENTER": AcuteTypeSpec(
         "NJ_ASC", "none", False, True, "Ambulatory surgical center."
     ),
     "AMBULATORY SURGICAL CENTER ASC-ST": AcuteTypeSpec(
-        "NJ_ASC_ST", "none", False, True, "Ambulatory surgical center ASC-ST. Distinct official subtype."
+        "NJ_ASC_ST",
+        "none",
+        False,
+        True,
+        "Ambulatory surgical center ASC-ST. Distinct official subtype.",
     ),
     "SURGICAL PRACTICE": AcuteTypeSpec(
         "NJ_SURGICAL_PRACTICE", "none", False, True, "Surgical Practice. Not an ASC."
     ),
     "SURGICAL PRACTICE ASC-P-C": AcuteTypeSpec(
-        "NJ_SURGICAL_PRACTICE_ASC_PC", "none", False, True, "Surgical Practice ASC-P-C. Distinct official subtype."
+        "NJ_SURGICAL_PRACTICE_ASC_PC",
+        "none",
+        False,
+        True,
+        "Surgical Practice ASC-P-C. Distinct official subtype.",
     ),
     "END STAGE RENAL DIALYSIS": AcuteTypeSpec(
         "NJ_ESRD", "none", False, True, "End Stage Renal Dialysis. Not home health."
@@ -170,7 +234,11 @@ TYPE_MAP: dict[str, AcuteTypeSpec] = {
         "NJ_FQHC", "none", False, True, "Federally Qualified Health Center."
     ),
     "COMPREHENSIVE OUTPATIENT REHAB": AcuteTypeSpec(
-        "NJ_CORF", "none", True, True, "Comprehensive outpatient rehab. Not a hospital and not nursing."
+        "NJ_CORF",
+        "none",
+        True,
+        True,
+        "Comprehensive outpatient rehab. Not a hospital and not nursing.",
     ),
     "MATERNAL AND CHILD HEALTH CONSORTIUM": AcuteTypeSpec(
         "NJ_MCHC", "none", False, True, "Maternal and Child Health Consortium."
@@ -453,10 +521,18 @@ def match_cms_agency(
             )
         if len(exact) > 1:
             return NjMatch(
-                "CONFLICT", "source_ccn", "Published CCN matched more than one CMS identity", None, len(exact)
+                "CONFLICT",
+                "source_ccn",
+                "Published CCN matched more than one CMS identity",
+                None,
+                len(exact),
             )
         return NjMatch(
-            "UNRESOLVED", "source_ccn", "Published CCN is not in the current CMS class universe", published, 0
+            "UNRESOLVED",
+            "source_ccn",
+            "Published CCN is not in the current CMS class universe",
+            published,
+            0,
         )
 
     if row.facility_type_canonical == "NJ_HOSPICE_BRANCH":
@@ -474,7 +550,11 @@ def match_cms_agency(
     name_hits = [item for item in in_state if name and normalize_licensed_name(item.name) == name]
     if name_hits and not address and not phone:
         return NjMatch(
-            "UNSAFE_REJECTED", "name_only", "Name-only matching is never auto-attached", None, len(name_hits)
+            "UNSAFE_REJECTED",
+            "name_only",
+            "Name-only matching is never auto-attached",
+            None,
+            len(name_hits),
         )
 
     high: list[CanonicalCmsFacility] = []
@@ -530,7 +610,9 @@ def match_cms_agency(
             None,
             len(unique_review),
         )
-    return NjMatch("UNRESOLVED", "no_overlap", "No overlapping CMS identity evidence in this class", None, 0)
+    return NjMatch(
+        "UNRESOLVED", "no_overlap", "No overlapping CMS identity evidence in this class", None, 0
+    )
 
 
 def match_home_health(row: NjAcuteFacilityRow, universe: list[CanonicalCmsFacility]) -> NjMatch:
@@ -627,7 +709,9 @@ def fetch_official_workbook(timeout: float = 120) -> bytes:
 
 
 def probe_service_area_page(facid: str, timeout: float = 20) -> ServiceAreaProbe:
-    last = ServiceAreaProbe(facid, DETAIL_URL_CANDIDATES[0].format(item=facid), None, True, "not_attempted")
+    last = ServiceAreaProbe(
+        facid, DETAIL_URL_CANDIDATES[0].format(item=facid), None, True, "not_attempted"
+    )
     for template in DETAIL_URL_CANDIDATES:
         url = template.format(item=facid)
         try:
@@ -655,7 +739,12 @@ def probe_service_area_page(facid: str, timeout: float = 20) -> ServiceAreaProbe
         )
         if "counties served" in lower or "service area" in lower:
             return ServiceAreaProbe(
-                facid, url, status, False, "acquired", [item.title() for item in dict.fromkeys(counties)]
+                facid,
+                url,
+                status,
+                False,
+                "acquired",
+                [item.title() for item in dict.fromkeys(counties)],
             )
         last = ServiceAreaProbe(facid, url, status, True, "no_service_area_fields")
     return last
@@ -684,31 +773,53 @@ def inspect_payload(payload: bytes, retrieved_at: datetime | None = None) -> dic
         "quarantined_rows": len(quarantined),
         "distinct_source_facility_ids": len({item.source_facility_id for item in parsed}),
         "distinct_license_numbers": len({item.license_number for item in parsed}),
-        "duplicate_facids": max(0, len(rows) - len({normalize_license_number(r.get("FacID")) for r in rows})),
+        "duplicate_facids": max(
+            0, len(rows) - len({normalize_license_number(r.get("FacID")) for r in rows})
+        ),
         "duplicate_licenses": max(0, len(parsed) - len({item.license_number for item in parsed})),
         "rows_by_raw_type": dict(Counter(item.facility_type_raw for item in parsed)),
         "rows_by_canonical_type": dict(Counter(item.facility_type_canonical for item in parsed)),
         "unknown_types": dict(
-            Counter(str(item.get("FACILITY_TYPE") or "") for item in quarantined if "unknown facility type" in str(item.get("_reason") or ""))
+            Counter(
+                str(item.get("FACILITY_TYPE") or "")
+                for item in quarantined
+                if "unknown facility type" in str(item.get("_reason") or "")
+            )
         ),
         "counties": [name for name in counties if name in NJ_COUNTIES],
         "invalid_counties": [name for name in counties if name not in NJ_COUNTIES],
         "null_rates": {
-            column: round(sum(1 for row in rows if not _text(row.get(column))) / len(rows), 4) if rows else 0
+            column: round(sum(1 for row in rows if not _text(row.get(column))) / len(rows), 4)
+            if rows
+            else 0
             for column in headers
         },
-        "license_expiration_min": min((item.license_expires_on for item in parsed if item.license_expires_on), default=None),
-        "license_expiration_max": max((item.license_expires_on for item in parsed if item.license_expires_on), default=None),
+        "license_expiration_min": min(
+            (item.license_expires_on for item in parsed if item.license_expires_on), default=None
+        ),
+        "license_expiration_max": max(
+            (item.license_expires_on for item in parsed if item.license_expires_on), default=None
+        ),
         "expired_before_rundate": sum(
             1
             for item in parsed
             if item.license_expires_on and item.run_date and item.license_expires_on < item.run_date
         ),
-        "geo_anomalies": sum(1 for item in parsed if item.latitude is None or item.longitude is None),
-        "home_health_agencies": sum(1 for item in parsed if item.facility_type_canonical == "NJ_HHA"),
-        "hospice_programs": sum(1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_PROGRAM"),
-        "hospice_branches": sum(1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_BRANCH"),
-        "hospice_inpatient": sum(1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_INPATIENT"),
+        "geo_anomalies": sum(
+            1 for item in parsed if item.latitude is None or item.longitude is None
+        ),
+        "home_health_agencies": sum(
+            1 for item in parsed if item.facility_type_canonical == "NJ_HHA"
+        ),
+        "hospice_programs": sum(
+            1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_PROGRAM"
+        ),
+        "hospice_branches": sum(
+            1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_BRANCH"
+        ),
+        "hospice_inpatient": sum(
+            1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_INPATIENT"
+        ),
         "adapter_version": ADAPTER_VERSION,
     }
 
@@ -749,13 +860,17 @@ def build_report(
         rows_by_raw_type=dict(Counter(item.facility_type_raw for item in parsed)),
         rows_by_canonical_type=dict(Counter(item.facility_type_canonical for item in parsed)),
         home_health_agencies=sum(1 for item in parsed if item.facility_type_canonical == "NJ_HHA"),
-        hospice_programs=sum(1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_PROGRAM"),
-        hospice_branches=sum(1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_BRANCH"),
-        hospice_inpatient=sum(1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_INPATIENT"),
+        hospice_programs=sum(
+            1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_PROGRAM"
+        ),
+        hospice_branches=sum(
+            1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_BRANCH"
+        ),
+        hospice_inpatient=sum(
+            1 for item in parsed if item.facility_type_canonical == "NJ_HOSPICE_INPATIENT"
+        ),
         other_acute_classes=sum(
-            1
-            for item in parsed
-            if item.facility_type_canonical not in HHA_TYPES | HOSPICE_TYPES
+            1 for item in parsed if item.facility_type_canonical not in HHA_TYPES | HOSPICE_TYPES
         ),
         unknown_types=dict(
             Counter(

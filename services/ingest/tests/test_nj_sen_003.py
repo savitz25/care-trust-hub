@@ -101,14 +101,28 @@ SUNRISE OF SUMMIT $91.10
 *Assisted Living Programs (ALP) not listed will receive a rate of $99.10. Assisted Living Residences (ALR) not listed will receive a rate of $91.10.
 Comprehensive Personal Care Homes (CPCH) not listed will receive a rate of $81.10.
 """
-    schedule = parse_rate_text(text, official_url="https://www.njmmis.com/downloadDocuments/SFY_2026_Assisted_Living_Rates.pdf")
+    schedule = parse_rate_text(
+        text,
+        official_url="https://www.njmmis.com/downloadDocuments/SFY_2026_Assisted_Living_Rates.pdf",
+    )
     assert schedule.fiscal_year == "SFY_2026"
     assert schedule.effective_on.isoformat() == "2025-07-01"
     assert infer_subtype("ACTORS FUND HOME, ALR") == "ALR"
     assert infer_subtype("ACTORS FUND HOME, CPCH") == "CPCH"
     assert infer_subtype("CAPITAL HEALTH ASSISTED LIVING PROGRAM") == "ALP"
     identities = [
-        IdentityRecord("ALR001", "ALR001", "SUNRISE OF SUMMIT", None, "1 ST", "SUMMIT", "UNION", "07901", None, "NJ_ALR")
+        IdentityRecord(
+            "ALR001",
+            "ALR001",
+            "SUNRISE OF SUMMIT",
+            None,
+            "1 ST",
+            "SUMMIT",
+            "UNION",
+            "07901",
+            None,
+            "NJ_ALR",
+        )
     ]
     matches = [match_rate_row(row, identities) for row in schedule.rows]
     report = build_rate_report(schedule, matches, dry_run=True)
@@ -127,12 +141,18 @@ def test_pace_org_center_zip_and_status_history() -> None:
     assert any(item.coverage_type == "PARTIAL_COUNTY_ZIPS" for item in burlington)
     assert {item.zip_code for item in hudson if item.zip_code} >= {"07302", "07306"}
     assert "08015" in {item.zip_code for item in burlington if item.zip_code}
-    awarded = {item.county for item in corpus.service_areas if item.coverage_type == "AWARDED_FUTURE"}
+    awarded = {
+        item.county for item in corpus.service_areas if item.coverage_type == "AWARDED_FUTURE"
+    }
     assert "Sussex" in awarded
     assert "Middlesex" not in awarded
     east = next(item for item in corpus.centers if "East Brunswick" in item.center_name)
     assert east.current_status == "OPERATING"
-    types = {item.event_type for item in corpus.events if item.center_name and "East Brunswick" in item.center_name}
+    types = {
+        item.event_type
+        for item in corpus.events
+        if item.center_name and "East Brunswick" in item.center_name
+    }
     assert types == {"IN_DEVELOPMENT", "OPERATING"}
     assert report.organizations >= 6
     assert report.centers >= 9
@@ -141,12 +161,19 @@ def test_pace_org_center_zip_and_status_history() -> None:
 
 
 def test_reconciliation_indexed_equals_downloaded_plus_unavailable() -> None:
-    ledger_path = Path(__file__).resolve().parents[3] / "docs" / "data" / "nj-sen-002-acquisition-ledger.jsonl"
+    ledger_path = (
+        Path(__file__).resolve().parents[3]
+        / "docs"
+        / "data"
+        / "nj-sen-002-acquisition-ledger.jsonl"
+    )
     if not ledger_path.is_file():
         return
     rows = load_ledger(ledger_path)
     downloaded = sum(1 for row in rows if row.get("sha256"))
-    unavailable = sum(1 for row in rows if str(row.get("final_acquisition_status", "")).startswith("HTTP_"))
+    unavailable = sum(
+        1 for row in rows if str(row.get("final_acquisition_status", "")).startswith("HTTP_")
+    )
     assert len(rows) == downloaded + unavailable
     hashes = [row["sha256"] for row in rows if row.get("sha256")]
     unique = len(set(hashes))

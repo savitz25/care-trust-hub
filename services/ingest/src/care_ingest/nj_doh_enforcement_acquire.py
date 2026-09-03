@@ -118,7 +118,9 @@ def local_pdf_map(pdf_dir: Path) -> dict[str, Path]:
     return mapping
 
 
-def lookup_local_pdf(pdf_dir: Path, source_document_id: str | None, mapping: dict[str, Path] | None = None) -> Path | None:
+def lookup_local_pdf(
+    pdf_dir: Path, source_document_id: str | None, mapping: dict[str, Path] | None = None
+) -> Path | None:
     if not source_document_id:
         return None
     files = mapping if mapping is not None else local_pdf_map(pdf_dir)
@@ -128,7 +130,9 @@ def lookup_local_pdf(pdf_dir: Path, source_document_id: str | None, mapping: dic
 
 def fetch_pdf(url: str, timeout: float = 90) -> FetchResult:
     if not url or "://" not in url:
-        return FetchResult("INVALID_SOURCE_URL", error_category="invalid_url", error_detail="missing url")
+        return FetchResult(
+            "INVALID_SOURCE_URL", error_category="invalid_url", error_detail="missing url"
+        )
     opener = build_opener(BoundedRedirectHandler())
     request = Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/pdf,*/*"})
     try:
@@ -139,23 +143,51 @@ def fetch_pdf(url: str, timeout: float = 90) -> FetchResult:
             final = response.geturl()
     except HTTPError as exc:
         if exc.code == 404:
-            return FetchResult("HTTP_404_SOURCE_DOCUMENT_UNAVAILABLE", http_status=404, error_category="http_404", error_detail=str(exc))
+            return FetchResult(
+                "HTTP_404_SOURCE_DOCUMENT_UNAVAILABLE",
+                http_status=404,
+                error_category="http_404",
+                error_detail=str(exc),
+            )
         if exc.code == 410:
-            return FetchResult("HTTP_410_SOURCE_DOCUMENT_REMOVED", http_status=410, error_category="http_410", error_detail=str(exc))
-        return FetchResult("RETRYABLE_NETWORK_FAILURE", http_status=int(exc.code), error_category="other_http", error_detail=str(exc))
+            return FetchResult(
+                "HTTP_410_SOURCE_DOCUMENT_REMOVED",
+                http_status=410,
+                error_category="http_410",
+                error_detail=str(exc),
+            )
+        return FetchResult(
+            "RETRYABLE_NETWORK_FAILURE",
+            http_status=int(exc.code),
+            error_category="other_http",
+            error_detail=str(exc),
+        )
     except TimeoutError as exc:
-        return FetchResult("RETRYABLE_NETWORK_FAILURE", error_category="timeout", error_detail=str(exc))
+        return FetchResult(
+            "RETRYABLE_NETWORK_FAILURE", error_category="timeout", error_detail=str(exc)
+        )
     except URLError as exc:
         detail = str(exc.reason if getattr(exc, "reason", None) else exc)
         if "redirect" in detail.lower():
-            return FetchResult("RETRYABLE_NETWORK_FAILURE", error_category="redirect_failure", error_detail=detail)
+            return FetchResult(
+                "RETRYABLE_NETWORK_FAILURE", error_category="redirect_failure", error_detail=detail
+            )
         if "timed out" in detail.lower():
-            return FetchResult("RETRYABLE_NETWORK_FAILURE", error_category="timeout", error_detail=detail)
+            return FetchResult(
+                "RETRYABLE_NETWORK_FAILURE", error_category="timeout", error_detail=detail
+            )
         return FetchResult("RETRYABLE_NETWORK_FAILURE", error_category="other", error_detail=detail)
     except Exception as exc:  # noqa: BLE001
-        return FetchResult("RETRYABLE_NETWORK_FAILURE", error_category="other", error_detail=str(exc))
+        return FetchResult(
+            "RETRYABLE_NETWORK_FAILURE", error_category="other", error_detail=str(exc)
+        )
     if status >= 400:
-        return FetchResult("RETRYABLE_NETWORK_FAILURE", http_status=status, error_category="other_http", error_detail=f"http {status}")
+        return FetchResult(
+            "RETRYABLE_NETWORK_FAILURE",
+            http_status=status,
+            error_category="other_http",
+            error_detail=f"http {status}",
+        )
     if not body.startswith(b"%PDF"):
         return FetchResult(
             "NON_PDF_RESPONSE",
@@ -167,8 +199,20 @@ def fetch_pdf(url: str, timeout: float = 90) -> FetchResult:
             error_detail=f"content-type={ctype}",
         )
     if ctype and "html" in ctype.lower():
-        return FetchResult("NON_PDF_RESPONSE", http_status=status, content_type=ctype, error_category="content_type_mismatch", error_detail=ctype)
-    return FetchResult("DOWNLOADED_HASH_VERIFIED", http_status=status, body=body, content_type=ctype, final_url=final)
+        return FetchResult(
+            "NON_PDF_RESPONSE",
+            http_status=status,
+            content_type=ctype,
+            error_category="content_type_mismatch",
+            error_detail=ctype,
+        )
+    return FetchResult(
+        "DOWNLOADED_HASH_VERIFIED",
+        http_status=status,
+        body=body,
+        content_type=ctype,
+        final_url=final,
+    )
 
 
 def verify_existing_pdf(path: Path) -> tuple[str, str | None, int, int | None]:
@@ -204,13 +248,27 @@ def acquire_pdfs(
     for row in unique:
         now = datetime.now(tz=UTC).isoformat()
         normalized = row.source_document_url
-        dest_name = safe_filename(row.source_document_id or filename_from_url(normalized) or "document.pdf")
+        dest_name = safe_filename(
+            row.source_document_id or filename_from_url(normalized) or "document.pdf"
+        )
         existing = lookup_local_pdf(pdf_dir, dest_name, files)
         if existing and existing.exists() and existing.stat().st_size > 0:
             status, digest, size, pages = verify_existing_pdf(existing)
             report.skipped_existing += 1
             report.records.append(
-                _record(row, normalized, status, http_status=None, path=existing, size=size, digest=digest, pages=pages, retry=0, checked=now, first=now)
+                _record(
+                    row,
+                    normalized,
+                    status,
+                    http_status=None,
+                    path=existing,
+                    size=size,
+                    digest=digest,
+                    pages=pages,
+                    retry=0,
+                    checked=now,
+                    first=now,
+                )
             )
             continue
         if not retry_missing_only:
@@ -222,14 +280,32 @@ def acquire_pdfs(
             report.invalid_url += 1
             report.attempted += 1
             report.records.append(
-                _record(row, normalized, "INVALID_SOURCE_URL", error_category="invalid_url", error_detail="no normalized url", retry=1, checked=now, first=now)
+                _record(
+                    row,
+                    normalized,
+                    "INVALID_SOURCE_URL",
+                    error_category="invalid_url",
+                    error_detail="no normalized url",
+                    retry=1,
+                    checked=now,
+                    first=now,
+                )
             )
             continue
         if normalized in seen_404:
             report.http_404 += 1
             report.attempted += 1
             report.records.append(
-                _record(row, normalized, "HTTP_404_SOURCE_DOCUMENT_UNAVAILABLE", http_status=404, error_category="http_404", retry=1, checked=now, first=now)
+                _record(
+                    row,
+                    normalized,
+                    "HTTP_404_SOURCE_DOCUMENT_UNAVAILABLE",
+                    http_status=404,
+                    error_category="http_404",
+                    retry=1,
+                    checked=now,
+                    first=now,
+                )
             )
             continue
         report.attempted += 1
@@ -275,8 +351,18 @@ def acquire_pdfs(
                     mime=result.content_type,
                 )
             )
-        time.sleep(pause_seconds if result.status == "DOWNLOADED_HASH_VERIFIED" else max(pause_seconds, 0.6))
-    report.records.sort(key=lambda item: (item.source_year or "", item.source_listed_document_date or "", item.normalized_url or ""))
+        time.sleep(
+            pause_seconds
+            if result.status == "DOWNLOADED_HASH_VERIFIED"
+            else max(pause_seconds, 0.6)
+        )
+    report.records.sort(
+        key=lambda item: (
+            item.source_year or "",
+            item.source_listed_document_date or "",
+            item.normalized_url or "",
+        )
+    )
     _ = retrieved
     return report
 
@@ -327,7 +413,9 @@ def _record(
         normalized_url=normalized,
         source_title=row.action_raw,
         source_listed_facility_name=row.facility_name,
-        source_listed_document_date=row.document_date.isoformat() if row.document_date else row.date_raw,
+        source_listed_document_date=row.document_date.isoformat()
+        if row.document_date
+        else row.date_raw,
         source_listed_action=row.action_raw,
         retrieval_attempt_timestamp=checked,
         http_status=http_status,
@@ -347,10 +435,16 @@ def _record(
     )
 
 
-def complete_ledger(rows: list[IndexRow], retry: RetryReport, pdf_dir: Path) -> list[AcquisitionRecord]:
+def complete_ledger(
+    rows: list[IndexRow], retry: RetryReport, pdf_dir: Path
+) -> list[AcquisitionRecord]:
     unique, _ = dedupe_index_rows(rows)
     by_url = {item.normalized_url: item for item in retry.records if item.normalized_url}
-    by_id = {Path(item.local_file_path).name.casefold(): item for item in retry.records if item.local_file_path}
+    by_id = {
+        Path(item.local_file_path).name.casefold(): item
+        for item in retry.records
+        if item.local_file_path
+    }
     files = local_pdf_map(pdf_dir)
     now = datetime.now(tz=UTC).isoformat()
     ledger: list[AcquisitionRecord] = []
@@ -366,10 +460,31 @@ def complete_ledger(rows: list[IndexRow], retry: RetryReport, pdf_dir: Path) -> 
         existing = lookup_local_pdf(pdf_dir, dest_name, files)
         if existing:
             status, digest, size, pages = verify_existing_pdf(existing)
-            ledger.append(_record(row, normalized, status, path=existing, size=size, digest=digest, pages=pages, checked=now, first=now))
+            ledger.append(
+                _record(
+                    row,
+                    normalized,
+                    status,
+                    path=existing,
+                    size=size,
+                    digest=digest,
+                    pages=pages,
+                    checked=now,
+                    first=now,
+                )
+            )
         else:
             ledger.append(
-                _record(row, normalized, "NOT_ATTEMPTED" if not retry.records else "HTTP_404_SOURCE_DOCUMENT_UNAVAILABLE", retry=0, checked=now, first=now)
+                _record(
+                    row,
+                    normalized,
+                    "NOT_ATTEMPTED"
+                    if not retry.records
+                    else "HTTP_404_SOURCE_DOCUMENT_UNAVAILABLE",
+                    retry=0,
+                    checked=now,
+                    first=now,
+                )
             )
     return ledger
 
@@ -394,7 +509,9 @@ def dedupe_hashes(ledger: list[AcquisitionRecord]) -> dict[str, Any]:
                 "urls": [item.normalized_url for item in recs],
                 "names": sorted({item.source_listed_facility_name for item in recs}),
             }
-            for digest, recs in sorted(duplicate_groups.items(), key=lambda pair: -len(pair[1]))[:50]
+            for digest, recs in sorted(duplicate_groups.items(), key=lambda pair: -len(pair[1]))[
+                :50
+            ]
         ],
     }
 
@@ -443,7 +560,10 @@ def build_corpus_summary(
         slot["parsed"] += 1
         if doc.corpus_scope == "NJ_LTC_FACILITY_MATCHED":
             slot["matched_ltc"] += 1
-        elif doc.corpus_scope in {"NJ_ACUTE_OR_OTHER_HEALTH_FACILITY", "NON_FACILITY_OR_AGENCY_DOCUMENT"}:
+        elif doc.corpus_scope in {
+            "NJ_ACUTE_OR_OTHER_HEALTH_FACILITY",
+            "NON_FACILITY_OR_AGENCY_DOCUMENT",
+        }:
             slot["non_ltc"] += 1
         elif doc.corpus_scope in {"UNRESOLVED_SCOPE", "LIKELY_NJ_LTC_REVIEW_REQUIRED"}:
             slot["unresolved"] += 1
@@ -456,7 +576,9 @@ def build_corpus_summary(
         if year in by_year:
             by_year[year]["unique_hashes"] = len(hashes)
     matched_docs = [item for item in documents if item.match.bucket in {"EXACT", "HIGH_CONFIDENCE"}]
-    unique_facilities = sorted({item.match.facility_id_key for item in matched_docs if item.match.facility_id_key})
+    unique_facilities = sorted(
+        {item.match.facility_id_key for item in matched_docs if item.match.facility_id_key}
+    )
     by_type: Counter[str] = Counter()
     identity_type = {item.source_facility_id: item.canonical_type for item in identities}
     for facid in unique_facilities:

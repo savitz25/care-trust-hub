@@ -21,7 +21,9 @@ from .nj_doh_enforcement import DocumentMatch, IdentityRecord, match_document
 ADAPTER_VERSION = "nj-medicaid-al-rates-v1"
 DATASET_KEY = "nj-medicaid-al-rate-schedule"
 PROGRAM_CODE = "NJ_MEDICAID_AL"
-OFFICIAL_SFY_2026_URL = "https://www.njmmis.com/downloadDocuments/SFY_2026_Assisted_Living_Rates.pdf"
+OFFICIAL_SFY_2026_URL = (
+    "https://www.njmmis.com/downloadDocuments/SFY_2026_Assisted_Living_Rates.pdf"
+)
 AGENCY = "New Jersey Division of Medical Assistance and Health Services"
 
 RATE_LINE_RE = re.compile(r"^(.+?)\s+\$(\d+(?:\.\d{2})?)\s*$")
@@ -97,7 +99,9 @@ def extract_pdf_text(payload: bytes) -> tuple[str, int]:
 
     reader = PdfReader(io.BytesIO(payload))
     pages = [(page.extract_text() or "") for page in reader.pages]
-    return "\n".join(f"\n---PAGE {index}---\n{text}" for index, text in enumerate(pages, start=1)), len(pages)
+    return "\n".join(
+        f"\n---PAGE {index}---\n{text}" for index, text in enumerate(pages, start=1)
+    ), len(pages)
 
 
 def parse_named_date(text: str) -> date | None:
@@ -122,7 +126,14 @@ def infer_subtype(name: str) -> str:
     return "UNKNOWN_NOT_PRINTED"
 
 
-def parse_rate_text(text: str, *, official_url: str, source_class: str = "OFFICIAL", sha256: str = "", page_count: int = 1) -> RateSchedule:
+def parse_rate_text(
+    text: str,
+    *,
+    official_url: str,
+    source_class: str = "OFFICIAL",
+    sha256: str = "",
+    page_count: int = 1,
+) -> RateSchedule:
     fy = "SFY_UNKNOWN"
     fy_match = re.search(r"SFY\s+(\d{4})", text)
     if fy_match:
@@ -180,7 +191,9 @@ def parse_rate_text(text: str, *, official_url: str, source_class: str = "OFFICI
     )
 
 
-def parse_rate_pdf(payload: bytes, *, official_url: str, source_class: str = "OFFICIAL") -> RateSchedule:
+def parse_rate_pdf(
+    payload: bytes, *, official_url: str, source_class: str = "OFFICIAL"
+) -> RateSchedule:
     text, page_count = extract_pdf_text(payload)
     return parse_rate_text(
         text,
@@ -204,7 +217,9 @@ def match_rate_row(row: RateRow, identities: list[IdentityRecord]) -> DocumentMa
     )
 
 
-def build_rate_report(schedule: RateSchedule, matches: list[DocumentMatch], *, dry_run: bool) -> RateReport:
+def build_rate_report(
+    schedule: RateSchedule, matches: list[DocumentMatch], *, dry_run: bool
+) -> RateReport:
     buckets = Counter(item.bucket for item in matches)
     subtypes = Counter(row.subtype for row in schedule.rows)
     rates = [row.daily_rate for row in schedule.rows]

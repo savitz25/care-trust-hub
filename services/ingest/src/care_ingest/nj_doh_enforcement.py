@@ -728,7 +728,8 @@ def match_document(
         hits = [
             item
             for item in identities
-            if normalize_licensed_name(item.official_name) == name and normalize_name(item.city) == city
+            if normalize_licensed_name(item.official_name) == name
+            and normalize_name(item.city) == city
         ]
         if len(hits) == 1:
             return DocumentMatch(
@@ -778,7 +779,9 @@ def match_document(
                 None,
                 len(owner_hits),
             )
-        name_hits = [item for item in identities if normalize_licensed_name(item.official_name) == name]
+        name_hits = [
+            item for item in identities if normalize_licensed_name(item.official_name) == name
+        ]
         if name_hits:
             return DocumentMatch(
                 "UNSAFE_REJECTED",
@@ -836,7 +839,9 @@ def assemble_documents(
         payload = payloads.get(row.source_document_id)
         if payload is None and row.source_document_id:
             wanted = row.source_document_id.casefold()
-            payload = next((value for key, value in payloads.items() if key.casefold() == wanted), None)
+            payload = next(
+                (value for key, value in payloads.items() if key.casefold() == wanted), None
+            )
         text = injected.get(row.source_document_id, "")
         page_count = None
         content_sha = None

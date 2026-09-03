@@ -126,19 +126,22 @@ class RematchReport:
     notes: list[str] = field(default_factory=list)
 
     def to_json(self) -> str:
-        return json.dumps(
-            {
-                "before": asdict(self.before),
-                "after": asdict(self.after),
-                "new_exact": self.new_exact,
-                "new_high_confidence": self.new_high_confidence,
-                "prior_unresolved": self.prior_unresolved,
-                "remaining_unresolved": self.remaining_unresolved,
-                "duplicate_documents": self.duplicate_documents,
-                "notes": self.notes,
-            },
-            indent=2,
-        ) + "\n"
+        return (
+            json.dumps(
+                {
+                    "before": asdict(self.before),
+                    "after": asdict(self.after),
+                    "new_exact": self.new_exact,
+                    "new_high_confidence": self.new_high_confidence,
+                    "prior_unresolved": self.prior_unresolved,
+                    "remaining_unresolved": self.remaining_unresolved,
+                    "duplicate_documents": self.duplicate_documents,
+                    "notes": self.notes,
+                },
+                indent=2,
+            )
+            + "\n"
+        )
 
 
 @dataclass(slots=True)
@@ -171,7 +174,9 @@ class CmsPaceRow:
 def classify_match_identity(match: DocumentMatch, identities: list[IdentityRecord]) -> str:
     if not match.facility_id_key:
         return match.bucket
-    hit = next((item for item in identities if item.source_facility_id == match.facility_id_key), None)
+    hit = next(
+        (item for item in identities if item.source_facility_id == match.facility_id_key), None
+    )
     if hit is None:
         return match.bucket
     canonical = hit.canonical_type or ""
@@ -343,7 +348,11 @@ def classify_staffing_facid(
         hit = next(iter(unique_ltc.values()))
         name_match = normalize_licensed_name(name) == normalize_licensed_name(hit.official_name)
         if hit.canonical_type and hit.canonical_type not in NURSING_TYPES:
-            classification = "NON_NURSING_FACILITY" if name_match or hit.source_facility_id == facid else "RENAMED_LTC_FACILITY"
+            classification = (
+                "NON_NURSING_FACILITY"
+                if name_match or hit.source_facility_id == facid
+                else "RENAMED_LTC_FACILITY"
+            )
             return StaffingFacidAudit(
                 facid,
                 name,
@@ -534,7 +543,9 @@ def write_staffing_audit_csv(audits: list[StaffingFacidAudit], path: Path) -> Pa
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=list(asdict(audits[0]).keys()) if audits else [
+            fieldnames=list(asdict(audits[0]).keys())
+            if audits
+            else [
                 "source_facility_id",
                 "source_facility_name",
                 "classification",
@@ -565,7 +576,11 @@ def upgrade_medicaid_match(
     street: str | None = None,
 ) -> DocumentMatch:
     if medicaid_provider_id and license_number:
-        hits = [item for item in identities if item.license_number == normalize_license_number(license_number)]
+        hits = [
+            item
+            for item in identities
+            if item.license_number == normalize_license_number(license_number)
+        ]
         if len(hits) == 1:
             return DocumentMatch(
                 "EXACT",
@@ -575,7 +590,11 @@ def upgrade_medicaid_match(
                 1,
             )
     if facid:
-        hits = [item for item in identities if item.source_facility_id == normalize_license_number(facid)]
+        hits = [
+            item
+            for item in identities
+            if item.source_facility_id == normalize_license_number(facid)
+        ]
         if len(hits) == 1:
             return DocumentMatch(
                 "EXACT",
@@ -626,9 +645,7 @@ def match_pace_cms(org: PaceOrganization, cms_rows: list[CmsPaceRow]) -> Documen
             len(exact_name),
         )
     aliases = [
-        item
-        for item in cms_rows
-        if name and name.split(" ")[0] in normalize_name(item.legal_name)
+        item for item in cms_rows if name and name.split(" ")[0] in normalize_name(item.legal_name)
     ]
     if aliases:
         return DocumentMatch(
@@ -638,12 +655,16 @@ def match_pace_cms(org: PaceOrganization, cms_rows: list[CmsPaceRow]) -> Documen
             None,
             len(aliases),
         )
-    return DocumentMatch("UNRESOLVED", "no_cms_identifier", "No official CMS PACE identifier join", None, 0)
+    return DocumentMatch(
+        "UNRESOLVED", "no_cms_identifier", "No official CMS PACE identifier join", None, 0
+    )
 
 
 def discover_ccrc(html: str, *, retrieved_at: str) -> dict[str, Any]:
     lower = html.lower()
-    has_registry = bool(re.search(r"certificate of authority.{0,40}(list|registry|roster|xlsx|csv)", lower))
+    has_registry = bool(
+        re.search(r"certificate of authority.{0,40}(list|registry|roster|xlsx|csv)", lower)
+    )
     has_download = ".xlsx" in lower or "csv" in lower
     return {
         "landing_url": CCRC_LANDING_URL,
@@ -798,12 +819,18 @@ def fetch_url(url: str, timeout: float = 45) -> tuple[int | None, bytes, str | N
     request = Request(url, headers={"User-Agent": "SeniorTrustHub/NJ-SEN-004 (research ingest)"})
     try:
         with urlopen(request, timeout=timeout) as response:  # noqa: S310
-            return getattr(response, "status", 200), response.read(), response.headers.get("Content-Type")
+            return (
+                getattr(response, "status", 200),
+                response.read(),
+                response.headers.get("Content-Type"),
+            )
     except Exception as exc:  # noqa: BLE001
         return None, str(exc).encode("utf-8"), exc.__class__.__name__
 
 
-def load_identities_from_paths(ltc_xlsx: Path | None, acute_xlsx: Path | None) -> tuple[list[IdentityRecord], list[IdentityRecord]]:
+def load_identities_from_paths(
+    ltc_xlsx: Path | None, acute_xlsx: Path | None
+) -> tuple[list[IdentityRecord], list[IdentityRecord]]:
     ltc: list[IdentityRecord] = []
     acute: list[IdentityRecord] = []
     if ltc_xlsx and ltc_xlsx.is_file():

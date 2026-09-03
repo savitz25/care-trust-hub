@@ -602,18 +602,21 @@ def main(argv: list[str] | None = None) -> int:
             if sample:
                 probe = probe_service_area_page(sample, timeout=min(args.timeout, 20))
                 service_area_status = (
-                    "ACQUIRED_CURRENT_SNAPSHOT"
-                    if not probe.blocked
-                    else "SOURCE_ACCESS_BLOCKED"
+                    "ACQUIRED_CURRENT_SNAPSHOT" if not probe.blocked else "SOURCE_ACCESS_BLOCKED"
                 )
-                print(json.dumps({
-                    "facid": probe.facid,
-                    "url": probe.url,
-                    "http_status": probe.http_status,
-                    "blocked": probe.blocked,
-                    "barrier": probe.barrier,
-                    "counties_served": probe.counties_served,
-                }, indent=2))
+                print(
+                    json.dumps(
+                        {
+                            "facid": probe.facid,
+                            "url": probe.url,
+                            "http_status": probe.http_status,
+                            "blocked": probe.blocked,
+                            "barrier": probe.barrier,
+                            "counties_served": probe.counties_served,
+                        },
+                        indent=2,
+                    )
+                )
         if not args.execute:
             args.dry_run = True
         if args.execute and not args.database_url:

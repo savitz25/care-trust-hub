@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 
 from care_ingest.nj_doh_ltc import (
-    ADAPTER_VERSION,
     TYPE_MAP,
     CanonicalCmsFacility,
     excel_serial_date,

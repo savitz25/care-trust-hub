@@ -12,34 +12,34 @@ Every metric below is **NOT_PUBLIC**. Values in the companion snapshot are local
 
 ## NJDOH long-term care
 
-| Field | Contract |
-| --- | --- |
-| Display label | New Jersey NJDOH long-term-care licensed identities |
-| Definition | Count of current All_LTC source identities |
-| Numerator | Rows in the current All_LTC snapshot |
-| Denominator | Official All_LTC workbook |
-| Population | NJDOH LTC licensed facilities |
-| Included | All 19 official NJDOH LTC types in the snapshot |
-| Excluded | All_Acute, PACE, CCRC, CMS-only |
-| Source | https://healthapps.nj.gov/facilities/documents2/All_LTC.xlsx |
-| Geographic grain | state / county |
-| Identity rule | `dataset_key = nj-doh-all-ltc` |
-| Trace | `SELECT official_facility_type_canonical, COUNT(*) FROM state_facility_identity WHERE dataset_key='nj-doh-all-ltc' GROUP BY 1` |
+| Field            | Contract                                                                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Display label    | New Jersey NJDOH long-term-care licensed identities                                                                            |
+| Definition       | Count of current All_LTC source identities                                                                                     |
+| Numerator        | Rows in the current All_LTC snapshot                                                                                           |
+| Denominator      | Official All_LTC workbook                                                                                                      |
+| Population       | NJDOH LTC licensed facilities                                                                                                  |
+| Included         | All 19 official NJDOH LTC types in the snapshot                                                                                |
+| Excluded         | All_Acute, PACE, CCRC, CMS-only                                                                                                |
+| Source           | https://healthapps.nj.gov/facilities/documents2/All_LTC.xlsx                                                                   |
+| Geographic grain | state / county                                                                                                                 |
+| Identity rule    | `dataset_key = nj-doh-all-ltc`                                                                                                 |
+| Trace            | `SELECT official_facility_type_canonical, COUNT(*) FROM state_facility_identity WHERE dataset_key='nj-doh-all-ltc' GROUP BY 1` |
 
 Counts by official licensed type and licensed beds/slots by type use the same source and identity rule.
 
 ## NJDOH acute care
 
-| Field | Contract |
-| --- | --- |
-| Display label | New Jersey NJDOH acute-care licensed identities |
-| Definition | Count of current All_Acute source identities |
-| Population | NJDOH acute licensed facilities |
-| Included | Every official All_Acute type, stored separately |
-| Excluded | All_LTC identities |
-| Source | https://healthapps.nj.gov/facilities/documents2/All_Acute.xlsx |
-| Identity rule | `dataset_key = nj-doh-all-acute` |
-| Trace | `SELECT official_facility_type_canonical, COUNT(*) FROM state_facility_identity WHERE dataset_key='nj-doh-all-acute' GROUP BY 1` |
+| Field         | Contract                                                                                                                         |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Display label | New Jersey NJDOH acute-care licensed identities                                                                                  |
+| Definition    | Count of current All_Acute source identities                                                                                     |
+| Population    | NJDOH acute licensed facilities                                                                                                  |
+| Included      | Every official All_Acute type, stored separately                                                                                 |
+| Excluded      | All_LTC identities                                                                                                               |
+| Source        | https://healthapps.nj.gov/facilities/documents2/All_Acute.xlsx                                                                   |
+| Identity rule | `dataset_key = nj-doh-all-acute`                                                                                                 |
+| Trace         | `SELECT official_facility_type_canonical, COUNT(*) FROM state_facility_identity WHERE dataset_key='nj-doh-all-acute' GROUP BY 1` |
 
 Separate metrics, never combined:
 

@@ -150,7 +150,9 @@ def test_pdf_url_normalization() -> None:
     assert relative == "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-x-09012026.pdf"
     http = normalize_pdf_url("http://www.nj.gov/health/healthfacilities/surveys-insp/ea-x.pdf")
     assert http == "https://www.nj.gov/health/healthfacilities/surveys-insp/ea-x.pdf"
-    spaced = normalize_pdf_url("/health/healthfacilities/surveys-insp/ea-aster-creek%20nursing-1224.pdf ")
+    spaced = normalize_pdf_url(
+        "/health/healthfacilities/surveys-insp/ea-aster-creek%20nursing-1224.pdf "
+    )
     assert " " not in spaced
     assert "aster-creek%20nursing" in spaced
     already = encode_url_path("/health/ea%20file.pdf")
@@ -433,11 +435,43 @@ def test_scope_and_proposed_versus_final() -> None:
     assert is_proposed_penalty("Notice of Assessment of Penalties") is True
     assert is_proposed_penalty("Final Order") is False
     exact = DocumentMatch("EXACT", "facid", "x", "NJ1", 1)
-    assert classify_scope(match=exact, facility_name="X", canonical="NOTICE_OF_ASSESSMENT_OF_PENALTIES", downloaded=True) == "NJ_LTC_FACILITY_MATCHED"
+    assert (
+        classify_scope(
+            match=exact,
+            facility_name="X",
+            canonical="NOTICE_OF_ASSESSMENT_OF_PENALTIES",
+            downloaded=True,
+        )
+        == "NJ_LTC_FACILITY_MATCHED"
+    )
     none = DocumentMatch("UNRESOLVED", "no_overlap", "x", None, 0)
-    assert classify_scope(match=none, facility_name="East Orange General Hospital", canonical="DIRECTED_PLAN_OF_CORRECTION", downloaded=True) == "NJ_ACUTE_OR_OTHER_HEALTH_FACILITY"
-    assert classify_scope(match=none, facility_name="Jane Doe", canonical="PERSON_OR_PROGRAM_CREDENTIAL", downloaded=True) == "NON_FACILITY_OR_AGENCY_DOCUMENT"
-    assert classify_scope(match=none, facility_name="X", canonical="NOTICE_OF_ASSESSMENT_OF_PENALTIES", downloaded=False) == "SOURCE_DOCUMENT_UNAVAILABLE"
+    assert (
+        classify_scope(
+            match=none,
+            facility_name="East Orange General Hospital",
+            canonical="DIRECTED_PLAN_OF_CORRECTION",
+            downloaded=True,
+        )
+        == "NJ_ACUTE_OR_OTHER_HEALTH_FACILITY"
+    )
+    assert (
+        classify_scope(
+            match=none,
+            facility_name="Jane Doe",
+            canonical="PERSON_OR_PROGRAM_CREDENTIAL",
+            downloaded=True,
+        )
+        == "NON_FACILITY_OR_AGENCY_DOCUMENT"
+    )
+    assert (
+        classify_scope(
+            match=none,
+            facility_name="X",
+            canonical="NOTICE_OF_ASSESSMENT_OF_PENALTIES",
+            downloaded=False,
+        )
+        == "SOURCE_DOCUMENT_UNAVAILABLE"
+    )
 
 
 def test_existing_hashed_pdf_is_skipped(tmp_path: Path) -> None:
@@ -470,7 +504,12 @@ def test_http_404_remains_in_index(monkeypatch, tmp_path: Path) -> None:
     from care_ingest.nj_doh_enforcement_acquire import FetchResult, acquire_pdfs
 
     def boom(url: str, timeout: float = 90) -> FetchResult:
-        return FetchResult("HTTP_404_SOURCE_DOCUMENT_UNAVAILABLE", http_status=404, error_category="http_404", error_detail="404")
+        return FetchResult(
+            "HTTP_404_SOURCE_DOCUMENT_UNAVAILABLE",
+            http_status=404,
+            error_category="http_404",
+            error_detail="404",
+        )
 
     monkeypatch.setattr("care_ingest.nj_doh_enforcement_acquire.fetch_pdf", boom)
     rows = [

@@ -57,8 +57,10 @@ def build_reconciliation(
         group_id = digest if digest and hash_counts[digest] > 1 else None
         if digest and digest not in first_hash:
             first_hash[digest] = index
-        canonical_flag = "CANONICAL" if digest and first_hash.get(digest) == index else (
-            "DUPLICATE_CONTENT" if digest else "NO_CONTENT"
+        canonical_flag = (
+            "CANONICAL"
+            if digest and first_hash.get(digest) == index
+            else ("DUPLICATE_CONTENT" if digest else "NO_CONTENT")
         )
         action = row.get("source_listed_action") or ""
         canonical_class = classify_document_class(classify_remedy(action))

@@ -131,19 +131,21 @@ def parse_ratio(raw: str) -> StaffingCell:
 
 
 def parse_title_period(title: str) -> tuple[int, str]:
-    match = re.search(
-        r"(First|Second|Third|Fourth) Quarter of the Year (\d{4})", title, re.I
-    )
+    match = re.search(r"(First|Second|Third|Fourth) Quarter of the Year (\d{4})", title, re.I)
     mapping = {"first": "Q1", "second": "Q2", "third": "Q3", "fourth": "Q4"}
     if not match:
         raise ValueError(f"staffing report title missing period: {title!r}")
     return int(match.group(2)), mapping[match.group(1).lower()]
 
 
-def parse_staffing_html(html: str, *, year: int | None = None, quarter: str | None = None) -> list[StaffingFacilityRow]:
+def parse_staffing_html(
+    html: str, *, year: int | None = None, quarter: str | None = None
+) -> list[StaffingFacilityRow]:
     parser = StaffingTableParser()
     parser.feed(html)
-    parsed_year, parsed_quarter = parse_title_period(parser.title) if parser.title.strip() else (year, quarter)
+    parsed_year, parsed_quarter = (
+        parse_title_period(parser.title) if parser.title.strip() else (year, quarter)
+    )
     if parsed_year is None or parsed_quarter is None:
         raise ValueError("staffing HTML has no quarter title")
     out: list[StaffingFacilityRow] = []
@@ -187,7 +189,9 @@ def match_staffing_row(row: StaffingFacilityRow, identities: list[IdentityRecord
     from .nj_doh_enforcement import DocumentMatch
 
     if row.is_statewide:
-        return DocumentMatch("UNRESOLVED", "statewide_comparator", "Statewide comparator is not a facility", None, 0)
+        return DocumentMatch(
+            "UNRESOLVED", "statewide_comparator", "Statewide comparator is not a facility", None, 0
+        )
     if row.source_facility_id:
         hits = [item for item in identities if item.source_facility_id == row.source_facility_id]
         if len(hits) == 1:
@@ -199,9 +203,17 @@ def match_staffing_row(row: StaffingFacilityRow, identities: list[IdentityRecord
                     None,
                     1,
                 )
-            return DocumentMatch("EXACT", "facid", "Exact NJDOH FacID from staffing report link", hits[0].source_facility_id, 1)
+            return DocumentMatch(
+                "EXACT",
+                "facid",
+                "Exact NJDOH FacID from staffing report link",
+                hits[0].source_facility_id,
+                1,
+            )
         if len(hits) > 1:
-            return DocumentMatch("CONFLICT", "facid", "FacID matched more than one identity", None, len(hits))
+            return DocumentMatch(
+                "CONFLICT", "facid", "FacID matched more than one identity", None, len(hits)
+            )
     return match_document(
         printed_license=None,
         printed_facid=None,
@@ -276,7 +288,9 @@ def build_staffing_report(
         year=year,
         quarter=quarter,
         source_rows=len(facility_rows),
-        distinct_facilities=len({row.source_facility_id or row.source_facility_name for row in facility_rows}),
+        distinct_facilities=len(
+            {row.source_facility_id or row.source_facility_name for row in facility_rows}
+        ),
         statewide_rows=sum(1 for row in rows if row.is_statewide),
         exact=buckets.get("EXACT", 0),
         high_confidence=buckets.get("HIGH_CONFIDENCE", 0),
