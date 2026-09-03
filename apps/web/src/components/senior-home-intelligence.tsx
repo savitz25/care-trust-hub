@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { STATE_NAMES, type SeniorHomeIntel } from "@care/domain";
+import {
+  HOMEPAGE_EVIDENCE_METRIC_KEYS,
+  STATE_NAMES,
+  metricByKey,
+  type SeniorHomeIntel,
+  type SeniorNetworkMetricsV1,
+} from "@care/domain";
 import { SeniorHomeChecklist } from "./senior-home-checklist";
 
 function dateLabel(value: string | null): string {
@@ -35,15 +41,24 @@ function CoverageBar({
 
 export function SeniorHomeIntelligence({
   intel,
+  networkMetrics,
   tools,
 }: {
   intel: SeniorHomeIntel;
+  networkMetrics: SeniorNetworkMetricsV1;
   tools: {
     navigator: boolean;
     planner: boolean;
     workspace: boolean;
   };
 }) {
+  const evidenceMetrics = HOMEPAGE_EVIDENCE_METRIC_KEYS.map((key) => {
+    const metric = metricByKey(networkMetrics, key);
+    if (!metric || metric.publicationStatus !== "PUBLIC" || metric.value == null) {
+      throw new Error(`Homepage evidence metric ${key} is missing from senior-network-metrics-v1`);
+    }
+    return metric;
+  });
   return (
     <div className="intel-home">
       <section className="intel-hero" aria-labelledby="home-title">
@@ -138,6 +153,57 @@ export function SeniorHomeIntelligence({
                 </p>
                 <ul>
                   {metric.limitations.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </details>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section
+        className="intel-section"
+        id="indexed-evidence"
+        aria-labelledby="indexed-evidence-title"
+      >
+        <div className="section-heading">
+          <p className="eyebrow">Indexed CMS evidence</p>
+          <h2 id="indexed-evidence-title">Evidence depth by source-native grain</h2>
+          <p>
+            These counts come from the SeniorTrustHub {networkMetrics.schemaVersion} publication
+            contract. Each family keeps its CMS grain. They are not provider counts and are not one
+            combined evidence total.
+          </p>
+        </div>
+        <div className="intel-metric-rail">
+          {evidenceMetrics.map((metric) => (
+            <article className="intel-metric" key={metric.key}>
+              <p className="intel-metric__value">{(metric.value ?? 0).toLocaleString("en-US")}</p>
+              <h3>{metric.label}</h3>
+              <p className="hub-kicker">
+                Official as-of {dateLabel(metric.sourceAsOf)} · Grain{" "}
+                {metric.grain.replaceAll("_", " ")}
+              </p>
+              <details className="intel-disclose">
+                <summary>Trace this number</summary>
+                <p>{metric.description}</p>
+                <ul>
+                  {metric.trace.components.map((part) => (
+                    <li key={part.payloadKey}>
+                      {part.label}: {part.value}
+                    </li>
+                  ))}
+                </ul>
+                <p>
+                  Method: {metric.trace.method} Payload key: <code>{metric.trace.payloadKey}</code>
+                </p>
+                <p>
+                  Source systems: {metric.contributingSourceSystems.join(", ")}. Manifest generated{" "}
+                  {metric.generatedAt.slice(0, 10)}.
+                </p>
+                <ul>
+                  {metric.trace.limitations.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>

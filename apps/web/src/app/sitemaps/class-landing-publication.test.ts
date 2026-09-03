@@ -16,6 +16,7 @@ describe("class landing publication", () => {
       const text = source(file);
       expect(text).toMatch(/robots:\s*publicRobots\(true\)/);
       expect(text).toMatch(/canonicalUrl\("\/(?:home-health|hospice)"\)/);
+      expect(text).toMatch(/getSeniorNetworkMetrics/);
       expect(text).not.toMatch(/robots:\s*\{\s*index:\s*false/);
     }
   });
