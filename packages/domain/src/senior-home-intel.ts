@@ -7,6 +7,7 @@ import {
   type SeniorNationalIntelligence,
 } from "./senior-hub-intelligence";
 import { NJ_LOCKED, NJ_PUBLIC_PATH } from "./nj-intelligence";
+import { CA_LOCKED, CA_PUBLIC_PATH } from "./ca-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -85,7 +86,11 @@ export interface HomeGeoRow {
   homeHealth: number;
   hospice: number;
   nhVolumeShare: number;
-  enrichment: "florida_state_intelligence" | "new_jersey_state_intelligence" | "cms_directory_only";
+  enrichment:
+    | "florida_state_intelligence"
+    | "new_jersey_state_intelligence"
+    | "california_state_intelligence"
+    | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
 }
@@ -141,6 +146,15 @@ export interface SeniorHomeIntel {
     href: string;
     ltcIdentities: number;
     acuteIdentities: number;
+    cmsNursingHomes: number;
+    cmsHomeHealth: number;
+    cmsHospice: number;
+    note: string;
+  };
+  californiaPreview: {
+    href: string;
+    elmsRows: number;
+    rcfeLicensed: number;
     cmsNursingHomes: number;
     cmsHomeHealth: number;
     cmsHospice: number;
@@ -210,6 +224,12 @@ export function buildSeniorHomeIntel(input: {
   };
   const njGeo = national.geography.find((row) => row.state === "NJ") ?? {
     state: "NJ",
+    nursingHomes: 0,
+    homeHealth: 0,
+    hospice: 0,
+  };
+  const caGeo = national.geography.find((row) => row.state === "CA") ?? {
+    state: "CA",
     nursingHomes: 0,
     homeHealth: 0,
     hospice: 0,
@@ -657,7 +677,7 @@ export function buildSeniorHomeIntel(input: {
       method: "Florida state-license universe on /florida. Not a national licensing denominator.",
       limitations: [
         "State licensing is not a CMS national class.",
-        "Most states have no SeniorTrustHub state-intelligence page yet.",
+        "Most states have no SeniorTrustHub state-intelligence page yet. Florida, New Jersey, and California currently do.",
       ],
     },
     {
@@ -674,6 +694,21 @@ export function buildSeniorHomeIntel(input: {
         "CMS class overlays are independent and are not exact NJDOH joins in this snapshot.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "California CDPH / CCLD / HCAI (state enrichment)",
+      numerator: CA_LOCKED.elmsRows,
+      denominator: null,
+      display: `${CA_LOCKED.elmsRows.toLocaleString("en-US")} ELMS locations; ${CA_LOCKED.rcfeLicensed.toLocaleString("en-US")} RCFE LICENSED as of 2025-05-25 (not a combined total)`,
+      status: "partial",
+      method:
+        "California state-license universes on /california. ELMS, RCFE, HCAI, and Home Care Organizations stay separate.",
+      limitations: [
+        "Do not add ELMS, RCFE, and HCAI into one senior-provider denominator.",
+        "RCFE is not SNF. Home Care Organization is not Home Health.",
+        "The CCLD listing clock is 2025-05-25.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -688,8 +723,17 @@ export function buildSeniorHomeIntel(input: {
         ? "florida_state_intelligence"
         : row.state === "NJ"
           ? "new_jersey_state_intelligence"
-          : "cms_directory_only",
-    intelligenceHref: row.state === "FL" ? "/florida" : row.state === "NJ" ? NJ_PUBLIC_PATH : null,
+          : row.state === "CA"
+            ? "california_state_intelligence"
+            : "cms_directory_only",
+    intelligenceHref:
+      row.state === "FL"
+        ? "/florida"
+        : row.state === "NJ"
+          ? NJ_PUBLIC_PATH
+          : row.state === "CA"
+            ? CA_PUBLIC_PATH
+            : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 
@@ -720,7 +764,7 @@ export function buildSeniorHomeIntel(input: {
     findings,
     coverage,
     gaps: [
-      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida and New Jersey currently have state intelligence pages.",
+      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, and California currently have state intelligence pages.",
       "CMS stars, staffing, inspections, and penalties are not interchangeable across Nursing Home, Home Health, and Hospice.",
       `${national.ownership.unknownEdges.toLocaleString("en-US")} ownership edges are UNKNOWN. UNKNOWN is not historical ownership.`,
       "Home Health and Hospice have no CMS CHOW event file in this research graph.",
@@ -752,6 +796,15 @@ export function buildSeniorHomeIntel(input: {
       cmsHomeHealth: njGeo.homeHealth,
       cmsHospice: njGeo.hospice,
       note: "New Jersey state intelligence is NJDOH licensing, staffing, enforcement, Medicaid listed rates, and PACE evidence plus CMS class context. All_LTC and All_Acute are not added into one senior-provider total.",
+    },
+    californiaPreview: {
+      href: CA_PUBLIC_PATH,
+      elmsRows: CA_LOCKED.elmsRows,
+      rcfeLicensed: CA_LOCKED.rcfeLicensed,
+      cmsNursingHomes: caGeo.nursingHomes,
+      cmsHomeHealth: caGeo.homeHealth,
+      cmsHospice: caGeo.hospice,
+      note: "California state intelligence keeps CDPH ELMS, CCLD RCFE, HCAI, Home Care Organizations, and CMS class overlays as separate datasets. They are not one senior-provider total. RCFE is not SNF.",
     },
     askMarket: [
       {

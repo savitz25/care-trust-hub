@@ -355,13 +355,34 @@ export function SeniorHomeIntelligence({
             Explore New Jersey Intelligence →
           </Link>
         </article>
+        <article className="intel-florida">
+          <p className="eyebrow">California preview</p>
+          <h3>{STATE_NAMES.CA} intelligence</h3>
+          <p>{intel.californiaPreview.note}</p>
+          <ul className="hub-plain-list">
+            <li>CDPH ELMS locations: {intel.californiaPreview.elmsRows.toLocaleString("en-US")}</li>
+            <li>
+              CCLD RCFE LICENSED (as of 2025-05-25):{" "}
+              {intel.californiaPreview.rcfeLicensed.toLocaleString("en-US")}
+            </li>
+            <li>
+              CMS Nursing Homes / Home Health / Hospice:{" "}
+              {intel.californiaPreview.cmsNursingHomes.toLocaleString("en-US")} /{" "}
+              {intel.californiaPreview.cmsHomeHealth.toLocaleString("en-US")} /{" "}
+              {intel.californiaPreview.cmsHospice.toLocaleString("en-US")}
+            </li>
+          </ul>
+          <Link className="button button--secondary" href={intel.californiaPreview.href}>
+            Explore California Intelligence →
+          </Link>
+        </article>
         <details className="intel-disclose">
           <summary>Accessible state list</summary>
           <div className="hub-table-scroll">
             <table className="hub-table">
               <caption>
-                Current CMS directory counts by jurisdiction. Florida and New Jersey link to state
-                intelligence; other jurisdictions open Nursing Home search.
+                Current CMS directory counts by jurisdiction. Florida, New Jersey, and California
+                link to state intelligence; other jurisdictions open Nursing Home search.
               </caption>
               <thead>
                 <tr>

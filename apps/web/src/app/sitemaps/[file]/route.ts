@@ -43,6 +43,7 @@ const corePaths = [
   "/hospice",
   "/florida",
   "/new-jersey",
+  "/california",
   "/new-jersey/monmouth-county",
   "/new-jersey/middlesex-county",
   "/new-jersey/somerset-county",

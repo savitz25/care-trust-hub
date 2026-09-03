@@ -70,12 +70,16 @@ describe("senior-home-intel-v1", () => {
     expect(intel.askMarket).toHaveLength(7);
     expect(intel.geography.some((row) => row.intelligenceHref === "/florida")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/new-jersey")).toBe(true);
+    expect(intel.geography.some((row) => row.intelligenceHref === "/california")).toBe(true);
     expect(
       intel.geography
-        .filter((row) => row.state !== "FL" && row.state !== "NJ")
+        .filter((row) => row.state !== "FL" && row.state !== "NJ" && row.state !== "CA")
         .every((row) => row.intelligenceHref === null),
     ).toBe(true);
     expect(intel.newJerseyPreview.href).toBe("/new-jersey");
     expect(intel.newJerseyPreview.ltcIdentities).toBe(893);
+    expect(intel.californiaPreview.href).toBe("/california");
+    expect(intel.californiaPreview.elmsRows).toBe(15097);
+    expect(intel.californiaPreview.rcfeLicensed).toBe(7939);
   });
 });
