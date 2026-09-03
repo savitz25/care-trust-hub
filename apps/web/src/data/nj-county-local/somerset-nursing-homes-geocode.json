@@ -1,0 +1,108 @@
+{
+  "source": "Nursing Homes of Somerset County FeatureServer/0",
+  "service_url": "https://services2.arcgis.com/2g2XvfUywwLJoF2c/arcgis/rest/services/Nursing_Homes_of_Somerset_County/FeatureServer/0",
+  "service_item_id": "40dfe11cf40f4dae9274f5fe8f624258",
+  "retrieved_at": "2026-09-03T13:53:08.006Z",
+  "grain": "COUNTY_CRITICAL_INFRASTRUCTURE_POINT",
+  "semantic": "Geocoded CJHRC address table. Not a NJDOH license roster and not CMS Care Compare.",
+  "records": [
+    {
+      "name": "Rehab at River's Edge",
+      "address": "633 Route 28, Raritan, NJ 08869",
+      "municipality": "Raritan Borough",
+      "telephone": "908-526-8950",
+      "website": null
+    },
+    {
+      "name": "Bridgeway Care & Rehabilitation Center at Bridgewater",
+      "address": "270 Route 28, Bridgewater, NJ 08807",
+      "municipality": "Bridgewater Township",
+      "telephone": "908-722-7022",
+      "website": "https://www.bshcare.com/bridgeway-at-bridgewater.html"
+    },
+    {
+      "name": "Regency Jewish Heritage Nursing and Rehab Center",
+      "address": "380 Demott Lane, Somerset, NJ 08873",
+      "municipality": "Franklin Township",
+      "telephone": "732-873-2000",
+      "website": "https://www.regencyheritagenursing.com/"
+    },
+    {
+      "name": "Complete Care at Willow Creek\n",
+      "address": "1165 Easton Avenue, Somerset, NJ 08873",
+      "municipality": "Franklin Township",
+      "telephone": "732-246-4100",
+      "website": null
+    },
+    {
+      "name": "Abingdon Care & Rehabilitation Center",
+      "address": "303 Rock Avenue, Green Brook, NJ 08812",
+      "municipality": "Green Brook Township",
+      "telephone": "732-968-5500",
+      "website": "https://www.windsorhealthcare.org/abingdon"
+    },
+    {
+      "name": "McAuley Hall Health Care Center",
+      "address": "1633 Highway 22, Watchung, NJ 07069",
+      "municipality": "Watchung Borough",
+      "telephone": "908-754-3663",
+      "website": "https://www.mcauleyhall.com/"
+    },
+    {
+      "name": "Complete Care at Green Knoll",
+      "address": "875 Route 202/206, Bridgewater, NJ 08807",
+      "municipality": "Bridgewater Township",
+      "telephone": "908-526-8600",
+      "website": "https://ccgreenknoll.com/"
+    },
+    {
+      "name": "Parker at Somerset",
+      "address": "15 Dellwood Drive, Somerset, NJ 08873",
+      "municipality": "Franklin Township",
+      "telephone": "732-902-4200",
+      "website": "https://www.parkerlife.org/communities/somerset/"
+    },
+    {
+      "name": "Foothill Acres Rehabilitation & Nursing Center",
+      "address": "39 East Mountain Road, Hillsborough, NJ 08844",
+      "municipality": "Hillsborough Township",
+      "telephone": "908-369-8711 Ext. 2222",
+      "website": "https://foothillacres.com/"
+    },
+    {
+      "name": "Lyons Veterans Affairs Medical Center",
+      "address": "151 Knollcroft Road, Lyons, NJ 07939",
+      "municipality": "Bernards Township",
+      "telephone": "908-647-0600",
+      "website": "https://www.va.gov/new-jersey-health-care/"
+    },
+    {
+      "name": "Somerset Woods Rehabilitation & Nursing Center",
+      "address": "780 New Brunswick Road, Somerset, NJ 08873",
+      "municipality": "Franklin Township",
+      "telephone": "732-653-3000 Ext. 116",
+      "website": "https://www.somersetwoodsnj.com/"
+    },
+    {
+      "name": "Bridgeway Care and Rehabilitation Center at Hillsborough",
+      "address": "395 Amwell Road, Hillsborough, NJ 08844",
+      "municipality": "Hillsborough Township",
+      "telephone": "908-281-4400",
+      "website": "https://www.bshcare.com/bridgeway-at-hillsborough.html"
+    },
+    {
+      "name": "CareOne at Somerset Valley",
+      "address": "1621 Highway 22, Bound Brook, NJ 08805",
+      "municipality": "Bridgewater Township",
+      "telephone": "732-469-2000",
+      "website": "https://www.care-one.com/locations/careone-at-somerset-valley-assisted-living"
+    },
+    {
+      "name": "New Jersey Eastern Star Home",
+      "address": "111 Finderne Avenue, Bridgewater, NJ 08807",
+      "municipality": "Bridgewater Township",
+      "telephone": "908-722-4140",
+      "website": "https://www.njeasternstarhome.com/"
+    }
+  ]
+}

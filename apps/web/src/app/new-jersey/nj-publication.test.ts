@@ -14,16 +14,21 @@ describe("New Jersey page publication", () => {
     expect(source).toMatch(/canonicalUrl\("\/new-jersey"\)/);
     expect(source).not.toMatch(/robots:\s*\{\s*index:\s*false/);
     expect(source).not.toMatch(/aggregateRating|ratingValue|reviewCount/);
-    expect(source).not.toMatch(/\/new-jersey\/[a-z]/);
   });
 
-  it("lists /new-jersey exactly once in core.xml and never lists counties", () => {
+  it("lists /new-jersey exactly once in core.xml and only the four published county routes", () => {
     const start = sitemap.indexOf("const corePaths");
     const end = sitemap.indexOf("];", start) + 2;
     const block = sitemap.slice(start, end);
     expect([...block.matchAll(/"\/new-jersey"/g)]).toHaveLength(1);
-    expect(block).not.toMatch(/bergen|essex|ocean|monmouth/i);
-    expect(block).not.toMatch(/\/new-jersey\//);
+    expect(block).toContain('"/new-jersey/monmouth-county"');
+    expect(block).toContain('"/new-jersey/middlesex-county"');
+    expect(block).toContain('"/new-jersey/somerset-county"');
+    expect(block).toContain('"/new-jersey/union-county"');
+    expect(block).not.toMatch(/bergen|essex|ocean/i);
+    expect(block).not.toMatch(/\/new-jersey\/[a-z-]+-township/);
+    expect(block).not.toMatch(/\/new-jersey\/[a-z-]+-borough/);
+    expect([...block.matchAll(/"\/new-jersey\/[a-z-]+"/g)]).toHaveLength(4);
   });
 
   it("keeps the NJ-SEN-005 public snapshot fingerprint deterministic", () => {

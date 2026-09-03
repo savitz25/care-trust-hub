@@ -1,0 +1,195 @@
+{
+  "county": "Middlesex",
+  "county_fips": "34023",
+  "source_family": "aging_resources",
+  "source_name": "Middlesex County Office of Aging and Disabled Services",
+  "senior_centers_url": "https://www.middlesexcountynj.gov/government/departments/department-of-community-services/office-of-aging-and-disabled-services/senior-centers",
+  "nutrition_url": "https://www.middlesexcountynj.gov/government/departments/department-of-community-services/office-of-aging-and-disabled-services/nutrition-services",
+  "adrc_directory_app": "https://experience.arcgis.com/experience/3a231bc218754141872d6ac542bfbdfa/page/Nutrition-Programs",
+  "access_class": "OPEN_BULK_DOWNLOAD",
+  "acquisition_status": "ACQUIRED_PUBLIC_HTML_PARTIAL",
+  "source_as_of": "2026-09-03",
+  "last_checked": "2026-09-03",
+  "grain": "facility / program site",
+  "identifier_fields": ["name", "municipality"],
+  "geography_fields": ["municipality", "street_address", "zip"],
+  "adrc": {
+    "agency": "Middlesex County Office of Aging and Disabled Services",
+    "phone": "732-745-3295",
+    "toll_free": "1-877-222-3737",
+    "email": "mcoads@co.middlesex.nj.us",
+    "address": "75 Bayard Street, 5th Floor, New Brunswick, NJ 08901"
+  },
+  "notes": [
+    "This is a public facility/program directory, not a senior household profile.",
+    "Inclusion on the county list is not an endorsement.",
+    "The printed Resource Directory is available by calling the office; this ticket does not extract that PDF."
+  ],
+  "congregate_meal_sites": [
+    {
+      "name": "Thomas J. Deverin Community Center",
+      "street_address": "100 Cooke Avenue",
+      "municipality": "Carteret",
+      "zip": "07008",
+      "phone": "732-541-6221",
+      "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+    },
+    {
+      "name": "Edison Senior Center",
+      "street_address": "2963 Woodbridge Avenue",
+      "municipality": "Edison",
+      "zip": "08817",
+      "phone": "732-452-0377",
+      "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+    },
+    {
+      "name": "Old Bridge Senior Center (George J. Bush Center for Human Services)",
+      "street_address": "1 Old Bridge Plaza",
+      "municipality": "Old Bridge",
+      "zip": "08857",
+      "phone": "732-607-1582",
+      "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+    },
+    {
+      "name": "Alexander J. Jankowski Community Center",
+      "street_address": "1 Olive Street",
+      "municipality": "Perth Amboy",
+      "zip": "08861",
+      "phone": "732-442-0930",
+      "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+    },
+    {
+      "name": "Piscataway Senior Center",
+      "street_address": "700 Buena Vista Avenue",
+      "municipality": "Piscataway",
+      "zip": "08854",
+      "phone": "732-743-9844",
+      "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+    },
+    {
+      "name": "Sayreville Senior Center",
+      "street_address": "423 Main Street",
+      "municipality": "Sayreville",
+      "zip": "08872",
+      "phone": "732-254-4299",
+      "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+    },
+    {
+      "name": "South Brunswick Senior Center",
+      "street_address": "540 Ridge Road",
+      "municipality": "Monmouth Junction / South Brunswick",
+      "zip": "08852",
+      "phone": "732-329-6171",
+      "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+    },
+    {
+      "name": "South Plainfield Senior Center",
+      "street_address": "90 Maple Avenue",
+      "municipality": "South Plainfield",
+      "zip": "07080",
+      "phone": "908-753-1040",
+      "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+    }
+  ],
+  "senior_centers_acquired": [
+    {
+      "municipality": "Carteret",
+      "name": "Thomas J. Deverin Community Center",
+      "street_address": "100 Cooke Avenue",
+      "zip": "07008",
+      "phone": "732-541-3890"
+    },
+    {
+      "municipality": "Cranbury",
+      "name": "Senior Community Center",
+      "street_address": "23A North Main Street",
+      "zip": "08512",
+      "phone": "609-395-0900"
+    },
+    {
+      "municipality": "Dunellen",
+      "name": "Dunellen Senior Center",
+      "street_address": "200 Orange Street",
+      "zip": "08812",
+      "phone": "732-968-3033"
+    },
+    {
+      "municipality": "East Brunswick",
+      "name": "Senior Center/Department on Aging",
+      "street_address": "3 Jean Walling Civic Center Drive",
+      "zip": "08816",
+      "phone": "732-390-6896"
+    },
+    {
+      "municipality": "Edison",
+      "name": "Edison Senior Center",
+      "street_address": "2963 Woodbridge Avenue",
+      "zip": "08817",
+      "phone": "732-248-7345"
+    },
+    {
+      "municipality": "Highland Park",
+      "name": "Community Center",
+      "street_address": "220 South 6th Avenue",
+      "zip": "08904",
+      "phone": "732-819-0052"
+    },
+    {
+      "municipality": "Jamesburg",
+      "name": "Senior Center",
+      "street_address": "139 Stevens Avenue",
+      "zip": "08831",
+      "phone": "732-521-2920"
+    },
+    {
+      "municipality": "Metuchen",
+      "name": "Metuchen Senior Center",
+      "street_address": "15 Center Street",
+      "zip": "08840",
+      "phone": "732-632-8524"
+    },
+    {
+      "municipality": "Middlesex",
+      "name": "Middlesex Recreation Center",
+      "street_address": "1400 Mountain Ave.",
+      "zip": "08846",
+      "phone": "732-356-0414"
+    },
+    {
+      "municipality": "Milltown",
+      "name": "Milltown Senior Center/Office on Aging",
+      "street_address": "60 Violet Terrace",
+      "zip": "08850",
+      "phone": "732-296-0681"
+    },
+    {
+      "municipality": "Monroe",
+      "name": "Monroe Senior Center/Office on Aging",
+      "street_address": "12 Halsey Reed Road",
+      "zip": "08831",
+      "phone": "609-448-7140"
+    },
+    {
+      "municipality": "New Brunswick",
+      "name": "New Brunswick Senior Center/Office on Aging",
+      "street_address": "81 Huntington Street",
+      "zip": "08901",
+      "phone": "732-745-5100"
+    }
+  ],
+  "senior_centers_not_extracted_this_ticket": [
+    "North Brunswick",
+    "Old Bridge (listed as congregate site; confirm senior-center listing on county page)",
+    "Perth Amboy (listed as congregate site; confirm senior-center listing on county page)",
+    "Piscataway (listed as congregate site; confirm senior-center listing on county page)",
+    "Plainsboro",
+    "Sayreville (listed as congregate site; confirm senior-center listing on county page)",
+    "South Amboy",
+    "South Brunswick (listed as congregate site; confirm senior-center listing on county page)",
+    "South Plainfield (listed as congregate site; confirm senior-center listing on county page)",
+    "South River",
+    "Spotswood",
+    "Woodbridge"
+  ],
+  "coverage_note": "Official county page lists additional municipal senior centers beyond the first page of the public HTML extract. Congregate meal sites (8) are complete. Remaining municipal senior-center rows should be copied from the same official page, not from a third-party directory."
+}

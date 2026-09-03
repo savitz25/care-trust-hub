@@ -1,0 +1,389 @@
+{
+  "version": "nj-sen-county-001-public-v1",
+  "ticket": "NJ-SEN-COUNTY-001",
+  "slug": "union-county",
+  "path": "/new-jersey/union-county",
+  "county": "Union",
+  "countyFips": "34039",
+  "asOf": "2026-09-03",
+  "stateSnapshotVersion": "nj-sen-005-public-v1",
+  "stateSnapshotFingerprint": "92e0742f77f2f55a5ccd6217c5caa779f3281fd26b1d91c14e2df11ae144011a",
+  "stateAsOf": "2026-09-02",
+  "njdoh": {
+    "ltc": 46,
+    "acute": 74,
+    "nfSnf": 19,
+    "alr": 8,
+    "cpch": 3,
+    "alp": 1,
+    "hha": 1,
+    "hospiceProgram": 4,
+    "hospiceBranch": 0,
+    "hospiceInpatient": 2,
+    "inventoryRows": 120,
+    "ltcAsOf": "2026-08-31",
+    "acuteAsOf": "2026-08-31",
+    "ltcByType": [
+      {
+        "label": "LONG TERM CARE FACILITY SNF/NF",
+        "typeKey": "NJ_NF_SNF",
+        "count": 19
+      },
+      {
+        "label": "ADULT DAY HEALTH SERVICES FACILITY",
+        "typeKey": "NJ_ADHS",
+        "count": 10
+      },
+      {
+        "label": "ASSISTED LIVING RESIDENCE",
+        "typeKey": "NJ_ALR",
+        "count": 8
+      },
+      {
+        "label": "COMPREHENSIVE PERSONAL CARE HOME",
+        "typeKey": "NJ_CPCH",
+        "count": 3
+      },
+      {
+        "label": "HOSPITAL BASED - LONG TERM CARE FACILITY SNF/NF",
+        "typeKey": "NJ_NF_SNF_HOSPITAL",
+        "count": 2
+      },
+      {
+        "label": "LONG TERM CARE FACILITY",
+        "typeKey": "NJ_LTC_UNSPECIFIED",
+        "count": 2
+      },
+      {
+        "label": "ADULT DAY HEALTH SERVICES in a LONG-TERM CARE FACILITY",
+        "typeKey": "NJ_ADHS_IN_LTC",
+        "count": 1
+      },
+      {
+        "label": "ASSISTED LIVING PROGRAM",
+        "typeKey": "NJ_ALP",
+        "count": 1
+      }
+    ],
+    "acuteByType": [
+      {
+        "label": "AMBULATORY CARE FACILITY",
+        "typeKey": "NJ_ACF",
+        "count": 15
+      },
+      {
+        "label": "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY STHSPOFF",
+        "typeKey": "NJ_HOSP_OFFSITE_ACF_STHSPOFF",
+        "count": 15
+      },
+      {
+        "label": "AMBULATORY SURGICAL CENTER",
+        "typeKey": "NJ_ASC",
+        "count": 11
+      },
+      {
+        "label": "END STAGE RENAL DIALYSIS",
+        "typeKey": "NJ_ESRD",
+        "count": 9
+      },
+      {
+        "label": "HOSPICE CARE PROGRAM",
+        "typeKey": "NJ_HOSPICE_PROGRAM",
+        "count": 4
+      },
+      {
+        "label": "GENERAL ACUTE CARE HOSPITAL",
+        "typeKey": "NJ_HOSPITAL_GENERAL_ACUTE",
+        "count": 3
+      },
+      {
+        "label": "AMBULATORY SURGICAL CENTER ASC-ST",
+        "typeKey": "NJ_ASC_ST",
+        "count": 2
+      },
+      {
+        "label": "HOSPICE CARE - INPATIENT",
+        "typeKey": "NJ_HOSPICE_INPATIENT",
+        "count": 2
+      },
+      {
+        "label": "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY",
+        "typeKey": "NJ_HOSP_OFFSITE_ACF",
+        "count": 2
+      },
+      {
+        "label": "AMBULATORY CARE FACILITY - SATELLITE",
+        "typeKey": "NJ_ACF_SATELLITE",
+        "count": 1
+      },
+      {
+        "label": "COMPREHENSIVE OUTPATIENT REHAB",
+        "typeKey": "NJ_CORF",
+        "count": 1
+      },
+      {
+        "label": "FEDERALLY QUALIFIED HEALTH CENTERS",
+        "typeKey": "NJ_FQHC",
+        "count": 1
+      },
+      {
+        "label": "HOME HEALTH AGENCY",
+        "typeKey": "NJ_HHA",
+        "count": 1
+      },
+      {
+        "label": "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY CTR ST",
+        "typeKey": "NJ_HOSP_OFFSITE_ACF_CTR_ST",
+        "count": 1
+      },
+      {
+        "label": "PSYCHIATRIC HOSPITAL",
+        "typeKey": "NJ_HOSPITAL_PSYCH",
+        "count": 1
+      },
+      {
+        "label": "SPECIAL HOSPITAL",
+        "typeKey": "NJ_HOSPITAL_SPECIAL",
+        "count": 1
+      },
+      {
+        "label": "SPECIAL HOSPITAL - PSYCHIATRIC",
+        "typeKey": "NJ_HOSPITAL_SPECIAL_PSYCH",
+        "count": 1
+      },
+      {
+        "label": "SPECIAL HOSPITAL HOSP-LT",
+        "typeKey": "NJ_HOSPITAL_SPECIAL_LT",
+        "count": 1
+      },
+      {
+        "label": "SURGICAL PRACTICE",
+        "typeKey": "NJ_SURGICAL_PRACTICE",
+        "count": 1
+      },
+      {
+        "label": "SURGICAL PRACTICE ASC-P-C",
+        "typeKey": "NJ_SURGICAL_PRACTICE_ASC_PC",
+        "count": 1
+      }
+    ],
+    "caveat": "All_LTC and All_Acute are different licensed universes. They are not added together and are not added to CMS. FacID is not a license number. Office/address county is not a service area."
+  },
+  "cms": {
+    "treatment": "STATEWIDE_OVERLAY_ONLY",
+    "nursingHomesStatewide": 348,
+    "homeHealthStatewide": 38,
+    "hospiceStatewide": 61,
+    "asOf": "2026-08-27",
+    "source": "senior-national-intelligence.json geography NJ",
+    "countyCountPublished": null,
+    "identityLinkage": "unavailable",
+    "caveat": "CMS overlay is statewide New Jersey geography. Exact NJDOH\u2194CMS CCN joins are not in this snapshot. County CMS counts are unknown, not zero. CMS directory is not an NJDOH identity join."
+  },
+  "enforcement": {
+    "treatment": "STATEWIDE_EXACT_CONTEXT_ONLY",
+    "indexedStatewide": 1146,
+    "downloadedStatewide": 1144,
+    "uniqueHashesStatewide": 1131,
+    "exactStatewide": 300,
+    "highConfidenceStatewide": 76,
+    "reviewRequiredStatewide": 3,
+    "unsafeRejectedStatewide": 291,
+    "unresolvedStatewide": 476,
+    "exactFacilitiesStatewide": 224,
+    "countyExactPublished": null,
+    "identityLinkage": "partial",
+    "caveat": "Exact FacID/license county assignment is not in this snapshot. Unresolved, unsafe-rejected, and name-only matches are not county-assigned. Missing county enforcement is unknown, not a clean county. NOTICE/PENALTY/DPOC retain official action semantics."
+  },
+  "staffing": {
+    "treatment": "STATEWIDE_CONTEXT_ONLY_NH",
+    "latest": "2026 Q2",
+    "first": "2019 Q1",
+    "populatedQuarters": 30,
+    "statewideDayRn": 40.5,
+    "statewideDayLpn": 21.0,
+    "statewideDayCna": 8.3,
+    "statewideReportingFacilities": 361,
+    "countyAggregatePublished": null,
+    "semantics": "Official values are residents per one staff member (1RN:#Res). Missing codes are not zero.",
+    "notAttachedTo": [
+      "ALR",
+      "CPCH",
+      "ALP",
+      "Home Health",
+      "Hospice",
+      "PACE",
+      "CCRC"
+    ],
+    "caveat": "Official values are 1RN:#Res / 1LPN:#Res / 1CNA:#Res (residents per one staff member). A higher ratio means more residents per staff. Staffing is nursing-home / relevant facility only and is not copied to AL, HHA, Hospice, PACE, or CCRC. County aggregate is omitted because source-native county numerators and denominators are not in the public snapshot. Missing is not zero. No staffing score."
+  },
+  "medicaid": {
+    "treatment": "STATEWIDE_SCHEDULE_ONLY",
+    "listedRowsStatewide": 236,
+    "minRate": 81.1,
+    "maxRate": 126.1,
+    "fiscalYear": "SFY_2026",
+    "effectiveOn": "2025-07-01",
+    "source": "https://www.njmmis.com/downloadDocuments/SFY_2026_Assisted_Living_Rates.pdf",
+    "countyListedRowsPublished": null,
+    "caveat": "Schedule rows are name/subtype/rate only. County identity coverage is incomplete, not zero. A listed rate is not Medicaid participation and is not a quality score. Name-only rows are not assigned to a county."
+  },
+  "pace": {
+    "treatment": "CENTER_ADDRESS_COUNTY_ONLY",
+    "centersInCounty": [
+      {
+        "org": "Lutheran Senior LIFE",
+        "name": "Lutheran Senior LIFE at Union",
+        "city": "Plainfield",
+        "county": "Union",
+        "status": "OPERATING"
+      }
+    ],
+    "operatingCentersInCounty": 1,
+    "awardedOrInDevelopmentCentersInCounty": 0,
+    "statewideOrganizations": 8,
+    "statewideOperatingOrganizations": 6,
+    "statewideAwardedOrganizations": 2,
+    "statewideOperatingCenters": 10,
+    "caveat": "Center address county is not a service area. Organization is not a center. Operating is not awarded. A county PACE listing is not guaranteed eligibility."
+  },
+  "ccrc": {
+    "coverage": "SOURCE_AVAILABLE_BY_REQUEST",
+    "countPublished": null,
+    "caveat": "Missing CCRC Certificate of Authority roster is unknown, not zero CCRCs. Somerset planning-inventory CCRC points are not that roster."
+  },
+  "localResources": {
+    "kind": "COUNTY_RESOURCE",
+    "notALicensedFacility": true,
+    "sourceAsOf": "2026-01-14",
+    "adrc": {
+      "agency": "Union County Division on Aging / ADRC",
+      "phone": "908-527-4870",
+      "tollFree": "888-280-8226",
+      "adrcTollFree": "877-222-3737",
+      "email": null,
+      "address": null,
+      "url": "https://ucnj.org/dhs/aging/",
+      "resourceDirectoryPdf": "https://ucnj.org/dhs/wp-content/uploads/sites/21/2026/05/Resource-Directory_5.2026-1.pdf",
+      "resourceDirectoryAsOf": "2026-05",
+      "informationPacketPdf": "https://ucnj.org/dhs/wp-content/uploads/sites/21/2026/03/Information-Packet_3.2026.pdf",
+      "informationPacketAsOf": "2026-03",
+      "grain": "COUNTY_AAA_PROGRAM_DIRECTORY",
+      "notAFacilityLicense": true
+    },
+    "seniorCenters": null,
+    "otherServiceCenters": [],
+    "congregateMealSites": null,
+    "congregateMealSitesCoverage": null,
+    "homeDeliveredMeals": [],
+    "seniorCentersNotExtracted": null,
+    "housingInventory": null,
+    "nursingHomeGeocode": null,
+    "seniorGrant": {
+      "programId": "union-senior-home-improvement-grant",
+      "programName": "Union County Senior Home Improvement Grant",
+      "sourceUrl": "https://ucnj.org/department-of-economic-development/home-improvement-and-senior-home-improvement-grant-programs/",
+      "sourceAsOf": "2026-01-14",
+      "benefitType": "Grant (does not have to be repaid)",
+      "benefitAmountPublished": "capped at $10,000",
+      "ageRule": "eligible Union County residents ages 62 and over, subject to the same income/property guidelines as the Home Improvement Program",
+      "coverage": "same participating-municipality list as the Home Improvement Program",
+      "attribution": "According to the county's dated program information (2026-01-14), eligible Union County residents ages 62 and over may apply for a Senior Home Improvement Grant capped at $10,000 that does not have to be repaid, subject to the same income/property guidelines as the Home Improvement Program.",
+      "notGuaranteedEligibilityOrFunding": true,
+      "notACountyLicense": true
+    },
+    "homeImprovementProgram": {
+      "programId": "union-home-improvement-program",
+      "programName": "Union County Home Improvement Program",
+      "sourceUrl": "https://ucnj.org/department-of-economic-development/home-improvement-and-senior-home-improvement-grant-programs/",
+      "sourceAsOf": "2026-01-14",
+      "benefitType": "Deferred payment loan (non-interest; repayment deferred until sale or transfer)",
+      "benefitAmountPublished": "up to $24,999",
+      "agingInPlaceNote": "The general Home Improvement Program may be relevant for aging-in-place repairs. Program contractors are not county-licensed contractors.",
+      "notACountyLicense": true,
+      "preferredEntityClass": "UNION_COUNTY_HOME_IMPROVEMENT_PROGRAM_PARTICIPANT"
+    },
+    "notes": [
+      "Union County Senior Home Improvement Grant terms are as published on the county page dated 2026-01-14.",
+      "A county aging program is not a licensed facility and not a guarantee of eligibility or current funding."
+    ]
+  },
+  "sourceFamilies": [
+    {
+      "id": "njdoh-all-ltc",
+      "label": "NJDOH All_LTC licensed identities",
+      "countySpecific": true,
+      "grain": "licensed long-term-care facility identity located in the county"
+    },
+    {
+      "id": "njdoh-all-acute",
+      "label": "NJDOH All_Acute licensed identities",
+      "countySpecific": true,
+      "grain": "licensed acute-care facility identity; office county is not a service area"
+    },
+    {
+      "id": "union-aging-grant",
+      "label": "Union County ADRC and Senior Home Improvement Grant",
+      "countySpecific": true,
+      "grain": "county AAA program and dated grant terms, not a licensed facility"
+    },
+    {
+      "id": "doas-pace",
+      "label": "NJ DoAS PACE center geography",
+      "countySpecific": true,
+      "grain": "PACE center address county; not a service area"
+    }
+  ],
+  "findings": [
+    {
+      "id": "njdoh-universes",
+      "text": "NJDOH All_LTC lists 46 licensed identities in Union County as of 2026-08-31, including 19 SNF/NF and 8 ALR. All_Acute lists 74 identities, including 1 Home Health Agency offices, 4 Hospice Programs, 0 Hospice Branches, and 2 Hospice Inpatient identities. These universes are not combined into one senior-provider total. Office/address county is not a service area."
+    },
+    {
+      "id": "senior-grant",
+      "text": "According to the county's dated program information (2026-01-14), eligible Union County residents ages 62 and over may apply for a Senior Home Improvement Grant capped at $10,000 that does not have to be repaid, subject to the same income/property guidelines as the Home Improvement Program. This is not a guarantee of eligibility or current funding beyond the source date."
+    },
+    {
+      "id": "adrc",
+      "text": "Union County Division on Aging / ADRC (908-527-4870; toll-free 888-280-8226) is the county aging resource. The May 2026 resource directory PDF is cited, not copied. A county AAA directory is not a facility license."
+    },
+    {
+      "id": "pace-operating",
+      "text": "Lutheran Senior LIFE at Union is listed as OPERATING with a Union County center address (Plainfield). Center address is not a service area. Operating is not awarded."
+    }
+  ],
+  "gaps": [
+    "County CMS CCN counts are not published without an exact NJDOH join.",
+    "County exact enforcement counts are not published without FacID county assignment in this snapshot.",
+    "County staffing averages are omitted without source-native county numerators and denominators.",
+    "Medicaid listed rates are not county-assigned from name-only rows.",
+    "Home Health and Hospice office county is not a service area.",
+    "CCRC Certificate of Authority roster remains SOURCE_AVAILABLE_BY_REQUEST."
+  ],
+  "sourceClocks": {
+    "njdohLtc": "2026-08-31",
+    "njdohAcute": "2026-08-31",
+    "stateSnapshot": "2026-09-02",
+    "cmsOverlay": "2026-08-27",
+    "medicaid": "2025-07-01",
+    "staffingLatest": "2026 Q2",
+    "localResources": "2026-01-14",
+    "countyResearch": "2026-09-03"
+  },
+  "publicationGate": {
+    "indexable": true,
+    "sourceFamilyCount": 4,
+    "countySpecificLocalSource": true,
+    "findingCount": 4,
+    "deterministicSnapshot": true,
+    "thinStateCopy": false
+  },
+  "disclaimers": [
+    "SeniorTrustHub does not rank facilities and does not publish a Trust Score.",
+    "There is no Verified by New Jersey badge.",
+    "COUNTY RESOURCE is not a LICENSED FACILITY.",
+    "PLANNING HOUSING INVENTORY is not an NJDOH LICENSE.",
+    "CMS DIRECTORY is not an NJDOH identity join."
+  ],
+  "fingerprint": "72cb9792d6ad078639e36c27e5c4794197ec0c08ff4eee6e55251610854cb441"
+}

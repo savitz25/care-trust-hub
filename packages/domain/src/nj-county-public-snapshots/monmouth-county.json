@@ -1,0 +1,454 @@
+{
+  "version": "nj-sen-county-001-public-v1",
+  "ticket": "NJ-SEN-COUNTY-001",
+  "slug": "monmouth-county",
+  "path": "/new-jersey/monmouth-county",
+  "county": "Monmouth",
+  "countyFips": "34025",
+  "asOf": "2026-09-03",
+  "stateSnapshotVersion": "nj-sen-005-public-v1",
+  "stateSnapshotFingerprint": "92e0742f77f2f55a5ccd6217c5caa779f3281fd26b1d91c14e2df11ae144011a",
+  "stateAsOf": "2026-09-02",
+  "njdoh": {
+    "ltc": 86,
+    "acute": 99,
+    "nfSnf": 32,
+    "alr": 33,
+    "cpch": 1,
+    "alp": 0,
+    "hha": 2,
+    "hospiceProgram": 5,
+    "hospiceBranch": 3,
+    "hospiceInpatient": 0,
+    "inventoryRows": 185,
+    "ltcAsOf": "2026-08-31",
+    "acuteAsOf": "2026-08-31",
+    "ltcByType": [
+      {
+        "label": "ASSISTED LIVING RESIDENCE",
+        "typeKey": "NJ_ALR",
+        "count": 33
+      },
+      {
+        "label": "LONG TERM CARE FACILITY SNF/NF",
+        "typeKey": "NJ_NF_SNF",
+        "count": 32
+      },
+      {
+        "label": "ADULT DAY HEALTH SERVICES FACILITY",
+        "typeKey": "NJ_ADHS",
+        "count": 14
+      },
+      {
+        "label": "RESIDENTIAL DEMENTIA CARE HOME",
+        "typeKey": "NJ_RDCH",
+        "count": 5
+      },
+      {
+        "label": "COMPREHENSIVE PERSONAL CARE HOME",
+        "typeKey": "NJ_CPCH",
+        "count": 1
+      },
+      {
+        "label": "LONG TERM CARE FACILITY - HOME FOR THE AGED SNF/NF",
+        "typeKey": "NJ_NF_SNF_HOME_FOR_AGED",
+        "count": 1
+      }
+    ],
+    "acuteByType": [
+      {
+        "label": "AMBULATORY CARE FACILITY",
+        "typeKey": "NJ_ACF",
+        "count": 31
+      },
+      {
+        "label": "AMBULATORY SURGICAL CENTER",
+        "typeKey": "NJ_ASC",
+        "count": 23
+      },
+      {
+        "label": "END STAGE RENAL DIALYSIS",
+        "typeKey": "NJ_ESRD",
+        "count": 12
+      },
+      {
+        "label": "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY STHSPOFF",
+        "typeKey": "NJ_HOSP_OFFSITE_ACF_STHSPOFF",
+        "count": 8
+      },
+      {
+        "label": "GENERAL ACUTE CARE HOSPITAL",
+        "typeKey": "NJ_HOSPITAL_GENERAL_ACUTE",
+        "count": 5
+      },
+      {
+        "label": "HOSPICE CARE PROGRAM",
+        "typeKey": "NJ_HOSPICE_PROGRAM",
+        "count": 5
+      },
+      {
+        "label": "FEDERALLY QUALIFIED HEALTH CENTERS",
+        "typeKey": "NJ_FQHC",
+        "count": 3
+      },
+      {
+        "label": "HOSPICE CARE BRANCH",
+        "typeKey": "NJ_HOSPICE_BRANCH",
+        "count": 3
+      },
+      {
+        "label": "SURGICAL PRACTICE",
+        "typeKey": "NJ_SURGICAL_PRACTICE",
+        "count": 3
+      },
+      {
+        "label": "HOME HEALTH AGENCY",
+        "typeKey": "NJ_HHA",
+        "count": 2
+      },
+      {
+        "label": "AMBULATORY CARE FACILITY - SATELLITE",
+        "typeKey": "NJ_ACF_SATELLITE",
+        "count": 1
+      },
+      {
+        "label": "AMBULATORY SURGICAL CENTER ASC-ST",
+        "typeKey": "NJ_ASC_ST",
+        "count": 1
+      },
+      {
+        "label": "COMPREHENSIVE REHABILITATION HOSPITAL",
+        "typeKey": "NJ_HOSPITAL_COMP_REHAB",
+        "count": 1
+      },
+      {
+        "label": "SURGICAL PRACTICE ASC-P-C",
+        "typeKey": "NJ_SURGICAL_PRACTICE_ASC_PC",
+        "count": 1
+      }
+    ],
+    "caveat": "All_LTC and All_Acute are different licensed universes. They are not added together and are not added to CMS. FacID is not a license number. Office/address county is not a service area."
+  },
+  "cms": {
+    "treatment": "STATEWIDE_OVERLAY_ONLY",
+    "nursingHomesStatewide": 348,
+    "homeHealthStatewide": 38,
+    "hospiceStatewide": 61,
+    "asOf": "2026-08-27",
+    "source": "senior-national-intelligence.json geography NJ",
+    "countyCountPublished": null,
+    "identityLinkage": "unavailable",
+    "caveat": "CMS overlay is statewide New Jersey geography. Exact NJDOH\u2194CMS CCN joins are not in this snapshot. County CMS counts are unknown, not zero. CMS directory is not an NJDOH identity join."
+  },
+  "enforcement": {
+    "treatment": "STATEWIDE_EXACT_CONTEXT_ONLY",
+    "indexedStatewide": 1146,
+    "downloadedStatewide": 1144,
+    "uniqueHashesStatewide": 1131,
+    "exactStatewide": 300,
+    "highConfidenceStatewide": 76,
+    "reviewRequiredStatewide": 3,
+    "unsafeRejectedStatewide": 291,
+    "unresolvedStatewide": 476,
+    "exactFacilitiesStatewide": 224,
+    "countyExactPublished": null,
+    "identityLinkage": "partial",
+    "caveat": "Exact FacID/license county assignment is not in this snapshot. Unresolved, unsafe-rejected, and name-only matches are not county-assigned. Missing county enforcement is unknown, not a clean county. NOTICE/PENALTY/DPOC retain official action semantics."
+  },
+  "staffing": {
+    "treatment": "STATEWIDE_CONTEXT_ONLY_NH",
+    "latest": "2026 Q2",
+    "first": "2019 Q1",
+    "populatedQuarters": 30,
+    "statewideDayRn": 40.5,
+    "statewideDayLpn": 21.0,
+    "statewideDayCna": 8.3,
+    "statewideReportingFacilities": 361,
+    "countyAggregatePublished": null,
+    "semantics": "Official values are residents per one staff member (1RN:#Res). Missing codes are not zero.",
+    "notAttachedTo": [
+      "ALR",
+      "CPCH",
+      "ALP",
+      "Home Health",
+      "Hospice",
+      "PACE",
+      "CCRC"
+    ],
+    "caveat": "Official values are 1RN:#Res / 1LPN:#Res / 1CNA:#Res (residents per one staff member). A higher ratio means more residents per staff. Staffing is nursing-home / relevant facility only and is not copied to AL, HHA, Hospice, PACE, or CCRC. County aggregate is omitted because source-native county numerators and denominators are not in the public snapshot. Missing is not zero. No staffing score."
+  },
+  "medicaid": {
+    "treatment": "STATEWIDE_SCHEDULE_ONLY",
+    "listedRowsStatewide": 236,
+    "minRate": 81.1,
+    "maxRate": 126.1,
+    "fiscalYear": "SFY_2026",
+    "effectiveOn": "2025-07-01",
+    "source": "https://www.njmmis.com/downloadDocuments/SFY_2026_Assisted_Living_Rates.pdf",
+    "countyListedRowsPublished": null,
+    "caveat": "Schedule rows are name/subtype/rate only. County identity coverage is incomplete, not zero. A listed rate is not Medicaid participation and is not a quality score. Name-only rows are not assigned to a county."
+  },
+  "pace": {
+    "treatment": "CENTER_ADDRESS_COUNTY_ONLY",
+    "centersInCounty": [
+      {
+        "org": "BoldAge PACE",
+        "name": "BoldAge PACE Oceanport",
+        "city": "Oceanport",
+        "county": "Monmouth",
+        "status": "OPERATING"
+      }
+    ],
+    "operatingCentersInCounty": 1,
+    "awardedOrInDevelopmentCentersInCounty": 0,
+    "statewideOrganizations": 8,
+    "statewideOperatingOrganizations": 6,
+    "statewideAwardedOrganizations": 2,
+    "statewideOperatingCenters": 10,
+    "caveat": "Center address county is not a service area. Organization is not a center. Operating is not awarded. A county PACE listing is not guaranteed eligibility."
+  },
+  "ccrc": {
+    "coverage": "SOURCE_AVAILABLE_BY_REQUEST",
+    "countPublished": null,
+    "caveat": "Missing CCRC Certificate of Authority roster is unknown, not zero CCRCs. Somerset planning-inventory CCRC points are not that roster."
+  },
+  "localResources": {
+    "kind": "COUNTY_RESOURCE",
+    "notALicensedFacility": true,
+    "sourceAsOf": "2026-09-03",
+    "adrc": {
+      "agency": "Monmouth County Division of Aging, Disabilities and Veterans Services",
+      "phone": "732-431-7450",
+      "tollFree": "1-877-222-3737",
+      "email": "Monmouthadvs@monmouthcounty.us",
+      "address": "3000 Kozloski Road, Freehold, NJ 07728",
+      "url": "https://www.nj.gov/humanservices/doas/assistance/county-offices/"
+    },
+    "seniorCenters": {
+      "sourceUrl": "https://monmouthadvs.com/senior-centers/",
+      "coverage": "ACQUIRED_PUBLIC_HTML",
+      "count": 12,
+      "rows": [
+        {
+          "name": "Asbury Park Senior Center",
+          "streetAddress": "1 Municipal Plaza",
+          "municipality": "Asbury Park",
+          "zip": "07712",
+          "phone": "732-988-5252",
+          "nutritionSite": true
+        },
+        {
+          "name": "Freehold Township Senior Center",
+          "streetAddress": "116 Jackson Mills Road",
+          "municipality": "Freehold Township",
+          "zip": "07728",
+          "phone": "732-294-2029",
+          "nutritionSite": false
+        },
+        {
+          "name": "Howell Senior Center",
+          "streetAddress": "251 Preventorium Rd",
+          "municipality": "Howell",
+          "zip": "07731",
+          "phone": "732-938-4500 x2550",
+          "nutritionSite": true
+        },
+        {
+          "name": "Long Branch Senior Center",
+          "streetAddress": "85 Second Avenue",
+          "municipality": "Long Branch",
+          "zip": "07740",
+          "phone": "732-571-6542",
+          "nutritionSite": false
+        },
+        {
+          "name": "Marlboro Township Senior Center",
+          "streetAddress": "1996 Recreation Way",
+          "municipality": "Marlboro",
+          "zip": "07746",
+          "phone": "732-617-0367",
+          "nutritionSite": false
+        },
+        {
+          "name": "Neptune Senior Center",
+          "streetAddress": "1607 Corlies Avenue",
+          "municipality": "Neptune",
+          "zip": "07753",
+          "phone": "732-988-8855",
+          "nutritionSite": true
+        },
+        {
+          "name": "Atlantic Highlands Senior Citizen Center",
+          "streetAddress": "3 Simon Lake Drive",
+          "municipality": "Atlantic Highlands",
+          "zip": "07716",
+          "phone": "732-291-5635",
+          "nutritionSite": false
+        },
+        {
+          "name": "Hazlet Senior Center (James J. Cullen Center)",
+          "streetAddress": "1776 Union Avenue",
+          "municipality": "Hazlet",
+          "zip": "07730",
+          "phone": "732-217-8683",
+          "nutritionSite": true
+        },
+        {
+          "name": "Keyport Senior Center",
+          "streetAddress": "110 Second Street",
+          "municipality": "Keyport",
+          "zip": "07735",
+          "phone": "732-264-4916",
+          "nutritionSite": false
+        },
+        {
+          "name": "Manalapan Senior Center",
+          "streetAddress": "211 Freehold Road",
+          "municipality": "Manalapan",
+          "zip": "07726",
+          "phone": "732-446-8401",
+          "nutritionSite": false
+        },
+        {
+          "name": "Middletown Senior Center (Croydon Hall)",
+          "streetAddress": "900 Leonardville Road",
+          "municipality": "Leonardo / Middletown",
+          "zip": "07737",
+          "phone": "732-615-2265",
+          "nutritionSite": true
+        },
+        {
+          "name": "Red Bank Senior Center",
+          "streetAddress": "80 Shrewsbury Avenue",
+          "municipality": "Red Bank",
+          "zip": "07701",
+          "phone": "732-747-5204",
+          "nutritionSite": true
+        }
+      ]
+    },
+    "otherServiceCenters": [
+      {
+        "name": "Eatontown Human Services/Senior Center",
+        "streetAddress": "68 Broad Street",
+        "municipality": "Eatontown",
+        "zip": "07724",
+        "phone": "732-389-7666"
+      },
+      {
+        "name": "Marlboro Kosher Site",
+        "streetAddress": "103 School Road West",
+        "municipality": "Marlboro",
+        "zip": "07746",
+        "phone": "732-536-2307"
+      },
+      {
+        "name": "Highlands Community Center",
+        "streetAddress": "22 Snug Harbor Avenue",
+        "municipality": "Highlands",
+        "zip": "07732",
+        "phone": "732-872-1959"
+      }
+    ],
+    "congregateMealSites": null,
+    "congregateMealSitesCoverage": null,
+    "homeDeliveredMeals": [
+      {
+        "provider": "Interfaith Neighbors",
+        "phone": "732-775-0525 x227"
+      },
+      {
+        "provider": "Jewish Family & Children's Service of Monmouth County (Kosher meals)",
+        "phone": "732-774-6886 x40"
+      }
+    ],
+    "seniorCentersNotExtracted": null,
+    "housingInventory": null,
+    "nursingHomeGeocode": null,
+    "seniorGrant": null,
+    "homeImprovementProgram": null,
+    "notes": [
+      "This is a public facility/program directory, not a senior household profile.",
+      "A listed nutrition site is not a finding about any resident.",
+      "Housing resources change; the county office directs callers rather than publishing a stable housing roster."
+    ]
+  },
+  "sourceFamilies": [
+    {
+      "id": "njdoh-all-ltc",
+      "label": "NJDOH All_LTC licensed identities",
+      "countySpecific": true,
+      "grain": "licensed long-term-care facility identity located in the county"
+    },
+    {
+      "id": "njdoh-all-acute",
+      "label": "NJDOH All_Acute licensed identities",
+      "countySpecific": true,
+      "grain": "licensed acute-care facility identity; office county is not a service area"
+    },
+    {
+      "id": "county-aging-resources",
+      "label": "Monmouth County ADRC / senior centers / nutrition",
+      "countySpecific": true,
+      "grain": "county resource directory site, not a licensed facility"
+    },
+    {
+      "id": "doas-pace",
+      "label": "NJ DoAS PACE center geography",
+      "countySpecific": true,
+      "grain": "PACE center address county; not a service area"
+    }
+  ],
+  "findings": [
+    {
+      "id": "njdoh-universes",
+      "text": "NJDOH All_LTC lists 86 licensed identities in Monmouth County as of 2026-08-31, including 32 SNF/NF and 33 ALR. All_Acute lists 99 identities, including 2 Home Health Agency offices, 5 Hospice Programs, 3 Hospice Branches, and 0 Hospice Inpatient identities. These universes are not combined into one senior-provider total. Office/address county is not a service area."
+    },
+    {
+      "id": "adrc-centers",
+      "text": "Monmouth County Division of Aging, Disabilities and Veterans Services is the ADRC (732-431-7450). The county lists 12 senior centers and 3 other service centers as of 2026-09-03. A listed center is a county resource, not a licensed facility."
+    },
+    {
+      "id": "meals",
+      "text": "County meal resources include Interfaith Neighbors and Jewish Family & Children's Service of Monmouth County (kosher meals). A listed nutrition site is not a finding about any resident."
+    },
+    {
+      "id": "pace-operating",
+      "text": "BoldAge PACE Oceanport is listed as OPERATING with a Monmouth County center address (Oceanport). Center address is not a service area. Operating is not awarded."
+    }
+  ],
+  "gaps": [
+    "County CMS CCN counts are not published without an exact NJDOH join.",
+    "County exact enforcement counts are not published without FacID county assignment in this snapshot.",
+    "County staffing averages are omitted without source-native county numerators and denominators.",
+    "Medicaid listed rates are not county-assigned from name-only rows.",
+    "Home Health and Hospice office county is not a service area.",
+    "CCRC Certificate of Authority roster remains SOURCE_AVAILABLE_BY_REQUEST."
+  ],
+  "sourceClocks": {
+    "njdohLtc": "2026-08-31",
+    "njdohAcute": "2026-08-31",
+    "stateSnapshot": "2026-09-02",
+    "cmsOverlay": "2026-08-27",
+    "medicaid": "2025-07-01",
+    "staffingLatest": "2026 Q2",
+    "localResources": "2026-09-03",
+    "countyResearch": "2026-09-03"
+  },
+  "publicationGate": {
+    "indexable": true,
+    "sourceFamilyCount": 4,
+    "countySpecificLocalSource": true,
+    "findingCount": 4,
+    "deterministicSnapshot": true,
+    "thinStateCopy": false
+  },
+  "disclaimers": [
+    "SeniorTrustHub does not rank facilities and does not publish a Trust Score.",
+    "There is no Verified by New Jersey badge.",
+    "COUNTY RESOURCE is not a LICENSED FACILITY.",
+    "PLANNING HOUSING INVENTORY is not an NJDOH LICENSE.",
+    "CMS DIRECTORY is not an NJDOH identity join."
+  ],
+  "fingerprint": "5c1dbcdea4bfa3f15dad4285d4b6cbecf745c12c06a016209460edc894446006"
+}

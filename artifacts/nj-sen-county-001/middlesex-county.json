@@ -1,0 +1,511 @@
+{
+  "version": "nj-sen-county-001-public-v1",
+  "ticket": "NJ-SEN-COUNTY-001",
+  "slug": "middlesex-county",
+  "path": "/new-jersey/middlesex-county",
+  "county": "Middlesex",
+  "countyFips": "34023",
+  "asOf": "2026-09-03",
+  "stateSnapshotVersion": "nj-sen-005-public-v1",
+  "stateSnapshotFingerprint": "92e0742f77f2f55a5ccd6217c5caa779f3281fd26b1d91c14e2df11ae144011a",
+  "stateAsOf": "2026-09-02",
+  "njdoh": {
+    "ltc": 81,
+    "acute": 109,
+    "nfSnf": 23,
+    "alr": 16,
+    "cpch": 1,
+    "alp": 1,
+    "hha": 2,
+    "hospiceProgram": 6,
+    "hospiceBranch": 0,
+    "hospiceInpatient": 0,
+    "inventoryRows": 190,
+    "ltcAsOf": "2026-08-31",
+    "acuteAsOf": "2026-08-31",
+    "ltcByType": [
+      {
+        "label": "ADULT DAY HEALTH SERVICES FACILITY",
+        "typeKey": "NJ_ADHS",
+        "count": 31
+      },
+      {
+        "label": "LONG TERM CARE FACILITY SNF/NF",
+        "typeKey": "NJ_NF_SNF",
+        "count": 23
+      },
+      {
+        "label": "ASSISTED LIVING RESIDENCE",
+        "typeKey": "NJ_ALR",
+        "count": 16
+      },
+      {
+        "label": "RESIDENTIAL DEMENTIA CARE HOME",
+        "typeKey": "NJ_RDCH",
+        "count": 4
+      },
+      {
+        "label": "LONG TERM CARE FACILITY LTC-PRIV",
+        "typeKey": "NJ_LTC_PRIV",
+        "count": 3
+      },
+      {
+        "label": "ASSISTED LIVING PROGRAM",
+        "typeKey": "NJ_ALP",
+        "count": 1
+      },
+      {
+        "label": "COMPREHENSIVE PERSONAL CARE HOME",
+        "typeKey": "NJ_CPCH",
+        "count": 1
+      },
+      {
+        "label": "LONG TERM CARE FACILITY",
+        "typeKey": "NJ_LTC_UNSPECIFIED",
+        "count": 1
+      },
+      {
+        "label": "RESIDENTIAL HEALTH CARE in a LONG-TERM CARE FACILITY",
+        "typeKey": "NJ_RHCF_IN_LTC",
+        "count": 1
+      }
+    ],
+    "acuteByType": [
+      {
+        "label": "AMBULATORY CARE FACILITY",
+        "typeKey": "NJ_ACF",
+        "count": 26
+      },
+      {
+        "label": "AMBULATORY SURGICAL CENTER",
+        "typeKey": "NJ_ASC",
+        "count": 19
+      },
+      {
+        "label": "END STAGE RENAL DIALYSIS",
+        "typeKey": "NJ_ESRD",
+        "count": 19
+      },
+      {
+        "label": "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY STHSPOFF",
+        "typeKey": "NJ_HOSP_OFFSITE_ACF_STHSPOFF",
+        "count": 17
+      },
+      {
+        "label": "GENERAL ACUTE CARE HOSPITAL",
+        "typeKey": "NJ_HOSPITAL_GENERAL_ACUTE",
+        "count": 6
+      },
+      {
+        "label": "HOSPICE CARE PROGRAM",
+        "typeKey": "NJ_HOSPICE_PROGRAM",
+        "count": 6
+      },
+      {
+        "label": "FEDERALLY QUALIFIED HEALTH CENTERS",
+        "typeKey": "NJ_FQHC",
+        "count": 4
+      },
+      {
+        "label": "AMBULATORY CARE FACILITY - SATELLITE",
+        "typeKey": "NJ_ACF_SATELLITE",
+        "count": 2
+      },
+      {
+        "label": "HOME HEALTH AGENCY",
+        "typeKey": "NJ_HHA",
+        "count": 2
+      },
+      {
+        "label": "SPECIAL HOSPITAL HOSP-LT",
+        "typeKey": "NJ_HOSPITAL_SPECIAL_LT",
+        "count": 2
+      },
+      {
+        "label": "AMBULATORY SURGICAL CENTER ASC-ST",
+        "typeKey": "NJ_ASC_ST",
+        "count": 1
+      },
+      {
+        "label": "CHILDREN REHABILITATION HOSPITAL",
+        "typeKey": "NJ_HOSPITAL_CHILD_REHAB",
+        "count": 1
+      },
+      {
+        "label": "COMPREHENSIVE REHABILITATION HOSPITAL",
+        "typeKey": "NJ_HOSPITAL_COMP_REHAB",
+        "count": 1
+      },
+      {
+        "label": "HOSPITAL-BASED, OFF-SITE AMBULATORY CARE FACILITY CTR ST",
+        "typeKey": "NJ_HOSP_OFFSITE_ACF_CTR_ST",
+        "count": 1
+      },
+      {
+        "label": "MATERNAL AND CHILD HEALTH CONSORTIUM",
+        "typeKey": "NJ_MCHC",
+        "count": 1
+      },
+      {
+        "label": "PSYCHIATRIC HOSPITAL",
+        "typeKey": "NJ_HOSPITAL_PSYCH",
+        "count": 1
+      }
+    ],
+    "caveat": "All_LTC and All_Acute are different licensed universes. They are not added together and are not added to CMS. FacID is not a license number. Office/address county is not a service area."
+  },
+  "cms": {
+    "treatment": "STATEWIDE_OVERLAY_ONLY",
+    "nursingHomesStatewide": 348,
+    "homeHealthStatewide": 38,
+    "hospiceStatewide": 61,
+    "asOf": "2026-08-27",
+    "source": "senior-national-intelligence.json geography NJ",
+    "countyCountPublished": null,
+    "identityLinkage": "unavailable",
+    "caveat": "CMS overlay is statewide New Jersey geography. Exact NJDOH\u2194CMS CCN joins are not in this snapshot. County CMS counts are unknown, not zero. CMS directory is not an NJDOH identity join."
+  },
+  "enforcement": {
+    "treatment": "STATEWIDE_EXACT_CONTEXT_ONLY",
+    "indexedStatewide": 1146,
+    "downloadedStatewide": 1144,
+    "uniqueHashesStatewide": 1131,
+    "exactStatewide": 300,
+    "highConfidenceStatewide": 76,
+    "reviewRequiredStatewide": 3,
+    "unsafeRejectedStatewide": 291,
+    "unresolvedStatewide": 476,
+    "exactFacilitiesStatewide": 224,
+    "countyExactPublished": null,
+    "identityLinkage": "partial",
+    "caveat": "Exact FacID/license county assignment is not in this snapshot. Unresolved, unsafe-rejected, and name-only matches are not county-assigned. Missing county enforcement is unknown, not a clean county. NOTICE/PENALTY/DPOC retain official action semantics."
+  },
+  "staffing": {
+    "treatment": "STATEWIDE_CONTEXT_ONLY_NH",
+    "latest": "2026 Q2",
+    "first": "2019 Q1",
+    "populatedQuarters": 30,
+    "statewideDayRn": 40.5,
+    "statewideDayLpn": 21.0,
+    "statewideDayCna": 8.3,
+    "statewideReportingFacilities": 361,
+    "countyAggregatePublished": null,
+    "semantics": "Official values are residents per one staff member (1RN:#Res). Missing codes are not zero.",
+    "notAttachedTo": [
+      "ALR",
+      "CPCH",
+      "ALP",
+      "Home Health",
+      "Hospice",
+      "PACE",
+      "CCRC"
+    ],
+    "caveat": "Official values are 1RN:#Res / 1LPN:#Res / 1CNA:#Res (residents per one staff member). A higher ratio means more residents per staff. Staffing is nursing-home / relevant facility only and is not copied to AL, HHA, Hospice, PACE, or CCRC. County aggregate is omitted because source-native county numerators and denominators are not in the public snapshot. Missing is not zero. No staffing score."
+  },
+  "medicaid": {
+    "treatment": "STATEWIDE_SCHEDULE_ONLY",
+    "listedRowsStatewide": 236,
+    "minRate": 81.1,
+    "maxRate": 126.1,
+    "fiscalYear": "SFY_2026",
+    "effectiveOn": "2025-07-01",
+    "source": "https://www.njmmis.com/downloadDocuments/SFY_2026_Assisted_Living_Rates.pdf",
+    "countyListedRowsPublished": null,
+    "caveat": "Schedule rows are name/subtype/rate only. County identity coverage is incomplete, not zero. A listed rate is not Medicaid participation and is not a quality score. Name-only rows are not assigned to a county."
+  },
+  "pace": {
+    "treatment": "CENTER_ADDRESS_COUNTY_ONLY",
+    "centersInCounty": [
+      {
+        "org": "BoldAge PACE",
+        "name": "BoldAge PACE East Brunswick",
+        "city": "East Brunswick",
+        "county": "Middlesex",
+        "status": "OPERATING"
+      }
+    ],
+    "operatingCentersInCounty": 1,
+    "awardedOrInDevelopmentCentersInCounty": 0,
+    "statewideOrganizations": 8,
+    "statewideOperatingOrganizations": 6,
+    "statewideAwardedOrganizations": 2,
+    "statewideOperatingCenters": 10,
+    "caveat": "Center address county is not a service area. Organization is not a center. Operating is not awarded. A county PACE listing is not guaranteed eligibility."
+  },
+  "ccrc": {
+    "coverage": "SOURCE_AVAILABLE_BY_REQUEST",
+    "countPublished": null,
+    "caveat": "Missing CCRC Certificate of Authority roster is unknown, not zero CCRCs. Somerset planning-inventory CCRC points are not that roster."
+  },
+  "localResources": {
+    "kind": "COUNTY_RESOURCE",
+    "notALicensedFacility": true,
+    "sourceAsOf": "2026-09-03",
+    "adrc": {
+      "agency": "Middlesex County Office of Aging and Disabled Services",
+      "phone": "732-745-3295",
+      "tollFree": "1-877-222-3737",
+      "email": "mcoads@co.middlesex.nj.us",
+      "address": "75 Bayard Street, 5th Floor, New Brunswick, NJ 08901",
+      "url": "https://www.middlesexcountynj.gov/government/departments/department-of-community-services/office-of-aging-and-disabled-services/senior-centers"
+    },
+    "seniorCenters": {
+      "sourceUrl": "https://www.middlesexcountynj.gov/government/departments/department-of-community-services/office-of-aging-and-disabled-services/senior-centers",
+      "coverage": "ACQUIRED_PUBLIC_HTML_PARTIAL",
+      "count": 12,
+      "rows": [
+        {
+          "name": "Thomas J. Deverin Community Center",
+          "streetAddress": "100 Cooke Avenue",
+          "municipality": "Carteret",
+          "zip": "07008",
+          "phone": "732-541-3890"
+        },
+        {
+          "name": "Senior Community Center",
+          "streetAddress": "23A North Main Street",
+          "municipality": "Cranbury",
+          "zip": "08512",
+          "phone": "609-395-0900"
+        },
+        {
+          "name": "Dunellen Senior Center",
+          "streetAddress": "200 Orange Street",
+          "municipality": "Dunellen",
+          "zip": "08812",
+          "phone": "732-968-3033"
+        },
+        {
+          "name": "Senior Center/Department on Aging",
+          "streetAddress": "3 Jean Walling Civic Center Drive",
+          "municipality": "East Brunswick",
+          "zip": "08816",
+          "phone": "732-390-6896"
+        },
+        {
+          "name": "Edison Senior Center",
+          "streetAddress": "2963 Woodbridge Avenue",
+          "municipality": "Edison",
+          "zip": "08817",
+          "phone": "732-248-7345"
+        },
+        {
+          "name": "Community Center",
+          "streetAddress": "220 South 6th Avenue",
+          "municipality": "Highland Park",
+          "zip": "08904",
+          "phone": "732-819-0052"
+        },
+        {
+          "name": "Senior Center",
+          "streetAddress": "139 Stevens Avenue",
+          "municipality": "Jamesburg",
+          "zip": "08831",
+          "phone": "732-521-2920"
+        },
+        {
+          "name": "Metuchen Senior Center",
+          "streetAddress": "15 Center Street",
+          "municipality": "Metuchen",
+          "zip": "08840",
+          "phone": "732-632-8524"
+        },
+        {
+          "name": "Middlesex Recreation Center",
+          "streetAddress": "1400 Mountain Ave.",
+          "municipality": "Middlesex",
+          "zip": "08846",
+          "phone": "732-356-0414"
+        },
+        {
+          "name": "Milltown Senior Center/Office on Aging",
+          "streetAddress": "60 Violet Terrace",
+          "municipality": "Milltown",
+          "zip": "08850",
+          "phone": "732-296-0681"
+        },
+        {
+          "name": "Monroe Senior Center/Office on Aging",
+          "streetAddress": "12 Halsey Reed Road",
+          "municipality": "Monroe",
+          "zip": "08831",
+          "phone": "609-448-7140"
+        },
+        {
+          "name": "New Brunswick Senior Center/Office on Aging",
+          "streetAddress": "81 Huntington Street",
+          "municipality": "New Brunswick",
+          "zip": "08901",
+          "phone": "732-745-5100"
+        }
+      ]
+    },
+    "otherServiceCenters": [],
+    "congregateMealSites": [
+      {
+        "name": "Thomas J. Deverin Community Center",
+        "streetAddress": "100 Cooke Avenue",
+        "municipality": "Carteret",
+        "zip": "07008",
+        "phone": "732-541-6221",
+        "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+      },
+      {
+        "name": "Edison Senior Center",
+        "streetAddress": "2963 Woodbridge Avenue",
+        "municipality": "Edison",
+        "zip": "08817",
+        "phone": "732-452-0377",
+        "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+      },
+      {
+        "name": "Old Bridge Senior Center (George J. Bush Center for Human Services)",
+        "streetAddress": "1 Old Bridge Plaza",
+        "municipality": "Old Bridge",
+        "zip": "08857",
+        "phone": "732-607-1582",
+        "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+      },
+      {
+        "name": "Alexander J. Jankowski Community Center",
+        "streetAddress": "1 Olive Street",
+        "municipality": "Perth Amboy",
+        "zip": "08861",
+        "phone": "732-442-0930",
+        "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+      },
+      {
+        "name": "Piscataway Senior Center",
+        "streetAddress": "700 Buena Vista Avenue",
+        "municipality": "Piscataway",
+        "zip": "08854",
+        "phone": "732-743-9844",
+        "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+      },
+      {
+        "name": "Sayreville Senior Center",
+        "streetAddress": "423 Main Street",
+        "municipality": "Sayreville",
+        "zip": "08872",
+        "phone": "732-254-4299",
+        "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+      },
+      {
+        "name": "South Brunswick Senior Center",
+        "streetAddress": "540 Ridge Road",
+        "municipality": "Monmouth Junction / South Brunswick",
+        "zip": "08852",
+        "phone": "732-329-6171",
+        "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+      },
+      {
+        "name": "South Plainfield Senior Center",
+        "streetAddress": "90 Maple Avenue",
+        "municipality": "South Plainfield",
+        "zip": "07080",
+        "phone": "908-753-1040",
+        "hours": "Monday-Friday 8:30 am-2:30 pm except holidays"
+      }
+    ],
+    "congregateMealSitesCoverage": "COMPLETE_OFFICIAL_HTML",
+    "homeDeliveredMeals": [],
+    "seniorCentersNotExtracted": [
+      "North Brunswick",
+      "Old Bridge (listed as congregate site; confirm senior-center listing on county page)",
+      "Perth Amboy (listed as congregate site; confirm senior-center listing on county page)",
+      "Piscataway (listed as congregate site; confirm senior-center listing on county page)",
+      "Plainsboro",
+      "Sayreville (listed as congregate site; confirm senior-center listing on county page)",
+      "South Amboy",
+      "South Brunswick (listed as congregate site; confirm senior-center listing on county page)",
+      "South Plainfield (listed as congregate site; confirm senior-center listing on county page)",
+      "South River",
+      "Spotswood",
+      "Woodbridge"
+    ],
+    "housingInventory": null,
+    "nursingHomeGeocode": null,
+    "seniorGrant": null,
+    "homeImprovementProgram": null,
+    "notes": [
+      "This is a public facility/program directory, not a senior household profile.",
+      "Inclusion on the county list is not an endorsement.",
+      "The printed Resource Directory is available by calling the office; this ticket does not extract that PDF.",
+      "Official county page lists additional municipal senior centers beyond the first page of the public HTML extract. Congregate meal sites (8) are complete. Remaining municipal senior-center rows should be copied from the same official page, not from a third-party directory."
+    ]
+  },
+  "sourceFamilies": [
+    {
+      "id": "njdoh-all-ltc",
+      "label": "NJDOH All_LTC licensed identities",
+      "countySpecific": true,
+      "grain": "licensed long-term-care facility identity located in the county"
+    },
+    {
+      "id": "njdoh-all-acute",
+      "label": "NJDOH All_Acute licensed identities",
+      "countySpecific": true,
+      "grain": "licensed acute-care facility identity; office county is not a service area"
+    },
+    {
+      "id": "county-aging-resources",
+      "label": "Middlesex County ADRC / senior centers / nutrition",
+      "countySpecific": true,
+      "grain": "county resource directory site, not a licensed facility"
+    },
+    {
+      "id": "doas-pace",
+      "label": "NJ DoAS PACE center geography",
+      "countySpecific": true,
+      "grain": "PACE center address county; not a service area"
+    }
+  ],
+  "findings": [
+    {
+      "id": "njdoh-universes",
+      "text": "NJDOH All_LTC lists 81 licensed identities in Middlesex County as of 2026-08-31, including 23 SNF/NF and 16 ALR. All_Acute lists 109 identities, including 2 Home Health Agency offices, 6 Hospice Programs, 0 Hospice Branches, and 0 Hospice Inpatient identities. These universes are not combined into one senior-provider total. Office/address county is not a service area."
+    },
+    {
+      "id": "adrc-centers",
+      "text": "Middlesex County Office of Aging and Disabled Services is the ADRC (732-745-3295). Eight congregate meal sites from the official nutrition page are complete. Twelve municipal senior centers were extracted from the official HTML; additional municipalities on the same county page were not extracted in this ticket and are labeled as coverage remaining."
+    },
+    {
+      "id": "pace-operating",
+      "text": "BoldAge PACE East Brunswick is listed as OPERATING with a Middlesex County center address (East Brunswick). Center address is not a service area. Operating is not awarded."
+    }
+  ],
+  "gaps": [
+    "County CMS CCN counts are not published without an exact NJDOH join.",
+    "County exact enforcement counts are not published without FacID county assignment in this snapshot.",
+    "County staffing averages are omitted without source-native county numerators and denominators.",
+    "Medicaid listed rates are not county-assigned from name-only rows.",
+    "Home Health and Hospice office county is not a service area.",
+    "CCRC Certificate of Authority roster remains SOURCE_AVAILABLE_BY_REQUEST."
+  ],
+  "sourceClocks": {
+    "njdohLtc": "2026-08-31",
+    "njdohAcute": "2026-08-31",
+    "stateSnapshot": "2026-09-02",
+    "cmsOverlay": "2026-08-27",
+    "medicaid": "2025-07-01",
+    "staffingLatest": "2026 Q2",
+    "localResources": "2026-09-03",
+    "countyResearch": "2026-09-03"
+  },
+  "publicationGate": {
+    "indexable": true,
+    "sourceFamilyCount": 4,
+    "countySpecificLocalSource": true,
+    "findingCount": 3,
+    "deterministicSnapshot": true,
+    "thinStateCopy": false
+  },
+  "disclaimers": [
+    "SeniorTrustHub does not rank facilities and does not publish a Trust Score.",
+    "There is no Verified by New Jersey badge.",
+    "COUNTY RESOURCE is not a LICENSED FACILITY.",
+    "PLANNING HOUSING INVENTORY is not an NJDOH LICENSE.",
+    "CMS DIRECTORY is not an NJDOH identity join."
+  ],
+  "fingerprint": "13225785ddd9fffa4299232d477e410a7c42ac1a1c897e84d3f004c46f2d369c"
+}

@@ -15,4 +15,8 @@ data
 apps/web/src/data/nj-facility-inventory.json
 apps/web/src/data/nj-medicaid-rate-rows.json
 packages/domain/src/nj-public-snapshot.ts
+packages/domain/src/nj-county-public-snapshots.ts
+packages/domain/src/nj-county-public-snapshots/*.json
+apps/web/src/data/nj-county-local/*.json
 artifacts/nj-sen-005-public-snapshot.json
+artifacts/nj-sen-county-001/*.json

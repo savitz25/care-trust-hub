@@ -29,9 +29,15 @@ const CLASS_FILTERS = [
   { id: "NJ_HOSPICE_INPATIENT", label: "Hospice Inpatient" },
 ] as const;
 
-export function NjFacilityInventory() {
+export function NjFacilityInventory({
+  defaultCounty = "",
+  lockCounty = false,
+}: {
+  defaultCounty?: string;
+  lockCounty?: boolean;
+} = {}) {
   const [query, setQuery] = useState("");
-  const [county, setCounty] = useState("");
+  const [county, setCounty] = useState(defaultCounty);
   const [klass, setKlass] = useState<(typeof CLASS_FILTERS)[number]["id"]>("all");
   const [page, setPage] = useState(0);
 
@@ -67,10 +73,13 @@ export function NjFacilityInventory() {
         <p className="eyebrow">Public facility inventory</p>
         <h2 id="nj-inventory-title">Licensed identities from NJDOH workbooks</h2>
         <p>
-          {payload.rows.length.toLocaleString("en-US")} state source rows as of {payload.asOf}. This
-          is not one combined senior-provider denominator: All_LTC and All_Acute stay labeled. Rows
-          are state-only. They are not CMS profile links unless an exact CCN join exists — none are
-          activated in this snapshot.
+          {payload.rows.length.toLocaleString("en-US")} state source rows as of {payload.asOf}
+          {lockCounty && defaultCounty
+            ? `, filtered to ${defaultCounty} County physical location.`
+            : "."}{" "}
+          This is not one combined senior-provider denominator: All_LTC and All_Acute stay labeled.
+          Rows are state-only. They are not CMS profile links unless an exact CCN join exists —
+          none are activated in this snapshot.
         </p>
       </div>
       <form
@@ -90,24 +99,26 @@ export function NjFacilityInventory() {
             }}
           />
         </div>
-        <div className="field">
-          <label htmlFor="nj-inv-county">County (physical location)</label>
-          <select
-            id="nj-inv-county"
-            value={county}
-            onChange={(event) => {
-              setCounty(event.target.value);
-              setPage(0);
-            }}
-          >
-            <option value="">All 21 counties</option>
-            {counties.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </div>
+        {lockCounty ? null : (
+          <div className="field">
+            <label htmlFor="nj-inv-county">County (physical location)</label>
+            <select
+              id="nj-inv-county"
+              value={county}
+              onChange={(event) => {
+                setCounty(event.target.value);
+                setPage(0);
+              }}
+            >
+              <option value="">All 21 counties</option>
+              {counties.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <div className="field">
           <label htmlFor="nj-inv-class">Source / class</label>
           <select

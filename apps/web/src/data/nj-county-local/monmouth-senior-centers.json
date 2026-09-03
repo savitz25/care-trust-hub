@@ -1,0 +1,158 @@
+{
+  "county": "Monmouth",
+  "county_fips": "34025",
+  "source_family": "aging_resources",
+  "source_name": "Monmouth County Division on Aging, Disabilities & Veterans Services senior centers",
+  "source_url": "https://monmouthadvs.com/senior-centers/",
+  "adrc_url": "https://www.nj.gov/humanservices/doas/assistance/county-offices/",
+  "access_class": "OPEN_BULK_DOWNLOAD",
+  "acquisition_status": "ACQUIRED_PUBLIC_HTML",
+  "source_as_of": "2026-09-03",
+  "last_checked": "2026-09-03",
+  "grain": "facility / program site",
+  "identifier_fields": ["name", "municipality"],
+  "geography_fields": ["municipality", "street_address", "zip"],
+  "adrc": {
+    "agency": "Monmouth County Division of Aging, Disabilities and Veterans Services",
+    "phone": "732-431-7450",
+    "toll_free": "1-877-222-3737",
+    "email": "Monmouthadvs@monmouthcounty.us",
+    "address": "3000 Kozloski Road, Freehold, NJ 07728"
+  },
+  "home_delivered_meals": [
+    {
+      "provider": "Interfaith Neighbors",
+      "phone": "732-775-0525 x227"
+    },
+    {
+      "provider": "Jewish Family & Children's Service of Monmouth County (Kosher meals)",
+      "phone": "732-774-6886 x40"
+    }
+  ],
+  "notes": [
+    "This is a public facility/program directory, not a senior household profile.",
+    "A listed nutrition site is not a finding about any resident.",
+    "Housing resources change; the county office directs callers rather than publishing a stable housing roster."
+  ],
+  "senior_centers": [
+    {
+      "name": "Asbury Park Senior Center",
+      "street_address": "1 Municipal Plaza",
+      "municipality": "Asbury Park",
+      "zip": "07712",
+      "phone": "732-988-5252",
+      "nutrition_site": true
+    },
+    {
+      "name": "Freehold Township Senior Center",
+      "street_address": "116 Jackson Mills Road",
+      "municipality": "Freehold Township",
+      "zip": "07728",
+      "phone": "732-294-2029",
+      "nutrition_site": false
+    },
+    {
+      "name": "Howell Senior Center",
+      "street_address": "251 Preventorium Rd",
+      "municipality": "Howell",
+      "zip": "07731",
+      "phone": "732-938-4500 x2550",
+      "nutrition_site": true
+    },
+    {
+      "name": "Long Branch Senior Center",
+      "street_address": "85 Second Avenue",
+      "municipality": "Long Branch",
+      "zip": "07740",
+      "phone": "732-571-6542",
+      "nutrition_site": false
+    },
+    {
+      "name": "Marlboro Township Senior Center",
+      "street_address": "1996 Recreation Way",
+      "municipality": "Marlboro",
+      "zip": "07746",
+      "phone": "732-617-0367",
+      "nutrition_site": false
+    },
+    {
+      "name": "Neptune Senior Center",
+      "street_address": "1607 Corlies Avenue",
+      "municipality": "Neptune",
+      "zip": "07753",
+      "phone": "732-988-8855",
+      "nutrition_site": true
+    },
+    {
+      "name": "Atlantic Highlands Senior Citizen Center",
+      "street_address": "3 Simon Lake Drive",
+      "municipality": "Atlantic Highlands",
+      "zip": "07716",
+      "phone": "732-291-5635",
+      "nutrition_site": false
+    },
+    {
+      "name": "Hazlet Senior Center (James J. Cullen Center)",
+      "street_address": "1776 Union Avenue",
+      "municipality": "Hazlet",
+      "zip": "07730",
+      "phone": "732-217-8683",
+      "nutrition_site": true
+    },
+    {
+      "name": "Keyport Senior Center",
+      "street_address": "110 Second Street",
+      "municipality": "Keyport",
+      "zip": "07735",
+      "phone": "732-264-4916",
+      "nutrition_site": false
+    },
+    {
+      "name": "Manalapan Senior Center",
+      "street_address": "211 Freehold Road",
+      "municipality": "Manalapan",
+      "zip": "07726",
+      "phone": "732-446-8401",
+      "nutrition_site": false
+    },
+    {
+      "name": "Middletown Senior Center (Croydon Hall)",
+      "street_address": "900 Leonardville Road",
+      "municipality": "Leonardo / Middletown",
+      "zip": "07737",
+      "phone": "732-615-2265",
+      "nutrition_site": true
+    },
+    {
+      "name": "Red Bank Senior Center",
+      "street_address": "80 Shrewsbury Avenue",
+      "municipality": "Red Bank",
+      "zip": "07701",
+      "phone": "732-747-5204",
+      "nutrition_site": true
+    }
+  ],
+  "other_service_centers": [
+    {
+      "name": "Eatontown Human Services/Senior Center",
+      "street_address": "68 Broad Street",
+      "municipality": "Eatontown",
+      "zip": "07724",
+      "phone": "732-389-7666"
+    },
+    {
+      "name": "Marlboro Kosher Site",
+      "street_address": "103 School Road West",
+      "municipality": "Marlboro",
+      "zip": "07746",
+      "phone": "732-536-2307"
+    },
+    {
+      "name": "Highlands Community Center",
+      "street_address": "22 Snug Harbor Avenue",
+      "municipality": "Highlands",
+      "zip": "07732",
+      "phone": "732-872-1959"
+    }
+  ]
+}

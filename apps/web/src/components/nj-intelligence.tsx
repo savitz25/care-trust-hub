@@ -19,6 +19,13 @@ function Stat({ label, value, note }: { label: string; value: string; note?: str
   );
 }
 
+const COUNTY_RESEARCH_PAGES: Record<string, string> = {
+  Monmouth: "/new-jersey/monmouth-county",
+  Middlesex: "/new-jersey/middlesex-county",
+  Somerset: "/new-jersey/somerset-county",
+  Union: "/new-jersey/union-county",
+};
+
 function Trace({ metric }: { metric: NjTraceMetric }) {
   return (
     <details className="intel-disclose">
@@ -168,10 +175,11 @@ export function NjIntelligenceView({ intel }: { intel: NjPublicSnapshot }) {
       <section aria-labelledby="nj-county-title">
         <div className="section-heading">
           <p className="eyebrow">County intelligence</p>
-          <h2 id="nj-county-title">Physical location by county, not a county product</h2>
+          <h2 id="nj-county-title">Physical location by county</h2>
           <p>
             These are licensed-identity locations in the current workbooks. They are not service
-            areas, market rankings, or county pages.
+            areas or market rankings. Four New Jersey county research pages are published for the
+            pilot; other counties remain location counts, not county products.
           </p>
         </div>
         <div className="hub-table-scroll">
@@ -195,7 +203,15 @@ export function NjIntelligenceView({ intel }: { intel: NjPublicSnapshot }) {
             <tbody>
               {intel.counties.map((row) => (
                 <tr key={row.county}>
-                  <th scope="row">{row.county}</th>
+                  <th scope="row">
+                    {COUNTY_RESEARCH_PAGES[row.county] ? (
+                      <Link className="text-link" href={COUNTY_RESEARCH_PAGES[row.county]}>
+                        {row.county} County
+                      </Link>
+                    ) : (
+                      row.county
+                    )}
+                  </th>
                   <td>{formatHubCount(row.ltc)}</td>
                   <td>{formatHubCount(row.nfSnf)}</td>
                   <td>{formatHubCount(row.alr)}</td>

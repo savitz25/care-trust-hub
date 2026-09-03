@@ -43,6 +43,10 @@ const corePaths = [
   "/hospice",
   "/florida",
   "/new-jersey",
+  "/new-jersey/monmouth-county",
+  "/new-jersey/middlesex-county",
+  "/new-jersey/somerset-county",
+  "/new-jersey/union-county",
 ];
 const response = (xml: string) =>
   new Response(xml, {

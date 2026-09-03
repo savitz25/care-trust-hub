@@ -1,0 +1,89 @@
+{
+  "retrieved_at": "2026-09-03T18:00:00.000Z",
+  "county": "Union",
+  "county_fips": "34039",
+  "programs": [
+    {
+      "program_id": "union-home-improvement-program",
+      "program_name": "Union County Home Improvement Program",
+      "source_url": "https://ucnj.org/department-of-economic-development/home-improvement-and-senior-home-improvement-grant-programs/",
+      "source_as_of": "2026-01-14",
+      "funding": "Community Development Block Grant (CDBG)",
+      "administrator": "Development Directions LLC",
+      "administrator_contact": {
+        "phone": "732-382-8100",
+        "email": "Christina@developmentdirectionsllc.com",
+        "address": "1600 St. Georges Ave., Suite 314, Rahway, NJ 07065"
+      },
+      "benefit_type": "Deferred payment loan (non-interest; repayment deferred until sale or transfer)",
+      "benefit_amount_published": "up to $24,999",
+      "benefit_amount_effective_date": "as published on county page dated 2026-01-14; HUD income limits change annually and are not restated here as current",
+      "eligible_property": "Owner-occupied 1- and 2-family homes",
+      "income_rule": "Homeowners below 80% of Median Area Income (HUD publishes limits annually)",
+      "eligible_improvements": [
+        "repair or replacement of substandard heating, electrical and plumbing systems",
+        "structural repairs",
+        "repairs to correct code violations",
+        "lead based paint remediation and stabilization",
+        "energy saving measures such as insulation, new windows and storm doors",
+        "improvements that upgrade the home to standard condition"
+      ],
+      "participating_municipalities": [
+        "Berkeley Heights",
+        "Clark",
+        "Cranford",
+        "Fanwood",
+        "Garwood",
+        "Hillside",
+        "Kenilworth",
+        "Mountainside",
+        "New Providence",
+        "Roselle",
+        "Roselle Park",
+        "Scotch Plains",
+        "Springfield",
+        "Summit",
+        "Westfield"
+      ],
+      "municipalities_with_independent_rehab": ["Elizabeth", "Linden", "Plainfield", "Rahway", "Union"],
+      "contractor_role": "County seeks contractors to bid on work for participating homeowners. Application is sent to Development Directions LLC. This is program vendor intake, not a Union County contractor license.",
+      "preferred_entity_class": "UNION_COUNTY_HOME_IMPROVEMENT_PROGRAM_PARTICIPANT",
+      "not_a_county_license": true,
+      "participant_list_public": false
+    },
+    {
+      "program_id": "union-senior-home-improvement-grant",
+      "program_name": "Senior Home Improvement Grant",
+      "source_url": "https://ucnj.org/department-of-economic-development/home-improvement-and-senior-home-improvement-grant-programs/",
+      "source_as_of": "2026-01-14",
+      "benefit_type": "Grant (does not have to be repaid)",
+      "benefit_amount_published": "capped at $10,000",
+      "benefit_amount_effective_date": "as published on county page dated 2026-01-14",
+      "age_rule": "eligible Union County residents ages 62 and over, subject to the same income/property guidelines as the Home Improvement Program",
+      "coverage": "same participating-municipality list as the Home Improvement Program",
+      "not_a_county_license": true
+    }
+  ],
+  "consumer_affairs": {
+    "office": "Union County Office of Consumer Affairs",
+    "url": "https://ucnj.org/public-safety/office-of-consumer-affairs/",
+    "phone": "908-654-9840",
+    "address": "300 North Avenue East, Westfield, NJ 07090",
+    "authority_note": "Acts under the New Jersey Consumer Fraud Act (N.J.S.A. 56:8-1 et seq.) against businesses located in Union County. Investigators will check whether complaints are on file against a retailer.",
+    "public_bulk_history": false,
+    "complaint_ne_violation": true
+  },
+  "adrc": {
+    "office": "Union County Division on Aging / ADRC",
+    "url": "https://ucnj.org/dhs/aging/",
+    "phone": "908-527-4870",
+    "toll_free": "888-280-8226",
+    "adrc_toll_free": "877-222-3737",
+    "resource_directory_pdf": "https://ucnj.org/dhs/wp-content/uploads/sites/21/2026/05/Resource-Directory_5.2026-1.pdf",
+    "resource_directory_as_of": "2026-05",
+    "information_packet_pdf": "https://ucnj.org/dhs/wp-content/uploads/sites/21/2026/03/Information-Packet_3.2026.pdf",
+    "information_packet_as_of": "2026-03",
+    "grain": "COUNTY_AAA_PROGRAM_DIRECTORY",
+    "not_a_facility_license": true
+  }
+}

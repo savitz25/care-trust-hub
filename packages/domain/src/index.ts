@@ -46,3 +46,4 @@ export * from "./florida-county";
 export * from "./florida-intelligence";
 export * from "./florida-provider-profile";
 export * from "./nj-intelligence";
+export * from "./nj-county-intelligence";

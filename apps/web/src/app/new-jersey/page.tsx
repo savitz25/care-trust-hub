@@ -62,8 +62,9 @@ export default function NewJerseyPage() {
           <h1 id="new-jersey-title">New Jersey Senior Care Research</h1>
           <p className="home-hero__lede">
             Official NJDOH licensing, staffing, and enforcement evidence with Medicaid listed rates,
-            PACE geography, and national CMS class context. {brand.publicName} does not rank
-            facilities and does not publish a Trust Score.
+            PACE geography, and national CMS class context. County research pages are published for
+            Monmouth, Middlesex, Somerset, and Union. {brand.publicName} does not rank facilities
+            and does not publish a Trust Score.
           </p>
         </section>
         <NjIntelligenceView intel={intel} />
