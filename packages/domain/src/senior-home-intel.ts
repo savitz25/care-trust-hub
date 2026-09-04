@@ -9,6 +9,7 @@ import {
 import { NJ_LOCKED, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import { CA_LOCKED, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { TX_LOCKED, TX_PUBLIC_PATH } from "./tx-intelligence";
+import { WA_LOCKED, WA_PUBLIC_PATH } from "./wa-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -92,6 +93,7 @@ export interface HomeGeoRow {
     | "new_jersey_state_intelligence"
     | "california_state_intelligence"
     | "texas_state_intelligence"
+    | "washington_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -172,6 +174,15 @@ export interface SeniorHomeIntel {
     hhscHcssa: number;
     note: string;
   };
+  washingtonPreview: {
+    href: string;
+    afh: number;
+    alf: number;
+    cmsNursingHomes: number;
+    cmsHomeHealth: number;
+    cmsHospice: number;
+    note: string;
+  };
   askMarket: HomeAskItem[];
   sources: HubSourceRow[];
   limitations: string[];
@@ -248,6 +259,12 @@ export function buildSeniorHomeIntel(input: {
   };
   const txGeo = national.geography.find((row) => row.state === "TX") ?? {
     state: "TX",
+    nursingHomes: 0,
+    homeHealth: 0,
+    hospice: 0,
+  };
+  const waGeo = national.geography.find((row) => row.state === "WA") ?? {
+    state: "WA",
     nursingHomes: 0,
     homeHealth: 0,
     hospice: 0,
@@ -695,7 +712,7 @@ export function buildSeniorHomeIntel(input: {
       method: "Florida state-license universe on /florida. Not a national licensing denominator.",
       limitations: [
         "State licensing is not a CMS national class.",
-        "Most states have no SeniorTrustHub state-intelligence page yet. Florida, New Jersey, California, and Texas currently do.",
+        "Most states have no SeniorTrustHub state-intelligence page yet. Florida, New Jersey, California, Texas, and Washington currently do.",
       ],
     },
     {
@@ -760,7 +777,9 @@ export function buildSeniorHomeIntel(input: {
             ? "california_state_intelligence"
             : row.state === "TX"
               ? "texas_state_intelligence"
-              : "cms_directory_only",
+              : row.state === "WA"
+                ? "washington_state_intelligence"
+                : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -770,7 +789,9 @@ export function buildSeniorHomeIntel(input: {
             ? CA_PUBLIC_PATH
             : row.state === "TX"
               ? TX_PUBLIC_PATH
-              : null,
+              : row.state === "WA"
+                ? WA_PUBLIC_PATH
+                : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 
@@ -801,7 +822,7 @@ export function buildSeniorHomeIntel(input: {
     findings,
     coverage,
     gaps: [
-      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, California, and Texas currently have state intelligence pages.",
+      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, California, Texas, and Washington currently have state intelligence pages.",
       "CMS stars, staffing, inspections, and penalties are not interchangeable across Nursing Home, Home Health, and Hospice.",
       `${national.ownership.unknownEdges.toLocaleString("en-US")} ownership edges are UNKNOWN. UNKNOWN is not historical ownership.`,
       "Home Health and Hospice have no CMS CHOW event file in this research graph.",
@@ -852,6 +873,15 @@ export function buildSeniorHomeIntel(input: {
       hhscAlf: TX_LOCKED.hhscAlf,
       hhscHcssa: TX_LOCKED.hhscHcssa,
       note: "Texas state intelligence keeps CMS class overlays, HHSC NF/ALF/HCSSA directories, and TULIP verification as separate datasets. They are not one senior-provider total. ALF is not SNF. HCSSA is not CMS Home Health.",
+    },
+    washingtonPreview: {
+      href: WA_PUBLIC_PATH,
+      afh: WA_LOCKED.afh,
+      alf: WA_LOCKED.alf,
+      cmsNursingHomes: waGeo.nursingHomes,
+      cmsHomeHealth: waGeo.homeHealth,
+      cmsHospice: waGeo.hospice,
+      note: "Washington state intelligence keeps DSHS Adult Family Homes, Assisted Living, Enhanced Services, and CMS class overlays as separate datasets. They are not one senior-provider total. AFH is not ALF. DSHS is not CMS.",
     },
     askMarket: [
       {
@@ -916,7 +946,7 @@ export function buildSeniorHomeIntel(input: {
       "Inspection findings describe conditions at points in time.",
       "Ownership can change, and UNKNOWN is not a former owner.",
       "Nursing Home, Home Health, and Hospice evidence is not directly comparable.",
-      "State evidence availability differs. Florida, New Jersey, California, and Texas are not a national template yet.",
+      "State evidence availability differs. Florida, New Jersey, California, Texas, and Washington are not a national template yet.",
       "Source publication schedules differ. This page is not live data.",
     ],
   };
