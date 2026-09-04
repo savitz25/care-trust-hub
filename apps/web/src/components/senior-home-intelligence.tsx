@@ -442,13 +442,32 @@ export function SeniorHomeIntelligence({
             Explore California Intelligence →
           </Link>
         </article>
+        <article className="intel-florida">
+          <p className="eyebrow">Texas preview</p>
+          <h3>{STATE_NAMES.TX} intelligence</h3>
+          <p>{intel.texasPreview.note}</p>
+          <ul className="hub-plain-list">
+            <li>
+              CMS Nursing Homes / Home Health / Hospice:{" "}
+              {intel.texasPreview.cmsNursingHomes.toLocaleString("en-US")} /{" "}
+              {intel.texasPreview.cmsHomeHealth.toLocaleString("en-US")} /{" "}
+              {intel.texasPreview.cmsHospice.toLocaleString("en-US")}
+            </li>
+            <li>HHSC nursing facilities: {intel.texasPreview.hhscNf.toLocaleString("en-US")}</li>
+            <li>HHSC assisted living: {intel.texasPreview.hhscAlf.toLocaleString("en-US")}</li>
+            <li>HHSC HCSSA rows: {intel.texasPreview.hhscHcssa.toLocaleString("en-US")}</li>
+          </ul>
+          <Link className="button button--secondary" href={intel.texasPreview.href}>
+            Explore Texas Intelligence →
+          </Link>
+        </article>
         <details className="intel-disclose">
           <summary>Accessible state list</summary>
           <div className="hub-table-scroll">
             <table className="hub-table">
               <caption>
-                Current CMS directory counts by jurisdiction. Florida, New Jersey, and California
-                link to state intelligence; other jurisdictions open Nursing Home search.
+                Current CMS directory counts by jurisdiction. Florida, New Jersey, California, and
+                Texas link to state intelligence; other jurisdictions open Nursing Home search.
               </caption>
               <thead>
                 <tr>
