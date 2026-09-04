@@ -71,9 +71,13 @@ describe("senior-home-intel-v1", () => {
     expect(intel.geography.some((row) => row.intelligenceHref === "/florida")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/new-jersey")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/california")).toBe(true);
+    expect(intel.geography.some((row) => row.intelligenceHref === "/texas")).toBe(true);
     expect(
       intel.geography
-        .filter((row) => row.state !== "FL" && row.state !== "NJ" && row.state !== "CA")
+        .filter(
+          (row) =>
+            row.state !== "FL" && row.state !== "NJ" && row.state !== "CA" && row.state !== "TX",
+        )
         .every((row) => row.intelligenceHref === null),
     ).toBe(true);
     expect(intel.newJerseyPreview.href).toBe("/new-jersey");
@@ -81,5 +85,10 @@ describe("senior-home-intel-v1", () => {
     expect(intel.californiaPreview.href).toBe("/california");
     expect(intel.californiaPreview.elmsRows).toBe(15097);
     expect(intel.californiaPreview.rcfeLicensed).toBe(7939);
+    expect(intel.texasPreview.href).toBe("/texas");
+    expect(intel.texasPreview.cmsNursingHomes).toBe(1177);
+    expect(intel.texasPreview.hhscNf).toBe(1175);
+    expect(intel.texasPreview.hhscAlf).toBe(2000);
+    expect(intel.texasPreview.hhscHcssa).toBe(8799);
   });
 });

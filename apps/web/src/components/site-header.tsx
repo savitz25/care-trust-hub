@@ -12,6 +12,7 @@ const PRIMARY_NAV = [
   { href: "/florida", label: "Florida" },
   { href: "/new-jersey", label: "New Jersey" },
   { href: "/california", label: "California" },
+  { href: "/texas", label: "Texas" },
   { href: "/compare", label: "Compare" },
 ] as const;
 
@@ -21,6 +22,7 @@ const DRAWER_NAV = [
   { href: "/florida", label: "Florida" },
   { href: "/new-jersey", label: "New Jersey" },
   { href: "/california", label: "California" },
+  { href: "/texas", label: "Texas" },
   { href: "/compare", label: "Compare" },
   { href: "/assisted-living", label: "Assisted living" },
   { href: "/research", label: "Research" },

@@ -8,6 +8,7 @@ import {
 } from "./senior-hub-intelligence";
 import { NJ_LOCKED, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import { CA_LOCKED, CA_PUBLIC_PATH } from "./ca-intelligence";
+import { TX_LOCKED, TX_PUBLIC_PATH } from "./tx-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -90,6 +91,7 @@ export interface HomeGeoRow {
     | "florida_state_intelligence"
     | "new_jersey_state_intelligence"
     | "california_state_intelligence"
+    | "texas_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -158,6 +160,16 @@ export interface SeniorHomeIntel {
     cmsNursingHomes: number;
     cmsHomeHealth: number;
     cmsHospice: number;
+    note: string;
+  };
+  texasPreview: {
+    href: string;
+    cmsNursingHomes: number;
+    cmsHomeHealth: number;
+    cmsHospice: number;
+    hhscNf: number;
+    hhscAlf: number;
+    hhscHcssa: number;
     note: string;
   };
   askMarket: HomeAskItem[];
@@ -230,6 +242,12 @@ export function buildSeniorHomeIntel(input: {
   };
   const caGeo = national.geography.find((row) => row.state === "CA") ?? {
     state: "CA",
+    nursingHomes: 0,
+    homeHealth: 0,
+    hospice: 0,
+  };
+  const txGeo = national.geography.find((row) => row.state === "TX") ?? {
+    state: "TX",
     nursingHomes: 0,
     homeHealth: 0,
     hospice: 0,
@@ -677,7 +695,7 @@ export function buildSeniorHomeIntel(input: {
       method: "Florida state-license universe on /florida. Not a national licensing denominator.",
       limitations: [
         "State licensing is not a CMS national class.",
-        "Most states have no SeniorTrustHub state-intelligence page yet. Florida, New Jersey, and California currently do.",
+        "Most states have no SeniorTrustHub state-intelligence page yet. Florida, New Jersey, California, and Texas currently do.",
       ],
     },
     {
@@ -709,6 +727,21 @@ export function buildSeniorHomeIntel(input: {
         "The CCLD listing clock is 2025-05-25.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Texas HHSC / TULIP (state enrichment)",
+      numerator: TX_LOCKED.hhscNf,
+      denominator: null,
+      display: `${TX_LOCKED.hhscNf.toLocaleString("en-US")} HHSC NF rows; ${TX_LOCKED.hhscAlf.toLocaleString("en-US")} ALF rows; ${TX_LOCKED.hhscHcssa.toLocaleString("en-US")} HCSSA rows (not a combined total). TULIP is search-only.`,
+      status: "partial",
+      method:
+        "Texas state-license directories on /texas. NF, ALF, and HCSSA stay separate. TULIP is verification, not a bulk roster.",
+      limitations: [
+        "Do not add NF, ALF, and HCSSA into one senior-provider denominator.",
+        "ALF is not SNF. HCSSA Personal Assistance is not Home Health.",
+        "TULIP search result is not a complete bulk universe.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -725,7 +758,9 @@ export function buildSeniorHomeIntel(input: {
           ? "new_jersey_state_intelligence"
           : row.state === "CA"
             ? "california_state_intelligence"
-            : "cms_directory_only",
+            : row.state === "TX"
+              ? "texas_state_intelligence"
+              : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -733,7 +768,9 @@ export function buildSeniorHomeIntel(input: {
           ? NJ_PUBLIC_PATH
           : row.state === "CA"
             ? CA_PUBLIC_PATH
-            : null,
+            : row.state === "TX"
+              ? TX_PUBLIC_PATH
+              : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 
@@ -764,7 +801,7 @@ export function buildSeniorHomeIntel(input: {
     findings,
     coverage,
     gaps: [
-      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, and California currently have state intelligence pages.",
+      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, California, and Texas currently have state intelligence pages.",
       "CMS stars, staffing, inspections, and penalties are not interchangeable across Nursing Home, Home Health, and Hospice.",
       `${national.ownership.unknownEdges.toLocaleString("en-US")} ownership edges are UNKNOWN. UNKNOWN is not historical ownership.`,
       "Home Health and Hospice have no CMS CHOW event file in this research graph.",
@@ -805,6 +842,16 @@ export function buildSeniorHomeIntel(input: {
       cmsHomeHealth: caGeo.homeHealth,
       cmsHospice: caGeo.hospice,
       note: "California state intelligence keeps CDPH ELMS, CCLD RCFE, HCAI, Home Care Organizations, and CMS class overlays as separate datasets. They are not one senior-provider total. RCFE is not SNF.",
+    },
+    texasPreview: {
+      href: TX_PUBLIC_PATH,
+      cmsNursingHomes: txGeo.nursingHomes,
+      cmsHomeHealth: txGeo.homeHealth,
+      cmsHospice: txGeo.hospice,
+      hhscNf: TX_LOCKED.hhscNf,
+      hhscAlf: TX_LOCKED.hhscAlf,
+      hhscHcssa: TX_LOCKED.hhscHcssa,
+      note: "Texas state intelligence keeps CMS class overlays, HHSC NF/ALF/HCSSA directories, and TULIP verification as separate datasets. They are not one senior-provider total. ALF is not SNF. HCSSA is not CMS Home Health.",
     },
     askMarket: [
       {
@@ -849,7 +896,7 @@ export function buildSeniorHomeIntel(input: {
       {
         id: "florida-differs",
         question: "How does Florida’s research coverage differ?",
-        answer: `Florida currently has a state intelligence page with ${input.floridaIdentities.toLocaleString("en-US")} AHCA identities and ${input.floridaRegulatoryObservations.toLocaleString("en-US")} regulatory observations, plus CMS class counts. New Jersey has a separate NJDOH state intelligence page. Other states on this homepage are CMS directory counts only.`,
+        answer: `Florida currently has a state intelligence page with ${input.floridaIdentities.toLocaleString("en-US")} AHCA identities and ${input.floridaRegulatoryObservations.toLocaleString("en-US")} regulatory observations, plus CMS class counts. New Jersey, California, and Texas have separate state intelligence pages. Other states on this homepage are CMS directory counts only.`,
         href: "/florida",
         hrefLabel: "Open Florida intelligence",
       },
@@ -869,7 +916,7 @@ export function buildSeniorHomeIntel(input: {
       "Inspection findings describe conditions at points in time.",
       "Ownership can change, and UNKNOWN is not a former owner.",
       "Nursing Home, Home Health, and Hospice evidence is not directly comparable.",
-      "State evidence availability differs. Florida and New Jersey are not a national template yet.",
+      "State evidence availability differs. Florida, New Jersey, California, and Texas are not a national template yet.",
       "Source publication schedules differ. This page is not live data.",
     ],
   };
