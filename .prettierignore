@@ -20,6 +20,8 @@ packages/domain/src/nj-county-public-snapshots/*.json
 packages/domain/src/ca-public-snapshot.ts
 packages/domain/src/tx-public-snapshot.ts
 artifacts/tx-sen-001-public-snapshot.json
+packages/domain/src/wa-public-snapshot.ts
+artifacts/wa-sen-001-public-snapshot.json
 apps/web/src/data/nj-county-local/*.json
 artifacts/nj-sen-005-public-snapshot.json
 artifacts/nj-sen-county-001/*.json

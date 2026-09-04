@@ -461,13 +461,32 @@ export function SeniorHomeIntelligence({
             Explore Texas Intelligence →
           </Link>
         </article>
+        <article className="intel-florida">
+          <p className="eyebrow">Washington preview</p>
+          <h3>{STATE_NAMES.WA} intelligence</h3>
+          <p>{intel.washingtonPreview.note}</p>
+          <ul className="hub-plain-list">
+            <li>DSHS Adult Family Homes: {intel.washingtonPreview.afh.toLocaleString("en-US")}</li>
+            <li>DSHS Assisted Living Facilities: {intel.washingtonPreview.alf.toLocaleString("en-US")}</li>
+            <li>
+              CMS Nursing Homes / Home Health / Hospice:{" "}
+              {intel.washingtonPreview.cmsNursingHomes.toLocaleString("en-US")} /{" "}
+              {intel.washingtonPreview.cmsHomeHealth.toLocaleString("en-US")} /{" "}
+              {intel.washingtonPreview.cmsHospice.toLocaleString("en-US")}
+            </li>
+          </ul>
+          <Link className="button button--secondary" href={intel.washingtonPreview.href}>
+            Explore Washington Intelligence →
+          </Link>
+        </article>
         <details className="intel-disclose">
           <summary>Accessible state list</summary>
           <div className="hub-table-scroll">
             <table className="hub-table">
               <caption>
-                Current CMS directory counts by jurisdiction. Florida, New Jersey, California, and
-                Texas link to state intelligence; other jurisdictions open Nursing Home search.
+                Current CMS directory counts by jurisdiction. Florida, New Jersey, California,
+                Texas, and Washington link to state intelligence; other jurisdictions open Nursing
+                Home search.
               </caption>
               <thead>
                 <tr>

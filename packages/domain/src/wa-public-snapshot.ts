@@ -1,0 +1,1739 @@
+/** Generated from artifacts/wa-sen-001-public-snapshot.json. Do not edit by hand. */
+export const WA_PUBLIC_SNAPSHOT = {
+  "version": "senior-wa-state-intel-v1",
+  "asOf": "2026-09-04",
+  "retrievedAt": "2026-09-04T16:38:57Z",
+  "ticket": "WA-SEN-001",
+  "regulatorMap": {
+    "agency": "Washington State Department of Social and Health Services",
+    "administration": "Home and Community Living Administration (HCLA) / Residential Care Services (RCS)",
+    "officialHub": "https://www.dshs.wa.gov/altsa/residential-care-services",
+    "verifyAfh": "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHAdvLookup.aspx",
+    "verifyAlf": "https://fortress.wa.gov/dshs/adsaapps/lookup/BHPubLookup.aspx",
+    "verifyNh": "https://fortress.wa.gov/dshs/adsaapps/lookup/NHPubLookup.aspx",
+    "scrape": "FORBIDDEN",
+    "classes": [
+      {
+        "code": "AF",
+        "officialName": "Adult Family Home",
+        "publication_class": "CORE_SENIOR",
+        "directory": "PUBLIC_CORE",
+        "profile_publication": "STATE_DIRECTORY_ONLY",
+        "cmsAnalog": null,
+        "count": 6179,
+        "note": "RCW 70.128 residential home for 2\u20138 adults. CORE senior-care class. AFH != ALF != Nursing Home."
+      },
+      {
+        "code": "BH",
+        "officialName": "Assisted Living Facility",
+        "publication_class": "CORE_SENIOR",
+        "directory": "PUBLIC_CORE",
+        "profile_publication": "STATE_DIRECTORY_ONLY",
+        "cmsAnalog": null,
+        "count": 557,
+        "note": "Community assisted living (source code BH). ALF != SNF. ALF != CMS Nursing Home. Do not infer CMS from this class."
+      },
+      {
+        "code": "EF",
+        "officialName": "Enhanced Services Facility",
+        "publication_class": "CORE_SENIOR",
+        "directory": "PUBLIC_CORE",
+        "profile_publication": "STATE_DIRECTORY_ONLY",
+        "cmsAnalog": null,
+        "count": 16,
+        "note": "Distinct DSHS residential class for people with behavioral support needs. Not merged into ALF."
+      },
+      {
+        "code": "SL",
+        "officialName": "Certified Residential Service and Supports Provider",
+        "publication_class": "ADJACENT_RELEVANT",
+        "directory": "INTERNAL_ONLY",
+        "profile_publication": "MARKET_INTELLIGENCE_ONLY",
+        "cmsAnalog": null,
+        "count": 187,
+        "note": "Supported living / certified RSS. Adjacent DDA/residential supports, not a consumer AFH/ALF/NH universe. Counted because it is in the same GIS layer; not published as senior-care core."
+      },
+      {
+        "code": "GT",
+        "officialName": "Group Training Home",
+        "publication_class": "OTHER / NOT_PUBLIC",
+        "directory": "INTERNAL_ONLY",
+        "profile_publication": "MARKET_INTELLIGENCE_ONLY",
+        "cmsAnalog": null,
+        "count": 29,
+        "note": "Group training homes are not a consumer senior-care product class. Excluded from public core tiles."
+      }
+    ],
+    "nursingHomes": {
+      "regulator": "DSHS RCS licenses nursing homes; CMS certifies Medicare/Medicaid SNFs",
+      "stateBulk": {
+        "rest": "https://services2.arcgis.com/WW3T8U6q5EkZ9U3n/arcgis/rest/services/Long_Term_Care_Nursing_Homes_view/FeatureServer/1",
+        "layer_id": 1,
+        "layer_name": "Long Term Care Nursing Homes",
+        "current_rule": "GDLArchiveDate IS NULL",
+        "current_count": 198,
+        "all_count": 1455,
+        "harvested_rows": 198,
+        "license_field": "nf_license_num",
+        "unique_license": 198,
+        "fields": [
+          "OBJECTID",
+          "nf_location_num",
+          "nf_loc_region_cde",
+          "nf_loc_street_address",
+          "nf_loc_city",
+          "nf_loc_zip_cde",
+          "nf_loc_phone_num",
+          "nf_loc_fax_num",
+          "nf_mailing_address",
+          "nf_mailing_city",
+          "nf_mailing_state",
+          "nf_mailing_zip_cde",
+          "nf_Loc_Type",
+          "nf_state_vendor_num",
+          "nf_license_num",
+          "nf_fed_provider_num",
+          "nf_name",
+          "nf_staff_last_name",
+          "nf_staff_first_name",
+          "nf_staff_mid_name",
+          "NF_County_Name",
+          "nf_licensee_name",
+          "nf_ownership_type_desc",
+          "nf_bed_type_cde",
+          "nf_SSPS",
+          "RCSUnit",
+          "TOTAL_Beds_nf_bed_count",
+          "XVIII_Beds_nf_bed_count",
+          "XIX_Beds_nf_bed_count",
+          "T1819_Beds_nf_bed_count",
+          "Has_reports",
+          "Reports_Location",
+          "acAddressKey",
+          "acAddressKeyUnit",
+          "acAddress1",
+          "acAddress2",
+          "acCity",
+          "acState",
+          "acZip",
+          "acPlus4",
+          "gcWAMASId",
+          "gcLocatorName",
+          "gcGrade",
+          "GDLPublishDate",
+          "GDLArchiveDate",
+          "Latitude",
+          "Longitude",
+          "SCO_Latitude",
+          "SCO_Longitude"
+        ],
+        "sample_keys": [
+          "GDLArchiveDate",
+          "GDLPublishDate",
+          "Has_reports",
+          "Latitude",
+          "Longitude",
+          "NF_County_Name",
+          "OBJECTID",
+          "RCSUnit",
+          "Reports_Location",
+          "SCO_Latitude",
+          "SCO_Longitude",
+          "T1819_Beds_nf_bed_count",
+          "TOTAL_Beds_nf_bed_count",
+          "XIX_Beds_nf_bed_count",
+          "XVIII_Beds_nf_bed_count",
+          "acAddress1",
+          "acAddress2",
+          "acAddressKey",
+          "acAddressKeyUnit",
+          "acCity",
+          "acPlus4",
+          "acState",
+          "acZip",
+          "gcGrade",
+          "gcLocatorName",
+          "gcWAMASId",
+          "nf_Loc_Type",
+          "nf_SSPS",
+          "nf_bed_type_cde",
+          "nf_fed_provider_num",
+          "nf_license_num",
+          "nf_licensee_name",
+          "nf_loc_city",
+          "nf_loc_fax_num",
+          "nf_loc_phone_num",
+          "nf_loc_region_cde",
+          "nf_loc_street_address",
+          "nf_loc_zip_cde",
+          "nf_location_num",
+          "nf_mailing_address",
+          "nf_mailing_city",
+          "nf_mailing_state",
+          "nf_mailing_zip_cde",
+          "nf_name",
+          "nf_ownership_type_desc",
+          "nf_staff_first_name",
+          "nf_staff_last_name",
+          "nf_staff_mid_name",
+          "nf_state_vendor_num"
+        ],
+        "has_ccn": true,
+        "ccn_field": "nf_fed_provider_num",
+        "unique_ccn": 196,
+        "loc_type": {
+          "NF": 195,
+          "IM": 3
+        },
+        "phone_field": "nf_loc_phone_num",
+        "phone_nonempty": 197,
+        "address_field": "nf_loc_street_address",
+        "address_nonempty": 198,
+        "person_fields_unpublished": [
+          "nf_staff_last_name",
+          "nf_staff_first_name",
+          "nf_staff_mid_name"
+        ],
+        "access": "OPEN_GIS_FEATURE_SERVICE",
+        "note": "nf_fed_provider_num is treated as a federal provider number / CCN candidate. Staff name fields are unpublished. Licensee name is facility-level only, not a person dossier."
+      },
+      "cmsAnalog": "CMS Nursing Home / SNF",
+      "note": "DSHS != CMS. State license != CMS certification."
+    }
+  },
+  "dshsGis": {
+    "source_name": "Long Term Care \u2014 Residential Care (DSHS Geospatial Data Library)",
+    "source_url": "https://services2.arcgis.com/WW3T8U6q5EkZ9U3n/arcgis/rest/services/Long_Term_Care_Residential_Care_view/FeatureServer/1",
+    "source_agency": "Washington State Department of Social and Health Services",
+    "current_rule": "GDLArchiveDate IS NULL",
+    "current_rule_meaning": "GDLArchiveDate IS NULL selects records still current in the nightly HCLA extract. This is a current GIS record rule, not a proof of license in good standing.",
+    "grain": "one geocoded location row per current (or archived) licensed/certified setting",
+    "identity": [
+      "LicenseNumber",
+      "FacInstanceId"
+    ],
+    "preferred_identity": "WA-DSHS:{LicenseNumber}",
+    "secondary_identity": "FacInstanceId",
+    "layer_meta": {
+      "name": "Long Term Care Residential Care",
+      "maxRecordCount": 2000,
+      "editingInfo": {
+        "lastEditDate": 1788498054883,
+        "schemaLastEditDate": 1776799756677,
+        "dataLastEditDate": 1788498054883
+      },
+      "count_all_including_archive": 134442,
+      "count_current_query": 6968
+    },
+    "profile": {
+      "rows": 6968,
+      "unique_license": 6967,
+      "unique_fac_instance": 6967,
+      "types": {
+        "AF": 6179,
+        "BH": 557,
+        "SL": 187,
+        "GT": 29,
+        "EF": 16
+      },
+      "status": {
+        "OP": 6968
+      },
+      "phone_nonempty": 6900,
+      "address_nonempty": 6968,
+      "email_nonempty": 0,
+      "website_nonempty": 0,
+      "licensed_bed_nonempty": 6750,
+      "counties_nonempty": 6968,
+      "distinct_counties": 37,
+      "by_type": {
+        "SL": {
+          "rows": 187,
+          "unique_license": 187,
+          "unique_fac_instance": 187,
+          "phone_nonempty": 181,
+          "address_nonempty": 187,
+          "licensed_bed_nonempty": 0,
+          "licensed_bed_sum": 0,
+          "status": {
+            "OP": 187
+          },
+          "counties": {
+            "King": 42,
+            "Spokane": 31,
+            "Pierce": 24,
+            "Clark": 15,
+            "Snohomish": 14,
+            "Thurston": 10,
+            "Benton": 8,
+            "Whatcom": 6,
+            "Cowlitz": 5,
+            "Yakima": 5,
+            "Kitsap": 4,
+            "Lewis": 3,
+            "Kittitas": 3,
+            "Walla Walla": 3,
+            "Grays Harbor": 2,
+            "Skagit": 2,
+            "Whitman": 2,
+            "Grant": 2,
+            "Clallam": 1,
+            "Island": 1,
+            "Mason": 1,
+            "Okanogan": 1,
+            "Chelan": 1,
+            "Stevens": 1
+          }
+        },
+        "AF": {
+          "rows": 6179,
+          "unique_license": 6179,
+          "unique_fac_instance": 6179,
+          "phone_nonempty": 6128,
+          "address_nonempty": 6179,
+          "licensed_bed_nonempty": 6177,
+          "licensed_bed_sum": 35934,
+          "status": {
+            "OP": 6179
+          },
+          "counties": {
+            "King": 1819,
+            "Snohomish": 1181,
+            "Pierce": 1074,
+            "Spokane": 628,
+            "Clark": 592,
+            "Thurston": 335,
+            "Benton": 85,
+            "Kitsap": 71,
+            "Lewis": 53,
+            "Whitman": 47,
+            "Cowlitz": 44,
+            "Yakima": 38,
+            "Skagit": 28,
+            "Grant": 28,
+            "Whatcom": 27,
+            "Franklin": 26,
+            "Chelan": 17,
+            "Asotin": 13,
+            "Okanogan": 9,
+            "Island": 8,
+            "Clallam": 7,
+            "Walla Walla": 6,
+            "Klickitat": 6,
+            "Adams": 6,
+            "Mason": 6,
+            "Grays Harbor": 6,
+            "Douglas": 4,
+            "Lincoln": 3,
+            "Kittitas": 3,
+            "San Juan": 2,
+            "Stevens": 2,
+            "Jefferson": 2,
+            "Skamania": 1,
+            "Pacific": 1,
+            "Ferry": 1
+          }
+        },
+        "GT": {
+          "rows": 29,
+          "unique_license": 29,
+          "unique_fac_instance": 29,
+          "phone_nonempty": 29,
+          "address_nonempty": 29,
+          "licensed_bed_nonempty": 0,
+          "licensed_bed_sum": 0,
+          "status": {
+            "OP": 29
+          },
+          "counties": {
+            "King": 14,
+            "Snohomish": 4,
+            "Kitsap": 4,
+            "Pierce": 2,
+            "Whatcom": 1,
+            "Clark": 1,
+            "Cowlitz": 1,
+            "Clallam": 1,
+            "Spokane": 1
+          }
+        },
+        "EF": {
+          "rows": 16,
+          "unique_license": 16,
+          "unique_fac_instance": 16,
+          "phone_nonempty": 15,
+          "address_nonempty": 16,
+          "licensed_bed_nonempty": 16,
+          "licensed_bed_sum": 243,
+          "status": {
+            "OP": 16
+          },
+          "counties": {
+            "Spokane": 6,
+            "Pierce": 3,
+            "Snohomish": 2,
+            "Clark": 2,
+            "Thurston": 1,
+            "King": 1,
+            "Whatcom": 1
+          }
+        },
+        "BH": {
+          "rows": 557,
+          "unique_license": 556,
+          "unique_fac_instance": 556,
+          "phone_nonempty": 547,
+          "address_nonempty": 557,
+          "licensed_bed_nonempty": 557,
+          "licensed_bed_sum": 38508,
+          "status": {
+            "OP": 557
+          },
+          "counties": {
+            "King": 154,
+            "Spokane": 58,
+            "Pierce": 58,
+            "Snohomish": 47,
+            "Clark": 33,
+            "Kitsap": 23,
+            "Benton": 21,
+            "Yakima": 17,
+            "Whatcom": 17,
+            "Thurston": 16,
+            "Skagit": 16,
+            "Chelan": 11,
+            "Clallam": 8,
+            "Cowlitz": 8,
+            "Island": 7,
+            "Grays Harbor": 6,
+            "Lewis": 6,
+            "Whitman": 6,
+            "Walla Walla": 6,
+            "Grant": 6,
+            "Douglas": 4,
+            "Stevens": 4,
+            "Jefferson": 3,
+            "Mason": 3,
+            "Kittitas": 3,
+            "Franklin": 2,
+            "Columbia": 2,
+            "Lincoln": 2,
+            "Adams": 2,
+            "Asotin": 2,
+            "Skamania": 1,
+            "San Juan": 1,
+            "Ferry": 1,
+            "Pend Oreille": 1,
+            "Okanogan": 1,
+            "Pacific": 1
+          }
+        }
+      },
+      "county_table": [
+        {
+          "county": "King",
+          "AF": 1819,
+          "BH": 154,
+          "EF": 1,
+          "SL": 42,
+          "GT": 14
+        },
+        {
+          "county": "Snohomish",
+          "AF": 1181,
+          "BH": 47,
+          "EF": 2,
+          "SL": 14,
+          "GT": 4
+        },
+        {
+          "county": "Pierce",
+          "AF": 1074,
+          "BH": 58,
+          "EF": 3,
+          "SL": 24,
+          "GT": 2
+        },
+        {
+          "county": "Spokane",
+          "AF": 628,
+          "BH": 58,
+          "EF": 6,
+          "SL": 31,
+          "GT": 1
+        },
+        {
+          "county": "Clark",
+          "AF": 592,
+          "BH": 33,
+          "EF": 2,
+          "SL": 15,
+          "GT": 1
+        },
+        {
+          "county": "Thurston",
+          "AF": 335,
+          "BH": 16,
+          "EF": 1,
+          "SL": 10,
+          "GT": 0
+        },
+        {
+          "county": "Benton",
+          "AF": 85,
+          "BH": 21,
+          "EF": 0,
+          "SL": 8,
+          "GT": 0
+        },
+        {
+          "county": "Kitsap",
+          "AF": 71,
+          "BH": 23,
+          "EF": 0,
+          "SL": 4,
+          "GT": 4
+        },
+        {
+          "county": "Lewis",
+          "AF": 53,
+          "BH": 6,
+          "EF": 0,
+          "SL": 3,
+          "GT": 0
+        },
+        {
+          "county": "Yakima",
+          "AF": 38,
+          "BH": 17,
+          "EF": 0,
+          "SL": 5,
+          "GT": 0
+        },
+        {
+          "county": "Cowlitz",
+          "AF": 44,
+          "BH": 8,
+          "EF": 0,
+          "SL": 5,
+          "GT": 1
+        },
+        {
+          "county": "Whitman",
+          "AF": 47,
+          "BH": 6,
+          "EF": 0,
+          "SL": 2,
+          "GT": 0
+        },
+        {
+          "county": "Whatcom",
+          "AF": 27,
+          "BH": 17,
+          "EF": 1,
+          "SL": 6,
+          "GT": 1
+        },
+        {
+          "county": "Skagit",
+          "AF": 28,
+          "BH": 16,
+          "EF": 0,
+          "SL": 2,
+          "GT": 0
+        },
+        {
+          "county": "Grant",
+          "AF": 28,
+          "BH": 6,
+          "EF": 0,
+          "SL": 2,
+          "GT": 0
+        },
+        {
+          "county": "Chelan",
+          "AF": 17,
+          "BH": 11,
+          "EF": 0,
+          "SL": 1,
+          "GT": 0
+        },
+        {
+          "county": "Franklin",
+          "AF": 26,
+          "BH": 2,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "Clallam",
+          "AF": 7,
+          "BH": 8,
+          "EF": 0,
+          "SL": 1,
+          "GT": 1
+        },
+        {
+          "county": "Island",
+          "AF": 8,
+          "BH": 7,
+          "EF": 0,
+          "SL": 1,
+          "GT": 0
+        },
+        {
+          "county": "Asotin",
+          "AF": 13,
+          "BH": 2,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "Walla Walla",
+          "AF": 6,
+          "BH": 6,
+          "EF": 0,
+          "SL": 3,
+          "GT": 0
+        },
+        {
+          "county": "Grays Harbor",
+          "AF": 6,
+          "BH": 6,
+          "EF": 0,
+          "SL": 2,
+          "GT": 0
+        },
+        {
+          "county": "Okanogan",
+          "AF": 9,
+          "BH": 1,
+          "EF": 0,
+          "SL": 1,
+          "GT": 0
+        },
+        {
+          "county": "Mason",
+          "AF": 6,
+          "BH": 3,
+          "EF": 0,
+          "SL": 1,
+          "GT": 0
+        },
+        {
+          "county": "Kittitas",
+          "AF": 3,
+          "BH": 3,
+          "EF": 0,
+          "SL": 3,
+          "GT": 0
+        },
+        {
+          "county": "Adams",
+          "AF": 6,
+          "BH": 2,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "Douglas",
+          "AF": 4,
+          "BH": 4,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "Stevens",
+          "AF": 2,
+          "BH": 4,
+          "EF": 0,
+          "SL": 1,
+          "GT": 0
+        },
+        {
+          "county": "Klickitat",
+          "AF": 6,
+          "BH": 0,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "Jefferson",
+          "AF": 2,
+          "BH": 3,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "Lincoln",
+          "AF": 3,
+          "BH": 2,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "San Juan",
+          "AF": 2,
+          "BH": 1,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "Columbia",
+          "AF": 0,
+          "BH": 2,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "Ferry",
+          "AF": 1,
+          "BH": 1,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "Pacific",
+          "AF": 1,
+          "BH": 1,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "Skamania",
+          "AF": 1,
+          "BH": 1,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        },
+        {
+          "county": "Pend Oreille",
+          "AF": 0,
+          "BH": 1,
+          "EF": 0,
+          "SL": 0,
+          "GT": 0
+        }
+      ],
+      "medicare_or_ccn_fields": [],
+      "medicare_or_ccn_nonempty": 0,
+      "sample_field_names": [
+        "ConfidentialFaxNmbr",
+        "ContractCode",
+        "FacInstanceId",
+        "FacilityName",
+        "FacilityPOC",
+        "FacilityStatus",
+        "FacilityType",
+        "FaxNmbr",
+        "GDLArchiveDate",
+        "GDLPublishDate",
+        "Has_Reports",
+        "Latitude",
+        "LicenseExpirationDate",
+        "LicenseNumber",
+        "LicensedBedCount",
+        "LocationAddress",
+        "LocationCity",
+        "LocationCounty",
+        "LocationNumber",
+        "LocationState",
+        "LocationZipCode",
+        "Longitude",
+        "MailAddress",
+        "MailCity",
+        "MailState",
+        "MailZipCode",
+        "OBJECTID",
+        "RCSRegionUnit",
+        "Reports_Location",
+        "SCO_Latitude",
+        "SCO_Longitude",
+        "ServiceDisclosure",
+        "Speciality",
+        "SpecialityCode",
+        "TelephoneNmbr",
+        "acAddress1",
+        "acAddress2",
+        "acAddressKey",
+        "acAddressKeyUnit",
+        "acCity",
+        "acPlus4",
+        "acState",
+        "acZip",
+        "contract",
+        "gcGrade",
+        "gcLocatorName",
+        "gcWAMASId"
+      ]
+    },
+    "contacts": {
+      "phone_field": "TelephoneNmbr",
+      "phone_nonempty": 6900,
+      "address_field": "LocationAddress",
+      "address_nonempty": 6968,
+      "email_field": null,
+      "email_nonempty": 0,
+      "website_field": null,
+      "website_nonempty": 0,
+      "provenance": {
+        "phone": "WA_DSHS_FACILITY_PHONE",
+        "address": "WA_DSHS_FACILITY_ADDRESS"
+      },
+      "note": "FacilityPOC is a person field and is not published. No internet enrichment."
+    },
+    "status_note": "FacilityStatus values are source-native (e.g. OP). A current GIS record (GDLArchiveDate IS NULL) is not independently proven as license-in-good-standing."
+  },
+  "adultFamilyHomes": {
+    "code": "AF",
+    "count": 6179,
+    "unique_license": 6179,
+    "unique_fac_instance": 6179,
+    "phone_nonempty": 6128,
+    "address_nonempty": 6179,
+    "licensed_bed_nonempty": 6177,
+    "licensed_bed_sum": 35934,
+    "status": {
+      "OP": 6179
+    },
+    "identity": "WA-DSHS:{LicenseNumber}",
+    "profile_publication": "STATE_DIRECTORY_ONLY",
+    "note": "AFH != ALF. AFH != Nursing Home. Facility record != endorsement. Owner/licensee is not a person profile."
+  },
+  "assistedLiving": {
+    "code": "BH",
+    "count": 557,
+    "unique_license": 556,
+    "unique_fac_instance": 556,
+    "phone_nonempty": 547,
+    "address_nonempty": 557,
+    "licensed_bed_nonempty": 557,
+    "licensed_bed_sum": 38508,
+    "status": {
+      "OP": 557
+    },
+    "identity": "WA-DSHS:{LicenseNumber}",
+    "profile_publication": "STATE_DIRECTORY_ONLY",
+    "note": "ALF != AFH. ALF != SNF. ALF != CMS Nursing Home. No CMS join by name/address."
+  },
+  "enhancedServices": {
+    "code": "EF",
+    "count": 16,
+    "unique_license": 16,
+    "phone_nonempty": 15,
+    "address_nonempty": 16,
+    "licensed_bed_nonempty": 16,
+    "licensed_bed_sum": 243,
+    "status": {
+      "OP": 16
+    },
+    "identity": "WA-DSHS:{LicenseNumber}",
+    "profile_publication": "STATE_DIRECTORY_ONLY",
+    "note": "Kept separate from Assisted Living."
+  },
+  "adjacentExcluded": {
+    "SL": {
+      "count": 187,
+      "publication_class": "ADJACENT_RELEVANT",
+      "directory": "INTERNAL_ONLY",
+      "note": "Certified RSS / supported living. Not a public AFH/ALF/NH tile."
+    },
+    "GT": {
+      "count": 29,
+      "publication_class": "OTHER / NOT_PUBLIC",
+      "directory": "INTERNAL_ONLY",
+      "note": "Group Training Home. Excluded from consumer senior-care core."
+    }
+  },
+  "cmsOverlay": {
+    "nursingHomes": 193,
+    "homeHealth": 74,
+    "hospice": 50,
+    "source": "senior-national-intelligence.json geography WA (CMS class directories)",
+    "asOf": "2026-08-27",
+    "nationalFingerprint": "215b9d6301a9759f53dd92324930803089d319f95fe5e46739cbbd5f326c3294",
+    "clocks": {
+      "nursingHomes": {
+        "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T20:24:52.158102+00:00",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/4pq5-n9py",
+        "cmsIdentifier": "4pq5-n9py"
+      },
+      "homeHealth": {
+        "sourceModifiedAt": "2026-05-27T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T21:08:16.274819+00:00",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/6jpm-sxkc",
+        "cmsIdentifier": "6jpm-sxkc"
+      },
+      "hospice": {
+        "sourceModifiedAt": "2026-08-19T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T22:15:06.243039+00:00",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/yc9t-dgbk",
+        "cmsIdentifier": "yc9t-dgbk"
+      },
+      "ownership": {
+        "sourceModifiedAt": "2026-08-17T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T20:25:26.251400+00:00",
+        "officialUrl": "https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/skilled-nursing-facility-all-owners",
+        "cmsIdentifier": "afe44b85-cc6d-40d7-b5df-00ae8910d1d2"
+      },
+      "penalties": {
+        "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T20:24:35.184131+00:00",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/g6vv-u9sr",
+        "cmsIdentifier": "g6vv-u9sr"
+      },
+      "staffing": {
+        "sourceModifiedAt": "2026-07-29T00:00:00+00:00",
+        "retrievedAt": "2026-08-15T04:29:10.416563+00:00",
+        "officialUrl": "https://data.cms.gov/quality-of-care/payroll-based-journal-daily-nurse-staffing",
+        "cmsIdentifier": "7e0d53ba-8f02-4c66-98a5-14a1c997c50d"
+      }
+    },
+    "liveDirectoryWaUniqueCcn": {
+      "nursingHomes": 193,
+      "homeHealth": 74,
+      "hospice": 50
+    },
+    "query": {
+      "nh": {
+        "dataset_id": "4pq5-n9py",
+        "title": "Provider Information",
+        "modified": "2026-08-01",
+        "identifier": "4pq5-n9py",
+        "state_field": "state",
+        "properties_sample": [
+          "cms_certification_number_ccn",
+          "provider_name",
+          "provider_address",
+          "citytown",
+          "state",
+          "zip_code",
+          "telephone_number",
+          "provider_ssa_county_code",
+          "countyparish",
+          "urban",
+          "ownership_type",
+          "number_of_certified_beds",
+          "average_number_of_residents_per_day",
+          "average_number_of_residents_per_day_footnote",
+          "provider_type",
+          "provider_resides_in_hospital",
+          "legal_business_name",
+          "date_first_approved_to_provide_medicare_and_medicaid_services",
+          "chain_name",
+          "chain_id",
+          "number_of_facilities_in_chain",
+          "chain_average_overall_5star_rating",
+          "chain_average_health_inspection_rating",
+          "chain_average_staffing_rating",
+          "chain_average_qm_rating",
+          "continuing_care_retirement_community",
+          "special_focus_status",
+          "abuse_icon",
+          "most_recent_health_inspection_more_than_2_years_ago",
+          "provider_changed_ownership_in_last_12_months",
+          "with_a_resident_and_family_council",
+          "automatic_sprinkler_systems_in_all_required_areas",
+          "overall_rating",
+          "overall_rating_footnote",
+          "health_inspection_rating",
+          "health_inspection_rating_footnote",
+          "qm_rating",
+          "qm_rating_footnote",
+          "longstay_qm_rating",
+          "longstay_qm_rating_footnote"
+        ],
+        "count_all": 14690,
+        "wa_count_reported": 193,
+        "wa_rows": 193,
+        "ccn_field": "cms_certification_number_ccn",
+        "unique_ccn": 193
+      },
+      "hha": {
+        "dataset_id": "6jpm-sxkc",
+        "title": "Home Health Care Agencies",
+        "modified": "2026-05-27",
+        "identifier": "6jpm-sxkc",
+        "state_field": "state",
+        "properties_sample": [
+          "state",
+          "cms_certification_number_ccn",
+          "provider_name",
+          "address",
+          "citytown",
+          "zip_code",
+          "telephone_number",
+          "type_of_ownership",
+          "offers_nursing_care_services",
+          "offers_physical_therapy_services",
+          "offers_occupational_therapy_services",
+          "offers_speech_pathology_services",
+          "offers_medical_social_services",
+          "offers_home_health_aide_services",
+          "certification_date",
+          "quality_of_patient_care_star_rating",
+          "footnote_for_quality_of_patient_care_star_rating",
+          "numerator_for_how_often_the_home_health_team_began_their_pa_ada1",
+          "denominator_for_how_often_the_home_health_team_began_their__9354",
+          "how_often_the_home_health_team_began_their_patients_care_in_d440",
+          "footnote_for_how_often_the_home_health_team_began_their_pat_6aee",
+          "numerator_for_how_often_the_home_health_team_determined_whe_72da",
+          "denominator_for_how_often_the_home_health_team_determined_w_81bc",
+          "how_often_the_home_health_team_determined_whether_patients__4505",
+          "footnote_for_how_often_the_home_health_team_determined_whet_5002",
+          "numerator_for_how_often_patients_got_better_at_walking_or_m_3b64",
+          "denominator_for_how_often_patients_got_better_at_walking_or_b3eb",
+          "how_often_patients_got_better_at_walking_or_moving_around",
+          "footnote_for_how_often_patients_got_better_at_walking_or_mo_e2ff",
+          "numerator_for_how_often_patients_got_better_at_getting_in_a_e863",
+          "denominator_for_how_often_patients_got_better_at_getting_in_4b7a",
+          "how_often_patients_got_better_at_getting_in_and_out_of_bed",
+          "footnote_for_how_often_patients_got_better_at_getting_in_an_7940",
+          "numerator_for_how_often_patients_got_better_at_bathing",
+          "denominator_for_how_often_patients_got_better_at_bathing",
+          "how_often_patients_got_better_at_bathing",
+          "footnote_for_how_often_patients_got_better_at_bathing",
+          "numerator_for_how_often_patients_breathing_improved",
+          "denominator_for_how_often_patients_breathing_improved",
+          "how_often_patients_breathing_improved"
+        ],
+        "count_all": 12460,
+        "wa_count_reported": 74,
+        "wa_rows": 74,
+        "ccn_field": "cms_certification_number_ccn",
+        "unique_ccn": 74
+      },
+      "hospice": {
+        "dataset_id": "yc9t-dgbk",
+        "title": "Hospice - General Information",
+        "modified": "2026-08-19",
+        "identifier": "yc9t-dgbk",
+        "state_field": "state",
+        "properties_sample": [
+          "cms_certification_number_ccn",
+          "facility_name",
+          "address_line_1",
+          "address_line_2",
+          "citytown",
+          "state",
+          "zip_code",
+          "countyparish",
+          "telephone_number",
+          "cms_region",
+          "ownership_type",
+          "certification_date"
+        ],
+        "count_all": 6669,
+        "wa_count_reported": 50,
+        "wa_rows": 50,
+        "ccn_field": "cms_certification_number_ccn",
+        "unique_ccn": 50
+      }
+    },
+    "nationalCoverage": {
+      "mdsQualityProviders": 14687,
+      "mdsQualityMissing": 3,
+      "staffingPbjProviders": 14596,
+      "inspectionProviders": 14687,
+      "fireSafetyProviders": 13909,
+      "ownedByProviders": 12562,
+      "chowHistoryProviders": 5172
+    },
+    "note": "CMS class overlays are independent of DSHS GIS row counts and are not summed. CMS CERTIFIED != STATE LICENSED. HOME HEALTH != RESIDENTIAL CARE. HOSPICE != HOME HEALTH."
+  },
+  "stateNursingHomeSource": {
+    "source_name": "Long Term Care - Nursing Homes (DSHS Geospatial Data Library)",
+    "service_url": "https://services2.arcgis.com/WW3T8U6q5EkZ9U3n/arcgis/rest/services/Long_Term_Care_Nursing_Homes_view/FeatureServer",
+    "locator": "https://fortress.wa.gov/dshs/adsaapps/lookup/NHPubLookup.aspx",
+    "scrape": "FORBIDDEN",
+    "service_layers": [
+      {
+        "id": 1,
+        "name": "Long Term Care Nursing Homes"
+      }
+    ],
+    "acquired": {
+      "rest": "https://services2.arcgis.com/WW3T8U6q5EkZ9U3n/arcgis/rest/services/Long_Term_Care_Nursing_Homes_view/FeatureServer/1",
+      "layer_id": 1,
+      "layer_name": "Long Term Care Nursing Homes",
+      "current_rule": "GDLArchiveDate IS NULL",
+      "current_count": 198,
+      "all_count": 1455,
+      "harvested_rows": 198,
+      "license_field": "nf_license_num",
+      "unique_license": 198,
+      "fields": [
+        "OBJECTID",
+        "nf_location_num",
+        "nf_loc_region_cde",
+        "nf_loc_street_address",
+        "nf_loc_city",
+        "nf_loc_zip_cde",
+        "nf_loc_phone_num",
+        "nf_loc_fax_num",
+        "nf_mailing_address",
+        "nf_mailing_city",
+        "nf_mailing_state",
+        "nf_mailing_zip_cde",
+        "nf_Loc_Type",
+        "nf_state_vendor_num",
+        "nf_license_num",
+        "nf_fed_provider_num",
+        "nf_name",
+        "nf_staff_last_name",
+        "nf_staff_first_name",
+        "nf_staff_mid_name",
+        "NF_County_Name",
+        "nf_licensee_name",
+        "nf_ownership_type_desc",
+        "nf_bed_type_cde",
+        "nf_SSPS",
+        "RCSUnit",
+        "TOTAL_Beds_nf_bed_count",
+        "XVIII_Beds_nf_bed_count",
+        "XIX_Beds_nf_bed_count",
+        "T1819_Beds_nf_bed_count",
+        "Has_reports",
+        "Reports_Location",
+        "acAddressKey",
+        "acAddressKeyUnit",
+        "acAddress1",
+        "acAddress2",
+        "acCity",
+        "acState",
+        "acZip",
+        "acPlus4",
+        "gcWAMASId",
+        "gcLocatorName",
+        "gcGrade",
+        "GDLPublishDate",
+        "GDLArchiveDate",
+        "Latitude",
+        "Longitude",
+        "SCO_Latitude",
+        "SCO_Longitude"
+      ],
+      "sample_keys": [
+        "GDLArchiveDate",
+        "GDLPublishDate",
+        "Has_reports",
+        "Latitude",
+        "Longitude",
+        "NF_County_Name",
+        "OBJECTID",
+        "RCSUnit",
+        "Reports_Location",
+        "SCO_Latitude",
+        "SCO_Longitude",
+        "T1819_Beds_nf_bed_count",
+        "TOTAL_Beds_nf_bed_count",
+        "XIX_Beds_nf_bed_count",
+        "XVIII_Beds_nf_bed_count",
+        "acAddress1",
+        "acAddress2",
+        "acAddressKey",
+        "acAddressKeyUnit",
+        "acCity",
+        "acPlus4",
+        "acState",
+        "acZip",
+        "gcGrade",
+        "gcLocatorName",
+        "gcWAMASId",
+        "nf_Loc_Type",
+        "nf_SSPS",
+        "nf_bed_type_cde",
+        "nf_fed_provider_num",
+        "nf_license_num",
+        "nf_licensee_name",
+        "nf_loc_city",
+        "nf_loc_fax_num",
+        "nf_loc_phone_num",
+        "nf_loc_region_cde",
+        "nf_loc_street_address",
+        "nf_loc_zip_cde",
+        "nf_location_num",
+        "nf_mailing_address",
+        "nf_mailing_city",
+        "nf_mailing_state",
+        "nf_mailing_zip_cde",
+        "nf_name",
+        "nf_ownership_type_desc",
+        "nf_staff_first_name",
+        "nf_staff_last_name",
+        "nf_staff_mid_name",
+        "nf_state_vendor_num"
+      ],
+      "has_ccn": true,
+      "ccn_field": "nf_fed_provider_num",
+      "unique_ccn": 196,
+      "loc_type": {
+        "NF": 195,
+        "IM": 3
+      },
+      "phone_field": "nf_loc_phone_num",
+      "phone_nonempty": 197,
+      "address_field": "nf_loc_street_address",
+      "address_nonempty": 198,
+      "person_fields_unpublished": [
+        "nf_staff_last_name",
+        "nf_staff_first_name",
+        "nf_staff_mid_name"
+      ],
+      "access": "OPEN_GIS_FEATURE_SERVICE",
+      "note": "nf_fed_provider_num is treated as a federal provider number / CCN candidate. Staff name fields are unpublished. Licensee name is facility-level only, not a person dossier."
+    }
+  },
+  "crosswalk": {
+    "afhToCmsNh": {
+      "attempted": false,
+      "reason": "AFH is not a CMS Nursing Home class. No CCN field on the residential-care GIS layer."
+    },
+    "alfToCmsNh": {
+      "attempted": false,
+      "reason": "ALF is not a CMS Nursing Home class. Name/address join is forbidden."
+    },
+    "esfToCmsNh": {
+      "attempted": false,
+      "reason": "ESF is not a CMS Nursing Home class."
+    },
+    "stateNhToCmsNh": {
+      "attempted": true,
+      "method": "exact padded CCN only; name and city are not used",
+      "state_native_ccns": 196,
+      "cms_wa_ccns": 193,
+      "exact_matches": 193,
+      "unmatched_state": 3,
+      "unmatched_cms": 0,
+      "note": "No name/city join. DSHS != CMS. Unmatched remain unmatched."
+    },
+    "gisMedicareFields": []
+  },
+  "enforcement": {
+    "state": {
+      "result": "NO_BULK_ACQUIRED",
+      "access": "SEARCH_ONLY / locator inspection pages; no structured statewide inspection CSV found this ticket",
+      "catalog": {
+        "adult family home inspection": {
+          "query": "adult family home inspection",
+          "hits": [
+            {
+              "id": "28ar-n972",
+              "name": "Public Health Activities and Services - 2013",
+              "attribution": "Washington State Department of Health",
+              "type": "dataset",
+              "permalink": "https://data.wa.gov/d/28ar-n972"
+            },
+            {
+              "id": "rd48-d4y8",
+              "name": "Public Health Activities and Services - Compact View",
+              "attribution": "Washington State Department of Health",
+              "type": "filter",
+              "permalink": "https://data.wa.gov/d/rd48-d4y8"
+            },
+            {
+              "id": "i3e8-j9am",
+              "name": "Public Health Activities and Services - 2014",
+              "attribution": "Washington State Department of Health",
+              "type": "dataset",
+              "permalink": "https://data.wa.gov/d/i3e8-j9am"
+            },
+            {
+              "id": "jq8n-5me2",
+              "name": "Annual Trends of Entries into Out-of-Home Care, 2010-2022",
+              "attribution": "Department of Children, Youth & Families",
+              "type": "dataset",
+              "permalink": "https://data.wa.gov/d/jq8n-5me2"
+            },
+            {
+              "id": "2i33-bdcz",
+              "name": "Age Distribution for Children Entering Out-of-Home Care, 2010-2022",
+              "attribution": "Department of Children, Youth & Families",
+              "type": "dataset",
+              "permalink": "https://data.wa.gov/d/2i33-bdcz"
+            },
+            {
+              "id": "4g8r-4ydu",
+              "name": "Children in out-of-home care, single point in time, FY 1979-2023",
+              "attribution": "Department of Children, Youth & Families",
+              "type": "dataset",
+              "permalink": "https://data.wa.gov/d/4g8r-4ydu"
+            },
+            {
+              "id": "jdqv-4fu8",
+              "name": "Children in CPS Intakes by Referent Type, 2010-2022",
+              "attribution": "Department of Children, Youth & Families",
+              "type": "dataset",
+              "permalink": "https://data.wa.gov/d/jdqv-4fu8"
+            },
+            {
+              "id": "j2xg-kg6j",
+              "name": "Race/ethnicity Percentage of Children Entering Out-of-Home Care, 2010-2022",
+              "attribution": "Department of Children, Youth & Families",
+              "type": "dataset",
+              "permalink": "https://data.wa.gov/d/j2xg-kg6j"
+            },
+            {
+              "id": "nv7a-nzk6",
+              "name": "Rate of Children Entering Out-of-Home Care by Race/ethnicity, 2010-2022",
+              "attribution": "Department of Children, Youth & Families",
+              "type": "dataset",
+              "permalink": "https://data.wa.gov/d/nv7a-nzk6"
+            },
+            {
+              "id": "dzfe-8ekk",
+              "name": "Children in Screened-In CPS Intakes, 2010-2022",
+              "attribution": "Department of Children, Youth & Families",
+              "type": "dataset",
+              "permalink": "https://data.wa.gov/d/dzfe-8ekk"
+            },
+            {
+              "id": "was8-3ni8",
+              "name": "DCYF Licensed Childcare Center and School Age Program Providers",
+              "attribution": "DCYF",
+              "type": "dataset",
+              "permalink": "https://data.wa.gov/d/was8-3ni8"
+            },
+            {
+              "id": "g4qj-yi5j",
+              "name": "Languages Spoken by Students and Families, 2024-25 School Year",
+              "attribution": "OSPI",
+              "type": "dataset",
+              "permalink": "https://data.wa.gov/d/g4qj-yi5j"
+            }
+          ]
+        },
+        "assisted living citation": {
+          "query": "assisted living citation",
+          "hits": []
+        },
+        "nursing home enforcement": {
+          "query": "nursing home enforcement",
+          "hits": []
+        },
+        "residential care services": {
+          "query": "residential care services",
+          "hits": []
+        },
+        "DSHS stop placement": {
+          "query": "DSHS stop placement",
+          "hits": []
+        },
+        "AFH complaint": {
+          "query": "AFH complaint",
+          "hits": []
+        }
+      },
+      "note": "Complaint != violation. Investigation != finding. Citation != quality score. Name-only attach is UNSAFE. Missing bulk != zero enforcement."
+    },
+    "cms": {
+      "result": "REUSED_NATIONAL_EXACT_CCN",
+      "note": "Nursing Home inspection, deficiency, penalty, staffing, and ownership stay on existing exact-CCN national architecture. No Washington-specific score."
+    }
+  },
+  "ownership": {
+    "cmsNursingHome": "Reuse existing SeniorTrustHub CMS ownership graph on exact CCN.",
+    "dshs": "Do not infer cross-facility ownership by matching names. FacilityPOC / licensee person fields are unpublished."
+  },
+  "geography": {
+    "grain": "LocationCounty on the current GIS record is a facility address county, not a service area.",
+    "county_table": [
+      {
+        "county": "King",
+        "AF": 1819,
+        "BH": 154,
+        "EF": 1,
+        "SL": 42,
+        "GT": 14
+      },
+      {
+        "county": "Snohomish",
+        "AF": 1181,
+        "BH": 47,
+        "EF": 2,
+        "SL": 14,
+        "GT": 4
+      },
+      {
+        "county": "Pierce",
+        "AF": 1074,
+        "BH": 58,
+        "EF": 3,
+        "SL": 24,
+        "GT": 2
+      },
+      {
+        "county": "Spokane",
+        "AF": 628,
+        "BH": 58,
+        "EF": 6,
+        "SL": 31,
+        "GT": 1
+      },
+      {
+        "county": "Clark",
+        "AF": 592,
+        "BH": 33,
+        "EF": 2,
+        "SL": 15,
+        "GT": 1
+      },
+      {
+        "county": "Thurston",
+        "AF": 335,
+        "BH": 16,
+        "EF": 1,
+        "SL": 10,
+        "GT": 0
+      },
+      {
+        "county": "Benton",
+        "AF": 85,
+        "BH": 21,
+        "EF": 0,
+        "SL": 8,
+        "GT": 0
+      },
+      {
+        "county": "Kitsap",
+        "AF": 71,
+        "BH": 23,
+        "EF": 0,
+        "SL": 4,
+        "GT": 4
+      },
+      {
+        "county": "Lewis",
+        "AF": 53,
+        "BH": 6,
+        "EF": 0,
+        "SL": 3,
+        "GT": 0
+      },
+      {
+        "county": "Yakima",
+        "AF": 38,
+        "BH": 17,
+        "EF": 0,
+        "SL": 5,
+        "GT": 0
+      },
+      {
+        "county": "Cowlitz",
+        "AF": 44,
+        "BH": 8,
+        "EF": 0,
+        "SL": 5,
+        "GT": 1
+      },
+      {
+        "county": "Whitman",
+        "AF": 47,
+        "BH": 6,
+        "EF": 0,
+        "SL": 2,
+        "GT": 0
+      },
+      {
+        "county": "Whatcom",
+        "AF": 27,
+        "BH": 17,
+        "EF": 1,
+        "SL": 6,
+        "GT": 1
+      },
+      {
+        "county": "Skagit",
+        "AF": 28,
+        "BH": 16,
+        "EF": 0,
+        "SL": 2,
+        "GT": 0
+      },
+      {
+        "county": "Grant",
+        "AF": 28,
+        "BH": 6,
+        "EF": 0,
+        "SL": 2,
+        "GT": 0
+      },
+      {
+        "county": "Chelan",
+        "AF": 17,
+        "BH": 11,
+        "EF": 0,
+        "SL": 1,
+        "GT": 0
+      },
+      {
+        "county": "Franklin",
+        "AF": 26,
+        "BH": 2,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "Clallam",
+        "AF": 7,
+        "BH": 8,
+        "EF": 0,
+        "SL": 1,
+        "GT": 1
+      },
+      {
+        "county": "Island",
+        "AF": 8,
+        "BH": 7,
+        "EF": 0,
+        "SL": 1,
+        "GT": 0
+      },
+      {
+        "county": "Asotin",
+        "AF": 13,
+        "BH": 2,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "Walla Walla",
+        "AF": 6,
+        "BH": 6,
+        "EF": 0,
+        "SL": 3,
+        "GT": 0
+      },
+      {
+        "county": "Grays Harbor",
+        "AF": 6,
+        "BH": 6,
+        "EF": 0,
+        "SL": 2,
+        "GT": 0
+      },
+      {
+        "county": "Okanogan",
+        "AF": 9,
+        "BH": 1,
+        "EF": 0,
+        "SL": 1,
+        "GT": 0
+      },
+      {
+        "county": "Mason",
+        "AF": 6,
+        "BH": 3,
+        "EF": 0,
+        "SL": 1,
+        "GT": 0
+      },
+      {
+        "county": "Kittitas",
+        "AF": 3,
+        "BH": 3,
+        "EF": 0,
+        "SL": 3,
+        "GT": 0
+      },
+      {
+        "county": "Adams",
+        "AF": 6,
+        "BH": 2,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "Douglas",
+        "AF": 4,
+        "BH": 4,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "Stevens",
+        "AF": 2,
+        "BH": 4,
+        "EF": 0,
+        "SL": 1,
+        "GT": 0
+      },
+      {
+        "county": "Klickitat",
+        "AF": 6,
+        "BH": 0,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "Jefferson",
+        "AF": 2,
+        "BH": 3,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "Lincoln",
+        "AF": 3,
+        "BH": 2,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "San Juan",
+        "AF": 2,
+        "BH": 1,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "Columbia",
+        "AF": 0,
+        "BH": 2,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "Ferry",
+        "AF": 1,
+        "BH": 1,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "Pacific",
+        "AF": 1,
+        "BH": 1,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "Skamania",
+        "AF": 1,
+        "BH": 1,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      },
+      {
+        "county": "Pend Oreille",
+        "AF": 0,
+        "BH": 1,
+        "EF": 0,
+        "SL": 0,
+        "GT": 0
+      }
+    ],
+    "cmsNhCounties": "CMS NH county coverage is not a service area and is not published as a ranked county list.",
+    "no_county_routes": true
+  },
+  "publicationDecisions": {
+    "AFH_PROFILE_PUBLICATION": "STATE_DIRECTORY_ONLY",
+    "ALF_PROFILE_PUBLICATION": "STATE_DIRECTORY_ONLY",
+    "ESF_PROFILE_PUBLICATION": "STATE_DIRECTORY_ONLY",
+    "rationale": "Exact LicenseNumber, stable GIS, public facility identity, phone/address, and nightly refresh exist, but minting thousands of weak state-only profile routes is not required for consumer research. State page tables plus official locators are enough. CMS classes keep existing CCN routes."
+  },
+  "findings": [
+    {
+      "id": "afh-scale",
+      "title": "Adult Family Homes are Washington\u2019s large state-licensed residential class",
+      "summary": "The current DSHS GIS layer has thousands of Adult Family Homes \u2014 far more settings than Assisted Living Facilities \u2014 because AFHs are small licensed homes, not campus buildings.",
+      "doesNotMean": [
+        "best care",
+        "quality rank",
+        "safer than ALF"
+      ]
+    },
+    {
+      "id": "afh-vs-alf",
+      "title": "AFH and ALF are different DSHS licenses",
+      "summary": "Adult Family Home (AF) and Assisted Living Facility (BH) stay separate in the official type code. Capacity, setting, and rules differ. They are not one \u2018residential care\u2019 total.",
+      "doesNotMean": [
+        "one combined Washington senior-provider number"
+      ]
+    },
+    {
+      "id": "state-vs-cms",
+      "title": "State residential care is not CMS certification",
+      "summary": "DSHS GIS AFH/ALF/ESF identities are LicenseNumber. CMS Nursing Home, Home Health, and Hospice identities are CCN. This snapshot does not add those universes together.",
+      "doesNotMean": [
+        "every AFH is a nursing home",
+        "CMS certified equals state licensed"
+      ]
+    },
+    {
+      "id": "contacts",
+      "title": "Facility phone and address are source-native on the GIS layer",
+      "summary": "Current GIS rows carry TelephoneNmbr and LocationAddress at high occupancy. Email and website columns are not in this layer.",
+      "doesNotMean": [
+        "missing email means the facility has no email"
+      ]
+    },
+    {
+      "id": "cms-depth",
+      "title": "CMS Nursing Homes keep federal inspection and ownership depth",
+      "summary": "Washington CMS Nursing Homes reuse the national exact-CCN inspection, penalty, staffing, and ownership products. AFH/ALF do not inherit those federal files.",
+      "doesNotMean": [
+        "no deficiencies means a clean record",
+        "a deficiency is a quality rank"
+      ]
+    }
+  ],
+  "coverageGaps": [
+    "Complete structured DSHS nursing-home bulk if GIS/CSV is not pinned",
+    "Statewide AFH/ALF/ESF inspection, citation, stop-placement, and fine bulk",
+    "Exact DSHS\u2194CMS CCN crosswalk (no CCN on residential-care GIS)",
+    "Facility service areas (address county is not a service area)",
+    "Email/website on DSHS GIS",
+    "License-in-good-standing independent of current GIS archive flag"
+  ],
+  "verification": {
+    "snapshot": "TrustHub current GIS snapshot (GDLArchiveDate IS NULL) as of retrievedAt",
+    "live": "DSHS locators remain the live verification path. TrustHub does not scrape them."
+  },
+  "guardrails": [
+    "DSHS != CMS",
+    "AFH != ALF",
+    "ALF != SNF",
+    "AFH != NURSING HOME",
+    "HOME HEALTH != RESIDENTIAL CARE",
+    "HOSPICE != HOME HEALTH",
+    "CURRENT GIS RECORD != QUALITY",
+    "CMS CERTIFIED != STATE LICENSED",
+    "FACILITY ADDRESS != SERVICE AREA",
+    "COMPLAINT != VIOLATION",
+    "DEFICIENCY != QUALITY RANK",
+    "NO DEFICIENCY FOUND != CLEAN RECORD",
+    "MISSING != ZERO",
+    "NO TRUST SCORE",
+    "NO PAID RANKING"
+  ],
+  "noCombinedDenominator": true,
+  "publicationPath": "/washington",
+  "noCountyRoutes": true,
+  "fingerprint": "2ad2b2ec7cdf0c1c32aae8980ea4b1f921e264cf49705881ce31671faaf220a4"
+} as const;
