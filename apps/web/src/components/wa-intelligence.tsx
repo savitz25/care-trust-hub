@@ -126,7 +126,9 @@ export function WaIntelligenceView({ intel }: { intel: WaPublicSnapshot }) {
       <section aria-labelledby="wa-afh-title">
         <div className="section-heading">
           <p className="eyebrow">Questions 2–4</p>
-          <h2 id="wa-afh-title">Adult Family Homes, Assisted Living, and Nursing Homes stay separate</h2>
+          <h2 id="wa-afh-title">
+            Adult Family Homes, Assisted Living, and Nursing Homes stay separate
+          </h2>
           <p>
             Current GIS Adult Family Homes: {formatHubCount(intel.adultFamilyHomes.count)}. Current
             GIS Assisted Living Facilities: {formatHubCount(intel.assistedLiving.count)}. Enhanced
@@ -190,10 +192,10 @@ export function WaIntelligenceView({ intel }: { intel: WaPublicSnapshot }) {
           <p className="eyebrow">Questions 7–8</p>
           <h2 id="wa-verify-title">How to verify, and what remains unavailable</h2>
           <p>
-            TrustHub’s snapshot is the current GIS extract ({gis.current_rule}) as of {intel.retrievedAt}.
-            Live status is on DSHS locators. Current GIS record is not independently
-            license-in-good-standing. Email and website are not in the residential GIS. Service
-            areas are not in these files.
+            TrustHub’s snapshot is the current GIS extract ({gis.current_rule}) as of{" "}
+            {intel.retrievedAt}. Live status is on DSHS locators. Current GIS record is not
+            independently license-in-good-standing. Email and website are not in the residential
+            GIS. Service areas are not in these files.
           </p>
         </div>
         <ul className="hub-plain-list">
@@ -214,11 +216,12 @@ export function WaIntelligenceView({ intel }: { intel: WaPublicSnapshot }) {
           <p className="eyebrow">State nursing homes</p>
           <h2 id="wa-nh-title">DSHS nursing-home GIS is not the CMS directory</h2>
           <p>
-            Current DSHS NH GIS rows: {formatHubCount(nh.current_count)} ({formatHubCount(nh.loc_type.NF)}{" "}
-            NF and {formatHubCount(nh.loc_type.IM)} IM). Distinct federal provider numbers:{" "}
-            {formatHubCount(nh.unique_ccn)}. Exact matches to CMS Nursing Homes:{" "}
-            {formatHubCount(cross.exact_matches)}. Unmatched state {formatHubCount(cross.unmatched_state)};
-            unmatched CMS {formatHubCount(cross.unmatched_cms)}. Name and city are not used.
+            Current DSHS NH GIS rows: {formatHubCount(nh.current_count)} (
+            {formatHubCount(nh.loc_type.NF)} NF and {formatHubCount(nh.loc_type.IM)} IM). Distinct
+            federal provider numbers: {formatHubCount(nh.unique_ccn)}. Exact matches to CMS Nursing
+            Homes: {formatHubCount(cross.exact_matches)}. Unmatched state{" "}
+            {formatHubCount(cross.unmatched_state)}; unmatched CMS{" "}
+            {formatHubCount(cross.unmatched_cms)}. Name and city are not used.
           </p>
         </div>
         {trace("state-nh-cms-exact") ? <Trace metric={trace("state-nh-cms-exact")!} /> : null}
@@ -229,13 +232,15 @@ export function WaIntelligenceView({ intel }: { intel: WaPublicSnapshot }) {
           <p className="eyebrow">Facility address counties</p>
           <h2 id="wa-geo-title">County geography is not a ranking</h2>
           <p>
-            {formatHubCount(gis.profile.distinct_counties)} counties appear on current GIS rows. This
-            is facility address county, not a service area, and not best/worst counties.
+            {formatHubCount(gis.profile.distinct_counties)} counties appear on current GIS rows.
+            This is facility address county, not a service area, and not best/worst counties.
           </p>
         </div>
         <div className="hub-table-scroll">
           <table className="hub-table">
-            <caption>Current DSHS GIS counts by facility address county. Classes stay separate.</caption>
+            <caption>
+              Current DSHS GIS counts by facility address county. Classes stay separate.
+            </caption>
             <thead>
               <tr>
                 <th scope="col">County</th>

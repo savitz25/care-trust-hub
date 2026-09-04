@@ -72,9 +72,9 @@ describe("WA-SEN-001 public snapshot", () => {
     expect(snap.publicationDecisions.ESF_PROFILE_PUBLICATION).toBe("STATE_DIRECTORY_ONLY");
     expect(snap.dshsGis.contacts.email_nonempty).toBe(0);
     expect(snap.dshsGis.contacts.provenance.phone).toBe("WA_DSHS_FACILITY_PHONE");
-    expect(WA_SOURCE_CATALOG.some((row) => row.id === "dshs-sl" && row.coverage === "INTERNAL_ONLY")).toBe(
-      true,
-    );
+    expect(
+      WA_SOURCE_CATALOG.some((row) => row.id === "dshs-sl" && row.coverage === "INTERNAL_ONLY"),
+    ).toBe(true);
   });
 
   it("matches the artifact fingerprint and traces AFH/CMS clocks", () => {
