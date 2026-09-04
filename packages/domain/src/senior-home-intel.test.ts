@@ -73,6 +73,7 @@ describe("senior-home-intel-v1", () => {
     expect(intel.geography.some((row) => row.intelligenceHref === "/california")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/texas")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/washington")).toBe(true);
+    expect(intel.geography.some((row) => row.intelligenceHref === "/arizona")).toBe(true);
     expect(
       intel.geography
         .filter(
@@ -81,7 +82,8 @@ describe("senior-home-intel-v1", () => {
             row.state !== "NJ" &&
             row.state !== "CA" &&
             row.state !== "TX" &&
-            row.state !== "WA",
+            row.state !== "WA" &&
+            row.state !== "AZ",
         )
         .every((row) => row.intelligenceHref === null),
     ).toBe(true);
@@ -99,5 +101,10 @@ describe("senior-home-intel-v1", () => {
     expect(intel.washingtonPreview.afh).toBe(6179);
     expect(intel.washingtonPreview.alf).toBe(557);
     expect(intel.washingtonPreview.cmsNursingHomes).toBe(193);
+    expect(intel.arizonaPreview.href).toBe("/arizona");
+    expect(intel.arizonaPreview.alHome).toBe(1719);
+    expect(intel.arizonaPreview.alCenter).toBe(328);
+    expect(intel.arizonaPreview.afc).toBe(25);
+    expect(intel.arizonaPreview.cmsNursingHomes).toBe(140);
   });
 });

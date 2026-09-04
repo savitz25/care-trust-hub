@@ -51,3 +51,4 @@ export * from "./nj-county-intelligence";
 export * from "./ca-intelligence";
 export * from "./tx-intelligence";
 export * from "./wa-intelligence";
+export * from "./az-intelligence";

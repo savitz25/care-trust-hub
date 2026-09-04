@@ -77,6 +77,10 @@ describe("senior homepage intelligence", () => {
       "href",
       "/washington",
     );
+    expect(screen.getByRole("link", { name: /explore arizona intelligence/i })).toHaveAttribute(
+      "href",
+      "/arizona",
+    );
     expect(screen.getByRole("link", { name: /save research to your shortlist/i })).toHaveAttribute(
       "href",
       "/shortlist",

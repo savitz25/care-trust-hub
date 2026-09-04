@@ -115,6 +115,7 @@ export function Footer({
             <a href="/california">California</a>
             <a href="/texas">Texas</a>
             <a href="/washington">Washington</a>
+            <a href="/arizona">Arizona</a>
             <a href={standardUrl}>Ask Trust Hub Standard</a>
             <a href="/privacy">Privacy</a>
             <a href="/terms">Terms</a>
