@@ -10,6 +10,7 @@ import { NJ_LOCKED, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import { CA_LOCKED, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { TX_LOCKED, TX_PUBLIC_PATH } from "./tx-intelligence";
 import { WA_LOCKED, WA_PUBLIC_PATH } from "./wa-intelligence";
+import { AZ_LOCKED, AZ_PUBLIC_PATH } from "./az-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -94,6 +95,7 @@ export interface HomeGeoRow {
     | "california_state_intelligence"
     | "texas_state_intelligence"
     | "washington_state_intelligence"
+    | "arizona_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -183,6 +185,16 @@ export interface SeniorHomeIntel {
     cmsHospice: number;
     note: string;
   };
+  arizonaPreview: {
+    href: string;
+    alHome: number;
+    alCenter: number;
+    afc: number;
+    cmsNursingHomes: number;
+    cmsHomeHealth: number;
+    cmsHospice: number;
+    note: string;
+  };
   askMarket: HomeAskItem[];
   sources: HubSourceRow[];
   limitations: string[];
@@ -265,6 +277,12 @@ export function buildSeniorHomeIntel(input: {
   };
   const waGeo = national.geography.find((row) => row.state === "WA") ?? {
     state: "WA",
+    nursingHomes: 0,
+    homeHealth: 0,
+    hospice: 0,
+  };
+  const azGeo = national.geography.find((row) => row.state === "AZ") ?? {
+    state: "AZ",
     nursingHomes: 0,
     homeHealth: 0,
     hospice: 0,
@@ -759,6 +777,21 @@ export function buildSeniorHomeIntel(input: {
         "TULIP search result is not a complete bulk universe.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Arizona ADHS (state enrichment)",
+      numerator: AZ_LOCKED.alHome,
+      denominator: null,
+      display: `${AZ_LOCKED.alHome.toLocaleString("en-US")} Assisted Living Homes; ${AZ_LOCKED.alCenter.toLocaleString("en-US")} Assisted Living Centers; ${AZ_LOCKED.afc.toLocaleString("en-US")} Adult Foster Care (not a combined total). GIS clock ${AZ_LOCKED.gisRun}.`,
+      status: "partial",
+      method:
+        "Arizona state-license GIS classes on /arizona. Homes, Centers, and Adult Foster Care stay separate. AZ Care Check is search-only.",
+      limitations: [
+        "Do not add Homes, Centers, Adult Foster Care, and CMS classes into one senior-provider denominator.",
+        "Assisted Living Home is not Assisted Living Center. Assisted Living is not SNF.",
+        "The ADHS GIS run date is 2025-02-03. Current monthly Excel tables were not acquired.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -779,7 +812,9 @@ export function buildSeniorHomeIntel(input: {
               ? "texas_state_intelligence"
               : row.state === "WA"
                 ? "washington_state_intelligence"
-                : "cms_directory_only",
+                : row.state === "AZ"
+                  ? "arizona_state_intelligence"
+                  : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -791,7 +826,9 @@ export function buildSeniorHomeIntel(input: {
               ? TX_PUBLIC_PATH
               : row.state === "WA"
                 ? WA_PUBLIC_PATH
-                : null,
+                : row.state === "AZ"
+                  ? AZ_PUBLIC_PATH
+                  : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 
@@ -882,6 +919,16 @@ export function buildSeniorHomeIntel(input: {
       cmsHomeHealth: waGeo.homeHealth,
       cmsHospice: waGeo.hospice,
       note: "Washington state intelligence keeps DSHS Adult Family Homes, Assisted Living, Enhanced Services, and CMS class overlays as separate datasets. They are not one senior-provider total. AFH is not ALF. DSHS is not CMS.",
+    },
+    arizonaPreview: {
+      href: AZ_PUBLIC_PATH,
+      alHome: AZ_LOCKED.alHome,
+      alCenter: AZ_LOCKED.alCenter,
+      afc: AZ_LOCKED.afc,
+      cmsNursingHomes: azGeo.nursingHomes,
+      cmsHomeHealth: azGeo.homeHealth,
+      cmsHospice: azGeo.hospice,
+      note: "Arizona state intelligence keeps ADHS Assisted Living Homes, Assisted Living Centers, Adult Foster Care, and CMS class overlays as separate datasets. They are not one senior-provider total. Home is not Center. ADHS is not CMS.",
     },
     askMarket: [
       {
