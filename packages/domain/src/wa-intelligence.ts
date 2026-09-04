@@ -264,9 +264,11 @@ export function waTraceMetrics(snapshot: WaPublicSnapshot = WA_PUBLIC_SNAPSHOT):
       sourceGrain: "GDLArchiveDate IS NULL",
       numerator: gis.profile.rows,
       denominator: gis.profile.rows,
-      computation: "FeatureServer count and paged harvest of current (non-archived) residential-care locations.",
+      computation:
+        "FeatureServer count and paged harvest of current (non-archived) residential-care locations.",
       coverageState: "ACQUIRED_CURRENT_SNAPSHOT",
-      caveat: "Includes AF, BH, EF, SL, and GT. Not one senior-provider total. Current GIS record != quality.",
+      caveat:
+        "Includes AF, BH, EF, SL, and GT. Not one senior-provider total. Current GIS record != quality.",
     },
     {
       id: "afh",

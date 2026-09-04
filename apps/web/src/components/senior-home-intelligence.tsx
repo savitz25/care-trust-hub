@@ -467,7 +467,9 @@ export function SeniorHomeIntelligence({
           <p>{intel.washingtonPreview.note}</p>
           <ul className="hub-plain-list">
             <li>DSHS Adult Family Homes: {intel.washingtonPreview.afh.toLocaleString("en-US")}</li>
-            <li>DSHS Assisted Living Facilities: {intel.washingtonPreview.alf.toLocaleString("en-US")}</li>
+            <li>
+              DSHS Assisted Living Facilities: {intel.washingtonPreview.alf.toLocaleString("en-US")}
+            </li>
             <li>
               CMS Nursing Homes / Home Health / Hospice:{" "}
               {intel.washingtonPreview.cmsNursingHomes.toLocaleString("en-US")} /{" "}
