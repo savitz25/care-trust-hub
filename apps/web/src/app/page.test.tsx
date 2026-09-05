@@ -9,7 +9,7 @@ describe("experience lab home", () => {
     render(await DevelopmentHome({}));
     expect(screen.getByRole("note")).toHaveTextContent(/synthetic demonstration data/i);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      /understand senior care through public evidence/i,
+      /research the provider.*research the evidence around them/i,
     );
     expect(
       screen.getByRole("heading", { name: /what is in the research universe/i }),
