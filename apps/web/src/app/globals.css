@@ -3565,6 +3565,19 @@ html {
   padding: 0 var(--space-3);
   background: var(--color-warm-50);
 }
+.intel-class-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin-top: var(--space-4);
+}
+.intel-class-links a {
+  min-height: var(--th-control);
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-senior-plum);
+  font-weight: 700;
+}
 .intel-section {
   padding-block: clamp(2.5rem, 6vw, 4.5rem);
   border-top: 1px solid var(--color-warm-200);
@@ -3686,12 +3699,158 @@ html {
   width: 1.2rem;
   height: 1.2rem;
 }
+.intel-layer-flow,
+.intel-inventory,
+.intel-inventory__rows,
+.intel-state-cards,
+.intel-identity__examples,
+.intel-timeline {
+  display: grid;
+  gap: var(--space-5);
+  min-width: 0;
+}
+.intel-layer-flow {
+  margin-top: var(--space-8);
+  border-block: 1px solid var(--color-warm-200);
+}
+.intel-layer-flow article {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: var(--space-4);
+  padding-block: var(--space-5);
+  border-bottom: 1px solid var(--color-warm-200);
+}
+.intel-layer-flow article:last-child {
+  border-bottom: 0;
+}
+.intel-layer-flow article > span {
+  color: var(--color-senior-plum);
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+}
+.intel-layer-flow h3,
+.intel-layer-flow p {
+  margin: 0;
+}
+.intel-layer-flow p {
+  margin-top: var(--space-2);
+  color: var(--color-slate-700);
+}
+.intel-inventory {
+  margin-top: var(--space-10);
+}
+.intel-inventory__family {
+  min-width: 0;
+  padding-top: var(--space-5);
+  border-top: 3px solid var(--color-senior-plum);
+}
+.intel-inventory__family > h3 {
+  max-width: 25ch;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.intel-inventory__row,
+.intel-state-card,
+.intel-identity__examples article {
+  min-width: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--th-radius-card);
+  background: var(--color-white);
+}
+.intel-inventory__value {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--color-senior-plum);
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+}
+.intel-inventory__row h4 {
+  margin: var(--space-2) 0;
+  font-size: 1.05rem;
+}
+.intel-inventory dl,
+.intel-state-card dl {
+  display: grid;
+  gap: var(--space-3);
+  margin-block: var(--space-5);
+}
+.intel-inventory dl div,
+.intel-state-card dl div {
+  display: grid;
+  gap: 0.15rem;
+}
+.intel-inventory dt,
+.intel-state-card dt {
+  color: var(--color-slate-700);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.intel-inventory dd,
+.intel-state-card dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.intel-identity__examples {
+  margin-top: var(--space-8);
+}
+.intel-identity__examples h3 span {
+  color: var(--color-senior-plum);
+}
+.intel-state-cards {
+  margin-block: var(--space-8);
+}
+.intel-state-card .button {
+  width: 100%;
+}
+.intel-national-map {
+  padding: var(--space-5);
+  border: 1px solid var(--color-warm-200);
+  border-radius: var(--th-radius-card);
+}
+.intel-national-map > summary {
+  min-height: var(--th-control);
+  cursor: pointer;
+  font-weight: 700;
+}
+.intel-timeline {
+  margin: var(--space-8) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.intel-timeline li {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.3fr) 1fr;
+  gap: var(--space-5);
+  padding: var(--space-5) 0;
+  border-top: 1px solid var(--color-warm-200);
+}
+.intel-timeline__freshness {
+  margin: 0;
+  color: var(--color-senior-plum);
+  font-weight: 700;
+}
+.intel-timeline h3,
+.intel-timeline p {
+  margin: 0;
+}
+.intel-timeline p {
+  margin-top: var(--space-2);
+}
 @media (min-width: 48rem) {
   .intel-lookup__grid {
     grid-template-columns: 1.4fr 0.8fr 1fr auto;
     align-items: end;
   }
   .intel-metric-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .intel-inventory__rows,
+  .intel-state-cards,
+  .intel-identity__examples {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -3717,6 +3876,10 @@ html {
   }
   .hub-table-scroll {
     max-width: 100%;
+  }
+  .intel-timeline li {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
   }
   .intel-home .hub-table,
   .intel-home .hub-table--compact {

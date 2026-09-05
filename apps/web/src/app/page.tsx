@@ -8,13 +8,17 @@ import { productionOrigin } from "@/config/deployment";
 import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-handoff";
 import { getSeniorHomeIntel } from "@/server/care/senior-home-intel";
 import { getSeniorNetworkMetrics } from "@/server/care/senior-network-metrics";
+import {
+  getSeniorHomepageEvidenceInventory,
+  getSeniorHomepageStateCards,
+} from "@/server/care/senior-home-evidence-inventory";
 
 export const metadata: Metadata = {
   title: {
     absolute: `${brand.publicName} — Independent Senior-Care Intelligence`,
   },
   description:
-    "Research nursing homes, home health, and hospice through published government evidence. Classes stay separate. No Trust Hub score, ranking, or paid placement.",
+    "Research senior-care licensing, CMS certification, inspections, nursing-home deficiencies, enforcement, staffing, ownership, home health, and hospice through published government evidence.",
   alternates: { canonical: productionOrigin.origin },
 };
 
@@ -30,6 +34,7 @@ export default async function Home({
   const journeyModule = resolveSeniorJourneyModule(parseNetworkJourney(sp), "home");
   const intel = getSeniorHomeIntel();
   const networkMetrics = getSeniorNetworkMetrics();
+  const evidenceInventory = getSeniorHomepageEvidenceInventory();
   return (
     <>
       <div className="page-shell home-page">
@@ -46,7 +51,7 @@ export default async function Home({
             name: `${brand.publicName} — Independent Senior-Care Intelligence`,
             url: productionOrigin.href,
             description:
-              "National senior-care research hub using published CMS evidence. No aggregate rating.",
+              "Senior-care research connecting federal CMS evidence with state licensing, inspections, deficiencies, enforcement, staffing, quality, and ownership records. No aggregate rating.",
             isPartOf: { "@id": `${productionOrigin.href}#website` },
             about: [
               { "@type": "Thing", name: "CMS Nursing Homes" },
@@ -58,6 +63,8 @@ export default async function Home({
         <SeniorHomeIntelligence
           intel={intel}
           networkMetrics={networkMetrics}
+          evidenceInventory={evidenceInventory}
+          stateCards={getSeniorHomepageStateCards()}
           tools={{
             navigator: navigatorEnabled,
             planner: plannerEnabled,

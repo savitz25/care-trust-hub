@@ -545,7 +545,7 @@ export function buildSeniorHomeIntel(input: {
       storyId: "ownership-coverage-gap",
       storyType: "GAP",
       title: "Ownership evidence is uneven — and UNKNOWN is not a clean history",
-      summary: `CURRENT OWNED_BY evidence is on file for ${share(nh.coverage.ownedByProviders, nh.current)} Nursing Homes, ${share(hh.coverage.ownedByProviders, hh.current)} Home Health agencies, and ${share(hospice.coverage.ownedByProviders, hospice.current)} Hospice providers. The graph also contains ${national.ownership.unknownEdges.toLocaleString("en-US")} UNKNOWN ownership edges. Nursing Home CHOW events exist (${nh.chow.events.toLocaleString("en-US")}); Home Health and Hospice CHOW files do not.`,
+      summary: `CURRENT OWNED_BY evidence is on file for ${share(nh.coverage.ownedByProviders, nh.current)} Nursing Homes, ${share(hh.coverage.ownedByProviders, hh.current)} Home Health agencies, and ${share(hospice.coverage.ownedByProviders, hospice.current)} Hospice providers. Internal graph-edge counts are not a homepage measure. Nursing Home CHOW events exist (${nh.chow.events.toLocaleString("en-US")}); Home Health and Hospice CHOW files do not.`,
       chartType: "coverage",
       chart: {
         caption: "Share of each current directory with resolved CURRENT OWNED_BY evidence.",
@@ -587,7 +587,6 @@ export function buildSeniorHomeIntel(input: {
         "nursingHome.coverage.ownedByProviders",
         "homeHealth.coverage.ownedByProviders",
         "hospice.coverage.ownedByProviders",
-        "ownership.unknownEdges",
       ],
     },
   ];
@@ -859,9 +858,9 @@ export function buildSeniorHomeIntel(input: {
     findings,
     coverage,
     gaps: [
-      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, California, Texas, and Washington currently have state intelligence pages.",
+      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, California, Texas, Washington, and Arizona currently have state intelligence pages.",
       "CMS stars, staffing, inspections, and penalties are not interchangeable across Nursing Home, Home Health, and Hospice.",
-      `${national.ownership.unknownEdges.toLocaleString("en-US")} ownership edges are UNKNOWN. UNKNOWN is not historical ownership.`,
+      "Internal ownership graph edges are not homepage publication measures. Missing public ownership evidence is not proof of independence.",
       "Home Health and Hospice have no CMS CHOW event file in this research graph.",
       "Assisted Living is state-regulated and is not a CMS national directory class.",
       "No authoritative nationwide AHCA↔CMS File Number to CCN bridge is published. Internal candidates are not shown here.",
@@ -973,7 +972,7 @@ export function buildSeniorHomeIntel(input: {
       {
         id: "florida-differs",
         question: "How does Florida’s research coverage differ?",
-        answer: `Florida currently has a state intelligence page with ${input.floridaIdentities.toLocaleString("en-US")} AHCA identities and ${input.floridaRegulatoryObservations.toLocaleString("en-US")} regulatory observations, plus CMS class counts. New Jersey, California, and Texas have separate state intelligence pages. Other states on this homepage are CMS directory counts only.`,
+        answer: `Florida currently has a state intelligence page with ${input.floridaIdentities.toLocaleString("en-US")} AHCA identities and ${input.floridaRegulatoryObservations.toLocaleString("en-US")} regulatory observations, plus CMS class counts. New Jersey, California, Texas, Washington, and Arizona have separate state intelligence pages. Other states on this homepage are CMS directory counts only.`,
         href: "/florida",
         hrefLabel: "Open Florida intelligence",
       },
@@ -993,7 +992,7 @@ export function buildSeniorHomeIntel(input: {
       "Inspection findings describe conditions at points in time.",
       "Ownership can change, and UNKNOWN is not a former owner.",
       "Nursing Home, Home Health, and Hospice evidence is not directly comparable.",
-      "State evidence availability differs. Florida, New Jersey, California, Texas, and Washington are not a national template yet.",
+      "State evidence availability differs. Florida, New Jersey, California, Texas, Washington, and Arizona are not a national template yet.",
       "Source publication schedules differ. This page is not live data.",
     ],
   };

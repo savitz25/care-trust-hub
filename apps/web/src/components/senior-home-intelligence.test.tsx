@@ -1,10 +1,14 @@
 import { render, screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   HOME_PROHIBITED_LANGUAGE,
   assertSeniorHomeIntel,
   assertSeniorNetworkMetrics,
   buildSeniorHomeIntel,
+  buildSeniorHomepageEvidenceInventory,
+  SENIOR_HOMEPAGE_STATE_CARDS,
   type SeniorNationalIntelligence,
   type SeniorNetworkMetricsV1,
 } from "@care/domain";
@@ -21,6 +25,12 @@ const intel = assertSeniorHomeIntel(
   }),
 );
 const networkMetrics = assertSeniorNetworkMetrics(networkPayload as SeniorNetworkMetricsV1);
+const evidenceInventory = buildSeniorHomepageEvidenceInventory({
+  networkMetrics,
+  floridaIdentities: 6983,
+  floridaRegulatoryObservations: 77219,
+  floridaSourceAsOf: "2026-08-27",
+});
 
 describe("senior homepage intelligence", () => {
   it("leads with intelligence and keeps classes separate", () => {
@@ -28,11 +38,13 @@ describe("senior homepage intelligence", () => {
       <SeniorHomeIntelligence
         intel={intel}
         networkMetrics={networkMetrics}
+        evidenceInventory={evidenceInventory}
+        stateCards={SENIOR_HOMEPAGE_STATE_CARDS}
         tools={{ navigator: true, planner: true, workspace: true }}
       />,
     );
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      /understand senior care through public evidence/i,
+      /research the provider.*research the evidence around them/i,
     );
     expect(document.body.textContent).toMatch(
       /Research senior care without being sold senior care/i,
@@ -56,7 +68,11 @@ describe("senior homepage intelligence", () => {
     expect(screen.getAllByText(/explain this chart/i)).toHaveLength(3);
     expect(screen.getAllByText(/trace this number/i).length).toBeGreaterThanOrEqual(5);
     expect(document.body.textContent).toMatch(/where the record is incomplete/i);
-    expect(document.body.textContent).toMatch(/does not encode quality/i);
+    expect(document.body.textContent).toMatch(
+      /not quality, safety, importance, or research depth/i,
+    );
+    expect(document.body.textContent).not.toMatch(/205,082 canonical organizations/i);
+    expect(document.body.textContent).not.toMatch(/1,421,277 ownership edges/i);
     expect(screen.getByRole("link", { name: /explore florida intelligence/i })).toHaveAttribute(
       "href",
       "/florida",
@@ -88,5 +104,21 @@ describe("senior homepage intelligence", () => {
     expect(document.body.textContent).not.toMatch(HOME_PROHIBITED_LANGUAGE);
     expect(document.body.textContent).not.toMatch(/senior-care providers/);
     expect(document.body.textContent).not.toMatch(/Loading intelligence/i);
+    expect(document.body.textContent).toMatch(/source-as-of dates are agency evidence clocks/i);
+    expect(document.body.textContent).toMatch(/not dates the state was added/i);
+    expect(screen.queryByText(/Recently added \/ updated/i)).not.toBeInTheDocument();
+    expect(document.querySelector("#recent-intelligence time")).toBeNull();
+    expect(document.body.textContent).toMatch(/Federal directories & certification/i);
+    expect(document.body.textContent).toMatch(/Public research surfaces/i);
+    expect(document.body.textContent).not.toMatch(/PUBLIC & RESEARCH & SURFACES/i);
+  });
+
+  it("contains no disabled legacy state-preview block", () => {
+    const source = readFileSync(
+      resolve(process.cwd(), "src/components/senior-home-intelligence.tsx"),
+      "utf8",
+    );
+    expect(source).not.toMatch(/false\s*&&/);
+    expect(source).not.toMatch(/Florida preview|Arizona preview/);
   });
 });
