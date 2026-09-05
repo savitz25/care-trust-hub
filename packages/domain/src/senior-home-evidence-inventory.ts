@@ -49,6 +49,13 @@ export interface SeniorHomepageStateCard {
   sourceAsOf: string;
 }
 
+export const SENIOR_HOMEPAGE_CLASS_SURFACES = [
+  "/search?search=1&class=nursing_home",
+  "/home-health",
+  "/hospice",
+  "/assisted-living",
+] as const;
+
 function publicNationalMetrics(metrics: SeniorNetworkMetricsV1): SeniorHomepageEvidenceMeasure[] {
   return metrics.metrics
     .filter((metric) => metric.publicationStatus === "PUBLIC" && metric.value !== null)
@@ -185,8 +192,8 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       "NJDOH enforcement corpus",
       NJ_PUBLIC_FINGERPRINT,
       "2026-09-02",
-      "Downloads represented by accepted corpus rows.",
-      "Unique legal actions or safe provider attachments; duplicate content can exist.",
+      "1,144 downloaded document occurrences. The accepted corpus separately reports 1,131 unique content hashes.",
+      "Unique legal actions, violations, or safe provider attachments; downloaded occurrences and deduplicated content hashes are different grains.",
       NJ_PUBLIC_PATH,
     ),
     m(
@@ -418,7 +425,7 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Completed state intelligence pages",
-      6,
+      SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
       "FL, NJ, CA, TX, WA, AZ",
@@ -433,7 +440,7 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       "class-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Provider-class research surfaces",
-      4,
+      SENIOR_HOMEPAGE_CLASS_SURFACES.length,
       "published class route or class-filtered search surface",
       "Nursing Home, Home Health, Hospice, Assisted Living",
       "United States / class-dependent",
@@ -554,9 +561,10 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     name: "Washington",
     href: WA_PUBLIC_PATH,
     regulators: "DSHS RCS + CMS",
-    stateClasses: "Adult Family Home, Assisted Living, Enhanced Services",
+    stateClasses:
+      "6,179 Adult Family Homes · 557 Assisted Living Facilities · 16 Enhanced Services Facilities",
     cmsOverlay: "Nursing Home · Home Health · Hospice",
-    identityDepth: `${WA_LOCKED.stateNhExactCms} exact state NH-to-CMS matches`,
+    identityDepth: `${WA_LOCKED.stateNhCurrent} state Nursing Homes · ${WA_LOCKED.cmsNursingHomes} CMS Nursing Homes · ${WA_LOCKED.stateNhExactCms} exact matches`,
     regulatoryDepth: "State bulk enforcement not acquired; federal NH evidence remains",
     sourceAsOf: WA_LOCKED.gisAsOf,
   },
@@ -565,7 +573,7 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     name: "Arizona",
     href: AZ_PUBLIC_PATH,
     regulators: "ADHS + CMS",
-    stateClasses: "Assisted Living Home/Center, Adult Foster Care",
+    stateClasses: `${AZ_LOCKED.alHome.toLocaleString("en-US")} Assisted Living Homes · ${AZ_LOCKED.alCenter} Assisted Living Centers · ${AZ_LOCKED.afc} Adult Foster Care`,
     cmsOverlay: "Nursing Home · Home Health · Hospice",
     identityDepth: `Exact joins: NH ${AZ_LOCKED.nhExact}, HHA ${AZ_LOCKED.hhaExact}, Hospice ${AZ_LOCKED.hospiceExact}`,
     regulatoryDepth: "Open-search state evidence; missing bulk is unknown",

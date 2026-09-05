@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   HOMEPAGE_EVIDENCE_METRIC_KEYS,
-  STATE_NAMES,
   metricByKey,
   type SeniorHomeIntel,
   type SeniorHomepageEvidenceMeasure,
@@ -9,6 +8,18 @@ import {
   type SeniorNetworkMetricsV1,
 } from "@care/domain";
 import { SeniorHomeChecklist } from "./senior-home-checklist";
+
+const EVIDENCE_FAMILY_LABELS: Record<SeniorHomepageEvidenceMeasure["family"], string> = {
+  IDENTITY_LICENSURE: "Identity & licensure",
+  FEDERAL_DIRECTORY: "Federal directories & certification",
+  INSPECTION_DEFICIENCY: "Inspections & deficiencies",
+  ENFORCEMENT_REGULATORY: "Enforcement & regulatory history",
+  STAFFING_OPERATIONS: "Staffing & care operations",
+  QUALITY_EXPERIENCE: "Quality & experience observations",
+  OWNERSHIP_CHANGE: "Ownership & change",
+  STATE_CARE_ECOSYSTEM: "State-specific care ecosystems",
+  PUBLIC_RESEARCH_SURFACES: "Public research surfaces",
+};
 
 function dateLabel(value: string | null): string {
   return value ?? "Not reported";
@@ -192,7 +203,7 @@ export function SeniorHomeIntelligence({
         <div className="intel-inventory">
           {Object.entries(inventoryFamilies).map(([family, rows]) => (
             <section key={family} className="intel-inventory__family">
-              <h3>{family.replaceAll("_", " & ")}</h3>
+              <h3>{EVIDENCE_FAMILY_LABELS[family as SeniorHomepageEvidenceMeasure["family"]]}</h3>
               <div className="intel-inventory__rows">
                 {rows.map((row) => (
                   <article key={row.key} className="intel-inventory__row">
@@ -495,30 +506,28 @@ export function SeniorHomeIntelligence({
 
       <section className="intel-section" id="recent-intelligence" aria-labelledby="recent-title">
         <div className="section-heading">
-          <p className="eyebrow">Recently added / updated</p>
-          <h2 id="recent-title">State intelligence now extends beyond the CMS directory</h2>
+          <p className="eyebrow">State intelligence coverage & source freshness</p>
+          <h2 id="recent-title">State intelligence now available</h2>
           <p>
-            These entries project accepted state artifacts. They describe evidence availability—not
-            changes in provider quality.
+            These entries project accepted state artifacts. Source-as-of dates are agency evidence
+            clocks—not dates the state was added to SeniorTrustHub and not changes in provider
+            quality.
           </p>
         </div>
-        <ol className="intel-timeline">
-          {stateCards
-            .slice()
-            .reverse()
-            .map((state) => (
-              <li key={state.state}>
-                <time>{state.sourceAsOf}</time>
-                <div>
-                  <h3>{state.name} intelligence</h3>
-                  <p>{state.stateClasses}</p>
-                  <p className="hub-kicker">
-                    {state.identityDepth} · {state.regulatoryDepth}
-                  </p>
-                </div>
-              </li>
-            ))}
-        </ol>
+        <ul className="intel-timeline">
+          {stateCards.map((state) => (
+            <li key={state.state}>
+              <p className="intel-timeline__freshness">Source as of: {state.sourceAsOf}</p>
+              <div>
+                <h3>{state.name} intelligence</h3>
+                <p>{state.stateClasses}</p>
+                <p className="hub-kicker">
+                  {state.identityDepth} · {state.regulatoryDepth}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="intel-section" id="explore" aria-labelledby="explore-title">
@@ -597,149 +606,6 @@ export function SeniorHomeIntelligence({
               ))}
           </div>
         </details>
-        {false && (
-          <>
-            <article className="intel-florida">
-              <p className="eyebrow">Florida preview</p>
-              <h3>{STATE_NAMES.FL} intelligence</h3>
-              <p>{intel.floridaPreview.note}</p>
-              <ul className="hub-plain-list">
-                <li>
-                  AHCA identities: {intel.floridaPreview.ahcaIdentities.toLocaleString("en-US")}
-                </li>
-                <li>
-                  State regulatory observations:{" "}
-                  {intel.floridaPreview.regulatoryObservations.toLocaleString("en-US")}
-                </li>
-                <li>
-                  CMS Nursing Homes / Home Health / Hospice:{" "}
-                  {intel.floridaPreview.cmsNursingHomes.toLocaleString("en-US")} /{" "}
-                  {intel.floridaPreview.cmsHomeHealth.toLocaleString("en-US")} /{" "}
-                  {intel.floridaPreview.cmsHospice.toLocaleString("en-US")}
-                </li>
-                <li>Published ALF/AFCH profiles: {intel.floridaPreview.publishedAlfAfch}</li>
-              </ul>
-              <Link className="button button--secondary" href={intel.floridaPreview.href}>
-                Explore Florida Intelligence →
-              </Link>
-            </article>
-            <article className="intel-florida">
-              <p className="eyebrow">New Jersey preview</p>
-              <h3>{STATE_NAMES.NJ} intelligence</h3>
-              <p>{intel.newJerseyPreview.note}</p>
-              <ul className="hub-plain-list">
-                <li>
-                  NJDOH All_LTC identities:{" "}
-                  {intel.newJerseyPreview.ltcIdentities.toLocaleString("en-US")}
-                </li>
-                <li>
-                  NJDOH All_Acute identities:{" "}
-                  {intel.newJerseyPreview.acuteIdentities.toLocaleString("en-US")}
-                </li>
-                <li>
-                  CMS Nursing Homes / Home Health / Hospice:{" "}
-                  {intel.newJerseyPreview.cmsNursingHomes.toLocaleString("en-US")} /{" "}
-                  {intel.newJerseyPreview.cmsHomeHealth.toLocaleString("en-US")} /{" "}
-                  {intel.newJerseyPreview.cmsHospice.toLocaleString("en-US")}
-                </li>
-              </ul>
-              <Link className="button button--secondary" href={intel.newJerseyPreview.href}>
-                Explore New Jersey Intelligence →
-              </Link>
-            </article>
-            <article className="intel-florida">
-              <p className="eyebrow">California preview</p>
-              <h3>{STATE_NAMES.CA} intelligence</h3>
-              <p>{intel.californiaPreview.note}</p>
-              <ul className="hub-plain-list">
-                <li>
-                  CDPH ELMS locations: {intel.californiaPreview.elmsRows.toLocaleString("en-US")}
-                </li>
-                <li>
-                  CCLD RCFE LICENSED (as of 2025-05-25):{" "}
-                  {intel.californiaPreview.rcfeLicensed.toLocaleString("en-US")}
-                </li>
-                <li>
-                  CMS Nursing Homes / Home Health / Hospice:{" "}
-                  {intel.californiaPreview.cmsNursingHomes.toLocaleString("en-US")} /{" "}
-                  {intel.californiaPreview.cmsHomeHealth.toLocaleString("en-US")} /{" "}
-                  {intel.californiaPreview.cmsHospice.toLocaleString("en-US")}
-                </li>
-              </ul>
-              <Link className="button button--secondary" href={intel.californiaPreview.href}>
-                Explore California Intelligence →
-              </Link>
-            </article>
-            <article className="intel-florida">
-              <p className="eyebrow">Texas preview</p>
-              <h3>{STATE_NAMES.TX} intelligence</h3>
-              <p>{intel.texasPreview.note}</p>
-              <ul className="hub-plain-list">
-                <li>
-                  CMS Nursing Homes / Home Health / Hospice:{" "}
-                  {intel.texasPreview.cmsNursingHomes.toLocaleString("en-US")} /{" "}
-                  {intel.texasPreview.cmsHomeHealth.toLocaleString("en-US")} /{" "}
-                  {intel.texasPreview.cmsHospice.toLocaleString("en-US")}
-                </li>
-                <li>
-                  HHSC nursing facilities: {intel.texasPreview.hhscNf.toLocaleString("en-US")}
-                </li>
-                <li>HHSC assisted living: {intel.texasPreview.hhscAlf.toLocaleString("en-US")}</li>
-                <li>HHSC HCSSA rows: {intel.texasPreview.hhscHcssa.toLocaleString("en-US")}</li>
-              </ul>
-              <Link className="button button--secondary" href={intel.texasPreview.href}>
-                Explore Texas Intelligence →
-              </Link>
-            </article>
-            <article className="intel-florida">
-              <p className="eyebrow">Washington preview</p>
-              <h3>{STATE_NAMES.WA} intelligence</h3>
-              <p>{intel.washingtonPreview.note}</p>
-              <ul className="hub-plain-list">
-                <li>
-                  DSHS Adult Family Homes: {intel.washingtonPreview.afh.toLocaleString("en-US")}
-                </li>
-                <li>
-                  DSHS Assisted Living Facilities:{" "}
-                  {intel.washingtonPreview.alf.toLocaleString("en-US")}
-                </li>
-                <li>
-                  CMS Nursing Homes / Home Health / Hospice:{" "}
-                  {intel.washingtonPreview.cmsNursingHomes.toLocaleString("en-US")} /{" "}
-                  {intel.washingtonPreview.cmsHomeHealth.toLocaleString("en-US")} /{" "}
-                  {intel.washingtonPreview.cmsHospice.toLocaleString("en-US")}
-                </li>
-              </ul>
-              <Link className="button button--secondary" href={intel.washingtonPreview.href}>
-                Explore Washington Intelligence →
-              </Link>
-            </article>
-            <article className="intel-florida">
-              <p className="eyebrow">Arizona preview</p>
-              <h3>{STATE_NAMES.AZ} intelligence</h3>
-              <p>{intel.arizonaPreview.note}</p>
-              <ul className="hub-plain-list">
-                <li>
-                  ADHS Assisted Living Homes: {intel.arizonaPreview.alHome.toLocaleString("en-US")}
-                </li>
-                <li>
-                  ADHS Assisted Living Centers:{" "}
-                  {intel.arizonaPreview.alCenter.toLocaleString("en-US")}
-                </li>
-                <li>ADHS Adult Foster Care: {intel.arizonaPreview.afc.toLocaleString("en-US")}</li>
-                <li>
-                  CMS Nursing Homes / Home Health / Hospice:{" "}
-                  {intel.arizonaPreview.cmsNursingHomes.toLocaleString("en-US")} /{" "}
-                  {intel.arizonaPreview.cmsHomeHealth.toLocaleString("en-US")} /{" "}
-                  {intel.arizonaPreview.cmsHospice.toLocaleString("en-US")}
-                </li>
-              </ul>
-              <Link className="button button--secondary" href={intel.arizonaPreview.href}>
-                Explore Arizona Intelligence →
-              </Link>
-            </article>
-          </>
-        )}
         <details className="intel-disclose">
           <summary>Accessible state list</summary>
           <div className="hub-table-scroll">

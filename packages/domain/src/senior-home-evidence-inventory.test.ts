@@ -3,6 +3,7 @@ import metricsPayload from "../../../apps/web/src/data/senior-network-metrics-v1
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
 import {
   SENIOR_HOMEPAGE_STATE_CARDS,
+  SENIOR_HOMEPAGE_CLASS_SURFACES,
   assertSeniorHomepageEvidenceInventory,
   buildSeniorHomepageEvidenceInventory,
 } from "./senior-home-evidence-inventory";
@@ -52,6 +53,15 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
     );
     expect(inventory.find((row) => row.key === "ca-rcfe")?.doesNotCount).toMatch(
       /CMS certification/i,
+    );
+    expect(inventory.find((row) => row.key === "state-pages")?.value).toBe(
+      SENIOR_HOMEPAGE_STATE_CARDS.length,
+    );
+    expect(inventory.find((row) => row.key === "class-pages")?.value).toBe(
+      SENIOR_HOMEPAGE_CLASS_SURFACES.length,
+    );
+    expect(inventory.find((row) => row.key === "nj-enforcement-documents")?.counts).toMatch(
+      /1,131 unique content hashes/i,
     );
   });
 

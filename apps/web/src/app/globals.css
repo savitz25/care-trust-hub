@@ -3828,7 +3828,8 @@ html {
   padding: var(--space-5) 0;
   border-top: 1px solid var(--color-warm-200);
 }
-.intel-timeline time {
+.intel-timeline__freshness {
+  margin: 0;
   color: var(--color-senior-plum);
   font-weight: 700;
 }

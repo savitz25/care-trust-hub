@@ -1,4 +1,6 @@
 import { render, screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   HOME_PROHIBITED_LANGUAGE,
@@ -102,5 +104,21 @@ describe("senior homepage intelligence", () => {
     expect(document.body.textContent).not.toMatch(HOME_PROHIBITED_LANGUAGE);
     expect(document.body.textContent).not.toMatch(/senior-care providers/);
     expect(document.body.textContent).not.toMatch(/Loading intelligence/i);
+    expect(document.body.textContent).toMatch(/source-as-of dates are agency evidence clocks/i);
+    expect(document.body.textContent).toMatch(/not dates the state was added/i);
+    expect(screen.queryByText(/Recently added \/ updated/i)).not.toBeInTheDocument();
+    expect(document.querySelector("#recent-intelligence time")).toBeNull();
+    expect(document.body.textContent).toMatch(/Federal directories & certification/i);
+    expect(document.body.textContent).toMatch(/Public research surfaces/i);
+    expect(document.body.textContent).not.toMatch(/PUBLIC & RESEARCH & SURFACES/i);
+  });
+
+  it("contains no disabled legacy state-preview block", () => {
+    const source = readFileSync(
+      resolve(process.cwd(), "src/components/senior-home-intelligence.tsx"),
+      "utf8",
+    );
+    expect(source).not.toMatch(/false\s*&&/);
+    expect(source).not.toMatch(/Florida preview|Arizona preview/);
   });
 });
