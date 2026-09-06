@@ -29,7 +29,15 @@ export async function GET(
         },
         { status: 404, headers: HEADERS },
       );
-    console.info(JSON.stringify({ event: "claim_cta_clicked", hub: "senior", profile_class: providerClass, state: "unknown", acquisition_source: "organic" }));
+    console.info(
+      JSON.stringify({
+        event: "claim_cta_clicked",
+        hub: "senior",
+        profile_class: providerClass,
+        state: "unknown",
+        acquisition_source: "organic",
+      }),
+    );
     return claimRedirect(mintSeniorHandoff(process.env.ATH_HANDOFF_SECRET || "", p).token);
   } catch {
     return Response.json(
