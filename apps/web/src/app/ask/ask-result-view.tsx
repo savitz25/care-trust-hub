@@ -9,12 +9,26 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
       <section className="senior-ask__interpretation" aria-labelledby="ask-interp-title">
         <h2 id="ask-interp-title">We interpreted your question as</h2>
         <dl>
-          {result.interpretation.map((chip) => (
-            <div key={chip.label}>
-              <dt>{chip.label}</dt>
-              <dd>{chip.value}</dd>
-            </div>
-          ))}
+          {result.interpretation.map((chip) => {
+            const refined = removeCriterion(result.rawQuery, chip.label);
+            return (
+              <div key={chip.label}>
+                <dt>{chip.label}</dt>
+                <dd>{chip.value}</dd>
+                {refined !== null && refined !== result.rawQuery ? (
+                  <dd>
+                    <Link
+                      data-specialist-event="refine"
+                      href={`/ask?q=${encodeURIComponent(refined)}`}
+                      aria-label={`Remove ${chip.label} criterion`}
+                    >
+                      Remove criterion
+                    </Link>
+                  </dd>
+                ) : null}
+              </div>
+            );
+          })}
         </dl>
         <form className="senior-ask__change" action="/ask" method="get">
           <label htmlFor="ask-q-edit">Change interpretation</label>
@@ -113,6 +127,9 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
                 </p>
                 <p>{entity.location}</p>
                 <p>{entity.statusLabel}</p>
+                <p>
+                  <strong>Evidence available</strong>
+                </p>
                 <ul>
                   {entity.evidence.map((item) => (
                     <li key={item.label}>
@@ -127,8 +144,53 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
                   <strong>Why this matched.</strong> {entity.whyMatched}
                 </p>
                 <p>
-                  <Link href={entity.href}>View research report</Link>
+                  <Link data-specialist-event="profile_open" href={entity.href}>
+                    Research this provider
+                  </Link>
                 </p>
+                <details className="senior-ask__result-trace" data-specialist-event="trace_open">
+                  <summary>Trace this result</summary>
+                  <dl>
+                    <div>
+                      <dt>Provider class</dt>
+                      <dd>
+                        {entity.providerClass === "nursing_home"
+                          ? "Nursing Home"
+                          : entity.providerClass === "home_health"
+                            ? "Home Health Agency"
+                            : "Hospice Provider"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>CMS CCN</dt>
+                      <dd>{entity.ccn}</dd>
+                    </div>
+                    <div>
+                      <dt>Why matched</dt>
+                      <dd>{entity.whyMatched}</dd>
+                    </div>
+                    <div>
+                      <dt>Source family</dt>
+                      <dd>{result.provenance.sourceFamily}</dd>
+                    </div>
+                    <div>
+                      <dt>Official as-of</dt>
+                      <dd>
+                        {entity.sourceAsOf ??
+                          result.provenance.officialAsOf ??
+                          "See source clock on the provider report"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Geography meaning</dt>
+                      <dd>{result.provenance.geographyMeaning}</dd>
+                    </div>
+                    <div>
+                      <dt>Limitations</dt>
+                      <dd>{result.limitations.join(" ")}</dd>
+                    </div>
+                  </dl>
+                </details>
               </article>
             </li>
           ))}
@@ -146,7 +208,7 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
         </nav>
       ) : null}
 
-      <details className="senior-ask__trace">
+      <details className="senior-ask__trace" data-specialist-event="trace_open">
         <summary>Trace this query</summary>
         <dl>
           <div>
@@ -196,4 +258,30 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
       </ul>
     </div>
   );
+}
+
+function removeCriterion(query: string, label: string): string | null {
+  if (/provider class/i.test(label))
+    return query
+      .replace(/\b(?:nursing homes?|home health agencies?|hospice providers?)\b/gi, "")
+      .trim();
+  if (/geography/i.test(label))
+    return query
+      .replace(
+        /\b(?:in|near)\s+(?:palm beach county|broward county|miami-dade county|boca raton|miami|tampa|florida|new jersey|california|texas|washington|arizona)\b/gi,
+        "",
+      )
+      .trim();
+  if (/stars|evidence/i.test(label))
+    return query
+      .replace(
+        /\b(?:with\s+)?(?:[1-5]\s+(?:cms overall|staffing|health inspection) stars?|indexed deficiencies|civil monetary penalties|staffing hprd|chow evidence|hhcahps evidence|cahps evidence)\b/gi,
+        "",
+      )
+      .trim();
+  if (/ccn|provider/i.test(label)) return "";
+  if (/status/i.test(label)) return query.replace(/\b(?:active|current)\b/gi, "").trim();
+  if (/sort/i.test(label))
+    return query.replace(/\b(?:highest|most|ordered by)\b[^,]*/gi, "").trim();
+  return null;
 }

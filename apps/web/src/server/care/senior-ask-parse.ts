@@ -11,6 +11,9 @@ const STATE_NAMES: Record<string, string> = {
   texas: "TX",
   california: "CA",
   "new york": "NY",
+  "new jersey": "NJ",
+  arizona: "AZ",
+  washington: "WA",
 };
 
 const COUNTIES: Record<string, { value: string; meaning: string }> = {
@@ -72,6 +75,25 @@ function detectCounty(q: string) {
   return undefined;
 }
 
+const CITIES: Record<string, { value: string; state: string }> = {
+  "boca raton": { value: "BOCA RATON", state: "FL" },
+  miami: { value: "MIAMI", state: "FL" },
+  tampa: { value: "TAMPA", state: "FL" },
+};
+
+function detectCity(q: string) {
+  for (const [name, city] of Object.entries(CITIES)) {
+    if (new RegExp(`\\b${name}\\b`, "i").test(q)) {
+      return {
+        type: "city" as const,
+        value: city.value,
+        meaning: `Recorded provider/office city in ${city.state} — not a verified service area.`,
+      };
+    }
+  }
+  return undefined;
+}
+
 function starNumber(q: string): number | undefined {
   const m =
     q.match(/\b([1-5])\s*(?:-|–)?\s*star/i) ||
@@ -89,9 +111,10 @@ function labeledCcn(q: string): string | undefined {
 }
 
 export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQuery {
-  const q = raw.trim();
+  const q = raw.trim().slice(0, 180);
   const providerClass = detectClass(q);
   const county = detectCounty(q);
+  const city = detectCity(q);
   const state = county
     ? {
         type: "state" as const,
@@ -99,11 +122,15 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
         meaning: "Florida — inferred from named Florida county.",
       }
     : detectState(q);
-  const geography = county ?? state;
+  const geography = county ?? city ?? state;
   const ccn = labeledCcn(q);
   const stars = starNumber(q);
 
-  const fail = (failReason: string, alternatives: string[]): SeniorResearchQuery =>
+  const fail = (
+    failReason: string,
+    alternatives: string[],
+    coverageState: SeniorResearchQuery["coverageState"] = "UNSUPPORTED",
+  ): SeniorResearchQuery =>
     validateSeniorResearchQuery({
       mode: "fail_closed",
       page: 1,
@@ -111,10 +138,38 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
       alternatives,
       providerClass: providerClass === "ambiguous" ? undefined : providerClass,
       geography,
+      coverageState,
     });
 
   if (!q) {
     return fail("Enter a research question.", ["Show nursing homes in Florida."]);
+  }
+  if (
+    raw.trim().length > 180 ||
+    /<\/?(?:script|iframe|object|style)\b|(?:'|%27)\s*(?:or|and)\s+\d+\s*=\s*\d+|--\s*$|;\s*(?:drop|select|insert|delete)\b/i.test(
+      raw,
+    )
+  ) {
+    return fail("The research question is malformed or exceeds the 180-character limit.", [
+      "Show nursing homes in Florida.",
+    ]);
+  }
+  if (
+    /\b(?:serving|serves|service area|coverage area)\b|\bnear my (?:address|zip)|\bserving my (?:zip|address)/i.test(
+      q,
+    )
+  ) {
+    return fail(
+      "Provider and office locations do not establish a verified service territory. Research recorded locations, then confirm service availability directly.",
+      ["Show nursing homes in Florida."],
+    );
+  }
+  if (/assisted living/i.test(q)) {
+    return fail(
+      "Assisted living is state-regulated and does not share the federal CMS nursing-home, Home Health, or Hospice directory contract. Use the available state-specific assisted-living research.",
+      ["Open Arizona assisted-living research."],
+      "PARTIAL",
+    );
   }
 
   if (/best owner|largest senior-care company/i.test(q)) {
@@ -124,7 +179,7 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
     );
   }
   if (
-    /\b(best|safest|worst|most dangerous|most abusive)\b/i.test(q) &&
+    /\b(best|safe|safest|worst|most dangerous|most abusive|should i choose)\b/i.test(q) &&
     /nursing|home health|hospice|senior/i.test(q)
   ) {
     return fail(
@@ -143,21 +198,38 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
       ["Show Florida nursing homes with indexed civil monetary penalties."],
     );
   }
-  if (/5-?\s*star hospice|hospice.*overall star|overall star.*hospice/i.test(q)) {
+  if (/5-?\s*star hospice|hospice.*overall.*star|overall.*star.*hospice/i.test(q)) {
     return fail(
       "Hospice does not have an overall CMS star rating comparable to nursing homes. That question is not supported.",
       ["Show hospice providers in Florida.", "Show hospice CAHPS evidence."],
     );
   }
+  if (/lowest (?:indexed )?deficienc/i.test(q)) {
+    return fail(
+      "The current research experience can show indexed deficiency evidence, but it does not rank providers by a low count or treat fewer indexed rows as better care.",
+      ["Show Florida nursing homes with indexed deficiencies."],
+    );
+  }
   if (
-    /watch list|generator compliance|ccrc|fixed need pool|memory care services license/i.test(q)
+    (/payment denial|fire citation/i.test(q) && /nursing/i.test(q)) ||
+    (/\binspections?\b/i.test(q) && !/stars?/i.test(q) && /nursing/i.test(q))
   ) {
+    return fail(
+      "This evidence family is source-backed on provider reports, but the current Ask executor does not expose a defensible standalone filter for it. Open a matching nursing-home report to inspect the evidence.",
+      ["Show nursing homes in Florida."],
+      "PARTIAL",
+    );
+  }
+  if (/watch list|generator compliance|ccrc|fixed need pool|memory care/i.test(q)) {
     return fail(
       "That Florida field is not available as a live Ask query on the current production extract. No new ingest is started from Ask.",
       ["Show nursing homes in Florida.", "Open Florida intelligence"],
     );
   }
-  if (/combined|all senior|senior providers total|33,?819/i.test(q) && /how many|count/i.test(q)) {
+  if (
+    /33,?819|all senior providers total/i.test(q) ||
+    (/combined|all senior|senior providers total/i.test(q) && /how many|count/i.test(q))
+  ) {
     return fail(
       "Nursing homes, home health, and hospice are separate classes. SeniorTrustHub does not publish a combined “senior providers” count.",
       [
@@ -174,11 +246,22 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
       identifier: { type: "ccn", value: ccn },
       status: "current",
       page: 1,
+      coverageState: "KNOWN",
     });
   }
   if (/^\d{6}$/.test(q) || /^[A-Z0-9]{6}$/i.test(q)) {
     return fail(
       "Bare six-character strings can be a nursing-home CCN, a Home Health CCN, or another identifier. Label the CCN (for example “CMS CCN 105502”) so Ask does not guess the class.",
+      ["Find CMS CCN 105502"],
+    );
+  }
+  if (
+    /\bwho owns this facility\b|\bdid this facility change owners\b|\bhas this nursing home been fined\b|\bwhat is (?:a )?deficienc/i.test(
+      q,
+    )
+  ) {
+    return fail(
+      "Add an exact provider name or labeled CMS CCN, or open a provider report. Ask will not attach ownership or evidence to an unspecified facility.",
       ["Find CMS CCN 105502"],
     );
   }
@@ -382,12 +465,54 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
   }
 
   if (!providerClass) {
+    const plausibleName = q.replace(/^find\s+|^research\s+/i, "").trim();
+    if (
+      /^[a-z0-9][a-z0-9&'., -]{2,119}$/i.test(plausibleName) &&
+      !/\b(how|what|which|where|who|count|compare|show|need|want|is|has|did)\b/i.test(plausibleName)
+    ) {
+      return validateSeniorResearchQuery({
+        mode: "entity",
+        identityQuery: plausibleName,
+        status: "current",
+        page,
+        coverageState: "PARTIAL",
+      });
+    }
     return fail(
       "Ask could not determine a provider class. Nursing homes, home health, and hospice stay separate.",
       [
         "Show nursing homes in Florida.",
         "Show home health agencies in Florida.",
         "Show hospice providers in Florida.",
+      ],
+      "UNKNOWN",
+    );
+  }
+
+  if (
+    (providerClass === "home_health" || providerClass === "hospice") &&
+    /deficien|penalt|civil monetary|staffing (?:hours|hprd|stars?)|health inspection|fire citation|payment denial/i.test(
+      q,
+    )
+  ) {
+    return fail(
+      "That evidence filter belongs to the nursing-home evidence contract. Home Health and Hospice use different CMS measures, and Ask will not silently apply a nursing-home filter to another provider class.",
+      providerClass === "home_health"
+        ? ["Show home health agencies with HHCAHPS evidence."]
+        : ["Show hospice providers with CAHPS evidence."],
+    );
+  }
+
+  if (
+    (providerClass === "nursing_home" && /\b(?:hhcahps|hospice cahps)\b/i.test(q)) ||
+    (providerClass === "home_health" && /hospice cahps/i.test(q)) ||
+    (providerClass === "hospice" && /\bhhcahps\b/i.test(q))
+  ) {
+    return fail(
+      "CMS experience measures are provider-class specific. Ask will not apply Home Health or Hospice CAHPS evidence to a different provider class.",
+      [
+        "Show home health agencies with HHCAHPS evidence.",
+        "Show hospice providers with CAHPS evidence.",
       ],
     );
   }
@@ -415,7 +540,7 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
 
   let sort: SeniorResearchQuery["sort"] = "name";
   const mode: SeniorAskMode = "entity";
-  if (/highest overall|highest cms rating/i.test(q)) sort = "overall_desc";
+  if (/highest (?:cms )?overall(?: stars?| rating)?/i.test(q)) sort = "overall_desc";
   if (/highest staffing rating/i.test(q)) sort = "staffing_desc";
   if (providerClass === "home_health" && /highest.*quality of patient care/i.test(q))
     sort = "qpc_desc";
@@ -428,6 +553,7 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
     qualityFilters: Object.keys(qualityFilters).length ? qualityFilters : undefined,
     sort,
     page,
+    coverageState: "KNOWN",
   });
 }
 
