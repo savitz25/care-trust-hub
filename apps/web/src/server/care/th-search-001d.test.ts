@@ -63,6 +63,8 @@ describe("TH-SEARCH-001D Senior Specialist Search V1", () => {
     expect(shell).toContain("maxLength={180}");
     expect(result).toContain("Trace this result");
     expect(result).toContain("Why this matched");
+    expect(result).toContain("No matching published provider record");
+    expect(result).toContain("Confirm it with CMS");
     expect(analytics).not.toMatch(/rawQuery|ccn|providerName|email|address/);
     expect(executor).toContain("could not reach the published research corpus");
     expect(executor).toContain('coverageState: "UNKNOWN"');

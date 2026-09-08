@@ -4,6 +4,14 @@ import { CmsStarRating } from "@/components/real-provider";
 
 export function AskResultView({ result }: { result: SeniorAskResult }) {
   const changeHref = `/ask?q=${encodeURIComponent(result.rawQuery)}`;
+  const hasPrimaryOutput = Boolean(
+    result.failClosed ||
+      result.definition ||
+      result.count ||
+      result.buckets ||
+      result.comparison ||
+      result.entities.length,
+  );
   return (
     <div className="senior-ask">
       <section className="senior-ask__interpretation" aria-labelledby="ask-interp-title">
@@ -52,6 +60,17 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
               ))}
             </ul>
           ) : null}
+        </section>
+      ) : null}
+
+      {!hasPrimaryOutput ? (
+        <section className="senior-ask__closed" role="status">
+          <h2>No matching published provider record</h2>
+          <p>
+            {result.query.mode === "identifier"
+              ? "We did not find this CMS CCN in the published research corpus. Confirm it with CMS; absence here is not proof that the identifier is unused."
+              : "We did not find a matching published provider identity for these criteria. Missing source evidence is not zero or a clean history."}
+          </p>
         </section>
       ) : null}
 
