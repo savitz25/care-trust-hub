@@ -47,6 +47,7 @@ export type SeniorAskEntity = {
   href: string;
   evidence: Array<{ label: string; value: string }>;
   whyMatched: string;
+  sourceAsOf?: string | null;
 };
 
 export type SeniorAskResult = {
@@ -157,6 +158,7 @@ function chips(query: SeniorResearchQuery): SeniorAskChip[] {
     });
   }
   if (query.identifier) rows.push({ label: "CCN", value: query.identifier.value });
+  if (query.identityQuery) rows.push({ label: "Provider", value: query.identityQuery });
   if (query.sort)
     rows.push({ label: "Sort", value: query.sort === "name" ? "Provider name" : query.sort });
   if (query.metric) rows.push({ label: "Evidence", value: query.metric });
@@ -164,6 +166,8 @@ function chips(query: SeniorResearchQuery): SeniorAskChip[] {
 }
 
 function nhWhy(query: SeniorResearchQuery, name: string, ccn: string): string {
+  if (query.identityQuery)
+    return `${name} is a bounded provider-name match in the current CMS nursing-home directory (CCN ${ccn}). Name similarity is a research match, not proof that similarly named providers are the same identity.`;
   const parts = [
     `${name} matches because it is classified as a current nursing home provider (CMS CCN ${ccn})`,
   ];
@@ -260,6 +264,11 @@ function nhFilters(query: SeniorResearchQuery, values: unknown[]) {
   }
   if (query.geography?.type === "zip") {
     conditions.push(`zip_code=${p(query.geography.value)}`);
+  }
+  if (query.identityQuery) {
+    conditions.push(
+      `provider_name ILIKE ${p(`%${query.identityQuery.replace(/[\\%_]/g, "\\$&")}%`)} ESCAPE '\\'`,
+    );
   }
   if (query.qualityFilters?.overallStars?.length) {
     conditions.push(`overall_rating = ANY(${p(query.qualityFilters.overallStars)}::int[])`);
@@ -396,6 +405,27 @@ export async function executeSeniorResearchPlan(
   query: SeniorResearchQuery,
   raw = "Structured specialist execution request",
 ): Promise<SeniorAskResult> {
+  try {
+    return await executeSeniorResearchPlanUnsafe(query, raw);
+  } catch {
+    return executeSeniorResearchPlanUnsafe(
+      {
+        mode: "fail_closed",
+        page: 1,
+        coverageState: "UNKNOWN",
+        failReason:
+          "SeniorTrustHub could not reach the published research corpus. No provider or evidence conclusion was inferred.",
+        alternatives: ["Try the research again later or confirm a provider directly with CMS."],
+      },
+      raw,
+    );
+  }
+}
+
+async function executeSeniorResearchPlanUnsafe(
+  query: SeniorResearchQuery,
+  raw = "Structured specialist execution request",
+): Promise<SeniorAskResult> {
   const started = Date.now();
   const interpretation = chips(query);
   const limitations: string[] = [
@@ -479,6 +509,78 @@ export async function executeSeniorResearchPlan(
         entities.length === 0
           ? "No current indexed provider matched this CCN. That is not proof the number is unused elsewhere."
           : "CCN match is canonical identity for that class directory.",
+      ],
+    };
+  }
+
+  if (query.identityQuery && !query.providerClass) {
+    const [nursing, homeHealth, hospice] = await Promise.all([
+      searchNursingHomes(query),
+      searchCurrentAgencies({
+        providerClass: "home_health",
+        query: query.identityQuery,
+        limit: 8,
+        offset: 0,
+      }),
+      searchCurrentAgencies({
+        providerClass: "hospice",
+        query: query.identityQuery,
+        limit: 8,
+        offset: 0,
+      }),
+    ]);
+    const agencyEntities: SeniorAskEntity[] = [...homeHealth, ...hospice].map((row) => ({
+      providerClass: row.providerClass,
+      ccn: row.ccn,
+      providerName: row.providerName,
+      location: [row.city, row.state, row.zipCode].filter(Boolean).join(", "),
+      statusLabel: `Current research cohort (CMS ${CLASS_LABEL[row.providerClass]} directory)`,
+      href: row.href,
+      evidence:
+        row.providerClass === "home_health"
+          ? [
+              {
+                label: "Quality of Patient Care stars",
+                value: starText(row.cmsQualityStar, "Quality of Patient Care"),
+              },
+            ]
+          : [
+              {
+                label: "Overall CMS stars",
+                value: "Not applicable — hospice has no overall CMS star in this directory",
+              },
+            ],
+      whyMatched: `${row.providerName} is a bounded provider-name match in the current ${CLASS_LABEL[row.providerClass]} directory (CCN ${row.ccn}). Similar names are not merged.`,
+    }));
+    const entities = [...nursing.rows, ...agencyEntities]
+      .sort(
+        (a, b) =>
+          Number(a.providerName.toUpperCase() !== query.identityQuery?.toUpperCase()) -
+            Number(b.providerName.toUpperCase() !== query.identityQuery?.toUpperCase()) ||
+          a.providerName.localeCompare(b.providerName),
+      )
+      .slice(0, ASK_PAGE_SIZE);
+    return {
+      contract: SENIOR_ASK_CONTRACT,
+      rawQuery: raw,
+      query,
+      interpretation,
+      resultType: "entity",
+      entities,
+      pagination: {
+        page: 1,
+        pageSize: ASK_PAGE_SIZE,
+        hasMore: nursing.hasMore || agencyEntities.length > ASK_PAGE_SIZE,
+      },
+      provenance: {
+        ...provenanceBase,
+        providerClass: "class-resolved identity search",
+        queryGrain: "bounded provider-name match across separate current CMS class directories",
+        identifierMethod: "Provider names searched separately by class; no fuzzy identity merge",
+      },
+      limitations: [
+        ...limitations,
+        "Name matches are candidates within their displayed class. Exact CCN remains the strongest identity lookup.",
       ],
     };
   }
@@ -577,8 +679,7 @@ export async function executeSeniorResearchPlan(
       getCurrentAgencySourceClock(query.providerClass),
       searchCurrentAgencies({
         providerClass: query.providerClass,
-        query:
-          query.metric === "hh_hhcahps" || query.metric === "hospice_cahps" ? undefined : undefined,
+        query: query.identityQuery,
         state: query.geography?.type === "state" ? query.geography.value : undefined,
         city: query.geography?.type === "city" ? query.geography.value : undefined,
         zip: query.geography?.type === "zip" ? query.geography.value : undefined,

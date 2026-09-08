@@ -8,6 +8,7 @@ import {
   type SeniorNetworkMetricsV1,
 } from "@care/domain";
 import { SeniorHomeChecklist } from "./senior-home-checklist";
+import { SeniorSpecialistSearchShell } from "./specialist-search/senior-specialist-search-shell";
 
 const EVIDENCE_FAMILY_LABELS: Record<SeniorHomepageEvidenceMeasure["family"], string> = {
   IDENTITY_LICENSURE: "Identity & licensure",
@@ -105,47 +106,15 @@ export function SeniorHomeIntelligence({
             Ask SeniorTrustHub
           </a>
         </div>
-        <form id="lookup" className="intel-lookup" action="/search" method="get">
-          <input type="hidden" name="search" value="1" />
-          <p className="eyebrow">Provider lookup</p>
-          <div className="intel-lookup__grid">
-            <label>
-              Name or CCN
-              <input name="q" type="search" autoComplete="off" />
-            </label>
-            <label>
-              State
-              <select name="state" defaultValue="">
-                <option value="">Any</option>
-                {intel.geography.map((row) => (
-                  <option key={row.state} value={row.state}>
-                    {row.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Provider class
-              <select name="class" defaultValue="nursing_home">
-                <option value="nursing_home">Nursing Homes</option>
-                <option value="home_health">Home Health</option>
-                <option value="hospice">Hospice</option>
-              </select>
-            </label>
-            <button className="button button--primary" type="submit">
-              Search published evidence
-            </button>
-          </div>
-          <p className="hub-kicker">
-            Search uses the existing CMS directory interface. It does not rank results.
-          </p>
+        <div id="lookup" className="intel-lookup">
+          <SeniorSpecialistSearchShell compact />
           <nav className="intel-class-links" aria-label="Provider class research">
             <Link href="/search?search=1&class=nursing_home">Nursing Homes</Link>
             <Link href="/home-health">Home Health</Link>
             <Link href="/hospice">Hospice</Link>
             <Link href="/assisted-living">Assisted Living by state</Link>
           </nav>
-        </form>
+        </div>
       </section>
 
       <section className="intel-section intel-layers" aria-labelledby="layers-title">

@@ -32,6 +32,8 @@ export type SeniorResearchQuery = {
     qpcStars?: number[];
   };
   identifier?: { type: "ccn"; value: string };
+  identityQuery?: string;
+  coverageState?: "KNOWN" | "UNKNOWN" | "PARTIAL" | "NOT_ACQUIRED" | "REQUEST_ONLY" | "UNSUPPORTED";
   sort?: SeniorAskSort;
   metric?: string;
   compareGeography?: { type: "county"; value: string; meaning: string };
@@ -70,5 +72,6 @@ export function validateSeniorResearchQuery(query: SeniorResearchQuery): SeniorR
       failReason: "State geography must be a two-letter code.",
     };
   }
+  if (query.identityQuery) query.identityQuery = query.identityQuery.trim().slice(0, 120);
   return query;
 }
