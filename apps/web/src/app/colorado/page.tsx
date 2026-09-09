@@ -9,7 +9,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/colorado");
   return {
     title: {
-      absolute: "Colorado Senior Care Research — CDPHE, CMS Nursing Homes & License Lookup | SeniorTrustHub",
+      absolute:
+        "Colorado Senior Care Research — CDPHE, CMS Nursing Homes & License Lookup | SeniorTrustHub",
     },
     description:
       "Research Colorado nursing homes, inspections, assisted living license lookup, home health agencies, hospice providers, and CDPHE facility lookup as separate official datasets. CMS Colorado overlays stay uncombined. No score and no ranking.",

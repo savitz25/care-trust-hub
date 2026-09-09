@@ -52,9 +52,9 @@ export function CoIntelligenceView({ intel }: { intel: CoPublicSnapshot }) {
           <p className="eyebrow">Separate official universes</p>
           <h2 id="co-scale-title">Source families, not one Colorado senior-provider total</h2>
           <p>
-            CMS Nursing Homes, CMS Home Health, CMS Hospice, CDPHE verification, and Assisted
-            Living Residences are not added together. CMS is the bulk identity spine. CDPHE is the
-            state verification and inspection context.
+            CMS Nursing Homes, CMS Home Health, CMS Hospice, CDPHE verification, and Assisted Living
+            Residences are not added together. CMS is the bulk identity spine. CDPHE is the state
+            verification and inspection context.
           </p>
         </div>
         <div className="hub-stat-grid">
@@ -184,7 +184,9 @@ export function CoIntelligenceView({ intel }: { intel: CoPublicSnapshot }) {
       <section aria-labelledby="co-inspect-title">
         <div className="section-heading">
           <p className="eyebrow">Question 7</p>
-          <h2 id="co-inspect-title">Inspections, citations, occurrences, and complaints stay distinct</h2>
+          <h2 id="co-inspect-title">
+            Inspections, citations, occurrences, and complaints stay distinct
+          </h2>
           <p>
             A citation is not a penalty. An occurrence is not a violation. A plan of correction is
             not an admission. Inspection is not deficiency is not enforcement. Staffing is not
@@ -196,10 +198,14 @@ export function CoIntelligenceView({ intel }: { intel: CoPublicSnapshot }) {
         </div>
         <ul className="hub-plain-list">
           <li>
-            <Link href={intel.regulatorMap.complaints}>CDPHE health facilities complaint contacts</Link>
+            <Link href={intel.regulatorMap.complaints}>
+              CDPHE health facilities complaint contacts
+            </Link>
           </li>
           <li>
-            <Link href={intel.regulatorMap.nursingHomeSurveys}>How the state surveys nursing homes</Link>
+            <Link href={intel.regulatorMap.nursingHomeSurveys}>
+              How the state surveys nursing homes
+            </Link>
           </li>
         </ul>
       </section>
@@ -216,7 +222,9 @@ export function CoIntelligenceView({ intel }: { intel: CoPublicSnapshot }) {
         </div>
         <ul className="hub-plain-list">
           <li>
-            <Link href={intel.regulatorMap.doraLicenseLookup}>DORA professional license lookup</Link>
+            <Link href={intel.regulatorMap.doraLicenseLookup}>
+              DORA professional license lookup
+            </Link>
           </li>
         </ul>
       </section>

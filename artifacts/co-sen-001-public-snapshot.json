@@ -405,9 +405,7 @@
       "id": "stale-gis",
       "title": "The 2017 CDPHE GIS file cannot be used as a current roster",
       "summary": "Colorado Information Marketplace dataset 98pp-s4r4 is a January 2017 address-derived point file. It is historical/stale and cannot be promoted to current identity.",
-      "doesNotMean": [
-        "January 2017 locations are the current licensed universe"
-      ]
+      "doesNotMean": ["January 2017 locations are the current licensed universe"]
     },
     {
       "id": "person-grain",

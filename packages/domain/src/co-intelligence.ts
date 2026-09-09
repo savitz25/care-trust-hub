@@ -128,7 +128,8 @@ export const CO_SOURCE_CATALOG: CoSourceCatalogRow[] = [
     grain: "licensed Assisted Living Residence (no current bulk acquired)",
     identityKey: "CDPHE ALR license when a future bulk file publishes one",
     access: "Official class page + Find and Compare search",
-    publication: "Class structure and verify path only; no state-only ALR profiles without safe identity",
+    publication:
+      "Class structure and verify path only; no state-only ALR profiles without safe identity",
     coverage: "NO_BULK_ACQUIRED",
     limitations: "ALR != Nursing Home. Approximate press counts are not network metrics.",
   },
@@ -169,7 +170,8 @@ export const CO_SOURCE_CATALOG: CoSourceCatalogRow[] = [
     access: "PUBLIC_RESEARCH_PATH",
     publication: "Process links only",
     coverage: "PUBLIC_RESEARCH_PATH",
-    limitations: "Complaint process != complaint dataset. Complaint != violation. Bulk not acquired.",
+    limitations:
+      "Complaint process != complaint dataset. Complaint != violation. Bulk not acquired.",
   },
   {
     id: "dora-nha",
@@ -286,7 +288,8 @@ export function coTraceMetrics(snapshot: CoPublicSnapshot = CO_PUBLIC_SNAPSHOT):
       denominator: null,
       computation: "No current ALR roster count is published. Press approximations are rejected.",
       coverageState: "NO_BULK_ACQUIRED",
-      caveat: "ALR != Nursing Home. Approximate assisted-living press counts are not network metrics.",
+      caveat:
+        "ALR != Nursing Home. Approximate assisted-living press counts are not network metrics.",
     },
     {
       id: "net-new-canonical",
