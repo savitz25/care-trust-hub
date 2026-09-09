@@ -14,6 +14,7 @@ const STATE_NAMES: Record<string, string> = {
   "new jersey": "NJ",
   arizona: "AZ",
   washington: "WA",
+  colorado: "CO",
 };
 
 const COUNTIES: Record<string, { value: string; meaning: string }> = {

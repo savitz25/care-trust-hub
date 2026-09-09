@@ -74,6 +74,7 @@ describe("senior-home-intel-v1", () => {
     expect(intel.geography.some((row) => row.intelligenceHref === "/texas")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/washington")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/arizona")).toBe(true);
+    expect(intel.geography.some((row) => row.intelligenceHref === "/colorado")).toBe(true);
     expect(
       intel.geography
         .filter(
@@ -83,7 +84,8 @@ describe("senior-home-intel-v1", () => {
             row.state !== "CA" &&
             row.state !== "TX" &&
             row.state !== "WA" &&
-            row.state !== "AZ",
+            row.state !== "AZ" &&
+            row.state !== "CO",
         )
         .every((row) => row.intelligenceHref === null),
     ).toBe(true);
@@ -106,5 +108,11 @@ describe("senior-home-intel-v1", () => {
     expect(intel.arizonaPreview.alCenter).toBe(328);
     expect(intel.arizonaPreview.afc).toBe(25);
     expect(intel.arizonaPreview.cmsNursingHomes).toBe(140);
+    expect(intel.coloradoPreview.href).toBe("/colorado");
+    expect(intel.coloradoPreview.cmsNursingHomes).toBe(210);
+    expect(intel.coloradoPreview.cmsHomeHealth).toBe(222);
+    expect(intel.coloradoPreview.cmsHospice).toBe(88);
+    expect(intel.coloradoPreview.alrCount).toBeNull();
+    expect(intel.coloradoPreview.cdpheCoverage).toBe("OPEN_SEARCH_ONLY");
   });
 });

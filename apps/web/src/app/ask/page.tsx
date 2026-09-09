@@ -102,6 +102,7 @@ function buildEffectiveQuery(
     TX: "Texas",
     WA: "Washington",
     AZ: "Arizona",
+    CO: "Colorado",
   };
   const evidenceText: Record<string, string> = {
     deficiencies: "with indexed deficiencies",

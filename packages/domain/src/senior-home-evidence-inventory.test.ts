@@ -39,6 +39,7 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
       "/texas",
       "/washington",
       "/arizona",
+      "/colorado",
     ]);
     expect(inventory.find((row) => row.key === "fl-regulatory-observations")?.value).toBe(77219);
     expect(inventory.find((row) => row.key === "nj-enforcement-indexed")?.doesNotCount).toMatch(
@@ -54,6 +55,13 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
     expect(inventory.find((row) => row.key === "ca-rcfe")?.doesNotCount).toMatch(
       /CMS certification/i,
     );
+    expect(inventory.find((row) => row.key === "co-cms-nh")?.value).toBe(210);
+    expect(inventory.find((row) => row.key === "co-cms-hha")?.value).toBe(222);
+    expect(inventory.find((row) => row.key === "co-cms-hospice")?.value).toBe(88);
+    expect(inventory.find((row) => row.key === "co-cms-nh")?.doesNotCount).toMatch(
+      /combined Colorado provider/i,
+    );
+    expect(inventory.some((row) => row.value === 675)).toBe(false);
     expect(inventory.find((row) => row.key === "state-pages")?.value).toBe(
       SENIOR_HOMEPAGE_STATE_CARDS.length,
     );

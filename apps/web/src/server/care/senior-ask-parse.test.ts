@@ -63,6 +63,24 @@ describe("interpretSeniorAskQuery", () => {
     expect(q.qualityFilters?.overallStars).toEqual([5]);
   });
 
+  it("parses Colorado nursing homes as current NH entity without inventing Denver geography", () => {
+    const q = interpretSeniorAskQuery("Show nursing homes in Colorado.");
+    expect(q.mode).toBe("entity");
+    expect(q.providerClass).toBe("nursing_home");
+    expect(q.geography?.value).toBe("CO");
+    const denver = interpretSeniorAskQuery("Show nursing homes in Denver.");
+    expect(denver.geography?.value).not.toBe("DENVER");
+  });
+
+  it("keeps existing six-state search routes intact", () => {
+    expect(interpretSeniorAskQuery("nursing homes in Florida").geography?.value).toBe("FL");
+    expect(interpretSeniorAskQuery("nursing homes in New Jersey").geography?.value).toBe("NJ");
+    expect(interpretSeniorAskQuery("nursing homes in California").geography?.value).toBe("CA");
+    expect(interpretSeniorAskQuery("nursing homes in Texas").geography?.value).toBe("TX");
+    expect(interpretSeniorAskQuery("nursing homes in Washington").geography?.value).toBe("WA");
+    expect(interpretSeniorAskQuery("nursing homes in Arizona").geography?.value).toBe("AZ");
+  });
+
   it("parses home health Florida entity", () => {
     const q = interpretSeniorAskQuery("Show home health agencies in Florida.");
     expect(q.mode).toBe("entity");

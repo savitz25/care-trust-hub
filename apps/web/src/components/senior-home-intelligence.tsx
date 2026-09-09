@@ -504,8 +504,9 @@ export function SeniorHomeIntelligence({
           <p className="eyebrow">Localize</p>
           <h2 id="explore-title">Explore senior-care intelligence by state</h2>
           <p>
-            Six completed state intelligence surfaces connect source-native licensing and regulatory
-            systems to CMS overlays where accepted identity evidence supports the relationship.
+            {stateCards.length} completed state intelligence surfaces connect source-native
+            licensing and regulatory systems to CMS overlays where accepted identity evidence
+            supports the relationship.
           </p>
         </div>
         <div className="intel-state-cards" id="state-intelligence">
@@ -581,8 +582,8 @@ export function SeniorHomeIntelligence({
             <table className="hub-table">
               <caption>
                 Current CMS directory counts by jurisdiction. Florida, New Jersey, California,
-                Texas, Washington, and Arizona link to state intelligence; other jurisdictions open
-                Nursing Home search.
+                Texas, Washington, Arizona, and Colorado link to state intelligence; other
+                jurisdictions open Nursing Home search.
               </caption>
               <thead>
                 <tr>

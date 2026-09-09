@@ -1,4 +1,5 @@
 import { AZ_LOCKED, AZ_PUBLIC_FINGERPRINT, AZ_PUBLIC_PATH } from "./az-intelligence";
+import { CO_LOCKED, CO_PUBLIC_FINGERPRINT, CO_PUBLIC_PATH } from "./co-intelligence";
 import { CA_LOCKED, CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_LOCKED, NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -38,7 +39,7 @@ export interface SeniorHomepageEvidenceMeasure {
 }
 
 export interface SeniorHomepageStateCard {
-  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ";
+  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO";
   name: string;
   href: string;
   regulators: string;
@@ -422,15 +423,60 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       AZ_PUBLIC_PATH,
     ),
     m(
+      "co-cms-nh",
+      "FEDERAL_DIRECTORY",
+      "Colorado CMS Nursing Home overlay",
+      CO_LOCKED.cmsNursingHomes,
+      "CMS Nursing Home CCN in Colorado geography",
+      "Nursing Home",
+      "Colorado",
+      "CMS Provider Data Catalog",
+      CO_PUBLIC_FINGERPRINT,
+      CO_LOCKED.overlayAsOf,
+      "Accepted CMS Nursing Home identities already in the national geography partition.",
+      "National CMS totals (already included); Assisted Living Residences; a combined Colorado provider count.",
+      CO_PUBLIC_PATH,
+    ),
+    m(
+      "co-cms-hha",
+      "FEDERAL_DIRECTORY",
+      "Colorado CMS Home Health overlay",
+      CO_LOCKED.cmsHomeHealth,
+      "CMS Home Health CCN in Colorado geography",
+      "Home Health",
+      "Colorado",
+      "CMS Provider Data Catalog",
+      CO_PUBLIC_FINGERPRINT,
+      CO_LOCKED.overlayAsOf,
+      "Accepted CMS Home Health identities already in the national geography partition.",
+      "National CMS totals (already included); CDPHE Home Care Agencies; a service area.",
+      CO_PUBLIC_PATH,
+    ),
+    m(
+      "co-cms-hospice",
+      "FEDERAL_DIRECTORY",
+      "Colorado CMS Hospice overlay",
+      CO_LOCKED.cmsHospice,
+      "CMS Hospice CCN in Colorado geography",
+      "Hospice",
+      "Colorado",
+      "CMS Provider Data Catalog",
+      CO_PUBLIC_FINGERPRINT,
+      CO_LOCKED.overlayAsOf,
+      "Accepted CMS Hospice identities already in the national geography partition.",
+      "National CMS totals (already included); Home Health agencies; a combined provider count.",
+      CO_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Completed state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ",
+      "FL, NJ, CA, TX, WA, AZ, CO",
       "SeniorTrustHub accepted state artifacts",
-      "six accepted state snapshots",
+      "seven accepted state snapshots",
       "2026-09-04",
       "Live state research destinations backed by accepted artifacts.",
       "A national template, ranking, or claim of identical state coverage.",
@@ -506,6 +552,7 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "az-gis-all",
     "fl-regulatory-observations",
     "ca-rcfe",
+    "co-cms-nh",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -578,5 +625,18 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     identityDepth: `Exact joins: NH ${AZ_LOCKED.nhExact}, HHA ${AZ_LOCKED.hhaExact}, Hospice ${AZ_LOCKED.hospiceExact}`,
     regulatoryDepth: "Open-search state evidence; missing bulk is unknown",
     sourceAsOf: AZ_LOCKED.gisRun,
+  },
+  {
+    state: "CO",
+    name: "Colorado",
+    href: CO_PUBLIC_PATH,
+    regulators: "CDPHE HFEMSD + CMS",
+    stateClasses:
+      "CMS Nursing Home / Home Health / Hospice overlays; ALR, HCA, hospice, and NHA as separate state classes without a current bulk roster",
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${CO_LOCKED.cmsNursingHomes} CMS Nursing Homes · ${CO_LOCKED.cmsHomeHealth} CMS Home Health · ${CO_LOCKED.cmsHospice} CMS Hospice · CDPHE search/path`,
+    regulatoryDepth:
+      "Open-search state inspection/occurrence path; 2017 GIS excluded; missing bulk is unknown",
+    sourceAsOf: CO_LOCKED.overlayAsOf,
   },
 ];

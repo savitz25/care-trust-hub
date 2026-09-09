@@ -11,6 +11,7 @@ import { CA_LOCKED, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { TX_LOCKED, TX_PUBLIC_PATH } from "./tx-intelligence";
 import { WA_LOCKED, WA_PUBLIC_PATH } from "./wa-intelligence";
 import { AZ_LOCKED, AZ_PUBLIC_PATH } from "./az-intelligence";
+import { CO_LOCKED, CO_PUBLIC_PATH } from "./co-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -96,6 +97,7 @@ export interface HomeGeoRow {
     | "texas_state_intelligence"
     | "washington_state_intelligence"
     | "arizona_state_intelligence"
+    | "colorado_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -195,6 +197,15 @@ export interface SeniorHomeIntel {
     cmsHospice: number;
     note: string;
   };
+  coloradoPreview: {
+    href: string;
+    cmsNursingHomes: number;
+    cmsHomeHealth: number;
+    cmsHospice: number;
+    cdpheCoverage: "OPEN_SEARCH_ONLY";
+    alrCount: null;
+    note: string;
+  };
   askMarket: HomeAskItem[];
   sources: HubSourceRow[];
   limitations: string[];
@@ -283,6 +294,12 @@ export function buildSeniorHomeIntel(input: {
   };
   const azGeo = national.geography.find((row) => row.state === "AZ") ?? {
     state: "AZ",
+    nursingHomes: 0,
+    homeHealth: 0,
+    hospice: 0,
+  };
+  const coGeo = national.geography.find((row) => row.state === "CO") ?? {
+    state: "CO",
     nursingHomes: 0,
     homeHealth: 0,
     hospice: 0,
@@ -729,7 +746,7 @@ export function buildSeniorHomeIntel(input: {
       method: "Florida state-license universe on /florida. Not a national licensing denominator.",
       limitations: [
         "State licensing is not a CMS national class.",
-        "Most states have no SeniorTrustHub state-intelligence page yet. Florida, New Jersey, California, Texas, and Washington currently do.",
+        "Most states have no SeniorTrustHub state-intelligence page yet. Florida, New Jersey, California, Texas, Washington, Arizona, and Colorado currently do.",
       ],
     },
     {
@@ -791,6 +808,21 @@ export function buildSeniorHomeIntel(input: {
         "The ADHS GIS run date is 2025-02-03. Current monthly Excel tables were not acquired.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Colorado CDPHE (state enrichment)",
+      numerator: CO_LOCKED.cmsNursingHomes,
+      denominator: null,
+      display: `${CO_LOCKED.cmsNursingHomes.toLocaleString("en-US")} CMS Nursing Homes; ${CO_LOCKED.cmsHomeHealth.toLocaleString("en-US")} CMS Home Health; ${CO_LOCKED.cmsHospice.toLocaleString("en-US")} CMS Hospice (not a combined total). CDPHE Find and Compare is search-only.`,
+      status: "partial",
+      method:
+        "Colorado CMS class overlays on /colorado. Assisted Living Residence, Home Care Agency, and Nursing Home Administrator stay separate. CDPHE is verification/inspection context, not a bulk roster.",
+      limitations: [
+        "Do not add Nursing Home, Home Health, Hospice, and Assisted Living into one senior-provider denominator.",
+        "Assisted Living Residence is not a Nursing Home. Home Care Agency is not CMS Home Health.",
+        "The 2017 CDPHE GIS file is not a current roster. Search-only is not zero.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -813,7 +845,9 @@ export function buildSeniorHomeIntel(input: {
                 ? "washington_state_intelligence"
                 : row.state === "AZ"
                   ? "arizona_state_intelligence"
-                  : "cms_directory_only",
+                  : row.state === "CO"
+                    ? "colorado_state_intelligence"
+                    : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -827,7 +861,9 @@ export function buildSeniorHomeIntel(input: {
                 ? WA_PUBLIC_PATH
                 : row.state === "AZ"
                   ? AZ_PUBLIC_PATH
-                  : null,
+                  : row.state === "CO"
+                    ? CO_PUBLIC_PATH
+                    : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 
@@ -858,7 +894,7 @@ export function buildSeniorHomeIntel(input: {
     findings,
     coverage,
     gaps: [
-      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, California, Texas, Washington, and Arizona currently have state intelligence pages.",
+      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, California, Texas, Washington, Arizona, and Colorado currently have state intelligence pages.",
       "CMS stars, staffing, inspections, and penalties are not interchangeable across Nursing Home, Home Health, and Hospice.",
       "Internal ownership graph edges are not homepage publication measures. Missing public ownership evidence is not proof of independence.",
       "Home Health and Hospice have no CMS CHOW event file in this research graph.",
@@ -929,6 +965,15 @@ export function buildSeniorHomeIntel(input: {
       cmsHospice: azGeo.hospice,
       note: "Arizona state intelligence keeps ADHS Assisted Living Homes, Assisted Living Centers, Adult Foster Care, and CMS class overlays as separate datasets. They are not one senior-provider total. Home is not Center. ADHS is not CMS.",
     },
+    coloradoPreview: {
+      href: CO_PUBLIC_PATH,
+      cmsNursingHomes: coGeo.nursingHomes,
+      cmsHomeHealth: coGeo.homeHealth,
+      cmsHospice: coGeo.hospice,
+      cdpheCoverage: "OPEN_SEARCH_ONLY",
+      alrCount: null,
+      note: "Colorado state intelligence keeps CMS Nursing Home, Home Health, and Hospice overlays separate from CDPHE verification. Assisted Living Residence is a state class without a current bulk roster. They are not one senior-provider total. CDPHE is not CMS. The 2017 GIS file is not a current roster.",
+    },
     askMarket: [
       {
         id: "nh-in-state",
@@ -957,7 +1002,7 @@ export function buildSeniorHomeIntel(input: {
         id: "regulatory-review",
         question: "What regulatory history should I review?",
         answer:
-          "For Nursing Homes, CMS publishes inspection, deficiency, and penalty families separately. Home Health and Hospice do not have those same national files on this hub.",
+          "For Nursing Homes, CMS publishes inspection, deficiency, and penalty families separately. Home Health and Hospice do not have those same national files on this hub. Colorado CDPHE Find and Compare is a state search path, not a bulk inspection dataset.",
         href: "#depth",
         hrefLabel: "Evidence depth",
       },
@@ -972,7 +1017,7 @@ export function buildSeniorHomeIntel(input: {
       {
         id: "florida-differs",
         question: "How does Florida’s research coverage differ?",
-        answer: `Florida currently has a state intelligence page with ${input.floridaIdentities.toLocaleString("en-US")} AHCA identities and ${input.floridaRegulatoryObservations.toLocaleString("en-US")} regulatory observations, plus CMS class counts. New Jersey, California, Texas, Washington, and Arizona have separate state intelligence pages. Other states on this homepage are CMS directory counts only.`,
+        answer: `Florida currently has a state intelligence page with ${input.floridaIdentities.toLocaleString("en-US")} AHCA identities and ${input.floridaRegulatoryObservations.toLocaleString("en-US")} regulatory observations, plus CMS class counts. New Jersey, California, Texas, Washington, Arizona, and Colorado have separate state intelligence pages. Other states on this homepage are CMS directory counts only.`,
         href: "/florida",
         hrefLabel: "Open Florida intelligence",
       },
@@ -992,7 +1037,7 @@ export function buildSeniorHomeIntel(input: {
       "Inspection findings describe conditions at points in time.",
       "Ownership can change, and UNKNOWN is not a former owner.",
       "Nursing Home, Home Health, and Hospice evidence is not directly comparable.",
-      "State evidence availability differs. Florida, New Jersey, California, Texas, Washington, and Arizona are not a national template yet.",
+      "State evidence availability differs. Florida, New Jersey, California, Texas, Washington, Arizona, and Colorado are not a national template yet.",
       "Source publication schedules differ. This page is not live data.",
     ],
   };

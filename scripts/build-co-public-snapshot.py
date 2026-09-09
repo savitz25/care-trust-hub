@@ -1,0 +1,513 @@
+#!/usr/bin/env python3
+"""CO-SEN-001 — CMS Colorado overlays + CDPHE verification; no bulk state roster.
+
+Allowed: accepted national CMS geography partition, official CDPHE HTML, CIM metadata.
+Forbidden: CDPHE Find and Compare scrape, 2017 GIS as current identity, ALR press counts,
+combined provider denominator, county/Denver pages, re-download of the national CMS corpus.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+ART = ROOT / "artifacts"
+DOMAIN = ROOT / "packages" / "domain" / "src"
+NATIONAL = ROOT / "apps" / "web" / "src" / "data" / "senior-national-intelligence.json"
+
+AS_OF = "2026-09-09"
+RETRIEVED = "2026-09-09T18:00:00Z"
+TICKET = "CO-SEN-001"
+
+
+def sha256_obj(obj: object) -> str:
+    blob = json.dumps(obj, sort_keys=True, separators=(",", ":")).encode()
+    return hashlib.sha256(blob).hexdigest()
+
+
+def json_to_ts(obj: object) -> str:
+    return (
+        "/** Generated from artifacts/co-sen-001-public-snapshot.json. Do not edit by hand. */\n"
+        "export const CO_PUBLIC_SNAPSHOT = "
+        + json.dumps(obj, indent=2)
+        + " as const;\n"
+    )
+
+
+def clock(sources: list[dict], key: str) -> dict:
+    row = next((item for item in sources if item.get("datasetKey") == key), {})
+    return {
+        "datasetKey": key,
+        "officialUrl": row.get("officialUrl"),
+        "sourceModifiedAt": row.get("sourceModifiedAt"),
+        "retrievedAt": row.get("retrievedAt"),
+        "sourcePeriod": row.get("sourcePeriod"),
+    }
+
+
+def main() -> int:
+    national = json.loads(NATIONAL.read_text(encoding="utf-8"))
+    geo = next(
+        (row for row in national.get("geography") or [] if row.get("state") == "CO"),
+        None,
+    )
+    if not geo:
+        raise SystemExit("Colorado geography partition missing from senior-national-intelligence.json")
+    nh = int(geo["nursingHomes"])
+    hha = int(geo["homeHealth"])
+    hospice = int(geo["hospice"])
+    sources = national.get("sources") or []
+    nh_cov = (national.get("nursingHome") or {}).get("coverage") or {}
+
+    snapshot = {
+        "version": "senior-co-state-intel-v1",
+        "asOf": AS_OF,
+        "retrievedAt": RETRIEVED,
+        "ticket": TICKET,
+        "regulatorMap": {
+            "agency": "Colorado Department of Public Health and Environment",
+            "division": "Health Facilities and Emergency Medical Services Division (HFEMSD)",
+            "officialHub": "https://cdphe.colorado.gov/health-facilities",
+            "findAndCompare": "https://cdphe.colorado.gov/health-facilities/find-and-compare-facilities",
+            "findAndCompareDashboard": "https://cohealthviz.dphe.state.co.us/t/HealthFacilitiesPublic/views/HealthFacilitySearchSite/1_HealthFacilitySearchSite",
+            "complaints": "https://cdphe.colorado.gov/health-facilities/file-a-complaint/health-facilities-complaint-contacts",
+            "complaintIntake": "https://docs.google.com/a/state.co.us/forms/d/e/1FAIpQLScLOLmW1TxB6ZqDcUivQkVOvtLHZc7OfXBEKDkgL-4valt22Q/viewform",
+            "assistedLiving": "https://cdphe.colorado.gov/assisted-living-residences",
+            "homeCareAgencies": "https://cdphe.colorado.gov/home-care-agencies",
+            "hospices": "https://cdphe.colorado.gov/hospices",
+            "nursingHomes": "https://cdphe.colorado.gov/nursing-homes",
+            "nursingHomeSurveys": "https://cdphe.colorado.gov/how-the-state-surveys-nursing-homes",
+            "doraLicenseLookup": "https://apps.colorado.gov/dora/licensing/Lookup/LicenseLookup.aspx",
+            "staleGis": "https://data.colorado.gov/Health/CDPHE-Health-Facilities/98pp-s4r4",
+            "cmsCareCompare": "https://www.medicare.gov/care-compare/",
+            "scrape": "FORBIDDEN",
+            "classes": [
+                {
+                    "code": "NF",
+                    "officialName": "Nursing Care Facility",
+                    "regulation": "6 CCR 1011-1 Chapter 5",
+                    "publication_class": "CORE_SENIOR",
+                    "directory": "CMS_OVERLAY_PLUS_STATE_VERIFY",
+                    "profile_publication": "EXISTING_CMS_CCN_ROUTES_ONLY",
+                    "count": nh,
+                    "count_source": "CMS Nursing Home Provider Information geography CO",
+                    "note": "CDPHE licenses Nursing Care Facilities. CMS certifies Skilled Nursing Care Facilities. State license != CMS CCN unless an exact official ID establishes the relationship. Nursing Home != Assisted Living Residence.",
+                },
+                {
+                    "code": "ALR",
+                    "officialName": "Assisted Living Residence",
+                    "regulation": "6 CCR 1011-1 Chapter 7; C.R.S. Title 25 Article 27",
+                    "publication_class": "CORE_SENIOR",
+                    "directory": "STATE_VERIFY_PATH_ONLY",
+                    "profile_publication": "NO_STATE_ONLY_PROFILES_WITHOUT_SAFE_IDENTITY",
+                    "count": None,
+                    "count_source": "NO_CURRENT_BULK_ROSTER",
+                    "note": "ALR != Nursing Home. Approximate press counts are not network metrics. No state-only ALR profiles without a safe identity source.",
+                },
+                {
+                    "code": "ACF",
+                    "officialName": "Alternative Care Facility (Medicaid)",
+                    "regulation": "10 CCR 2505-10 Section 8.495 on a licensed ALR",
+                    "publication_class": "ADJACENT_RELEVANT",
+                    "directory": "MARKET_INTELLIGENCE_ONLY",
+                    "profile_publication": "NO_SEPARATE_PROFILE_CLASS",
+                    "count": None,
+                    "count_source": "NO_CURRENT_BULK_ROSTER",
+                    "note": "ACF is a Medicaid certification on an Assisted Living Residence, not a CMS Nursing Home class and not a combined ALR total.",
+                },
+                {
+                    "code": "HCA",
+                    "officialName": "Home Care Agency (Class A / Class B)",
+                    "regulation": "6 CCR 1011-1 Chapter 26",
+                    "publication_class": "CORE_SENIOR",
+                    "directory": "STATE_VERIFY_PATH_ONLY",
+                    "profile_publication": "EXISTING_CMS_HHA_ROUTES_WHEN_EXACT_CCN_ELSE_NO_PROFILE",
+                    "count": None,
+                    "count_source": "NO_CURRENT_BULK_ROSTER",
+                    "note": "HCA != CMS Home Health. Class A skilled != Class B personal care. Do not infer a state HCA license solely from a CMS Home Health CCN.",
+                },
+                {
+                    "code": "HCPA",
+                    "officialName": "Home Care Placement Agency",
+                    "regulation": "6 CCR 1011-1 Chapter 26 placement-agency rules",
+                    "publication_class": "ADJACENT_RELEVANT",
+                    "directory": "MARKET_INTELLIGENCE_ONLY",
+                    "profile_publication": "NO_SEPARATE_PROFILE_CLASS",
+                    "count": None,
+                    "count_source": "NO_CURRENT_BULK_ROSTER",
+                    "note": "HCPA != HCA. A placement agency is not a Home Care Agency and is not CMS Home Health.",
+                },
+                {
+                    "code": "HOSPICE",
+                    "officialName": "Hospice (HPC)",
+                    "regulation": "6 CCR 1011-1 Chapter 21",
+                    "publication_class": "CORE_SENIOR",
+                    "directory": "CMS_OVERLAY_PLUS_STATE_VERIFY",
+                    "profile_publication": "EXISTING_CMS_HOSPICE_CCN_ROUTES_ONLY",
+                    "count": hospice,
+                    "count_source": "CMS Hospice General Information geography CO",
+                    "note": "Hospice != Home Health. Do not infer a state hospice license solely from a CMS Hospice CCN.",
+                },
+                {
+                    "code": "ADULT_DAY",
+                    "officialName": "Adult Day services",
+                    "regulation": "HCPF / CDPHE adult-day programs as licensed or certified",
+                    "publication_class": "ADJACENT_RELEVANT",
+                    "directory": "MARKET_INTELLIGENCE_ONLY",
+                    "profile_publication": "NO_SEPARATE_PROFILE_CLASS",
+                    "count": None,
+                    "count_source": "NO_CURRENT_BULK_ROSTER",
+                    "note": "Adult Day != Assisted Living Residence.",
+                },
+                {
+                    "code": "GROUP_HOME_BI_SL",
+                    "officialName": "Group home / Brain Injury Supported Living",
+                    "regulation": "HCPF HCBS waivers; CDPHE inspection of some HCBS settings",
+                    "publication_class": "ADJACENT_RELEVANT",
+                    "directory": "MARKET_INTELLIGENCE_ONLY",
+                    "profile_publication": "NO_SEPARATE_PROFILE_CLASS",
+                    "count": None,
+                    "count_source": "NO_CURRENT_BULK_ROSTER",
+                    "note": "Not merged into Assisted Living or Nursing Home counts.",
+                },
+                {
+                    "code": "NHA",
+                    "officialName": "Nursing Home Administrator",
+                    "regulation": "DORA Division of Professions and Occupations",
+                    "publication_class": "PERSON_GRAIN",
+                    "directory": "PUBLIC_RESEARCH_PATH",
+                    "profile_publication": "NO_PERSON_PAGES",
+                    "count": None,
+                    "count_source": "NOT_PUBLISHED_AS_FACILITY_METRIC",
+                    "note": "NHA is a person license, not a facility count. Do not auto-create person pages.",
+                },
+            ],
+        },
+        "cmsOverlay": {
+            "nursingHomes": nh,
+            "homeHealth": hha,
+            "hospice": hospice,
+            "source": "senior-national-intelligence.json geography CO (CMS class directories)",
+            "asOf": "2026-08-27",
+            "nationalFingerprint": national["sourceFingerprint"],
+            "addedToNationalTotals": False,
+            "clocks": {
+                "nursingHomes": clock(sources, "nursing-home-provider-information"),
+                "homeHealth": clock(sources, "home-health-care-agencies"),
+                "hospice": clock(sources, "hospice-general-information"),
+                "ownership": clock(sources, "skilled-nursing-facility-all-owners"),
+                "penalties": clock(sources, "nursing-home-penalties"),
+                "staffing": clock(sources, "payroll-based-journal-daily-nurse-staffing"),
+            },
+            "liveDirectoryCoUniqueCcn": {
+                "nursingHomes": nh,
+                "homeHealth": hha,
+                "hospice": hospice,
+                "source": "Accepted national geography partition; unique CCN counts in the current CMS class directories for state = CO.",
+            },
+            "query": {
+                "nh": {
+                    "dataset_id": "4pq5-n9py",
+                    "title": "Provider Information",
+                    "state_field": "state",
+                    "co_count": nh,
+                    "unique_ccn": nh,
+                    "method": "Deterministic slice from accepted senior-national-intelligence.json geography. National corpus was not re-downloaded.",
+                },
+                "hha": {
+                    "dataset_id": "6jpm-sxkc",
+                    "title": "Home Health Care Agencies",
+                    "state_field": "state",
+                    "co_count": hha,
+                    "unique_ccn": hha,
+                    "method": "Deterministic slice from accepted senior-national-intelligence.json geography. National corpus was not re-downloaded.",
+                },
+                "hospice": {
+                    "dataset_id": "yc9t-dgbk",
+                    "title": "Hospice - General Information",
+                    "state_field": "state",
+                    "co_count": hospice,
+                    "unique_ccn": hospice,
+                    "method": "Deterministic slice from accepted senior-national-intelligence.json geography. National corpus was not re-downloaded.",
+                },
+            },
+            "nationalCoverage": {
+                "mdsQualityProviders": nh_cov.get("mdsQualityProviders"),
+                "mdsQualityMissing": nh_cov.get("mdsQualityMissing"),
+                "staffingPbjProviders": nh_cov.get("staffingPbjProviders"),
+                "inspectionProviders": nh_cov.get("inspectionProviders"),
+                "fireSafetyProviders": nh_cov.get("fireSafetyProviders"),
+                "ownedByProviders": nh_cov.get("ownedByProviders"),
+                "chowHistoryProviders": nh_cov.get("chowHistoryProviders"),
+            },
+            "note": "CMS class overlays are independent of CDPHE search results and are not summed. CMS CERTIFIED != STATE LICENSED. These Colorado partitions already live in national CMS totals and are not added again.",
+        },
+        "cdpheVerification": {
+            "CDPHE_FIND_AND_COMPARE": "OPEN_SEARCH_ONLY",
+            "coverage": "OPEN_SEARCH_ONLY",
+            "completeCurrentUniverse": "UNKNOWN_SEARCH_ONLY",
+            "url": "https://cdphe.colorado.gov/health-facilities/find-and-compare-facilities",
+            "dashboard": "https://cohealthviz.dphe.state.co.us/t/HealthFacilitiesPublic/views/HealthFacilitySearchSite/1_HealthFacilitySearchSite",
+            "window": "Inspection results and self-reported occurrences for surveys/events within the last 3 years",
+            "includes": [
+                "citations identified during those inspections",
+                "regulation text",
+                "plans of correction submitted by the provider",
+                "occurrence results submitted within the last 3 years",
+            ],
+            "result": "Interactive dashboard / search path. No current official bulk facility roster was acquired this ticket.",
+            "scrape": "FORBIDDEN",
+            "searchOnlyIsNotZero": True,
+            "note": "A Find and Compare search result is not a complete CDPHE universe and is not claim eligibility. Missing bulk is unknown, not zero.",
+        },
+        "staleGis2017": {
+            "id": "98pp-s4r4",
+            "name": "CDPHE Health Facilities",
+            "url": "https://data.colorado.gov/Health/CDPHE-Health-Facilities/98pp-s4r4",
+            "agencyClock": "January 2017",
+            "description": "Point geometry of known regulated health facilities developed from HFEMSD addresses in January 2017.",
+            "coverage": "HISTORICAL_STALE",
+            "publication": "EXCLUDED_FROM_CURRENT_IDENTITY",
+            "cannotPromoteToCurrentIdentity": True,
+            "cannotUseAsCurrentRoster": True,
+            "note": "January 2017 GIS is not a current Colorado facility roster and must not be used as current identity.",
+        },
+        "assistedLiving": {
+            "officialName": "Assisted Living Residence",
+            "count": None,
+            "pressCountRejected": 675,
+            "pressCountUsed": False,
+            "coverage": "NO_BULK_ACQUIRED",
+            "verifyPath": "https://cdphe.colorado.gov/assisted-living-residences",
+            "findAndCompare": "OPEN_SEARCH_ONLY",
+            "profilePublication": "NO_STATE_ONLY_PROFILES_WITHOUT_SAFE_IDENTITY",
+            "note": "ALR is a separate state class. Approximate assisted-living press counts are not network metrics.",
+        },
+        "homeCare": {
+            "hcaCount": None,
+            "hcpaCount": None,
+            "cmsHomeHealth": hha,
+            "coverage": "NO_BULK_ACQUIRED",
+            "classA": "skilled healthcare services; may also provide personal care",
+            "classB": "personal care only; shall not provide skilled healthcare service",
+            "note": "Home Care Agency != CMS Home Health. Home Care Placement Agency != Home Care Agency. Office geography is not a service area.",
+        },
+        "hospiceState": {
+            "cmsHospice": hospice,
+            "stateLicenseCount": None,
+            "coverage": "NO_BULK_ACQUIRED",
+            "note": "Hospice != Home Health. Do not infer state hospice license solely from CMS.",
+        },
+        "nursingHomeAdministrator": {
+            "grain": "PERSON",
+            "regulator": "Colorado Department of Regulatory Agencies / Division of Professions and Occupations",
+            "lookup": "https://apps.colorado.gov/dora/licensing/Lookup/LicenseLookup.aspx",
+            "countPublished": None,
+            "coverage": "PUBLIC_RESEARCH_PATH",
+            "publication": "NO_PERSON_PAGES",
+            "notAFacilityCount": True,
+            "note": "NHA != facility. Person-grain research path only. No automatic person pages.",
+        },
+        "preIngestBaseline": {
+            "cmsNursingHomeCcns": nh,
+            "cmsHomeHealthCcns": hha,
+            "cmsHospiceCcns": hospice,
+            "stateAssistedLivingResidence": 0,
+            "stateHomeCareAgency": 0,
+            "stateHospiceLicense": 0,
+            "stateNursingCareFacilityIdentities": 0,
+            "note": "CMS Colorado CCNs already live in the national graph. No current CDPHE bulk state-license identities were acquired this ticket.",
+        },
+        "crosswalk": {
+            "policy": "EXACT_OFFICIAL_ID else REVIEW. Name-only adverse attachment is UNSAFE.",
+            "alrToCmsNh": {
+                "attempted": False,
+                "reason": "Assisted Living Residence is not a CMS Nursing Home class. Name/address join is forbidden.",
+            },
+            "hcaToCmsHha": {
+                "attempted": False,
+                "reason": "No current bulk CDPHE HCA roster with official CMS numbers was acquired. Do not infer state license from CMS Home Health CCN.",
+            },
+            "stateHospiceToCmsHospice": {
+                "attempted": False,
+                "reason": "No current bulk CDPHE hospice roster with official CMS numbers was acquired. Do not infer state license from CMS Hospice CCN.",
+            },
+            "stateNfToCmsNh": {
+                "attempted": False,
+                "reason": "No current bulk CDPHE Nursing Care Facility roster with official Medicare IDs was acquired. CMS CCN remains the published identity for existing national NH routes. State license != CMS CCN unless exact.",
+            },
+            "cmsCcnPreserved": True,
+        },
+        "inspections": {
+            "cdpheFindAndCompare": "OPEN_SEARCH_ONLY",
+            "cmsNursingHome": "REUSED_NATIONAL_EXACT_CCN",
+            "citationIsNotPenalty": True,
+            "occurrenceIsNotViolation": True,
+            "planOfCorrectionIsNotAdmission": True,
+            "inspectionIsNotDeficiency": True,
+            "deficiencyIsNotEnforcement": True,
+            "staffingIsNotQuality": True,
+            "cmsStarsAreNotTrustHubRating": True,
+            "nameOnlyAdverseAttach": "UNSAFE",
+            "note": "Find and Compare shows last-3-year surveys, citations, plans of correction, and self-reported occurrences. A citation is not a penalty. An occurrence is not a violation. A plan of correction is not an admission. CMS Nursing Home inspection/deficiency/penalty stay on exact CCN. Home Health and Hospice have no CMS national inspection/enforcement file on this hub.",
+        },
+        "complaints": {
+            "coverage": "PUBLIC_RESEARCH_PATH",
+            "bulk": "NOT_ACQUIRED",
+            "url": "https://cdphe.colorado.gov/health-facilities/file-a-complaint/health-facilities-complaint-contacts",
+            "complaintProcessIsNotComplaintDataset": True,
+            "note": "The public complaint-intake process is not a complaint dataset. A complaint is not a violation.",
+        },
+        "enforcement": {
+            "state": {
+                "result": "NO_BULK_ACQUIRED",
+                "access": "CDPHE Find and Compare SEARCH_ONLY",
+                "note": "Complaint != violation. Occurrence != violation. Citation != penalty. Name-only attach is UNSAFE. No action found != clean record.",
+            },
+            "cms": {
+                "result": "REUSED_NATIONAL_EXACT_CCN",
+                "note": "Nursing Home inspection, deficiency, penalty, staffing, and ownership stay on existing exact-CCN national architecture.",
+            },
+        },
+        "ownership": {
+            "cmsNursingHome": "Reuse existing SeniorTrustHub CMS ownership graph on exact CCN.",
+            "cdphe": "Do not infer ownership for state-only facilities by name. Find and Compare is not scraped as an owner roster.",
+        },
+        "publicationDecisions": {
+            "CMS_NURSING_HOME": "EXISTING_NATIONAL_CCN_ROUTES",
+            "CMS_HOME_HEALTH": "EXISTING_NATIONAL_CCN_ROUTES",
+            "CMS_HOSPICE": "EXISTING_NATIONAL_CCN_ROUTES",
+            "ASSISTED_LIVING_RESIDENCE": "NO_STATE_ONLY_PROFILES_WITHOUT_SAFE_IDENTITY",
+            "HOME_CARE_AGENCY": "NO_STATE_ONLY_PROFILES_WITHOUT_SAFE_IDENTITY",
+            "NURSING_HOME_ADMINISTRATOR": "NO_PERSON_PAGES",
+            "rationale": "Colorado state verification does not automatically create new public facility profiles without safe identity. Existing CMS public facility/provider profiles remain governed by current Senior publication rules.",
+        },
+        "claimEligibility": {
+            "broadened": False,
+            "authoritativeRules": "Existing Senior claim rules remain authoritative.",
+            "searchResultIsNotEligibility": True,
+            "claimedIsNotVerified": True,
+            "note": "A state search result is not claim eligibility. Claimed is not verified.",
+        },
+        "expansionLedger": {
+            "NET_NEW_CANONICAL_ORGANIZATIONS": 0,
+            "NET_NEW_STATE_IDENTITIES": 0,
+            "EXISTING_ORGANIZATIONS_ENRICHED": 0,
+            "NEW_EVIDENCE_ROWS": 0,
+            "note": "CMS Colorado CCNs already in the national graph are not net-new organizations. No current CDPHE bulk identities were minted. STATE_VERIFY_PATH_ONLY is not a directory build.",
+        },
+        "findings": [
+            {
+                "id": "cms-spine",
+                "title": "CMS is the bulk identity spine for Colorado on this hub",
+                "summary": f"Accepted CMS geography lists {nh} Nursing Homes, {hha} Home Health agencies, and {hospice} Hospice providers in Colorado. Those class overlays already live in national CMS totals and are not added again.",
+                "doesNotMean": [
+                    "one Colorado senior-provider total",
+                    "state licensed equals CMS certified",
+                    "Home Health office geography is a service area",
+                ],
+            },
+            {
+                "id": "cdphe-search-only",
+                "title": "CDPHE live verification is search/path unless a bulk source is acquired",
+                "summary": "Find and Compare is an official dashboard for last-3-year inspections, citations, plans of correction, and self-reported occurrences. No current official bulk facility roster was acquired. Search-only is not zero.",
+                "doesNotMean": [
+                    "Colorado has zero licensed facilities outside CMS",
+                    "a dashboard search result is the complete CDPHE universe",
+                    "a search result is claim eligibility",
+                ],
+            },
+            {
+                "id": "alr-separate",
+                "title": "Assisted Living Residence is a separate state class",
+                "summary": "Colorado Assisted Living Residences are licensed under 6 CCR 1011-1 Chapter 7. They are not Nursing Homes. No current ALR roster count is published here. Approximate press counts are rejected.",
+                "doesNotMean": [
+                    "every assisted living residence is a nursing home",
+                    "an unpublished ALR count is zero",
+                ],
+            },
+            {
+                "id": "stale-gis",
+                "title": "The 2017 CDPHE GIS file cannot be used as a current roster",
+                "summary": "Colorado Information Marketplace dataset 98pp-s4r4 is a January 2017 address-derived point file. It is historical/stale and cannot be promoted to current identity.",
+                "doesNotMean": [
+                    "January 2017 locations are the current licensed universe",
+                ],
+            },
+            {
+                "id": "person-grain",
+                "title": "Nursing Home Administrator licenses are person-grain",
+                "summary": "DORA licenses Nursing Home Administrators as people. That path is a public research lookup, not a facility count, and does not mint person pages.",
+                "doesNotMean": [
+                    "administrator licenses are facilities",
+                    "an unpublished person count is zero facilities",
+                ],
+            },
+        ],
+        "coverageGaps": [
+            "Current official CDPHE bulk facility roster / COHFI extract",
+            "Current Assisted Living Residence universe count",
+            "Current Home Care Agency / Home Care Placement Agency bulk",
+            "Current state hospice license bulk independent of CMS",
+            "Exact official-ID CMS↔state crosswalk until a bulk source with native federal IDs is acquired",
+            "Complaint dataset (intake process is not a dataset)",
+            "County or Denver local pages (statewide only this sprint)",
+        ],
+        "verification": {
+            "snapshot": "Accepted CMS Colorado class overlays plus CDPHE official verification/inspection paths",
+            "live": "CDPHE Find and Compare and CMS Care Compare remain live verification paths. TrustHub does not scrape Find and Compare.",
+        },
+        "guardrails": [
+            "CMS IS THE BULK IDENTITY SPINE",
+            "CDPHE IS STATE VERIFICATION / INSPECTION CONTEXT",
+            "NURSING HOME != HOME HEALTH != HOSPICE",
+            "ALR != NURSING HOME",
+            "HCA != CMS HOME HEALTH",
+            "HCPA != HCA",
+            "HOSPICE != HOME HEALTH",
+            "ADULT DAY != ASSISTED LIVING",
+            "NHA != FACILITY",
+            "STATE LICENSE != CMS CCN UNLESS EXACT",
+            "SEARCH-ONLY != ZERO",
+            "COMPLAINT PROCESS != COMPLAINT DATASET",
+            "OCCURRENCE != VIOLATION",
+            "CITATION != PENALTY",
+            "PLAN OF CORRECTION != ADMISSION",
+            "NO NAME-ONLY ADVERSE ATTACHMENT",
+            "2017 GIS IS NOT A CURRENT ROSTER",
+            "NO COMBINED PROVIDER DENOMINATOR",
+            "NO TRUST SCORE",
+            "NO RANKING",
+            "NO AGGREGATE RATING",
+            "NO COUNTY PAGES",
+            "NO DENVER PAGE",
+        ],
+        "noCombinedDenominator": True,
+        "noTrustScore": True,
+        "noRanking": True,
+        "noAggregateRating": True,
+        "publicationPath": "/colorado",
+        "noCountyRoutes": True,
+        "noCityRoutes": True,
+        "noDenverPage": True,
+        "statewideOnly": True,
+    }
+    snapshot["fingerprint"] = sha256_obj(
+        {k: v for k, v in snapshot.items() if k != "fingerprint"}
+    )
+    ART.mkdir(parents=True, exist_ok=True)
+    (ART / "co-sen-001-public-snapshot.json").write_text(
+        json.dumps(snapshot, indent=2) + "\n", encoding="utf-8"
+    )
+    (DOMAIN / "co-public-snapshot.ts").write_text(json_to_ts(snapshot), encoding="utf-8")
+    print("fingerprint", snapshot["fingerprint"])
+    print("cms NH", nh, "HHA", hha, "Hospice", hospice)
+    print("alr count", snapshot["assistedLiving"]["count"])
+    print("gis promote", snapshot["staleGis2017"]["cannotPromoteToCurrentIdentity"])
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
