@@ -12,6 +12,7 @@ import { TX_LOCKED, TX_PUBLIC_PATH } from "./tx-intelligence";
 import { WA_LOCKED, WA_PUBLIC_PATH } from "./wa-intelligence";
 import { AZ_LOCKED, AZ_PUBLIC_PATH } from "./az-intelligence";
 import { CO_LOCKED, CO_PUBLIC_PATH } from "./co-intelligence";
+import { VA_LOCKED, VA_PUBLIC_PATH } from "./va-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -98,6 +99,7 @@ export interface HomeGeoRow {
     | "washington_state_intelligence"
     | "arizona_state_intelligence"
     | "colorado_state_intelligence"
+    | "virginia_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -206,6 +208,15 @@ export interface SeniorHomeIntel {
     alrCount: null;
     note: string;
   };
+  virginiaPreview: {
+    href: string;
+    alfCount: number;
+    adcCount: number;
+    cmsNursingHomes: number;
+    cmsHomeHealth: number;
+    cmsHospice: number;
+    note: string;
+  };
   askMarket: HomeAskItem[];
   sources: HubSourceRow[];
   limitations: string[];
@@ -300,6 +311,12 @@ export function buildSeniorHomeIntel(input: {
   };
   const coGeo = national.geography.find((row) => row.state === "CO") ?? {
     state: "CO",
+    nursingHomes: 0,
+    homeHealth: 0,
+    hospice: 0,
+  };
+  const vaGeo = national.geography.find((row) => row.state === "VA") ?? {
+    state: "VA",
     nursingHomes: 0,
     homeHealth: 0,
     hospice: 0,
@@ -823,6 +840,21 @@ export function buildSeniorHomeIntel(input: {
         "The 2017 CDPHE GIS file is not a current roster. Search-only is not zero.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Virginia DSS (state enrichment)",
+      numerator: VA_LOCKED.alfCount,
+      denominator: null,
+      display: `${VA_LOCKED.alfCount.toLocaleString("en-US")} DSS Assisted Living Facilities; ${VA_LOCKED.adcCount.toLocaleString("en-US")} Adult Day Centers; ${VA_LOCKED.cmsNursingHomes.toLocaleString("en-US")} CMS Nursing Homes (not a combined total).`,
+      status: "partial",
+      method:
+        "Virginia DSS ALF and Adult Day official search JSON on /virginia, kept separate from CMS class overlays. VDH nursing-home portal remains search-only.",
+      limitations: [
+        "Do not add ALF, Adult Day, and CMS classes into one senior-provider denominator.",
+        "Assisted Living is not a Nursing Home. Adult Day is not Assisted Living. DSS licenseId is not a CMS CCN.",
+        "Complaint-related inspection is not a substantiated complaint. Licensed capacity is not occupancy.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -847,7 +879,9 @@ export function buildSeniorHomeIntel(input: {
                   ? "arizona_state_intelligence"
                   : row.state === "CO"
                     ? "colorado_state_intelligence"
-                    : "cms_directory_only",
+                    : row.state === "VA"
+                      ? "virginia_state_intelligence"
+                      : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -863,7 +897,9 @@ export function buildSeniorHomeIntel(input: {
                   ? AZ_PUBLIC_PATH
                   : row.state === "CO"
                     ? CO_PUBLIC_PATH
-                    : null,
+                    : row.state === "VA"
+                      ? VA_PUBLIC_PATH
+                      : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 
@@ -894,7 +930,7 @@ export function buildSeniorHomeIntel(input: {
     findings,
     coverage,
     gaps: [
-      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, California, Texas, Washington, Arizona, and Colorado currently have state intelligence pages.",
+      "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, California, Texas, Washington, Arizona, Colorado, and Virginia currently have state intelligence pages.",
       "CMS stars, staffing, inspections, and penalties are not interchangeable across Nursing Home, Home Health, and Hospice.",
       "Internal ownership graph edges are not homepage publication measures. Missing public ownership evidence is not proof of independence.",
       "Home Health and Hospice have no CMS CHOW event file in this research graph.",
@@ -973,6 +1009,15 @@ export function buildSeniorHomeIntel(input: {
       cdpheCoverage: "OPEN_SEARCH_ONLY",
       alrCount: null,
       note: "Colorado state intelligence keeps CMS Nursing Home, Home Health, and Hospice overlays separate from CDPHE verification. Assisted Living Residence is a state class without a current bulk roster. They are not one senior-provider total. CDPHE is not CMS. The 2017 GIS file is not a current roster.",
+    },
+    virginiaPreview: {
+      href: VA_PUBLIC_PATH,
+      alfCount: VA_LOCKED.alfCount,
+      adcCount: VA_LOCKED.adcCount,
+      cmsNursingHomes: vaGeo.nursingHomes,
+      cmsHomeHealth: vaGeo.homeHealth,
+      cmsHospice: vaGeo.hospice,
+      note: "Virginia state intelligence keeps DSS Assisted Living, DSS Adult Day, and CMS class overlays as separate datasets. They are not one senior-provider total. ALF is not a Nursing Home. DSS licenseId is not a CMS CCN. Complaint-related inspection is not a substantiated complaint.",
     },
     askMarket: [
       {

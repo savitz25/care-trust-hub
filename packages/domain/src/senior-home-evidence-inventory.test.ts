@@ -40,6 +40,7 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
       "/washington",
       "/arizona",
       "/colorado",
+      "/virginia",
     ]);
     expect(inventory.find((row) => row.key === "fl-regulatory-observations")?.value).toBe(77219);
     expect(inventory.find((row) => row.key === "nj-enforcement-indexed")?.doesNotCount).toMatch(

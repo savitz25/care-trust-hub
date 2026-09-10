@@ -287,7 +287,7 @@ function removeCriterion(query: string, label: string): string | null {
   if (/geography/i.test(label))
     return query
       .replace(
-        /\b(?:in|near)\s+(?:palm beach county|broward county|miami-dade county|boca raton|miami|tampa|florida|new jersey|california|texas|washington|arizona|colorado)\b/gi,
+        /\b(?:in|near)\s+(?:palm beach county|broward county|miami-dade county|boca raton|miami|tampa|florida|new jersey|california|texas|washington|arizona|colorado|virginia)\b/gi,
         "",
       )
       .trim();
