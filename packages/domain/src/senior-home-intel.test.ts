@@ -75,6 +75,7 @@ describe("senior-home-intel-v1", () => {
     expect(intel.geography.some((row) => row.intelligenceHref === "/washington")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/arizona")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/colorado")).toBe(true);
+    expect(intel.geography.some((row) => row.intelligenceHref === "/virginia")).toBe(true);
     expect(
       intel.geography
         .filter(
@@ -85,7 +86,8 @@ describe("senior-home-intel-v1", () => {
             row.state !== "TX" &&
             row.state !== "WA" &&
             row.state !== "AZ" &&
-            row.state !== "CO",
+            row.state !== "CO" &&
+            row.state !== "VA",
         )
         .every((row) => row.intelligenceHref === null),
     ).toBe(true);
@@ -114,5 +116,11 @@ describe("senior-home-intel-v1", () => {
     expect(intel.coloradoPreview.cmsHospice).toBe(88);
     expect(intel.coloradoPreview.alrCount).toBeNull();
     expect(intel.coloradoPreview.cdpheCoverage).toBe("OPEN_SEARCH_ONLY");
+    expect(intel.virginiaPreview.href).toBe("/virginia");
+    expect(intel.virginiaPreview.alfCount).toBe(573);
+    expect(intel.virginiaPreview.adcCount).toBe(82);
+    expect(intel.virginiaPreview.cmsNursingHomes).toBe(289);
+    expect(intel.virginiaPreview.cmsHomeHealth).toBe(237);
+    expect(intel.virginiaPreview.cmsHospice).toBe(110);
   });
 });

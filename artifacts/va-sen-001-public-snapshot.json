@@ -1,0 +1,235 @@
+{
+  "version": "senior-va-state-intel-v1",
+  "ticket": "VA-SEN-001",
+  "asOf": null,
+  "sourceAsOf": null,
+  "sourceAsOfState": "UNKNOWN",
+  "retrievedAt": "2026-09-10T16:02:10Z",
+  "snapshotAsOf": "2026-09-10",
+  "generatedAt": "2026-09-10T16:02:10Z",
+  "regulatorMap": {
+    "alfAgency": "Virginia Department of Social Services",
+    "alfDivision": "Division of Licensing Programs (DOLP)",
+    "alfSearch": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/",
+    "alfHub": "https://www.dss.virginia.gov/licensed-care/assisted-living-facilities-alf/",
+    "adcSearch": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/adult-day-center-search/",
+    "complaint": "https://www.dss.virginia.gov/licensed-care/submit-a-complaint/",
+    "vdhOlc": "https://www.vdh.virginia.gov/licensure-and-certification/",
+    "vdhNursingHomePortal": "https://www.vdh.virginia.gov/licensure-and-certification/",
+    "vdhLtcSurveys": "https://www.vdh.virginia.gov/licensure-and-certification/division-of-long-term-care-services/ltc-inspections-surveys/",
+    "cmsCareCompare": "https://www.medicare.gov/care-compare/"
+  },
+  "identity": {
+    "namespace": "VA-DSS-ALF:{licenseId}",
+    "verified": true,
+    "routingField": "licenseId",
+    "additionalSourceField": "licenseFacilityId",
+    "nameIsNotIdentity": true,
+    "nameOnlyJoins": "UNSAFE"
+  },
+  "dssAlf": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "accessMethod": "Official DSS Terminalfour search JSON via list pagination + licenseId detail",
+    "completeness": "LIST_TOTAL_EQUALS_DETAIL_COUNT",
+    "licensedFacilityCount": 573,
+    "uniqueLicenseIds": 573,
+    "uniqueLicenseFacilityIds": 573,
+    "licensedCapacitySum": 38010,
+    "capacityGrain": "licensed_capacity_not_occupancy",
+    "capacityMissing": 0,
+    "licenseTypes": {
+      "1YR": 277,
+      "2YR": 211,
+      "3YR": 53,
+      "PROV": 7,
+      "COND": 25
+    },
+    "licenseTypeIsNotQuality": true,
+    "expirationDatesPresent": 573,
+    "qualifications": {
+      "Assisted Living": 491,
+      "Non-Ambulatory": 405,
+      "Special Care Un": 264,
+      "Ambulatory Only": 109,
+      "ResidentialOnly": 75
+    },
+    "qualificationsAreNotRatings": true,
+    "officialSearch": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/",
+    "notNursingHome": true,
+    "notCmsCcn": true
+  },
+  "dssAlfInspections": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "observationCount": 7032,
+    "facilitiesWithAtLeastOneObservation": 571,
+    "facilitiesWithZeroReturnedObservations": 2,
+    "violationFlagYes": 4066,
+    "violationFlagNo": 2966,
+    "complaintRelatedObservations": 2488,
+    "complaintRelatedMeans": "inspection.complaintNumber != 0 in the DSS JSON",
+    "complaintRelatedIsNotSubstantiatedComplaint": true,
+    "violationFlagIsNotViolationCount": true,
+    "inspectionIsNotDisciplinaryAction": true,
+    "noViolationShownIsNotPerfect": true,
+    "didNotChaseViolationPdfs": true
+  },
+  "dssAdc": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "licensedFacilityCount": 82,
+    "inspectionObservations": 615,
+    "notAlf": true,
+    "notNursingHome": true,
+    "sameAdapterAsAlf": true,
+    "officialSearch": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/adult-day-center-search/"
+  },
+  "cmsOverlay": {
+    "nursingHomes": 289,
+    "homeHealth": 237,
+    "hospice": 110,
+    "source": "senior-national-intelligence.json geography VA (CMS class directories)",
+    "asOf": "2026-08-27",
+    "nationalFingerprint": "215b9d6301a9759f53dd92324930803089d319f95fe5e46739cbbd5f326c3294",
+    "addedToNationalTotals": false,
+    "clocks": {
+      "nursingHomes": {
+        "datasetKey": "nursing-home-provider-information",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/4pq5-n9py",
+        "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T20:24:52.158102+00:00",
+        "sourcePeriod": null
+      },
+      "homeHealth": {
+        "datasetKey": "home-health-care-agencies",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/6jpm-sxkc",
+        "sourceModifiedAt": "2026-05-27T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T21:08:16.274819+00:00",
+        "sourcePeriod": null
+      },
+      "hospice": {
+        "datasetKey": "hospice-general-information",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/yc9t-dgbk",
+        "sourceModifiedAt": "2026-08-19T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T22:15:06.243039+00:00",
+        "sourcePeriod": null
+      }
+    }
+  },
+  "vdh": {
+    "nursingHomeInformationalPortal": {
+      "coverage": "OPEN_SEARCH_ONLY",
+      "reason": "Interactive VDH OLC / Salesforce portal. No clean bulk download or structured public API found in this ticket.",
+      "url": "https://www.vdh.virginia.gov/licensure-and-certification/"
+    },
+    "ltcInspectionLibrary": {
+      "coverage": "OPEN_SEARCH_ONLY",
+      "reason": "Per-facility survey/PDF library. Document-heavy; CMS already supplies the nursing-home backbone.",
+      "url": "https://www.vdh.virginia.gov/licensure-and-certification/division-of-long-term-care-services/ltc-inspections-surveys/"
+    },
+    "homeCareHospiceLicensing": {
+      "coverage": "OPEN_SEARCH_ONLY",
+      "reason": "OLC licensing portal is application/login oriented. No trivial statewide public roster."
+    }
+  },
+  "publication": {
+    "claimableAlfProfiles": false,
+    "publicAlfProfileRoutes": false,
+    "stateResearchIdentityIsNotPublicProfile": true,
+    "stateResearchIdentityIsNotClaimableProfile": true,
+    "noEmailNameMatching": true,
+    "noAutomaticCmsMatch": true
+  },
+  "crosswalk": {
+    "alfToCmsNh": {
+      "attempted": false,
+      "exact": 0,
+      "reviewRequired": 0,
+      "rejectedUnsafe": 0
+    },
+    "adcToCms": {
+      "attempted": false
+    },
+    "cmsCcnPreserved": true,
+    "nameOnlyJoins": "UNSAFE"
+  },
+  "expansionLedger": {
+    "NEW_VA_ALF_STATE_IDENTITIES": 573,
+    "NEW_VA_ALF_LICENSE_ROWS": 573,
+    "NEW_VA_INSPECTION_OBSERVATION_ROWS": 7032,
+    "NEW_VA_COMPLAINT_RELATED_INSPECTION_ROWS": 2488,
+    "NEW_VA_VIOLATION_FLAGGED_INSPECTION_ROWS": 4066,
+    "NEW_VA_ADC_STATE_IDENTITIES": 82,
+    "NET_NEW_CANONICAL_FACILITIES": 0,
+    "NET_NEW_PUBLIC_PROFILES": 0,
+    "EXACT_STATE_TO_CMS_CROSSWALKS": 0,
+    "REVIEW_REQUIRED_CROSSWALKS": 0,
+    "REJECTED_UNSAFE_CROSSWALKS": 0
+  },
+  "juiceSqueeze": [
+    {
+      "source": "VDSS DOLP Assisted Living Facility Search JSON",
+      "decision": "GRABBED \u2014 HIGH YIELD",
+      "note": "Paginated official JSON, 573/573 licensed ALFs, licenseId identity, capacity, qualifications, license type/expiration, inspection flags."
+    },
+    {
+      "source": "VDSS ALF facility-detail inspection JSON",
+      "decision": "GRABBED \u2014 HIGH YIELD",
+      "note": "Same adapter. Inspection-level Yes/No violation and complaintNumber. Did not chase violation PDFs."
+    },
+    {
+      "source": "VDSS Adult Day Center Search JSON",
+      "decision": "GRABBED \u2014 EASY SECONDARY",
+      "note": "Same search architecture, endpoint=adc. 82 licensed centers. Kept as a separate class."
+    },
+    {
+      "source": "VDH Nursing Home Informational Portal",
+      "decision": "LEFT \u2014 SEARCH ONLY",
+      "note": "Interactive portal / Salesforce. CMS already provides the nursing-home spine."
+    },
+    {
+      "source": "VDH LTC inspection/survey PDF library",
+      "decision": "LEFT \u2014 TOO MUCH WORK FOR CURRENT YIELD",
+      "note": "Per-facility document crawl. Not required to close statewide Virginia Senior."
+    },
+    {
+      "source": "VDH home care / hospice licensing portal",
+      "decision": "LEFT \u2014 SEARCH ONLY",
+      "note": "No trivial statewide public roster. CMS HHA/Hospice overlays retained."
+    },
+    {
+      "source": "DSS ALF violation-detail PDFs",
+      "decision": "LEFT \u2014 TOO MUCH WORK FOR CURRENT YIELD",
+      "note": "Inspection-level flags are sufficient for this ticket."
+    },
+    {
+      "source": "Inspector and administrator contact fields",
+      "decision": "LEFT \u2014 SEARCH ONLY",
+      "note": "Present on source JSON; stripped from publication. Not facility identity."
+    },
+    {
+      "source": "Virginia city/county pages",
+      "decision": "LEFT \u2014 LOCAL / FUTURE",
+      "note": "Statewide first. No Fairfax/Richmond/Virginia Beach routes."
+    },
+    {
+      "source": "FOIA / CORA-style DSS extracts",
+      "decision": "LEFT \u2014 REQUEST ONLY",
+      "note": "Not requested. Public search JSON was enough."
+    }
+  ],
+  "claimEligibility": {
+    "broadened": false
+  },
+  "noCombinedDenominator": true,
+  "noTrustScore": true,
+  "noRanking": true,
+  "noAggregateRating": true,
+  "publicationPath": "/virginia",
+  "noCountyRoutes": true,
+  "noCityRoutes": true,
+  "noFairfaxPage": true,
+  "noRichmondPage": true,
+  "noVirginiaBeachPage": true,
+  "statewideOnly": true,
+  "unknownIsNotZero": true,
+  "fingerprint": "c98e5373d60c765690f03493e0c1fd85d4b24f2c4693fb964abd27b5d5d73d68"
+}

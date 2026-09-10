@@ -15,6 +15,7 @@ const STATE_NAMES: Record<string, string> = {
   arizona: "AZ",
   washington: "WA",
   colorado: "CO",
+  virginia: "VA",
 };
 
 const COUNTIES: Record<string, { value: string; meaning: string }> = {
@@ -166,9 +167,27 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
     );
   }
   if (/assisted living/i.test(q)) {
+    if (/\bvirginia\b/i.test(q) || state?.value === "VA") {
+      return fail(
+        "Virginia assisted living is a DSS license class, not a CMS nursing-home directory. A complaint-related inspection is not a substantiated complaint. Open the Virginia research page.",
+        ["Open Virginia assisted-living research."],
+        "PARTIAL",
+      );
+    }
     return fail(
       "Assisted living is state-regulated and does not share the federal CMS nursing-home, Home Health, or Hospice directory contract. Use the available state-specific assisted-living research.",
-      ["Open Arizona assisted-living research."],
+      ["Open Arizona assisted-living research.", "Open Virginia assisted-living research."],
+      "PARTIAL",
+    );
+  }
+  if (
+    /\bvirginia\b/i.test(q) &&
+    /complaint|inspection/i.test(q) &&
+    /assisted living|alf|dss/i.test(q)
+  ) {
+    return fail(
+      "A DSS complaint-related inspection is not a substantiated complaint, not a violation count, and not a quality score.",
+      ["Open Virginia assisted-living research."],
       "PARTIAL",
     );
   }

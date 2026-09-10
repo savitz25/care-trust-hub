@@ -1,5 +1,6 @@
 import { AZ_LOCKED, AZ_PUBLIC_FINGERPRINT, AZ_PUBLIC_PATH } from "./az-intelligence";
 import { CO_LOCKED, CO_PUBLIC_FINGERPRINT, CO_PUBLIC_PATH } from "./co-intelligence";
+import { VA_LOCKED, VA_PUBLIC_FINGERPRINT, VA_PUBLIC_PATH } from "./va-intelligence";
 import { CA_LOCKED, CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_LOCKED, NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -39,7 +40,7 @@ export interface SeniorHomepageEvidenceMeasure {
 }
 
 export interface SeniorHomepageStateCard {
-  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO";
+  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA";
   name: string;
   href: string;
   regulators: string;
@@ -468,15 +469,60 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       CO_PUBLIC_PATH,
     ),
     m(
+      "va-dss-alf",
+      "IDENTITY_LICENSURE",
+      "Virginia DSS Assisted Living Facilities",
+      VA_LOCKED.alfCount,
+      "licensed ALF; VA-DSS-ALF:{licenseId}",
+      "Assisted Living",
+      "Virginia",
+      "Virginia DSS DOLP search JSON",
+      VA_PUBLIC_FINGERPRINT,
+      null,
+      "Complete official licensed ALF search universe.",
+      "Nursing homes; Adult Day Centers; occupancy; a combined Virginia senior-provider total.",
+      VA_PUBLIC_PATH,
+    ),
+    m(
+      "va-dss-alf-inspections",
+      "INSPECTION_DEFICIENCY",
+      "Virginia DSS ALF inspection observations",
+      VA_LOCKED.alfInspections,
+      "one DSS inspection row = one observation",
+      "Assisted Living",
+      "Virginia",
+      "Virginia DSS DOLP facility-detail JSON",
+      VA_PUBLIC_FINGERPRINT,
+      null,
+      "Inspection-level observations with complaintNumber and violations Y/N flags.",
+      "Substantiated complaints; deficiency counts; a ranking.",
+      VA_PUBLIC_PATH,
+    ),
+    m(
+      "va-dss-adc",
+      "IDENTITY_LICENSURE",
+      "Virginia DSS Adult Day Centers",
+      VA_LOCKED.adcCount,
+      "licensed Adult Day Center",
+      "Adult Day",
+      "Virginia",
+      "Virginia DSS DOLP search JSON",
+      VA_PUBLIC_FINGERPRINT,
+      null,
+      "Complete official licensed Adult Day Center search universe.",
+      "Assisted Living Facilities; Nursing Homes; a combined provider total.",
+      VA_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Completed state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA",
       "SeniorTrustHub accepted state artifacts",
-      "seven accepted state snapshots",
+      "eight accepted state snapshots",
       "2026-09-04",
       "Live state research destinations backed by accepted artifacts.",
       "A national template, ranking, or claim of identical state coverage.",
@@ -553,6 +599,7 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "fl-regulatory-observations",
     "ca-rcfe",
     "co-cms-nh",
+    "va-dss-alf",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -638,5 +685,17 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "Open-search state inspection/occurrence path; 2017 GIS excluded; missing bulk is unknown",
     sourceAsOf: CO_LOCKED.overlayAsOf,
+  },
+  {
+    state: "VA",
+    name: "Virginia",
+    href: VA_PUBLIC_PATH,
+    regulators: "VDSS DOLP + CMS",
+    stateClasses: `${VA_LOCKED.alfCount.toLocaleString("en-US")} Assisted Living Facilities · ${VA_LOCKED.adcCount} Adult Day Centers`,
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${VA_LOCKED.alfCount} DSS ALF · ${VA_LOCKED.adcCount} Adult Day · ${VA_LOCKED.cmsNursingHomes} CMS Nursing Homes`,
+    regulatoryDepth:
+      "Complete DSS ALF inspection-observation flags; VDH nursing-home portal remains search-only",
+    sourceAsOf: VA_LOCKED.snapshotAsOf,
   },
 ];
