@@ -55,3 +55,4 @@ export * from "./wa-intelligence";
 export * from "./az-intelligence";
 export * from "./co-intelligence";
 export * from "./va-intelligence";
+export * from "./ny-intelligence";

@@ -1,6 +1,7 @@
 import { AZ_LOCKED, AZ_PUBLIC_FINGERPRINT, AZ_PUBLIC_PATH } from "./az-intelligence";
 import { CO_LOCKED, CO_PUBLIC_FINGERPRINT, CO_PUBLIC_PATH } from "./co-intelligence";
 import { VA_LOCKED, VA_PUBLIC_FINGERPRINT, VA_PUBLIC_PATH } from "./va-intelligence";
+import { NY_LOCKED, NY_PUBLIC_FINGERPRINT, NY_PUBLIC_PATH } from "./ny-intelligence";
 import { CA_LOCKED, CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_LOCKED, NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -40,7 +41,7 @@ export interface SeniorHomepageEvidenceMeasure {
 }
 
 export interface SeniorHomepageStateCard {
-  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA";
+  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA" | "NY";
   name: string;
   href: string;
   regulators: string;
@@ -514,15 +515,30 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       VA_PUBLIC_PATH,
     ),
     m(
+      "ny-acf",
+      "IDENTITY_LICENSURE",
+      "New York Adult Care Facility identities",
+      NY_LOCKED.acfFacilities,
+      "NYSDOH Facility ID with operating certificate (AH or EHP)",
+      "Adult Care",
+      "New York",
+      "Health Facility General Information",
+      NY_PUBLIC_FINGERPRINT,
+      NY_LOCKED.snapshotAsOf,
+      "Adult Home and Enriched Housing Facility IDs with operating certificates.",
+      "Nursing homes; a sum of ALR/EALR/SNALR/ALP designations; occupancy.",
+      NY_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Completed state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO, VA",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY",
       "SeniorTrustHub accepted state artifacts",
-      "eight accepted state snapshots",
+      "nine accepted state snapshots",
       "2026-09-04",
       "Live state research destinations backed by accepted artifacts.",
       "A national template, ranking, or claim of identical state coverage.",
@@ -600,6 +616,7 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "ca-rcfe",
     "co-cms-nh",
     "va-dss-alf",
+    "ny-acf",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -697,5 +714,17 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "Complete DSS ALF inspection-observation flags; VDH nursing-home portal remains search-only",
     sourceAsOf: VA_LOCKED.snapshotAsOf,
+  },
+  {
+    state: "NY",
+    name: "New York",
+    href: NY_PUBLIC_PATH,
+    regulators: "NYSDOH + CMS",
+    stateClasses: `${NY_LOCKED.acfFacilities.toLocaleString("en-US")} Adult Care Facilities · ${NY_LOCKED.nhFacilities} NYSDOH Nursing Home Profile facilities`,
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${NY_LOCKED.acfFacilities} ACF · ${NY_LOCKED.nhFacilities} state NH · ${NY_LOCKED.nhDistinctCcn} exact Profile CCNs · ${NY_LOCKED.cmsNursingHomes} CMS Nursing Homes`,
+    regulatoryDepth:
+      "Nursing Home Profile surveys/citations/fines plus Do Not Refer observations; ACF Health Profiles inspections remain a research path",
+    sourceAsOf: NY_LOCKED.snapshotAsOf,
   },
 ];

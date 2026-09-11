@@ -59,6 +59,14 @@ export const SENIOR_SEARCH_CAPABILITIES: SpecialistSearchCapability[] = [
     limitations: ["No combined national assisted-living universe."],
   },
   {
+    key: "ny-acf",
+    label: "New York Adult Care Facilities",
+    supportState: "PARTIAL",
+    coverage: "NYSDOH Adult Care identities on /new-york; not a Search V1 CMS filter",
+    sourceSystems: ["NYSDOH Health Facility General Information"],
+    limitations: ["Adult Care is not a CMS nursing-home directory. LHCSA is not CMS Home Health."],
+  },
+  {
     key: "service-territory",
     label: "Verified service territory",
     supportState: "UNSUPPORTED",
