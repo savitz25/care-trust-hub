@@ -80,7 +80,14 @@ describe("NY-SEN-001 New York state intelligence", () => {
     expect(snap.uiGrains.cmsHomeHealth).toBe("VISIBLE_PUBLIC_METRIC");
     expect(snap.uiGrains.cmsHospice).toBe("VISIBLE_PUBLIC_METRIC");
     expect(nyTraceMetrics().map((row) => row.id)).toEqual(
-      expect.arrayContaining(["acf-count", "nh-count", "nh-surveys", "dnr-count", "cms-hha", "cms-hospice"]),
+      expect.arrayContaining([
+        "acf-count",
+        "nh-count",
+        "nh-surveys",
+        "dnr-count",
+        "cms-hha",
+        "cms-hospice",
+      ]),
     );
   });
 

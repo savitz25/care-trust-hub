@@ -183,7 +183,11 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
     }
     return fail(
       "Assisted living is state-regulated and does not share the federal CMS nursing-home, Home Health, or Hospice directory contract. Use the available state-specific assisted-living research.",
-      ["Open Arizona assisted-living research.", "Open Virginia assisted-living research.", "Open New York adult-care research."],
+      [
+        "Open Arizona assisted-living research.",
+        "Open Virginia assisted-living research.",
+        "Open New York adult-care research.",
+      ],
       "PARTIAL",
     );
   }

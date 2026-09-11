@@ -9,8 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/new-york");
   return {
     title: {
-      absolute:
-        "New York Senior Care Research — Adult Care, Nursing Homes, CMS | SeniorTrustHub",
+      absolute: "New York Senior Care Research — Adult Care, Nursing Homes, CMS | SeniorTrustHub",
     },
     description:
       "Research New York Adult Care Facilities, NYSDOH Nursing Home Profile evidence, Do Not Refer observations, and CMS nursing home, home health, and hospice overlays as separate official datasets. Adult Care is not a nursing home. LHCSA is not CMS Home Health. No score and no ranking.",

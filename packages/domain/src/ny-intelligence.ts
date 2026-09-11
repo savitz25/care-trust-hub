@@ -69,9 +69,11 @@ export function nyTraceMetrics(snapshot: NyPublicSnapshot = NY_PUBLIC_SNAPSHOT):
       sourceGrain: "NYSDOH Facility ID with operating certificate; Adult Home or Enriched Housing",
       numerator: NY_LOCKED.acfFacilities,
       denominator: NY_LOCKED.acfFacilities,
-      computation: "381 Adult Homes + 146 Enriched Housing Programs; overlap 0; 527 distinct operating certificates.",
+      computation:
+        "381 Adult Homes + 146 Enriched Housing Programs; overlap 0; 527 distinct operating certificates.",
       coverageState: "PARTIAL_SOURCE_COVERAGE",
-      caveat: "Not nursing homes. Not a sum of ALR/EALR/SNALR/ALP designations. Currentness is partial — no source ACTIVE flag.",
+      caveat:
+        "Not nursing homes. Not a sum of ALR/EALR/SNALR/ALP designations. Currentness is partial — no source ACTIVE flag.",
     },
     {
       id: "nh-count",
@@ -83,9 +85,11 @@ export function nyTraceMetrics(snapshot: NyPublicSnapshot = NY_PUBLIC_SNAPSHOT):
       sourceGrain: "one Facility_Info row = one FACILITY_ID",
       numerator: NY_LOCKED.nhFacilities,
       denominator: NY_LOCKED.nhFacilities,
-      computation: "Count Facility_Info rows (FACILITY_ID unique). Distinct source-native MEDICARE_NUMBER = 594.",
+      computation:
+        "Count Facility_Info rows (FACILITY_ID unique). Distinct source-native MEDICARE_NUMBER = 594.",
       coverageState: "ACQUIRED_CURRENT_SNAPSHOT",
-      caveat: "Not the CMS directory count (593). Not Adult Care Facilities. Inspection count is a different grain.",
+      caveat:
+        "Not the CMS directory count (593). Not Adult Care Facilities. Inspection count is a different grain.",
     },
     {
       id: "nh-surveys",
@@ -97,7 +101,8 @@ export function nyTraceMetrics(snapshot: NyPublicSnapshot = NY_PUBLIC_SNAPSHOT):
       sourceGrain: "one Surveys.csv row = one survey observation",
       numerator: NY_LOCKED.nhSurveys,
       denominator: NY_LOCKED.nhFacilities,
-      computation: "Count Surveys.csv rows covering all 597 Facility IDs. Types include COMPLAINT, CERTIFICATION/COMPLAINT, COVID19, CERTIFICATION.",
+      computation:
+        "Count Surveys.csv rows covering all 597 Facility IDs. Types include COMPLAINT, CERTIFICATION/COMPLAINT, COVID19, CERTIFICATION.",
       coverageState: "ACQUIRED_CURRENT_SNAPSHOT",
       caveat: "Survey observation is not a deficiency count and is not a quality score.",
     },
@@ -111,9 +116,11 @@ export function nyTraceMetrics(snapshot: NyPublicSnapshot = NY_PUBLIC_SNAPSHOT):
       sourceGrain: "one Facility Name block = one observation",
       numerator: NY_LOCKED.dnrObservations,
       denominator: NY_LOCKED.acfFacilities,
-      computation: "Count Facility Name blocks in the 2026-09-10 PDF. Exact current GI operating-certificate matches = 6. Name-only remainder not attached.",
+      computation:
+        "Count Facility Name blocks in the 2026-09-10 PDF. Exact current GI operating-certificate matches = 6. Name-only remainder not attached.",
       coverageState: "ACQUIRED_CURRENT_SNAPSHOT",
-      caveat: "Do Not Refer is not a criminal conviction, not a TrustHub blacklist, and not every enforcement action.",
+      caveat:
+        "Do Not Refer is not a criminal conviction, not a TrustHub blacklist, and not every enforcement action.",
     },
     {
       id: "cms-hha",
@@ -141,7 +148,8 @@ export function nyTraceMetrics(snapshot: NyPublicSnapshot = NY_PUBLIC_SNAPSHOT):
       denominator: NY_LOCKED.cmsHospice,
       computation: "Accepted national geography partition for NY.",
       coverageState: "ACQUIRED_CURRENT_SNAPSHOT",
-      caveat: "Hospice is not Home Health. State HSPC Facility IDs (39) were not name-matched to CMS.",
+      caveat:
+        "Hospice is not Home Health. State HSPC Facility IDs (39) were not name-matched to CMS.",
     },
   ];
 }
@@ -150,31 +158,49 @@ export function assertNyIntelligence(
   value: NyPublicSnapshot = NY_PUBLIC_SNAPSHOT,
 ): NyPublicSnapshot {
   if (value.version !== NY_INTEL_VERSION) throw new Error("New York snapshot version mismatch");
-  if (value.fingerprint !== NY_PUBLIC_FINGERPRINT) throw new Error("New York snapshot fingerprint mismatch");
+  if (value.fingerprint !== NY_PUBLIC_FINGERPRINT)
+    throw new Error("New York snapshot fingerprint mismatch");
   if (value.acf.acfFacilities !== NY_LOCKED.acfFacilities) throw new Error("ACF count mismatch");
-  if (value.nursingHomeProfile.sourceRows !== NY_LOCKED.nhFacilities) throw new Error("NH count mismatch");
-  if (value.nursingHomeProfile.distinctCcn !== NY_LOCKED.nhDistinctCcn) throw new Error("NH CCN mismatch");
-  if (value.doNotRefer.observationCount !== NY_LOCKED.dnrObservations) throw new Error("DNR count mismatch");
-  if (value.cmsOverlay.nursingHomes !== NY_LOCKED.cmsNursingHomes) throw new Error("CMS NH overlay mismatch");
-  if (value.cmsOverlay.homeHealth !== NY_LOCKED.cmsHomeHealth) throw new Error("CMS HHA overlay mismatch");
-  if (value.cmsOverlay.hospice !== NY_LOCKED.cmsHospice) throw new Error("CMS Hospice overlay mismatch");
-  if (value.acf.adultHomeIsNotEnrichedHousing !== true) throw new Error("AH must stay distinct from EHP");
-  if (value.assistedLivingDesignations.alpIsNotAlr !== true) throw new Error("ALP must stay distinct from ALR");
+  if (value.nursingHomeProfile.sourceRows !== NY_LOCKED.nhFacilities)
+    throw new Error("NH count mismatch");
+  if (value.nursingHomeProfile.distinctCcn !== NY_LOCKED.nhDistinctCcn)
+    throw new Error("NH CCN mismatch");
+  if (value.doNotRefer.observationCount !== NY_LOCKED.dnrObservations)
+    throw new Error("DNR count mismatch");
+  if (value.cmsOverlay.nursingHomes !== NY_LOCKED.cmsNursingHomes)
+    throw new Error("CMS NH overlay mismatch");
+  if (value.cmsOverlay.homeHealth !== NY_LOCKED.cmsHomeHealth)
+    throw new Error("CMS HHA overlay mismatch");
+  if (value.cmsOverlay.hospice !== NY_LOCKED.cmsHospice)
+    throw new Error("CMS Hospice overlay mismatch");
+  if (value.acf.adultHomeIsNotEnrichedHousing !== true)
+    throw new Error("AH must stay distinct from EHP");
+  if (value.assistedLivingDesignations.alpIsNotAlr !== true)
+    throw new Error("ALP must stay distinct from ALR");
   if (value.assistedLivingDesignations.doNotSumAsAssistedLivingFacilities !== true) {
     throw new Error("Do not sum assisted-living designations");
   }
-  if (value.homeCare.lhcsaIsNotCmsHha !== true) throw new Error("LHCSA must stay distinct from CMS HHA");
-  if (value.doNotRefer.nameOnlyJoins !== "UNSAFE") throw new Error("Name-only DNR joins must stay unsafe");
-  if (value.doNotRefer.exactProfileAttachments !== 0) throw new Error("Do not attach DNR rows to profiles");
-  if (value.expansionLedger.NET_NEW_CANONICAL_FACILITIES !== 0) throw new Error("Do not mint canonical facilities");
-  if (value.expansionLedger.NET_NEW_PUBLIC_PROFILES !== 0) throw new Error("Do not mint public profiles");
-  if (value.expansionLedger.EXISTING_ORGANIZATIONS_ENRICHED !== 0) throw new Error("No graph enrichment");
+  if (value.homeCare.lhcsaIsNotCmsHha !== true)
+    throw new Error("LHCSA must stay distinct from CMS HHA");
+  if (value.doNotRefer.nameOnlyJoins !== "UNSAFE")
+    throw new Error("Name-only DNR joins must stay unsafe");
+  if (value.doNotRefer.exactProfileAttachments !== 0)
+    throw new Error("Do not attach DNR rows to profiles");
+  if (value.expansionLedger.NET_NEW_CANONICAL_FACILITIES !== 0)
+    throw new Error("Do not mint canonical facilities");
+  if (value.expansionLedger.NET_NEW_PUBLIC_PROFILES !== 0)
+    throw new Error("Do not mint public profiles");
+  if (value.expansionLedger.EXISTING_ORGANIZATIONS_ENRICHED !== 0)
+    throw new Error("No graph enrichment");
   if (value.expansionLedger.NY_ACF_CERTIFIED_CAPACITY !== null) {
     throw new Error("ACF certified capacity must remain UNKNOWN as a unique-facility total");
   }
-  if (value.uiGrains.acfFacilities !== "VISIBLE_PUBLIC_METRIC") throw new Error("ACF must be visible");
-  if (value.uiGrains.nursingHomeFacilities !== "VISIBLE_PUBLIC_METRIC") throw new Error("NH must be visible");
-  if (value.uiGrains.doNotReferObservations !== "VISIBLE_PUBLIC_METRIC") throw new Error("DNR must be visible");
+  if (value.uiGrains.acfFacilities !== "VISIBLE_PUBLIC_METRIC")
+    throw new Error("ACF must be visible");
+  if (value.uiGrains.nursingHomeFacilities !== "VISIBLE_PUBLIC_METRIC")
+    throw new Error("NH must be visible");
+  if (value.uiGrains.doNotReferObservations !== "VISIBLE_PUBLIC_METRIC")
+    throw new Error("DNR must be visible");
   if (value.noCombinedDenominator !== true) throw new Error("No combined NY senior-provider total");
   if (value.publicationPath !== "/new-york") throw new Error("Route drifted");
   return value;

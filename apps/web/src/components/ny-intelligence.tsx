@@ -48,9 +48,9 @@ export function NyIntelligenceView({ intel }: { intel: NyPublicSnapshot }) {
           <p className="eyebrow">Separate official universes</p>
           <h2 id="ny-scale-title">Source families, not one New York senior-provider total</h2>
           <p>
-            Adult Care Facilities, nursing homes, Do Not Refer observations, CMS Home Health, and CMS
-            Hospice are not added together. Adult Home is not Enriched Housing. ALP is not ALR. LHCSA
-            is not CMS Home Health. No score and no ranking.
+            Adult Care Facilities, nursing homes, Do Not Refer observations, CMS Home Health, and
+            CMS Hospice are not added together. Adult Home is not Enriched Housing. ALP is not ALR.
+            LHCSA is not CMS Home Health. No score and no ranking.
           </p>
         </div>
         <div className="hub-stat-grid">
@@ -99,8 +99,9 @@ export function NyIntelligenceView({ intel }: { intel: NyPublicSnapshot }) {
           The Nursing Home Profile lists {formatHubCount(nh.sourceRows)} facilities (
           {formatHubCount(nh.distinctFacilityIds)} distinct Facility IDs). Source-native Medicare
           numbers appear on {formatHubCount(nh.rowsWithCcn)} rows ({formatHubCount(nh.distinctCcn)}{" "}
-          distinct CCNs; {formatHubCount(nh.rowsWithoutCcn)} without CCN). CMS New York nursing homes
-          are {formatHubCount(cms.nursingHomes)} — a different directory grain, not forced equal.
+          distinct CCNs; {formatHubCount(nh.rowsWithoutCcn)} without CCN). CMS New York nursing
+          homes are {formatHubCount(cms.nursingHomes)} — a different directory grain, not forced
+          equal.
         </p>
         <p>
           Surveys: {formatHubCount(nh.surveyRows)} observations covering every Profile facility.
@@ -117,17 +118,18 @@ export function NyIntelligenceView({ intel }: { intel: NyPublicSnapshot }) {
         <p>
           {formatHubCount(acf.adultHomeFacilities)} Adult Homes and{" "}
           {formatHubCount(acf.enrichedHousingFacilities)} Enriched Housing Programs (
-          {formatHubCount(acf.acfFacilities)} Facility IDs; {formatHubCount(acf.distinctOperatingCertificates)}{" "}
-          operating certificates). Certification Bed rows ({formatHubCount(acf.ahBedCertificationRows)}{" "}
-          Adult Home + {formatHubCount(acf.ehpBedCertificationRows)} Enriched Housing) are credentials,
-          not extra facilities. Capacity is not occupancy.
+          {formatHubCount(acf.acfFacilities)} Facility IDs;{" "}
+          {formatHubCount(acf.distinctOperatingCertificates)} operating certificates). Certification
+          Bed rows ({formatHubCount(acf.ahBedCertificationRows)} Adult Home +{" "}
+          {formatHubCount(acf.ehpBedCertificationRows)} Enriched Housing) are credentials, not extra
+          facilities. Capacity is not occupancy.
         </p>
         <p>
           Designations at those sites: ALR {formatHubCount(al.alrFacilities)}, EALR{" "}
-          {formatHubCount(al.ealrFacilities)}, SNALR {formatHubCount(al.snalrFacilities)}, residential
-          ALP {formatHubCount(al.alpResidentialFacilities)}. These are not summed as “assisted living
-          facilities.” LHCSA specialty ALP ({formatHubCount(al.alpLhCsaSpecialtyFacilities)}) is a
-          home-care class, not an Adult Home.
+          {formatHubCount(al.ealrFacilities)}, SNALR {formatHubCount(al.snalrFacilities)},
+          residential ALP {formatHubCount(al.alpResidentialFacilities)}. These are not summed as
+          “assisted living facilities.” LHCSA specialty ALP (
+          {formatHubCount(al.alpLhCsaSpecialtyFacilities)}) is a home-care class, not an Adult Home.
         </p>
       </section>
 
@@ -136,8 +138,8 @@ export function NyIntelligenceView({ intel }: { intel: NyPublicSnapshot }) {
         <p>
           {formatHubCount(dnr.observationCount)} official observations as of {dnr.sourceAsOf}. Exact
           operating-certificate matches to the current GI Adult Care universe:{" "}
-          {formatHubCount(dnr.exactOpcertMatchesToCurrentGiAcf)}. Name-only remainder is not attached.
-          Placement is not a criminal conviction and is not a TrustHub blacklist.
+          {formatHubCount(dnr.exactOpcertMatchesToCurrentGiAcf)}. Name-only remainder is not
+          attached. Placement is not a criminal conviction and is not a TrustHub blacklist.
         </p>
       </section>
 
@@ -145,9 +147,10 @@ export function NyIntelligenceView({ intel }: { intel: NyPublicSnapshot }) {
         <h2 id="ny-home-title">Home care and hospice</h2>
         <p>
           State LHCSA Facility IDs: {formatHubCount(intel.homeCare.lhcsaDistinctFacilityIds)}. State
-          CHHA Facility IDs: {formatHubCount(intel.homeCare.chhaDistinctFacilityIds)}. CMS Home Health
-          remains {formatHubCount(cms.homeHealth)}. LHCSA is not CMS HHA. State hospice Facility IDs (
-          {formatHubCount(cms.stateHospiceDistinctFacilities)}) were not name-matched to CMS hospice.
+          CHHA Facility IDs: {formatHubCount(intel.homeCare.chhaDistinctFacilityIds)}. CMS Home
+          Health remains {formatHubCount(cms.homeHealth)}. LHCSA is not CMS HHA. State hospice
+          Facility IDs ({formatHubCount(cms.stateHospiceDistinctFacilities)}) were not name-matched
+          to CMS hospice.
         </p>
       </section>
 
@@ -168,7 +171,9 @@ export function NyIntelligenceView({ intel }: { intel: NyPublicSnapshot }) {
           </li>
         </ul>
         <p>
-          <Link href="/search?search=1&state=NY">Research CMS providers with a New York location</Link>
+          <Link href="/search?search=1&state=NY">
+            Research CMS providers with a New York location
+          </Link>
         </p>
       </section>
 
@@ -176,8 +181,13 @@ export function NyIntelligenceView({ intel }: { intel: NyPublicSnapshot }) {
         <h2 id="ny-not-title">What these numbers do not mean</h2>
         <ul>
           <li>There is no combined New York senior-provider total.</li>
-          <li>Adult Care Facility is not a nursing home. CMS CCN is not a state operating certificate.</li>
-          <li>Inspection is not a deficiency count. Complaint-related citation is not a substantiated complaint.</li>
+          <li>
+            Adult Care Facility is not a nursing home. CMS CCN is not a state operating certificate.
+          </li>
+          <li>
+            Inspection is not a deficiency count. Complaint-related citation is not a substantiated
+            complaint.
+          </li>
           <li>Missing ACF current-status flag is unknown, not zero. Search-only is not zero.</li>
           <li>No Trust Score. No ranking. New York City is not a separate route.</li>
         </ul>
