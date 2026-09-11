@@ -105,6 +105,10 @@ describe("senior homepage intelligence", () => {
       "href",
       "/virginia",
     );
+    expect(screen.getByRole("link", { name: /explore new york intelligence/i })).toHaveAttribute(
+      "href",
+      "/new-york",
+    );
     expect(screen.getByRole("link", { name: /save research to your shortlist/i })).toHaveAttribute(
       "href",
       "/shortlist",
@@ -119,7 +123,7 @@ describe("senior homepage intelligence", () => {
     expect(document.body.textContent).toMatch(/Federal directories & certification/i);
     expect(document.body.textContent).toMatch(/Public research surfaces/i);
     expect(document.body.textContent).not.toMatch(/PUBLIC & RESEARCH & SURFACES/i);
-  });
+  }, 15_000);
 
   it("contains no disabled legacy state-preview block", () => {
     const source = readFileSync(

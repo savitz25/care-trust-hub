@@ -1,0 +1,190 @@
+{
+  "nursingHomeProfile": {
+    "sourceRows": 597,
+    "distinctFacilityIds": 597,
+    "duplicateFacilityIds": 0,
+    "rowsWithCcn": 595,
+    "rowsWithoutCcn": 2,
+    "distinctCcn": 594,
+    "duplicateCcnValues": 1,
+    "surveyRows": 6036,
+    "surveyFacilityCoverage": 597,
+    "surveyDateMin": "01/02/2024",
+    "surveyDateMax": "12/31/2025",
+    "surveyTypes": [
+      ["COMPLAINT", 3802],
+      ["CERTIFICATION/COMPLAINT", 1109],
+      ["COVID19", 1024],
+      ["CERTIFICATION", 101]
+    ],
+    "citationRows": 19032,
+    "citationRowsIsComplaint1": 4244,
+    "enforcementRows": 2036,
+    "enforcementFacilityCoverage": 583,
+    "grain": "Facility_Info.csv row = one NYSDOH nursing-home facility (FACILITY_ID unique in this extract)."
+  },
+  "acf": {
+    "giAdultHomeFacilities": 381,
+    "giEnrichedHousingFacilities": 146,
+    "giAcfFacilities": 527,
+    "giDistinctOperatingCertificates": 527,
+    "ahBedCertificationRows": 1146,
+    "ehpBedCertificationRows": 466,
+    "ahEhpOverlapFacilityIds": 0,
+    "status": "GI directory presence with operating certificate; source does not print ACTIVE/EXPIRED. Currentness is PARTIAL (open-date present, no explicit active flag)."
+  },
+  "assistedLivingDesignations": {
+    "alr": {
+      "label": "Assisted Living Residence (ALR)",
+      "rows": 271,
+      "distinctFacilityIds": 271,
+      "certifiedBedMeasureSum": 26577,
+      "hostClasses": [
+        ["AH", 178],
+        ["EHP", 93]
+      ],
+      "note": "Designation/bed-program rows at Adult Home or Enriched Housing sites. Not unique assisted-living facilities."
+    },
+    "ealr": {
+      "label": "Enhanced Assisted Living Residence (EALR)",
+      "rows": 220,
+      "distinctFacilityIds": 220,
+      "certifiedBedMeasureSum": 13224,
+      "hostClasses": [
+        ["AH", 139],
+        ["EHP", 81]
+      ],
+      "note": "Designation/bed-program rows at Adult Home or Enriched Housing sites. Not unique assisted-living facilities."
+    },
+    "snalr": {
+      "label": "Special Needs Assisted Living Residence (SNALR)",
+      "rows": 203,
+      "distinctFacilityIds": 203,
+      "certifiedBedMeasureSum": 7449,
+      "hostClasses": [
+        ["AH", 139],
+        ["EHP", 64]
+      ],
+      "note": "Designation/bed-program rows at Adult Home or Enriched Housing sites. Not unique assisted-living facilities."
+    },
+    "alpResidential": {
+      "label": "Assisted Living Program (ALP)",
+      "rows": 162,
+      "distinctFacilityIds": 162,
+      "certifiedBedMeasureSum": 14844,
+      "hostClasses": [
+        ["AH", 136],
+        ["EHP", 26]
+      ],
+      "note": "Designation/bed-program rows at Adult Home or Enriched Housing sites. Not unique assisted-living facilities."
+    },
+    "alpLhCsaSpecialty": {
+      "label": "Specialty - Assisted Living Program(ALP)",
+      "rows": 155,
+      "distinctFacilityIds": 155,
+      "certifiedBedMeasureSum": 0,
+      "hostClasses": [["LHCSA", 155]],
+      "note": "Designation/bed-program rows at Adult Home or Enriched Housing sites. Not unique assisted-living facilities."
+    }
+  },
+  "homeCare": {
+    "chha": {
+      "rows": 1388,
+      "distinctFacilityIds": 97,
+      "attributeTypes": [
+        ["Service", 971],
+        ["County Served", 417]
+      ]
+    },
+    "lhcsa": {
+      "rows": 15279,
+      "distinctFacilityIds": 1258,
+      "attributeTypes": [
+        ["Service", 8793],
+        ["County Served", 6486]
+      ]
+    },
+    "lthhcp": {
+      "rows": 475,
+      "distinctFacilityIds": 30,
+      "attributeTypes": [
+        ["Service", 430],
+        ["County Served", 45]
+      ]
+    }
+  },
+  "hospiceState": {
+    "rows": 976,
+    "distinctFacilityIds": 39,
+    "attributeTypes": [
+      ["Service", 843],
+      ["County Served", 109],
+      ["Bed", 24]
+    ]
+  },
+  "adultDay": {
+    "rows": 34,
+    "distinctFacilityIds": 34,
+    "attributeTypes": [["Service", 34]]
+  },
+  "doNotRefer": {
+    "sourceAsOfPrinted": "2026-09-10",
+    "facilityNameBlocks": 117,
+    "operatingCertificateTokens": [
+      "040-F-026",
+      "040-F-030",
+      "210-E-001",
+      "230-E-014",
+      "240-E-141",
+      "240-S-121",
+      "260-F-020",
+      "320-E-005",
+      "370-E-202",
+      "370-F-208",
+      "370-F-250",
+      "370-S-051",
+      "370-S-132",
+      "370-S-191",
+      "370-S-847",
+      "380-E-002",
+      "400-S-320",
+      "520-S-118",
+      "520-S-135",
+      "590-E-292",
+      "620-F-078",
+      "650-F-078",
+      "680-F-010",
+      "690-F-046",
+      "800-E-134",
+      "800-F-971"
+    ],
+    "exactOpcertMatchesToGiAcf": [
+      "040-F-030",
+      "210-E-001",
+      "370-E-202",
+      "370-F-208",
+      "680-F-010",
+      "690-F-046"
+    ],
+    "exactOpcertMatchCount": 6,
+    "nameOnlyRemainder": 111,
+    "reasonDistribution": [
+      ["Voluntary Closure", 76],
+      ["Voluntary", 7],
+      ["Endangerment of resident health or safety", 7],
+      ["Involuntary Closure", 6],
+      ["Failure to obtain adult care facility certification", 6],
+      ["Facility closed due to damage", 3],
+      ["Involuntary", 3],
+      ["Endangerment of resident health or saf ety", 2],
+      ["Closed", 1],
+      ["Facility evacuated", 1],
+      ["Closed by Commissioner\u2019s Order", 1],
+      ["Closure \u2013 Commissioner\u2019s Emergency Order", 1],
+      ["Order to close", 1],
+      ["Temporary Closure", 1],
+      ["Commissioner\u2019s order to suspend operating certificate", 1],
+      ["Order suspension", 1]
+    ]
+  }
+}

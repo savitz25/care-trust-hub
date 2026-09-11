@@ -13,6 +13,7 @@ import { WA_LOCKED, WA_PUBLIC_PATH } from "./wa-intelligence";
 import { AZ_LOCKED, AZ_PUBLIC_PATH } from "./az-intelligence";
 import { CO_LOCKED, CO_PUBLIC_PATH } from "./co-intelligence";
 import { VA_LOCKED, VA_PUBLIC_PATH } from "./va-intelligence";
+import { NY_LOCKED, NY_PUBLIC_PATH } from "./ny-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -100,6 +101,7 @@ export interface HomeGeoRow {
     | "arizona_state_intelligence"
     | "colorado_state_intelligence"
     | "virginia_state_intelligence"
+    | "new_york_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -217,6 +219,15 @@ export interface SeniorHomeIntel {
     cmsHospice: number;
     note: string;
   };
+  newYorkPreview: {
+    href: string;
+    acfCount: number;
+    nhCount: number;
+    cmsNursingHomes: number;
+    cmsHomeHealth: number;
+    cmsHospice: number;
+    note: string;
+  };
   askMarket: HomeAskItem[];
   sources: HubSourceRow[];
   limitations: string[];
@@ -317,6 +328,12 @@ export function buildSeniorHomeIntel(input: {
   };
   const vaGeo = national.geography.find((row) => row.state === "VA") ?? {
     state: "VA",
+    nursingHomes: 0,
+    homeHealth: 0,
+    hospice: 0,
+  };
+  const nyGeo = national.geography.find((row) => row.state === "NY") ?? {
+    state: "NY",
     nursingHomes: 0,
     homeHealth: 0,
     hospice: 0,
@@ -881,7 +898,9 @@ export function buildSeniorHomeIntel(input: {
                     ? "colorado_state_intelligence"
                     : row.state === "VA"
                       ? "virginia_state_intelligence"
-                      : "cms_directory_only",
+                      : row.state === "NY"
+                        ? "new_york_state_intelligence"
+                        : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -899,7 +918,9 @@ export function buildSeniorHomeIntel(input: {
                     ? CO_PUBLIC_PATH
                     : row.state === "VA"
                       ? VA_PUBLIC_PATH
-                      : null,
+                      : row.state === "NY"
+                        ? NY_PUBLIC_PATH
+                        : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 
@@ -1018,6 +1039,15 @@ export function buildSeniorHomeIntel(input: {
       cmsHomeHealth: vaGeo.homeHealth,
       cmsHospice: vaGeo.hospice,
       note: "Virginia state intelligence keeps DSS Assisted Living, DSS Adult Day, and CMS class overlays as separate datasets. They are not one senior-provider total. ALF is not a Nursing Home. DSS licenseId is not a CMS CCN. Complaint-related inspection is not a substantiated complaint.",
+    },
+    newYorkPreview: {
+      href: NY_PUBLIC_PATH,
+      acfCount: NY_LOCKED.acfFacilities,
+      nhCount: NY_LOCKED.nhFacilities,
+      cmsNursingHomes: nyGeo.nursingHomes,
+      cmsHomeHealth: nyGeo.homeHealth,
+      cmsHospice: nyGeo.hospice,
+      note: "New York state intelligence keeps Adult Care Facilities, NYSDOH Nursing Home Profile facilities, Do Not Refer observations, and CMS class overlays as separate datasets. They are not one senior-provider total. ACF is not a Nursing Home. LHCSA is not CMS Home Health.",
     },
     askMarket: [
       {
