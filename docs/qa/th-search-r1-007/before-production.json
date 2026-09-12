@@ -1,0 +1,838 @@
+{
+  "baseline": "eaff708dd7459c8ca24eca00c1ce0039100b5979",
+  "deployment": "dpl_671sc68ApSMqMHLna9D3XGuP2Wnq",
+  "cases": [
+    {
+      "q": "Nursing homes in Austin Texas",
+      "at": "2026-09-12T01:49:06.094Z",
+      "ms": 2038,
+      "query": {
+        "mode": "entity",
+        "providerClass": "nursing_home",
+        "geography": {
+          "type": "state",
+          "value": "TX",
+          "meaning": "CMS directory state on the provider record (address/location state), not a verified service area."
+        },
+        "status": "current",
+        "sort": "name",
+        "page": 1,
+        "coverageState": "KNOWN"
+      },
+      "results": [
+        {
+          "providerClass": "nursing_home",
+          "ccn": "675144",
+          "providerName": "600 Maple Ave.",
+          "location": "BURLESON, TX, Johnson",
+          "statusLabel": "Current research cohort (CMS nursing-home directory)",
+          "href": "/facility/cms/675144/600-maple-ave",
+          "evidence": [
+            {
+              "label": "CMS overall stars",
+              "value": "Overall: 3/5 CMS-reported"
+            },
+            {
+              "label": "Staffing stars",
+              "value": "Staffing: 1/5 CMS-reported"
+            },
+            {
+              "label": "Health inspection stars",
+              "value": "Inspection: 4/5 CMS-reported"
+            },
+            {
+              "label": "Ownership category",
+              "value": "For profit - Corporation"
+            }
+          ],
+          "whyMatched": "600 Maple Ave. matches because it is classified as a current nursing home provider (CMS CCN 675144) with a recorded TX address/location state."
+        },
+        {
+          "providerClass": "nursing_home",
+          "ccn": "676437",
+          "providerName": "Accel at College Station",
+          "location": "College Station, TX, Brazos",
+          "statusLabel": "Current research cohort (CMS nursing-home directory)",
+          "href": "/facility/cms/676437/accel-at-college-station",
+          "evidence": [
+            {
+              "label": "CMS overall stars",
+              "value": "Overall: 2/5 CMS-reported"
+            },
+            {
+              "label": "Staffing stars",
+              "value": "Staffing: 1/5 CMS-reported"
+            },
+            {
+              "label": "Health inspection stars",
+              "value": "Inspection: 1/5 CMS-reported"
+            },
+            {
+              "label": "Ownership category",
+              "value": "For profit - Limited Liability company"
+            }
+          ],
+          "whyMatched": "Accel at College Station matches because it is classified as a current nursing home provider (CMS CCN 676437) with a recorded TX address/location state."
+        },
+        {
+          "providerClass": "nursing_home",
+          "ccn": "676349",
+          "providerName": "Accel at Willow Bend",
+          "location": "Plano, TX, Collin",
+          "statusLabel": "Current research cohort (CMS nursing-home directory)",
+          "href": "/facility/cms/676349/accel-at-willow-bend",
+          "evidence": [
+            {
+              "label": "CMS overall stars",
+              "value": "Overall: 1/5 CMS-reported"
+            },
+            {
+              "label": "Staffing stars",
+              "value": "Staffing: 1/5 CMS-reported"
+            },
+            {
+              "label": "Health inspection stars",
+              "value": "Inspection: 2/5 CMS-reported"
+            },
+            {
+              "label": "Ownership category",
+              "value": "For profit - Corporation"
+            }
+          ],
+          "whyMatched": "Accel at Willow Bend matches because it is classified as a current nursing home provider (CMS CCN 676349) with a recorded TX address/location state."
+        }
+      ],
+      "nan": true,
+      "visible": "We interpreted your question as\nProvider class\nNursing Homes\nRemove criterion\nGeography\nTX\nStatus\nCurrent research cohort\nSort\nProvider name\nChange interpretation\nUpdate question\n600 Maple Ave.\n\nNursing Home · CCN 675144\n\nBURLESON, TX, Johnson\n\nCurrent research cohort (CMS nursing-home directory)\n\nEvidence available\n\nCMS overall stars: Overall: 3/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nStaffing stars: Staffing: 1/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nHealth inspection stars: Inspection: 4/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nOwnership category: For profit - Corporation\n\nWhy this matched. 600 Maple Ave. matches because it is classified as a current nursing home provider (CMS CCN 675144) with a recorded TX address/location state.\n\nResearch this provider\n\nTrace this result\nAccel at College Station\n\nNursing Home · CCN 676437\n\nCollege Station, TX, Brazos\n\nCurrent research cohort (CMS nursing-home directory)\n\nEvidence available\n\nCMS overall stars: Overall: 2/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nStaffing stars: Staffing: 1/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nHealth inspection stars: Inspection: 1/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nOwnership category: For profit - Limited Liability company\n\nWhy this matched. Accel at College Station matches because it is classified as a current nursing home provider (CMS CCN 676437) with a recorded TX address/location state.\n\nResearch this provider\n\nTrace this result\nAccel at Willow Bend\n\nNursing Home · CCN 676349\n\nPlano, TX, Collin\n\nCurrent research cohort (CMS nursing-home directory)\n\nEvidence available\n\nCMS overall stars: Overal",
+      "header": [
+        {
+          "label": "SENIORTRUST HUB",
+          "box": {
+            "x": 64,
+            "y": 16,
+            "width": 116.09375,
+            "height": 36,
+            "top": 16,
+            "right": 180.09375,
+            "bottom": 52,
+            "left": 64
+          }
+        },
+        {
+          "label": "Ask",
+          "box": {
+            "x": 109.34375,
+            "y": 12,
+            "width": 45.75,
+            "height": 44,
+            "top": 12,
+            "right": 155.09375,
+            "bottom": 56,
+            "left": 109.34375
+          }
+        },
+        {
+          "label": "Find care",
+          "box": {
+            "x": 157.09375,
+            "y": 12,
+            "width": 82.59375,
+            "height": 44,
+            "top": 12,
+            "right": 239.6875,
+            "bottom": 56,
+            "left": 157.09375
+          }
+        },
+        {
+          "label": "Florida",
+          "box": {
+            "x": 241.6875,
+            "y": 12,
+            "width": 66.515625,
+            "height": 44,
+            "top": 12,
+            "right": 308.203125,
+            "bottom": 56,
+            "left": 241.6875
+          }
+        },
+        {
+          "label": "New Jersey",
+          "box": {
+            "x": 310.203125,
+            "y": 12,
+            "width": 99.875,
+            "height": 44,
+            "top": 12,
+            "right": 410.078125,
+            "bottom": 56,
+            "left": 310.203125
+          }
+        },
+        {
+          "label": "California",
+          "box": {
+            "x": 412.078125,
+            "y": 12,
+            "width": 85.28125,
+            "height": 44,
+            "top": 12,
+            "right": 497.359375,
+            "bottom": 56,
+            "left": 412.078125
+          }
+        },
+        {
+          "label": "Texas",
+          "box": {
+            "x": 499.359375,
+            "y": 12,
+            "width": 59.8125,
+            "height": 44,
+            "top": 12,
+            "right": 559.171875,
+            "bottom": 56,
+            "left": 499.359375
+          }
+        },
+        {
+          "label": "Washington",
+          "box": {
+            "x": 561.171875,
+            "y": 12,
+            "width": 100.703125,
+            "height": 44,
+            "top": 12,
+            "right": 661.875,
+            "bottom": 56,
+            "left": 561.171875
+          }
+        },
+        {
+          "label": "Arizona",
+          "box": {
+            "x": 663.875,
+            "y": 12,
+            "width": 72.296875,
+            "height": 44,
+            "top": 12,
+            "right": 736.171875,
+            "bottom": 56,
+            "left": 663.875
+          }
+        },
+        {
+          "label": "Colorado",
+          "box": {
+            "x": 738.171875,
+            "y": 12,
+            "width": 81.765625,
+            "height": 44,
+            "top": 12,
+            "right": 819.9375,
+            "bottom": 56,
+            "left": 738.171875
+          }
+        },
+        {
+          "label": "Virginia",
+          "box": {
+            "x": 821.9375,
+            "y": 12,
+            "width": 71.796875,
+            "height": 44,
+            "top": 12,
+            "right": 893.734375,
+            "bottom": 56,
+            "left": 821.9375
+          }
+        },
+        {
+          "label": "New York",
+          "box": {
+            "x": 895.734375,
+            "y": 12,
+            "width": 84.859375,
+            "height": 44,
+            "top": 12,
+            "right": 980.59375,
+            "bottom": 56,
+            "left": 895.734375
+          }
+        },
+        {
+          "label": "Compare",
+          "box": {
+            "x": 982.59375,
+            "y": 12,
+            "width": 81.890625,
+            "height": 44,
+            "top": 12,
+            "right": 1064.484375,
+            "bottom": 56,
+            "left": 982.59375
+          }
+        },
+        {
+          "label": "ShortlistSwitch Hub",
+          "box": {
+            "x": 993.71875,
+            "y": 12,
+            "width": 222.28125,
+            "height": 44,
+            "top": 12,
+            "right": 1216,
+            "bottom": 56,
+            "left": 993.71875
+          }
+        }
+      ]
+    },
+    {
+      "q": "Home health agencies in Houston",
+      "at": "2026-09-12T01:49:08.085Z",
+      "ms": 1006,
+      "query": {
+        "mode": "entity",
+        "providerClass": "home_health",
+        "status": "current",
+        "sort": "name",
+        "page": 1,
+        "coverageState": "KNOWN"
+      },
+      "results": [
+        {
+          "providerClass": "home_health",
+          "ccn": "497744",
+          "providerName": "@HEART HOMECARE",
+          "location": "VIRGINIA BEACH, VA, 23452",
+          "statusLabel": "Current research cohort (CMS Home Health Agencies directory)",
+          "href": "/home-health/cms/497744/heart-homecare",
+          "evidence": [
+            {
+              "label": "Quality of Patient Care stars",
+              "value": "Quality of Patient Care: 5/5 CMS-reported"
+            },
+            {
+              "label": "HHCAHPS",
+              "value": "Experience measures indexed"
+            }
+          ],
+          "whyMatched": "@HEART HOMECARE matches because it is a current home health agencie in the CMS directory. Office location is not a verified service area."
+        },
+        {
+          "providerClass": "home_health",
+          "ccn": "109541",
+          "providerName": "#FREEDOM HOME HEALTH",
+          "location": "BOYNTON BEACH, FL, 33426",
+          "statusLabel": "Current research cohort (CMS Home Health Agencies directory)",
+          "href": "/home-health/cms/109541/freedom-home-health",
+          "evidence": [
+            {
+              "label": "Quality of Patient Care stars",
+              "value": "Quality of Patient Care: 2/5 CMS-reported"
+            },
+            {
+              "label": "HHCAHPS",
+              "value": "Experience measures indexed"
+            }
+          ],
+          "whyMatched": "#FREEDOM HOME HEALTH matches because it is a current home health agencie in the CMS directory. Office location is not a verified service area."
+        },
+        {
+          "providerClass": "home_health",
+          "ccn": "059574",
+          "providerName": "1 & 1 HOME HEALTH, INC",
+          "location": "WESTMINSTER, CA, 92683",
+          "statusLabel": "Current research cohort (CMS Home Health Agencies directory)",
+          "href": "/home-health/cms/059574/1-and-1-home-health-inc",
+          "evidence": [
+            {
+              "label": "Quality of Patient Care stars",
+              "value": "Quality of Patient Care: 4/5 CMS-reported"
+            },
+            {
+              "label": "HHCAHPS",
+              "value": "Experience measures indexed"
+            }
+          ],
+          "whyMatched": "1 & 1 HOME HEALTH, INC matches because it is a current home health agencie in the CMS directory. Office location is not a verified service area."
+        }
+      ],
+      "nan": true,
+      "visible": "We interpreted your question as\nProvider class\nHome Health Agencies\nRemove criterion\nStatus\nCurrent research cohort\nSort\nProvider name\nChange interpretation\nUpdate question\n@HEART HOMECARE\n\nHome Health Agency · CCN 497744\n\nVIRGINIA BEACH, VA, 23452\n\nCurrent research cohort (CMS Home Health Agencies directory)\n\nEvidence available\n\nQuality of Patient Care stars: Quality of Patient Care: 5/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nHHCAHPS: Experience measures indexed\n\nWhy this matched. @HEART HOMECARE matches because it is a current home health agencie in the CMS directory. Office location is not a verified service area.\n\nResearch this provider\n\nTrace this result\n#FREEDOM HOME HEALTH\n\nHome Health Agency · CCN 109541\n\nBOYNTON BEACH, FL, 33426\n\nCurrent research cohort (CMS Home Health Agencies directory)\n\nEvidence available\n\nQuality of Patient Care stars: Quality of Patient Care: 2/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nHHCAHPS: Experience measures indexed\n\nWhy this matched. #FREEDOM HOME HEALTH matches because it is a current home health agencie in the CMS directory. Office location is not a verified service area.\n\nResearch this provider\n\nTrace this result\n1 & 1 HOME HEALTH, INC\n\nHome Health Agency · CCN 059574\n\nWESTMINSTER, CA, 92683\n\nCurrent research cohort (CMS Home Health Agencies directory)\n\nEvidence available\n\nQuality of Patient Care stars: Quality of Patient Care: 4/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nHHCAHPS: Experience measures indexed\n\nWhy this matched. 1 & 1 HOME HEALTH, INC matches because it is a current home health agencie in the CMS directory. Office location ",
+      "header": [
+        {
+          "label": "SENIORTRUST HUB",
+          "box": {
+            "x": 64,
+            "y": 16,
+            "width": 116.09375,
+            "height": 36,
+            "top": 16,
+            "right": 180.09375,
+            "bottom": 52,
+            "left": 64
+          }
+        },
+        {
+          "label": "Ask",
+          "box": {
+            "x": 109.34375,
+            "y": 12,
+            "width": 45.75,
+            "height": 44,
+            "top": 12,
+            "right": 155.09375,
+            "bottom": 56,
+            "left": 109.34375
+          }
+        },
+        {
+          "label": "Find care",
+          "box": {
+            "x": 157.09375,
+            "y": 12,
+            "width": 82.59375,
+            "height": 44,
+            "top": 12,
+            "right": 239.6875,
+            "bottom": 56,
+            "left": 157.09375
+          }
+        },
+        {
+          "label": "Florida",
+          "box": {
+            "x": 241.6875,
+            "y": 12,
+            "width": 66.515625,
+            "height": 44,
+            "top": 12,
+            "right": 308.203125,
+            "bottom": 56,
+            "left": 241.6875
+          }
+        },
+        {
+          "label": "New Jersey",
+          "box": {
+            "x": 310.203125,
+            "y": 12,
+            "width": 99.875,
+            "height": 44,
+            "top": 12,
+            "right": 410.078125,
+            "bottom": 56,
+            "left": 310.203125
+          }
+        },
+        {
+          "label": "California",
+          "box": {
+            "x": 412.078125,
+            "y": 12,
+            "width": 85.28125,
+            "height": 44,
+            "top": 12,
+            "right": 497.359375,
+            "bottom": 56,
+            "left": 412.078125
+          }
+        },
+        {
+          "label": "Texas",
+          "box": {
+            "x": 499.359375,
+            "y": 12,
+            "width": 59.8125,
+            "height": 44,
+            "top": 12,
+            "right": 559.171875,
+            "bottom": 56,
+            "left": 499.359375
+          }
+        },
+        {
+          "label": "Washington",
+          "box": {
+            "x": 561.171875,
+            "y": 12,
+            "width": 100.703125,
+            "height": 44,
+            "top": 12,
+            "right": 661.875,
+            "bottom": 56,
+            "left": 561.171875
+          }
+        },
+        {
+          "label": "Arizona",
+          "box": {
+            "x": 663.875,
+            "y": 12,
+            "width": 72.296875,
+            "height": 44,
+            "top": 12,
+            "right": 736.171875,
+            "bottom": 56,
+            "left": 663.875
+          }
+        },
+        {
+          "label": "Colorado",
+          "box": {
+            "x": 738.171875,
+            "y": 12,
+            "width": 81.765625,
+            "height": 44,
+            "top": 12,
+            "right": 819.9375,
+            "bottom": 56,
+            "left": 738.171875
+          }
+        },
+        {
+          "label": "Virginia",
+          "box": {
+            "x": 821.9375,
+            "y": 12,
+            "width": 71.796875,
+            "height": 44,
+            "top": 12,
+            "right": 893.734375,
+            "bottom": 56,
+            "left": 821.9375
+          }
+        },
+        {
+          "label": "New York",
+          "box": {
+            "x": 895.734375,
+            "y": 12,
+            "width": 84.859375,
+            "height": 44,
+            "top": 12,
+            "right": 980.59375,
+            "bottom": 56,
+            "left": 895.734375
+          }
+        },
+        {
+          "label": "Compare",
+          "box": {
+            "x": 982.59375,
+            "y": 12,
+            "width": 81.890625,
+            "height": 44,
+            "top": 12,
+            "right": 1064.484375,
+            "bottom": 56,
+            "left": 982.59375
+          }
+        },
+        {
+          "label": "ShortlistSwitch Hub",
+          "box": {
+            "x": 993.71875,
+            "y": 12,
+            "width": 222.28125,
+            "height": 44,
+            "top": 12,
+            "right": 1216,
+            "bottom": 56,
+            "left": 993.71875
+          }
+        }
+      ]
+    },
+    {
+      "q": "Nursing homes in Tampa Florida",
+      "at": "2026-09-12T01:49:09.201Z",
+      "ms": 901,
+      "query": {
+        "mode": "entity",
+        "providerClass": "nursing_home",
+        "geography": {
+          "type": "city",
+          "value": "TAMPA",
+          "meaning": "Recorded provider/office city in FL — not a verified service area."
+        },
+        "status": "current",
+        "sort": "name",
+        "page": 1,
+        "coverageState": "KNOWN"
+      },
+      "results": [
+        {
+          "providerClass": "nursing_home",
+          "ccn": "105644",
+          "providerName": "AVIATA AT FLETCHER",
+          "location": "TAMPA, FL, Hillsborough",
+          "statusLabel": "Current research cohort (CMS nursing-home directory)",
+          "href": "/facility/cms/105644/aviata-at-fletcher",
+          "evidence": [
+            {
+              "label": "CMS overall stars",
+              "value": "Overall: 1/5 CMS-reported"
+            },
+            {
+              "label": "Staffing stars",
+              "value": "Staffing: 3/5 CMS-reported"
+            },
+            {
+              "label": "Health inspection stars",
+              "value": "Inspection: 1/5 CMS-reported"
+            },
+            {
+              "label": "Ownership category",
+              "value": "For profit - Individual"
+            }
+          ],
+          "whyMatched": "AVIATA AT FLETCHER matches because it is classified as a current nursing home provider (CMS CCN 105644)."
+        },
+        {
+          "providerClass": "nursing_home",
+          "ccn": "105417",
+          "providerName": "AVIATA AT THE BAY",
+          "location": "TAMPA, FL, Hillsborough",
+          "statusLabel": "Current research cohort (CMS nursing-home directory)",
+          "href": "/facility/cms/105417/aviata-at-the-bay",
+          "evidence": [
+            {
+              "label": "CMS overall stars",
+              "value": "Overall: 1/5 CMS-reported"
+            },
+            {
+              "label": "Staffing stars",
+              "value": "Staffing: 3/5 CMS-reported"
+            },
+            {
+              "label": "Health inspection stars",
+              "value": "Inspection: 1/5 CMS-reported"
+            },
+            {
+              "label": "Ownership category",
+              "value": "For profit - Limited Liability company"
+            }
+          ],
+          "whyMatched": "AVIATA AT THE BAY matches because it is classified as a current nursing home provider (CMS CCN 105417)."
+        },
+        {
+          "providerClass": "nursing_home",
+          "ccn": "105650",
+          "providerName": "BAYSHORE POINTE NURSING AND REHAB CENTER",
+          "location": "TAMPA, FL, Hillsborough",
+          "statusLabel": "Current research cohort (CMS nursing-home directory)",
+          "href": "/facility/cms/105650/bayshore-pointe-nursing-and-rehab-center",
+          "evidence": [
+            {
+              "label": "CMS overall stars",
+              "value": "Overall: 3/5 CMS-reported"
+            },
+            {
+              "label": "Staffing stars",
+              "value": "Staffing: 4/5 CMS-reported"
+            },
+            {
+              "label": "Health inspection stars",
+              "value": "Inspection: 2/5 CMS-reported"
+            },
+            {
+              "label": "Ownership category",
+              "value": "For profit - Limited Liability company"
+            }
+          ],
+          "whyMatched": "BAYSHORE POINTE NURSING AND REHAB CENTER matches because it is classified as a current nursing home provider (CMS CCN 105650)."
+        }
+      ],
+      "nan": true,
+      "visible": "We interpreted your question as\nProvider class\nNursing Homes\nRemove criterion\nGeography\nTAMPA\nRemove criterion\nStatus\nCurrent research cohort\nSort\nProvider name\nChange interpretation\nUpdate question\nAVIATA AT FLETCHER\n\nNursing Home · CCN 105644\n\nTAMPA, FL, Hillsborough\n\nCurrent research cohort (CMS nursing-home directory)\n\nEvidence available\n\nCMS overall stars: Overall: 1/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nStaffing stars: Staffing: 3/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nHealth inspection stars: Inspection: 1/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nOwnership category: For profit - Individual\n\nWhy this matched. AVIATA AT FLETCHER matches because it is classified as a current nursing home provider (CMS CCN 105644).\n\nResearch this provider\n\nTrace this result\nAVIATA AT THE BAY\n\nNursing Home · CCN 105417\n\nTAMPA, FL, Hillsborough\n\nCurrent research cohort (CMS nursing-home directory)\n\nEvidence available\n\nCMS overall stars: Overall: 1/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nStaffing stars: Staffing: 3/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nHealth inspection stars: Inspection: 1/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nOwnership category: For profit - Limited Liability company\n\nWhy this matched. AVIATA AT THE BAY matches because it is classified as a current nursing home provider (CMS CCN 105417).\n\nResearch this provider\n\nTrace this result\nBAYSHORE POINTE NURSING AND REHAB CENTER\n\nNursing Home · CCN 105650\n\nTAMPA, FL, Hillsborough\n\nCurrent research cohort (CMS nursing-home directory)\n\nEvidence available\n\nCMS overall stars: Overall: 3/5 CMS-reported\nNaN of 5 CMS stars\nNaN/5\nSt",
+      "header": [
+        {
+          "label": "SENIORTRUST HUB",
+          "box": {
+            "x": 64,
+            "y": 16,
+            "width": 116.09375,
+            "height": 36,
+            "top": 16,
+            "right": 180.09375,
+            "bottom": 52,
+            "left": 64
+          }
+        },
+        {
+          "label": "Ask",
+          "box": {
+            "x": 109.34375,
+            "y": 12,
+            "width": 45.75,
+            "height": 44,
+            "top": 12,
+            "right": 155.09375,
+            "bottom": 56,
+            "left": 109.34375
+          }
+        },
+        {
+          "label": "Find care",
+          "box": {
+            "x": 157.09375,
+            "y": 12,
+            "width": 82.59375,
+            "height": 44,
+            "top": 12,
+            "right": 239.6875,
+            "bottom": 56,
+            "left": 157.09375
+          }
+        },
+        {
+          "label": "Florida",
+          "box": {
+            "x": 241.6875,
+            "y": 12,
+            "width": 66.515625,
+            "height": 44,
+            "top": 12,
+            "right": 308.203125,
+            "bottom": 56,
+            "left": 241.6875
+          }
+        },
+        {
+          "label": "New Jersey",
+          "box": {
+            "x": 310.203125,
+            "y": 12,
+            "width": 99.875,
+            "height": 44,
+            "top": 12,
+            "right": 410.078125,
+            "bottom": 56,
+            "left": 310.203125
+          }
+        },
+        {
+          "label": "California",
+          "box": {
+            "x": 412.078125,
+            "y": 12,
+            "width": 85.28125,
+            "height": 44,
+            "top": 12,
+            "right": 497.359375,
+            "bottom": 56,
+            "left": 412.078125
+          }
+        },
+        {
+          "label": "Texas",
+          "box": {
+            "x": 499.359375,
+            "y": 12,
+            "width": 59.8125,
+            "height": 44,
+            "top": 12,
+            "right": 559.171875,
+            "bottom": 56,
+            "left": 499.359375
+          }
+        },
+        {
+          "label": "Washington",
+          "box": {
+            "x": 561.171875,
+            "y": 12,
+            "width": 100.703125,
+            "height": 44,
+            "top": 12,
+            "right": 661.875,
+            "bottom": 56,
+            "left": 561.171875
+          }
+        },
+        {
+          "label": "Arizona",
+          "box": {
+            "x": 663.875,
+            "y": 12,
+            "width": 72.296875,
+            "height": 44,
+            "top": 12,
+            "right": 736.171875,
+            "bottom": 56,
+            "left": 663.875
+          }
+        },
+        {
+          "label": "Colorado",
+          "box": {
+            "x": 738.171875,
+            "y": 12,
+            "width": 81.765625,
+            "height": 44,
+            "top": 12,
+            "right": 819.9375,
+            "bottom": 56,
+            "left": 738.171875
+          }
+        },
+        {
+          "label": "Virginia",
+          "box": {
+            "x": 821.9375,
+            "y": 12,
+            "width": 71.796875,
+            "height": 44,
+            "top": 12,
+            "right": 893.734375,
+            "bottom": 56,
+            "left": 821.9375
+          }
+        },
+        {
+          "label": "New York",
+          "box": {
+            "x": 895.734375,
+            "y": 12,
+            "width": 84.859375,
+            "height": 44,
+            "top": 12,
+            "right": 980.59375,
+            "bottom": 56,
+            "left": 895.734375
+          }
+        },
+        {
+          "label": "Compare",
+          "box": {
+            "x": 982.59375,
+            "y": 12,
+            "width": 81.890625,
+            "height": 44,
+            "top": 12,
+            "right": 1064.484375,
+            "bottom": 56,
+            "left": 982.59375
+          }
+        },
+        {
+          "label": "ShortlistSwitch Hub",
+          "box": {
+            "x": 993.71875,
+            "y": 12,
+            "width": 222.28125,
+            "height": 44,
+            "top": 12,
+            "right": 1216,
+            "bottom": 56,
+            "left": 993.71875
+          }
+        }
+      ]
+    }
+  ]
+}

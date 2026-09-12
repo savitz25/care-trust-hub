@@ -1,0 +1,55 @@
+{
+  "at": "2026-09-12T01:50:07.109Z",
+  "method": "Independent city/state select over latest succeeded dataset ingest; no production parser used",
+  "sql": "WITH chosen AS (\n SELECT DISTINCT ON(sd.dataset_key) sd.dataset_key,sr.id,sr.release_key,sr.content_sha256,sr.source_modified_at,sr.retrieved_at,ir.id ingest_run_id\n FROM source_dataset sd JOIN source_release sr ON sr.source_dataset_id=sd.id JOIN ingest_run ir ON ir.source_release_id=sr.id AND ir.status='succeeded'\n WHERE sd.dataset_key IN ('nursing-home-provider-information','home-health-care-agencies','hospice-general-information')\n ORDER BY sd.dataset_key,sr.source_modified_at DESC NULLS LAST,ir.completed_at DESC\n), requested(kind,city,state) AS (VALUES ('nursing_home','AUSTIN','TX'),('home_health','HOUSTON','TX'),('nursing_home','TAMPA','FL')),\ncohorts AS (\n SELECT 'nursing_home' kind,f.city,f.state_code,pi.identifier_value ccn,f.provider_name,c.*,f.overall_rating::numeric rating\n FROM chosen c JOIN facility_snapshot f ON f.source_release_id=c.id AND f.ingest_run_id=c.ingest_run_id\n JOIN provider_identifier pi ON pi.provider_id=f.provider_id AND pi.issuer='CMS' AND pi.identifier_type='CCN' AND pi.valid_from IS NULL\n WHERE c.dataset_key='nursing-home-provider-information' AND ((upper(trim(f.city))='AUSTIN' AND f.state_code='TX') OR (upper(trim(f.city))='TAMPA' AND f.state_code='FL'))\n UNION ALL\n SELECT 'home_health',h.city,h.state_code,h.cms_ccn,h.provider_name,c.*,h.quality_of_patient_care_star::numeric\n FROM chosen c JOIN home_health_snapshot h ON h.source_release_id=c.id AND h.ingest_run_id=c.ingest_run_id\n WHERE c.dataset_key='home-health-care-agencies' AND upper(trim(h.city))='HOUSTON' AND h.state_code='TX'\n)\nSELECT kind,upper(trim(city)) city,state_code,release_key,content_sha256,source_modified_at,retrieved_at,count(DISTINCT ccn) count, (array_agg(ccn ORDER BY provider_name,ccn))[1:3] sample_ccns,(array_agg(provider_name ORDER BY provider_name,ccn))[1:3] sample_names\nFROM cohorts GROUP BY kind,upper(trim(city)),state_code,release_key,content_sha256,source_modified_at,retrieved_at ORDER BY kind,city",
+  "rows": [
+    {
+      "kind": "home_health",
+      "city": "HOUSTON",
+      "state_code": "TX",
+      "release_key": "2026-05-27",
+      "content_sha256": "b8532b139af24d6ade7873c38e778c0ca7b3dec097d55ca600e379d7c7b3eef9",
+      "source_modified_at": "2026-05-27 00:00:00+00",
+      "retrieved_at": "2026-08-26 21:08:16.274819+00",
+      "count": 260,
+      "sample_ccns": ["679422", "747123", "677890"],
+      "sample_names": [
+        "1 STOP HEALTH CARE SERVICES LLC",
+        "1ST ACCURATE HOME HEALTH SERVICE",
+        "1ST GENESIS HOME HEALTH SERVICES"
+      ]
+    },
+    {
+      "kind": "nursing_home",
+      "city": "AUSTIN",
+      "state_code": "TX",
+      "release_key": "2026-08-01",
+      "content_sha256": "a5808fcded1ca73a629fde88fc23dcba3b6ff8ed75199883062a262e14ef8fe0",
+      "source_modified_at": "2026-08-01 00:00:00+00",
+      "retrieved_at": "2026-08-26 20:24:52.158102+00",
+      "count": 25,
+      "sample_ccns": ["455799", "675862", "675596"],
+      "sample_names": [
+        "AUSTIN WELLNESS & REHABILITATION",
+        "Avir at Park Bend",
+        "Barton Valley Rehabilitation and Healthcare Center"
+      ]
+    },
+    {
+      "kind": "nursing_home",
+      "city": "TAMPA",
+      "state_code": "FL",
+      "release_key": "2026-08-01",
+      "content_sha256": "a5808fcded1ca73a629fde88fc23dcba3b6ff8ed75199883062a262e14ef8fe0",
+      "source_modified_at": "2026-08-01 00:00:00+00",
+      "retrieved_at": "2026-08-26 20:24:52.158102+00",
+      "count": 18,
+      "sample_ccns": ["105644", "105417", "105650"],
+      "sample_names": [
+        "AVIATA AT FLETCHER",
+        "AVIATA AT THE BAY",
+        "BAYSHORE POINTE NURSING AND REHAB CENTER"
+      ]
+    }
+  ]
+}

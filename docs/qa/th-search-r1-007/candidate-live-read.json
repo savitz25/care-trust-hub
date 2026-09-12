@@ -1,0 +1,343 @@
+{
+  "at": "2026-09-12T02:30:37.038Z",
+  "observations": [
+    {
+      "q": "Nursing homes in Austin Texas",
+      "ms": 120,
+      "query": {
+        "mode": "entity",
+        "providerClass": "nursing_home",
+        "geography": {
+          "type": "city",
+          "value": "AUSTIN",
+          "state": "TX",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Austin Texas",
+          "outcome": "APPLIED"
+        },
+        "status": "current",
+        "sort": "name",
+        "page": 1,
+        "coverageState": "KNOWN",
+        "inputOverrides": {}
+      },
+      "provenance": {
+        "providerClass": "Nursing Homes",
+        "sourceFamily": "Nursing Home Provider Information (4pq5-n9py)",
+        "officialAsOf": "2026-08-01T00:00:00.000Z",
+        "geographyMeaning": "Recorded provider/office location, not service territory or service area, distance or availability.",
+        "queryGrain": "Current CMS nursing-home directory identities",
+        "metric": null,
+        "exclusions": [
+          "Do not add nursing homes, home health, and hospice.",
+          "Provider location/address is not service area unless the dataset says so.",
+          "Quality-based sort only when requested."
+        ],
+        "identifierMethod": "Not an identifier query",
+        "sourceRelease": "2026-08-01",
+        "sourceFingerprint": "a5808fcded1ca73a629fde88fc23dcba3b6ff8ed75199883062a262e14ef8fe0",
+        "retrievedAt": "2026-08-26T20:24:52.158Z"
+      },
+      "rows": [
+        {
+          "ccn": "455799",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          },
+          "why": "AUSTIN WELLNESS & REHABILITATION matches because it is classified as a current nursing home provider (CMS CCN 455799) with recorded city AUSTIN, TX; this is not a service area."
+        },
+        {
+          "ccn": "675862",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          },
+          "why": "Avir at Park Bend matches because it is classified as a current nursing home provider (CMS CCN 675862) with recorded city Austin, TX; this is not a service area."
+        },
+        {
+          "ccn": "675596",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          },
+          "why": "Barton Valley Rehabilitation and Healthcare Center matches because it is classified as a current nursing home provider (CMS CCN 675596) with recorded city Austin, TX; this is not a service area."
+        }
+      ]
+    },
+    {
+      "q": "Home health agencies in Houston Texas",
+      "ms": 155,
+      "query": {
+        "mode": "entity",
+        "providerClass": "home_health",
+        "geography": {
+          "type": "city",
+          "value": "HOUSTON",
+          "state": "TX",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Houston Texas",
+          "outcome": "APPLIED"
+        },
+        "status": "current",
+        "sort": "name",
+        "page": 1,
+        "coverageState": "KNOWN",
+        "inputOverrides": {}
+      },
+      "provenance": {
+        "providerClass": "Home Health Agencies",
+        "sourceFamily": "Home Health Care Agencies (Centers for Medicare & Medicaid Services (CMS))",
+        "officialAsOf": "2026-05-27T00:00:00.000Z",
+        "geographyMeaning": "Recorded provider/office location, not service territory or service area, distance or availability.",
+        "queryGrain": "entity",
+        "metric": null,
+        "exclusions": [
+          "Do not add nursing homes, home health, and hospice.",
+          "Provider location/address is not service area unless the dataset says so."
+        ],
+        "identifierMethod": "Not an identifier query",
+        "datasetKey": "home-health-care-agencies",
+        "sourceRelease": "2026-05-27",
+        "sourceFingerprint": "b8532b139af24d6ade7873c38e778c0ca7b3dec097d55ca600e379d7c7b3eef9",
+        "retrievedAt": "2026-08-26T21:08:16.274Z"
+      },
+      "rows": [
+        {
+          "ccn": "679422",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          },
+          "why": "1 STOP HEALTH CARE SERVICES LLC matches because it is a current home health agencie in the CMS directory with recorded office location HOUSTON, TX. Office location is not a verified service area."
+        },
+        {
+          "ccn": "747123",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          },
+          "why": "1ST ACCURATE HOME HEALTH SERVICE matches because it is a current home health agencie in the CMS directory with recorded office location HOUSTON, TX. Office location is not a verified service area."
+        },
+        {
+          "ccn": "677890",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          },
+          "why": "1ST GENESIS HOME HEALTH SERVICES matches because it is a current home health agencie in the CMS directory with recorded office location HOUSTON, TX. Office location is not a verified service area."
+        }
+      ]
+    },
+    {
+      "q": "Nursing homes in Tampa Florida",
+      "ms": 78,
+      "query": {
+        "mode": "entity",
+        "providerClass": "nursing_home",
+        "geography": {
+          "type": "city",
+          "value": "TAMPA",
+          "state": "FL",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Tampa Florida",
+          "outcome": "APPLIED"
+        },
+        "status": "current",
+        "sort": "name",
+        "page": 1,
+        "coverageState": "KNOWN",
+        "inputOverrides": {}
+      },
+      "provenance": {
+        "providerClass": "Nursing Homes",
+        "sourceFamily": "Nursing Home Provider Information (4pq5-n9py)",
+        "officialAsOf": "2026-08-01T00:00:00.000Z",
+        "geographyMeaning": "Recorded provider/office location, not service territory or service area, distance or availability.",
+        "queryGrain": "Current CMS nursing-home directory identities",
+        "metric": null,
+        "exclusions": [
+          "Do not add nursing homes, home health, and hospice.",
+          "Provider location/address is not service area unless the dataset says so.",
+          "Quality-based sort only when requested."
+        ],
+        "identifierMethod": "Not an identifier query",
+        "sourceRelease": "2026-08-01",
+        "sourceFingerprint": "a5808fcded1ca73a629fde88fc23dcba3b6ff8ed75199883062a262e14ef8fe0",
+        "retrievedAt": "2026-08-26T20:24:52.158Z"
+      },
+      "rows": [
+        {
+          "ccn": "105644",
+          "location": {
+            "city": "TAMPA",
+            "state": "FL",
+            "county": "Hillsborough"
+          },
+          "why": "AVIATA AT FLETCHER matches because it is classified as a current nursing home provider (CMS CCN 105644) with recorded city TAMPA, FL; this is not a service area."
+        },
+        {
+          "ccn": "105417",
+          "location": {
+            "city": "TAMPA",
+            "state": "FL",
+            "county": "Hillsborough"
+          },
+          "why": "AVIATA AT THE BAY matches because it is classified as a current nursing home provider (CMS CCN 105417) with recorded city TAMPA, FL; this is not a service area."
+        },
+        {
+          "ccn": "105650",
+          "location": {
+            "city": "TAMPA",
+            "state": "FL",
+            "county": "Hillsborough"
+          },
+          "why": "BAYSHORE POINTE NURSING AND REHAB CENTER matches because it is classified as a current nursing home provider (CMS CCN 105650) with recorded city TAMPA, FL; this is not a service area."
+        }
+      ]
+    },
+    {
+      "q": "How many nursing homes in Austin Texas?",
+      "ms": 81,
+      "query": {
+        "qualityFilters": {},
+        "mode": "count",
+        "providerClass": "nursing_home",
+        "geography": {
+          "type": "city",
+          "value": "AUSTIN",
+          "state": "TX",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Austin Texas",
+          "outcome": "APPLIED"
+        },
+        "status": "current",
+        "page": 1,
+        "inputOverrides": {}
+      },
+      "count": {
+        "n": 25,
+        "grain": "Current CMS nursing-home directory identities in this research cohort.",
+        "denominator": "Current nursing homes in the selected geography (or national if none)."
+      },
+      "provenance": {
+        "providerClass": "Nursing Homes",
+        "sourceFamily": "Provider Information (Centers for Medicare & Medicaid Services (CMS))",
+        "officialAsOf": "2026-08-01T00:00:00.000Z",
+        "geographyMeaning": "Recorded provider/office location, not service territory or service area, distance or availability.",
+        "queryGrain": "count",
+        "metric": null,
+        "exclusions": [
+          "Do not add nursing homes, home health, and hospice.",
+          "Provider location/address is not service area unless the dataset says so."
+        ],
+        "identifierMethod": "Not an identifier query",
+        "sourceRelease": "2026-08-01",
+        "sourceFingerprint": "a5808fcded1ca73a629fde88fc23dcba3b6ff8ed75199883062a262e14ef8fe0",
+        "retrievedAt": "2026-08-26T20:24:52.158Z",
+        "numerator": "25"
+      },
+      "rows": []
+    },
+    {
+      "q": "How many home health agencies in Houston Texas?",
+      "ms": 148,
+      "query": {
+        "qualityFilters": {},
+        "mode": "count",
+        "providerClass": "home_health",
+        "geography": {
+          "type": "city",
+          "value": "HOUSTON",
+          "state": "TX",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Houston Texas",
+          "outcome": "APPLIED"
+        },
+        "status": "current",
+        "page": 1,
+        "inputOverrides": {}
+      },
+      "count": {
+        "n": 260,
+        "grain": "Current Home Health Agencies directory identities. Not combined with other classes."
+      },
+      "provenance": {
+        "providerClass": "Home Health Agencies",
+        "sourceFamily": "Home Health Care Agencies (Centers for Medicare & Medicaid Services (CMS))",
+        "officialAsOf": "2026-05-27T00:00:00.000Z",
+        "geographyMeaning": "Recorded provider/office location, not service territory or service area, distance or availability.",
+        "queryGrain": "count",
+        "metric": null,
+        "exclusions": [
+          "Do not add nursing homes, home health, and hospice.",
+          "Provider location/address is not service area unless the dataset says so."
+        ],
+        "identifierMethod": "Not an identifier query",
+        "datasetKey": "home-health-care-agencies",
+        "sourceRelease": "2026-05-27",
+        "sourceFingerprint": "b8532b139af24d6ade7873c38e778c0ca7b3dec097d55ca600e379d7c7b3eef9",
+        "retrievedAt": "2026-08-26T21:08:16.274Z"
+      },
+      "rows": []
+    },
+    {
+      "q": "How many nursing homes in Tampa Florida?",
+      "ms": 76,
+      "query": {
+        "qualityFilters": {},
+        "mode": "count",
+        "providerClass": "nursing_home",
+        "geography": {
+          "type": "city",
+          "value": "TAMPA",
+          "state": "FL",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Tampa Florida",
+          "outcome": "APPLIED"
+        },
+        "status": "current",
+        "page": 1,
+        "inputOverrides": {}
+      },
+      "count": {
+        "n": 18,
+        "grain": "Current CMS nursing-home directory identities in this research cohort.",
+        "denominator": "Current nursing homes in the selected geography (or national if none)."
+      },
+      "provenance": {
+        "providerClass": "Nursing Homes",
+        "sourceFamily": "Provider Information (Centers for Medicare & Medicaid Services (CMS))",
+        "officialAsOf": "2026-08-01T00:00:00.000Z",
+        "geographyMeaning": "Recorded provider/office location, not service territory or service area, distance or availability.",
+        "queryGrain": "count",
+        "metric": null,
+        "exclusions": [
+          "Do not add nursing homes, home health, and hospice.",
+          "Provider location/address is not service area unless the dataset says so."
+        ],
+        "identifierMethod": "Not an identifier query",
+        "sourceRelease": "2026-08-01",
+        "sourceFingerprint": "a5808fcded1ca73a629fde88fc23dcba3b6ff8ed75199883062a262e14ef8fe0",
+        "retrievedAt": "2026-08-26T20:24:52.158Z",
+        "numerator": "18"
+      },
+      "rows": []
+    }
+  ]
+}

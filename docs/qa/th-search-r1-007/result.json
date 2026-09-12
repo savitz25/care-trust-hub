@@ -1,0 +1,54 @@
+{
+  "ticket": "TH-SEARCH-R1-007",
+  "status": "READY_FOR_REVIEW",
+  "closed": false,
+  "model": {
+    "setting": "GPT-6 Astra / High",
+    "confirmation": "USER-CONFIRMED",
+    "independentlyVerified": false
+  },
+  "baseline": "eaff708dd7459c8ca24eca00c1ce0039100b5979",
+  "baselineDeployment": "dpl_671sc68ApSMqMHLna9D3XGuP2Wnq",
+  "testedImplementation": "fbe7bff38c3de47b09b3f1ba4d2dfcbbe71b141d",
+  "searchCommit": "65c30b089b21e056f1788c70fc6e014585894eec",
+  "uiCommitAbbreviation": "f215d15",
+  "runtimeMerge": null,
+  "finalDeployment": null,
+  "canonicalAlias": "https://www.seniortrusthub.com",
+  "sourceOracle": "source-oracle.json",
+  "focusedGate": { "command": "npm run check:th-search-r1-007", "passed": 72, "failed": 0 },
+  "mutations": {
+    "dropCity": "DETECTED",
+    "dropState": "DETECTED",
+    "ratingFromProse": "DETECTED",
+    "restored": true
+  },
+  "localBrowser": {
+    "file": "local-browser.json",
+    "searchCases": 22,
+    "headerWidths": [320, 390, 768, 1024, 1280, 1440, 1920],
+    "errors": 0,
+    "failures": 0,
+    "supplement": "local-supplement.json",
+    "actual200PercentZoom": "local-actual-zoom.json"
+  },
+  "review": {
+    "method": "Separate self-review and automated checks; not independent human review",
+    "publicationChanges": false,
+    "databaseWrites": false,
+    "otherRepositoryEdits": false
+  },
+  "securityScan": "secret-scan.json",
+  "remainingReleaseSteps": [
+    "Required PR CI and preview checks",
+    "Normal reviewed merge",
+    "Exact deployed SHA verification",
+    "Canonical production browser/API proof"
+  ],
+  "separateWork": [
+    "Parent Ask senior-care routing",
+    "Radius/service-area coverage",
+    "Broader care-class and ownership workflows",
+    "Move canonical docket correction pending separate approval"
+  ]
+}

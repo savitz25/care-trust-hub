@@ -1,0 +1,61 @@
+{
+  "at": "2026-09-12T02:39:01.706Z",
+  "origin": "http://localhost:3107",
+  "checks": [
+    {
+      "width": 1280,
+      "editMissClearsCards": true,
+      "backReload": true,
+      "typedStateConflictAndRestore": true,
+      "profile": "/facility/cms/455799/austin-wellness-and-rehabilitation",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "editMissClearsCards": true,
+      "backReload": true,
+      "typedStateConflictAndRestore": true,
+      "profile": "/facility/cms/455799/austin-wellness-and-rehabilitation",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "editMissClearsCards": true,
+      "backReload": true,
+      "typedStateConflictAndRestore": true,
+      "profile": "/facility/cms/455799/austin-wellness-and-rehabilitation",
+      "status": 200,
+      "overflow": false
+    },
+    {
+      "futureList": 60,
+      "panel": {
+        "height": 478,
+        "scrollHeight": 3483,
+        "bottom": 536
+      },
+      "lastKeyboardReachable": true
+    },
+    {
+      "q": "How many home health agencies in HOUSTON TX?",
+      "expected": 260,
+      "actual": 260,
+      "fingerprint": "b8532b139af24d6ade7873c38e778c0ca7b3dec097d55ca600e379d7c7b3eef9"
+    },
+    {
+      "q": "How many nursing homes in AUSTIN TX?",
+      "expected": 25,
+      "actual": 25,
+      "fingerprint": "a5808fcded1ca73a629fde88fc23dcba3b6ff8ed75199883062a262e14ef8fe0"
+    },
+    {
+      "q": "How many nursing homes in TAMPA FL?",
+      "expected": 18,
+      "actual": 18,
+      "fingerprint": "a5808fcded1ca73a629fde88fc23dcba3b6ff8ed75199883062a262e14ef8fe0"
+    }
+  ],
+  "failures": []
+}
