@@ -424,3 +424,20 @@ it("an exact evidence answer cannot silently ignore a rating cohort filter", asy
   expect(r.query.terminalState).toBe("NEEDS_CLARIFICATION");
   expect(mocks.ownership).not.toHaveBeenCalled();
 });
+
+for (const [state, path] of [
+  ["Illinois", "/illinois"],
+  ["New Jersey", "/new-jersey"],
+  ["California", "/california"],
+  ["Texas", "/texas"],
+  ["Washington", "/washington"],
+  ["Colorado", "/colorado"],
+])
+  it(`published ${state} recovery keeps its own jurisdiction`, async () => {
+    const r = await executeSeniorResearchQuery(`assisted living in ${state}`);
+    expect(r.entities).toEqual([]);
+    expect(renderToStaticMarkup(createElement(AskResultView, { result: r }))).toContain(
+      `href="${path}"`,
+    );
+    expect(mocks.db).not.toHaveBeenCalled();
+  });

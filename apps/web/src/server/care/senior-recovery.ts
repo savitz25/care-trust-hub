@@ -20,6 +20,12 @@ export function stateCareRecovery(query: SeniorResearchQuery) {
     NY: { href: "/new-york", label: "Open New York Adult Care / ALP / ALR research" },
     AZ: { href: "/arizona", label: "Open Arizona assisted-living research" },
     FL: { href: "/florida", label: "Open Florida care-setting intelligence" },
+    NJ: { href: "/new-jersey", label: "Open New Jersey care-setting intelligence" },
+    CA: { href: "/california", label: "Open California care-setting intelligence" },
+    TX: { href: "/texas", label: "Open Texas care-setting intelligence" },
+    WA: { href: "/washington", label: "Open Washington care-setting intelligence" },
+    CO: { href: "/colorado", label: "Open Colorado care-setting intelligence" },
+    IL: { href: "/illinois", label: "Open Illinois IDPH / HFS care-setting research" },
   };
   return state
     ? (routes[state] ?? null)
