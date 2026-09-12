@@ -62,11 +62,11 @@ export async function getCurrentAgencySourceClock(
     display_name: string;
     source_organization: string;
     release_key?: string;
-    content_hash?: string;
+    content_sha256?: string;
     retrieved_at?: Date | null;
     source_modified_at: Date | null;
   }>(
-    `SELECT sd.display_name, sd.source_organization, sr.source_modified_at, sr.release_key, sr.content_hash, sr.retrieved_at
+    `SELECT sd.display_name, sd.source_organization, sr.source_modified_at, sr.release_key, sr.content_sha256, sr.retrieved_at
      FROM source_dataset sd
      JOIN source_release sr ON sr.source_dataset_id=sd.id
      JOIN ingest_run ir ON ir.source_release_id=sr.id AND ir.status='succeeded'
@@ -84,7 +84,7 @@ export async function getCurrentAgencySourceClock(
       : `CMS Care Compare (${datasetKey})`,
     officialAsOf: row?.source_modified_at?.toISOString() ?? null,
     sourceRelease: row?.release_key,
-    sourceFingerprint: row?.content_hash,
+    sourceFingerprint: row?.content_sha256,
     retrievedAt: row?.retrieved_at?.toISOString() ?? null,
   };
 }

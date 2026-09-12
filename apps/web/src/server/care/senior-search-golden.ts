@@ -1,4 +1,9 @@
-export type GoldenOutcome = "PASS" | "PARTIAL" | "UNSUPPORTED_SAFE" | "FAIL";
+export type GoldenOutcome =
+  | "PASS"
+  | "PARTIAL"
+  | "NEEDS_CLARIFICATION"
+  | "UNSUPPORTED_SAFE"
+  | "FAIL";
 export type SeniorGoldenQuestion = { query: string; expected: GoldenOutcome };
 
 export const SENIOR_SEARCH_GOLDEN_QUESTIONS: SeniorGoldenQuestion[] = [
@@ -34,9 +39,9 @@ export const SENIOR_SEARCH_GOLDEN_QUESTIONS: SeniorGoldenQuestion[] = [
   { query: "best nursing home in New York", expected: "UNSUPPORTED_SAFE" },
   { query: "how many senior care providers in Colorado", expected: "UNSUPPORTED_SAFE" },
   { query: "best nursing home in Colorado", expected: "UNSUPPORTED_SAFE" },
-  { query: "nursing homes in Boca Raton", expected: "PASS" },
+  { query: "nursing homes in Boca Raton", expected: "NEEDS_CLARIFICATION" },
   { query: "home health agencies in Palm Beach County", expected: "UNSUPPORTED_SAFE" },
-  { query: "hospice providers in Miami", expected: "PASS" },
+  { query: "hospice providers in Miami", expected: "NEEDS_CLARIFICATION" },
   { query: "5 CMS overall star nursing homes in Florida", expected: "PASS" },
   { query: "nursing homes with 5 staffing stars", expected: "PASS" },
   { query: "nursing homes with 5 health inspection stars", expected: "PASS" },
@@ -74,7 +79,7 @@ export const SENIOR_SEARCH_GOLDEN_QUESTIONS: SeniorGoldenQuestion[] = [
   { query: "nursing homes serving my ZIP code", expected: "UNSUPPORTED_SAFE" },
   { query: "home health agency serving Broward County", expected: "UNSUPPORTED_SAFE" },
   { query: "hospice serving my address", expected: "UNSUPPORTED_SAFE" },
-  { query: "I need a nursing home for my mother in Boca Raton", expected: "PASS" },
+  { query: "I need a nursing home for my mother in Boca Raton", expected: "NEEDS_CLARIFICATION" },
   { query: "I need home health for my father", expected: "PASS" },
   { query: "I want to research a hospice provider", expected: "PASS" },
   { query: "How do I check nursing home deficiencies", expected: "PASS" },

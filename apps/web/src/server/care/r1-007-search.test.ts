@@ -12,6 +12,9 @@ import {
 import { planSeniorRequest, seniorRequestParams } from "./senior-ask-request";
 import { normalizeSeniorSpecialistRequest } from "./senior-specialist-execution-v2";
 import { GET } from "@/app/api/ask/route";
+import { render } from "@testing-library/react";
+import { createElement } from "react";
+import { AskResultView } from "@/app/ask/ask-result-view";
 
 // Independent source fixture and SQL-boundary interpreter. It reads emitted predicates,
 // not the production plan, and deliberately admits distractors when either predicate is absent.
@@ -103,7 +106,10 @@ const clock = {
   source_modified_at: new Date("2026-01-01T00:00:00Z"),
 };
 async function fixtureDatabase(sql: string, values: unknown[] = []) {
-  if (sql.includes("SELECT sd.display_name")) return { rows: [clock] };
+  if (sql.includes("SELECT sd.display_name")) {
+    expect(sql).toContain("sr.content_sha256");
+    return { rows: [clock] };
+  }
   const kind = sql.includes("FROM current_snapshots")
     ? "nursing_home"
     : sql.includes("home_health_snapshot")
@@ -144,6 +150,55 @@ async function fixtureDatabase(sql: string, values: unknown[] = []) {
 describe("R1-007 recorded location integrity", () => {
   beforeEach(() => {
     database.query.mockReset().mockImplementation(fixtureDatabase);
+  });
+  it("renders actual typed values instead of reading the first character of rating prose", async () => {
+    const result = await executeSeniorResearchQuery("Nursing homes in Austin Texas");
+    const { container } = render(createElement(AskResultView, { result }));
+    expect(container.querySelectorAll(".cms-stars small")[0]?.textContent).toBe("4/5");
+    expect(container.textContent).not.toContain("NaN/5");
+  });
+  it.each(["Boca Raton", "Miami"])(
+    "requires explicit jurisdiction for %s, then completes the selected plan",
+    (city) => {
+      expect(planSeniorRequest({ q: `Nursing homes in ${city}` }).query.terminalState).toBe(
+        "NEEDS_CLARIFICATION",
+      );
+      const selected = planSeniorRequest({ q: `Nursing homes in ${city}`, state: "FL" }).query;
+      expect(selected.mode).toBe("entity");
+      expect(selected.geography).toMatchObject({
+        type: "city",
+        value: city.toUpperCase(),
+        state: "FL",
+      });
+    },
+  );
+  it("does not mistake state words within a city for a conflicting jurisdiction", () => {
+    expect(
+      interpretSeniorAskQuery("Home health agencies in Virginia Beach Virginia").geography,
+    ).toMatchObject({ value: "VIRGINIA BEACH", state: "VA" });
+    expect(interpretSeniorAskQuery("Nursing homes in New York NY").geography).toMatchObject({
+      value: "NEW YORK",
+      state: "NY",
+    });
+    expect(interpretSeniorAskQuery("Nursing homes in Austin TX CA").terminalState).toBe(
+      "NEEDS_CLARIFICATION",
+    );
+  });
+  it("preserves star criteria in local counts and rejects missing source releases", async () => {
+    const count = await executeSeniorResearchQuery(
+      "How many nursing homes in Austin Texas with 4 CMS overall stars?",
+    );
+    expect(count.query.qualityFilters).toEqual({ overallStars: [4] });
+    expect(
+      database.query.mock.calls.find(([sql]) => sql.includes("SELECT count(*)"))?.[0],
+    ).toContain("overall_rating = ANY");
+    database.query.mockImplementation(async (sql: string) =>
+      sql.includes("SELECT sd.display_name") ? { rows: [] } : fixtureDatabase(sql),
+    );
+    expect(
+      (await executeSeniorResearchQuery("How many nursing homes in Austin Texas?")).query
+        .terminalState,
+    ).toBe("SOURCE_UNAVAILABLE");
   });
   it.each([
     ["Nursing homes in Austin Texas", "nursing_home", "AUSTIN", "TX"],

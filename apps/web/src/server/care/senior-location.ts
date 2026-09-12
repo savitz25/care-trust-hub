@@ -48,7 +48,7 @@ export function parseRecordedLocation(
         ...requirement,
         outcome: "UNSUPPORTED",
         reason:
-          "Recorded addresses do not establish radius, proximity or service coverage. Choose a city and state to research recorded locations.",
+          "Recorded addresses do not establish radius, proximity or service territory. Choose a city and state to research recorded locations.",
       },
     };
   if (
@@ -87,8 +87,8 @@ export function parseRecordedLocation(
     state &&
     Object.entries(STATE_NAMES).some(
       ([code, name]) =>
-        new RegExp(`(?:^|[ ,])${escape(name)}(?:$|[ ,])`, "i").test(place) ||
-        new RegExp(`(?:^|[ ,])${code}$`).test(place),
+        new RegExp(`.+[ ,]${escape(name)}$`, "i").test(place) ||
+        new RegExp(`.+[ ,]${code}$`).test(place),
     )
   )
     return {
