@@ -1,0 +1,882 @@
+{
+  "id" : "9miz-pbzm",
+  "name" : "IDPH Home Services Agency Directory",
+  "assetType" : "dataset",
+  "attribution" : "IDPH",
+  "averageRating" : 0,
+  "category" : "Health and Human Services",
+  "createdAt" : 1737774365,
+  "description" : "List of home services agencies, including facility name, address, phone number, license number, and license expiration date.",
+  "diciBackend" : false,
+  "displayType" : "table",
+  "domainCName" : "data.illinois.gov",
+  "downloadCount" : 2915,
+  "hideFromCatalog" : false,
+  "hideFromDataJson" : false,
+  "locked" : false,
+  "newBackend" : true,
+  "numberOfComments" : 0,
+  "oid" : 41119356,
+  "provenance" : "official",
+  "publicationAppendEnabled" : false,
+  "publicationDate" : 1738813080,
+  "publicationGroup" : 19749496,
+  "publicationStage" : "published",
+  "rowsUpdatedAt" : 1777390467,
+  "rowsUpdatedBy" : "pt78-8b3w",
+  "tableId" : 19777236,
+  "totalTimesRated" : 0,
+  "viewCount" : 13168,
+  "viewLastModified" : 1777390466,
+  "viewType" : "tabular",
+  "approvals" : [ {
+    "reviewedAt" : 1737776063,
+    "reviewedAutomatically" : false,
+    "state" : "approved",
+    "submissionId" : 6734011,
+    "submissionObject" : "public_audience_request",
+    "submissionOutcome" : "change_audience",
+    "submittedAt" : 1737775828,
+    "targetAudience" : "public",
+    "workflowId" : 3886,
+    "reviewer" : {
+      "id" : "rrdi-inip",
+      "displayName" : "Kyri Kalpakidis"
+    },
+    "submissionDetails" : {
+      "permissionType" : "read"
+    },
+    "submissionOutcomeApplication" : {
+      "endedAt" : 1737776063,
+      "failureCount" : 0,
+      "startedAt" : 1737776063,
+      "status" : "success"
+    },
+    "submitter" : {
+      "id" : "rrdi-inip",
+      "displayName" : "Kyri Kalpakidis"
+    }
+  }, {
+    "message" : "The `strict_permissions` flag must be on to enable internal approvals.",
+    "state" : "unsubmittable",
+    "targetAudience" : "internal",
+    "workflowId" : 4750
+  } ],
+  "clientContext" : {
+    "clientContextVariables" : [ ],
+    "inheritedVariables" : { }
+  },
+  "columns" : [ {
+    "id" : 605291616,
+    "name" : "Facility Name",
+    "dataTypeName" : "text",
+    "description" : "Legal name of the licensed Home Services Agency as recorded by IDPH. May include a \"DBA\" (doing business as) trade name. The same legal entity may also hold other Part 245 licenses; each is tracked under a separate license number.",
+    "fieldName" : "facility_name",
+    "position" : 1,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156459688,
+    "width" : 454,
+    "cachedContents" : {
+      "non_null" : "1029",
+      "largest" : "Zoe Healthcare Services, LLC",
+      "null" : "0",
+      "top" : [ {
+        "item" : "All Ways Caring Services, Inc. - DBA All Ways Caring HomeCare",
+        "count" : "5"
+      }, {
+        "item" : "Maxim Healthcare Services, Inc.",
+        "count" : "5"
+      }, {
+        "item" : "Help at Home, LLC",
+        "count" : "4"
+      }, {
+        "item" : "Addus Healthcare, Inc. - DBA Addus Homecare",
+        "count" : "4"
+      }, {
+        "item" : "Cornerstone Caregiving East LLC",
+        "count" : "3"
+      }, {
+        "item" : "Advantage Nursing Services, Inc.",
+        "count" : "3"
+      }, {
+        "item" : "Advantage In-Home Services, LLC",
+        "count" : "2"
+      }, {
+        "item" : "Senior Home Care Solutions, LLC - DBA Corsocare Personal Care",
+        "count" : "2"
+      }, {
+        "item" : "Village Caregiving LLC",
+        "count" : "2"
+      }, {
+        "item" : "PurposeCare of Illinois, LLC",
+        "count" : "2"
+      }, {
+        "item" : "B and K Illinois, LLC - DBA Right at Home Peoria",
+        "count" : "1"
+      }, {
+        "item" : "Professional Home Care Advantage, Inc.",
+        "count" : "1"
+      }, {
+        "item" : "Villa Holistic Caregivers, LLC",
+        "count" : "1"
+      }, {
+        "item" : "Fox Valley Caregiving Services Inc. - DBA A Meaningful Care",
+        "count" : "1"
+      }, {
+        "item" : "Golden Years Home Care LLC",
+        "count" : "1"
+      }, {
+        "item" : "Excel Home Healthcare Inc.",
+        "count" : "1"
+      }, {
+        "item" : "Extended Family In-Home Senior Care Inc.",
+        "count" : "1"
+      }, {
+        "item" : "24-Hour Care, LLC",
+        "count" : "1"
+      }, {
+        "item" : "Bella's Home Health and Caregiving Services LLC",
+        "count" : "1"
+      }, {
+        "item" : "Home Life Healthcare, Corp.",
+        "count" : "1"
+      } ],
+      "smallest" : "1103 Health Partners LLC - DBA Interim Healthcare of Northern Illinois",
+      "count" : "1029",
+      "cardinality" : "1029"
+    },
+    "format" : { }
+  }, {
+    "id" : 605291617,
+    "name" : "Address",
+    "dataTypeName" : "text",
+    "description" : "Street address of the agency's licensed parent location. Suite or building numbers are included where applicable. Branch offices and drop-sites are not separately listed.",
+    "fieldName" : "address",
+    "position" : 2,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156459689,
+    "cachedContents" : {
+      "non_null" : "1029",
+      "largest" : "999 oakmont Plaza Dr.",
+      "null" : "0",
+      "top" : [ {
+        "item" : "3525 W Peterson Ave",
+        "count" : "3"
+      }, {
+        "item" : "5875 N Lincoln Ave",
+        "count" : "3"
+      }, {
+        "item" : "121 Fairfield Way",
+        "count" : "3"
+      }, {
+        "item" : "3080 Ogden Ave",
+        "count" : "2"
+      }, {
+        "item" : "3055 W 111th Street",
+        "count" : "2"
+      }, {
+        "item" : "20200 Governors Dr",
+        "count" : "2"
+      }, {
+        "item" : "3525 West Peterson Avenue",
+        "count" : "2"
+      }, {
+        "item" : "4137 Sauk Trail",
+        "count" : "2"
+      }, {
+        "item" : "350 S Northwest Highway",
+        "count" : "2"
+      }, {
+        "item" : "350 West North Avenue",
+        "count" : "2"
+      }, {
+        "item" : "7100 N Ridgeway Ave",
+        "count" : "1"
+      }, {
+        "item" : "6500 West College Drive Suite 101 E",
+        "count" : "1"
+      }, {
+        "item" : "477 E Butterfield Rd, Ste 202",
+        "count" : "1"
+      }, {
+        "item" : "15122 Quail Hollow Drive, Apt 1S",
+        "count" : "1"
+      }, {
+        "item" : "605 Edward Drive",
+        "count" : "1"
+      }, {
+        "item" : "18W140 Butterfield Rd, Floor 15",
+        "count" : "1"
+      }, {
+        "item" : "6160 N Cicero Ave Ste 303",
+        "count" : "1"
+      }, {
+        "item" : "109 Royce Rd",
+        "count" : "1"
+      }, {
+        "item" : "1515 N. Harlem Ave, Ste 205-14",
+        "count" : "1"
+      }, {
+        "item" : "5020 N Ashland Ave",
+        "count" : "1"
+      } ],
+      "smallest" : "1000 Garlands Lane",
+      "count" : "1029",
+      "cardinality" : "1029"
+    },
+    "format" : { }
+  }, {
+    "id" : 605291618,
+    "name" : "City",
+    "dataTypeName" : "text",
+    "description" : "Municipality of the agency's licensed parent location.",
+    "fieldName" : "city",
+    "position" : 3,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156459690,
+    "cachedContents" : {
+      "non_null" : "1029",
+      "largest" : "Woodstock",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Chicago",
+        "count" : "173"
+      }, {
+        "item" : "Naperville",
+        "count" : "29"
+      }, {
+        "item" : "Skokie",
+        "count" : "28"
+      }, {
+        "item" : "Schaumburg",
+        "count" : "24"
+      }, {
+        "item" : "Northbrook",
+        "count" : "21"
+      }, {
+        "item" : "Des Plaines",
+        "count" : "21"
+      }, {
+        "item" : "Lincolnwood",
+        "count" : "16"
+      }, {
+        "item" : "Bolingbrook",
+        "count" : "15"
+      }, {
+        "item" : "Arlington Heights",
+        "count" : "14"
+      }, {
+        "item" : "Bloomingdale",
+        "count" : "14"
+      }, {
+        "item" : "Matteson",
+        "count" : "14"
+      }, {
+        "item" : "Rockford",
+        "count" : "12"
+      }, {
+        "item" : "Orland Park",
+        "count" : "12"
+      }, {
+        "item" : "Lansing",
+        "count" : "12"
+      }, {
+        "item" : "Park Ridge",
+        "count" : "12"
+      }, {
+        "item" : "Glenview",
+        "count" : "12"
+      }, {
+        "item" : "Peoria",
+        "count" : "11"
+      }, {
+        "item" : "Aurora",
+        "count" : "11"
+      }, {
+        "item" : "Lisle",
+        "count" : "11"
+      }, {
+        "item" : "South Holland",
+        "count" : "11"
+      } ],
+      "smallest" : "Addison",
+      "count" : "1029",
+      "cardinality" : "1029"
+    },
+    "format" : { }
+  }, {
+    "id" : 605291619,
+    "name" : "County",
+    "dataTypeName" : "text",
+    "description" : "Illinois county of the agency's licensed parent location. The agency's approved geographic service area may extend beyond this county; consult IDPH for service area details.",
+    "fieldName" : "county",
+    "position" : 4,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156459691,
+    "width" : 130,
+    "cachedContents" : {
+      "non_null" : "1029",
+      "largest" : "Woodford",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Cook",
+        "count" : "547"
+      }, {
+        "item" : "Du Page",
+        "count" : "146"
+      }, {
+        "item" : "Will",
+        "count" : "56"
+      }, {
+        "item" : "Lake",
+        "count" : "54"
+      }, {
+        "item" : "Kane",
+        "count" : "37"
+      }, {
+        "item" : "Mc Henry",
+        "count" : "24"
+      }, {
+        "item" : "Madison",
+        "count" : "20"
+      }, {
+        "item" : "Winnebago",
+        "count" : "12"
+      }, {
+        "item" : "Peoria",
+        "count" : "12"
+      }, {
+        "item" : "Champaign",
+        "count" : "10"
+      }, {
+        "item" : "St Clair",
+        "count" : "10"
+      }, {
+        "item" : "Rock Island",
+        "count" : "9"
+      }, {
+        "item" : "Kendall",
+        "count" : "7"
+      }, {
+        "item" : "Mc Lean",
+        "count" : "6"
+      }, {
+        "item" : "Sangamon",
+        "count" : "6"
+      }, {
+        "item" : "Tazewell",
+        "count" : "5"
+      }, {
+        "item" : "Williamson",
+        "count" : "5"
+      }, {
+        "item" : "De Kalb",
+        "count" : "4"
+      }, {
+        "item" : "Macon",
+        "count" : "4"
+      }, {
+        "item" : "Monroe",
+        "count" : "3"
+      } ],
+      "smallest" : "Adams",
+      "count" : "1029",
+      "cardinality" : "1029"
+    },
+    "format" : { }
+  }, {
+    "id" : 605291620,
+    "name" : "Zip",
+    "dataTypeName" : "text",
+    "description" : "Five-digit U.S. Postal Service ZIP code of the agency's licensed parent location.",
+    "fieldName" : "zip",
+    "position" : 5,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156459685,
+    "width" : 132,
+    "cachedContents" : {
+      "non_null" : "1029",
+      "largest" : "629660",
+      "null" : "0",
+      "top" : [ {
+        "item" : "60659",
+        "count" : "38"
+      }, {
+        "item" : "60646",
+        "count" : "21"
+      }, {
+        "item" : "60062",
+        "count" : "21"
+      }, {
+        "item" : "60173",
+        "count" : "21"
+      }, {
+        "item" : "60563",
+        "count" : "20"
+      }, {
+        "item" : "60077",
+        "count" : "17"
+      }, {
+        "item" : "60712",
+        "count" : "16"
+      }, {
+        "item" : "60018",
+        "count" : "15"
+      }, {
+        "item" : "60108",
+        "count" : "15"
+      }, {
+        "item" : "60443",
+        "count" : "14"
+      }, {
+        "item" : "60438",
+        "count" : "12"
+      }, {
+        "item" : "60440",
+        "count" : "12"
+      }, {
+        "item" : "60068",
+        "count" : "12"
+      }, {
+        "item" : "60532",
+        "count" : "12"
+      }, {
+        "item" : "60473",
+        "count" : "12"
+      }, {
+        "item" : "60014",
+        "count" : "11"
+      }, {
+        "item" : "60643",
+        "count" : "11"
+      }, {
+        "item" : "60423",
+        "count" : "10"
+      }, {
+        "item" : "60016",
+        "count" : "10"
+      }, {
+        "item" : "60076",
+        "count" : "10"
+      } ],
+      "smallest" : "60004",
+      "count" : "1029",
+      "cardinality" : "1029"
+    },
+    "format" : {
+      "decimalSeparator" : ".",
+      "groupSeparator" : ","
+    }
+  }, {
+    "id" : 605291621,
+    "name" : "Contact Name",
+    "dataTypeName" : "text",
+    "description" : "Primary administrative contact at the agency, designated for IDPH correspondence. Typically the agency manager or licensee.",
+    "fieldName" : "contact_name",
+    "position" : 6,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156459692,
+    "cachedContents" : {
+      "non_null" : "1029",
+      "largest" : "Zoryana Podolny",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Ada Christopher",
+        "count" : "5"
+      }, {
+        "item" : "Mary Lou Leonard",
+        "count" : "3"
+      }, {
+        "item" : "Olajide Adewale",
+        "count" : "2"
+      }, {
+        "item" : "Ashley Oliveros",
+        "count" : "2"
+      }, {
+        "item" : "Jim Lederer",
+        "count" : "2"
+      }, {
+        "item" : "Rich Keller",
+        "count" : "2"
+      }, {
+        "item" : "Menachem \"Michael\" Wallach",
+        "count" : "2"
+      }, {
+        "item" : "Mario Tucker",
+        "count" : "2"
+      }, {
+        "item" : "Julie Kollada",
+        "count" : "2"
+      }, {
+        "item" : "Daylen Davis",
+        "count" : "2"
+      }, {
+        "item" : "Sunniya Puri",
+        "count" : "2"
+      }, {
+        "item" : "Evidence Eguakun",
+        "count" : "2"
+      }, {
+        "item" : "Lesley Decker",
+        "count" : "2"
+      }, {
+        "item" : "Paige Allen",
+        "count" : "2"
+      }, {
+        "item" : "Margaret Lanier",
+        "count" : "2"
+      }, {
+        "item" : "Jeannette Isip",
+        "count" : "2"
+      }, {
+        "item" : "Nicole Gebke",
+        "count" : "2"
+      }, {
+        "item" : "Victoria Hollister",
+        "count" : "2"
+      }, {
+        "item" : "Adebusola Adetunji",
+        "count" : "2"
+      }, {
+        "item" : "Dontae Greenfield",
+        "count" : "2"
+      } ],
+      "smallest" : "Abayomi Joel",
+      "count" : "1029",
+      "cardinality" : "1029"
+    },
+    "format" : { }
+  }, {
+    "id" : 605291622,
+    "name" : "Phone",
+    "dataTypeName" : "text",
+    "description" : "Main published telephone number for the agency, including area code. Format: (XXX) XXX-XXXX.",
+    "fieldName" : "phone",
+    "position" : 7,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156459693,
+    "cachedContents" : {
+      "non_null" : "1029",
+      "largest" : "(888) 628-6100",
+      "null" : "0",
+      "top" : [ {
+        "item" : "(773) 332-9568",
+        "count" : "2"
+      }, {
+        "item" : "(847) 272-4997",
+        "count" : "2"
+      }, {
+        "item" : "(847) 975-3950",
+        "count" : "2"
+      }, {
+        "item" : "(847) 698-1400",
+        "count" : "2"
+      }, {
+        "item" : "(708) 331-4214",
+        "count" : "2"
+      }, {
+        "item" : "(630) 355-4180",
+        "count" : "1"
+      }, {
+        "item" : "(815) 277-9319",
+        "count" : "1"
+      }, {
+        "item" : "(224) 565-4774",
+        "count" : "1"
+      }, {
+        "item" : "(708) 687-3333",
+        "count" : "1"
+      }, {
+        "item" : "(708) 898-1750",
+        "count" : "1"
+      }, {
+        "item" : "(630) 305-9100",
+        "count" : "1"
+      }, {
+        "item" : "(224) 614-8291",
+        "count" : "1"
+      }, {
+        "item" : "(708) 459-9121",
+        "count" : "1"
+      }, {
+        "item" : "(872) 298-4424",
+        "count" : "1"
+      }, {
+        "item" : "(847) 899-5248",
+        "count" : "1"
+      }, {
+        "item" : "(309) 222-8656",
+        "count" : "1"
+      }, {
+        "item" : "(630) 290-7466",
+        "count" : "1"
+      }, {
+        "item" : "(773) 999-6184",
+        "count" : "1"
+      }, {
+        "item" : "(312) 810-5059",
+        "count" : "1"
+      }, {
+        "item" : "(847) 877-7456",
+        "count" : "1"
+      } ],
+      "smallest" : "(207) 515-8850",
+      "count" : "1029",
+      "cardinality" : "1029"
+    },
+    "format" : { }
+  }, {
+    "id" : 605291623,
+    "name" : "License Number",
+    "dataTypeName" : "text",
+    "description" : "License number issued by the Illinois Department of Public Health authorizing the agency to operate as a Home Services Agency under 77 Ill. Adm. Code 245. This is the state license number; an entity holding multiple Part 245 license types will have a distinct license number for each.",
+    "fieldName" : "license_number",
+    "position" : 8,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156459686,
+    "cachedContents" : {
+      "non_null" : "1029",
+      "largest" : "3003204",
+      "null" : "0",
+      "top" : [ {
+        "item" : "3001628",
+        "count" : "1"
+      }, {
+        "item" : "3002795",
+        "count" : "1"
+      }, {
+        "item" : "3001062",
+        "count" : "1"
+      }, {
+        "item" : "3000585",
+        "count" : "1"
+      }, {
+        "item" : "3002757",
+        "count" : "1"
+      }, {
+        "item" : "3003101",
+        "count" : "1"
+      }, {
+        "item" : "3002753",
+        "count" : "1"
+      }, {
+        "item" : "3002415",
+        "count" : "1"
+      }, {
+        "item" : "3002508",
+        "count" : "1"
+      }, {
+        "item" : "3000607",
+        "count" : "1"
+      }, {
+        "item" : "3002465",
+        "count" : "1"
+      }, {
+        "item" : "3002229",
+        "count" : "1"
+      }, {
+        "item" : "3001188",
+        "count" : "1"
+      }, {
+        "item" : "3002926",
+        "count" : "1"
+      }, {
+        "item" : "3002746",
+        "count" : "1"
+      }, {
+        "item" : "3002267",
+        "count" : "1"
+      }, {
+        "item" : "3000780",
+        "count" : "1"
+      }, {
+        "item" : "3002793",
+        "count" : "1"
+      }, {
+        "item" : "3002513",
+        "count" : "1"
+      }, {
+        "item" : "3001445",
+        "count" : "1"
+      } ],
+      "smallest" : "3000102",
+      "count" : "1029",
+      "cardinality" : "1029"
+    },
+    "format" : {
+      "decimalSeparator" : ".",
+      "groupSeparator" : ","
+    }
+  }, {
+    "id" : 605291625,
+    "name" : "Exp. Date",
+    "dataTypeName" : "calendar_date",
+    "description" : "Date on which the agency's current IDPH license expires. Agencies must submit a renewal application prior to this date to maintain authority to operate. Format: YYYY-MM-DD.",
+    "fieldName" : "exp_date",
+    "position" : 9,
+    "renderTypeName" : "calendar_date",
+    "tableColumnId" : 156687066,
+    "cachedContents" : {
+      "non_null" : "1029",
+      "largest" : "2027-04-30T00:00:00.000",
+      "null" : "0",
+      "top" : [ {
+        "item" : "2026-12-31T00:00:00.000",
+        "count" : "104"
+      }, {
+        "item" : "2026-05-31T00:00:00.000",
+        "count" : "92"
+      }, {
+        "item" : "2026-09-30T00:00:00.000",
+        "count" : "90"
+      }, {
+        "item" : "2027-01-31T00:00:00.000",
+        "count" : "90"
+      }, {
+        "item" : "2027-03-31T00:00:00.000",
+        "count" : "87"
+      }, {
+        "item" : "2026-10-31T00:00:00.000",
+        "count" : "82"
+      }, {
+        "item" : "2026-08-31T00:00:00.000",
+        "count" : "81"
+      }, {
+        "item" : "2026-07-31T00:00:00.000",
+        "count" : "79"
+      }, {
+        "item" : "2027-02-28T00:00:00.000",
+        "count" : "72"
+      }, {
+        "item" : "2026-11-30T00:00:00.000",
+        "count" : "62"
+      }, {
+        "item" : "2026-06-30T00:00:00.000",
+        "count" : "61"
+      }, {
+        "item" : "2027-04-30T00:00:00.000",
+        "count" : "43"
+      }, {
+        "item" : "2026-04-30T00:00:00.000",
+        "count" : "41"
+      }, {
+        "item" : "2026-03-31T00:00:00.000",
+        "count" : "11"
+      }, {
+        "item" : "2026-01-31T00:00:00.000",
+        "count" : "6"
+      }, {
+        "item" : "2026-02-28T00:00:00.000",
+        "count" : "5"
+      }, {
+        "item" : "2025-07-31T00:00:00.000",
+        "count" : "2"
+      }, {
+        "item" : "2025-01-31T00:00:00.000",
+        "count" : "2"
+      }, {
+        "item" : "2025-12-31T00:00:00.000",
+        "count" : "2"
+      }, {
+        "item" : "2025-08-31T00:00:00.000",
+        "count" : "2"
+      } ],
+      "smallest" : "2025-01-31T00:00:00.000",
+      "count" : "1029",
+      "cardinality" : "1029"
+    },
+    "format" : {
+      "view" : "date"
+    }
+  } ],
+  "grants" : [ {
+    "inherited" : false,
+    "type" : "viewer",
+    "flags" : [ "public" ]
+  } ],
+  "metadata" : {
+    "custom_fields" : {
+      "Organizations" : {
+        "Organization" : "Department of Public Health"
+      },
+      "Data Management" : {
+        "Maintainer" : "IDPH"
+      }
+    },
+    "availableDisplayTypes" : [ "table", "fatrow", "page" ]
+  },
+  "owner" : {
+    "id" : "qtnz-sddg",
+    "createdAt" : 1726767805,
+    "displayName" : "DPH - Division of Health Data and Policy",
+    "screenName" : "DPH - Division of Health Data and Policy",
+    "type" : "team",
+    "members" : [ {
+      "id" : "nryf-acz9",
+      "createdAt" : 1726512445,
+      "displayName" : "Anna Sakach",
+      "screenName" : "Anna Sakach",
+      "teamId" : 1679006,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "bvn3-tnzc",
+      "createdAt" : 1726857916,
+      "displayName" : "State Data Practice Support",
+      "screenName" : "State Data Practice Support",
+      "teamId" : 1679006,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "pt78-8b3w",
+      "createdAt" : 1759242288,
+      "displayName" : "Kenton",
+      "screenName" : "Kenton",
+      "teamId" : 1679006,
+      "teamRole" : "owner",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    } ]
+  },
+  "query" : { },
+  "rights" : [ "read" ],
+  "tableAuthor" : {
+    "id" : "qtnz-sddg",
+    "createdAt" : 1726767805,
+    "displayName" : "DPH - Division of Health Data and Policy",
+    "screenName" : "DPH - Division of Health Data and Policy",
+    "type" : "team",
+    "members" : [ {
+      "id" : "nryf-acz9",
+      "createdAt" : 1726512445,
+      "displayName" : "Anna Sakach",
+      "screenName" : "Anna Sakach",
+      "teamId" : 1679006,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "bvn3-tnzc",
+      "createdAt" : 1726857916,
+      "displayName" : "State Data Practice Support",
+      "screenName" : "State Data Practice Support",
+      "teamId" : 1679006,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "pt78-8b3w",
+      "createdAt" : 1759242288,
+      "displayName" : "Kenton",
+      "screenName" : "Kenton",
+      "teamId" : 1679006,
+      "teamRole" : "owner",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    } ]
+  },
+  "tags" : [ "home services", "home services agency", "hs", "in-home care", "personal care", "companion care", "activities of daily living", "adl", "housekeeping", "non-medical home care", "healthcare licensing", "idph licensure", "210 ilcs 55", "77 ill adm code 245", "healthcare directory", "licensed agencies", "illinois health" ],
+  "flags" : [ "default", "federated", "internalToPublicFederatedView", "ownerMayBeContacted", "restorable", "restorePossibleForType" ]
+}
