@@ -54,3 +54,7 @@ The CMS recovery destination is exact HTTPS `https://www.medicare.gov/care-compa
 Separate self-review plus executable automated checks; not independent human review. Review covers identity precedence, ambiguity, CCN equality, source-specific ownership roles, absence semantics, class/location preservation, current releases, API projection, recovery URLs, and stale form selection. R1-007 gates protect ratings/header/location. Rollback is a reviewed Senior-only revert/deployment of this ticket, with no database rollback. Prior Move/Lender/Contractor/Ask releases and pending Move correction are outside scope.
 
 Release identity and final browser observations are recorded only after they exist in the result/receipt artifacts. This diagnosis is not a Production certificate.
+
+## Fresh-main reconciliation
+
+Illinois PR #33 was merged by its owner at `72c1ddb01a3d4f126fb9692b350f091a8eb60d72`. The ticket branch merged that already-accepted main normally. Its state distinctions were preserved, and recovery now includes all existing published state intelligence destinations (state research is not a claim of an acquired local provider cohort). Reconciled runtime: `41ee303c5f742f9f894397bc5aee8494375798ee`. Focused gates: 56 R1-011 and 74 R1-007 passed. The Illinois raw-source fingerprint check reports ?fingerprint drifted? on both this checkout and a separate untouched 72c1ddb worktree. No raw source or global line-ending configuration was changed. Final CI and Production verification remain required.

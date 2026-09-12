@@ -1,0 +1,15 @@
+
+> ask-trust-hub-care@0.1.0 check:th-search-r1-011
+> npm exec --workspace=@care/web -- vitest run --configLoader runner src/server/care/r1-011-identity.test.tsx src/server/care/regulatory-repository.test.ts src/server/care/ownership-repository.test.ts
+
+
+ RUN  v3.2.7 C:/Users/makei/th-search-r1-011-work/apps/web
+
+ ✓ src/server/care/ownership-repository.test.ts (2 tests) 26ms
+ ✓ src/server/care/regulatory-repository.test.ts (3 tests) 61ms
+ ✓ src/server/care/r1-011-identity.test.tsx (51 tests) 70ms
+
+ Test Files  3 passed (3)
+      Tests  56 passed (56)
+   Start at  12:33:54
+   Duration  2.40s (transform 880ms, setup 557ms, collect 1.40s, tests 157ms, environment 1.55s, prepare 312ms)

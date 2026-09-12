@@ -1,0 +1,10 @@
+
+> ask-trust-hub-care@0.1.0 assert:il-sen-001
+> python -X utf8 scripts/build-il-public-snapshot.py --check && npm --workspace=@care/domain exec -- vitest run src/il-intelligence.test.ts src/senior-home-intel.test.ts src/senior-home-evidence-inventory.test.ts && npm --workspace=@care/web exec -- vitest run --configLoader runner src/app/illinois/il-publication.test.ts src/components/il-intelligence.test.tsx src/server/care/senior-ask-parse.test.ts src/server/care/th-search-001d.test.ts src/app/sitemaps/class-landing-publication.test.ts src/components/senior-home-intelligence.test.tsx
+
+node.exe : fingerprint drifted
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fingerprint drifted:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
