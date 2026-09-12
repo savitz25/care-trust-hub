@@ -37,6 +37,7 @@ describe("class landing publication", () => {
     expect([...block.matchAll(/"\/colorado"/g)]).toHaveLength(1);
     expect([...block.matchAll(/"\/virginia"/g)]).toHaveLength(1);
     expect([...block.matchAll(/"\/new-york"/g)]).toHaveLength(1);
+    expect([...block.matchAll(/"\/illinois"/g)]).toHaveLength(1);
     expect(block).not.toMatch(/\/search/);
   });
 });

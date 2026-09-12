@@ -44,6 +44,7 @@ describe("R1-007 shared header", () => {
       "Colorado",
       "Virginia",
       "New York",
+      "Illinois",
     ])
       expect(screen.getByRole("link", { name })).toBeInTheDocument();
     fireEvent.keyDown(document, { key: "Escape" });

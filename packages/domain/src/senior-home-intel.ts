@@ -14,6 +14,7 @@ import { AZ_LOCKED, AZ_PUBLIC_PATH } from "./az-intelligence";
 import { CO_LOCKED, CO_PUBLIC_PATH } from "./co-intelligence";
 import { VA_LOCKED, VA_PUBLIC_PATH } from "./va-intelligence";
 import { NY_LOCKED, NY_PUBLIC_PATH } from "./ny-intelligence";
+import { IL_LOCKED, IL_PUBLIC_PATH } from "./il-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -102,6 +103,7 @@ export interface HomeGeoRow {
     | "colorado_state_intelligence"
     | "virginia_state_intelligence"
     | "new_york_state_intelligence"
+    | "illinois_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -228,6 +230,15 @@ export interface SeniorHomeIntel {
     cmsHospice: number;
     note: string;
   };
+  illinoisPreview: {
+    href: string;
+    cmsNursingHomes: number;
+    cmsHomeHealth: number;
+    cmsHospice: number;
+    idphHomeHealth: number;
+    slpSites: number;
+    note: string;
+  };
   askMarket: HomeAskItem[];
   sources: HubSourceRow[];
   limitations: string[];
@@ -334,6 +345,12 @@ export function buildSeniorHomeIntel(input: {
   };
   const nyGeo = national.geography.find((row) => row.state === "NY") ?? {
     state: "NY",
+    nursingHomes: 0,
+    homeHealth: 0,
+    hospice: 0,
+  };
+  const ilGeo = national.geography.find((row) => row.state === "IL") ?? {
+    state: "IL",
     nursingHomes: 0,
     homeHealth: 0,
     hospice: 0,
@@ -872,6 +889,21 @@ export function buildSeniorHomeIntel(input: {
         "Complaint-related inspection is not a substantiated complaint. Licensed capacity is not occupancy.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Illinois IDPH / HFS (state enrichment)",
+      numerator: IL_LOCKED.cmsNursingHomes,
+      denominator: null,
+      display: `${IL_LOCKED.cmsNursingHomes.toLocaleString("en-US")} CMS Nursing Homes; ${IL_LOCKED.idphHomeHealth.toLocaleString("en-US")} IDPH Home Health licenses; ${IL_LOCKED.slpSites.toLocaleString("en-US")} HFS Supportive Living sites (not a combined total).`,
+      status: "partial",
+      method:
+        "Illinois CMS class overlays on /illinois plus current IDPH Home Health/Hospice/Home Nursing/Home Services directories and HFS Supportive Living operational sites. Current nursing-home and assisted-living license censuses remain search-only.",
+      limitations: [
+        "Do not add CMS classes, IDPH licenses, and Supportive Living into one senior-provider denominator.",
+        "IDPH Home Health is not CMS Home Health. Supportive Living is not a nursing home.",
+        "The 2013-era IDPH GIS dump is not a current nursing-home roster. Search-only is not zero.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -900,7 +932,9 @@ export function buildSeniorHomeIntel(input: {
                       ? "virginia_state_intelligence"
                       : row.state === "NY"
                         ? "new_york_state_intelligence"
-                        : "cms_directory_only",
+                        : row.state === "IL"
+                          ? "illinois_state_intelligence"
+                          : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -920,7 +954,9 @@ export function buildSeniorHomeIntel(input: {
                       ? VA_PUBLIC_PATH
                       : row.state === "NY"
                         ? NY_PUBLIC_PATH
-                        : null,
+                        : row.state === "IL"
+                          ? IL_PUBLIC_PATH
+                          : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 
@@ -1048,6 +1084,15 @@ export function buildSeniorHomeIntel(input: {
       cmsHomeHealth: nyGeo.homeHealth,
       cmsHospice: nyGeo.hospice,
       note: "New York state intelligence keeps Adult Care Facilities, NYSDOH Nursing Home Profile facilities, Do Not Refer observations, and CMS class overlays as separate datasets. They are not one senior-provider total. ACF is not a Nursing Home. LHCSA is not CMS Home Health.",
+    },
+    illinoisPreview: {
+      href: IL_PUBLIC_PATH,
+      cmsNursingHomes: ilGeo.nursingHomes,
+      cmsHomeHealth: ilGeo.homeHealth,
+      cmsHospice: ilGeo.hospice,
+      idphHomeHealth: IL_LOCKED.idphHomeHealth,
+      slpSites: IL_LOCKED.slpSites,
+      note: "Illinois state intelligence keeps CMS Nursing Homes, IDPH Home Health/Hospice licenses, and HFS Supportive Living sites as separate datasets. They are not one senior-provider total. IDPH Home Health is not CMS Home Health. Supportive Living is not a nursing home.",
     },
     askMarket: [
       {

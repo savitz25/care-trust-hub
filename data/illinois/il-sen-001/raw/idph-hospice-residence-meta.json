@@ -1,0 +1,604 @@
+{
+  "id" : "iigv-ktef",
+  "name" : "IDPH Hospice Residence Facility Directory",
+  "assetType" : "dataset",
+  "attribution" : "IDPH",
+  "averageRating" : 0,
+  "category" : "Health and Human Services",
+  "createdAt" : 1737765166,
+  "description" : "Directory of physical residential facilities licensed in Illinois as Hospice Residences under the Hospice Program Licensing Act (210 ILCS 60) and 77 Ill. Adm. Code 280, Subpart D. A Hospice Residence is a separately licensed home, apartment building, or similar building providing living quarters where hospice services are delivered to facility residents. Each Hospice Residence must be owned or operated by an entity that also holds a Comprehensive Hospice Program license; the residence license is distinct from and additional to the underlying hospice program license. State law caps each Hospice Residence at 16 resident beds and limits the number of licensed residences statewide. Each record represents one currently licensed residence and includes the residence name, physical location, primary administrative contact, license number, and license expiration date. Buildings licensed under the Hospital Licensing Act, Nursing Home Care Act, Specialized Mental Health Rehabilitation Act of 2013, ID/DD Community Care Act, or MC/DD Act are statutorily excluded from the Hospice Residence definition. Licensure is administered by the Illinois Department of Public Health (IDPH), Division of Health Care Facilities and Programs, Hospice Program.",
+  "diciBackend" : false,
+  "displayType" : "table",
+  "domainCName" : "data.illinois.gov",
+  "downloadCount" : 407,
+  "hideFromCatalog" : false,
+  "hideFromDataJson" : false,
+  "locked" : false,
+  "newBackend" : true,
+  "numberOfComments" : 0,
+  "oid" : 42100746,
+  "provenance" : "official",
+  "publicationAppendEnabled" : false,
+  "publicationDate" : 1777392572,
+  "publicationGroup" : 19749262,
+  "publicationStage" : "published",
+  "rowsUpdatedAt" : 1777392560,
+  "rowsUpdatedBy" : "pt78-8b3w",
+  "tableId" : 20360356,
+  "totalTimesRated" : 0,
+  "viewCount" : 1630,
+  "viewLastModified" : 1777392572,
+  "viewType" : "tabular",
+  "approvals" : [ {
+    "reviewedAt" : 1737776065,
+    "reviewedAutomatically" : false,
+    "state" : "approved",
+    "submissionId" : 7448902,
+    "submissionObject" : "public_audience_request",
+    "submissionOutcome" : "change_audience",
+    "submittedAt" : 1737775712,
+    "targetAudience" : "public",
+    "workflowId" : 3886,
+    "reviewer" : {
+      "id" : "rrdi-inip",
+      "displayName" : "Kyri Kalpakidis"
+    },
+    "submissionDetails" : {
+      "permissionType" : "read"
+    },
+    "submissionOutcomeApplication" : {
+      "endedAt" : 1737776065,
+      "failureCount" : 0,
+      "startedAt" : 1737776065,
+      "status" : "success"
+    },
+    "submitter" : {
+      "id" : "rrdi-inip",
+      "displayName" : "Kyri Kalpakidis"
+    }
+  }, {
+    "message" : "The `strict_permissions` flag must be on to enable internal approvals.",
+    "state" : "unsubmittable",
+    "targetAudience" : "internal",
+    "workflowId" : 4750
+  } ],
+  "clientContext" : {
+    "clientContextVariables" : [ ],
+    "inheritedVariables" : { }
+  },
+  "columns" : [ {
+    "id" : 631569292,
+    "name" : "Facility Name",
+    "dataTypeName" : "text",
+    "description" : "Legal name of the licensed Hospice Residence as recorded by IDPH. Often includes the parent hospice program's \"DBA\" trade name plus a location identifier (e.g., a city or campus name). The same legal entity may also hold a separate Hospice Program license.",
+    "fieldName" : "facility_name",
+    "position" : 1,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156453363,
+    "width" : 431,
+    "cachedContents" : {
+      "non_null" : "10",
+      "largest" : "Serenity Hospice and Home",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Integrated Palliative and Hospice, LLC",
+        "count" : "1"
+      }, {
+        "item" : "Addus Hospice of Illinois, LLC - DBA JourneyCare - Barrington",
+        "count" : "1"
+      }, {
+        "item" : "Sarah Bush Lincoln Hospice - DBA Sarah Bush Lincoln Hospice House",
+        "count" : "1"
+      }, {
+        "item" : "Joliet Area Community Hospice, Inc. - DBA Lightways Hospice and Serious Illness Care",
+        "count" : "1"
+      }, {
+        "item" : "Seasons Hospice, Inc. - DBA AccentCare Hospice & Palliative Care of Illinois",
+        "count" : "1"
+      }, {
+        "item" : "OSF Richard L Owens Hospice Home",
+        "count" : "1"
+      }, {
+        "item" : "Hospice of the Rock River Valley - DBA Rock River Hospice and Home",
+        "count" : "1"
+      }, {
+        "item" : "Serenity Hospice and Home",
+        "count" : "1"
+      }, {
+        "item" : "Alexian Brothers Hospice",
+        "count" : "1"
+      }, {
+        "item" : "Oasis House of Refuge - DBA House of Goshen",
+        "count" : "1"
+      } ],
+      "smallest" : "Addus Hospice of Illinois, LLC - DBA JourneyCare - Barrington",
+      "count" : "10",
+      "cardinality" : "10"
+    },
+    "format" : { }
+  }, {
+    "id" : 631569293,
+    "name" : "Address",
+    "dataTypeName" : "text",
+    "description" : "Physical street address of the residence. Suite or building numbers are included where applicable. The address shown is the residence itself, not the parent hospice program's administrative office.",
+    "fieldName" : "address",
+    "position" : 2,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156453364,
+    "cachedContents" : {
+      "non_null" : "10",
+      "largest" : "901 Martha Street",
+      "null" : "0",
+      "top" : [ {
+        "item" : "10660 E. County Road 800 North",
+        "count" : "1"
+      }, {
+        "item" : "1658 S. Illinois Route 2",
+        "count" : "1"
+      }, {
+        "item" : "405 Lake Zurich Road",
+        "count" : "1"
+      }, {
+        "item" : "2195 W Diehl Road",
+        "count" : "1"
+      }, {
+        "item" : "151 W Golf Road",
+        "count" : "1"
+      }, {
+        "item" : "2706 Avenue E",
+        "count" : "1"
+      }, {
+        "item" : "8630 N Route 91",
+        "count" : "1"
+      }, {
+        "item" : "901 Martha Street",
+        "count" : "1"
+      }, {
+        "item" : "19810-19812 Governors Highway",
+        "count" : "1"
+      }, {
+        "item" : "250 Water Stone Circle",
+        "count" : "1"
+      } ],
+      "smallest" : "10660 E. County Road 800 North",
+      "count" : "10",
+      "cardinality" : "10"
+    },
+    "format" : { }
+  }, {
+    "id" : 631569294,
+    "name" : "City",
+    "dataTypeName" : "text",
+    "description" : "Municipality where the residence is physically located.",
+    "fieldName" : "city",
+    "position" : 3,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156453365,
+    "width" : 117,
+    "cachedContents" : {
+      "non_null" : "10",
+      "largest" : "Sterling",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Elk Grove Village",
+        "count" : "1"
+      }, {
+        "item" : "Peoria",
+        "count" : "1"
+      }, {
+        "item" : "Libertyville",
+        "count" : "1"
+      }, {
+        "item" : "Oregon",
+        "count" : "1"
+      }, {
+        "item" : "Barrington",
+        "count" : "1"
+      }, {
+        "item" : "Naperville",
+        "count" : "1"
+      }, {
+        "item" : "Flossmoor",
+        "count" : "1"
+      }, {
+        "item" : "Joliet",
+        "count" : "1"
+      }, {
+        "item" : "Mattoon",
+        "count" : "1"
+      }, {
+        "item" : "Sterling",
+        "count" : "1"
+      } ],
+      "smallest" : "Barrington",
+      "count" : "10",
+      "cardinality" : "10"
+    },
+    "format" : { }
+  }, {
+    "id" : 631569295,
+    "name" : "County",
+    "dataTypeName" : "text",
+    "description" : "Illinois county where the residence is physically located.",
+    "fieldName" : "county",
+    "position" : 4,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156453366,
+    "width" : 105,
+    "cachedContents" : {
+      "non_null" : "10",
+      "largest" : "Will",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Lake",
+        "count" : "2"
+      }, {
+        "item" : "Cook",
+        "count" : "2"
+      }, {
+        "item" : "Peoria",
+        "count" : "1"
+      }, {
+        "item" : "Will",
+        "count" : "1"
+      }, {
+        "item" : "Ogle",
+        "count" : "1"
+      }, {
+        "item" : "Coles",
+        "count" : "1"
+      }, {
+        "item" : "Du Page",
+        "count" : "1"
+      }, {
+        "item" : "Whiteside",
+        "count" : "1"
+      } ],
+      "smallest" : "Coles",
+      "count" : "10",
+      "cardinality" : "10"
+    },
+    "format" : { }
+  }, {
+    "id" : 631569296,
+    "name" : "Zip",
+    "dataTypeName" : "text",
+    "description" : "Five-digit U.S. Postal Service ZIP code of the residence's physical location.",
+    "fieldName" : "zip",
+    "position" : 5,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156453370,
+    "width" : 91,
+    "cachedContents" : {
+      "non_null" : "10",
+      "largest" : "61938",
+      "null" : "0",
+      "top" : [ {
+        "item" : "61061",
+        "count" : "1"
+      }, {
+        "item" : "60007",
+        "count" : "1"
+      }, {
+        "item" : "60431",
+        "count" : "1"
+      }, {
+        "item" : "60422",
+        "count" : "1"
+      }, {
+        "item" : "61615",
+        "count" : "1"
+      }, {
+        "item" : "60010",
+        "count" : "1"
+      }, {
+        "item" : "61081",
+        "count" : "1"
+      }, {
+        "item" : "60563",
+        "count" : "1"
+      }, {
+        "item" : "61938",
+        "count" : "1"
+      }, {
+        "item" : "60048",
+        "count" : "1"
+      } ],
+      "smallest" : "60007",
+      "count" : "10",
+      "cardinality" : "10"
+    },
+    "format" : {
+      "decimalSeparator" : ".",
+      "groupSeparator" : ","
+    }
+  }, {
+    "id" : 631569297,
+    "name" : "Contact Name",
+    "dataTypeName" : "text",
+    "description" : "Primary administrative contact for the residence, designated for IDPH correspondence. Typically the residence administrator or the parent hospice program's director.",
+    "fieldName" : "contact_name",
+    "position" : 6,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156453367,
+    "cachedContents" : {
+      "non_null" : "10",
+      "largest" : "Suzanne Ravlin",
+      "null" : "0",
+      "top" : [ {
+        "item" : "Suzanne Ravlin",
+        "count" : "1"
+      }, {
+        "item" : "Jenn Roberts",
+        "count" : "1"
+      }, {
+        "item" : "Holly Rozanski",
+        "count" : "1"
+      }, {
+        "item" : "Susan Fristad",
+        "count" : "1"
+      }, {
+        "item" : "Jacqueline Donaldson",
+        "count" : "1"
+      }, {
+        "item" : "Robin Keating",
+        "count" : "1"
+      }, {
+        "item" : "Olufolasade Bello",
+        "count" : "1"
+      }, {
+        "item" : "Mary K. Sheehan",
+        "count" : "1"
+      }, {
+        "item" : "Molly Bubb",
+        "count" : "1"
+      }, {
+        "item" : "Allan Oliva",
+        "count" : "1"
+      } ],
+      "smallest" : "Allan Oliva",
+      "count" : "10",
+      "cardinality" : "10"
+    },
+    "format" : { }
+  }, {
+    "id" : 631569298,
+    "name" : "Phone",
+    "dataTypeName" : "text",
+    "description" : "Main published telephone number for the residence, including area code. Format: (XXX) XXX-XXXX.",
+    "fieldName" : "phone",
+    "position" : 7,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156453369,
+    "width" : 165,
+    "cachedContents" : {
+      "non_null" : "10",
+      "largest" : "(847) 685-9900",
+      "null" : "0",
+      "top" : [ {
+        "item" : "(847) 549-0588",
+        "count" : "1"
+      }, {
+        "item" : "(800) 454-4055",
+        "count" : "1"
+      }, {
+        "item" : "(815) 625-3858",
+        "count" : "1"
+      }, {
+        "item" : "(815) 740-4104",
+        "count" : "1"
+      }, {
+        "item" : "(630) 416-5201",
+        "count" : "1"
+      }, {
+        "item" : "(309) 683-7745",
+        "count" : "1"
+      }, {
+        "item" : "(815) 732-2499",
+        "count" : "1"
+      }, {
+        "item" : "(773) 941-4838",
+        "count" : "1"
+      }, {
+        "item" : "(847) 381-5599",
+        "count" : "1"
+      }, {
+        "item" : "(847) 685-9900",
+        "count" : "1"
+      } ],
+      "smallest" : "(309) 683-7745",
+      "count" : "10",
+      "cardinality" : "10"
+    },
+    "format" : { }
+  }, {
+    "id" : 631569299,
+    "name" : "License Number",
+    "dataTypeName" : "text",
+    "description" : "License number issued by the Illinois Department of Public Health authorizing the building to operate as a Hospice Residence under 210 ILCS 60 and 77 Ill. Adm. Code 280. The residence license is distinct from the parent hospice program's license; the same legal entity will hold separate license numbers for each.",
+    "fieldName" : "license_number",
+    "position" : 8,
+    "renderTypeName" : "text",
+    "tableColumnId" : 156453362,
+    "width" : 168,
+    "cachedContents" : {
+      "non_null" : "10",
+      "largest" : "2003293",
+      "null" : "0",
+      "top" : [ {
+        "item" : "2000298",
+        "count" : "1"
+      }, {
+        "item" : "2000340",
+        "count" : "1"
+      }, {
+        "item" : "2003230",
+        "count" : "1"
+      }, {
+        "item" : "2001107",
+        "count" : "1"
+      }, {
+        "item" : "2003011",
+        "count" : "1"
+      }, {
+        "item" : "2003293",
+        "count" : "1"
+      }, {
+        "item" : "2002005",
+        "count" : "1"
+      }, {
+        "item" : "2003211",
+        "count" : "1"
+      }, {
+        "item" : "2000166",
+        "count" : "1"
+      }, {
+        "item" : "2002732",
+        "count" : "1"
+      } ],
+      "smallest" : "2000166",
+      "count" : "10",
+      "cardinality" : "10"
+    },
+    "format" : {
+      "decimalSeparator" : ".",
+      "groupSeparator" : ","
+    }
+  }, {
+    "id" : 631569301,
+    "name" : "Exp. Date",
+    "dataTypeName" : "calendar_date",
+    "description" : "Date on which the residence's current IDPH license expires. The residence license must be renewed independently of the parent hospice program license. Format: YYYY-MM-DD.",
+    "fieldName" : "exp_date",
+    "position" : 9,
+    "renderTypeName" : "calendar_date",
+    "tableColumnId" : 167267875,
+    "width" : 150,
+    "cachedContents" : {
+      "non_null" : "10",
+      "largest" : "2027-04-30T00:00:00.000",
+      "null" : "0",
+      "top" : [ {
+        "item" : "2027-02-28T00:00:00.000",
+        "count" : "2"
+      }, {
+        "item" : "2027-03-31T00:00:00.000",
+        "count" : "2"
+      }, {
+        "item" : "2026-12-31T00:00:00.000",
+        "count" : "1"
+      }, {
+        "item" : "2026-09-30T00:00:00.000",
+        "count" : "1"
+      }, {
+        "item" : "2026-05-31T00:00:00.000",
+        "count" : "1"
+      }, {
+        "item" : "2026-12-27T00:00:00.000",
+        "count" : "1"
+      }, {
+        "item" : "2027-01-31T00:00:00.000",
+        "count" : "1"
+      }, {
+        "item" : "2027-04-30T00:00:00.000",
+        "count" : "1"
+      } ],
+      "smallest" : "2026-05-31T00:00:00.000",
+      "count" : "10",
+      "cardinality" : "10"
+    },
+    "format" : {
+      "view" : "date"
+    }
+  } ],
+  "grants" : [ {
+    "inherited" : false,
+    "type" : "viewer",
+    "flags" : [ "public" ]
+  } ],
+  "metadata" : {
+    "custom_fields" : {
+      "Organizations" : {
+        "Organization" : "Department of Public Health"
+      },
+      "Data Management" : {
+        "Maintainer" : "IDPH"
+      }
+    },
+    "availableDisplayTypes" : [ "table", "fatrow", "page" ]
+  },
+  "owner" : {
+    "id" : "qtnz-sddg",
+    "createdAt" : 1726767805,
+    "displayName" : "DPH - Division of Health Data and Policy",
+    "screenName" : "DPH - Division of Health Data and Policy",
+    "type" : "team",
+    "members" : [ {
+      "id" : "nryf-acz9",
+      "createdAt" : 1726512445,
+      "displayName" : "Anna Sakach",
+      "screenName" : "Anna Sakach",
+      "teamId" : 1679006,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "bvn3-tnzc",
+      "createdAt" : 1726857916,
+      "displayName" : "State Data Practice Support",
+      "screenName" : "State Data Practice Support",
+      "teamId" : 1679006,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "pt78-8b3w",
+      "createdAt" : 1759242288,
+      "displayName" : "Kenton",
+      "screenName" : "Kenton",
+      "teamId" : 1679006,
+      "teamRole" : "owner",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    } ]
+  },
+  "query" : { },
+  "rights" : [ "read" ],
+  "tableAuthor" : {
+    "id" : "qtnz-sddg",
+    "createdAt" : 1726767805,
+    "displayName" : "DPH - Division of Health Data and Policy",
+    "screenName" : "DPH - Division of Health Data and Policy",
+    "type" : "team",
+    "members" : [ {
+      "id" : "nryf-acz9",
+      "createdAt" : 1726512445,
+      "displayName" : "Anna Sakach",
+      "screenName" : "Anna Sakach",
+      "teamId" : 1679006,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "bvn3-tnzc",
+      "createdAt" : 1726857916,
+      "displayName" : "State Data Practice Support",
+      "screenName" : "State Data Practice Support",
+      "teamId" : 1679006,
+      "teamRole" : "member",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    }, {
+      "id" : "pt78-8b3w",
+      "createdAt" : 1759242288,
+      "displayName" : "Kenton",
+      "screenName" : "Kenton",
+      "teamId" : 1679006,
+      "teamRole" : "owner",
+      "type" : "interactive",
+      "flags" : [ "siteMember" ]
+    } ]
+  },
+  "tags" : [ "hospice residence", "hospice", "residential hospice", "inpatient hospice", "end of life care", "palliative care", "16 bed limit", "210 ilcs 60", "77 ill adm code 280", "idph licensure", "healthcare licensing", "healthcare directory", "licensed facilities", "illinois health" ],
+  "flags" : [ "default", "federated", "internalToPublicFederatedView", "ownerMayBeContacted", "restorable", "restorePossibleForType" ]
+}
