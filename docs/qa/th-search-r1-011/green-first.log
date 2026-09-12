@@ -1,0 +1,9 @@
+
+ RUN  v3.2.7 C:/Users/makei/th-search-r1-011-work/apps/web
+
+ ✓ src/server/care/r1-011-identity.test.tsx (5 tests) 27ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  11:58:19
+   Duration  2.87s (transform 794ms, setup 244ms, collect 1.19s, tests 27ms, environment 1.05s, prepare 95ms)

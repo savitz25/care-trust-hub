@@ -1,0 +1,247 @@
+
+> ask-trust-hub-care@0.1.0 test
+> npm run test --workspaces --if-present
+
+
+> @care/web@0.1.0 test
+> vitest run --configLoader runner && node scripts/assert-visual-008.mjs
+
+
+ RUN  v3.2.7 C:/Users/makei/th-search-r1-011-base/apps/web
+
+node.exe : stderr | src/components/senior-care-cost-planner.test.tsx
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (stderr | src/co...lanner.test.tsx:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Error: Not implemented: navigation (except hash changes)
+    at module.exports
+(C:\Users\makei\th-search-r1-011-work\node_modules\jsdom\lib\jsdom\browser\not-implemented.js:9:17)
+    at navigateFetch
+(C:\Users\makei\th-search-r1-011-work\node_modules\jsdom\lib\jsdom\living\window\navigation.js:77:3)
+    at exports.navigate
+(C:\Users\makei\th-search-r1-011-work\node_modules\jsdom\lib\jsdom\living\window\navigation.js:55:3)
+    at Timeout._onTimeout
+(C:\Users\makei\th-search-r1-011-work\node_modules\jsdom\lib\jsdom\living\nodes\HTMLHyperlinkElementUtils-impl.js:80:7)
+    at listOnTimeout (node:internal/timers:635:17)
+    at processTimers (node:internal/timers:571:7) undefined
+
+ ✓ src/components/senior-care-cost-planner.test.tsx (8 tests) 1191ms
+   ✓ senior care cost planner > compares light home care and assisted living with visible source year  431ms
+ ✓ src/components/nj-intelligence.test.tsx (2 tests) 1725ms
+   ✓ New Jersey intelligence page > separates All_LTC from All_Acute and refuses ranking language  1311ms
+   ✓ New Jersey intelligence page > shows coverage gaps instead of silent zeros  413ms
+ ✓ src/components/facility-interview-builder.test.tsx (8 tests) 2919ms
+   ✓ facility interview builder > builds a generic skilled-nursing checklist with must-ask groups and print  1205ms
+   ✓ facility interview builder > lets a user hide a question and restore it  844ms
+ ✓ src/components/senior-home-intelligence.test.tsx (2 tests) 3574ms
+   ✓ senior homepage intelligence > leads with intelligence and keeps classes separate  3548ms
+ ✓ src/components/r1-007-ui.test.tsx (11 tests) 2341ms
+   ✓ R1-007 shared header > puts published state links under one scalable disclosure  1595ms
+   ✓ R1-007 shared header > retains an expanded fixture state list inside the disclosure  372ms
+ ✓ src/app/page.test.tsx (1 test) 1683ms
+   ✓ experience lab home > leads with independent research and labels synthetic content  1682ms
+ ✓ src/components/family-comparison-workspace.test.tsx (2 tests) 1158ms
+   ✓ family comparison workspace > loads published evidence for a saved facility and keeps notes local  1008ms
+ ✓ src/components/class-research-landing.test.tsx (2 tests) 1341ms
+   ✓ class research landings > states the Home Health current denominator and separates CMS stars from HHCAHPS  913ms
+   ✓ class research landings > keeps Hospice GI current separate from EVIDENCE_ONLY and does not invent a star  426ms
+ ✓ src/components/nj-medicaid-rates.test.tsx (1 test) 1029ms
+   ✓ New Jersey Medicaid listed rates > shows listed rows without implying participation or quality  1028ms
+ ✓ src/components/ownership-intelligence.test.tsx (1 test) 489ms
+   ✓ ownership intelligence > uses source-qualified neutral language and preserves parties, roles, flags, and portfolio facts  488ms
+stderr | src/components/care-needs-navigator.test.tsx
+Error: Not implemented: navigation (except hash changes)
+    at module.exports
+(C:\Users\makei\th-search-r1-011-work\node_modules\jsdom\lib\jsdom\browser\not-implemented.js:9:17)
+    at navigateFetch
+(C:\Users\makei\th-search-r1-011-work\node_modules\jsdom\lib\jsdom\living\window\navigation.js:77:3)
+    at exports.navigate
+(C:\Users\makei\th-search-r1-011-work\node_modules\jsdom\lib\jsdom\living\window\navigation.js:55:3)
+    at Timeout._onTimeout
+(C:\Users\makei\th-search-r1-011-work\node_modules\jsdom\lib\jsdom\living\nodes\HTMLHyperlinkElementUtils-impl.js:80:7)
+    at listOnTimeout (node:internal/timers:635:17)
+    at processTimers (node:internal/timers:571:7) undefined
+
+ ✓ src/components/care-needs-navigator.test.tsx (7 tests) 9618ms
+   ✓ care needs navigator > shows aging-in-place results for an independent persona  2704ms
+   ✓ care needs navigator > keeps assisted living off the SNF directory  1721ms
+   ✓ care needs navigator > uses memory-supportive language without a dementia diagnosis  1469ms
+   ✓ care needs navigator > offers the interview builder with a coarse setting only  1752ms
+   ✓ care needs navigator > bridges skilled-nursing results into existing facility search  1679ms
+ ✓ src/components/staffing-intelligence.test.tsx (2 tests) 751ms
+   ✓ staffing intelligence > separates CMS rating from calculations and provides accessible evidence  737ms
+ ✓ src/app/compare/real-compare.test.tsx (1 test) 469ms
+   ✓ real provider comparison > compares approved CMS fields without declaring a winner  468ms
+ ✓ src/components/national-hub-intelligence.test.tsx (1 test) 723ms
+   ✓ national hub intelligence > separates provider classes and does not rank quality  721ms
+ ✓ src/components/facility-history.test.tsx (3 tests) 496ms
+ ✓ src/components/florida-profile-qa.test.tsx (3 tests) 750ms
+   ✓ Florida internal profile QA > covers five classes, 25 unpublished snapshots, and no ranking language  584ms
+ ✓ src/components/nh-profile-intelligence.test.tsx (5 tests) 754ms
+ ✓ src/components/state-license-oversight.test.tsx (9 tests) 1037ms
+ ✓ src/components/real-provider.test.tsx (7 tests) 1187ms
+   ✓ real provider presentation > renders truthful preview copy, complete sources, and working section anchors  583ms
+ ✓ src/components/ownership-v2.test.tsx (1 test) 481ms
+   ✓ ownership operation v2 > keeps operator, licensee, and chain distinct and does not rank related facilities  479ms
+ ✓ src/components/nj-facility-inventory.test.tsx (1 test) 511ms
+   ✓ New Jersey facility inventory > exposes state-only rows without combining universes or inventing CMS links  510ms
+ ✓ src/app/api/customer-profile-validation/v1/route.test.ts (3 tests) 560ms
+ ✓ src/components/florida-intelligence.test.tsx (1 test) 870ms
+   ✓ Florida intelligence page > separates observations from providers and refuses ranking language  868ms
+ ✓ src/components/verified-public-contact.test.tsx (4 tests) 989ms
+   ✓ verified public contact publication > does not render unpublished enrichment, Place IDs, or Google business status  555ms
+ ✓ src/app/api/specialist-execution/v2/route.test.ts (3 tests) 2143ms
+ ✓ src/components/ca-intelligence.test.tsx (1 test) 316ms
+   ✓ California intelligence page > separates ELMS, RCFE, HCAI, and CMS and refuses ranking language  314ms
+ ✓ src/server/care/r1-007-search.test.ts (29 tests) 490ms
+ ✓ src/components/regulatory-intelligence.test.tsx (1 test) 560ms
+   ✓ regulatory intelligence > uses official terminology, accessible disclosure, and precise no-penalty language  558ms
+ ✓ src/server/care/interview-facility-context.test.ts (3 tests) 354ms
+   ✓ interview facility context > returns nothing when the real-provider UI is off or the CCN is invalid  347ms
+ ✓ src/server/care/ownership-repository.test.ts (2 tests) 81ms
+ ✓ src/components/organization-portfolio.test.tsx (1 test) 505ms
+   ✓ organization portfolio page > shows current members, historical members, and no owner score  504ms
+ ✓ src/server/care/history-repository.test.ts (4 tests) 194ms
+ ✓ src/server/care/state-publication.test.ts (2 tests) 218ms
+ ✓ src/components/agency-directory-card.test.tsx (2 tests) 540ms
+   ✓ agency directory cards > labels Home Health CMS stars and links the canonical profile  517ms
+ ✓ src/components/nh-evidence-panel.test.tsx (4 tests) 424ms
+   ✓ NursingHomeEvidencePanel > does not render an SFF candidate as an SFF designation  379ms
+ ✓ src/server/care/assisted-living-publication.test.ts (4 tests) 222ms
+ ✓ src/components/tx-intelligence.test.tsx (1 test) 338ms
+   ✓ Texas intelligence page > separates CMS classes, HHSC directories, and TULIP and refuses ranking language  336ms
+ ✓ src/server/care/ownership-v2.test.ts (3 tests) 219ms
+ ✓ src/server/care/family-workspace-repository.test.ts (2 tests) 226ms
+ ✓ src/server/care/ownership-portfolio.test.ts (2 tests) 203ms
+ ✓ src/server/care/enrichment-publication.test.ts (2 tests) 206ms
+ ✓ src/components/florida-provider-profile.test.tsx (1 test) 213ms
+ ✓ src/components/evidence.test.tsx (2 tests) 142ms
+ ✓ src/server/care/feature-flags.test.ts (23 tests) 30ms
+ ✓ src/components/agency-profile-intelligence.test.tsx (2 tests) 172ms
+ ✓ src/components/va-intelligence.test.tsx (1 test) 79ms
+ ✓ src/components/co-intelligence.test.tsx (1 test) 157ms
+ ✓ src/components/ny-intelligence.test.tsx (1 test) 81ms
+ ✓ src/server/care/db.test.ts (1 test) 83ms
+ ✓ src/components/chain-intelligence.test.tsx (1 test) 125ms
+ ✓ src/app/api/workspace/comparison/route.test.ts (2 tests) 56ms
+ ✓ src/server/care/regulatory-repository.test.ts (2 tests) 1057ms
+   ✓ regulatory repository > maps linked findings, exact money, repeat tags, and a descending timeline  1052ms
+ ✓ src/app/api/cms-source-freshness/route.test.ts (2 tests) 830ms
+   ✓ cms source freshness API > returns per-source rows and no global last-updated value  826ms
+ ✓ src/components/nj-profile-evidence.test.tsx (2 tests) 39ms
+ ✓ src/server/care/th-search-001d.test.ts (4 tests) 47ms
+stdout | src/server/care/senior-customer-profile-validation.test.ts > Senior customer profile validation V1 > reports all absolute safety metrics at zero
+NAME_ONLY_VALIDATIONS = 0
+FUZZY_VALIDATIONS = 0
+CROSS_CLASS_VALIDATIONS = 0
+CCN_NATIVE_ID_MISMATCHES_ACCEPTED = 0
+CANONICAL_DESTINATION_MISMATCHES_ACCEPTED = 0
+HISTORICAL_PROFILES_VALIDATED_AS_CURRENT = 0
+UNPUBLISHED_PROFILES_VALIDATED_AS_PUBLIC = 0
+PUBLICATION_EXPANSION = 0
+DB_WRITES = 0
+CUSTOMER_DATA_EXPOSURE = 0
+OWNERSHIP_AUTO_BINDINGS = 0
+CHAIN_AUTO_BINDINGS = 0
+
+ ✓ src/server/care/senior-customer-profile-validation.test.ts (5 tests) 38ms
+ ✓ src/server/care/staffing-repository.test.ts (3 tests) 491ms
+   ✓ staffing repository > returns bounded consumer-safe multi-quarter summaries  486ms
+ ✓ src/server/care/senior-ask-parse.test.ts (17 tests) 32ms
+ ✓ src/server/care/database-config.test.ts (7 tests) 23ms
+ ✓ src/server/care/repository.test.ts (4 tests) 22ms
+ ✓ src/server/care/cms-source-freshness.test.ts (1 test) 191ms
+ ✓ src/server/places/google-places.test.ts (6 tests) 18ms
+ ✓ src/server/care/agency-search.test.ts (3 tests) 19ms
+ ✓ src/server/care/senior-specialist-execution-v2.test.ts (6 tests) 18ms
+ ✓ src/server/care/senior-network-metrics.test.ts (3 tests) 12ms
+ ✓ src/server/customer-integration/customer-integration.test.ts (6 tests) 15ms
+ ✓ src/config/brand.test.ts (5 tests) 15ms
+ ✓ src/components/family-workspace-storage.test.ts (3 tests) 15ms
+ ✓ src/app/sitemaps/class-landing-publication.test.ts (2 tests) 9ms
+ ✓ src/app/new-york/ny-publication.test.ts (3 tests) 11ms
+ ✓ src/server/care/trust-participation.test.ts (4 tests) 10ms
+ ✓ src/server/care/search-contract.test.ts (5 tests) 9ms
+ ✓ src/app/florida/florida-publication.test.ts (4 tests) 9ms
+ ✓ src/app/washington/wa-publication.test.ts (3 tests) 6ms
+ ✓ src/server/care/consumer.test.ts (5 tests) 8ms
+ ✓ src/config/share-hub.test.ts (4 tests) 6ms
+ ✓ src/app/virginia/va-publication.test.ts (3 tests) 8ms
+ ✓ src/server/care/florida-publication.test.ts (3 tests) 8ms
+ ✓ src/lib/journey-handoff.test.ts (5 tests) 7ms
+ ✓ src/app/sitemaps/__tests__/florida-provider-unpublished.test.ts (2 tests) 6ms
+ ✓ src/config/deployment.test.ts (3 tests) 8ms
+ ✓ src/server/places/postgres-google-places-cache.test.ts (1 test) 8ms
+ ✓ src/app/arizona/az-publication.test.ts (3 tests) 6ms
+ ✓ src/app/new-jersey/nj-publication.test.ts (3 tests) 7ms
+ ✓ src/app/california/ca-publication.test.ts (3 tests) 6ms
+ ✓ src/app/new-jersey/[county]/nj-county-publication.test.ts (3 tests) 7ms
+ ✓ src/server/care/shortlist-contract.test.ts (2 tests) 6ms
+ ✓ src/app/colorado/co-publication.test.ts (3 tests) 7ms
+ ✓ src/app/texas/tx-publication.test.ts (3 tests) 6ms
+ ✓ src/app/nh-profile-layout.test.ts (2 tests) 5ms
+ ✓ src/config/metadata.test.ts (4 tests) 6ms
+ ✓ src/server/care/freshness.test.ts (2 tests) 5ms
+ ✓ src/server/environment-audit.test.ts (2 tests) 5ms
+ ✓ src/server/care/agency-publication.test.ts (2 tests) 5ms
+ ✓ src/config/share-card-model.test.ts (2 tests) 4ms
+ ✓ src/server/care/access.test.ts (2 tests) 4ms
+ ↓ src/server/care/repository.integration.test.ts (5 tests | 5 skipped)
+ ✓ src/server/care/senior-hub-intelligence.test.ts (1 test) 4ms
+ ↓ src/server/care/family-workspace-repository.integration.test.ts (1 test | 1 skipped)
+
+ Test Files  97 passed | 2 skipped (99)
+      Tests  350 passed | 6 skipped (356)
+   Start at  12:23:32
+   Duration  54.30s (transform 38.70s, setup 40.51s, collect 77.58s, tests 48.11s, environment 122.48s, prepare 22.23s)
+
+VISUAL-008 Senior network-shell assertions passed.
+
+> @care/domain@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 C:/Users/makei/th-search-r1-011-base/packages/domain
+
+ ✓ src/facility-history.test.ts (9 tests) 43ms
+ ✓ src/nj-intelligence.test.ts (10 tests) 42ms
+ ✓ src/ca-intelligence.test.ts (6 tests) 40ms
+ ✓ src/tx-intelligence.test.ts (5 tests) 39ms
+ ✓ src/senior-network-metrics.test.ts (12 tests) 76ms
+ ✓ src/nj-county-intelligence.test.ts (9 tests) 49ms
+ ✓ src/senior-home-intel.test.ts (3 tests) 49ms
+ ✓ src/wa-intelligence.test.ts (5 tests) 41ms
+ ✓ src/enrichment-publication.test.ts (9 tests) 41ms
+ ✓ src/state-publication.test.ts (10 tests) 40ms
+ ✓ src/co-intelligence.test.ts (13 tests) 41ms
+ ✓ src/interview-builder.test.ts (19 tests) 43ms
+ ✓ src/ny-intelligence.test.ts (6 tests) 38ms
+ ✓ src/senior-hub-intelligence.test.ts (3 tests) 33ms
+ ✓ src/va-intelligence.test.ts (8 tests) 37ms
+ ✓ src/az-intelligence.test.ts (5 tests) 42ms
+ ✓ src/facilities.test.ts (4 tests) 35ms
+ ✓ src/family-workspace.test.ts (8 tests) 14ms
+ ✓ src/family-workspace-comparison.test.ts (5 tests) 32ms
+ ✓ src/senior-care-cost-planner.test.ts (15 tests) 17ms
+ ✓ src/assisted-living-identity.test.ts (10 tests) 12ms
+ ✓ src/care-needs-navigator.test.ts (12 tests) 12ms
+ ✓ src/facility-intelligence.test.ts (16 tests) 10ms
+ ✓ src/ownership-intelligence.test.ts (11 tests) 10ms
+ ✓ src/florida-provider-profile.test.ts (5 tests) 7ms
+ ✓ src/florida-county.test.ts (4 tests) 6ms
+ ✓ src/state-regulator.test.ts (4 tests) 7ms
+ ✓ src/senior-home-evidence-inventory.test.ts (4 tests) 7ms
+ ✓ src/florida-intelligence.test.ts (3 tests) 6ms
+ ✓ src/provider-intelligence.test.ts (8 tests) 7ms
+ ✓ src/assisted-living-presentation.test.ts (2 tests) 6ms
+ ✓ src/agency-publication.test.ts (4 tests) 5ms
+ ✓ src/nh-evidence.test.ts (5 tests) 5ms
+ ✓ src/index.test.ts (1 test) 3ms
+
+ Test Files  34 passed (34)
+      Tests  253 passed (253)
+   Start at  12:24:28
+   Duration  4.60s (transform 5.51s, setup 0ms, collect 8.01s, tests 896ms, environment 9ms, prepare 6.67s)

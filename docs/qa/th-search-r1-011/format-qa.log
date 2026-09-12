@@ -1,0 +1,14 @@
+docs/qa/th-search-r1-011/baseline-browser.json 122ms
+docs/qa/th-search-r1-011/local-browser-first.json 42ms
+docs/qa/th-search-r1-011/local-browser.json 41ms
+docs/qa/th-search-r1-011/local-supplement.json 1ms
+docs/qa/th-search-r1-011/mutations.json 1ms
+docs/qa/th-search-r1-011/official-link-check.json 1ms
+docs/qa/th-search-r1-011/result.json 3ms
+docs/qa/th-search-r1-011/source-oracle.json 2ms
+docs/qa/th-search-r1-011/diagnosis.md 41ms
+docs/qa/th-search-r1-011/review.md 6ms
+docs/qa/th-search-r1-011/before.cjs 29ms
+docs/qa/th-search-r1-011/browser.cjs 43ms
+docs/qa/th-search-r1-011/official-check.cjs 3ms
+docs/qa/th-search-r1-011/supplement.cjs 9ms

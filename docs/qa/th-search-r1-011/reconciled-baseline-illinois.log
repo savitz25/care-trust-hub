@@ -1,0 +1,6 @@
+python : fingerprint drifted
+At line:2 char:1
++ python -X utf8 scripts/build-il-public-snapshot.py --check *> C:/User ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fingerprint drifted:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError

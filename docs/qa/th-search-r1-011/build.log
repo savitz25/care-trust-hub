@@ -1,0 +1,112 @@
+
+> ask-trust-hub-care@0.1.0 build
+> npm run build --workspace=@care/web
+
+
+> @care/web@0.1.0 build
+> next build
+
+▲ Next.js 16.3.1 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 29ms
+
+node.exe : ⚠ The Edge Runtime is deprecated. You can use the "nodejs" runtime instead. Learn more:
+https://nextjs.org/docs/messages/edge-runtime-deprecated
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (⚠ The Edge Runt...time-deprecated:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1462ms
+  Running TypeScript ...
+  Finished TypeScript in 3.6s ...
+  Collecting page data using 7 workers ...
+⚠ Using edge runtime on a page currently disables static generation for that page
+  Generating static pages using 7 workers (0/42) ...
+  Generating static pages using 7 workers (10/42)
+  Generating static pages using 7 workers (20/42)
+  Generating static pages using 7 workers (31/42)
+✓ Generating static pages using 7 workers (42/42) in 1793ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ○ /about
+├ ƒ /api/ask
+├ ƒ /api/claim/handoff/[providerClass]/[ccn]
+├ ƒ /api/cms-source-freshness
+├ ƒ /api/customer-profile-validation/v1
+├ ƒ /api/health
+├ ƒ /api/specialist-execution/v2
+├ ƒ /api/trust-requests
+├ ƒ /api/workspace/comparison
+├ ○ /arizona
+├ ƒ /ask
+├ ƒ /assisted-living
+├ ƒ /assisted-living/[state]
+├ ƒ /assisted-living/[state]/[providerId]/[slug]
+├ ○ /california
+├ ƒ /chain/[chainId]/[slug]
+├ ○ /colorado
+├ ƒ /compare
+├ ○ /contact
+├ ƒ /development/providers
+├ ƒ /development/providers/[ccn]
+├   /facility/[slug]
+│ ├ ● /facility/harbor-pines
+│ ├ ● /facility/meadowridge
+│ ├ ● /facility/northstar-pavilion
+│ └ ● [+7 more paths]
+├ ƒ /facility/[slug]/share-og
+├ ƒ /facility/cms/[ccn]/[slug]
+├ ƒ /facility/cms/[ccn]/[slug]/share-og
+├ ○ /florida
+├ ƒ /florida/[kind]/[fileNumber]/[slug]
+├ ƒ /florida/internal
+├ ƒ /florida/internal/[kind]/[fileNumber]/[slug]
+├ ○ /home-health
+├ ƒ /home-health/cms/[ccn]/[slug]
+├ ○ /hospice
+├ ƒ /hospice/cms/[ccn]/[slug]
+├ ○ /icon.svg
+├ ○ /independence
+├ ○ /manifest.webmanifest
+├ ○ /methodology
+├ ○ /new-jersey
+├   /new-jersey/[county]
+│ ├ ● /new-jersey/monmouth-county
+│ ├ ● /new-jersey/middlesex-county
+│ ├ ● /new-jersey/somerset-county
+│ └ ● /new-jersey/union-county
+├ ○ /new-york
+├ ƒ /opengraph-image
+├ ƒ /ownership/[organizationId]/[slug]
+├ ○ /privacy
+├ ƒ /research
+├ ○ /robots.txt
+├ ƒ /search
+├ ƒ /shortlist
+├ ƒ /sitemap.xml
+├ ƒ /sitemaps/[file]
+├ ○ /sources
+├ ○ /terms
+├ ○ /texas
+├ ƒ /tools/care-needs-navigator
+├ ƒ /tools/facility-tour-interview-builder
+├ ƒ /tools/senior-care-cost-planner
+├ ƒ /trust/[kind]
+├ ○ /trust/corrections
+├ ○ /twitter-image
+├ ○ /virginia
+├ ○ /washington
+└ ƒ /workspace
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand

@@ -1,0 +1,104 @@
+
+> ask-trust-hub-care@0.1.0 check:th-search-r1-011
+> npm exec --workspace=@care/web -- vitest run --configLoader runner src/server/care/r1-011-identity.test.tsx src/server/care/regulatory-repository.test.ts src/server/care/ownership-repository.test.ts
+
+
+ RUN  v3.2.7 C:/Users/makei/th-search-r1-011-work/apps/web
+
+ ✓ src/server/care/ownership-repository.test.ts (2 tests) 31ms
+ ✓ src/server/care/regulatory-repository.test.ts (3 tests) 62ms
+ ❯ src/server/care/r1-011-identity.test.tsx (45 tests | 2 failed) 173ms
+   ✓ R1-011 baseline reproductions > unspecified ownership requires an identity before retrieval 4ms
+   ✓ R1-011 baseline reproductions > Has this nursing home been fined? 2ms
+   ✓ R1-011 baseline reproductions > Did this facility change owners? 0ms
+   ✓ R1-011 baseline reproductions > CCN miss has a usable official action 37ms
+   ✓ R1-011 baseline reproductions > Virginia assisted living navigates to state research 5ms
+   ✓ R1-011 identity/evidence behavioral contract > Who owns that facility? 2ms
+   ✓ R1-011 identity/evidence behavioral contract > Who operates this provider? 1ms
+   ✓ R1-011 identity/evidence behavioral contract > Has that facility been fined? 1ms
+   ✓ R1-011 identity/evidence behavioral contract > Did this nursing home change owners? 1ms
+   ✓ R1-011 identity/evidence behavioral contract > Inspections for this facility 1ms
+   ✓ R1-011 identity/evidence behavioral contract > Deficiencies for this nursing home 1ms
+   × R1-011 identity/evidence behavioral contract > unique exact source name attaches only that CCN 19ms
+     → expected 'Owned by' to be 'CMS ownership category' // Object.is equality
+   ✓ R1-011 identity/evidence behavioral contract > ambiguous name has bounded selection and no evidence assignment 4ms
+   ✓ R1-011 identity/evidence behavioral contract > selection resumes original ownership task with revalidated candidate 4ms
+   ✓ R1-011 identity/evidence behavioral contract > tampered selection cannot attach unrelated evidence 1ms
+   ✓ R1-011 identity/evidence behavioral contract > provider entry cannot replace explicitly named subject 1ms
+   ✓ R1-011 identity/evidence behavioral contract > identity-required form retains question and resolves exact CCN 1ms
+   × R1-011 identity/evidence behavioral contract > source-backed relationships retain role and source without category-as-owner 4ms
+     → expected [ 'Owned by', …(2) ] to deeply equal [ 'CMS ownership category', …(2) ]
+   ✓ R1-011 identity/evidence behavioral contract > empty CHOW is corpus absence, not never changed owners 1ms
+   ✓ R1-011 identity/evidence behavioral contract > CHOW keeps event timing separate from source clocks 0ms
+   ✓ R1-011 identity/evidence behavioral contract > empty penalties is corpus absence, not never fined 1ms
+   ✓ R1-011 identity/evidence behavioral contract > penalty source identity mismatch is unavailable, not evidence 1ms
+   ✓ R1-011 identity/evidence behavioral contract > labeled positive remains exact; bare token remains safe 3ms
+   ✓ R1-011 identity/evidence behavioral contract > exact miss never performs name retrieval 1ms
+   ✓ R1-011 identity/evidence behavioral contract > absent source is unavailable, not a valid exact miss 1ms
+   ✓ R1-011 identity/evidence behavioral contract > home_health does not inherit NH CHOW 1ms
+   ✓ R1-011 identity/evidence behavioral contract > hospice does not inherit NH CHOW 0ms
+   ✓ R1-011 identity/evidence behavioral contract > class choice retains Austin TX 26ms
+   ✓ R1-011 identity/evidence behavioral contract > memory care cannot become NH via filter 1ms
+   ✓ R1-011 identity/evidence behavioral contract > assisted living in New York 5ms
+   ✓ R1-011 identity/evidence behavioral contract > assisted living in Arizona 5ms
+   ✓ R1-011 identity/evidence behavioral contract > memory care in Florida 4ms
+   ✓ R1-011 identity/evidence behavioral contract > official destination is exact HTTPS CMS allowlist, no guessed CCN parameter 2ms
+   ✓ R1-011 identity/evidence behavioral contract > API and common boundary agree on requested CCN evidence 16ms
+   ✓ R1-011 identity/evidence behavioral contract > structured missing identity cannot bypass guard 1ms
+   ✓ R1-011 additional boundary regressions > a state word inside a provider name is not a location predicate 1ms
+   ✓ R1-011 additional boundary regressions > same exact name in different states requires selection 2ms
+   ✓ R1-011 additional boundary regressions > evidence source failure is not absence 1ms
+   ✓ R1-011 additional boundary regressions > unlinked source deficiency remains evidence 1ms
+   ✓ R1-011 additional boundary regressions > evidence override cannot silently replace the question 0ms
+   ✓ R1-011 additional boundary regressions > profile-style exact context cannot be replaced with a selected candidate 1ms
+   ✓ generic care waits for class then executes locality without a fake provider name 7ms
+   ✓ multiple CCNs cannot select the first provider for ownership 1ms
+   ✓ explicit mixed provider classes cannot acquire NH evidence 0ms
+   ✓ an exact evidence answer cannot silently ignore a rating cohort filter 1ms
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  2 failed | 48 passed (50)
+   Start at  12:28:42
+   Duration  2.88s (transform 1.01s, setup 619ms, collect 1.59s, tests 266ms, environment 1.63s, prepare 347ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > unique exact source name attaches only that CCN
+AssertionError: expected 'Owned by' to be 'CMS ownership category' // Object.is equality
+
+Expected: "CMS ownership category"
+Received: "Owned by"
+
+ ❯ src/server/care/r1-011-identity.test.tsx:165:46
+    163|     expect(r.entities.map((x) => x.ccn)).toEqual(["T00001"]);
+    164|     expect(mocks.ownership).toHaveBeenCalledWith("T00001");
+    165|     expect(r.facilityAnswer?.rows[0]?.label).toBe("CMS ownership categ…
+       |                                              ^
+    166|     expect(r.facilityAnswer?.rows[0]?.value).toBe("For profit - Corpor…
+    167|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > source-backed relationships retain role and source without category-as-owner
+AssertionError: expected [ 'Owned by', …(2) ] to deeply equal [ 'CMS ownership category', …(2) ]
+
+- Expected
++ Received
+
+  [
+-   "CMS ownership category",
++   "Owned by",
+    "organization: Indirect ownership",
+    "individual: Manager",
+  ]
+
+ ❯ src/server/care/r1-011-identity.test.tsx:226:56
+    224|     });
+    225|     const r = await executeSeniorResearchQuery("Who owns CMS CCN T0000…
+    226|     expect(r.facilityAnswer?.rows.map((x) => x.label)).toEqual([
+       |                                                        ^
+    227|       "CMS ownership category",
+    228|       "organization: Indirect ownership",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯

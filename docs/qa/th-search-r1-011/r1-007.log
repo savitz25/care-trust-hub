@@ -1,0 +1,20 @@
+
+> ask-trust-hub-care@0.1.0 check:th-search-r1-007
+> npm exec --workspace=@care/web -- vitest run --configLoader runner src/server/care/r1-007-search.test.ts src/components/r1-007-ui.test.tsx src/server/care/th-search-001d.test.ts src/server/care/senior-ask-parse.test.ts src/server/care/agency-search.test.ts src/server/care/senior-specialist-execution-v2.test.ts src/app/api/specialist-execution/v2/route.test.ts
+
+
+ RUN  v3.2.7 C:/Users/makei/th-search-r1-011-work/apps/web
+
+ ✓ src/server/care/agency-search.test.ts (3 tests) 86ms
+ ✓ src/server/care/senior-specialist-execution-v2.test.ts (6 tests) 88ms
+ ✓ src/app/api/specialist-execution/v2/route.test.ts (3 tests) 859ms
+ ✓ src/server/care/senior-ask-parse.test.ts (17 tests) 27ms
+ ✓ src/server/care/th-search-001d.test.ts (4 tests) 43ms
+ ✓ src/server/care/r1-007-search.test.ts (29 tests) 138ms
+ ✓ src/components/r1-007-ui.test.tsx (11 tests) 584ms
+   ✓ R1-007 shared header > puts published state links under one scalable disclosure  417ms
+
+ Test Files  7 passed (7)
+      Tests  73 passed (73)
+   Start at  12:25:47
+   Duration  3.29s (transform 1.51s, setup 1.98s, collect 4.44s, tests 1.83s, environment 6.00s, prepare 1.06s)

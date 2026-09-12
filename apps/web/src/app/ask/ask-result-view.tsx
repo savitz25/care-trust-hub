@@ -1,3 +1,4 @@
+import { SENIOR_OFFICIAL_RECOVERY, stateCareRecovery } from "@/server/care/senior-recovery";
 import { STATE_NAMES } from "@care/domain";
 import { seniorRequestHref } from "@/server/care/senior-ask-request";
 import Link from "next/link";
@@ -56,9 +57,11 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
             maxLength={180}
             defaultValue={result.rawQuery}
           />
-          {Object.entries(overrides).map(([key, value]) => (
-            <input key={key} type="hidden" name={key} value={value} />
-          ))}
+          {Object.entries(overrides)
+            .filter(([key]) => !["provider", "selected", "ccn"].includes(key))
+            .map(([key, value]) => (
+              <input key={key} type="hidden" name={key} value={value} />
+            ))}
           <button className="button button--primary" type="submit">
             Update question
           </button>
@@ -109,7 +112,106 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
         </section>
       ) : null}
 
-      {result.failClosed ? (
+      {result.query.clarification === "provider_identity" ? (
+        <section className="senior-ask__closed" role="status">
+          <h2>Which facility do you mean?</h2>
+          <p>
+            No facility-specific evidence has been attached. Search its provider name or enter an
+            exact CMS CCN.
+          </p>
+          <form action="/ask" method="get">
+            <input type="hidden" name="q" value={result.rawQuery} />
+            {Object.entries(overrides)
+              .filter(([k]) => !["provider", "selected", "ccn"].includes(k))
+              .map(([k, v]) => (
+                <input key={k} type="hidden" name={k} value={v} />
+              ))}
+            <label htmlFor="facility-name">Provider name</label>
+            <input id="facility-name" name="provider" maxLength={120} required />
+            <button type="submit" className="button">
+              Search provider
+            </button>
+          </form>
+          <form action="/ask" method="get">
+            <input type="hidden" name="q" value={result.rawQuery} />
+            {Object.entries(overrides)
+              .filter(([k]) => !["provider", "selected", "ccn"].includes(k))
+              .map(([k, v]) => (
+                <input key={k} type="hidden" name={k} value={v} />
+              ))}
+            <label htmlFor="facility-ccn">CMS CCN (six characters)</label>
+            <input
+              id="facility-ccn"
+              name="ccn"
+              minLength={6}
+              maxLength={6}
+              pattern="[A-Za-z0-9]{6}"
+              required
+            />
+            <button type="submit" className="button">
+              Research this CMS CCN
+            </button>
+          </form>
+        </section>
+      ) : null}
+      {result.query.clarification === "provider_class" ? (
+        <section className="senior-ask__closed">
+          <h2>Which care setting?</h2>
+          <p>{result.query.failReason}</p>
+          <ul>
+            {(
+              [
+                ["nursing_home", "Nursing homes"],
+                ["home_health", "Home Health agencies"],
+                ["hospice", "Hospice providers"],
+              ] as const
+            ).map(([value, label]) => (
+              <li key={value}>
+                <Link
+                  prefetch={false}
+                  href={seniorRequestHref(result.rawQuery, overrides, { class: value, page: "1" })}
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p>
+            <Link href={stateCareRecovery(result.query)?.href ?? "/assisted-living"}>
+              State-specific assisted-living research
+            </Link>
+          </p>
+          <details>
+            <summary>Not sure about the setting?</summary>
+            <p>
+              Nursing homes, Home Health agencies and Hospice providers are separate CMS
+              directories. Assisted living uses state licensing sources. These choices describe
+              research sources, not a recommendation about appropriate care.
+            </p>
+          </details>
+        </section>
+      ) : null}
+      {result.query.clarification === "state_care" ? (
+        <section className="senior-ask__closed">
+          <h2>Use state-specific care research</h2>
+          <p>{result.query.failReason}</p>
+          {stateCareRecovery(result.query) ? (
+            <Link href={stateCareRecovery(result.query)!.href}>
+              {stateCareRecovery(result.query)!.label}
+            </Link>
+          ) : (
+            <p>
+              No corresponding state research destination is published for this request. Edit the
+              setting or jurisdiction; no CMS class was substituted.
+            </p>
+          )}
+          <p>
+            This state intelligence action is not a city-filtered provider list or proof that a
+            facility offers memory care.
+          </p>
+        </section>
+      ) : null}
+      {result.failClosed && !result.query.clarification ? (
         <section className="senior-ask__closed" role="status">
           <h2>Ask cannot answer that as asked</h2>
           <p>{result.failClosed.reason}</p>
@@ -125,6 +227,46 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
         </section>
       ) : null}
 
+      {result.candidateSelection ? (
+        <section>
+          <h2>Choose the provider</h2>
+          <p>
+            These are name candidates, not ownership or penalty findings. Confirm the name, class,
+            CCN and recorded location.
+          </p>
+        </section>
+      ) : null}
+      {result.facilityAnswer ? (
+        <section className="senior-ask__closed" aria-label="Facility evidence answer">
+          <h2>{result.facilityAnswer.title}</h2>
+          <p>{result.facilityAnswer.summary}</p>
+          <dl>
+            {result.facilityAnswer.rows.map((r, i) => (
+              <div key={i}>
+                <dt>{r.label}</dt>
+                <dd>{r.value}</dd>
+                {r.date ? <dd>Event/association date: {r.date}</dd> : null}
+                <dd>
+                  Source: {r.source}; source as-of: {r.sourceAsOf ?? "Not reported"}
+                  {r.retrievedAt ? `; retrieved: ${r.retrievedAt}` : ""}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          {result.facilityAnswer.limitations.map((x) => (
+            <p key={x}>{x}</p>
+          ))}
+          <details>
+            <summary>Trace facility evidence</summary>
+            {result.facilityAnswer.sources.map((s) => (
+              <p key={s.name}>
+                {s.name}; release {s.release}; official as-of {s.asOf ?? "Not reported"}; retrieved{" "}
+                {s.retrievedAt ?? "Not reported"}
+              </p>
+            ))}
+          </details>
+        </section>
+      ) : null}
       {!hasPrimaryOutput ? (
         <section className="senior-ask__closed" role="status">
           <h2>No matching published provider record</h2>
@@ -133,6 +275,19 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
               ? "We did not find this CMS CCN in the published research corpus. Confirm it with CMS; absence here is not proof that the identifier is unused."
               : "We did not find a matching published provider identity for these criteria. Missing source evidence is not zero or a clean history."}
           </p>
+          {result.query.identifier ? (
+            <p>
+              Exact submitted CMS CCN: <strong>{result.query.identifier.value}</strong>.{" "}
+              <a href={SENIOR_OFFICIAL_RECOVERY.url}>Open official CMS Care Compare</a>. Choose the
+              relevant provider class and use the CCN to confirm the identity. Official destination
+              checked {SENIOR_OFFICIAL_RECOVERY.checkedAt}; this is not a live provider check.
+            </p>
+          ) : (
+            <p>
+              Edit the provider name or enter a labeled CMS CCN. No unrelated provider was
+              substituted.
+            </p>
+          )}
         </section>
       ) : null}
 
@@ -195,6 +350,13 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
           {result.entities.map((entity) => (
             <li key={`${entity.providerClass}-${entity.ccn}-${entity.providerName}`}>
               <article className="senior-ask__card">
+                {entity.selectionHref ? (
+                  <p>
+                    <Link prefetch={false} href={entity.selectionHref}>
+                      Select this provider for the original evidence question
+                    </Link>
+                  </p>
+                ) : null}
                 <h3>
                   <Link href={entity.href}>{entity.providerName}</Link>
                 </h3>
@@ -208,9 +370,11 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
                 </p>
                 <p>{entity.location}</p>
                 <p>{entity.statusLabel}</p>
-                <p>
-                  <strong>Evidence available</strong>
-                </p>
+                {entity.evidence.length > 0 ? (
+                  <p>
+                    <strong>Evidence available</strong>
+                  </p>
+                ) : null}
                 <ul>
                   {entity.evidence.map((item) => (
                     <li key={item.label}>

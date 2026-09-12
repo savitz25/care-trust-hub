@@ -143,6 +143,7 @@ export async function getProviderRegulatoryIntelligence(
     ),
   ]);
   const findingsByInspection = new Map<string, CareDeficiencyFinding[]>();
+  const allFindings: CareDeficiencyFinding[] = [];
   for (const row of deficiencyResult.rows) {
     const scopeSeverity = CMS_SCOPE_SEVERITY[row.scope_severity_code];
     if (!scopeSeverity)
@@ -159,6 +160,7 @@ export async function getProviderRegulatoryIntelligence(
       underIidr: row.citation_under_iidr,
       source: disclosure(row, "deficiencies"),
     };
+    allFindings.push(finding);
     if (row.inspection_event_id) {
       findingsByInspection.set(row.inspection_event_id, [
         ...(findingsByInspection.get(row.inspection_event_id) ?? []),
@@ -221,5 +223,11 @@ export async function getProviderRegulatoryIntelligence(
         : `${penalty.paymentDenialDays ?? "Not reported"} payment-denial days`,
     })),
   ].sort((a, b) => b.eventDate.localeCompare(a.eventDate) || a.id.localeCompare(b.id));
-  return { inspections, penalties, repeatTags, timeline };
+  return {
+    deficiencies: allFindings,
+    inspections,
+    penalties,
+    repeatTags,
+    timeline,
+  };
 }

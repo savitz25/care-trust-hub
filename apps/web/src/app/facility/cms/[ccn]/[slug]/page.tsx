@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { seniorRequestHref } from "@/server/care/senior-ask-request";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { RealProviderDetail } from "@/components/real-provider-detail";
@@ -146,6 +148,22 @@ export default async function RealFacilityPage({
     : { profile: null, replies: null };
   return (
     <>
+      <section aria-label="Research this facility evidence">
+        <h2>Ask about this facility</h2>
+        <ul>
+          {[
+            `Who owns CMS CCN ${provider.ccn}?`,
+            `Has CMS CCN ${provider.ccn} been fined?`,
+            `Did CMS CCN ${provider.ccn} change owners?`,
+          ].map((q) => (
+            <li key={q}>
+              <Link prefetch={false} href={seniorRequestHref(q, { class: "nursing_home" })}>
+                {q}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
       <RealProviderDetail
         provider={provider}
         regulatory={regulatory}

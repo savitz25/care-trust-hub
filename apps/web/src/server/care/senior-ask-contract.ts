@@ -48,6 +48,9 @@ export type SeniorResearchQuery = {
   };
   identifier?: { type: "ccn"; value: string };
   identityQuery?: string;
+  facilityEvidence?: "ownership" | "chow" | "penalty" | "inspection" | "deficiency";
+  selectedCcn?: string;
+  clarification?: "provider_identity" | "provider_class" | "state_care";
   coverageState?: "KNOWN" | "UNKNOWN" | "PARTIAL" | "NOT_ACQUIRED" | "REQUEST_ONLY" | "UNSUPPORTED";
   sort?: SeniorAskSort;
   metric?: string;
@@ -155,6 +158,39 @@ export function validateSeniorResearchQuery(query: SeniorResearchQuery): SeniorR
       failReason: "State geography must be a two-letter code.",
     };
   }
+  if (
+    query.facilityEvidence &&
+    !["ownership", "chow", "penalty", "inspection", "deficiency"].includes(query.facilityEvidence)
+  )
+    return invalid("Unsupported facility evidence request.");
+  if (query.facilityEvidence && ((query.identifier && query.identityQuery) || query.qualityFilters))
+    return {
+      ...query,
+      mode: "fail_closed",
+      terminalState: "NEEDS_CLARIFICATION",
+      failReason:
+        "Use one provider identity for this evidence question. Rating-cohort filters are not applied to an identity-only evidence answer; remove that filter or use provider discovery.",
+      alternatives: [],
+    };
+  if (
+    query.selectedCcn &&
+    (!/^[A-Z0-9]{6}$/.test(query.selectedCcn) || !query.facilityEvidence || !query.identityQuery)
+  )
+    return invalid("Select a candidate from the current provider-name request.");
+  if (
+    query.facilityEvidence &&
+    !query.identifier &&
+    !query.identityQuery &&
+    query.mode !== "fail_closed"
+  )
+    return {
+      ...query,
+      mode: "fail_closed",
+      terminalState: "NEEDS_CLARIFICATION",
+      clarification: "provider_identity",
+      failReason: "Which facility do you mean? Enter its provider name or labeled CMS CCN.",
+      alternatives: [],
+    };
   if (query.identityQuery && query.identityQuery.trim().length > 120)
     return {
       ...query,

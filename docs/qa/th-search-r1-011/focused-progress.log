@@ -1,0 +1,90 @@
+
+ RUN  v3.2.7 C:/Users/makei/th-search-r1-011-work/apps/web
+
+ ❯ src/server/care/r1-011-identity.test.tsx (35 tests | 1 failed) 166ms
+   ✓ R1-011 baseline reproductions > unspecified ownership requires an identity before retrieval 13ms
+   ✓ R1-011 baseline reproductions > Has this nursing home been fined? 10ms
+   ✓ R1-011 baseline reproductions > Did this facility change owners? 2ms
+   ✓ R1-011 baseline reproductions > CCN miss has a usable official action 37ms
+   ✓ R1-011 baseline reproductions > Virginia assisted living navigates to state research 5ms
+   ✓ R1-011 identity/evidence behavioral contract > Who owns that facility? 1ms
+   ✓ R1-011 identity/evidence behavioral contract > Who operates this provider? 0ms
+   ✓ R1-011 identity/evidence behavioral contract > Has that facility been fined? 1ms
+   ✓ R1-011 identity/evidence behavioral contract > Did this nursing home change owners? 0ms
+   ✓ R1-011 identity/evidence behavioral contract > Inspections for this facility 1ms
+   ✓ R1-011 identity/evidence behavioral contract > Deficiencies for this nursing home 1ms
+   ✓ R1-011 identity/evidence behavioral contract > unique exact source name attaches only that CCN 4ms
+   ✓ R1-011 identity/evidence behavioral contract > ambiguous name has bounded selection and no evidence assignment 5ms
+   ✓ R1-011 identity/evidence behavioral contract > selection resumes original ownership task with revalidated candidate 9ms
+   ✓ R1-011 identity/evidence behavioral contract > tampered selection cannot attach unrelated evidence 1ms
+   ✓ R1-011 identity/evidence behavioral contract > provider entry cannot replace explicitly named subject 2ms
+   ✓ R1-011 identity/evidence behavioral contract > identity-required form retains question and resolves exact CCN 1ms
+   ✓ R1-011 identity/evidence behavioral contract > source-backed relationships retain role and source without category-as-owner 1ms
+   ✓ R1-011 identity/evidence behavioral contract > empty CHOW is corpus absence, not never changed owners 1ms
+   ✓ R1-011 identity/evidence behavioral contract > CHOW keeps event timing separate from source clocks 1ms
+   ✓ R1-011 identity/evidence behavioral contract > empty penalties is corpus absence, not never fined 2ms
+   ✓ R1-011 identity/evidence behavioral contract > penalty source identity mismatch is unavailable, not evidence 2ms
+   ✓ R1-011 identity/evidence behavioral contract > labeled positive remains exact; bare token remains safe 3ms
+   ✓ R1-011 identity/evidence behavioral contract > exact miss never performs name retrieval 1ms
+   ✓ R1-011 identity/evidence behavioral contract > absent source is unavailable, not a valid exact miss 1ms
+   ✓ R1-011 identity/evidence behavioral contract > home_health does not inherit NH CHOW 1ms
+   ✓ R1-011 identity/evidence behavioral contract > hospice does not inherit NH CHOW 1ms
+   ✓ R1-011 identity/evidence behavioral contract > class choice retains Austin TX 19ms
+   ✓ R1-011 identity/evidence behavioral contract > memory care cannot become NH via filter 0ms
+   ✓ R1-011 identity/evidence behavioral contract > assisted living in New York 4ms
+   ✓ R1-011 identity/evidence behavioral contract > assisted living in Arizona 3ms
+   ✓ R1-011 identity/evidence behavioral contract > memory care in Florida 4ms
+   ✓ R1-011 identity/evidence behavioral contract > official destination is exact HTTPS CMS allowlist, no guessed CCN parameter 1ms
+   × R1-011 identity/evidence behavioral contract > API and common boundary agree on requested CCN evidence 22ms
+     → expected undefined to deeply equal { task: 'penalty', …(6) }
+   ✓ R1-011 identity/evidence behavioral contract > structured missing identity cannot bypass guard 0ms
+node.exe :
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > API and common
+boundary agree on requested CCN evidence
+AssertionError: expected undefined to deeply equal { task: 'penalty', …(6) }
+
+- Expected:
+{
+  "limitations": [
+    "These observations belong only to the displayed provider and CCN. Source dates are not live verification or a
+safety assessment.",
+    "This is not an all-time yes/no finding, proof of a clean history, or a conclusion that the provider has never
+been fined. Existing report limits apply (100 penalties, 20 inspections and 200 deficiency findings); counts shown are
+observations, not a quality ranking.",
+  ],
+  "rows": [],
+  "sources": [
+    {
+      "asOf": "2025-01-01T00:00:00.000Z",
+      "name": "Fixture CMS source",
+      "release": "fixture-release",
+      "retrievedAt": "2025-02-01T00:00:00.000Z",
+    },
+  ],
+  "status": "AVAILABLE",
+  "summary": "No indexed penalty record was found in the current corpus for this provider.",
+  "task": "penalty",
+  "title": "Indexed penalty and enforcement observations",
+}
+
++ Received:
+undefined
+
+ ❯ src/server/care/r1-011-identity.test.tsx:68:342
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 34 passed (35)
+   Start at  12:00:40
+   Duration  4.92s (transform 1.25s, setup 191ms, collect 3.47s, tests 166ms, environment 665ms, prepare 93ms)
