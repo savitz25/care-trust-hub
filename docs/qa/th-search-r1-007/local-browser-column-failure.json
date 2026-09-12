@@ -1,0 +1,55 @@
+{
+  "at": "2026-09-12T02:29:41.140Z",
+  "origin": "http://localhost:3107",
+  "workingHead": "65c30b089b21e056f1788c70fc6e014585894eec",
+  "label": "local",
+  "cases": [
+    {
+      "q": "Nursing homes in Austin Texas",
+      "extra": {},
+      "home": true,
+      "width": 1280,
+      "ms": 3658,
+      "query": {
+        "mode": "fail_closed",
+        "providerClass": "nursing_home",
+        "geography": {
+          "type": "city",
+          "value": "AUSTIN",
+          "state": "TX",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Austin Texas",
+          "outcome": "APPLIED"
+        },
+        "status": "current",
+        "sort": "name",
+        "page": 1,
+        "coverageState": "UNKNOWN",
+        "inputOverrides": {},
+        "terminalState": "SOURCE_UNAVAILABLE",
+        "failReason": "SeniorTrustHub could not reach the published research corpus. No provider or evidence conclusion was inferred.",
+        "alternatives": ["Try the research again later or confirm a provider directly with CMS."]
+      },
+      "terminal": "SOURCE_UNAVAILABLE",
+      "rows": [],
+      "source": {
+        "providerClass": "Nursing Homes",
+        "sourceFamily": "CMS Care Compare / SeniorTrustHub current directory snapshot",
+        "officialAsOf": null,
+        "geographyMeaning": "Recorded provider/office location, not service territory or service area, distance or availability.",
+        "queryGrain": "fail_closed",
+        "metric": null,
+        "exclusions": [
+          "Do not add nursing homes, home health, and hospice.",
+          "Provider location/address is not service area unless the dataset says so."
+        ],
+        "identifierMethod": "Not an identifier query"
+      }
+    }
+  ],
+  "headers": [],
+  "errors": [],
+  "failures": ["The expression evaluated to a falsy value:\n\n  assert(a.results.length>0)\n"]
+}

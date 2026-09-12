@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import type { SeniorRequestParams } from "@/server/care/senior-ask-request";
 import { RealDataNotice } from "@/components/evidence";
-import { executeSeniorResearchQuery } from "@/server/care/senior-ask-execute";
+import { executeSeniorRequest } from "@/server/care/senior-ask-execute";
 import { AskResultView } from "./ask-result-view";
 import { SeniorSpecialistSearchShell } from "@/components/specialist-search/senior-specialist-search-shell";
 import { SearchAnalytics } from "@/components/specialist-search/search-analytics";
@@ -17,20 +18,11 @@ export const metadata: Metadata = {
 export default async function SeniorAskPage({
   searchParams,
 }: {
-  searchParams: Promise<{
-    q?: string;
-    page?: string;
-    class?: string;
-    state?: string;
-    evidence?: string;
-    stars?: string;
-  }>;
+  searchParams: Promise<SeniorRequestParams>;
 }) {
   const sp = await searchParams;
-  const q = (sp.q ?? "").trim().slice(0, 180);
-  const page = Math.min(500, Math.max(1, Number(sp.page ?? "1") || 1));
-  const effectiveQuery = buildEffectiveQuery(q, sp);
-  const result = effectiveQuery ? await executeSeniorResearchQuery(effectiveQuery, page) : null;
+  const q = typeof sp.q === "string" ? sp.q : "";
+  const result = Object.keys(sp).length ? await executeSeniorRequest(sp) : null;
   return (
     <div className="page-shell">
       <RealDataNotice />
@@ -42,7 +34,7 @@ export default async function SeniorAskPage({
           stay separate. This is not a chatbot and not a “best nursing home” ranking.
         </p>
       </header>
-      <SeniorSpecialistSearchShell query={q} />
+      <SeniorSpecialistSearchShell query={q} filters={result?.query.inputOverrides} />
       {result ? (
         <>
           <SearchAnalytics
@@ -83,48 +75,4 @@ function intentFor(
             : mode === "comparison"
               ? "COMPARE"
               : "UNKNOWN";
-}
-
-function buildEffectiveQuery(
-  q: string,
-  sp: { class?: string; state?: string; evidence?: string; stars?: string },
-): string {
-  if (!q) return "";
-  const classText: Record<string, string> = {
-    nursing_home: "nursing homes",
-    home_health: "home health agencies",
-    hospice: "hospice providers",
-  };
-  const stateText: Record<string, string> = {
-    FL: "Florida",
-    NJ: "New Jersey",
-    CA: "California",
-    TX: "Texas",
-    WA: "Washington",
-    AZ: "Arizona",
-    CO: "Colorado",
-  };
-  const evidenceText: Record<string, string> = {
-    deficiencies: "with indexed deficiencies",
-    penalties: "with civil monetary penalties",
-    staffing: "with staffing HPRD",
-    chow: "with CHOW evidence",
-    hhcahps: "with HHCAHPS evidence",
-    hospice_cahps: "with CAHPS evidence",
-  };
-  const starText: Record<string, string> = {
-    "5_overall": "with 5 CMS overall stars",
-    "5_staffing": "with 5 staffing stars",
-    "5_inspection": "with 5 health inspection stars",
-  };
-  return [
-    q,
-    classText[sp.class ?? ""],
-    stateText[sp.state ?? ""],
-    evidenceText[sp.evidence ?? ""],
-    starText[sp.stars ?? ""],
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .slice(0, 180);
 }

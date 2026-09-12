@@ -1,9 +1,12 @@
+import { STATE_NAMES } from "@care/domain";
+import { seniorRequestHref } from "@/server/care/senior-ask-request";
 import Link from "next/link";
 import type { SeniorAskResult } from "@/server/care/senior-ask-execute";
 import { CmsStarRating } from "@/components/real-provider";
 
 export function AskResultView({ result }: { result: SeniorAskResult }) {
-  const changeHref = `/ask?q=${encodeURIComponent(result.rawQuery)}`;
+  const overrides = result.query.inputOverrides ?? {};
+  const changeHref = seniorRequestHref(result.rawQuery, overrides);
   const hasPrimaryOutput = Boolean(
     result.failClosed ||
       result.definition ||
@@ -18,7 +21,13 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
         <h2 id="ask-interp-title">We interpreted your question as</h2>
         <dl>
           {result.interpretation.map((chip) => {
-            const refined = removeCriterion(result.rawQuery, chip.label);
+            const refined = /geography/i.test(chip.label)
+              ? null
+              : removeCriterion(result.rawQuery, chip.label);
+            const remaining = { ...overrides };
+            if (/stars/i.test(chip.label)) delete remaining.stars;
+            if (/evidence/i.test(chip.label)) delete remaining.evidence;
+            if (/provider class/i.test(chip.label)) delete remaining.class;
             return (
               <div key={chip.label}>
                 <dt>{chip.label}</dt>
@@ -27,7 +36,7 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
                   <dd>
                     <Link
                       data-specialist-event="refine"
-                      href={`/ask?q=${encodeURIComponent(refined)}`}
+                      href={seniorRequestHref(refined, remaining)}
                       aria-label={`Remove ${chip.label} criterion`}
                     >
                       Remove criterion
@@ -40,12 +49,65 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
         </dl>
         <form className="senior-ask__change" action="/ask" method="get">
           <label htmlFor="ask-q-edit">Change interpretation</label>
-          <input id="ask-q-edit" name="q" defaultValue={result.rawQuery} />
+          <input
+            key={result.rawQuery}
+            id="ask-q-edit"
+            name="q"
+            maxLength={180}
+            defaultValue={result.rawQuery}
+          />
+          {Object.entries(overrides).map(([key, value]) => (
+            <input key={key} type="hidden" name={key} value={value} />
+          ))}
           <button className="button button--primary" type="submit">
             Update question
           </button>
         </form>
       </section>
+
+      {result.query.locationRequirement ? (
+        <section aria-label="Recorded location scope">
+          <p>
+            {result.query.locationRequirement.raw}:{" "}
+            {result.query.locationRequirement.outcome === "APPLIED"
+              ? "Applied to the recorded location."
+              : result.query.locationRequirement.reason}
+          </p>
+          {result.query.geography?.type === "city" &&
+          !result.query.geography.state &&
+          result.query.locationRequirement.outcome === "NEEDS_CLARIFICATION" ? (
+            <form action="/ask" method="get">
+              <input type="hidden" name="q" value={result.rawQuery} />
+              {Object.entries(overrides)
+                .filter(([key]) => key !== "state")
+                .map(([key, value]) => (
+                  <input key={key} type="hidden" name={key} value={value} />
+                ))}
+              <label>
+                State for {result.query.geography.value}
+                <select name="state" required defaultValue="">
+                  <option value="" disabled>
+                    Choose recorded state
+                  </option>
+                  {Object.entries(STATE_NAMES).map(([code, name]) => (
+                    <option key={code} value={code}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button className="button" type="submit">
+                Search this city and state
+              </button>
+            </form>
+          ) : null}
+          {result.query.geography?.state ? (
+            <Link href={seniorRequestHref(result.rawQuery, overrides, { broaden: "state" })}>
+              Search recorded locations across {STATE_NAMES[result.query.geography.state]} instead
+            </Link>
+          ) : null}
+        </section>
+      ) : null}
 
       {result.failClosed ? (
         <section className="senior-ask__closed" role="status">
@@ -152,10 +214,12 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
                 <ul>
                   {entity.evidence.map((item) => (
                     <li key={item.label}>
-                      {item.label}: {item.value}
-                      {/stars/i.test(item.label) && /\d\/5/.test(item.value) ? (
-                        <CmsStarRating value={Number(item.value[0])} />
-                      ) : null}
+                      {item.label}:{" "}
+                      {item.rating ? (
+                        <CmsStarRating value={item.rating.value} metric={item.rating.metric} />
+                      ) : (
+                        item.value
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -248,6 +312,34 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
             <dt>Geography meaning</dt>
             <dd>{result.provenance.geographyMeaning}</dd>
           </div>
+          <div>
+            <dt>Executed recorded location</dt>
+            <dd>
+              {result.query.geography
+                ? [result.query.geography.value, result.query.geography.state]
+                    .filter(Boolean)
+                    .join(", ")
+                : "No location filter"}
+            </dd>
+          </div>
+          {result.provenance.sourceRelease ? (
+            <div>
+              <dt>Source release</dt>
+              <dd>{result.provenance.sourceRelease}</dd>
+            </div>
+          ) : null}
+          {result.provenance.retrievedAt ? (
+            <div>
+              <dt>Source retrieved</dt>
+              <dd>{result.provenance.retrievedAt} (separate from official as-of)</dd>
+            </div>
+          ) : null}
+          {result.provenance.sourceFingerprint ? (
+            <div>
+              <dt>Source fingerprint</dt>
+              <dd className="senior-ask__fingerprint">{result.provenance.sourceFingerprint}</dd>
+            </div>
+          ) : null}
           <div>
             <dt>Query grain</dt>
             <dd>{result.provenance.queryGrain}</dd>

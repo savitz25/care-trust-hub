@@ -2886,7 +2886,7 @@ html {
   gap: var(--th-nav-gap);
   min-width: 0;
 }
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .th-header-nav {
     display: flex;
   }
@@ -2923,7 +2923,7 @@ html {
   gap: 8px;
   margin-left: auto;
 }
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .th-header-actions {
     display: flex;
   }
@@ -2935,7 +2935,7 @@ html {
   gap: 8px;
   margin-left: auto;
 }
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .th-header-mobile-actions {
     display: none;
   }
@@ -4045,4 +4045,100 @@ html {
   html {
     scroll-behavior: auto;
   }
+}
+
+/* R1-007: fixed desktop controls, scalable state disclosure, native modal compact navigation. */
+.th-header-inner > .th-logo-lockup {
+  flex: 0 0 auto;
+}
+.th-header-nav {
+  gap: clamp(8px, 1.2vw, 20px);
+}
+.th-header-nav > a[href="/compare"] {
+  order: 2;
+}
+.th-state-panel {
+  position: absolute;
+  z-index: 80;
+  top: 100%;
+  left: 0;
+  width: 15rem;
+  max-width: calc(100vw - 2rem);
+  max-height: min(65vh, 30rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 8px;
+  border: 1px solid var(--th-border);
+  border-radius: var(--th-radius-card);
+  background: white;
+  box-shadow: var(--th-shadow-elevated);
+}
+.th-state-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.th-network-panel {
+  max-height: min(75vh, 38rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.th-state-panel[hidden],
+.th-network-panel[hidden] {
+  display: none;
+}
+.th-compact-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+}
+.th-compact-dialog::backdrop {
+  background: rgb(10 24 44 / 45%);
+}
+.th-compact-panel {
+  box-sizing: border-box;
+  margin-left: auto;
+  width: min(100%, 24rem);
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
+  background: white;
+  font-family: var(--th-font-ui);
+}
+.th-compact-panel > button {
+  margin-bottom: 16px;
+}
+.th-compact-panel .th-state-panel {
+  position: static;
+  width: auto;
+  max-height: 45vh;
+  box-shadow: none;
+}
+.th-compact-panel .th-nav-link {
+  font-size: 16px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.cms-star-unit {
+  position: relative;
+  display: inline-block;
+}
+.senior-ask__fingerprint {
+  overflow-wrap: anywhere;
+}
+.cms-star-fill {
+  position: absolute;
+  inset: 0 auto auto 0;
+  overflow: hidden;
+  white-space: nowrap;
 }

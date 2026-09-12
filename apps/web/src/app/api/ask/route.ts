@@ -1,5 +1,6 @@
+import { seniorRequestParams } from "@/server/care/senior-ask-request";
 import { NextResponse } from "next/server";
-import { executeSeniorResearchQuery } from "@/server/care/senior-ask-execute";
+import { executeSeniorRequest } from "@/server/care/senior-ask-execute";
 import { SENIOR_ASK_CONTRACT } from "@/server/care/senior-ask-contract";
 
 export const dynamic = "force-dynamic";
@@ -7,7 +8,6 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const q = url.searchParams.get("q")?.trim() ?? "";
-  const page = Number(url.searchParams.get("page") ?? "1") || 1;
   if (!q) {
     return NextResponse.json(
       {
@@ -22,9 +22,20 @@ export async function GET(request: Request) {
       { status: 400 },
     );
   }
-  const result = await executeSeniorResearchQuery(q, page);
+  const result = await executeSeniorRequest(seniorRequestParams(url.searchParams));
   const publicSafe = {
     contract: result.contract,
+    terminalState:
+      result.query.terminalState ??
+      (result.failClosed
+        ? "UNSUPPORTED"
+        : result.entities.length ||
+            result.count ||
+            result.comparison ||
+            result.buckets ||
+            result.definition
+          ? "COMPLETE"
+          : "NO_MATCH"),
     query: result.query,
     interpretation: result.interpretation,
     resultType: result.resultType,
@@ -33,6 +44,8 @@ export async function GET(request: Request) {
       ccn: e.ccn,
       providerName: e.providerName,
       location: e.location,
+      recordedLocation: e.recordedLocation,
+      sourceAsOf: e.sourceAsOf,
       statusLabel: e.statusLabel,
       href: e.href,
       evidence: e.evidence,
@@ -48,6 +61,7 @@ export async function GET(request: Request) {
     failClosed: result.failClosed,
   };
   return NextResponse.json(publicSafe, {
+    status: result.query.terminalState === "INVALID_INPUT" ? 400 : 200,
     headers: {
       "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
     },

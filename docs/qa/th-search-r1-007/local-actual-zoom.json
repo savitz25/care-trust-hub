@@ -1,0 +1,15 @@
+{
+  "at": "2026-09-12T02:37:50.774Z",
+  "method": "chrome.tabs.setZoom/getZoom in an isolated owned browser profile; no global/user settings changed",
+  "zoom": {
+    "factor": 2,
+    "url": "http://localhost:3107/"
+  },
+  "dimensions": {
+    "innerWidth": 640,
+    "innerHeight": 450,
+    "devicePixelRatio": 2.0000000596046448,
+    "overflow": false
+  },
+  "keyboard": true
+}

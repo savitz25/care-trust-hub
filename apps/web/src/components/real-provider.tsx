@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { sourceRating, type CmsRatingMetric } from "@/lib/cms-rating";
 import type {
   CareProviderDetail,
   CareProviderSearchResult,
@@ -9,7 +10,14 @@ import { formatFreshnessLabels, formatMissingCmsValue } from "@/server/care/fres
 import { ShortlistButton } from "./shortlist-button";
 import { WorkspaceAddButton } from "./workspace-add-button";
 
-export function CmsStarRating({ value }: { value: number | null }) {
+export function CmsStarRating({
+  value: supplied,
+  metric = "nh_overall",
+}: {
+  value: number | null;
+  metric?: CmsRatingMetric;
+}) {
+  const value = sourceRating(supplied, metric);
   return (
     <span className={`cms-stars${value === null ? " cms-stars--missing" : ""}`}>
       <span className="sr-only">{cmsRatingText(value)}</span>
@@ -18,8 +26,17 @@ export function CmsStarRating({ value }: { value: number | null }) {
       ) : (
         <>
           <span aria-hidden="true">
-            {"★".repeat(value)}
-            {"☆".repeat(5 - value)}
+            {[0, 1, 2, 3, 4].map((index) => (
+              <span key={index} className="cms-star-unit">
+                <span>☆</span>
+                <span
+                  className="cms-star-fill"
+                  style={{ width: `${Math.min(1, Math.max(0, value - index)) * 100}%` }}
+                >
+                  ★
+                </span>
+              </span>
+            ))}
           </span>
           <small aria-hidden="true">{value}/5</small>
         </>

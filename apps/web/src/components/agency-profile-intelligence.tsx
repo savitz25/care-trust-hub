@@ -234,7 +234,7 @@ export function HomeHealthProfileIntelligence({
         <div className="nh-intel-glance__grid">
           <div>
             <h3>CMS Quality of Patient Care star</h3>
-            <CmsStarRating value={star?.value ?? null} />
+            <CmsStarRating metric="hh_qpc" value={star?.value ?? null} />
             {star?.footnote ? <p>{star.footnote}</p> : null}
           </div>
           <div>

@@ -11,6 +11,7 @@ import { SENIOR_SEARCH_GOLDEN_QUESTIONS, type GoldenOutcome } from "./senior-sea
 
 function outcome(query: string): GoldenOutcome {
   const parsed = interpretSeniorAskQuery(query);
+  if (parsed.terminalState === "NEEDS_CLARIFICATION") return "NEEDS_CLARIFICATION";
   if (parsed.coverageState === "PARTIAL") return "PARTIAL";
   return parsed.mode === "fail_closed" ? "UNSUPPORTED_SAFE" : "PASS";
 }

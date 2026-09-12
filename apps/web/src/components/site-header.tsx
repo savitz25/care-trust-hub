@@ -4,35 +4,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
+import { PublishedStateNavigation } from "@/components/published-state-navigation";
 import { SwitchHubMenu } from "@/components/switch-hub-menu";
 
 const PRIMARY_NAV = [
   { href: "/ask", label: "Ask" },
   { href: "/search", label: "Find care" },
-  { href: "/florida", label: "Florida" },
-  { href: "/new-jersey", label: "New Jersey" },
-  { href: "/california", label: "California" },
-  { href: "/texas", label: "Texas" },
-  { href: "/washington", label: "Washington" },
-  { href: "/arizona", label: "Arizona" },
-  { href: "/colorado", label: "Colorado" },
-  { href: "/virginia", label: "Virginia" },
-  { href: "/new-york", label: "New York" },
   { href: "/compare", label: "Compare" },
 ] as const;
 
 const DRAWER_NAV = [
   { href: "/ask", label: "Ask" },
   { href: "/search", label: "Find care" },
-  { href: "/florida", label: "Florida" },
-  { href: "/new-jersey", label: "New Jersey" },
-  { href: "/california", label: "California" },
-  { href: "/texas", label: "Texas" },
-  { href: "/washington", label: "Washington" },
-  { href: "/arizona", label: "Arizona" },
-  { href: "/colorado", label: "Colorado" },
-  { href: "/virginia", label: "Virginia" },
-  { href: "/new-york", label: "New York" },
   { href: "/compare", label: "Compare" },
   { href: "/assisted-living", label: "Assisted living" },
   { href: "/research", label: "Research" },
@@ -72,6 +55,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [pathForMenu, setPathForMenu] = useState(pathname);
   const drawerId = useId();
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const menuRef = useRef<HTMLButtonElement>(null);
 
   if (pathname !== pathForMenu) {
@@ -80,17 +64,23 @@ export function SiteHeader() {
   }
 
   useEffect(() => {
-    if (!open) return;
-    const prev = document.body.style.overflow;
+    const dialog = dialogRef.current;
+    const trigger = menuRef.current;
+    if (!open || !dialog) return;
+    const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    menuRef.current?.focus();
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
-    }
-    document.addEventListener("keydown", onKey);
+    dialog.showModal();
+    dialog.querySelector<HTMLButtonElement>("button")?.focus();
+    const wide = window.matchMedia("(min-width: 1200px)");
+    const resize = () => {
+      if (wide.matches) setOpen(false);
+    };
+    wide.addEventListener("change", resize);
     return () => {
-      document.body.style.overflow = prev;
-      document.removeEventListener("keydown", onKey);
+      wide.removeEventListener("change", resize);
+      dialog.close();
+      document.body.style.overflow = previous;
+      trigger?.focus();
     };
   }, [open]);
 
@@ -100,7 +90,7 @@ export function SiteHeader() {
         <div className="th-header-inner th-shell">
           <BrandLogo />
           <nav aria-label="Primary" className="th-header-nav">
-            {PRIMARY_NAV.map((item) => (
+            {PRIMARY_NAV.filter((item) => item.href !== "/compare").map((item) => (
               <Link
                 key={item.href}
                 prefetch={false}
@@ -111,6 +101,15 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
+            <PublishedStateNavigation />
+            <Link
+              href="/compare"
+              prefetch={false}
+              className="th-nav-link"
+              aria-current={navActive("/compare", pathname) ? "page" : undefined}
+            >
+              Compare
+            </Link>
           </nav>
           <div className="th-header-actions">
             <Link href="/shortlist" prefetch={false} className="th-btn-primary">
@@ -133,47 +132,73 @@ export function SiteHeader() {
           </div>
         </div>
       </header>
-      {open ? (
-        <>
-          <button
-            type="button"
-            className="th-drawer-backdrop"
-            aria-label="Close menu"
-            onClick={() => setOpen(false)}
-          />
-          <div
-            id={drawerId}
-            className="th-drawer"
-            role="dialog"
-            aria-modal="true"
-            aria-label="SeniorTrustHub menu"
-          >
-            <nav aria-label="Mobile" className="th-drawer-nav">
+      <dialog
+        ref={dialogRef}
+        id={drawerId}
+        className="th-compact-dialog"
+        aria-label="SeniorTrustHub menu"
+        onCancel={() => setOpen(false)}
+        onKeyDown={(event) => {
+          if (event.key !== "Tab") return;
+          const controls = [
+            ...event.currentTarget.querySelectorAll<HTMLElement>(
+              'a[href],button,select,input,textarea,[tabindex="0"]',
+            ),
+          ].filter(
+            (element) => element.getClientRects().length && !element.hasAttribute("disabled"),
+          );
+          const first = controls[0],
+            last = controls.at(-1);
+          if (
+            event.shiftKey &&
+            (document.activeElement === first ||
+              !controls.includes(document.activeElement as HTMLElement))
+          ) {
+            event.preventDefault();
+            last?.focus();
+          } else if (
+            !event.shiftKey &&
+            (document.activeElement === last ||
+              !controls.includes(document.activeElement as HTMLElement))
+          ) {
+            event.preventDefault();
+            first?.focus();
+          }
+        }}
+        onClick={(e) => {
+          if (e.target === e.currentTarget || (e.target as Element).closest("a")) setOpen(false);
+        }}
+      >
+        <div className="th-compact-panel">
+          <button type="button" className="th-btn-secondary" onClick={() => setOpen(false)}>
+            Close menu
+          </button>
+          <nav aria-label="Mobile" className="th-drawer-nav">
+            <Link
+              href="/shortlist"
+              className="th-btn-primary th-drawer-cta"
+              onClick={() => setOpen(false)}
+            >
+              Shortlist
+            </Link>
+            <PublishedStateNavigation />
+            {DRAWER_NAV.map((item) => (
               <Link
-                href="/shortlist"
-                className="th-btn-primary th-drawer-cta"
+                key={item.href}
+                href={item.href}
+                className="th-drawer-link"
+                aria-current={navActive(item.href, pathname) ? "page" : undefined}
                 onClick={() => setOpen(false)}
               >
-                Shortlist
+                {item.label}
               </Link>
-              {DRAWER_NAV.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="th-drawer-link"
-                  aria-current={navActive(item.href, pathname) ? "page" : undefined}
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              <div className="th-drawer-network">
-                <SwitchHubMenu variant="embedded" />
-              </div>
-            </nav>
-          </div>
-        </>
-      ) : null}
+            ))}
+            <div className="th-drawer-network">
+              <SwitchHubMenu variant="embedded" />
+            </div>
+          </nav>
+        </div>
+      </dialog>
     </>
   );
 }

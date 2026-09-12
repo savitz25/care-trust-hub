@@ -1,0 +1,16 @@
+{
+  "at": "2026-09-12T02:39:41.670281+00:00",
+  "results": [
+    {
+      "mutation": "drop-city",
+      "exitCode": 1,
+      "detected": true
+    },
+    {
+      "mutation": "drop-state",
+      "exitCode": 1,
+      "detected": true
+    }
+  ],
+  "restored": true
+}

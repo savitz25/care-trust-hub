@@ -1,0 +1,98 @@
+
+ RUN  v3.2.7 C:/Users/makei/th-search-r1-007-work/apps/web
+
+ ❯ src/server/care/r1-007-search.test.ts (28 tests | 3 failed) 127ms
+   ✓ R1-007 recorded location integrity > does not convert home-health location research into a nursing-home evidence cohort 15ms
+   ✓ R1-007 recorded location integrity > renders actual typed values instead of reading the first character of rating prose 51ms
+   ✓ R1-007 recorded location integrity > requires explicit jurisdiction for Boca Raton, then completes the selected plan 1ms
+   ✓ R1-007 recorded location integrity > requires explicit jurisdiction for Miami, then completes the selected plan 1ms
+   ✓ R1-007 recorded location integrity > does not mistake state words within a city for a conflicting jurisdiction 2ms
+   ✓ R1-007 recorded location integrity > preserves star criteria in local counts and rejects missing source releases 4ms
+   ✓ R1-007 recorded location integrity > preserves compound scope: Nursing homes in Austin Texas 1ms
+   ✓ R1-007 recorded location integrity > preserves compound scope: Home health agencies in Houston Texas 1ms
+   ✓ R1-007 recorded location integrity > preserves compound scope: Nursing homes in Tampa Florida 2ms
+   ✓ R1-007 recorded location integrity > preserves compound scope: Nursing homes in Portland, OR 1ms
+   × R1-007 recorded location integrity > binds the requested city and state before SQL pagination 16ms
+     → expected [ 'AUSTIN', 21, +0 ] to include 'TX'
+   × R1-007 recorded location integrity > executes current compound predicates, excludes distractors: Nursing homes in Austin Texas 5ms
+     → expected [ 'T00001', 'T00003' ] to deeply equal [ 'T00001' ]
+   ✓ R1-007 recorded location integrity > executes current compound predicates, excludes distractors: Home health agencies in Houston Texas 2ms
+   × R1-007 recorded location integrity > executes current compound predicates, excludes distractors: Nursing homes in Tampa Florida 1ms
+     → expected [ 'T00005', 'T00006' ] to deeply equal [ 'T00005' ]
+   ✓ R1-007 recorded location integrity > executes current compound predicates, excludes distractors: Hospice providers in Houston Texas 1ms
+   ✓ R1-007 recorded location integrity > counts the same current agency cohort and retains a sourced zero 1ms
+   ✓ R1-007 recorded location integrity > does not lose city-only, multiple or unsupported proximity requirements 2ms
+   ✓ R1-007 recorded location integrity > state selection resolves a city-only question; conflicting state cannot erase a city 2ms
+   ✓ R1-007 recorded location integrity > explicit broader search retains state and records the user's change 1ms
+   ✓ R1-007 recorded location integrity > rejects malformed full request before lookup: {"q":"Nursing homes in Austin Texas                                                                                                                                                                                     or Florida"} 0ms
+   ✓ R1-007 recorded location integrity > rejects malformed full request before lookup: {"q":["Nursing homes in Austin Texas","Nursing homes in Florida"]} 0ms
+   ✓ R1-007 recorded location integrity > rejects malformed full request before lookup: {"q":"Nursing homes in Texas","page":"1.5"} 0ms
+   ✓ R1-007 recorded location integrity > rejects malformed full request before lookup: {"q":"Nursing homes in Texas","state":"ZZ"} 0ms
+   ✓ R1-007 recorded location integrity > rejects malformed full request before lookup: {"q":"Nursing homes in Texas","stars":"banana"} 0ms
+   ✓ R1-007 recorded location integrity > preserves a named provider containing location words as identity 1ms
+   ✓ R1-007 recorded location integrity > shared API, native boundary and structured plan return the same cohort 11ms
+   ✓ R1-007 recorded location integrity > source outage is unavailable, never a valid empty cohort 1ms
+   ✓ R1-007 recorded location integrity > incompatible overrides preserve the request and clarify 1ms
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 25 passed (28)
+   Start at  22:39:39
+   Duration  2.47s (transform 730ms, setup 234ms, collect 1.16s, tests 127ms, environment 549ms, prepare 87ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/care/r1-007-search.test.ts > R1-007 recorded location integrity > binds the requested city and state before SQL pagination
+AssertionError: expected [ 'AUSTIN', 21, +0 ] to include 'TX'
+ ❯ src/server/care/r1-007-search.test.ts:229:22
+    227|     expect(call).toBeDefined();
+    228|     expect(call![1]).toContain("AUSTIN");
+    229|     expect(call![1]).toContain("TX");
+       |                      ^
+    230|   });
+    231|   it.each([
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/server/care/r1-007-search.test.ts > R1-007 recorded location integrity > executes current compound predicates, excludes distractors: Nursing homes in Austin Texas
+AssertionError: expected [ 'T00001', 'T00003' ] to deeply equal [ 'T00001' ]
+
+- Expected
++ Received
+
+  [
+    "T00001",
++   "T00003",
+  ]
+
+ ❯ src/server/care/r1-007-search.test.ts:239:47
+    237|     const result = await executeSeniorResearchQuery(raw);
+    238|     expect(result.failClosed).toBeUndefined();
+    239|     expect(result.entities.map((e) => e.ccn)).toEqual(expected);
+       |                                               ^
+    240|     for (const e of result.entities) {
+    241|       expect(e.whyMatched.toUpperCase()).toContain(e.recordedLocation!…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/server/care/r1-007-search.test.ts > R1-007 recorded location integrity > executes current compound predicates, excludes distractors: Nursing homes in Tampa Florida
+AssertionError: expected [ 'T00005', 'T00006' ] to deeply equal [ 'T00005' ]
+
+- Expected
++ Received
+
+  [
+    "T00005",
++   "T00006",
+  ]
+
+ ❯ src/server/care/r1-007-search.test.ts:239:47
+    237|     const result = await executeSeniorResearchQuery(raw);
+    238|     expect(result.failClosed).toBeUndefined();
+    239|     expect(result.entities.map((e) => e.ccn)).toEqual(expected);
+       |                                               ^
+    240|     for (const e of result.entities) {
+    241|       expect(e.whyMatched.toUpperCase()).toContain(e.recordedLocation!…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

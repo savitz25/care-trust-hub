@@ -36,7 +36,7 @@ export function AgencyDirectoryCard({ provider }: { provider: AgencySearchResult
           <div>
             <dt>CMS Quality of Patient Care star</dt>
             <dd>
-              <CmsStarRating value={provider.cmsQualityStar} />
+              <CmsStarRating metric="hh_qpc" value={provider.cmsQualityStar} />
             </dd>
           </div>
         ) : (
