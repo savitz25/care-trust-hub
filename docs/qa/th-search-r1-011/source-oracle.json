@@ -1,0 +1,79 @@
+{
+  "ticket": "TH-SEARCH-R1-011",
+  "method": "Bounded read-only SQL via connected Senior project; independent exact provider_identifier and source-native facility_snapshot/relationship/penalty rows. No production writes. Source observations are not current legal-owner findings.",
+  "baseline": "1d0e33deb30ac0e7ca07c7b9b4056553c0a8681d",
+  "identity": {
+    "ccn": "455799",
+    "name": "AUSTIN WELLNESS & REHABILITATION",
+    "city": "AUSTIN",
+    "state": "TX",
+    "category": "For profit - Corporation",
+    "canonicalIdentifierRows": 1
+  },
+  "misses": {
+    "000000": "No current canonical CMS CCN identifier row",
+    "105502": "No current canonical CMS CCN identifier row; historical lead is not a positive constant"
+  },
+  "ambiguousName": {
+    "query": "Sunrise",
+    "independentExamples": [
+      {
+        "ccn": "105250",
+        "name": "SUNRISE POINT HEALTH AND REHABILITATION CENTER",
+        "state": "FL"
+      },
+      {
+        "ccn": "105441",
+        "name": "SUNRISE HEALTH & REHABILITATION CENTER",
+        "state": "FL"
+      },
+      {
+        "ccn": "145783",
+        "name": "SUNRISE SKILLED NUR & REHAB",
+        "state": "IL"
+      }
+    ],
+    "meaning": "Distinct source identities; name overlap does not merge them. Bounded examples, not exhaustive total."
+  },
+  "sources": [
+    {
+      "key": "nursing-home-provider-information",
+      "release": "2026-08-01",
+      "sha256": "a5808fcded1ca73a629fde88fc23dcba3b6ff8ed75199883062a262e14ef8fe0",
+      "sourceModifiedAt": "2026-08-01T00:00:00Z",
+      "retrievedAt": "2026-08-26T20:24:52.158102Z"
+    },
+    {
+      "key": "nursing-home-ownership",
+      "release": "2026-08-01",
+      "sha256": "550ef28dc3a2c5ac544760023b5cb494e5fbd77567848dca36324211dd83aa68",
+      "observationsFor455799": 9,
+      "sourceModifiedAt": "2026-08-01T00:00:00Z",
+      "retrievedAt": "2026-08-26T20:19:47.315631Z"
+    },
+    {
+      "key": "skilled-nursing-facility-enrollments",
+      "release": "2026-08-17",
+      "sha256": "387e0caf0f2e017c5c8bddfda4b4351182e85ea7fc355b8a003f2f06d2ff2527",
+      "observationsFor455799": 1,
+      "sourceModifiedAt": "2026-08-17T00:00:00Z",
+      "retrievedAt": "2026-08-26T20:34:01.233098Z"
+    },
+    {
+      "key": "nursing-home-penalties",
+      "release": "2026-08-01",
+      "sha256": "3683f1debe5a19073075b3d5a1ceaa417971705d725d8c72cb568db95a39124d",
+      "observationsFor455799": 3,
+      "sourceModifiedAt": "2026-08-01T00:00:00Z",
+      "retrievedAt": "2026-08-26T20:24:35.184131Z"
+    }
+  ],
+  "calculation": "Select latest succeeded releases under existing release ordering; equality on canonical CMS CCN -> provider_id. Count relationship observations independently by source (9 + 1), not unique owners. Three penalty observations for this pinned source, not an all-time finding.",
+  "limitations": [
+    "One exploratory provider_class column check failed; no data changed. Corrected query selected only established provider_identifier columns.",
+    "Current CHOW list contains source-native historical events and separate row provenance; no current-owner inference.",
+    "Public provider report independently displays the enabled ownership and regulatory modules. Local Vercel export redacts flags; local test-only booleans enable the same modules without changing Production."
+  ],
+  "recordedAt": "2026-09-12T16:17:53.515326+00:00",
+  "checksWindowUTC": "2026-09-12T16:07:00Z through 2026-09-12T16:11:00Z"
+}

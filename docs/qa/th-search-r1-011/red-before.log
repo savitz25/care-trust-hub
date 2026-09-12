@@ -1,0 +1,108 @@
+
+ RUN  v3.2.7 C:/Users/makei/th-search-r1-011-work/apps/web
+
+ ❯ src/server/care/r1-011-identity.test.tsx (5 tests | 3 failed) 82ms
+   × R1-011 baseline reproductions > unspecified ownership requires an identity before retrieval 37ms
+     → expected 'evidence' to be 'fail_closed' // Object.is equality
+   ✓ R1-011 baseline reproductions > Has this nursing home been fined? 5ms
+   ✓ R1-011 baseline reproductions > Did this facility change owners? 1ms
+   × R1-011 baseline reproductions > CCN miss has a usable official action 28ms
+     → expected '<div class="senior-ask"><section clas…' to contain 'https://www.medicare.gov/care-compare/'
+   × R1-011 baseline reproductions > Virginia assisted living navigates to state research 8ms
+     → expected '<div class="senior-ask"><section clas…' to contain 'href="/virginia"'
+node.exe :
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 baseline reproductions > unspecified ownership requires an
+identity before retrieval
+AssertionError: expected 'evidence' to be 'fail_closed' // Object.is equality
+
+Expected: "fail_closed"
+Received: "evidence"
+
+ ❯ src/server/care/r1-011-identity.test.tsx:13:81
+     11| describe("R1-011 baseline reproductions",()=>{
+     12|  it("unspecified ownership requires an identity before retrieval",()=>{
+     13|   const q=interpretSeniorAskQuery("Who owns this nursing home?");expec…
+       |                                                                                 ^
+     14|  });
+     15|  for(const q of ["Has this nursing home been fined?","Did this facilit…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 baseline reproductions > CCN miss has a usable official action
+AssertionError: expected '<div class="senior-ask"><section clas…' to contain 'https://www.medicare.gov/care-compare/'
+
+Expected: "https://www.medicare.gov/care-compare/"
+Received: "<div class="senior-ask"><section class="senior-ask__interpretation" aria-labelledby="ask-interp-title"><h2
+id="ask-interp-title">We interpreted your question as</h2><dl><div><dt>Status</dt><dd>Current research
+cohort</dd></div><div><dt>CCN</dt><dd>000000</dd><dd><a data-specialist-event="refine" aria-label="Remove CCN
+criterion" href="/ask?q=">Remove criterion</a></dd></div></dl><form class="senior-ask__change" action="/ask"
+method="get"><label for="ask-q-edit">Change interpretation</label><input id="ask-q-edit" maxLength="180" name="q"
+value="CMS CCN 000000"/><button class="button button--primary" type="submit">Update
+question</button></form></section><section class="senior-ask__closed" role="status"><h2>No matching published provider
+record</h2><p>We did not find this CMS CCN in the published research corpus. Confirm it with CMS; absence here is not
+proof that the identifier is unused.</p></section><details class="senior-ask__trace"
+data-specialist-event="trace_open"><summary>Trace this query</summary><dl><div><dt>Provider
+class</dt><dd>unspecified</dd></div><div><dt>Source family</dt><dd>CMS Care Compare / SeniorTrustHub current directory
+snapshot</dd></div><div><dt>Official as-of</dt><dd>See specialist snapshot on the linked
+report</dd></div><div><dt>Geography meaning</dt><dd>Not geography-filtered</dd></div><div><dt>Executed recorded
+location</dt><dd>No location filter</dd></div><div><dt>Query
+grain</dt><dd>identifier</dd></div><div><dt>Metric</dt><dd>Directory identity</dd></div><div><dt>Canonical identifier
+method</dt><dd>Labeled CMS CCN exact match against current class directories</dd></div><div><dt>Exclusions</dt><dd>Do
+not add nursing homes, home health, and hospice. Provider location/address is not service area unless the dataset says
+so.</dd></div><div><dt>Contract</dt><dd>senior-ask-v1</dd></div></dl></details><ul class="senior-ask__limits"><li>Ask
+does not invent provider facts. Results come from structured SeniorTrustHub production data.</li><li>Missing source
+evidence is not zero, clean, or good standing.</li><li>CMS-reported ratings are not TrustHub
+recommendations.</li><li>No current indexed provider matched this CCN. That is not proof the number is unused
+elsewhere.</li></ul></div>"
+
+ ❯ src/server/care/r1-011-identity.test.tsx:18:200
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 baseline reproductions > Virginia assisted living navigates
+to state research
+AssertionError: expected '<div class="senior-ask"><section clas…' to contain 'href="/virginia"'
+
+Expected: "href="/virginia""
+Received: "<div class="senior-ask"><section class="senior-ask__interpretation" aria-labelledby="ask-interp-title"><h2
+id="ask-interp-title">We interpreted your question as</h2><dl><div><dt>Geography</dt><dd>VA</dd></div></dl><form
+class="senior-ask__change" action="/ask" method="get"><label for="ask-q-edit">Change interpretation</label><input
+id="ask-q-edit" maxLength="180" name="q" value="assisted living in Virginia"/><button class="button button--primary"
+type="submit">Update question</button></form></section><section aria-label="Recorded location scope"><p>Virginia:
+Applied to the recorded location.</p></section><section class="senior-ask__closed" role="status"><h2>Ask cannot answer
+that as asked</h2><p>Virginia assisted living is a DSS license class, not a CMS nursing-home directory. A
+complaint-related inspection is not a substantiated complaint. Open the Virginia research page.</p><ul><li><a
+href="/ask?q=Open%20Virginia%20assisted-living%20research.">Open Virginia assisted-living
+research.</a></li></ul></section><details class="senior-ask__trace" data-specialist-event="trace_open"><summary>Trace
+this query</summary><dl><div><dt>Provider class</dt><dd>unspecified</dd></div><div><dt>Source family</dt><dd>CMS Care
+Compare / SeniorTrustHub current directory snapshot</dd></div><div><dt>Official as-of</dt><dd>See specialist snapshot
+on the linked report</dd></div><div><dt>Geography meaning</dt><dd>Recorded provider/office location, not service
+territory or service area, distance or availability.</dd></div><div><dt>Executed recorded
+location</dt><dd>VA</dd></div><div><dt>Query grain</dt><dd>fail_closed</dd></div><div><dt>Metric</dt><dd>Directory
+identity</dd></div><div><dt>Canonical identifier method</dt><dd>Not an identifier
+query</dd></div><div><dt>Exclusions</dt><dd>Do not add nursing homes, home health, and hospice. Provider
+location/address is not service area unless the dataset says
+so.</dd></div><div><dt>Contract</dt><dd>senior-ask-v1</dd></div></dl></details><ul class="senior-ask__limits"><li>Ask
+does not invent provider facts. Results come from structured SeniorTrustHub production data.</li><li>Missing source
+evidence is not zero, clean, or good standing.</li><li>CMS-reported ratings are not TrustHub
+recommendations.</li></ul></div>"
+
+ ❯ src/server/care/r1-011-identity.test.tsx:19:228
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 2 passed (5)
+   Start at  11:49:36
+   Duration  33.80s (transform 816ms, setup 6.71s, collect 2.22s, tests 82ms, environment 23.29s, prepare 912ms)

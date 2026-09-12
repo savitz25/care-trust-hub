@@ -1,0 +1,121 @@
+{
+  "ticket": "TH-SEARCH-R1-011",
+  "status": "READY_FOR_REVIEW",
+  "closed": false,
+  "recordedAt": "2026-09-12T16:30:42.053591+00:00",
+  "model": {
+    "model": "GPT-6 Astra",
+    "confirmation": "USER-CONFIRMED",
+    "recommendedEffort": "Medium",
+    "activeEffortIndependentlyVerified": false,
+    "sessionSwitchClaimed": false
+  },
+  "baseline": "1d0e33deb30ac0e7ca07c7b9b4056553c0a8681d",
+  "baselineDeployment": "dpl_C9kjzMJh5yrq457T4W9rJe4g7nt6",
+  "implementation": "02aa6f46d044e3532e32564805cb91f3ec99442c",
+  "runtimeMerge": null,
+  "deployedSha": null,
+  "canonicalAlias": "https://www.seniortrusthub.com",
+  "sourceOracle": "source-oracle.json",
+  "baselineRed": {
+    "initialTests": 5,
+    "failed": 3,
+    "passed": 2,
+    "file": "red-before.log",
+    "alreadyGuarded": ["Has this nursing home been fined?", "Did this facility change owners?"]
+  },
+  "focused": {
+    "command": "npm run check:th-search-r1-011",
+    "passed": 50,
+    "failed": 0
+  },
+  "protectedR1007": {
+    "passed": 73,
+    "failed": 0
+  },
+  "fullTests": {
+    "webPassed": 396,
+    "domainPassed": 253,
+    "existingSkipped": 6
+  },
+  "baselineTests": {
+    "webPassed": 350,
+    "domainPassed": 253,
+    "existingSkipped": 6
+  },
+  "gates": {
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "productionBuild": "PASS",
+    "gitDiffCheck": "PASS",
+    "fullWindowsFormat": "baseline has 556 CRLF formatting warnings; no global rewrite. New files formatted; normal Linux CI remains required."
+  },
+  "mutations": {
+    "at": "2026-09-12T16:28:57.325692+00:00",
+    "results": [
+      {
+        "mutation": "identity-guard",
+        "exit": 1,
+        "detected": true
+      },
+      {
+        "mutation": "category-as-owner",
+        "exit": 1,
+        "detected": true
+      },
+      {
+        "mutation": "ccn-miss-broadens",
+        "exit": 1,
+        "detected": true
+      }
+    ],
+    "restored": true,
+    "cleanExit": 0
+  },
+  "localBrowser": {
+    "file": "local-browser.json",
+    "cases": 28,
+    "flows": 16,
+    "failures": [],
+    "errors": [],
+    "minimumMs": 83,
+    "maximumMs": 1957,
+    "widths": [320, 390, 768, 1280],
+    "productionBuild": true,
+    "testOnlyFlags": "Local ownership/inspection enabled to match observable public report modules; Vercel sensitive exports redact these values. No Production config changes.",
+    "supplement": {
+      "file": "local-supplement.json",
+      "checks": 6,
+      "failures": []
+    }
+  },
+  "review": {
+    "method": "Separate self-review plus automated behavioral/UI checks; not independent human review",
+    "file": "review.md"
+  },
+  "officialDestination": {
+    "file": "official-link-check.json",
+    "url": "https://www.medicare.gov/care-compare/",
+    "httpStatus": 200,
+    "interactiveLimitation": "Blank document in automation; official purpose corroborated by CMS. No live provider verification claimed."
+  },
+  "ownership": {
+    "separateAssignment": "Illinois PR #33, not merged/modified",
+    "databaseWrites": false,
+    "otherRepositoryEdits": false,
+    "publicationChanges": false
+  },
+  "remainingReleaseSteps": [
+    "scoped PR and normal CI/review",
+    "normal merge",
+    "exact deployment/alias verification",
+    "Production browser suite",
+    "final release receipt"
+  ],
+  "remainingScope": [
+    "ultimate legal/beneficial owner reconciliation",
+    "other Senior search and care capabilities",
+    "parent Ask and other hubs",
+    "Move canonical correction pending separate approval"
+  ]
+}

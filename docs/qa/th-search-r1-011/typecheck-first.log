@@ -1,0 +1,31 @@
+
+> ask-trust-hub-care@0.1.0 typecheck
+> npm run typecheck --workspaces --if-present
+
+
+> @care/web@0.1.0 typecheck
+> tsc --noEmit
+
+src/server/care/senior-ask-execute.ts(590,33): error TS2367: This comparison appears to be unintentional because the types '"count" | "entity" | "identifier" | "aggregate" | "comparison" | "evidence"' and '"fail_closed"' have no overlap.
+src/server/care/senior-facility-evidence.ts(24,189): error TS2339: Property 'sourceModifiedAt' does not exist on type 'CareSourceDisclosure'.
+node.exe : npm error Lifecycle script `typecheck` failed with error:
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm error Lifec...led with error::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+npm error code 2
+npm error path C:\Users\makei\th-search-r1-011-work\apps\web
+npm error workspace @care/web@0.1.0
+npm error location C:\Users\makei\th-search-r1-011-work\apps\web
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c tsc --noEmit
+
+
+> @care/domain@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @care/ui@0.1.0 typecheck
+> tsc --noEmit

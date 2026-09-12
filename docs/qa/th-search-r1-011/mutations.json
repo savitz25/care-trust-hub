@@ -1,0 +1,22 @@
+{
+  "at": "2026-09-12T16:28:57.325692+00:00",
+  "results": [
+    {
+      "mutation": "identity-guard",
+      "exit": 1,
+      "detected": true
+    },
+    {
+      "mutation": "category-as-owner",
+      "exit": 1,
+      "detected": true
+    },
+    {
+      "mutation": "ccn-miss-broadens",
+      "exit": 1,
+      "detected": true
+    }
+  ],
+  "restored": true,
+  "cleanExit": 0
+}

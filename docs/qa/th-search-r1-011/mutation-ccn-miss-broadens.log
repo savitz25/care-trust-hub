@@ -1,0 +1,277 @@
+
+> ask-trust-hub-care@0.1.0 check:th-search-r1-011
+> npm exec --workspace=@care/web -- vitest run --configLoader runner src/server/care/r1-011-identity.test.tsx src/server/care/regulatory-repository.test.ts src/server/care/ownership-repository.test.ts
+
+
+ RUN  v3.2.7 C:/Users/makei/th-search-r1-011-work/apps/web
+
+ ✓ src/server/care/ownership-repository.test.ts (2 tests) 44ms
+ ✓ src/server/care/regulatory-repository.test.ts (3 tests) 76ms
+ ❯ src/server/care/r1-011-identity.test.tsx (45 tests | 2 failed) 186ms
+   ✓ R1-011 baseline reproductions > unspecified ownership requires an identity before retrieval 6ms
+   ✓ R1-011 baseline reproductions > Has this nursing home been fined? 4ms
+   ✓ R1-011 baseline reproductions > Did this facility change owners? 1ms
+   × R1-011 baseline reproductions > CCN miss has a usable official action 96ms
+     → expected '<div class="senior-ask"><section clas…' to contain 'https://www.medicare.gov/care-compare/'
+   ✓ R1-011 baseline reproductions > Virginia assisted living navigates to state research 5ms
+   ✓ R1-011 identity/evidence behavioral contract > Who owns that facility? 1ms
+   ✓ R1-011 identity/evidence behavioral contract > Who operates this provider? 0ms
+   ✓ R1-011 identity/evidence behavioral contract > Has that facility been fined? 0ms
+   ✓ R1-011 identity/evidence behavioral contract > Did this nursing home change owners? 0ms
+   ✓ R1-011 identity/evidence behavioral contract > Inspections for this facility 1ms
+   ✓ R1-011 identity/evidence behavioral contract > Deficiencies for this nursing home 1ms
+   ✓ R1-011 identity/evidence behavioral contract > unique exact source name attaches only that CCN 2ms
+   ✓ R1-011 identity/evidence behavioral contract > ambiguous name has bounded selection and no evidence assignment 2ms
+   ✓ R1-011 identity/evidence behavioral contract > selection resumes original ownership task with revalidated candidate 3ms
+   ✓ R1-011 identity/evidence behavioral contract > tampered selection cannot attach unrelated evidence 1ms
+   ✓ R1-011 identity/evidence behavioral contract > provider entry cannot replace explicitly named subject 1ms
+   ✓ R1-011 identity/evidence behavioral contract > identity-required form retains question and resolves exact CCN 1ms
+   ✓ R1-011 identity/evidence behavioral contract > source-backed relationships retain role and source without category-as-owner 1ms
+   ✓ R1-011 identity/evidence behavioral contract > empty CHOW is corpus absence, not never changed owners 1ms
+   ✓ R1-011 identity/evidence behavioral contract > CHOW keeps event timing separate from source clocks 1ms
+   ✓ R1-011 identity/evidence behavioral contract > empty penalties is corpus absence, not never fined 1ms
+   ✓ R1-011 identity/evidence behavioral contract > penalty source identity mismatch is unavailable, not evidence 1ms
+   ✓ R1-011 identity/evidence behavioral contract > labeled positive remains exact; bare token remains safe 1ms
+   × R1-011 identity/evidence behavioral contract > exact miss never performs name retrieval 7ms
+     → expected [ { …(9) }, { …(9) }, { …(9) }, …(1) ] to deeply equal []
+   ✓ R1-011 identity/evidence behavioral contract > absent source is unavailable, not a valid exact miss 1ms
+   ✓ R1-011 identity/evidence behavioral contract > home_health does not inherit NH CHOW 1ms
+   ✓ R1-011 identity/evidence behavioral contract > hospice does not inherit NH CHOW 0ms
+   ✓ R1-011 identity/evidence behavioral contract > class choice retains Austin TX 14ms
+   ✓ R1-011 identity/evidence behavioral contract > memory care cannot become NH via filter 1ms
+   ✓ R1-011 identity/evidence behavioral contract > assisted living in New York 4ms
+   ✓ R1-011 identity/evidence behavioral contract > assisted living in Arizona 4ms
+   ✓ R1-011 identity/evidence behavioral contract > memory care in Florida 3ms
+   ✓ R1-011 identity/evidence behavioral contract > official destination is exact HTTPS CMS allowlist, no guessed CCN parameter 1ms
+   ✓ R1-011 identity/evidence behavioral contract > API and common boundary agree on requested CCN evidence 11ms
+   ✓ R1-011 identity/evidence behavioral contract > structured missing identity cannot bypass guard 0ms
+   ✓ R1-011 additional boundary regressions > a state word inside a provider name is not a location predicate 0ms
+   ✓ R1-011 additional boundary regressions > same exact name in different states requires selection 1ms
+   ✓ R1-011 additional boundary regressions > evidence source failure is not absence 1ms
+   ✓ R1-011 additional boundary regressions > unlinked source deficiency remains evidence 0ms
+   ✓ R1-011 additional boundary regressions > evidence override cannot silently replace the question 0ms
+   ✓ R1-011 additional boundary regressions > profile-style exact context cannot be replaced with a selected candidate 0ms
+   ✓ generic care waits for class then executes locality without a fake provider name 3ms
+   ✓ multiple CCNs cannot select the first provider for ownership 0ms
+   ✓ explicit mixed provider classes cannot acquire NH evidence 0ms
+   ✓ an exact evidence answer cannot silently ignore a rating cohort filter 0ms
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  2 failed | 48 passed (50)
+   Start at  12:28:48
+   Duration  2.86s (transform 1.02s, setup 623ms, collect 1.58s, tests 306ms, environment 1.64s, prepare 340ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 baseline reproductions > CCN miss has a usable official action
+AssertionError: expected '<div class="senior-ask"><section clas…' to contain 'https://www.medicare.gov/care-compare/'
+
+Expected: "https://www.medicare.gov/care-compare/"
+Received: "<div class="senior-ask"><section class="senior-ask__interpretation" aria-labelledby="ask-interp-title"><h2 id="ask-interp-title">We interpreted your question as</h2><dl><div><dt>Status</dt><dd>Current research cohort</dd></div><div><dt>CCN</dt><dd>000000</dd><dd><a data-specialist-event="refine" aria-label="Remove CCN criterion" href="/ask?q=">Remove criterion</a></dd></div></dl><form class="senior-ask__change" action="/ask" method="get"><label for="ask-q-edit">Change interpretation</label><input id="ask-q-edit" maxLength="180" name="q" value="CMS CCN 000000"/><button class="button button--primary" type="submit">Update question</button></form></section><ol class="senior-ask__results"><li><article class="senior-ask__card"><h3><a href="/facility/cms/T00001/harbor-nursing-center">Harbor Nursing Center</a></h3><p>Nursing Home · CCN T00001</p><p>Austin, TX, TRAVIS</p><p>Current research cohort (CMS nursing-home directory)</p><p><strong>Evidence available</strong></p><ul><li>CMS overall stars: <span class="cms-stars"><span class="sr-only">4 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">4/5</small></span></li><li>Staffing stars: <span class="cms-stars"><span class="sr-only">3 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">3/5</small></span></li><li>Health inspection stars: <span class="cms-stars"><span class="sr-only">2 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">2/5</small></span></li><li>Ownership category: For profit - Corporation</li></ul><p><strong>Why this matched.</strong> Harbor Nursing Center matches because it is classified as a current nursing home provider (CMS CCN T00001).</p><p><a data-specialist-event="profile_open" href="/facility/cms/T00001/harbor-nursing-center">Research this provider</a></p><details class="senior-ask__result-trace" data-specialist-event="trace_open"><summary>Trace this result</summary><dl><div><dt>Provider class</dt><dd>Nursing Home</dd></div><div><dt>CMS CCN</dt><dd>T00001</dd></div><div><dt>Why matched</dt><dd>Harbor Nursing Center matches because it is classified as a current nursing home provider (CMS CCN T00001).</dd></div><div><dt>Source family</dt><dd>Fixture CMS source (CMS)</dd></div><div><dt>Official as-of</dt><dd>2025-01-01T00:00:00.000Z</dd></div><div><dt>Geography meaning</dt><dd>Not geography-filtered</dd></div><div><dt>Limitations</dt><dd>Ask does not invent provider facts. Results come from structured SeniorTrustHub production data. Missing source evidence is not zero, clean, or good standing. CMS-reported ratings are not TrustHub recommendations. CCN match is canonical identity for that class directory.</dd></div></dl></details></article></li><li><article class="senior-ask__card"><h3><a href="/facility/cms/T00002/sunrise-nursing-home">Sunrise Nursing Home</a></h3><p>Nursing Home · CCN T00002</p><p>Austin, TX, TRAVIS</p><p>Current research cohort (CMS nursing-home directory)</p><p><strong>Evidence available</strong></p><ul><li>CMS overall stars: <span class="cms-stars"><span class="sr-only">4 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">4/5</small></span></li><li>Staffing stars: <span class="cms-stars"><span class="sr-only">3 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">3/5</small></span></li><li>Health inspection stars: <span class="cms-stars"><span class="sr-only">2 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">2/5</small></span></li><li>Ownership category: For profit - Corporation</li></ul><p><strong>Why this matched.</strong> Sunrise Nursing Home matches because it is classified as a current nursing home provider (CMS CCN T00002).</p><p><a data-specialist-event="profile_open" href="/facility/cms/T00002/sunrise-nursing-home">Research this provider</a></p><details class="senior-ask__result-trace" data-specialist-event="trace_open"><summary>Trace this result</summary><dl><div><dt>Provider class</dt><dd>Nursing Home</dd></div><div><dt>CMS CCN</dt><dd>T00002</dd></div><div><dt>Why matched</dt><dd>Sunrise Nursing Home matches because it is classified as a current nursing home provider (CMS CCN T00002).</dd></div><div><dt>Source family</dt><dd>Fixture CMS source (CMS)</dd></div><div><dt>Official as-of</dt><dd>2025-01-01T00:00:00.000Z</dd></div><div><dt>Geography meaning</dt><dd>Not geography-filtered</dd></div><div><dt>Limitations</dt><dd>Ask does not invent provider facts. Results come from structured SeniorTrustHub production data. Missing source evidence is not zero, clean, or good standing. CMS-reported ratings are not TrustHub recommendations. CCN match is canonical identity for that class directory.</dd></div></dl></details></article></li><li><article class="senior-ask__card"><h3><a href="/facility/cms/T00003/sunrise-nursing-home-east">Sunrise Nursing Home East</a></h3><p>Nursing Home · CCN T00003</p><p>Austin, TX, TRAVIS</p><p>Current research cohort (CMS nursing-home directory)</p><p><strong>Evidence available</strong></p><ul><li>CMS overall stars: <span class="cms-stars"><span class="sr-only">4 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">4/5</small></span></li><li>Staffing stars: <span class="cms-stars"><span class="sr-only">3 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">3/5</small></span></li><li>Health inspection stars: <span class="cms-stars"><span class="sr-only">2 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">2/5</small></span></li><li>Ownership category: For profit - Corporation</li></ul><p><strong>Why this matched.</strong> Sunrise Nursing Home East matches because it is classified as a current nursing home provider (CMS CCN T00003).</p><p><a data-specialist-event="profile_open" href="/facility/cms/T00003/sunrise-nursing-home-east">Research this provider</a></p><details class="senior-ask__result-trace" data-specialist-event="trace_open"><summary>Trace this result</summary><dl><div><dt>Provider class</dt><dd>Nursing Home</dd></div><div><dt>CMS CCN</dt><dd>T00003</dd></div><div><dt>Why matched</dt><dd>Sunrise Nursing Home East matches because it is classified as a current nursing home provider (CMS CCN T00003).</dd></div><div><dt>Source family</dt><dd>Fixture CMS source (CMS)</dd></div><div><dt>Official as-of</dt><dd>2025-01-01T00:00:00.000Z</dd></div><div><dt>Geography meaning</dt><dd>Not geography-filtered</dd></div><div><dt>Limitations</dt><dd>Ask does not invent provider facts. Results come from structured SeniorTrustHub production data. Missing source evidence is not zero, clean, or good standing. CMS-reported ratings are not TrustHub recommendations. CCN match is canonical identity for that class directory.</dd></div></dl></details></article></li><li><article class="senior-ask__card"><h3><a href="/facility/cms/T00004/sunrise-nursing-home">Sunrise Nursing Home</a></h3><p>Nursing Home · CCN T00004</p><p>Tampa, FL, TRAVIS</p><p>Current research cohort (CMS nursing-home directory)</p><p><strong>Evidence available</strong></p><ul><li>CMS overall stars: <span class="cms-stars"><span class="sr-only">4 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">4/5</small></span></li><li>Staffing stars: <span class="cms-stars"><span class="sr-only">3 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">3/5</small></span></li><li>Health inspection stars: <span class="cms-stars"><span class="sr-only">2 of 5 CMS stars</span><span aria-hidden="true"><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:100%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span><span class="cms-star-unit"><span>☆</span><span class="cms-star-fill" style="width:0%">★</span></span></span><small aria-hidden="true">2/5</small></span></li><li>Ownership category: For profit - Corporation</li></ul><p><strong>Why this matched.</strong> Sunrise Nursing Home matches because it is classified as a current nursing home provider (CMS CCN T00004).</p><p><a data-specialist-event="profile_open" href="/facility/cms/T00004/sunrise-nursing-home">Research this provider</a></p><details class="senior-ask__result-trace" data-specialist-event="trace_open"><summary>Trace this result</summary><dl><div><dt>Provider class</dt><dd>Nursing Home</dd></div><div><dt>CMS CCN</dt><dd>T00004</dd></div><div><dt>Why matched</dt><dd>Sunrise Nursing Home matches because it is classified as a current nursing home provider (CMS CCN T00004).</dd></div><div><dt>Source family</dt><dd>Fixture CMS source (CMS)</dd></div><div><dt>Official as-of</dt><dd>2025-01-01T00:00:00.000Z</dd></div><div><dt>Geography meaning</dt><dd>Not geography-filtered</dd></div><div><dt>Limitations</dt><dd>Ask does not invent provider facts. Results come from structured SeniorTrustHub production data. Missing source evidence is not zero, clean, or good standing. CMS-reported ratings are not TrustHub recommendations. CCN match is canonical identity for that class directory.</dd></div></dl></details></article></li></ol><details class="senior-ask__trace" data-specialist-event="trace_open"><summary>Trace this query</summary><dl><div><dt>Provider class</dt><dd>Nursing Homes</dd></div><div><dt>Source family</dt><dd>Fixture CMS source (CMS)</dd></div><div><dt>Official as-of</dt><dd>2025-01-01T00:00:00.000Z</dd></div><div><dt>Geography meaning</dt><dd>Not geography-filtered</dd></div><div><dt>Executed recorded location</dt><dd>No location filter</dd></div><div><dt>Source release</dt><dd>fixture-release</dd></div><div><dt>Source retrieved</dt><dd>2025-02-01T00:00:00.000Z (separate from official as-of)</dd></div><div><dt>Source fingerprint</dt><dd class="senior-ask__fingerprint">fixture</dd></div><div><dt>Query grain</dt><dd>identifier</dd></div><div><dt>Metric</dt><dd>Directory identity</dd></div><div><dt>Canonical identifier method</dt><dd>Labeled CMS CCN exact match against current class directories</dd></div><div><dt>Exclusions</dt><dd>Do not add nursing homes, home health, and hospice. Provider location/address is not service area unless the dataset says so.</dd></div><div><dt>Contract</dt><dd>senior-ask-v1</dd></div></dl></details><ul class="senior-ask__limits"><li>Ask does not invent provider facts. Results come from structured SeniorTrustHub production data.</li><li>Missing source evidence is not zero, clean, or good standing.</li><li>CMS-reported ratings are not TrustHub recommendations.</li><li>CCN match is canonical identity for that class directory.</li></ul></div>"
+
+ ❯ src/server/care/r1-011-identity.test.tsx:48:18
+     46|     const r = await executeSeniorResearchQuery("CMS CCN 000000");
+     47|     const html = renderToStaticMarkup(createElement(AskResultView, { r…
+     48|     expect(html).toContain("https://www.medicare.gov/care-compare/");
+       |                  ^
+     49|     expect(r.entities).toEqual([]);
+     50|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > exact miss never performs name retrieval
+AssertionError: expected [ { …(9) }, { …(9) }, { …(9) }, …(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "ccn": "T00001",
++     "evidence": [
++       {
++         "label": "CMS overall stars",
++         "rating": {
++           "metric": "nh_overall",
++           "value": 4,
++         },
++         "value": "Overall: 4/5 CMS-reported",
++       },
++       {
++         "label": "Staffing stars",
++         "rating": {
++           "metric": "nh_staffing",
++           "value": 3,
++         },
++         "value": "Staffing: 3/5 CMS-reported",
++       },
++       {
++         "label": "Health inspection stars",
++         "rating": {
++           "metric": "nh_inspection",
++           "value": 2,
++         },
++         "value": "Inspection: 2/5 CMS-reported",
++       },
++       {
++         "label": "Ownership category",
++         "value": "For profit - Corporation",
++       },
++     ],
++     "href": "/facility/cms/T00001/harbor-nursing-center",
++     "location": "Austin, TX, TRAVIS",
++     "providerClass": "nursing_home",
++     "providerName": "Harbor Nursing Center",
++     "recordedLocation": {
++       "city": "Austin",
++       "county": "TRAVIS",
++       "state": "TX",
++     },
++     "statusLabel": "Current research cohort (CMS nursing-home directory)",
++     "whyMatched": "Harbor Nursing Center matches because it is classified as a current nursing home provider (CMS CCN T00001).",
++   },
++   {
++     "ccn": "T00002",
++     "evidence": [
++       {
++         "label": "CMS overall stars",
++         "rating": {
++           "metric": "nh_overall",
++           "value": 4,
++         },
++         "value": "Overall: 4/5 CMS-reported",
++       },
++       {
++         "label": "Staffing stars",
++         "rating": {
++           "metric": "nh_staffing",
++           "value": 3,
++         },
++         "value": "Staffing: 3/5 CMS-reported",
++       },
++       {
++         "label": "Health inspection stars",
++         "rating": {
++           "metric": "nh_inspection",
++           "value": 2,
++         },
++         "value": "Inspection: 2/5 CMS-reported",
++       },
++       {
++         "label": "Ownership category",
++         "value": "For profit - Corporation",
++       },
++     ],
++     "href": "/facility/cms/T00002/sunrise-nursing-home",
++     "location": "Austin, TX, TRAVIS",
++     "providerClass": "nursing_home",
++     "providerName": "Sunrise Nursing Home",
++     "recordedLocation": {
++       "city": "Austin",
++       "county": "TRAVIS",
++       "state": "TX",
++     },
++     "statusLabel": "Current research cohort (CMS nursing-home directory)",
++     "whyMatched": "Sunrise Nursing Home matches because it is classified as a current nursing home provider (CMS CCN T00002).",
++   },
++   {
++     "ccn": "T00003",
++     "evidence": [
++       {
++         "label": "CMS overall stars",
++         "rating": {
++           "metric": "nh_overall",
++           "value": 4,
++         },
++         "value": "Overall: 4/5 CMS-reported",
++       },
++       {
++         "label": "Staffing stars",
++         "rating": {
++           "metric": "nh_staffing",
++           "value": 3,
++         },
++         "value": "Staffing: 3/5 CMS-reported",
++       },
++       {
++         "label": "Health inspection stars",
++         "rating": {
++           "metric": "nh_inspection",
++           "value": 2,
++         },
++         "value": "Inspection: 2/5 CMS-reported",
++       },
++       {
++         "label": "Ownership category",
++         "value": "For profit - Corporation",
++       },
++     ],
++     "href": "/facility/cms/T00003/sunrise-nursing-home-east",
++     "location": "Austin, TX, TRAVIS",
++     "providerClass": "nursing_home",
++     "providerName": "Sunrise Nursing Home East",
++     "recordedLocation": {
++       "city": "Austin",
++       "county": "TRAVIS",
++       "state": "TX",
++     },
++     "statusLabel": "Current research cohort (CMS nursing-home directory)",
++     "whyMatched": "Sunrise Nursing Home East matches because it is classified as a current nursing home provider (CMS CCN T00003).",
++   },
++   {
++     "ccn": "T00004",
++     "evidence": [
++       {
++         "label": "CMS overall stars",
++         "rating": {
++           "metric": "nh_overall",
++           "value": 4,
++         },
++         "value": "Overall: 4/5 CMS-reported",
++       },
++       {
++         "label": "Staffing stars",
++         "rating": {
++           "metric": "nh_staffing",
++           "value": 3,
++         },
++         "value": "Staffing: 3/5 CMS-reported",
++       },
++       {
++         "label": "Health inspection stars",
++         "rating": {
++           "metric": "nh_inspection",
++           "value": 2,
++         },
++         "value": "Inspection: 2/5 CMS-reported",
++       },
++       {
++         "label": "Ownership category",
++         "value": "For profit - Corporation",
++       },
++     ],
++     "href": "/facility/cms/T00004/sunrise-nursing-home",
++     "location": "Tampa, FL, TRAVIS",
++     "providerClass": "nursing_home",
++     "providerName": "Sunrise Nursing Home",
++     "recordedLocation": {
++       "city": "Tampa",
++       "county": "TRAVIS",
++       "state": "FL",
++     },
++     "statusLabel": "Current research cohort (CMS nursing-home directory)",
++     "whyMatched": "Sunrise Nursing Home matches because it is classified as a current nursing home provider (CMS CCN T00004).",
++   },
++ ]
+
+ ❯ src/server/care/r1-011-identity.test.tsx:283:24
+    281|   it("exact miss never performs name retrieval", async () => {
+    282|     const r = await executeSeniorResearchQuery("CCN Z99999");
+    283|     expect(r.entities).toEqual([]);
+       |                        ^
+    284|     expect(mocks.db.mock.calls.some(([sql]) => String(sql).includes("I…
+    285|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
