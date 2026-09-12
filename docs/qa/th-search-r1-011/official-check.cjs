@@ -16,6 +16,16 @@ const fs = require("fs");
   try {
     const resp = await p.goto(r.url, { waitUntil: "domcontentloaded", timeout: 30000 });
     r.status = resp.status();
+    r.officialPurposeCorroboration =
+      "https://www.cms.gov/about-cms/what-we-do/nursing-homes/patients-caregivers/finding-nursing-home";
+    try {
+      await p.waitForFunction(() => document.body.innerText.trim().length > 80, null, {
+        timeout: 15000,
+      });
+    } catch {
+      r.renderingLimitation =
+        "No populated official document within the bounded rendering wait; no challenge bypass.";
+    }
     r.finalUrl = p.url();
     r.title = await p.title();
     r.text = (await p.locator("body").innerText()).slice(0, 1800);

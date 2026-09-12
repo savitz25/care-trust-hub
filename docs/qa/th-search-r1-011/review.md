@@ -18,4 +18,6 @@ Findings addressed before release:
 
 Protected behavior: all R1-007 tests pass, including compound location filters, classes, typed ratings and header; full web/domain tests retain publication, state, claims/customer, metrics and SEO assertions. No dependency, schema, source ingestion, database write, account or publication-setting change. Illinois PR #33 remains another owner's assignment.
 
-Remaining limitations: ownership relationships are not a resolved ultimate/legal-owner graph. Historical CHOW events remain source observations. Care Compare returned HTTP 200 but an empty document in the automated browser; its official purpose is corroborated by CMS documentation, not a completed regulator lookup. Parent Ask and other hubs are not edited or certified here.
+Remaining limitations: ownership relationships are not a resolved ultimate/legal-owner graph. Historical CHOW events remain source observations. The first Care Compare capture preceded script rendering. A bounded settled-browser check now shows the official provider-class page and correct title at the maintained URL; this is not a completed provider lookup. Parent Ask and other hubs are not edited or certified here.
+
+Reconciliation review: Illinois main 72c1ddb was merged by its owner, then integrated normally. Reconciled runtime 41ee303 preserves its state distinctions and all published recovery destinations. Runtime merge c81b7ad is code-equivalent to the tested branch. CI web/ingest/migrations and Production browser/API proof pass.

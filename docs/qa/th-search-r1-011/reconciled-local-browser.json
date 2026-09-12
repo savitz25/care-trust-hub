@@ -1,0 +1,1885 @@
+{
+  "at": "2026-09-12T16:37:24.555Z",
+  "base": "http://localhost:3211",
+  "sha": "41ee303c5f742f9f894397bc5aee8494375798ee",
+  "cases": [
+    {
+      "q": "Who owns this nursing home?",
+      "width": 390,
+      "ms": 959,
+      "terminal": "NEEDS_CLARIFICATION",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "facilityEvidence": "ownership",
+        "providerClass": "nursing_home",
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "clarification": "provider_identity",
+        "terminalState": "NEEDS_CLARIFICATION",
+        "failReason": "Which facility do you mean? Enter its provider name or labeled CMS CCN. No ownership or evidence was attached to an unspecified provider.",
+        "alternatives": [],
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nProvider class\nNursing Homes\nRemove criterion\nStatus\nCurrent research cohort\nFacility evidence requested\nOwnership relationships\nChange interpretation\nUpdate question\nWhich facility do you mean?\n\nNo facility-specific evidence has been attached. Search its provider name or enter an exact CMS CCN.\n\nProvider nameSearch provider\nCMS CCN (six characters)Research this CMS CCN\nTrace this query\nAsk does not invent provider facts. Results come from structured SeniorTrustHu"
+    },
+    {
+      "q": "Has this nursing home been fined?",
+      "width": 390,
+      "ms": 123,
+      "terminal": "NEEDS_CLARIFICATION",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "facilityEvidence": "penalty",
+        "providerClass": "nursing_home",
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "clarification": "provider_identity",
+        "terminalState": "NEEDS_CLARIFICATION",
+        "failReason": "Which facility do you mean? Enter its provider name or labeled CMS CCN. No ownership or evidence was attached to an unspecified provider.",
+        "alternatives": [],
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nProvider class\nNursing Homes\nRemove criterion\nStatus\nCurrent research cohort\nFacility evidence requested\nPenalty/enforcement observations\nChange interpretation\nUpdate question\nWhich facility do you mean?\n\nNo facility-specific evidence has been attached. Search its provider name or enter an exact CMS CCN.\n\nProvider nameSearch provider\nCMS CCN (six characters)Research this CMS CCN\nTrace this query\nAsk does not invent provider facts. Results come from structured Seni"
+    },
+    {
+      "q": "Did this facility change owners?",
+      "width": 390,
+      "ms": 91,
+      "terminal": "NEEDS_CLARIFICATION",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "facilityEvidence": "chow",
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "clarification": "provider_identity",
+        "terminalState": "NEEDS_CLARIFICATION",
+        "failReason": "Which facility do you mean? Enter its provider name or labeled CMS CCN. No ownership or evidence was attached to an unspecified provider.",
+        "alternatives": [],
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nFacility evidence requested\nChanges of ownership\nChange interpretation\nUpdate question\nWhich facility do you mean?\n\nNo facility-specific evidence has been attached. Search its provider name or enter an exact CMS CCN.\n\nProvider nameSearch provider\nCMS CCN (six characters)Research this CMS CCN\nTrace this query\nAsk does not invent provider facts. Results come from structured SeniorTrustHub production data.\nMissing source evidence is not"
+    },
+    {
+      "q": "Who owns AUSTIN WELLNESS & REHABILITATION?",
+      "width": 390,
+      "ms": 1291,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "455799",
+          "name": "AUSTIN WELLNESS & REHABILITATION",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        }
+      ],
+      "query": {
+        "mode": "evidence",
+        "facilityEvidence": "ownership",
+        "identityQuery": "AUSTIN WELLNESS & REHABILITATION",
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "inputOverrides": {}
+      },
+      "evidence": {
+        "task": "ownership",
+        "status": "AVAILABLE",
+        "rows": 11,
+        "sources": [
+          {
+            "name": "Ownership",
+            "release": "2026-08-01",
+            "asOf": "2026-08-01T00:00:00.000Z",
+            "retrievedAt": "2026-08-26T20:19:47.315Z"
+          },
+          {
+            "name": "Skilled Nursing Facility All Owners",
+            "release": "2026-08-17",
+            "asOf": "2026-08-17T00:00:00.000Z",
+            "retrievedAt": "2026-08-26T20:25:26.251Z"
+          },
+          {
+            "name": "Skilled Nursing Facility Enrollments",
+            "release": "2026-08-17",
+            "asOf": "2026-08-17T00:00:00.000Z",
+            "retrievedAt": "2026-08-26T20:34:01.233Z"
+          }
+        ],
+        "summary": "CMS has indexed ownership or managerial relationships for this provider. Each role and source is shown separately; these are not one inferred current legal owner."
+      },
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nProvider\nAUSTIN WELLNESS & REHABILITATION\nRemove criterion\nFacility evidence requested\nOwnership relationships\nChange interpretation\nUpdate question\nIndexed ownership relationships\n\nCMS has indexed ownership or managerial relationships for this provider. Each role and source is shown separately; these are not one inferred current legal owner.\n\nCMS ownership category\nFor profit - Corporation\nSource: CMS Nursing Home Provider Informati"
+    },
+    {
+      "q": "Who owns Sunrise?",
+      "width": 390,
+      "ms": 582,
+      "terminal": "NEEDS_CLARIFICATION",
+      "ids": [
+        {
+          "ccn": "245357",
+          "name": "AVERA SUNRISE MANOR",
+          "class": "nursing_home",
+          "location": {
+            "city": "TYLER",
+            "state": "MN",
+            "county": "Lincoln"
+          }
+        },
+        {
+          "ccn": "115668",
+          "name": "PRUITTHEALTH - SUNRISE",
+          "class": "nursing_home",
+          "location": {
+            "city": "MOULTRIE",
+            "state": "GA",
+            "county": "Colquitt"
+          }
+        },
+        {
+          "ccn": "757450",
+          "name": "PURE SUNRISE HOME HEALTH INC",
+          "class": "home_health",
+          "location": {
+            "city": "GLENDALE",
+            "state": "CA"
+          }
+        },
+        {
+          "ccn": "105679",
+          "name": "REGENTS PARK OF SUNRISE",
+          "class": "nursing_home",
+          "location": {
+            "city": "SUNRISE",
+            "state": "FL",
+            "county": "Broward"
+          }
+        },
+        {
+          "ccn": "A11533",
+          "name": "SUN RISE HOSPICE CARE, LLC",
+          "class": "hospice",
+          "location": {
+            "city": "HAWTHORNE",
+            "state": "CA"
+          }
+        },
+        {
+          "ccn": "207051",
+          "name": "SUNRISE COUNTY HOME CARE SERVICES, LLC",
+          "class": "home_health",
+          "location": {
+            "city": "LUBEC",
+            "state": "ME"
+          }
+        },
+        {
+          "ccn": "105441",
+          "name": "SUNRISE HEALTH & REHABILITATION CENTER",
+          "class": "nursing_home",
+          "location": {
+            "city": "SUNRISE",
+            "state": "FL",
+            "county": "Broward"
+          }
+        },
+        {
+          "ccn": "679436",
+          "name": "SUNRISE HEALTH CARE SERVICES LTD",
+          "class": "home_health",
+          "location": {
+            "city": "MCALLEN",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "525493",
+          "name": "Sunrise Health Services",
+          "class": "nursing_home",
+          "location": {
+            "city": "MILWAUKEE",
+            "state": "WI",
+            "county": "Milwaukee"
+          }
+        },
+        {
+          "ccn": "037226",
+          "name": "SUNRISE HEALTH SERVICES",
+          "class": "home_health",
+          "location": {
+            "city": "MESA",
+            "state": "AZ"
+          }
+        }
+      ],
+      "query": {
+        "mode": "evidence",
+        "facilityEvidence": "ownership",
+        "identityQuery": "Sunrise",
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nProvider\nSunrise\nRemove criterion\nFacility evidence requested\nOwnership relationships\nChange interpretation\nUpdate question\nChoose the provider\n\nThese are name candidates, not ownership or penalty findings. Confirm the name, class, CCN and recorded location.\n\nSelect this provider for the original evidence question\n\nAVERA SUNRISE MANOR\n\nNursing Home · CCN 245357\n\nTYLER, MN, Lincoln\n\nCurrent research cohort (CMS nursing-home directory)"
+    },
+    {
+      "q": "CMS CCN 455799",
+      "width": 390,
+      "ms": 544,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "455799",
+          "name": "AUSTIN WELLNESS & REHABILITATION",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX"
+          }
+        }
+      ],
+      "query": {
+        "mode": "identifier",
+        "identifier": {
+          "type": "ccn",
+          "value": "455799"
+        },
+        "status": "current",
+        "page": 1,
+        "coverageState": "KNOWN",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nCCN\n455799\nRemove criterion\nChange interpretation\nUpdate question\nAUSTIN WELLNESS & REHABILITATION\n\nNursing Home · CCN 455799\n\nAUSTIN, TX, 78750\n\nCurrent research cohort (CMS nursing-home directory)\n\nEvidence available\n\nCMS overall stars: \n1 of 5 CMS stars\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n1/5\nStaffing stars: \n2 of 5 CMS stars\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n2/5\nHealth inspection stars: \n1 of 5 CMS stars\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n1/5\n\nWhy this matched. This provide"
+    },
+    {
+      "q": "CMS CCN 000000",
+      "width": 390,
+      "ms": 550,
+      "terminal": "NO_MATCH",
+      "ids": [],
+      "query": {
+        "mode": "identifier",
+        "identifier": {
+          "type": "ccn",
+          "value": "000000"
+        },
+        "status": "current",
+        "page": 1,
+        "coverageState": "KNOWN",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nCCN\n000000\nRemove criterion\nChange interpretation\nUpdate question\nNo matching published provider record\n\nWe did not find this CMS CCN in the published research corpus. Confirm it with CMS; absence here is not proof that the identifier is unused.\n\nExact submitted CMS CCN: 000000. Open official CMS Care Compare. Choose the relevant provider class and use the CCN to confirm the identity. Official destination checked 2026-09-12; this is "
+    },
+    {
+      "q": "assisted living in Virginia",
+      "width": 390,
+      "ms": 107,
+      "terminal": "UNSUPPORTED",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "page": 1,
+        "failReason": "Virginia assisted living is a DSS license class, not a CMS nursing-home directory. A complaint-related inspection is not a substantiated complaint. Open the Virginia research page.",
+        "alternatives": [],
+        "geography": {
+          "type": "state",
+          "value": "VA",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Virginia",
+          "outcome": "APPLIED"
+        },
+        "coverageState": "PARTIAL",
+        "clarification": "state_care",
+        "terminalState": "UNSUPPORTED",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nGeography\nVA\nChange interpretation\nUpdate question\n\nVirginia: Applied to the recorded location.\n\nUse state-specific care research\n\nVirginia assisted living is a DSS license class, not a CMS nursing-home directory. A complaint-related inspection is not a substantiated complaint. Open the Virginia research page.\n\nOpen Virginia DSS assisted-living research\n\nThis state intelligence action is not a city-filtered provider list or proof that a facility offers memory care"
+    },
+    {
+      "q": "assisted living in New York",
+      "width": 390,
+      "ms": 92,
+      "terminal": "UNSUPPORTED",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "page": 1,
+        "failReason": "New York Adult Care / assisted living is a NYSDOH class, not a CMS nursing-home directory. Adult Home is not Enriched Housing. ALP is not ALR. Open the New York research page.",
+        "alternatives": [],
+        "geography": {
+          "type": "state",
+          "value": "NY",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "New York",
+          "outcome": "APPLIED"
+        },
+        "coverageState": "PARTIAL",
+        "clarification": "state_care",
+        "terminalState": "UNSUPPORTED",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nGeography\nNY\nChange interpretation\nUpdate question\n\nNew York: Applied to the recorded location.\n\nUse state-specific care research\n\nNew York Adult Care / assisted living is a NYSDOH class, not a CMS nursing-home directory. Adult Home is not Enriched Housing. ALP is not ALR. Open the New York research page.\n\nOpen New York Adult Care / ALP / ALR research\n\nThis state intelligence action is not a city-filtered provider list or proof that a facility offers memory care.\n"
+    },
+    {
+      "q": "memory care in Florida",
+      "width": 390,
+      "ms": 97,
+      "terminal": "UNSUPPORTED",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "page": 1,
+        "failReason": "Memory care is not a CMS provider class. The current Ask filter does not establish memory-care services; use the relevant state research and confirm the setting with its regulator.",
+        "alternatives": [],
+        "geography": {
+          "type": "state",
+          "value": "FL",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Florida",
+          "outcome": "APPLIED"
+        },
+        "coverageState": "UNSUPPORTED",
+        "clarification": "state_care",
+        "terminalState": "UNSUPPORTED",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nGeography\nFL\nChange interpretation\nUpdate question\n\nFlorida: Applied to the recorded location.\n\nUse state-specific care research\n\nMemory care is not a CMS provider class. The current Ask filter does not establish memory-care services; use the relevant state research and confirm the setting with its regulator.\n\nOpen Florida care-setting intelligence\n\nThis state intelligence action is not a city-filtered provider list or proof that a facility offers memory care.\n\nTr"
+    },
+    {
+      "q": "nursing homes in Austin Texas",
+      "width": 390,
+      "ms": 265,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "455799",
+          "name": "AUSTIN WELLNESS & REHABILITATION",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675862",
+          "name": "Avir at Park Bend",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675596",
+          "name": "Barton Valley Rehabilitation and Healthcare Center",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676267",
+          "name": "Brodie Ranch Nursing and Rehabilitation Center",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "455866",
+          "name": "BROOKDALE WESTLAKE HILLS",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675118",
+          "name": "Brush Country Nursing and Rehabilitation",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "455862",
+          "name": "Coral Rehabilitation and Nursing of Austin",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675914",
+          "name": "GRACY WOODS II LIVING CENTER",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675918",
+          "name": "Gracy Woods Nursing Center",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "455599",
+          "name": "HERITAGE PARK REHABILITATION AND SKILLED NURSING C",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676440",
+          "name": "IGNITE MEDICAL RESORT ROUND ROCK, LLC",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Williamson"
+          }
+        },
+        {
+          "ccn": "676238",
+          "name": "LEGEND OAKS HEALTHCARE AND REHABILITATION - NORTH",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676266",
+          "name": "LONGHORN VILLAGE",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676291",
+          "name": "OAKCREST NURSING AND REHABILITATION CENTER",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676271",
+          "name": "Onion Creek Nursing and Rehabilitation Center",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676198",
+          "name": "Querencia at Barton Creek",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676246",
+          "name": "RIVERSIDE NURSING AND REHABILITATION CENTER",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675533",
+          "name": "SAGE PARK AUSTIN",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676459",
+          "name": "Sedona Trace Health and Wellness Center",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676299",
+          "name": "Southpark Meadows Nursing and Rehabilitation Cente",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        }
+      ],
+      "query": {
+        "mode": "entity",
+        "providerClass": "nursing_home",
+        "geography": {
+          "type": "city",
+          "value": "AUSTIN",
+          "state": "TX",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Austin Texas",
+          "outcome": "APPLIED"
+        },
+        "status": "current",
+        "sort": "name",
+        "page": 1,
+        "coverageState": "KNOWN",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nProvider class\nNursing Homes\nRemove criterion\nGeography\nAUSTIN, TX\nStatus\nCurrent research cohort\nSort\nProvider name\nChange interpretation\nUpdate question\n\nAustin Texas: Applied to the recorded location.\n\nSearch recorded locations across Texas instead\nAUSTIN WELLNESS & REHABILITATION\n\nNursing Home · CCN 455799\n\nAUSTIN, TX, Travis\n\nCurrent research cohort (CMS nursing-home directory)\n\nEvidence available\n\nCMS overall stars: \n1 of 5 CMS stars\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n1/5\n"
+    },
+    {
+      "q": "home health agencies in Houston Texas",
+      "width": 390,
+      "ms": 302,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "679422",
+          "name": "1 STOP HEALTH CARE SERVICES LLC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "747123",
+          "name": "1ST ACCURATE HOME HEALTH SERVICE",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "677890",
+          "name": "1ST GENESIS HOME HEALTH SERVICES",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "678144",
+          "name": "A & A HOME HEALTH SERVICES INC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679731",
+          "name": "A BETTER HOMECARE",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679663",
+          "name": "A. P. HOME HEALTH CARE SERVICES, LLC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679643",
+          "name": "A+ MEDICS SERVICES INC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "747580",
+          "name": "ABBA GENTLE HEALTHCARE LLC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "457954",
+          "name": "ABL HOMEHEALTH SERVICES INC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679451",
+          "name": "AC HEALTH SERVICES INC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679097",
+          "name": "ACC HEALTH SERVICES, INC.",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "457741",
+          "name": "ACCENTCARE HOME HEALTH OF HOUSTON - NORTH, LLC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "747603",
+          "name": "ACCESSIBLE HOME HEALTH CARE OF HOUSTON",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "673159",
+          "name": "ACCU CARE HOME HEALTH SERVICES",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "748006",
+          "name": "ADVANCED CARE HOME HEALTH, LLC.",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "743135",
+          "name": "ADVANCED HOME HEALTH SERVICES",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679648",
+          "name": "ALGEN HEALTH, LLC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679454",
+          "name": "ALL ABOUT HOME CARE, INC.",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "677870",
+          "name": "ALL- MODERN HEALTHCARE, INC.",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "747314",
+          "name": "ALLHEAL HOME HEALTH, INC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        }
+      ],
+      "query": {
+        "mode": "entity",
+        "providerClass": "home_health",
+        "geography": {
+          "type": "city",
+          "value": "HOUSTON",
+          "state": "TX",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Houston Texas",
+          "outcome": "APPLIED"
+        },
+        "status": "current",
+        "sort": "name",
+        "page": 1,
+        "coverageState": "KNOWN",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nProvider class\nHome Health Agencies\nRemove criterion\nGeography\nHOUSTON, TX\nStatus\nCurrent research cohort\nSort\nProvider name\nChange interpretation\nUpdate question\n\nHouston Texas: Applied to the recorded location.\n\nSearch recorded locations across Texas instead\n1 STOP HEALTH CARE SERVICES LLC\n\nHome Health Agency · CCN 679422\n\nHOUSTON, TX, 77099\n\nCurrent research cohort (CMS Home Health Agencies directory)\n\nEvidence available\n\nQuality of Patient Care stars: \n4 of 5 "
+    },
+    {
+      "q": "Has CMS CCN 455799 been fined?",
+      "width": 390,
+      "ms": 1068,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "455799",
+          "name": "AUSTIN WELLNESS & REHABILITATION",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX"
+          }
+        }
+      ],
+      "query": {
+        "mode": "identifier",
+        "facilityEvidence": "penalty",
+        "identifier": {
+          "type": "ccn",
+          "value": "455799"
+        },
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "inputOverrides": {}
+      },
+      "evidence": {
+        "task": "penalty",
+        "status": "AVAILABLE",
+        "rows": 3,
+        "sources": [
+          {
+            "name": "Penalties",
+            "release": "2026-08-01",
+            "asOf": "2026-08-01T00:00:00.000Z",
+            "retrievedAt": "2026-08-26T20:24:35.184Z"
+          }
+        ],
+        "summary": "Indexed penalty observations were found for this provider in the loaded corpus."
+      },
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nCCN\n455799\nRemove criterion\nFacility evidence requested\nPenalty/enforcement observations\nChange interpretation\nUpdate question\nIndexed penalty and enforcement observations\n\nIndexed penalty observations were found for this provider in the loaded corpus.\n\nFine\nSource fine amount: 131055.00\nEvent/association date: 2024-09-19\nSource: Penalties / 2026-08-01; source as-of: 2026-08-01T00:00:00.000Z; retrieved: 2026-08-26T20:24:35.184Z\nFine\n"
+    },
+    {
+      "q": "Did CMS CCN 455799 change owners?",
+      "width": 390,
+      "ms": 693,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "455799",
+          "name": "AUSTIN WELLNESS & REHABILITATION",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX"
+          }
+        }
+      ],
+      "query": {
+        "mode": "identifier",
+        "facilityEvidence": "chow",
+        "identifier": {
+          "type": "ccn",
+          "value": "455799"
+        },
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "inputOverrides": {}
+      },
+      "evidence": {
+        "task": "chow",
+        "status": "AVAILABLE",
+        "rows": 1,
+        "sources": [
+          {
+            "name": "Skilled Nursing Facility Change of Ownership",
+            "release": "2026-07-27",
+            "asOf": "2026-08-24T00:00:00.000Z",
+            "retrievedAt": "2026-08-15T22:02:31.279Z"
+          }
+        ],
+        "summary": "Indexed CMS CHOW events were found for this provider."
+      },
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nCCN\n455799\nRemove criterion\nFacility evidence requested\nChanges of ownership\nChange interpretation\nUpdate question\nIndexed changes of ownership\n\nIndexed CMS CHOW events were found for this provider.\n\nCHANGE OF OWNERSHIP\nReported seller: HEARTLAND OF AUSTIN TX LLC; reported buyer: CORYELL COUNTY MEMORIAL HOSPITAL AUTHORITY\nEvent/association date: 2018-08-16\nSource: Skilled Nursing Facility Change of Ownership / 2026-07-27; source as-o"
+    },
+    {
+      "q": "Who owns this nursing home?",
+      "width": 1280,
+      "ms": 635,
+      "terminal": "NEEDS_CLARIFICATION",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "facilityEvidence": "ownership",
+        "providerClass": "nursing_home",
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "clarification": "provider_identity",
+        "terminalState": "NEEDS_CLARIFICATION",
+        "failReason": "Which facility do you mean? Enter its provider name or labeled CMS CCN. No ownership or evidence was attached to an unspecified provider.",
+        "alternatives": [],
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nProvider class\nNursing Homes\nRemove criterion\nStatus\nCurrent research cohort\nFacility evidence requested\nOwnership relationships\nChange interpretation\nUpdate question\nWhich facility do you mean?\n\nNo facility-specific evidence has been attached. Search its provider name or enter an exact CMS CCN.\n\nProvider nameSearch provider\nCMS CCN (six characters)Research this CMS CCN\nTrace this query\nAsk does not invent provider facts. Results come from structured SeniorTrustHu"
+    },
+    {
+      "q": "Has this nursing home been fined?",
+      "width": 1280,
+      "ms": 92,
+      "terminal": "NEEDS_CLARIFICATION",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "facilityEvidence": "penalty",
+        "providerClass": "nursing_home",
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "clarification": "provider_identity",
+        "terminalState": "NEEDS_CLARIFICATION",
+        "failReason": "Which facility do you mean? Enter its provider name or labeled CMS CCN. No ownership or evidence was attached to an unspecified provider.",
+        "alternatives": [],
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nProvider class\nNursing Homes\nRemove criterion\nStatus\nCurrent research cohort\nFacility evidence requested\nPenalty/enforcement observations\nChange interpretation\nUpdate question\nWhich facility do you mean?\n\nNo facility-specific evidence has been attached. Search its provider name or enter an exact CMS CCN.\n\nProvider nameSearch provider\nCMS CCN (six characters)Research this CMS CCN\nTrace this query\nAsk does not invent provider facts. Results come from structured Seni"
+    },
+    {
+      "q": "Did this facility change owners?",
+      "width": 1280,
+      "ms": 95,
+      "terminal": "NEEDS_CLARIFICATION",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "facilityEvidence": "chow",
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "clarification": "provider_identity",
+        "terminalState": "NEEDS_CLARIFICATION",
+        "failReason": "Which facility do you mean? Enter its provider name or labeled CMS CCN. No ownership or evidence was attached to an unspecified provider.",
+        "alternatives": [],
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nFacility evidence requested\nChanges of ownership\nChange interpretation\nUpdate question\nWhich facility do you mean?\n\nNo facility-specific evidence has been attached. Search its provider name or enter an exact CMS CCN.\n\nProvider nameSearch provider\nCMS CCN (six characters)Research this CMS CCN\nTrace this query\nAsk does not invent provider facts. Results come from structured SeniorTrustHub production data.\nMissing source evidence is not"
+    },
+    {
+      "q": "Who owns AUSTIN WELLNESS & REHABILITATION?",
+      "width": 1280,
+      "ms": 968,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "455799",
+          "name": "AUSTIN WELLNESS & REHABILITATION",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        }
+      ],
+      "query": {
+        "mode": "evidence",
+        "facilityEvidence": "ownership",
+        "identityQuery": "AUSTIN WELLNESS & REHABILITATION",
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "inputOverrides": {}
+      },
+      "evidence": {
+        "task": "ownership",
+        "status": "AVAILABLE",
+        "rows": 11,
+        "sources": [
+          {
+            "name": "Ownership",
+            "release": "2026-08-01",
+            "asOf": "2026-08-01T00:00:00.000Z",
+            "retrievedAt": "2026-08-26T20:19:47.315Z"
+          },
+          {
+            "name": "Skilled Nursing Facility All Owners",
+            "release": "2026-08-17",
+            "asOf": "2026-08-17T00:00:00.000Z",
+            "retrievedAt": "2026-08-26T20:25:26.251Z"
+          },
+          {
+            "name": "Skilled Nursing Facility Enrollments",
+            "release": "2026-08-17",
+            "asOf": "2026-08-17T00:00:00.000Z",
+            "retrievedAt": "2026-08-26T20:34:01.233Z"
+          }
+        ],
+        "summary": "CMS has indexed ownership or managerial relationships for this provider. Each role and source is shown separately; these are not one inferred current legal owner."
+      },
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nProvider\nAUSTIN WELLNESS & REHABILITATION\nRemove criterion\nFacility evidence requested\nOwnership relationships\nChange interpretation\nUpdate question\nIndexed ownership relationships\n\nCMS has indexed ownership or managerial relationships for this provider. Each role and source is shown separately; these are not one inferred current legal owner.\n\nCMS ownership category\nFor profit - Corporation\nSource: CMS Nursing Home Provider Informati"
+    },
+    {
+      "q": "Who owns Sunrise?",
+      "width": 1280,
+      "ms": 659,
+      "terminal": "NEEDS_CLARIFICATION",
+      "ids": [
+        {
+          "ccn": "245357",
+          "name": "AVERA SUNRISE MANOR",
+          "class": "nursing_home",
+          "location": {
+            "city": "TYLER",
+            "state": "MN",
+            "county": "Lincoln"
+          }
+        },
+        {
+          "ccn": "115668",
+          "name": "PRUITTHEALTH - SUNRISE",
+          "class": "nursing_home",
+          "location": {
+            "city": "MOULTRIE",
+            "state": "GA",
+            "county": "Colquitt"
+          }
+        },
+        {
+          "ccn": "757450",
+          "name": "PURE SUNRISE HOME HEALTH INC",
+          "class": "home_health",
+          "location": {
+            "city": "GLENDALE",
+            "state": "CA"
+          }
+        },
+        {
+          "ccn": "105679",
+          "name": "REGENTS PARK OF SUNRISE",
+          "class": "nursing_home",
+          "location": {
+            "city": "SUNRISE",
+            "state": "FL",
+            "county": "Broward"
+          }
+        },
+        {
+          "ccn": "A11533",
+          "name": "SUN RISE HOSPICE CARE, LLC",
+          "class": "hospice",
+          "location": {
+            "city": "HAWTHORNE",
+            "state": "CA"
+          }
+        },
+        {
+          "ccn": "207051",
+          "name": "SUNRISE COUNTY HOME CARE SERVICES, LLC",
+          "class": "home_health",
+          "location": {
+            "city": "LUBEC",
+            "state": "ME"
+          }
+        },
+        {
+          "ccn": "105441",
+          "name": "SUNRISE HEALTH & REHABILITATION CENTER",
+          "class": "nursing_home",
+          "location": {
+            "city": "SUNRISE",
+            "state": "FL",
+            "county": "Broward"
+          }
+        },
+        {
+          "ccn": "679436",
+          "name": "SUNRISE HEALTH CARE SERVICES LTD",
+          "class": "home_health",
+          "location": {
+            "city": "MCALLEN",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "525493",
+          "name": "Sunrise Health Services",
+          "class": "nursing_home",
+          "location": {
+            "city": "MILWAUKEE",
+            "state": "WI",
+            "county": "Milwaukee"
+          }
+        },
+        {
+          "ccn": "037226",
+          "name": "SUNRISE HEALTH SERVICES",
+          "class": "home_health",
+          "location": {
+            "city": "MESA",
+            "state": "AZ"
+          }
+        }
+      ],
+      "query": {
+        "mode": "evidence",
+        "facilityEvidence": "ownership",
+        "identityQuery": "Sunrise",
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nProvider\nSunrise\nRemove criterion\nFacility evidence requested\nOwnership relationships\nChange interpretation\nUpdate question\nChoose the provider\n\nThese are name candidates, not ownership or penalty findings. Confirm the name, class, CCN and recorded location.\n\nSelect this provider for the original evidence question\n\nAVERA SUNRISE MANOR\n\nNursing Home · CCN 245357\n\nTYLER, MN, Lincoln\n\nCurrent research cohort (CMS nursing-home directory)"
+    },
+    {
+      "q": "CMS CCN 455799",
+      "width": 1280,
+      "ms": 662,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "455799",
+          "name": "AUSTIN WELLNESS & REHABILITATION",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX"
+          }
+        }
+      ],
+      "query": {
+        "mode": "identifier",
+        "identifier": {
+          "type": "ccn",
+          "value": "455799"
+        },
+        "status": "current",
+        "page": 1,
+        "coverageState": "KNOWN",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nCCN\n455799\nRemove criterion\nChange interpretation\nUpdate question\nAUSTIN WELLNESS & REHABILITATION\n\nNursing Home · CCN 455799\n\nAUSTIN, TX, 78750\n\nCurrent research cohort (CMS nursing-home directory)\n\nEvidence available\n\nCMS overall stars: \n1 of 5 CMS stars\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n1/5\nStaffing stars: \n2 of 5 CMS stars\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n2/5\nHealth inspection stars: \n1 of 5 CMS stars\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n1/5\n\nWhy this matched. This provide"
+    },
+    {
+      "q": "CMS CCN 000000",
+      "width": 1280,
+      "ms": 630,
+      "terminal": "NO_MATCH",
+      "ids": [],
+      "query": {
+        "mode": "identifier",
+        "identifier": {
+          "type": "ccn",
+          "value": "000000"
+        },
+        "status": "current",
+        "page": 1,
+        "coverageState": "KNOWN",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nCCN\n000000\nRemove criterion\nChange interpretation\nUpdate question\nNo matching published provider record\n\nWe did not find this CMS CCN in the published research corpus. Confirm it with CMS; absence here is not proof that the identifier is unused.\n\nExact submitted CMS CCN: 000000. Open official CMS Care Compare. Choose the relevant provider class and use the CCN to confirm the identity. Official destination checked 2026-09-12; this is "
+    },
+    {
+      "q": "assisted living in Virginia",
+      "width": 1280,
+      "ms": 143,
+      "terminal": "UNSUPPORTED",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "page": 1,
+        "failReason": "Virginia assisted living is a DSS license class, not a CMS nursing-home directory. A complaint-related inspection is not a substantiated complaint. Open the Virginia research page.",
+        "alternatives": [],
+        "geography": {
+          "type": "state",
+          "value": "VA",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Virginia",
+          "outcome": "APPLIED"
+        },
+        "coverageState": "PARTIAL",
+        "clarification": "state_care",
+        "terminalState": "UNSUPPORTED",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nGeography\nVA\nChange interpretation\nUpdate question\n\nVirginia: Applied to the recorded location.\n\nUse state-specific care research\n\nVirginia assisted living is a DSS license class, not a CMS nursing-home directory. A complaint-related inspection is not a substantiated complaint. Open the Virginia research page.\n\nOpen Virginia DSS assisted-living research\n\nThis state intelligence action is not a city-filtered provider list or proof that a facility offers memory care"
+    },
+    {
+      "q": "assisted living in New York",
+      "width": 1280,
+      "ms": 141,
+      "terminal": "UNSUPPORTED",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "page": 1,
+        "failReason": "New York Adult Care / assisted living is a NYSDOH class, not a CMS nursing-home directory. Adult Home is not Enriched Housing. ALP is not ALR. Open the New York research page.",
+        "alternatives": [],
+        "geography": {
+          "type": "state",
+          "value": "NY",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "New York",
+          "outcome": "APPLIED"
+        },
+        "coverageState": "PARTIAL",
+        "clarification": "state_care",
+        "terminalState": "UNSUPPORTED",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nGeography\nNY\nChange interpretation\nUpdate question\n\nNew York: Applied to the recorded location.\n\nUse state-specific care research\n\nNew York Adult Care / assisted living is a NYSDOH class, not a CMS nursing-home directory. Adult Home is not Enriched Housing. ALP is not ALR. Open the New York research page.\n\nOpen New York Adult Care / ALP / ALR research\n\nThis state intelligence action is not a city-filtered provider list or proof that a facility offers memory care.\n"
+    },
+    {
+      "q": "memory care in Florida",
+      "width": 1280,
+      "ms": 136,
+      "terminal": "UNSUPPORTED",
+      "ids": [],
+      "query": {
+        "mode": "fail_closed",
+        "page": 1,
+        "failReason": "Memory care is not a CMS provider class. The current Ask filter does not establish memory-care services; use the relevant state research and confirm the setting with its regulator.",
+        "alternatives": [],
+        "geography": {
+          "type": "state",
+          "value": "FL",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Florida",
+          "outcome": "APPLIED"
+        },
+        "coverageState": "UNSUPPORTED",
+        "clarification": "state_care",
+        "terminalState": "UNSUPPORTED",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nGeography\nFL\nChange interpretation\nUpdate question\n\nFlorida: Applied to the recorded location.\n\nUse state-specific care research\n\nMemory care is not a CMS provider class. The current Ask filter does not establish memory-care services; use the relevant state research and confirm the setting with its regulator.\n\nOpen Florida care-setting intelligence\n\nThis state intelligence action is not a city-filtered provider list or proof that a facility offers memory care.\n\nTr"
+    },
+    {
+      "q": "nursing homes in Austin Texas",
+      "width": 1280,
+      "ms": 381,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "455799",
+          "name": "AUSTIN WELLNESS & REHABILITATION",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675862",
+          "name": "Avir at Park Bend",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675596",
+          "name": "Barton Valley Rehabilitation and Healthcare Center",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676267",
+          "name": "Brodie Ranch Nursing and Rehabilitation Center",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "455866",
+          "name": "BROOKDALE WESTLAKE HILLS",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675118",
+          "name": "Brush Country Nursing and Rehabilitation",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "455862",
+          "name": "Coral Rehabilitation and Nursing of Austin",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675914",
+          "name": "GRACY WOODS II LIVING CENTER",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675918",
+          "name": "Gracy Woods Nursing Center",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "455599",
+          "name": "HERITAGE PARK REHABILITATION AND SKILLED NURSING C",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676440",
+          "name": "IGNITE MEDICAL RESORT ROUND ROCK, LLC",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Williamson"
+          }
+        },
+        {
+          "ccn": "676238",
+          "name": "LEGEND OAKS HEALTHCARE AND REHABILITATION - NORTH",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676266",
+          "name": "LONGHORN VILLAGE",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676291",
+          "name": "OAKCREST NURSING AND REHABILITATION CENTER",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676271",
+          "name": "Onion Creek Nursing and Rehabilitation Center",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676198",
+          "name": "Querencia at Barton Creek",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676246",
+          "name": "RIVERSIDE NURSING AND REHABILITATION CENTER",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "675533",
+          "name": "SAGE PARK AUSTIN",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676459",
+          "name": "Sedona Trace Health and Wellness Center",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        },
+        {
+          "ccn": "676299",
+          "name": "Southpark Meadows Nursing and Rehabilitation Cente",
+          "class": "nursing_home",
+          "location": {
+            "city": "Austin",
+            "state": "TX",
+            "county": "Travis"
+          }
+        }
+      ],
+      "query": {
+        "mode": "entity",
+        "providerClass": "nursing_home",
+        "geography": {
+          "type": "city",
+          "value": "AUSTIN",
+          "state": "TX",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Austin Texas",
+          "outcome": "APPLIED"
+        },
+        "status": "current",
+        "sort": "name",
+        "page": 1,
+        "coverageState": "KNOWN",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nProvider class\nNursing Homes\nRemove criterion\nGeography\nAUSTIN, TX\nStatus\nCurrent research cohort\nSort\nProvider name\nChange interpretation\nUpdate question\n\nAustin Texas: Applied to the recorded location.\n\nSearch recorded locations across Texas instead\nAUSTIN WELLNESS & REHABILITATION\n\nNursing Home · CCN 455799\n\nAUSTIN, TX, Travis\n\nCurrent research cohort (CMS nursing-home directory)\n\nEvidence available\n\nCMS overall stars: \n1 of 5 CMS stars\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n☆\n★\n1/5\n"
+    },
+    {
+      "q": "home health agencies in Houston Texas",
+      "width": 1280,
+      "ms": 365,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "679422",
+          "name": "1 STOP HEALTH CARE SERVICES LLC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "747123",
+          "name": "1ST ACCURATE HOME HEALTH SERVICE",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "677890",
+          "name": "1ST GENESIS HOME HEALTH SERVICES",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "678144",
+          "name": "A & A HOME HEALTH SERVICES INC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679731",
+          "name": "A BETTER HOMECARE",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679663",
+          "name": "A. P. HOME HEALTH CARE SERVICES, LLC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679643",
+          "name": "A+ MEDICS SERVICES INC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "747580",
+          "name": "ABBA GENTLE HEALTHCARE LLC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "457954",
+          "name": "ABL HOMEHEALTH SERVICES INC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679451",
+          "name": "AC HEALTH SERVICES INC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679097",
+          "name": "ACC HEALTH SERVICES, INC.",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "457741",
+          "name": "ACCENTCARE HOME HEALTH OF HOUSTON - NORTH, LLC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "747603",
+          "name": "ACCESSIBLE HOME HEALTH CARE OF HOUSTON",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "673159",
+          "name": "ACCU CARE HOME HEALTH SERVICES",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "748006",
+          "name": "ADVANCED CARE HOME HEALTH, LLC.",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "743135",
+          "name": "ADVANCED HOME HEALTH SERVICES",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679648",
+          "name": "ALGEN HEALTH, LLC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "679454",
+          "name": "ALL ABOUT HOME CARE, INC.",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "677870",
+          "name": "ALL- MODERN HEALTHCARE, INC.",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        },
+        {
+          "ccn": "747314",
+          "name": "ALLHEAL HOME HEALTH, INC",
+          "class": "home_health",
+          "location": {
+            "city": "HOUSTON",
+            "state": "TX"
+          }
+        }
+      ],
+      "query": {
+        "mode": "entity",
+        "providerClass": "home_health",
+        "geography": {
+          "type": "city",
+          "value": "HOUSTON",
+          "state": "TX",
+          "meaning": "Recorded provider/office location, not service territory or service area, distance or availability."
+        },
+        "locationRequirement": {
+          "raw": "Houston Texas",
+          "outcome": "APPLIED"
+        },
+        "status": "current",
+        "sort": "name",
+        "page": 1,
+        "coverageState": "KNOWN",
+        "inputOverrides": {}
+      },
+      "evidence": null,
+      "text": "We interpreted your question as\nProvider class\nHome Health Agencies\nRemove criterion\nGeography\nHOUSTON, TX\nStatus\nCurrent research cohort\nSort\nProvider name\nChange interpretation\nUpdate question\n\nHouston Texas: Applied to the recorded location.\n\nSearch recorded locations across Texas instead\n1 STOP HEALTH CARE SERVICES LLC\n\nHome Health Agency · CCN 679422\n\nHOUSTON, TX, 77099\n\nCurrent research cohort (CMS Home Health Agencies directory)\n\nEvidence available\n\nQuality of Patient Care stars: \n4 of 5 "
+    },
+    {
+      "q": "Has CMS CCN 455799 been fined?",
+      "width": 1280,
+      "ms": 1274,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "455799",
+          "name": "AUSTIN WELLNESS & REHABILITATION",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX"
+          }
+        }
+      ],
+      "query": {
+        "mode": "identifier",
+        "facilityEvidence": "penalty",
+        "identifier": {
+          "type": "ccn",
+          "value": "455799"
+        },
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "inputOverrides": {}
+      },
+      "evidence": {
+        "task": "penalty",
+        "status": "AVAILABLE",
+        "rows": 3,
+        "sources": [
+          {
+            "name": "Penalties",
+            "release": "2026-08-01",
+            "asOf": "2026-08-01T00:00:00.000Z",
+            "retrievedAt": "2026-08-26T20:24:35.184Z"
+          }
+        ],
+        "summary": "Indexed penalty observations were found for this provider in the loaded corpus."
+      },
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nCCN\n455799\nRemove criterion\nFacility evidence requested\nPenalty/enforcement observations\nChange interpretation\nUpdate question\nIndexed penalty and enforcement observations\n\nIndexed penalty observations were found for this provider in the loaded corpus.\n\nFine\nSource fine amount: 131055.00\nEvent/association date: 2024-09-19\nSource: Penalties / 2026-08-01; source as-of: 2026-08-01T00:00:00.000Z; retrieved: 2026-08-26T20:24:35.184Z\nFine\n"
+    },
+    {
+      "q": "Did CMS CCN 455799 change owners?",
+      "width": 1280,
+      "ms": 769,
+      "terminal": "COMPLETE",
+      "ids": [
+        {
+          "ccn": "455799",
+          "name": "AUSTIN WELLNESS & REHABILITATION",
+          "class": "nursing_home",
+          "location": {
+            "city": "AUSTIN",
+            "state": "TX"
+          }
+        }
+      ],
+      "query": {
+        "mode": "identifier",
+        "facilityEvidence": "chow",
+        "identifier": {
+          "type": "ccn",
+          "value": "455799"
+        },
+        "status": "current",
+        "page": 1,
+        "coverageState": "PARTIAL",
+        "inputOverrides": {}
+      },
+      "evidence": {
+        "task": "chow",
+        "status": "AVAILABLE",
+        "rows": 1,
+        "sources": [
+          {
+            "name": "Skilled Nursing Facility Change of Ownership",
+            "release": "2026-07-27",
+            "asOf": "2026-08-24T00:00:00.000Z",
+            "retrievedAt": "2026-08-15T22:02:31.279Z"
+          }
+        ],
+        "summary": "Indexed CMS CHOW events were found for this provider."
+      },
+      "text": "We interpreted your question as\nStatus\nCurrent research cohort\nCCN\n455799\nRemove criterion\nFacility evidence requested\nChanges of ownership\nChange interpretation\nUpdate question\nIndexed changes of ownership\n\nIndexed CMS CHOW events were found for this provider.\n\nCHANGE OF OWNERSHIP\nReported seller: HEARTLAND OF AUSTIN TX LLC; reported buyer: CORYELL COUNTY MEMORIAL HOSPITAL AUTHORITY\nEvent/association date: 2018-08-16\nSource: Skilled Nursing Facility Change of Ownership / 2026-07-27; source as-o"
+    }
+  ],
+  "flows": [
+    {
+      "width": 390,
+      "q": "assisted living in Virginia",
+      "recovery": "/virginia",
+      "title": "Virginia Senior Care Research"
+    },
+    {
+      "width": 390,
+      "q": "assisted living in New York",
+      "recovery": "/new-york",
+      "title": "New York Senior Care Research"
+    },
+    {
+      "width": 390,
+      "q": "memory care in Florida",
+      "recovery": "/florida",
+      "title": "Florida Senior Care Research"
+    },
+    {
+      "width": 390,
+      "flow": "name entry, selection, refresh, back/forward, edit to miss",
+      "href": "/ask?q=Who+owns+this+nursing+home%3F&provider=Sunrise&selected=245357&class=nursing_home",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "flow": "care class choice Austin TX",
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "q": "assisted living in Virginia",
+      "recovery": "/virginia",
+      "title": "Virginia Senior Care Research"
+    },
+    {
+      "width": 1280,
+      "q": "assisted living in New York",
+      "recovery": "/new-york",
+      "title": "New York Senior Care Research"
+    },
+    {
+      "width": 1280,
+      "q": "memory care in Florida",
+      "recovery": "/florida",
+      "title": "Florida Senior Care Research"
+    },
+    {
+      "width": 1280,
+      "flow": "name entry, selection, refresh, back/forward, edit to miss",
+      "href": "/ask?q=Who+owns+this+nursing+home%3F&provider=Sunrise&selected=245357&class=nursing_home",
+      "passed": true
+    },
+    {
+      "width": 1280,
+      "flow": "care class choice Austin TX",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "q": "Who owns this nursing home?",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "q": "Who owns AUSTIN WELLNESS & REHABILITATION?",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "q": "CMS CCN 000000",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "q": "Who owns this nursing home?",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "q": "Who owns AUSTIN WELLNESS & REHABILITATION?",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "q": "CMS CCN 000000",
+      "overflow": false
+    }
+  ],
+  "failures": [],
+  "errors": []
+}

@@ -1,0 +1,8 @@
+{
+  "file": "data/illinois/il-sen-001/raw/idph-home-health.csv",
+  "diskSha256": "63b9c4ff4a6726129f4e30c0ab85dd1a839ca3cc6141ecf7f267974f32d92636",
+  "acceptedGitBlobSha256": "c2b39e4699e5eeae5a513bff8874a7f1566fd956ddd56edc51631f11c20f776f",
+  "equalAfterCRLFNormalization": true,
+  "sourceEdited": false,
+  "meaning": "Read-only byte comparison; no source or global line-ending correction performed."
+}

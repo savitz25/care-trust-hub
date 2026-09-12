@@ -1,0 +1,15 @@
+
+> ask-trust-hub-care@0.1.0 typecheck
+> npm run typecheck --workspaces --if-present
+
+
+> @care/web@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @care/domain@0.1.0 typecheck
+> tsc --noEmit
+
+
+> @care/ui@0.1.0 typecheck
+> tsc --noEmit
