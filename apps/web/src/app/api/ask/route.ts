@@ -29,7 +29,11 @@ export async function GET(request: Request) {
       result.query.terminalState ??
       (result.failClosed
         ? "UNSUPPORTED"
-        : result.entities.length || result.count
+        : result.entities.length ||
+            result.count ||
+            result.comparison ||
+            result.buckets ||
+            result.definition
           ? "COMPLETE"
           : "NO_MATCH"),
     query: result.query,

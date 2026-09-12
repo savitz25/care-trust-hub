@@ -580,6 +580,24 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
 export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQuery {
   let plan = interpretSeniorAskQueryCore(raw, page);
   const location = parseRecordedLocation(raw);
+  const requestedClass = detectClass(raw);
+  if (
+    requestedClass &&
+    requestedClass !== "ambiguous" &&
+    plan.providerClass &&
+    plan.providerClass !== requestedClass
+  ) {
+    return {
+      ...plan,
+      ...location,
+      providerClass: requestedClass,
+      mode: "fail_closed",
+      terminalState: "UNSUPPORTED",
+      failReason:
+        "The requested evidence belongs to a different provider class. The original class and recorded location were retained; no nursing-home list was substituted.",
+      alternatives: [],
+    };
+  }
   const explicitName =
     raw.match(/^(?:find|research|provider named)\s+"([^"]+)"/i)?.[1] ??
     raw.match(/^(?:find|research|provider named)\s+(.+?)(?:\s+in\s+|$)/i)?.[1];

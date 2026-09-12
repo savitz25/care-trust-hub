@@ -151,6 +151,15 @@ describe("R1-007 recorded location integrity", () => {
   beforeEach(() => {
     database.query.mockReset().mockImplementation(fixtureDatabase);
   });
+  it("does not convert home-health location research into a nursing-home evidence cohort", async () => {
+    const result = await executeSeniorResearchQuery(
+      "Home health agencies in Houston Texas with penalties",
+    );
+    expect(result.query.providerClass).toBe("home_health");
+    expect(result.query.geography).toMatchObject({ value: "HOUSTON", state: "TX" });
+    expect(result.failClosed).toBeDefined();
+    expect(database.query).not.toHaveBeenCalled();
+  });
   it("renders actual typed values instead of reading the first character of rating prose", async () => {
     const result = await executeSeniorResearchQuery("Nursing homes in Austin Texas");
     const { container } = render(createElement(AskResultView, { result }));
