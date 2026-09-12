@@ -62,3 +62,7 @@ Illinois PR #33 was merged by its owner at `72c1ddb01a3d4f126fb9692b350f091a8eb6
 ## Final paraphrase audit
 
 Before closure, Production c81b7ad still returned an ownership cohort for `Can you tell me who owns this nursing home?` (20 returned rows). The original literal cases had passed, but this polite wrapper bypassed the anchored extraction. New tests reproduced that and quoted-name location loss. The final guard accepts ordinary polite introductions and recognizes deictic facility evidence questions before cohort execution. Quoted source names retain internal place words; the wrapper consumes the same extracted location requirement rather than reparsing it. Five new behavioral checks pass. Overall ticket closure is held until this follow-up is released and the expanded Production browser suite passes.
+
+## Final observed release
+
+The final guard merged through PR #35 as `02b1723b9e2b6fae5f7c90a181f5331d37d104d9`. Canonical www.seniortrusthub.com served that exact READY deployment during the expanded Production proof: 34 cases, 16 flows and six supplements passed, with no failures or browser errors. Measured settled case times were 172?4393 ms. The earlier closure hold is resolved for the certified cases only. See `result.json` and `release-receipt.json`; final evidence-only commit identities are deliberately not guessed.

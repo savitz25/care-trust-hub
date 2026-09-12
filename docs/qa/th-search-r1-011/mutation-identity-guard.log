@@ -5,40 +5,40 @@
 
  RUN  v3.2.7 C:/Users/makei/th-search-r1-011-work/apps/web
 
- ✓ src/server/care/ownership-repository.test.ts (2 tests) 32ms
- ✓ src/server/care/regulatory-repository.test.ts (3 tests) 63ms
- ❯ src/server/care/r1-011-identity.test.tsx (45 tests | 26 failed) 95ms
-   × R1-011 baseline reproductions > unspecified ownership requires an identity before retrieval 18ms
+ ✓ src/server/care/ownership-repository.test.ts (2 tests) 22ms
+ ✓ src/server/care/regulatory-repository.test.ts (3 tests) 56ms
+ ❯ src/server/care/r1-011-identity.test.tsx (56 tests | 31 failed) 185ms
+   × R1-011 baseline reproductions > unspecified ownership requires an identity before retrieval 21ms
      → expected 'evidence' to be 'fail_closed' // Object.is equality
-   ✓ R1-011 baseline reproductions > Has this nursing home been fined? 4ms
+   ✓ R1-011 baseline reproductions > Has this nursing home been fined? 6ms
    ✓ R1-011 baseline reproductions > Did this facility change owners? 1ms
-   ✓ R1-011 baseline reproductions > CCN miss has a usable official action 12ms
-   ✓ R1-011 baseline reproductions > Virginia assisted living navigates to state research 2ms
-   × R1-011 identity/evidence behavioral contract > Who owns that facility? 3ms
+   ✓ R1-011 baseline reproductions > CCN miss has a usable official action 30ms
+   ✓ R1-011 baseline reproductions > Virginia assisted living navigates to state research 7ms
+   × R1-011 identity/evidence behavioral contract > Who owns that facility? 6ms
      → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
-   × R1-011 identity/evidence behavioral contract > Who operates this provider? 1ms
+   × R1-011 identity/evidence behavioral contract > Who operates this provider? 2ms
      → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
-   × R1-011 identity/evidence behavioral contract > Has that facility been fined? 1ms
+   × R1-011 identity/evidence behavioral contract > Has that facility been fined? 2ms
      → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
-   × R1-011 identity/evidence behavioral contract > Did this nursing home change owners? 2ms
+   × R1-011 identity/evidence behavioral contract > Did this nursing home change owners? 3ms
      → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
-   × R1-011 identity/evidence behavioral contract > Inspections for this facility 1ms
+   × R1-011 identity/evidence behavioral contract > Inspections for this facility 3ms
      → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
    × R1-011 identity/evidence behavioral contract > Deficiencies for this nursing home 2ms
      → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
-   × R1-011 identity/evidence behavioral contract > unique exact source name attaches only that CCN 3ms
+   × R1-011 identity/evidence behavioral contract > unique exact source name attaches only that CCN 5ms
      → expected [ 'T00001', 'T00002', 'T00003', …(1) ] to deeply equal [ 'T00001' ]
-   × R1-011 identity/evidence behavioral contract > ambiguous name has bounded selection and no evidence assignment 1ms
+   × R1-011 identity/evidence behavioral contract > ambiguous name has bounded selection and no evidence assignment 2ms
      → expected undefined to be true // Object.is equality
-   × R1-011 identity/evidence behavioral contract > selection resumes original ownership task with revalidated candidate 2ms
+   × R1-011 identity/evidence behavioral contract > selection resumes original ownership task with revalidated candidate 3ms
      → expected '' to be 'Who owns Sunrise?' // Object.is equality
    ✓ R1-011 identity/evidence behavioral contract > tampered selection cannot attach unrelated evidence 1ms
-   ✓ R1-011 identity/evidence behavioral contract > provider entry cannot replace explicitly named subject 0ms
+   ✓ R1-011 identity/evidence behavioral contract > provider entry cannot replace explicitly named subject 1ms
    × R1-011 identity/evidence behavioral contract > identity-required form retains question and resolves exact CCN 1ms
      → expected undefined to be 'T00001' // Object.is equality
    × R1-011 identity/evidence behavioral contract > source-backed relationships retain role and source without category-as-owner 1ms
      → expected undefined to deeply equal [ 'CMS ownership category', …(2) ]
-   × R1-011 identity/evidence behavioral contract > empty CHOW is corpus absence, not never changed owners 2ms
+   × R1-011 identity/evidence behavioral contract > empty CHOW is corpus absence, not never changed owners 4ms
      → .toMatch() expects to receive a string, but got undefined
    × R1-011 identity/evidence behavioral contract > CHOW keeps event timing separate from source clocks 1ms
      → expected undefined to be '2020-06-01' // Object.is equality
@@ -47,46 +47,62 @@
    × R1-011 identity/evidence behavioral contract > penalty source identity mismatch is unavailable, not evidence 1ms
      → expected undefined to be 'SOURCE_UNAVAILABLE' // Object.is equality
    ✓ R1-011 identity/evidence behavioral contract > labeled positive remains exact; bare token remains safe 1ms
-   ✓ R1-011 identity/evidence behavioral contract > exact miss never performs name retrieval 0ms
-   ✓ R1-011 identity/evidence behavioral contract > absent source is unavailable, not a valid exact miss 0ms
-   × R1-011 identity/evidence behavioral contract > home_health does not inherit NH CHOW 0ms
+   ✓ R1-011 identity/evidence behavioral contract > exact miss never performs name retrieval 1ms
+   ✓ R1-011 identity/evidence behavioral contract > absent source is unavailable, not a valid exact miss 1ms
+   × R1-011 identity/evidence behavioral contract > home_health does not inherit NH CHOW 1ms
      → expected undefined to be 'UNSUPPORTED' // Object.is equality
-   × R1-011 identity/evidence behavioral contract > hospice does not inherit NH CHOW 0ms
+   × R1-011 identity/evidence behavioral contract > hospice does not inherit NH CHOW 1ms
      → expected undefined to be 'UNSUPPORTED' // Object.is equality
-   ✓ R1-011 identity/evidence behavioral contract > class choice retains Austin TX 10ms
-   ✓ R1-011 identity/evidence behavioral contract > memory care cannot become NH via filter 0ms
-   ✓ R1-011 identity/evidence behavioral contract > assisted living in New York 2ms
-   ✓ R1-011 identity/evidence behavioral contract > assisted living in Arizona 1ms
-   ✓ R1-011 identity/evidence behavioral contract > memory care in Florida 2ms
-   ✓ R1-011 identity/evidence behavioral contract > official destination is exact HTTPS CMS allowlist, no guessed CCN parameter 0ms
-   ✓ R1-011 identity/evidence behavioral contract > API and common boundary agree on requested CCN evidence 8ms
-   ✓ R1-011 identity/evidence behavioral contract > structured missing identity cannot bypass guard 1ms
-   × R1-011 additional boundary regressions > a state word inside a provider name is not a location predicate 1ms
+   ✓ R1-011 identity/evidence behavioral contract > class choice retains Austin TX 15ms
+   ✓ R1-011 identity/evidence behavioral contract > memory care cannot become NH via filter 1ms
+   ✓ R1-011 identity/evidence behavioral contract > assisted living in New York 5ms
+   ✓ R1-011 identity/evidence behavioral contract > assisted living in Arizona 4ms
+   ✓ R1-011 identity/evidence behavioral contract > memory care in Florida 4ms
+   ✓ R1-011 identity/evidence behavioral contract > official destination is exact HTTPS CMS allowlist, no guessed CCN parameter 1ms
+   ✓ R1-011 identity/evidence behavioral contract > API and common boundary agree on requested CCN evidence 12ms
+   ✓ R1-011 identity/evidence behavioral contract > structured missing identity cannot bypass guard 0ms
+   × R1-011 additional boundary regressions > a state word inside a provider name is not a location predicate 2ms
      → expected undefined to be 'Texas Nursing Center' // Object.is equality
    × R1-011 additional boundary regressions > same exact name in different states requires selection 1ms
      → expected undefined to be true // Object.is equality
    × R1-011 additional boundary regressions > evidence source failure is not absence 1ms
      → expected undefined to be 'SOURCE_UNAVAILABLE' // Object.is equality
-   × R1-011 additional boundary regressions > unlinked source deficiency remains evidence 1ms
+   × R1-011 additional boundary regressions > unlinked source deficiency remains evidence 2ms
      → expected undefined to be 'Synthetic finding' // Object.is equality
-   × R1-011 additional boundary regressions > evidence override cannot silently replace the question 1ms
+   × R1-011 additional boundary regressions > evidence override cannot silently replace the question 2ms
      → expected 'identifier' to be 'fail_closed' // Object.is equality
-   ✓ R1-011 additional boundary regressions > profile-style exact context cannot be replaced with a selected candidate 0ms
-   ✓ generic care waits for class then executes locality without a fake provider name 1ms
-   × multiple CCNs cannot select the first provider for ownership 0ms
+   ✓ R1-011 additional boundary regressions > profile-style exact context cannot be replaced with a selected candidate 1ms
+   ✓ generic care waits for class then executes locality without a fake provider name 4ms
+   × multiple CCNs cannot select the first provider for ownership 1ms
      → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
-   × explicit mixed provider classes cannot acquire NH evidence 0ms
+   × explicit mixed provider classes cannot acquire NH evidence 1ms
      → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
-   × an exact evidence answer cannot silently ignore a rating cohort filter 0ms
+   × an exact evidence answer cannot silently ignore a rating cohort filter 1ms
      → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
+   ✓ published Illinois recovery keeps its own jurisdiction 3ms
+   ✓ published New Jersey recovery keeps its own jurisdiction 2ms
+   ✓ published California recovery keeps its own jurisdiction 2ms
+   ✓ published Texas recovery keeps its own jurisdiction 2ms
+   ✓ published Washington recovery keeps its own jurisdiction 2ms
+   ✓ published Colorado recovery keeps its own jurisdiction 2ms
+   × final provider-question boundary > Can you tell me who owns this nursing home? 1ms
+     → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
+   × final provider-question boundary > Please tell me who owns that facility 0ms
+     → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
+   × final provider-question boundary > I want to know whether this facility has been fined 0ms
+     → expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
+   × final provider-question boundary > quoted name location words remain identity text 0ms
+     → expected undefined to be 'Harbor in Texas Nursing Home' // Object.is equality
+   × final provider-question boundary > polite explicit provider question keeps the source name 1ms
+     → expected [ 'T00001', 'T00002', 'T00003', …(1) ] to deeply equal [ 'T00001' ]
 
  Test Files  1 failed | 2 passed (3)
-      Tests  26 failed | 24 passed (50)
-   Start at  12:28:37
-   Duration  2.67s (transform 824ms, setup 654ms, collect 1.38s, tests 190ms, environment 1.77s, prepare 417ms)
+      Tests  31 failed | 30 passed (61)
+   Start at  12:54:36
+   Duration  3.17s (transform 1.11s, setup 672ms, collect 1.54s, tests 264ms, environment 2.19s, prepare 620ms)
 
 
-⎯⎯⎯⎯⎯⎯ Failed Tests 26 ⎯⎯⎯⎯⎯⎯⎯
+⎯⎯⎯⎯⎯⎯ Failed Tests 31 ⎯⎯⎯⎯⎯⎯⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 baseline reproductions > unspecified ownership requires an identity before retrieval
 AssertionError: expected 'evidence' to be 'fail_closed' // Object.is equality
@@ -102,7 +118,7 @@ Received: "evidence"
      37|     expect(q.terminalState).toBe("NEEDS_CLARIFICATION");
      38|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > Who owns that facility?
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > Who operates this provider?
@@ -126,7 +142,7 @@ undefined
     156|       expect(r.entities).toEqual([]);
     157|       expect(mocks.db).not.toHaveBeenCalled();
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > unique exact source name attaches only that CCN
 AssertionError: expected [ 'T00001', 'T00002', 'T00003', …(1) ] to deeply equal [ 'T00001' ]
@@ -149,7 +165,7 @@ AssertionError: expected [ 'T00001', 'T00002', 'T00003', …(1) ] to deeply equa
     164|     expect(mocks.ownership).toHaveBeenCalledWith("T00001");
     165|     expect(r.facilityAnswer?.rows[0]?.label).toBe("CMS ownership categ…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > ambiguous name has bounded selection and no evidence assignment
 AssertionError: expected undefined to be true // Object.is equality
@@ -168,7 +184,7 @@ undefined
     171|     expect(r.entities).toHaveLength(3);
     172|     expect(r.entities.every((e) => e.evidence.length === 0 && e.select…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > selection resumes original ownership task with revalidated candidate
 AssertionError: expected '' to be 'Who owns Sunrise?' // Object.is equality
@@ -186,7 +202,7 @@ AssertionError: expected '' to be 'Who owns Sunrise?' // Object.is equality
     181|     expect(r.entities).toHaveLength(1);
     182|     expect(mocks.ownership).toHaveBeenCalledWith(first.entities[1]!.cc…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > identity-required form retains question and resolves exact CCN
 AssertionError: expected undefined to be 'T00001' // Object.is equality
@@ -205,7 +221,7 @@ undefined
     203|     expect(mocks.ownership).toHaveBeenCalledWith("T00001");
     204|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > source-backed relationships retain role and source without category-as-owner
 AssertionError: expected undefined to deeply equal [ 'CMS ownership category', …(2) ]
@@ -228,7 +244,7 @@ undefined
     227|       "CMS ownership category",
     228|       "organization: Indirect ownership",
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > empty CHOW is corpus absence, not never changed owners
 TypeError: .toMatch() expects to receive a string, but got undefined
@@ -240,7 +256,7 @@ TypeError: .toMatch() expects to receive a string, but got undefined
     236|     expect(r.facilityAnswer?.summary).not.toMatch(/never/);
     237|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > CHOW keeps event timing separate from source clocks
 AssertionError: expected undefined to be '2020-06-01' // Object.is equality
@@ -259,7 +275,7 @@ undefined
     253|     expect(r.facilityAnswer?.rows[0]?.sourceAsOf).toBe("2025-01-01");
     254|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > empty penalties is corpus absence, not never fined
 TypeError: .toMatch() expects to receive a string, but got undefined
@@ -271,7 +287,7 @@ TypeError: .toMatch() expects to receive a string, but got undefined
     258|     expect(mocks.regulatory).toHaveBeenCalledWith("T00001");
     259|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > penalty source identity mismatch is unavailable, not evidence
 AssertionError: expected undefined to be 'SOURCE_UNAVAILABLE' // Object.is equality
@@ -290,7 +306,7 @@ undefined
     273|     expect(r.entities).toEqual([]);
     274|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > home_health does not inherit NH CHOW
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 identity/evidence behavioral contract > hospice does not inherit NH CHOW
@@ -310,7 +326,7 @@ undefined
     305|       expect(mocks.ownership).not.toHaveBeenCalled();
     306|     });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 additional boundary regressions > a state word inside a provider name is not a location predicate
 AssertionError: expected undefined to be 'Texas Nursing Center' // Object.is equality
@@ -329,7 +345,7 @@ undefined
     359|     expect(q.geography).toBeUndefined();
     360|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 additional boundary regressions > same exact name in different states requires selection
 AssertionError: expected undefined to be true // Object.is equality
@@ -348,7 +364,7 @@ undefined
     364|     expect(mocks.ownership).not.toHaveBeenCalled();
     365|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 additional boundary regressions > evidence source failure is not absence
 AssertionError: expected undefined to be 'SOURCE_UNAVAILABLE' // Object.is equality
@@ -367,7 +383,7 @@ undefined
     370|     expect(r.facilityAnswer).toBeUndefined();
     371|   });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 additional boundary regressions > unlinked source deficiency remains evidence
 AssertionError: expected undefined to be 'Synthetic finding' // Object.is equality
@@ -386,7 +402,7 @@ undefined
     380|   });
     381|   it("evidence override cannot silently replace the question", () => {
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > R1-011 additional boundary regressions > evidence override cannot silently replace the question
 AssertionError: expected 'identifier' to be 'fail_closed' // Object.is equality
@@ -402,7 +418,7 @@ Received: "identifier"
     388|   });
     389|   it("profile-style exact context cannot be replaced with a selected c…
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > multiple CCNs cannot select the first provider for ownership
 AssertionError: expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
@@ -421,7 +437,7 @@ undefined
     410|   expect(mocks.db).not.toHaveBeenCalled();
     411| });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > explicit mixed provider classes cannot acquire NH evidence
 AssertionError: expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
@@ -440,7 +456,7 @@ undefined
     415|   expect(mocks.ownership).not.toHaveBeenCalled();
     416| });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/31]⎯
 
  FAIL  src/server/care/r1-011-identity.test.tsx > an exact evidence answer cannot silently ignore a rating cohort filter
 AssertionError: expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
@@ -459,4 +475,67 @@ undefined
     425|   expect(mocks.ownership).not.toHaveBeenCalled();
     426| });
 
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/26]⎯
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/31]⎯
+
+ FAIL  src/server/care/r1-011-identity.test.tsx > final provider-question boundary > Can you tell me who owns this nursing home?
+ FAIL  src/server/care/r1-011-identity.test.tsx > final provider-question boundary > Please tell me who owns that facility
+ FAIL  src/server/care/r1-011-identity.test.tsx > final provider-question boundary > I want to know whether this facility has been fined
+AssertionError: expected undefined to be 'NEEDS_CLARIFICATION' // Object.is equality
+
+- Expected:
+"NEEDS_CLARIFICATION"
+
++ Received:
+undefined
+
+ ❯ src/server/care/r1-011-identity.test.tsx:453:37
+    451|     it(q, async () => {
+    452|       const r = await executeSeniorResearchQuery(q);
+    453|       expect(r.query.terminalState).toBe("NEEDS_CLARIFICATION");
+       |                                     ^
+    454|       expect(r.entities).toEqual([]);
+    455|       expect(mocks.db).not.toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/31]⎯
+
+ FAIL  src/server/care/r1-011-identity.test.tsx > final provider-question boundary > quoted name location words remain identity text
+AssertionError: expected undefined to be 'Harbor in Texas Nursing Home' // Object.is equality
+
+- Expected:
+"Harbor in Texas Nursing Home"
+
++ Received:
+undefined
+
+ ❯ src/server/care/r1-011-identity.test.tsx:459:29
+    457|   it("quoted name location words remain identity text", () => {
+    458|     const q = interpretSeniorAskQuery('Who owns "Harbor in Texas Nursi…
+    459|     expect(q.identityQuery).toBe("Harbor in Texas Nursing Home");
+       |                             ^
+    460|     expect(q.geography).toBeUndefined();
+    461|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/31]⎯
+
+ FAIL  src/server/care/r1-011-identity.test.tsx > final provider-question boundary > polite explicit provider question keeps the source name
+AssertionError: expected [ 'T00001', 'T00002', 'T00003', …(1) ] to deeply equal [ 'T00001' ]
+
+- Expected
++ Received
+
+  [
+    "T00001",
++   "T00002",
++   "T00003",
++   "T00004",
+  ]
+
+ ❯ src/server/care/r1-011-identity.test.tsx:464:42
+    462|   it("polite explicit provider question keeps the source name", async …
+    463|     const r = await executeSeniorResearchQuery("Can you tell me who ow…
+    464|     expect(r.entities.map((e) => e.ccn)).toEqual(["T00001"]);
+       |                                          ^
+    465|     expect(mocks.ownership).toHaveBeenCalledWith("T00001");
+    466|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/31]⎯
