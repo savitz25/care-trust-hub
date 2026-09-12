@@ -1,22 +1,10 @@
+import { parseRecordedLocation } from "./senior-location";
 import {
   type SeniorAskMode,
   type SeniorProviderClass,
   type SeniorResearchQuery,
   validateSeniorResearchQuery,
 } from "./senior-ask-contract";
-
-const STATE_NAMES: Record<string, string> = {
-  florida: "FL",
-  fl: "FL",
-  texas: "TX",
-  california: "CA",
-  "new york": "NY",
-  "new jersey": "NJ",
-  arizona: "AZ",
-  washington: "WA",
-  colorado: "CO",
-  virginia: "VA",
-};
 
 const COUNTIES: Record<string, { value: string; meaning: string }> = {
   broward: {
@@ -54,55 +42,42 @@ function detectClass(q: string): SeniorProviderClass | "ambiguous" | undefined {
   return undefined;
 }
 
-function detectState(q: string): { type: "state"; value: string; meaning: string } | undefined {
-  for (const [name, code] of Object.entries(STATE_NAMES)) {
-    if (new RegExp(`\\b${name}\\b`, "i").test(q)) {
-      return {
-        type: "state",
-        value: code,
-        meaning:
-          "CMS directory state on the provider record (address/location state), not a verified service area.",
-      };
-    }
-  }
-  return undefined;
-}
-
-function detectCounty(q: string) {
-  for (const [name, meta] of Object.entries(COUNTIES)) {
-    if (new RegExp(name, "i").test(q)) {
-      return { type: "county" as const, value: meta.value, meaning: meta.meaning };
-    }
-  }
-  return undefined;
-}
-
-const CITIES: Record<string, { value: string; state: string }> = {
-  "boca raton": { value: "BOCA RATON", state: "FL" },
-  miami: { value: "MIAMI", state: "FL" },
-  tampa: { value: "TAMPA", state: "FL" },
-};
-
-function detectCity(q: string) {
-  for (const [name, city] of Object.entries(CITIES)) {
-    if (new RegExp(`\\b${name}\\b`, "i").test(q)) {
-      return {
-        type: "city" as const,
-        value: city.value,
-        meaning: `Recorded provider/office city in ${city.state} — not a verified service area.`,
-      };
-    }
-  }
-  return undefined;
-}
-
 function starNumber(q: string): number | undefined {
   const m =
-    q.match(/\b([1-5])\s*(?:-|–)?\s*star/i) ||
+    q.match(/\b([1-5](?:\.5)?)\s*(?:-|–)?\s*star/i) ||
     q.match(/\b([1-5])\s+cms(?:\s+overall)?\s+stars?/i) ||
-    q.match(/at least\s+([1-5])/i);
+    q.match(/at least\s+([1-5](?:\.5)?)/i);
   if (!m) return undefined;
   return Number(m[1]);
+}
+
+function ratingFilters(
+  q: string,
+  providerClass: SeniorProviderClass | undefined,
+  stars: number | undefined,
+): NonNullable<SeniorResearchQuery["qualityFilters"]> {
+  const qualityFilters: SeniorResearchQuery["qualityFilters"] = {};
+  if (stars && /overall|cms (overall )?star/i.test(q) && providerClass === "nursing_home") {
+    qualityFilters.overallStars = /at least/i.test(q)
+      ? [stars, stars + 1, stars + 2, stars + 3, stars + 4].filter((n) => n <= 5)
+      : [stars];
+  } else if (stars && /staffing/i.test(q) && providerClass === "nursing_home") {
+    qualityFilters.staffingStars = /at least/i.test(q)
+      ? [stars, 5].filter((n) => n >= stars && n <= 5)
+      : [stars];
+  } else if (stars && /inspection|health-inspection/i.test(q) && providerClass === "nursing_home") {
+    qualityFilters.inspectionStars = [stars];
+  } else if (
+    stars &&
+    providerClass === "home_health" &&
+    /quality of patient care|qpc|star/i.test(q)
+  ) {
+    qualityFilters.qpcStars = [stars];
+  } else if (stars && providerClass === "nursing_home" && /star/i.test(q)) {
+    qualityFilters.overallStars = [stars];
+  }
+
+  return qualityFilters;
 }
 
 function labeledCcn(q: string): string | undefined {
@@ -112,19 +87,18 @@ function labeledCcn(q: string): string | undefined {
   return m?.[1]?.toUpperCase();
 }
 
-export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQuery {
-  const q = raw.trim().slice(0, 180);
+function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery {
+  const q = raw.trim();
   const providerClass = detectClass(q);
-  const county = detectCounty(q);
-  const city = detectCity(q);
-  const state = county
-    ? {
-        type: "state" as const,
-        value: "FL",
-        meaning: "Florida — inferred from named Florida county.",
-      }
-    : detectState(q);
-  const geography = county ?? city ?? state;
+  const location = parseRecordedLocation(q);
+  const geography = location.geography;
+  const county = geography?.type === "county" ? geography : undefined;
+  const state =
+    geography?.type === "state"
+      ? geography
+      : geography?.state
+        ? { value: geography.state }
+        : undefined;
   const ccn = labeledCcn(q);
   const stars = starNumber(q);
 
@@ -140,6 +114,7 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
       alternatives,
       providerClass: providerClass === "ambiguous" ? undefined : providerClass,
       geography,
+      locationRequirement: location.locationRequirement,
       coverageState,
     });
 
@@ -296,6 +271,9 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
     return validateSeniorResearchQuery({
       mode: "identifier",
       identifier: { type: "ccn", value: ccn },
+      providerClass: providerClass === "ambiguous" ? undefined : providerClass,
+      geography,
+      locationRequirement: location.locationRequirement,
       status: "current",
       page: 1,
       coverageState: "KNOWN",
@@ -369,10 +347,17 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
         "How many home health agencies are currently indexed nationally?",
       ]);
     }
+    if (/deficien|penalt|civil monetary|chow|ownership|cahps|staffing hours/i.test(q))
+      return fail(
+        "This evidence-specific count is not supported. The requested evidence was not removed from the count.",
+        [],
+      );
     return validateSeniorResearchQuery({
+      qualityFilters: ratingFilters(q, providerClass, stars),
       mode: "count",
       providerClass,
       geography,
+      locationRequirement: location.locationRequirement,
       status: "current",
       page: 1,
     });
@@ -436,6 +421,7 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
       metric: /connected to the most|network/i.test(q) ? "ownership_network_size" : "ownership",
       organizationName: q.match(/owned by\s+(.+)$/i)?.[1]?.trim(),
       geography,
+      locationRequirement: location.locationRequirement,
       status: "current",
       page,
     });
@@ -569,26 +555,7 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
     );
   }
 
-  const qualityFilters: SeniorResearchQuery["qualityFilters"] = {};
-  if (stars && /overall|cms (overall )?star/i.test(q) && providerClass === "nursing_home") {
-    qualityFilters.overallStars = /at least/i.test(q)
-      ? [stars, stars + 1, stars + 2, stars + 3, stars + 4].filter((n) => n <= 5)
-      : [stars];
-  } else if (stars && /staffing/i.test(q) && providerClass === "nursing_home") {
-    qualityFilters.staffingStars = /at least/i.test(q)
-      ? [stars, 5].filter((n) => n >= stars && n <= 5)
-      : [stars];
-  } else if (stars && /inspection|health-inspection/i.test(q) && providerClass === "nursing_home") {
-    qualityFilters.inspectionStars = [stars];
-  } else if (
-    stars &&
-    providerClass === "home_health" &&
-    /quality of patient care|qpc|star/i.test(q)
-  ) {
-    qualityFilters.qpcStars = [stars];
-  } else if (stars && providerClass === "nursing_home" && /star/i.test(q)) {
-    qualityFilters.overallStars = [stars];
-  }
+  const qualityFilters = ratingFilters(q, providerClass, stars);
 
   let sort: SeniorResearchQuery["sort"] = "name";
   const mode: SeniorAskMode = "entity";
@@ -601,12 +568,53 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
     mode,
     providerClass,
     geography,
+    locationRequirement: location.locationRequirement,
     status: "current",
     qualityFilters: Object.keys(qualityFilters).length ? qualityFilters : undefined,
     sort,
     page,
     coverageState: "KNOWN",
   });
+}
+
+export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQuery {
+  let plan = interpretSeniorAskQueryCore(raw, page);
+  const location = parseRecordedLocation(raw);
+  const explicitName =
+    raw.match(/^(?:find|research|provider named)\s+"([^"]+)"/i)?.[1] ??
+    raw.match(/^(?:find|research|provider named)\s+(.+?)(?:\s+in\s+|$)/i)?.[1];
+  if (
+    explicitName &&
+    raw.trim().length <= 180 &&
+    !/\bCCN\b/i.test(explicitName) &&
+    !/^(?:nursing homes?|home health agencies?|hospice providers?)$/i.test(explicitName) &&
+    /^[\p{L}\p{N}&'., -]{3,120}$/u.test(explicitName)
+  )
+    plan = validateSeniorResearchQuery({
+      mode: "entity",
+      identityQuery: explicitName,
+      ...location,
+      status: "current",
+      page,
+      coverageState: "PARTIAL",
+    });
+  if (plan.mode === "comparison" || plan.mode === "definition") return plan;
+  if (plan.mode === "fail_closed" && !location.locationRequirement) return plan;
+  const result = { ...plan, ...location };
+  if (location.locationRequirement && location.locationRequirement.outcome !== "APPLIED") {
+    return {
+      ...result,
+      modeBeforeClarification: plan.mode,
+      mode: "fail_closed",
+      terminalState:
+        location.locationRequirement.outcome === "UNSUPPORTED"
+          ? "UNSUPPORTED"
+          : "NEEDS_CLARIFICATION",
+      failReason: location.locationRequirement.reason,
+      alternatives: [],
+    };
+  }
+  return result;
 }
 
 export function seniorAskQueryToSearchParams(

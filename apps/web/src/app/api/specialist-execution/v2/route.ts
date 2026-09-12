@@ -51,6 +51,8 @@ function stars(value: string | null): number[] | undefined {
 }
 
 function requestFromUrl(url: URL): Record<string, unknown> | null {
+  if ([...url.searchParams.keys()].some((key) => url.searchParams.getAll(key).length > 1))
+    throw new SeniorSpecialistRequestError("invalid_request", 400, "Supply each parameter once.");
   const providerClass = url.searchParams.get("providerClass") ?? undefined;
   const identifier = url.searchParams.get("identifier") ?? undefined;
   const geographyType = url.searchParams.get("geographyType") ?? undefined;
@@ -60,7 +62,15 @@ function requestFromUrl(url: URL): Record<string, unknown> | null {
     providerClass,
     identifier,
     geography:
-      geographyType || geographyValue ? { type: geographyType, value: geographyValue } : undefined,
+      geographyType || geographyValue
+        ? {
+            type: geographyType,
+            value: geographyValue,
+            ...(url.searchParams.get("geographyState")
+              ? { state: url.searchParams.get("geographyState") }
+              : {}),
+          }
+        : undefined,
     filters: {
       overallStars: stars(url.searchParams.get("overallStars")),
       staffingStars: stars(url.searchParams.get("staffingStars")),
@@ -74,9 +84,38 @@ function requestFromUrl(url: URL): Record<string, unknown> | null {
 async function execute(input: unknown) {
   const { request, query } = normalizeSeniorSpecialistRequest(input);
   const result = await executeSeniorResearchPlan(query);
+  if (result.failClosed)
+    return NextResponse.json(
+      {
+        contract: SENIOR_SPECIALIST_EXECUTION_CONTRACT,
+        hub: "senior",
+        status:
+          result.query.terminalState === "SOURCE_UNAVAILABLE"
+            ? "execution_unavailable"
+            : "unsupported_capability",
+        queryInterpretation: result.query,
+        rows: [],
+        total: null,
+        message: result.failClosed.reason,
+        limitations: result.limitations,
+      },
+      { status: result.query.terminalState === "SOURCE_UNAVAILABLE" ? 503 : 422 },
+    );
   const countResult = query.identifier
     ? null
     : await executeSeniorResearchPlan({ ...query, mode: "count", page: 1 });
+  if (countResult?.failClosed)
+    return NextResponse.json(
+      {
+        contract: SENIOR_SPECIALIST_EXECUTION_CONTRACT,
+        hub: "senior",
+        status: "execution_unavailable",
+        rows: [],
+        total: null,
+        message: countResult.failClosed.reason,
+      },
+      { status: 503 },
+    );
   const total = query.identifier ? result.entities.length : (countResult?.count?.n ?? 0);
   return NextResponse.json(
     {
@@ -86,7 +125,8 @@ async function execute(input: unknown) {
       queryInterpretation: {
         providerClass: query.providerClass ?? null,
         identifier: query.identifier ?? null,
-        geography: query.geography ?? null,
+        geography: result.query.geography ?? null,
+        locationRequirement: result.query.locationRequirement ?? null,
         filters: query.qualityFilters ?? null,
         ordering: "neutral_provider_name_then_identifier",
       },
@@ -96,6 +136,7 @@ async function execute(input: unknown) {
         name: entity.providerName,
         cmsCcn: entity.ccn,
         recordedLocation: entity.location,
+        recordedLocationFields: entity.recordedLocation,
         status: entity.statusLabel,
         evidence: entity.evidence,
         canonicalProfileUrl: publicUrl(entity.href),

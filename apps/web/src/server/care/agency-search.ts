@@ -9,6 +9,7 @@ export interface AgencySearchCriteria {
   query?: string;
   state?: string;
   city?: string;
+  county?: string;
   zip?: string;
   qualityAvailable?: boolean;
   experienceAvailable?: boolean;
@@ -35,6 +36,9 @@ export interface AgencySearchResult {
 }
 
 export interface AgencySourceClock {
+  sourceRelease?: string;
+  sourceFingerprint?: string;
+  retrievedAt?: string | null;
   datasetKey: string;
   sourceFamily: string;
   officialAsOf: string | null;
@@ -53,29 +57,35 @@ const DATASET_KEYS = {
 export async function getCurrentAgencySourceClock(
   providerClass: AgencySearchClass,
 ): Promise<AgencySourceClock> {
-  const table = TABLES[providerClass];
   const datasetKey = DATASET_KEYS[providerClass];
   const result = await getCareDatabasePool().query<{
     display_name: string;
     source_organization: string;
+    release_key?: string;
+    content_hash?: string;
+    retrieved_at?: Date | null;
     source_modified_at: Date | null;
   }>(
-    `SELECT sd.display_name, sd.source_organization, sr.source_modified_at
-     FROM ${table} snapshot
-     JOIN source_release sr ON sr.id=snapshot.source_release_id
-     JOIN source_dataset sd ON sd.id=sr.source_dataset_id
+    `SELECT sd.display_name, sd.source_organization, sr.source_modified_at, sr.release_key, sr.content_hash, sr.retrieved_at
+     FROM source_dataset sd
+     JOIN source_release sr ON sr.source_dataset_id=sd.id
+     JOIN ingest_run ir ON ir.source_release_id=sr.id AND ir.status='succeeded'
      WHERE sd.dataset_key=$1
-     ORDER BY sr.source_modified_at DESC NULLS LAST, sr.retrieved_at DESC
+     ORDER BY sr.source_modified_at DESC NULLS LAST, ir.completed_at DESC
      LIMIT 1`,
     [datasetKey],
   );
   const row = result.rows[0];
+  if (!row) throw new Error("Current agency release unavailable");
   return {
     datasetKey,
     sourceFamily: row
       ? `${row.display_name} (${row.source_organization})`
       : `CMS Care Compare (${datasetKey})`,
     officialAsOf: row?.source_modified_at?.toISOString() ?? null,
+    sourceRelease: row?.release_key,
+    sourceFingerprint: row?.content_hash,
+    retrievedAt: row?.retrieved_at?.toISOString() ?? null,
   };
 }
 
@@ -121,9 +131,7 @@ export async function countCurrentAgencyDirectory(
   return Number(result.rows[0]?.n ?? 0);
 }
 
-export async function searchCurrentAgencies(
-  criteria: AgencySearchCriteria,
-): Promise<AgencySearchResult[]> {
+function buildAgencyQuery(criteria: AgencySearchCriteria, countOnly = false) {
   const table = TABLES[criteria.providerClass];
   const qualityFamily = QUALITY_FAMILY[criteria.providerClass];
   const experienceFamily = EXPERIENCE_FAMILY[criteria.providerClass];
@@ -153,7 +161,16 @@ export async function searchCurrentAgencies(
     conditions.push(`c.state_code=${parameter(state)}`);
   }
   if (criteria.city?.trim()) {
-    conditions.push(`c.city ILIKE ${parameter(escapedLike(criteria.city.trim()))} ESCAPE '\\'`);
+    conditions.push(
+      `upper(trim(c.city))=${parameter(criteria.city.trim().replace(/\s+/g, " ").toUpperCase())}`,
+    );
+  }
+  if (criteria.county) {
+    if (criteria.providerClass !== "hospice")
+      throw new RangeError("Home Health does not support county location");
+    conditions.push(
+      `upper(trim(regexp_replace(c.county_name, ' County$', '', 'i')))=${parameter(criteria.county.trim().toUpperCase())}`,
+    );
   }
   if (criteria.zip?.trim()) {
     const zip = criteria.zip.trim();
@@ -164,7 +181,12 @@ export async function searchCurrentAgencies(
     if (criteria.providerClass !== "home_health") {
       throw new RangeError("CMS Quality of Patient Care star filter applies only to Home Health");
     }
-    if (!Number.isInteger(criteria.cmsStar) || criteria.cmsStar < 1 || criteria.cmsStar > 5) {
+    if (
+      !Number.isFinite(criteria.cmsStar) ||
+      !Number.isInteger(criteria.cmsStar * 2) ||
+      criteria.cmsStar < 1 ||
+      criteria.cmsStar > 5
+    ) {
       throw new RangeError("CMS star must be between 1 and 5");
     }
     conditions.push(`c.quality_of_patient_care_star=${parameter(criteria.cmsStar)}`);
@@ -185,21 +207,31 @@ export async function searchCurrentAgencies(
     );
   }
 
-  const limitParameter = parameter(validateLimit(criteria.limit));
-  const offsetParameter = parameter(validateOffset(criteria.offset));
-  const exactName = query ? parameter(query.toUpperCase()) : "NULL";
-  const exactCcn = ccn ? parameter(ccn) : "NULL";
+  const limitParameter = countOnly ? "" : parameter(validateLimit(criteria.limit));
+  const offsetParameter = countOnly ? "" : parameter(validateOffset(criteria.offset));
+  const exactName = query && !countOnly ? parameter(query.toUpperCase()) : "NULL";
+  const exactCcn = ccn && !countOnly ? parameter(ccn) : "NULL";
   const starSelect =
     criteria.providerClass === "home_health" ? "c.quality_of_patient_care_star" : "NULL::smallint";
   const sql = `
-    WITH current_directory AS (
+    WITH selected_release AS (
+      SELECT sr.id AS source_release_id, ir.id AS ingest_run_id
+      FROM source_dataset sd JOIN source_release sr ON sr.source_dataset_id=sd.id
+      JOIN ingest_run ir ON ir.source_release_id=sr.id AND ir.status='succeeded'
+      WHERE sd.dataset_key=${parameter(DATASET_KEYS[criteria.providerClass])}
+      ORDER BY sr.source_modified_at DESC NULLS LAST, ir.completed_at DESC LIMIT 1
+    ), current_directory AS (
       SELECT DISTINCT ON (cms_ccn)
         cms_ccn, provider_id, provider_name, city, state_code, zip_code, telephone
+        ${criteria.providerClass === "hospice" ? ", county_name" : ""}
         ${criteria.providerClass === "home_health" ? ", quality_of_patient_care_star" : ""}
-      FROM ${table}
-      ORDER BY cms_ccn, id DESC
+      FROM ${table} s JOIN selected_release r ON s.source_release_id=r.source_release_id AND s.ingest_run_id=r.ingest_run_id
+      ORDER BY cms_ccn, s.id DESC
     )
-    SELECT c.cms_ccn, c.provider_name, c.city, c.state_code, c.zip_code, c.telephone,
+    SELECT ${
+      countOnly
+        ? "count(*)::text AS n"
+        : `c.cms_ccn, c.provider_name, c.city, c.state_code, c.zip_code, c.telephone,
            ${starSelect} AS quality_of_patient_care_star,
            EXISTS (
              SELECT 1 FROM cms_agency_quality_observation q
@@ -217,15 +249,35 @@ export async function searchCurrentAgencies(
            ) AS ownership_available,
            EXISTS (
              SELECT 1 FROM cms_agency_service_zip z WHERE z.provider_id=c.provider_id
-           ) AS service_evidence_available
+           ) AS service_evidence_available`
+    }
     FROM current_directory c
     ${conditions.length ? `WHERE ${conditions.join(" AND ")}` : ""}
-    ORDER BY
+    ${
+      countOnly
+        ? ""
+        : `    ORDER BY
       CASE WHEN c.cms_ccn = ${exactCcn} THEN 0 ELSE 1 END,
       CASE WHEN upper(c.provider_name) = ${exactName} THEN 0 ELSE 1 END,
       c.provider_name, c.cms_ccn, c.city, c.state_code
-    LIMIT ${limitParameter} OFFSET ${offsetParameter}`;
+    LIMIT ${limitParameter} OFFSET ${offsetParameter}`
+    }`;
 
+  return { sql, values };
+}
+
+export async function countCurrentAgencies(criteria: AgencySearchCriteria): Promise<number> {
+  const { sql, values } = buildAgencyQuery(criteria, true);
+  const result = await getCareDatabasePool().query<{ n: string }>(sql, values);
+  const n = Number(result.rows[0]?.n);
+  if (!Number.isSafeInteger(n) || n < 0) throw new Error("Unavailable directory count");
+  return n;
+}
+
+export async function searchCurrentAgencies(
+  criteria: AgencySearchCriteria,
+): Promise<AgencySearchResult[]> {
+  const { sql, values } = buildAgencyQuery(criteria);
   const result = await getCareDatabasePool().query<{
     cms_ccn: string;
     provider_name: string;

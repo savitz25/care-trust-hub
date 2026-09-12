@@ -63,13 +63,15 @@ describe("interpretSeniorAskQuery", () => {
     expect(q.qualityFilters?.overallStars).toEqual([5]);
   });
 
-  it("parses Colorado nursing homes as current NH entity without inventing Denver geography", () => {
+  it("preserves Colorado scope and requires a state for a city-only Denver request", () => {
     const q = interpretSeniorAskQuery("Show nursing homes in Colorado.");
     expect(q.mode).toBe("entity");
     expect(q.providerClass).toBe("nursing_home");
     expect(q.geography?.value).toBe("CO");
     const denver = interpretSeniorAskQuery("Show nursing homes in Denver.");
-    expect(denver.geography?.value).not.toBe("DENVER");
+    expect(denver.geography?.value).toBe("DENVER");
+    expect(denver.mode).toBe("fail_closed");
+    expect(denver.locationRequirement?.outcome).toBe("NEEDS_CLARIFICATION");
   });
 
   it("keeps existing six-state search routes intact", () => {

@@ -13,6 +13,7 @@ export type SeniorSpecialistRequest = {
   geography?: {
     type: "state" | "county" | "city" | "zip";
     value: string;
+    state?: string;
   };
   filters?: {
     overallStars?: number[];
@@ -110,7 +111,7 @@ export function normalizeSeniorSpecialistRequest(input: unknown): {
   let geography: SeniorResearchQuery["geography"];
   if (body.geography !== undefined) {
     const supplied = record(body.geography, "geography");
-    assertKnownFields(supplied, new Set(["type", "value"]), "geography");
+    assertKnownFields(supplied, new Set(["type", "value", "state"]), "geography");
     const type = supplied.type;
     const rawValue = typeof supplied.value === "string" ? supplied.value.trim() : "";
     if (!GEOGRAPHY_TYPES.has(String(type)) || !rawValue) {
@@ -148,10 +149,20 @@ export function normalizeSeniorSpecialistRequest(input: unknown): {
         },
       );
     }
+    if (
+      supplied.state !== undefined &&
+      (typeof supplied.state !== "string" || !/^[A-Za-z]{2}$/.test(supplied.state))
+    )
+      throw new SeniorSpecialistRequestError(
+        "invalid_geography",
+        400,
+        "Location state must be a two-letter postal code.",
+      );
     const noun = providerClass === "nursing_home" ? "provider" : "office";
     geography = {
       type: type as "state" | "county" | "city" | "zip",
       value,
+      state: typeof supplied.state === "string" ? supplied.state.toUpperCase() : undefined,
       meaning: `${noun} recorded ${String(type)} in the current CMS directory; not service area or availability.`,
     };
   }
@@ -206,7 +217,13 @@ export function normalizeSeniorSpecialistRequest(input: unknown): {
   const request: SeniorSpecialistRequest = {
     providerClass: providerClass as SeniorProviderClass | undefined,
     identifier,
-    geography: geography ? { type: geography.type, value: geography.value } : undefined,
+    geography: geography
+      ? {
+          type: geography.type,
+          value: geography.value,
+          ...(geography.state ? { state: geography.state } : {}),
+        }
+      : undefined,
     filters: qualityFilters,
     page,
   };
