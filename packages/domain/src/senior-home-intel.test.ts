@@ -77,6 +77,7 @@ describe("senior-home-intel-v1", () => {
     expect(intel.geography.some((row) => row.intelligenceHref === "/colorado")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/virginia")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/new-york")).toBe(true);
+    expect(intel.geography.some((row) => row.intelligenceHref === "/illinois")).toBe(true);
     expect(
       intel.geography
         .filter(
@@ -89,7 +90,8 @@ describe("senior-home-intel-v1", () => {
             row.state !== "AZ" &&
             row.state !== "CO" &&
             row.state !== "VA" &&
-            row.state !== "NY",
+            row.state !== "NY" &&
+            row.state !== "IL",
         )
         .every((row) => row.intelligenceHref === null),
     ).toBe(true);
@@ -130,5 +132,9 @@ describe("senior-home-intel-v1", () => {
     expect(intel.newYorkPreview.cmsNursingHomes).toBe(593);
     expect(intel.newYorkPreview.cmsHomeHealth).toBe(100);
     expect(intel.newYorkPreview.cmsHospice).toBe(39);
+    expect(intel.illinoisPreview.href).toBe("/illinois");
+    expect(intel.illinoisPreview.cmsNursingHomes).toBe(666);
+    expect(intel.illinoisPreview.idphHomeHealth).toBe(595);
+    expect(intel.illinoisPreview.slpSites).toBe(169);
   });
 });

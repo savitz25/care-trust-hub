@@ -81,6 +81,36 @@ describe("interpretSeniorAskQuery", () => {
     expect(interpretSeniorAskQuery("nursing homes in Texas").geography?.value).toBe("TX");
     expect(interpretSeniorAskQuery("nursing homes in Washington").geography?.value).toBe("WA");
     expect(interpretSeniorAskQuery("nursing homes in Arizona").geography?.value).toBe("AZ");
+    expect(interpretSeniorAskQuery("nursing homes in Illinois").geography?.value).toBe("IL");
+  });
+
+  it("keeps Illinois classes and complaint/search-only paths fail-closed", () => {
+    const nh = interpretSeniorAskQuery("nursing homes in Illinois");
+    expect(nh.mode).toBe("entity");
+    expect(nh.providerClass).toBe("nursing_home");
+    expect(nh.geography?.value).toBe("IL");
+    const count = interpretSeniorAskQuery(
+      "How many nursing homes are currently indexed in Illinois?",
+    );
+    expect(count.mode).toBe("count");
+    expect(count.providerClass).toBe("nursing_home");
+    const al = interpretSeniorAskQuery("assisted living in Illinois");
+    expect(al.mode).toBe("fail_closed");
+    expect(al.coverageState).toBe("NOT_ACQUIRED");
+    const slp = interpretSeniorAskQuery("supportive living in Illinois");
+    expect(slp.mode).toBe("fail_closed");
+    expect(slp.failReason).toMatch(/Supportive Living/i);
+    const complaints = interpretSeniorAskQuery("complaints against a nursing home in Illinois");
+    expect(complaints.mode).toBe("fail_closed");
+    expect(complaints.failReason).toMatch(/not a survey deficiency/i);
+    const best = interpretSeniorAskQuery("best nursing home in Illinois");
+    expect(best.mode).toBe("fail_closed");
+    const chicago = interpretSeniorAskQuery("safe nursing home in Chicago");
+    expect(chicago.mode).toBe("fail_closed");
+    const hha = interpretSeniorAskQuery("home health agencies in Illinois");
+    expect(hha.providerClass).toBe("home_health");
+    const hospice = interpretSeniorAskQuery("hospice in Illinois");
+    expect(hospice.providerClass).toBe("hospice");
   });
 
   it("parses home health Florida entity", () => {

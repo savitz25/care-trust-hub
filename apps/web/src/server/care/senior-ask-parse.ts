@@ -156,6 +156,13 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
         "PARTIAL",
       );
     }
+    if (/\billinois\b/i.test(q) || state?.value === "IL") {
+      return fail(
+        "Illinois Assisted Living and Shared Housing are IDPH license classes, not CMS nursing homes and not HFS Supportive Living. Current bulk rosters were not acquired. Use IDPH LLCS lookup. Search-only is not zero.",
+        ["Open Illinois senior-care research."],
+        "NOT_ACQUIRED",
+      );
+    }
     return fail(
       "Assisted living is state-regulated and does not share the federal CMS nursing-home, Home Health, or Hospice directory contract. Use the available state-specific assisted-living research.",
       [
@@ -186,6 +193,50 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
       ["Open New York nursing-home research."],
       "PARTIAL",
     );
+  }
+  if ((/\billinois\b/i.test(q) || state?.value === "IL") && /supportive living|\bslp\b/i.test(q)) {
+    return fail(
+      "Illinois Supportive Living is an HFS Medicaid program class (169 operational sites as of 2026-02-06), not a nursing home, not assisted living, and not a CMS SNF. Medicaid participation is not a facility license.",
+      ["Open Illinois senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (
+    (/\billinois\b/i.test(q) || state?.value === "IL") &&
+    /complaint/i.test(q) &&
+    /nursing home|assisted living|hospice|home health/i.test(q)
+  ) {
+    return fail(
+      "Illinois complaint research is IDPH hotline and LLCS search-only. Missing bulk complaint data is not zero complaints. A complaint is not a survey deficiency.",
+      ["Open Illinois senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (
+    (/\billinois\b/i.test(q) || state?.value === "IL") &&
+    /how many|count/i.test(q) &&
+    /licensed nursing home|idfpr|idph nursing/i.test(q)
+  ) {
+    return fail(
+      "A current IDPH nursing-home license census was not acquired. Do not answer with the CMS Illinois overlay of 666 certified providers as that license count. Search-only is not zero.",
+      [
+        "How many CMS nursing homes are currently indexed in Illinois?",
+        "Open Illinois senior-care research.",
+      ],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (
+    /\b(chicago|cook county)\b/i.test(q) &&
+    /nursing home|assisted living|senior/i.test(q) &&
+    (/\billinois\b/i.test(q) || state?.value === "IL" || /\bchicago\b|\bcook county\b/i.test(q))
+  ) {
+    if (/\b(best|safe|safest|worst)\b/i.test(q) || /local route|near me/i.test(q)) {
+      return fail(
+        "SeniorTrustHub does not rank Illinois facilities and does not publish Chicago or Cook County intelligence routes from this statewide page.",
+        ["Show nursing homes in Illinois."],
+      );
+    }
   }
   if (
     /\bvirginia\b/i.test(q) &&

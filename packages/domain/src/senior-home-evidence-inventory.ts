@@ -2,6 +2,7 @@ import { AZ_LOCKED, AZ_PUBLIC_FINGERPRINT, AZ_PUBLIC_PATH } from "./az-intellige
 import { CO_LOCKED, CO_PUBLIC_FINGERPRINT, CO_PUBLIC_PATH } from "./co-intelligence";
 import { VA_LOCKED, VA_PUBLIC_FINGERPRINT, VA_PUBLIC_PATH } from "./va-intelligence";
 import { NY_LOCKED, NY_PUBLIC_FINGERPRINT, NY_PUBLIC_PATH } from "./ny-intelligence";
+import { IL_LOCKED, IL_PUBLIC_FINGERPRINT, IL_PUBLIC_PATH } from "./il-intelligence";
 import { CA_LOCKED, CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_LOCKED, NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -41,7 +42,7 @@ export interface SeniorHomepageEvidenceMeasure {
 }
 
 export interface SeniorHomepageStateCard {
-  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA" | "NY";
+  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA" | "NY" | "IL";
   name: string;
   href: string;
   regulators: string;
@@ -530,15 +531,60 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       NY_PUBLIC_PATH,
     ),
     m(
+      "il-cms-nh",
+      "FEDERAL_DIRECTORY",
+      "Illinois CMS nursing-home providers",
+      IL_LOCKED.cmsNursingHomes,
+      "CMS Nursing Home CCN in Illinois geography",
+      "Nursing Home",
+      "Illinois",
+      "CMS Provider Information",
+      IL_PUBLIC_FINGERPRINT,
+      "2026-08-01",
+      "Accepted CMS Illinois overlay identities.",
+      "IDPH license census, Supportive Living sites, or a combined Illinois provider total.",
+      IL_PUBLIC_PATH,
+    ),
+    m(
+      "il-idph-hha",
+      "IDENTITY_LICENSURE",
+      "Illinois IDPH Home Health licenses",
+      IL_LOCKED.idphHomeHealth,
+      "IDPH Home Health license_number",
+      "Home Health Agency (state license)",
+      "Illinois",
+      "IDPH Open Data p7mg-cnpx",
+      IL_PUBLIC_FINGERPRINT,
+      "2026-04-28",
+      "Current IDPH Home Health license rows.",
+      "CMS Home Health CCNs; Home Nursing; Home Services.",
+      IL_PUBLIC_PATH,
+    ),
+    m(
+      "il-slp",
+      "STATE_CARE_ECOSYSTEM",
+      "Illinois HFS Supportive Living operational sites",
+      IL_LOCKED.slpSites,
+      "HFS operational SLP site",
+      "Supportive Living Program",
+      "Illinois",
+      "HFS OperationalSites.pdf",
+      IL_PUBLIC_FINGERPRINT,
+      "2026-02-06",
+      "Official HFS operational site total.",
+      "Nursing homes; assisted living; CMS SNFs.",
+      IL_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Completed state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL",
       "SeniorTrustHub accepted state artifacts",
-      "nine accepted state snapshots",
+      "ten accepted state snapshots",
       "2026-09-04",
       "Live state research destinations backed by accepted artifacts.",
       "A national template, ranking, or claim of identical state coverage.",
@@ -617,6 +663,9 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "co-cms-nh",
     "va-dss-alf",
     "ny-acf",
+    "il-cms-nh",
+    "il-idph-hha",
+    "il-slp",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -726,5 +775,17 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "Nursing Home Profile surveys/citations/fines plus Do Not Refer observations; ACF Health Profiles inspections remain a research path",
     sourceAsOf: NY_LOCKED.snapshotAsOf,
+  },
+  {
+    state: "IL",
+    name: "Illinois",
+    href: IL_PUBLIC_PATH,
+    regulators: "IDPH · HFS · CMS",
+    stateClasses: `${IL_LOCKED.cmsNursingHomes} CMS Nursing Homes · ${IL_LOCKED.idphHomeHealth} IDPH Home Health licenses · ${IL_LOCKED.slpSites} HFS Supportive Living sites`,
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${IL_LOCKED.cmsNursingHomes} CMS NH · ${IL_LOCKED.idphHomeHealth} IDPH HHA licenses · 0 exact state-to-CMS bridges`,
+    regulatoryDepth:
+      "Current NH/AL license censuses remain LLCS search-only; CMS survey evidence reused on exact CCN",
+    sourceAsOf: IL_LOCKED.snapshotAsOf,
   },
 ];
