@@ -1,3 +1,14 @@
+import {
+  AZ_ACCEPTED,
+  CA_ACCEPTED,
+  CO_ACCEPTED,
+  IL_ACCEPTED,
+  NJ_ACCEPTED,
+  NY_ACCEPTED,
+  TX_ACCEPTED,
+  VA_ACCEPTED,
+  WA_ACCEPTED,
+} from "./senior-home-accepted-inputs";
 import { createHash } from "node:crypto";
 import {
   SENIOR_HUB_INTEL_VERSION,
@@ -6,15 +17,15 @@ import {
   type HubSourceRow,
   type SeniorNationalIntelligence,
 } from "./senior-hub-intelligence";
-import { NJ_LOCKED, NJ_PUBLIC_PATH } from "./nj-intelligence";
-import { CA_LOCKED, CA_PUBLIC_PATH } from "./ca-intelligence";
-import { TX_LOCKED, TX_PUBLIC_PATH } from "./tx-intelligence";
-import { WA_LOCKED, WA_PUBLIC_PATH } from "./wa-intelligence";
-import { AZ_LOCKED, AZ_PUBLIC_PATH } from "./az-intelligence";
-import { CO_LOCKED, CO_PUBLIC_PATH } from "./co-intelligence";
-import { VA_LOCKED, VA_PUBLIC_PATH } from "./va-intelligence";
-import { NY_LOCKED, NY_PUBLIC_PATH } from "./ny-intelligence";
-import { IL_LOCKED, IL_PUBLIC_PATH } from "./il-intelligence";
+import { NJ_PUBLIC_PATH } from "./nj-intelligence";
+import { CA_PUBLIC_PATH } from "./ca-intelligence";
+import { TX_PUBLIC_PATH } from "./tx-intelligence";
+import { WA_PUBLIC_PATH } from "./wa-intelligence";
+import { AZ_PUBLIC_PATH } from "./az-intelligence";
+import { CO_PUBLIC_PATH } from "./co-intelligence";
+import { VA_PUBLIC_PATH } from "./va-intelligence";
+import { NY_PUBLIC_PATH } from "./ny-intelligence";
+import { IL_PUBLIC_PATH } from "./il-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -279,6 +290,12 @@ function coverageStatus(part: number, whole: number): CoverageStatus {
   return "unavailable";
 }
 
+function requireGeography(national: SeniorNationalIntelligence, state: string) {
+  const row = national.geography.find((entry) => entry.state === state);
+  if (!row) throw new Error(`Missing accepted CMS state partition: ${state}`);
+  return row;
+}
+
 export function buildSeniorHomeIntel(input: {
   national: SeniorNationalIntelligence;
   floridaIdentities: number;
@@ -295,66 +312,16 @@ export function buildSeniorHomeIntel(input: {
   const hospiceDates = sourceDate(sources, "hospice-general-information");
   const ownDates = sourceDate(sources, "nursing-home-ownership");
   const chowDates = sourceDate(sources, "skilled-nursing-facility-change-of-ownership");
-  const flGeo = national.geography.find((row) => row.state === "FL") ?? {
-    state: "FL",
-    nursingHomes: 0,
-    homeHealth: 0,
-    hospice: 0,
-  };
-  const njGeo = national.geography.find((row) => row.state === "NJ") ?? {
-    state: "NJ",
-    nursingHomes: 0,
-    homeHealth: 0,
-    hospice: 0,
-  };
-  const caGeo = national.geography.find((row) => row.state === "CA") ?? {
-    state: "CA",
-    nursingHomes: 0,
-    homeHealth: 0,
-    hospice: 0,
-  };
-  const txGeo = national.geography.find((row) => row.state === "TX") ?? {
-    state: "TX",
-    nursingHomes: 0,
-    homeHealth: 0,
-    hospice: 0,
-  };
-  const waGeo = national.geography.find((row) => row.state === "WA") ?? {
-    state: "WA",
-    nursingHomes: 0,
-    homeHealth: 0,
-    hospice: 0,
-  };
-  const azGeo = national.geography.find((row) => row.state === "AZ") ?? {
-    state: "AZ",
-    nursingHomes: 0,
-    homeHealth: 0,
-    hospice: 0,
-  };
-  const coGeo = national.geography.find((row) => row.state === "CO") ?? {
-    state: "CO",
-    nursingHomes: 0,
-    homeHealth: 0,
-    hospice: 0,
-  };
-  const vaGeo = national.geography.find((row) => row.state === "VA") ?? {
-    state: "VA",
-    nursingHomes: 0,
-    homeHealth: 0,
-    hospice: 0,
-  };
-  const nyGeo = national.geography.find((row) => row.state === "NY") ?? {
-    state: "NY",
-    nursingHomes: 0,
-    homeHealth: 0,
-    hospice: 0,
-  };
-  const ilGeo = national.geography.find((row) => row.state === "IL") ?? {
-    state: "IL",
-    nursingHomes: 0,
-    homeHealth: 0,
-    hospice: 0,
-  };
+  const flGeo = requireGeography(national, "FL");
+  const njGeo = requireGeography(national, "NJ");
+  const caGeo = requireGeography(national, "CA");
+  const txGeo = requireGeography(national, "TX");
+  const waGeo = requireGeography(national, "WA");
+  const azGeo = requireGeography(national, "AZ");
+  const coGeo = requireGeography(national, "CO");
+  const vaGeo = requireGeography(national, "VA");
+  const nyGeo = requireGeography(national, "NY");
+  const ilGeo = requireGeography(national, "IL");
   const nhMax = Math.max(...national.geography.map((row) => row.nursingHomes), 1);
   const officialAsOf = latest([
     nhDates.officialAsOf,
@@ -803,9 +770,9 @@ export function buildSeniorHomeIntel(input: {
     {
       family: "Licensing / registration",
       providerClass: "New Jersey NJDOH (state enrichment)",
-      numerator: NJ_LOCKED.ltcRows,
+      numerator: NJ_ACCEPTED.ltcRows,
       denominator: null,
-      display: `${NJ_LOCKED.ltcRows.toLocaleString("en-US")} All_LTC identities; ${NJ_LOCKED.acuteRows.toLocaleString("en-US")} All_Acute identities (not a combined total)`,
+      display: `${NJ_ACCEPTED.ltcRows.toLocaleString("en-US")} All_LTC identities; ${NJ_ACCEPTED.acuteRows.toLocaleString("en-US")} All_Acute identities (not a combined total)`,
       status: "partial",
       method:
         "New Jersey state-license universes on /new-jersey. All_LTC and All_Acute stay separate.",
@@ -817,9 +784,9 @@ export function buildSeniorHomeIntel(input: {
     {
       family: "Licensing / registration",
       providerClass: "California CDPH / CCLD / HCAI (state enrichment)",
-      numerator: CA_LOCKED.elmsRows,
+      numerator: CA_ACCEPTED.elmsRows,
       denominator: null,
-      display: `${CA_LOCKED.elmsRows.toLocaleString("en-US")} ELMS locations; ${CA_LOCKED.rcfeLicensed.toLocaleString("en-US")} RCFE LICENSED as of 2025-05-25 (not a combined total)`,
+      display: `${CA_ACCEPTED.elmsRows.toLocaleString("en-US")} ELMS locations; ${CA_ACCEPTED.rcfeLicensed.toLocaleString("en-US")} RCFE LICENSED as of 2025-05-25 (not a combined total)`,
       status: "partial",
       method:
         "California state-license universes on /california. ELMS, RCFE, HCAI, and Home Care Organizations stay separate.",
@@ -832,9 +799,9 @@ export function buildSeniorHomeIntel(input: {
     {
       family: "Licensing / registration",
       providerClass: "Texas HHSC / TULIP (state enrichment)",
-      numerator: TX_LOCKED.hhscNf,
+      numerator: TX_ACCEPTED.hhscNf,
       denominator: null,
-      display: `${TX_LOCKED.hhscNf.toLocaleString("en-US")} HHSC NF rows; ${TX_LOCKED.hhscAlf.toLocaleString("en-US")} ALF rows; ${TX_LOCKED.hhscHcssa.toLocaleString("en-US")} HCSSA rows (not a combined total). TULIP is search-only.`,
+      display: `${TX_ACCEPTED.hhscNf.toLocaleString("en-US")} HHSC NF rows; ${TX_ACCEPTED.hhscAlf.toLocaleString("en-US")} ALF rows; ${TX_ACCEPTED.hhscHcssa.toLocaleString("en-US")} HCSSA rows (not a combined total). TULIP is search-only.`,
       status: "partial",
       method:
         "Texas state-license directories on /texas. NF, ALF, and HCSSA stay separate. TULIP is verification, not a bulk roster.",
@@ -847,9 +814,9 @@ export function buildSeniorHomeIntel(input: {
     {
       family: "Licensing / registration",
       providerClass: "Arizona ADHS (state enrichment)",
-      numerator: AZ_LOCKED.alHome,
+      numerator: AZ_ACCEPTED.alHome,
       denominator: null,
-      display: `${AZ_LOCKED.alHome.toLocaleString("en-US")} Assisted Living Homes; ${AZ_LOCKED.alCenter.toLocaleString("en-US")} Assisted Living Centers; ${AZ_LOCKED.afc.toLocaleString("en-US")} Adult Foster Care (not a combined total). GIS clock ${AZ_LOCKED.gisRun}.`,
+      display: `${AZ_ACCEPTED.alHome.toLocaleString("en-US")} Assisted Living Homes; ${AZ_ACCEPTED.alCenter.toLocaleString("en-US")} Assisted Living Centers; ${AZ_ACCEPTED.afc.toLocaleString("en-US")} Adult Foster Care (not a combined total). GIS clock ${AZ_ACCEPTED.gisRun}.`,
       status: "partial",
       method:
         "Arizona state-license GIS classes on /arizona. Homes, Centers, and Adult Foster Care stay separate. AZ Care Check is search-only.",
@@ -862,9 +829,9 @@ export function buildSeniorHomeIntel(input: {
     {
       family: "Licensing / registration",
       providerClass: "Colorado CDPHE (state enrichment)",
-      numerator: CO_LOCKED.cmsNursingHomes,
+      numerator: CO_ACCEPTED.cmsNursingHomes,
       denominator: null,
-      display: `${CO_LOCKED.cmsNursingHomes.toLocaleString("en-US")} CMS Nursing Homes; ${CO_LOCKED.cmsHomeHealth.toLocaleString("en-US")} CMS Home Health; ${CO_LOCKED.cmsHospice.toLocaleString("en-US")} CMS Hospice (not a combined total). CDPHE Find and Compare is search-only.`,
+      display: `${CO_ACCEPTED.cmsNursingHomes.toLocaleString("en-US")} CMS Nursing Homes; ${CO_ACCEPTED.cmsHomeHealth.toLocaleString("en-US")} CMS Home Health; ${CO_ACCEPTED.cmsHospice.toLocaleString("en-US")} CMS Hospice (not a combined total). CDPHE Find and Compare is search-only.`,
       status: "partial",
       method:
         "Colorado CMS class overlays on /colorado. Assisted Living Residence, Home Care Agency, and Nursing Home Administrator stay separate. CDPHE is verification/inspection context, not a bulk roster.",
@@ -877,9 +844,9 @@ export function buildSeniorHomeIntel(input: {
     {
       family: "Licensing / registration",
       providerClass: "Virginia DSS (state enrichment)",
-      numerator: VA_LOCKED.alfCount,
+      numerator: VA_ACCEPTED.alfCount,
       denominator: null,
-      display: `${VA_LOCKED.alfCount.toLocaleString("en-US")} DSS Assisted Living Facilities; ${VA_LOCKED.adcCount.toLocaleString("en-US")} Adult Day Centers; ${VA_LOCKED.cmsNursingHomes.toLocaleString("en-US")} CMS Nursing Homes (not a combined total).`,
+      display: `${VA_ACCEPTED.alfCount.toLocaleString("en-US")} DSS Assisted Living Facilities; ${VA_ACCEPTED.adcCount.toLocaleString("en-US")} Adult Day Centers; ${VA_ACCEPTED.cmsNursingHomes.toLocaleString("en-US")} CMS Nursing Homes (not a combined total).`,
       status: "partial",
       method:
         "Virginia DSS ALF and Adult Day official search JSON on /virginia, kept separate from CMS class overlays. VDH nursing-home portal remains search-only.",
@@ -892,9 +859,9 @@ export function buildSeniorHomeIntel(input: {
     {
       family: "Licensing / registration",
       providerClass: "Illinois IDPH / HFS (state enrichment)",
-      numerator: IL_LOCKED.cmsNursingHomes,
+      numerator: IL_ACCEPTED.cmsNursingHomes,
       denominator: null,
-      display: `${IL_LOCKED.cmsNursingHomes.toLocaleString("en-US")} CMS Nursing Homes; ${IL_LOCKED.idphHomeHealth.toLocaleString("en-US")} IDPH Home Health licenses; ${IL_LOCKED.slpSites.toLocaleString("en-US")} HFS Supportive Living sites (not a combined total).`,
+      display: `${IL_ACCEPTED.cmsNursingHomes.toLocaleString("en-US")} CMS Nursing Homes; ${IL_ACCEPTED.idphHomeHealth.toLocaleString("en-US")} IDPH Home Health licenses; ${IL_ACCEPTED.slpSites.toLocaleString("en-US")} HFS Supportive Living sites (not a combined total).`,
       status: "partial",
       method:
         "Illinois CMS class overlays on /illinois plus current IDPH Home Health/Hospice/Home Nursing/Home Services directories and HFS Supportive Living operational sites. Current nursing-home and assisted-living license censuses remain search-only.",
@@ -1013,8 +980,8 @@ export function buildSeniorHomeIntel(input: {
     },
     newJerseyPreview: {
       href: NJ_PUBLIC_PATH,
-      ltcIdentities: NJ_LOCKED.ltcRows,
-      acuteIdentities: NJ_LOCKED.acuteRows,
+      ltcIdentities: NJ_ACCEPTED.ltcRows,
+      acuteIdentities: NJ_ACCEPTED.acuteRows,
       cmsNursingHomes: njGeo.nursingHomes,
       cmsHomeHealth: njGeo.homeHealth,
       cmsHospice: njGeo.hospice,
@@ -1022,8 +989,8 @@ export function buildSeniorHomeIntel(input: {
     },
     californiaPreview: {
       href: CA_PUBLIC_PATH,
-      elmsRows: CA_LOCKED.elmsRows,
-      rcfeLicensed: CA_LOCKED.rcfeLicensed,
+      elmsRows: CA_ACCEPTED.elmsRows,
+      rcfeLicensed: CA_ACCEPTED.rcfeLicensed,
       cmsNursingHomes: caGeo.nursingHomes,
       cmsHomeHealth: caGeo.homeHealth,
       cmsHospice: caGeo.hospice,
@@ -1034,15 +1001,15 @@ export function buildSeniorHomeIntel(input: {
       cmsNursingHomes: txGeo.nursingHomes,
       cmsHomeHealth: txGeo.homeHealth,
       cmsHospice: txGeo.hospice,
-      hhscNf: TX_LOCKED.hhscNf,
-      hhscAlf: TX_LOCKED.hhscAlf,
-      hhscHcssa: TX_LOCKED.hhscHcssa,
+      hhscNf: TX_ACCEPTED.hhscNf,
+      hhscAlf: TX_ACCEPTED.hhscAlf,
+      hhscHcssa: TX_ACCEPTED.hhscHcssa,
       note: "Texas state intelligence keeps CMS class overlays, HHSC NF/ALF/HCSSA directories, and TULIP verification as separate datasets. They are not one senior-provider total. ALF is not SNF. HCSSA is not CMS Home Health.",
     },
     washingtonPreview: {
       href: WA_PUBLIC_PATH,
-      afh: WA_LOCKED.afh,
-      alf: WA_LOCKED.alf,
+      afh: WA_ACCEPTED.afh,
+      alf: WA_ACCEPTED.alf,
       cmsNursingHomes: waGeo.nursingHomes,
       cmsHomeHealth: waGeo.homeHealth,
       cmsHospice: waGeo.hospice,
@@ -1050,9 +1017,9 @@ export function buildSeniorHomeIntel(input: {
     },
     arizonaPreview: {
       href: AZ_PUBLIC_PATH,
-      alHome: AZ_LOCKED.alHome,
-      alCenter: AZ_LOCKED.alCenter,
-      afc: AZ_LOCKED.afc,
+      alHome: AZ_ACCEPTED.alHome,
+      alCenter: AZ_ACCEPTED.alCenter,
+      afc: AZ_ACCEPTED.afc,
       cmsNursingHomes: azGeo.nursingHomes,
       cmsHomeHealth: azGeo.homeHealth,
       cmsHospice: azGeo.hospice,
@@ -1069,8 +1036,8 @@ export function buildSeniorHomeIntel(input: {
     },
     virginiaPreview: {
       href: VA_PUBLIC_PATH,
-      alfCount: VA_LOCKED.alfCount,
-      adcCount: VA_LOCKED.adcCount,
+      alfCount: VA_ACCEPTED.alfCount,
+      adcCount: VA_ACCEPTED.adcCount,
       cmsNursingHomes: vaGeo.nursingHomes,
       cmsHomeHealth: vaGeo.homeHealth,
       cmsHospice: vaGeo.hospice,
@@ -1078,8 +1045,8 @@ export function buildSeniorHomeIntel(input: {
     },
     newYorkPreview: {
       href: NY_PUBLIC_PATH,
-      acfCount: NY_LOCKED.acfFacilities,
-      nhCount: NY_LOCKED.nhFacilities,
+      acfCount: NY_ACCEPTED.acfFacilities,
+      nhCount: NY_ACCEPTED.nhFacilities,
       cmsNursingHomes: nyGeo.nursingHomes,
       cmsHomeHealth: nyGeo.homeHealth,
       cmsHospice: nyGeo.hospice,
@@ -1090,8 +1057,8 @@ export function buildSeniorHomeIntel(input: {
       cmsNursingHomes: ilGeo.nursingHomes,
       cmsHomeHealth: ilGeo.homeHealth,
       cmsHospice: ilGeo.hospice,
-      idphHomeHealth: IL_LOCKED.idphHomeHealth,
-      slpSites: IL_LOCKED.slpSites,
+      idphHomeHealth: IL_ACCEPTED.idphHomeHealth,
+      slpSites: IL_ACCEPTED.slpSites,
       note: "Illinois state intelligence keeps CMS Nursing Homes, IDPH Home Health/Hospice licenses, and HFS Supportive Living sites as separate datasets. They are not one senior-provider total. IDPH Home Health is not CMS Home Health. Supportive Living is not a nursing home.",
     },
     askMarket: [
@@ -1137,14 +1104,14 @@ export function buildSeniorHomeIntel(input: {
       {
         id: "florida-differs",
         question: "How does Florida’s research coverage differ?",
-        answer: `Florida currently has a state intelligence page with ${input.floridaIdentities.toLocaleString("en-US")} AHCA identities and ${input.floridaRegulatoryObservations.toLocaleString("en-US")} regulatory observations, plus CMS class counts. New Jersey, California, Texas, Washington, Arizona, and Colorado have separate state intelligence pages. Other states on this homepage are CMS directory counts only.`,
+        answer: `Florida currently has a state intelligence page with ${input.floridaIdentities.toLocaleString("en-US")} AHCA identities and ${input.floridaRegulatoryObservations.toLocaleString("en-US")} regulatory observations, plus CMS class counts. Published state pages have different acquired classes and search-only capabilities; federal CMS baseline does not imply state regulatory coverage.`,
         href: "/florida",
         hrefLabel: "Open Florida intelligence",
       },
       {
         id: "new-jersey-differs",
         question: "How does New Jersey’s research coverage differ?",
-        answer: `New Jersey currently has a state intelligence page with ${NJ_LOCKED.ltcRows.toLocaleString("en-US")} NJDOH All_LTC identities and ${NJ_LOCKED.acuteRows.toLocaleString("en-US")} All_Acute identities, plus CMS class counts. All_LTC and All_Acute are not one senior-provider total.`,
+        answer: `New Jersey currently has a state intelligence page with ${NJ_ACCEPTED.ltcRows.toLocaleString("en-US")} NJDOH All_LTC identities and ${NJ_ACCEPTED.acuteRows.toLocaleString("en-US")} All_Acute identities, plus CMS class counts. All_LTC and All_Acute are not one senior-provider total.`,
         href: NJ_PUBLIC_PATH,
         hrefLabel: "Open New Jersey intelligence",
       },

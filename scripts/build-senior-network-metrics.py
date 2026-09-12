@@ -8,15 +8,17 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import sys
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import psycopg
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "apps" / "web" / "src" / "data" / "senior-network-metrics-v1.json"
 HUB_INTEL = ROOT / "apps" / "web" / "src" / "data" / "senior-national-intelligence.json"
+CENSUS = ROOT / "artifacts" / "senior-metric-census-r2-03.json"
 SCHEMA = "senior-network-metrics-v1"
 
 NEWEST_SEMANTICS = (
@@ -26,7 +28,9 @@ NEWEST_SEMANTICS = (
 
 
 def load_env() -> None:
-    env_path = ROOT / ".env.local"
+    if os.environ.get("CARE_DATABASE_URL"):
+        return
+    env_path = Path(os.environ.get("CARE_METRICS_ENV_FILE", ROOT / ".env.local"))
     if not env_path.exists():
         raise SystemExit(".env.local missing")
     for line in env_path.read_text(encoding="utf-8").splitlines():
@@ -134,9 +138,9 @@ SELECT jsonb_build_object(
   'nh_current', (SELECT count(*) FROM current_nh),
   'nh_known', (SELECT count(*) FROM provider WHERE provider_type='nursing_home'),
   'nh_status', (SELECT coalesce(jsonb_object_agg(directory_status, n), '{}'::jsonb) FROM nh_status),
-  'hh_current', (SELECT count(DISTINCT provider_id) FROM home_health_snapshot),
+  'hh_current', (SELECT count(DISTINCT provider_id) FROM home_health_snapshot s JOIN latest l ON l.source_release_id=s.source_release_id WHERE l.dataset_key='home-health-care-agencies'),
   'hh_typed', (SELECT count(*) FROM provider WHERE provider_type='home_health'),
-  'hospice_current', (SELECT count(DISTINCT provider_id) FROM hospice_snapshot),
+  'hospice_current', (SELECT count(DISTINCT provider_id) FROM hospice_snapshot s JOIN latest l ON l.source_release_id=s.source_release_id WHERE l.dataset_key='hospice-general-information'),
   'hospice_typed', (SELECT count(*) FROM provider WHERE provider_type='hospice'),
   'mds_all', (SELECT count(*) FROM facility_quality_measure_observation),
   'mds_latest', (
@@ -221,14 +225,14 @@ SELECT jsonb_build_object(
     SELECT coalesce(jsonb_object_agg(state_code, n), '{}'::jsonb)
     FROM (
       SELECT state_code, count(DISTINCT provider_id) AS n
-      FROM home_health_snapshot GROUP BY 1
+      FROM home_health_snapshot s JOIN latest l ON l.source_release_id=s.source_release_id WHERE l.dataset_key='home-health-care-agencies' GROUP BY 1
     ) t
   ),
   'hospice_by_state', (
     SELECT coalesce(jsonb_object_agg(state_code, n), '{}'::jsonb)
     FROM (
       SELECT state_code, count(DISTINCT provider_id) AS n
-      FROM hospice_snapshot GROUP BY 1
+      FROM hospice_snapshot s JOIN latest l ON l.source_release_id=s.source_release_id WHERE l.dataset_key='hospice-general-information' GROUP BY 1
     ) t
   )
 )
@@ -241,29 +245,40 @@ ORDER BY dataset_key
 """
 
 
-def main() -> int:
+def capture_census() -> int:
+    import psycopg
     load_env()
-    url = os.environ.get("CARE_DATABASE_URL")
-    if not url:
-        raise SystemExit("CARE_DATABASE_URL missing")
-    generated_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-    hub = json.loads(HUB_INTEL.read_text(encoding="utf-8"))
-    print("querying canonical database...", flush=True)
-    with psycopg.connect(url, autocommit=True) as conn:
-        conn.execute("SET statement_timeout = '300s'")
+    with psycopg.connect(os.environ["CARE_DATABASE_URL"]) as conn:
+        conn.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
+        conn.execute("SET LOCAL statement_timeout = '300s'")
         counts = conn.execute(SQL).fetchone()[0]
         freshness_rows = conn.execute(FRESHNESS_SQL).fetchall()
+        conn.rollback()
+    sources = [{"datasetKey": row[0], "sourceAsOf": as_date(row[1]),
+                "sourceModifiedAt": row[1].isoformat() if row[1] else None,
+                "retrievedAt": row[2].isoformat() if row[2] else None,
+                "sourcePeriod": row[3], "freshnessBand": row[4]} for row in freshness_rows]
+    census = {"contractRevision": "ATH-METRICS-R2-03", "retrievedAt": datetime.now(timezone.utc).isoformat(),
+              "sourceAsOf": None, "acquisition": "Read-only repeatable-read CMS census. Source clocks retained separately.",
+              "counts": counts, "sources": sources}
+    CENSUS.write_text(json.dumps(census, indent=2) + "\n", encoding="utf-8")
+    print(f"Captured read-only census: {CENSUS}")
+    return 0
 
-    sources = [
-        {
-            "datasetKey": row[0],
-            "sourceAsOf": as_date(row[1]),
-            "retrievedAt": row[2].isoformat() if row[2] else None,
-            "sourcePeriod": row[3],
-            "freshnessBand": row[4],
-        }
-        for row in freshness_rows
-    ]
+
+def main() -> int:
+    if "--capture-census" in sys.argv:
+        return capture_census()
+    if "--base-json" not in sys.argv:
+        return subprocess.call(["node", "--import", "tsx", "scripts/build-senior-network-metrics.mts", *sys.argv[1:]], cwd=ROOT)
+    generated_at = os.environ.get("METRICS_GENERATED_AT") or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    hub = json.loads(HUB_INTEL.read_text(encoding="utf-8"))
+    census = json.loads(CENSUS.read_text(encoding="utf-8"))
+    counts, sources = census["counts"], census["sources"]
+    for key, value in counts.items():
+        values = value.values() if isinstance(value, dict) else [value]
+        if any(not isinstance(v, int) or isinstance(v, bool) or v < 0 for v in values):
+            raise SystemExit(f"Invalid/missing accepted census count: {key}")
     by_source = freshness_map(sources)
 
     def src(*keys: str) -> str | None:
@@ -1152,13 +1167,7 @@ def main() -> int:
             f"Hospice current {hospice_current} != hub intel {hub['hospice']['current']}"
         )
 
-    OUT.write_text(json.dumps(payload, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
-    print(f"wrote {OUT}", flush=True)
-    print(f"fingerprint {payload['sourceFingerprint']}", flush=True)
-    print(
-        f"NH {nh_current} HH {hh_current} Hospice {hospice_current} MDS {mds} fire {fire} inspections {inspections}",
-        flush=True,
-    )
+    print(json.dumps(payload, ensure_ascii=True))
     return 0
 
 

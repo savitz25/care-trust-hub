@@ -70,6 +70,11 @@ export function SeniorHomeIntelligence({
     workspace: boolean;
   };
 }) {
+  const inventoryValue = (key: string) => {
+    const metric = evidenceInventory.find((row) => row.key === key);
+    if (!metric) throw new Error(`Missing generated homepage metric: ${key}`);
+    return metric.value.toLocaleString("en-US");
+  };
   const inventoryFamilies = evidenceInventory.reduce<
     Record<string, SeniorHomepageEvidenceMeasure[]>
   >((groups, row) => {
@@ -175,7 +180,7 @@ export function SeniorHomeIntelligence({
               <h3>{EVIDENCE_FAMILY_LABELS[family as SeniorHomepageEvidenceMeasure["family"]]}</h3>
               <div className="intel-inventory__rows">
                 {rows.map((row) => (
-                  <article key={row.key} className="intel-inventory__row">
+                  <article key={row.key} className="intel-inventory__row" data-metric-key={row.key}>
                     <p className="intel-inventory__value">{row.value.toLocaleString("en-US")}</p>
                     <h4>{row.label}</h4>
                     <p>{row.counts}</p>
@@ -193,6 +198,10 @@ export function SeniorHomeIntelligence({
                       <div>
                         <dt>Source as of</dt>
                         <dd>{dateLabel(row.sourceAsOf)}</dd>
+                      </div>
+                      <div>
+                        <dt>Retrieved</dt>
+                        <dd>{dateLabel(row.retrievedAt ?? null)}</dd>
                       </div>
                     </dl>
                     <details className="intel-disclose">
@@ -228,8 +237,9 @@ export function SeniorHomeIntelligence({
               State license identity <span>+</span> CMS CCN
             </h3>
             <p>
-              <strong>140</strong> Nursing Home, <strong>172</strong> Home Health, and{" "}
-              <strong>232</strong> Hospice exact joins.
+              <strong>{inventoryValue("az-nh-crosswalk")}</strong> Nursing Home,{" "}
+              <strong>{inventoryValue("az-hha-crosswalk")}</strong> Home Health, and{" "}
+              <strong>{inventoryValue("az-hospice-crosswalk")}</strong> Hospice exact joins.
             </p>
             <p className="hub-kicker">
               Exact crosswalk does not mean endorsement. Unmatched does not mean unlicensed or
@@ -242,7 +252,8 @@ export function SeniorHomeIntelligence({
               State-only residential care <span>≠</span> CMS provider
             </h3>
             <p>
-              <strong>6,179</strong> Adult Family Homes and <strong>557</strong> Assisted Living
+              <strong>{inventoryValue("wa-afh")}</strong> Adult Family Homes and{" "}
+              <strong>{intel.washingtonPreview.alf.toLocaleString("en-US")}</strong> Assisted Living
               Facilities remain outside the CMS class totals.
             </p>
             <p className="hub-kicker">
@@ -486,7 +497,14 @@ export function SeniorHomeIntelligence({
         <ul className="intel-timeline">
           {stateCards.map((state) => (
             <li key={state.state}>
-              <p className="intel-timeline__freshness">Source as of: {state.sourceAsOf}</p>
+              <p className="intel-timeline__freshness">
+                Source as of:{" "}
+                {state.sourceAsOf
+                  ? dateLabel(state.sourceAsOf)
+                  : state.sourceClocks?.some((clock) => clock.sourceAsOf)
+                    ? "Varies by source"
+                    : "Not reported"}
+              </p>
               <div>
                 <h3>{state.name} intelligence</h3>
                 <p>{state.stateClasses}</p>
@@ -504,7 +522,7 @@ export function SeniorHomeIntelligence({
           <p className="eyebrow">Localize</p>
           <h2 id="explore-title">Explore senior-care intelligence by state</h2>
           <p>
-            {stateCards.length} completed state intelligence surfaces connect source-native
+            {stateCards.length} published state intelligence surfaces connect source-native
             licensing and regulatory systems to CMS overlays where accepted identity evidence
             supports the relationship.
           </p>
@@ -536,9 +554,34 @@ export function SeniorHomeIntelligence({
                 </div>
                 <div>
                   <dt>Source as of</dt>
-                  <dd>{state.sourceAsOf}</dd>
+                  <dd>
+                    {state.sourceAsOf
+                      ? dateLabel(state.sourceAsOf)
+                      : state.sourceClocks?.some((clock) => clock.sourceAsOf)
+                        ? "Varies by source"
+                        : "Not reported"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Snapshot / retrieved</dt>
+                  <dd>
+                    {dateLabel(state.snapshotAsOf ?? null)} / {dateLabel(state.retrievedAt ?? null)}
+                  </dd>
                 </div>
               </dl>
+              {state.sourceClocks && (
+                <details>
+                  <summary>Source clocks</summary>
+                  <ul>
+                    {state.sourceClocks.map((clock) => (
+                      <li key={clock.label}>
+                        {clock.label}: source {dateLabel(clock.sourceAsOf)}; snapshot{" "}
+                        {dateLabel(clock.snapshotAsOf)}; retrieved {dateLabel(clock.retrievedAt)}
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
               <Link className="button button--secondary" href={state.href}>
                 Explore {state.name} intelligence →
               </Link>

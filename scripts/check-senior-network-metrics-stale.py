@@ -42,8 +42,8 @@ SELECT jsonb_build_object(
     ORDER BY generated_at DESC LIMIT 1
   ),
   'nh_current', (SELECT count(*) FROM current_nh),
-  'hh_current', (SELECT count(DISTINCT provider_id) FROM home_health_snapshot),
-  'hospice_current', (SELECT count(DISTINCT provider_id) FROM hospice_snapshot),
+  'hh_current', (SELECT count(DISTINCT provider_id) FROM home_health_snapshot s JOIN latest l ON l.source_release_id=s.source_release_id WHERE l.dataset_key='home-health-care-agencies'),
+  'hospice_current', (SELECT count(DISTINCT provider_id) FROM hospice_snapshot s JOIN latest l ON l.source_release_id=s.source_release_id WHERE l.dataset_key='hospice-general-information'),
   'hospice_typed', (SELECT count(*) FROM provider WHERE provider_type='hospice'),
   'mds_latest', (
     SELECT count(*) FROM facility_quality_measure_observation o
@@ -97,7 +97,7 @@ def fingerprint(payload: dict[str, Any]) -> str:
         for key, value in payload.items()
         if key not in {"generatedAt", "sourceFingerprint"}
     }
-    encoded = json.dumps(canonical, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+    encoded = json.dumps(canonical, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
 
 
@@ -187,7 +187,11 @@ def check_live(metrics: dict[str, Any], hub: dict[str, Any]) -> None:
 def main() -> int:
     load_env()
     files = check_files()
-    print("file coupling ok", flush=True)
+    for source in files["metrics"].get("reconciliation", {}).get("acceptedSources", []):
+        content = (ROOT / source["path"]).read_text(encoding="utf-8")
+        if hashlib.sha256(content.encode("utf-8")).hexdigest() != source["sha256"]:
+            raise SystemExit(f"Stale accepted source fingerprint: {source['path']}")
+    print("file coupling and accepted source fingerprints ok", flush=True)
     check_live(files["metrics"], files["hub"])
     return 0
 

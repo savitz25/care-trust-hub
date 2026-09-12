@@ -1,3 +1,4 @@
+import type { SeniorGeneratedHomepage, SeniorReconciliation } from "./senior-state-metric-contract";
 import { createHash } from "node:crypto";
 import type { SeniorNationalIntelligence } from "./senior-hub-intelligence";
 
@@ -105,6 +106,9 @@ export interface NetworkFreshnessSource {
 }
 
 export interface SeniorNetworkMetricsV1 {
+  contractRevision?: "ATH-METRICS-R2-03";
+  reconciliation?: SeniorReconciliation;
+  homepage?: SeniorGeneratedHomepage;
   schemaVersion: typeof SENIOR_NETWORK_METRICS_VERSION;
   generatedAt: string;
   sourceFingerprint: string;
