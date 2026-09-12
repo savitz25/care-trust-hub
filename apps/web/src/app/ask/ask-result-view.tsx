@@ -214,10 +214,12 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
                 <ul>
                   {entity.evidence.map((item) => (
                     <li key={item.label}>
-                      {item.label}: {item.value}
-                      {/stars/i.test(item.label) && /\d\/5/.test(item.value) ? (
-                        <CmsStarRating value={Number(item.value[0])} />
-                      ) : null}
+                      {item.label}:{" "}
+                      {item.rating ? (
+                        <CmsStarRating value={item.rating.value} metric={item.rating.metric} />
+                      ) : (
+                        item.value
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -310,6 +312,34 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
             <dt>Geography meaning</dt>
             <dd>{result.provenance.geographyMeaning}</dd>
           </div>
+          <div>
+            <dt>Executed recorded location</dt>
+            <dd>
+              {result.query.geography
+                ? [result.query.geography.value, result.query.geography.state]
+                    .filter(Boolean)
+                    .join(", ")
+                : "No location filter"}
+            </dd>
+          </div>
+          {result.provenance.sourceRelease ? (
+            <div>
+              <dt>Source release</dt>
+              <dd>{result.provenance.sourceRelease}</dd>
+            </div>
+          ) : null}
+          {result.provenance.retrievedAt ? (
+            <div>
+              <dt>Source retrieved</dt>
+              <dd>{result.provenance.retrievedAt} (separate from official as-of)</dd>
+            </div>
+          ) : null}
+          {result.provenance.sourceFingerprint ? (
+            <div>
+              <dt>Source fingerprint</dt>
+              <dd className="senior-ask__fingerprint">{result.provenance.sourceFingerprint}</dd>
+            </div>
+          ) : null}
           <div>
             <dt>Query grain</dt>
             <dd>{result.provenance.queryGrain}</dd>

@@ -1,3 +1,4 @@
+import { sourceRating, type CmsRatingMetric } from "@/lib/cms-rating";
 import "server-only";
 import { getCareDatabasePool } from "./db";
 import { CMS_PROVIDER_INFORMATION_SOURCE, CMS_REGULATORY_SOURCES } from "./source-contracts";
@@ -52,7 +53,11 @@ export type SeniorAskEntity = {
   recordedLocation?: { city: string | null; state: string; county?: string | null };
   statusLabel: string;
   href: string;
-  evidence: Array<{ label: string; value: string }>;
+  evidence: Array<{
+    label: string;
+    value: string;
+    rating?: { metric: CmsRatingMetric; value: number | null };
+  }>;
   whyMatched: string;
   sourceAsOf?: string | null;
 };
@@ -99,11 +104,11 @@ async function getNursingHomeSourceClock(): Promise<{
     display_name: string;
     source_organization: string;
     release_key?: string;
-    content_hash?: string;
+    content_sha256?: string;
     retrieved_at?: Date | null;
     source_modified_at: Date | null;
   }>(
-    `SELECT sd.display_name, sd.source_organization, sr.source_modified_at, sr.release_key, sr.content_hash, sr.retrieved_at
+    `SELECT sd.display_name, sd.source_organization, sr.source_modified_at, sr.release_key, sr.content_sha256, sr.retrieved_at
      FROM source_dataset sd
      JOIN source_release sr ON sr.source_dataset_id=sd.id
      JOIN ingest_run ir ON ir.source_release_id=sr.id AND ir.status='succeeded'
@@ -120,7 +125,7 @@ async function getNursingHomeSourceClock(): Promise<{
       : `${CMS_PROVIDER_INFORMATION_SOURCE.datasetName} (${CMS_PROVIDER_INFORMATION_SOURCE.datasetIdentifier})`,
     officialAsOf: row?.source_modified_at?.toISOString() ?? null,
     sourceRelease: row?.release_key,
-    sourceFingerprint: row?.content_hash,
+    sourceFingerprint: row?.content_sha256,
     retrievedAt: row?.retrieved_at?.toISOString() ?? null,
   };
 }
@@ -215,10 +220,23 @@ function nhWhy(
   return `${parts.join(" ")}.`;
 }
 
-function starText(value: number | null, label: string): string {
-  return value == null
-    ? `${label}: not available in the current indexed source`
-    : `${label}: ${value}/5 CMS-reported`;
+function starEvidence(value: number | null, label: string) {
+  const metric: CmsRatingMetric =
+    label === "Quality of Patient Care"
+      ? "hh_qpc"
+      : label === "Staffing"
+        ? "nh_staffing"
+        : label === "Inspection"
+          ? "nh_inspection"
+          : "nh_overall";
+  const valid = sourceRating(value, metric);
+  return {
+    value:
+      valid === null
+        ? `${label}: not available in the current indexed source`
+        : `${label}: ${valid}/5 CMS-reported`,
+    rating: { metric, value: valid },
+  };
 }
 
 async function lookupCcn(
@@ -240,11 +258,11 @@ async function lookupCcn(
         statusLabel: "Current research cohort (CMS nursing-home directory)",
         href: providerHref(nh),
         evidence: [
-          { label: "CMS overall stars", value: starText(nh.ratings.overall, "Overall") },
-          { label: "Staffing stars", value: starText(nh.ratings.staffing, "Staffing") },
+          { label: "CMS overall stars", ...starEvidence(nh.ratings.overall, "Overall") },
+          { label: "Staffing stars", ...starEvidence(nh.ratings.staffing, "Staffing") },
           {
             label: "Health inspection stars",
-            value: starText(nh.ratings.healthInspection, "Inspection"),
+            ...starEvidence(nh.ratings.healthInspection, "Inspection"),
           },
         ],
         whyMatched: `This provider matches CCN ${ccn}.`,
@@ -276,9 +294,13 @@ async function lookupCcn(
             hit.providerClass === "home_health"
               ? "Quality of Patient Care stars"
               : "CMS overall stars",
+          rating:
+            hit.providerClass === "home_health"
+              ? starEvidence(hit.cmsQualityStar, "Quality of Patient Care").rating
+              : undefined,
           value:
             hit.providerClass === "home_health"
-              ? starText(hit.cmsQualityStar, "Quality of Patient Care")
+              ? starEvidence(hit.cmsQualityStar, "Quality of Patient Care").value
               : "Hospice has no overall CMS star rating in this directory",
         },
       ],
@@ -323,9 +345,7 @@ function nhFilters(query: SeniorResearchQuery, values: unknown[]) {
   return { conditions, p };
 }
 
-async function searchNursingHomes(
-  query: SeniorResearchQuery,
-): Promise<{
+async function searchNursingHomes(query: SeniorResearchQuery): Promise<{
   rows: SeniorAskEntity[];
   hasMore: boolean;
   asOf: string | null;
@@ -403,11 +423,11 @@ async function searchNursingHomes(
   const hasMore = result.rows.length > ASK_PAGE_SIZE;
   const rows = result.rows.slice(0, ASK_PAGE_SIZE).map((row) => {
     const evidence = [
-      { label: "CMS overall stars", value: starText(row.overall_rating, "Overall") },
-      { label: "Staffing stars", value: starText(row.staffing_rating, "Staffing") },
+      { label: "CMS overall stars", ...starEvidence(row.overall_rating, "Overall") },
+      { label: "Staffing stars", ...starEvidence(row.staffing_rating, "Staffing") },
       {
         label: "Health inspection stars",
-        value: starText(row.health_inspection_rating, "Inspection"),
+        ...starEvidence(row.health_inspection_rating, "Inspection"),
       },
       {
         label: "Ownership category",
@@ -654,7 +674,7 @@ async function executeSeniorResearchPlanUnsafe(
           ? [
               {
                 label: "Quality of Patient Care stars",
-                value: starText(row.cmsQualityStar, "Quality of Patient Care"),
+                ...starEvidence(row.cmsQualityStar, "Quality of Patient Care"),
               },
             ]
           : [
@@ -731,7 +751,7 @@ async function executeSeniorResearchPlanUnsafe(
           ? [
               {
                 label: "Quality of Patient Care stars",
-                value: starText(row.cmsQualityStar, "Quality of Patient Care"),
+                ...starEvidence(row.cmsQualityStar, "Quality of Patient Care"),
               },
               {
                 label: "HHCAHPS",
