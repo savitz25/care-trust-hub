@@ -1,0 +1,28 @@
+{
+  "observedAt": "2026-09-12T02:54:25.093179+00:00",
+  "runtimeMerge": "12169288367b157a4c5c0264992cae8c972270cd",
+  "implementationHead": "037032a5ce0224f1e1d164e5913122011e8c73bc",
+  "deployment": "dpl_45tKXBMzcLD3ZG6JeN1xppVng7Pt",
+  "state": "READY",
+  "aliases": ["seniortrusthub.com", "www.seniortrusthub.com"],
+  "pr": "https://github.com/savitz25/care-trust-hub/pull/31",
+  "mergedAt": "2026-09-12T02:48:59Z",
+  "productionBrowser": {
+    "file": "production-browser.json",
+    "searchCases": 22,
+    "headerWidths": [320, 390, 768, 1024, 1280, 1440, 1920],
+    "failures": 0,
+    "errors": 0,
+    "supplement": "production-supplement.json",
+    "supplementChecks": 10,
+    "actual200PercentZoom": "production-actual-zoom.json",
+    "minimumCaseMs": 187,
+    "maximumCaseMs": 1080
+  },
+  "runtimeLogs": {
+    "filter": "runtime merge deployment, production, last30m, error/fatal, grouped by level",
+    "observedGroups": []
+  },
+  "dataWrites": false,
+  "reviewMethod": "Separate self-review and automated checks; not independent human review"
+}

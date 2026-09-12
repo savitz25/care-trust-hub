@@ -97,6 +97,53 @@ const origin = process.env.R7_ORIGIN || "http://localhost:3107",
     );
     report.checks.push({ futureList: 60, panel: dims, lastKeyboardReachable: true });
     const oracle = JSON.parse(fs.readFileSync(dir + "/source-oracle.json"));
+    const base = origin + "/api/ask?" + new URLSearchParams({ q: "Nursing homes in Austin Texas" });
+    const first = await (await p.request.get(base)).json(),
+      second = await (await p.request.get(base + "&page=2")).json();
+    const expectedAustin = oracle.rows.find(
+      (row) => row.city === "AUSTIN" && row.state_code === "TX",
+    ).count;
+    assert(first.pagination.hasMore);
+    assert(!second.pagination.hasMore);
+    assert.equal(
+      new Set([...first.results, ...second.results].map((row) => row.ccn)).size,
+      expectedAustin,
+    );
+    report.checks.push({
+      pagination: {
+        first: first.results.length,
+        second: second.results.length,
+        distinct: expectedAustin,
+        firstHasMore: true,
+        secondHasMore: false,
+      },
+    });
+    for (const [providerClass, city, state] of [
+      ["nursing_home", "AUSTIN", "TX"],
+      ["home_health", "HOUSTON", "TX"],
+    ]) {
+      const response = await p.request.post(origin + "/api/specialist-execution/v2", {
+        data: { providerClass, geography: { type: "city", value: city, state } },
+      });
+      const result = await response.json();
+      assert.equal(response.status(), 200);
+      assert.equal(result.status, "ok");
+      const expected = oracle.rows.find((row) => row.kind === providerClass && row.city === city);
+      assert.equal(result.total, expected.count);
+      for (const row of result.rows) {
+        assert.equal(row.recordedLocationFields.city.trim().toUpperCase(), city);
+        assert.equal(row.recordedLocationFields.state, state);
+      }
+      report.checks.push({
+        structured: {
+          providerClass,
+          city,
+          state,
+          total: result.total,
+          source: result.provenance.sourceFingerprint,
+        },
+      });
+    }
     for (const row of oracle.rows) {
       const cls = row.kind === "home_health" ? "home health agencies" : "nursing homes";
       const q = `How many ${cls} in ${row.city} ${row.state_code}?`;

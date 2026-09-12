@@ -50,6 +50,6 @@ No production data/schema writes, ingestion, identity merges, publication expans
 
 ## Limited closure and rollback
 
-Only this ticket's compound recorded-location, typed rating and shared-header paths are candidates for closure after the actual release receipt. Ask senior-care routing, radius/service-area resolution, broader class/ownership work, and Move's unapproved canonical docket correction remain separate.
+This ticket's compound recorded-location, typed rating and shared-header paths are closed by the observed runtime release receipt and canonical browser proof. Ask senior-care routing, radius/service-area resolution, broader class/ownership work, and Move's unapproved canonical docket correction remain separate.
 
 Rollback: reviewed revert of this ticket's code commits and normal deployment; no database rollback. Preserve the evidence and explicitly disclose any temporarily unavailable local research rather than claiming wider results satisfy a city request.

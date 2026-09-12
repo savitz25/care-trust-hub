@@ -1,6 +1,6 @@
 # TH-SEARCH-R1-007 verification record
 
-This document is a candidate record until a final release receipt exists. No future merge/deployment identity is asserted.
+Runtime release is verified by `release-receipt.json`. PR #31 merged at `12169288367b157a4c5c0264992cae8c972270cd`; production deployment `dpl_45tKXBMzcLD3ZG6JeN1xppVng7Pt` is READY on both Senior aliases. The evidence follow-up's future merge identity is deliberately not asserted here.
 
 ## Deterministic checks
 
@@ -29,7 +29,11 @@ The initial optimized local run completed 22 search cases and then detected the 
 
 The corrected optimized local build at `fbe7bff38c3de47b09b3f1ba4d2dfcbbe71b141d` passed 22 browser/API cases and seven header widths with zero browser errors. `local-supplement.json` adds seven checks covering three responsive query-edit/filter/profile flows, the future-list scroll test, and three independently sourced count/fingerprint comparisons. `local-actual-zoom.json` records a separate **actual 200% Chrome zoom** using `chrome.tabs.setZoom/getZoom` in an isolated owned profile: factor 2, viewport 640×450, no overflow, keyboard/Escape/focus passed. No global or user browser profile setting changed.
 
-The clean focused command passes 72 tests. The latest full local run before the final additional class-guard test passed 348 web tests and 253 domain tests, with six existing integration skips. The final focused gate includes that class-guard test. Required CI must validate the final candidate too.
+The final clean focused command passes 73 tests. The final local run passes 350 web tests and 253 domain tests, with six existing integration skips. CI run `34668542773` on exact implementation head `037032a5ce0224f1e1d164e5913122011e8c73bc` passed web (including format/lint/typecheck/focused/full/build), ingest and migrations. Vercel's preview build passed. Interactive preview access required Vercel login and was not bypassed; optimized local and canonical production browser proofs are recorded separately.
+
+Final canonical production checks passed 22 search/browser cases, seven header widths, ten supplementary checks and actual Chrome 200% zoom. `production-browser.json` records each measured completion, returned CCNs/locations and API scope; `production-supplement.json` checks independent count/fingerprint agreement, 20+5 Austin pagination, structured-endpoint totals, filter restoration, stale-result clearing, provider routes and a future 60-state navigation fixture. The observed source cohorts remain Austin/TX nursing homes 25, Houston/TX home health 260 and Tampa/FL nursing homes 18. These are snapshot observations, not permanent assertions. The final implementation's local rerun also passed these checks. No error/fatal log groups were returned for the runtime deployment during final verification.
+
+The unrelated `cms-refresh.yml` workflow fails before creating jobs on both exact baseline (run `34623782631`) and the final candidate. This is an existing scheduler-workflow limitation, not a passing check or a ticket regression. It was not edited or bypassed. Required PR CI passed normally before merge.
 
 Windows full `format:check` flags checkout CRLF endings: 527 files on the exact baseline and 508 on the candidate. No repository-wide formatting rewrite or gate relaxation was performed. Changed files are formatted; Linux CI's existing formatting gate remains required. Baseline typecheck, lint and production build pass. The existing Edge Runtime deprecation warning remains unchanged. The dependency audit reported five existing findings in both identical lockfile installs; this ticket did not upgrade dependencies or change the lockfile.
 

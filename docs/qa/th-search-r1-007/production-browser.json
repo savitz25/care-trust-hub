@@ -1,16 +1,16 @@
 {
-  "at": "2026-09-12T02:48:22.701Z",
-  "origin": "http://localhost:3107",
+  "at": "2026-09-12T02:52:34.464Z",
+  "origin": "https://www.seniortrusthub.com",
   "workingHead": "037032a5ce0224f1e1d164e5913122011e8c73bc",
-  "deployedSha": null,
-  "label": "local",
+  "deployedSha": "12169288367b157a4c5c0264992cae8c972270cd",
+  "label": "production",
   "cases": [
     {
       "q": "Nursing homes in Austin Texas",
       "extra": {},
       "home": true,
       "width": 1280,
-      "ms": 1547,
+      "ms": 1080,
       "query": {
         "mode": "entity",
         "providerClass": "nursing_home",
@@ -221,7 +221,7 @@
       "extra": {},
       "home": false,
       "width": 1280,
-      "ms": 327,
+      "ms": 374,
       "query": {
         "mode": "entity",
         "providerClass": "home_health",
@@ -412,7 +412,7 @@
       "extra": {},
       "home": false,
       "width": 1280,
-      "ms": 298,
+      "ms": 332,
       "query": {
         "mode": "entity",
         "providerClass": "nursing_home",
@@ -607,7 +607,7 @@
       "extra": {},
       "home": false,
       "width": 1280,
-      "ms": 172,
+      "ms": 218,
       "query": {
         "mode": "fail_closed",
         "providerClass": "home_health",
@@ -659,7 +659,7 @@
       },
       "home": false,
       "width": 1280,
-      "ms": 120,
+      "ms": 396,
       "query": {
         "mode": "fail_closed",
         "providerClass": "nursing_home",
@@ -710,7 +710,7 @@
       "extra": {},
       "home": false,
       "width": 1280,
-      "ms": 84,
+      "ms": 377,
       "query": {
         "mode": "fail_closed",
         "providerClass": "nursing_home",
@@ -755,7 +755,7 @@
       "extra": {},
       "home": false,
       "width": 1280,
-      "ms": 251,
+      "ms": 328,
       "query": {
         "mode": "entity",
         "providerClass": "nursing_home",
@@ -805,7 +805,7 @@
       "extra": {},
       "home": false,
       "width": 1280,
-      "ms": 245,
+      "ms": 466,
       "query": {
         "mode": "entity",
         "providerClass": "nursing_home",
@@ -1016,7 +1016,7 @@
       "extra": {},
       "home": true,
       "width": 390,
-      "ms": 495,
+      "ms": 1070,
       "query": {
         "mode": "entity",
         "providerClass": "nursing_home",
@@ -1227,7 +1227,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 376,
+      "ms": 269,
       "query": {
         "mode": "entity",
         "providerClass": "home_health",
@@ -1418,7 +1418,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 288,
+      "ms": 241,
       "query": {
         "mode": "entity",
         "providerClass": "nursing_home",
@@ -1613,7 +1613,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 151,
+      "ms": 263,
       "query": {
         "mode": "fail_closed",
         "providerClass": "home_health",
@@ -1665,7 +1665,7 @@
       },
       "home": false,
       "width": 390,
-      "ms": 92,
+      "ms": 208,
       "query": {
         "mode": "fail_closed",
         "providerClass": "nursing_home",
@@ -1716,7 +1716,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 84,
+      "ms": 199,
       "query": {
         "mode": "fail_closed",
         "providerClass": "nursing_home",
@@ -1761,7 +1761,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 217,
+      "ms": 187,
       "query": {
         "mode": "entity",
         "providerClass": "nursing_home",
@@ -1811,7 +1811,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 393,
+      "ms": 235,
       "query": {
         "mode": "entity",
         "providerClass": "nursing_home",
@@ -2022,7 +2022,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 258,
+      "ms": 213,
       "query": {
         "qualityFilters": {},
         "mode": "count",
@@ -2076,7 +2076,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 331,
+      "ms": 285,
       "query": {
         "qualityFilters": {},
         "mode": "count",
@@ -2129,7 +2129,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 246,
+      "ms": 203,
       "query": {
         "qualityFilters": {},
         "mode": "count",
@@ -2183,7 +2183,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 275,
+      "ms": 202,
       "query": {
         "mode": "identifier",
         "identifier": {
@@ -2232,7 +2232,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 424,
+      "ms": 663,
       "query": {
         "mode": "identifier",
         "identifier": {
@@ -2270,7 +2270,7 @@
       "extra": {},
       "home": false,
       "width": 390,
-      "ms": 253,
+      "ms": 276,
       "query": {
         "mode": "comparison",
         "providerClass": "nursing_home",
