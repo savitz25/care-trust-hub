@@ -70,6 +70,7 @@ export function SiteHeader() {
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     dialog.showModal();
+    dialog.querySelector<HTMLButtonElement>("button")?.focus();
     const wide = window.matchMedia("(min-width: 1200px)");
     const resize = () => {
       if (wide.matches) setOpen(false);
@@ -137,6 +138,33 @@ export function SiteHeader() {
         className="th-compact-dialog"
         aria-label="SeniorTrustHub menu"
         onCancel={() => setOpen(false)}
+        onKeyDown={(event) => {
+          if (event.key !== "Tab") return;
+          const controls = [
+            ...event.currentTarget.querySelectorAll<HTMLElement>(
+              'a[href],button,select,input,textarea,[tabindex="0"]',
+            ),
+          ].filter(
+            (element) => element.getClientRects().length && !element.hasAttribute("disabled"),
+          );
+          const first = controls[0],
+            last = controls.at(-1);
+          if (
+            event.shiftKey &&
+            (document.activeElement === first ||
+              !controls.includes(document.activeElement as HTMLElement))
+          ) {
+            event.preventDefault();
+            last?.focus();
+          } else if (
+            !event.shiftKey &&
+            (document.activeElement === last ||
+              !controls.includes(document.activeElement as HTMLElement))
+          ) {
+            event.preventDefault();
+            first?.focus();
+          }
+        }}
         onClick={(e) => {
           if (e.target === e.currentTarget || (e.target as Element).closest("a")) setOpen(false);
         }}
