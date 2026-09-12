@@ -20,6 +20,6 @@ for path in set(files):
  data=path.read_bytes();checked+=1
  if any(value in data for value in values): hits.append(str(path.relative_to(root)))
 report={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'method':'Exact server credential values from ignored local runtime env; tracked files, QA artifacts, built client assets','filesChecked':checked,'matches':hits,'pass':not hits}
-(root/'docs/qa/th-search-r1-007/secret-scan.json').write_text(json.dumps(report,indent=2))
+(root/'docs/qa/th-search-r1-007/secret-scan.json').write_text(json.dumps(report,indent=2)+'\n')
 print({'filesChecked':checked,'pass':not hits,'matchedPaths':hits})
 assert not hits

@@ -10,6 +10,7 @@ const report = {
   at: new Date().toISOString(),
   origin,
   workingHead: cp.execSync("git rev-parse HEAD").toString().trim(),
+  deployedSha: process.env.R7_DEPLOYED_SHA || null,
   label,
   cases: [],
   headers: [],
@@ -77,6 +78,7 @@ const report = {
       terminal: api.terminalState,
       rows: api.results.map((r) => ({ ccn: r.ccn, location: r.recordedLocation })),
       count: api.count,
+      pagination: api.pagination,
       source: api.provenance,
     });
     return api;

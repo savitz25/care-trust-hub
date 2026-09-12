@@ -1,7 +1,7 @@
 {
   "ticket": "TH-SEARCH-R1-007",
-  "status": "READY_FOR_REVIEW",
-  "closed": false,
+  "status": "RELEASED_AND_VERIFIED",
+  "closed": true,
   "model": {
     "setting": "GPT-6 Astra / High",
     "confirmation": "USER-CONFIRMED",
@@ -9,14 +9,18 @@
   },
   "baseline": "eaff708dd7459c8ca24eca00c1ce0039100b5979",
   "baselineDeployment": "dpl_671sc68ApSMqMHLna9D3XGuP2Wnq",
-  "testedImplementation": "fbe7bff38c3de47b09b3f1ba4d2dfcbbe71b141d",
+  "testedImplementation": "037032a5ce0224f1e1d164e5913122011e8c73bc",
   "searchCommit": "65c30b089b21e056f1788c70fc6e014585894eec",
   "uiCommitAbbreviation": "f215d15",
-  "runtimeMerge": null,
-  "finalDeployment": null,
+  "runtimeMerge": "12169288367b157a4c5c0264992cae8c972270cd",
+  "finalDeployment": "dpl_45tKXBMzcLD3ZG6JeN1xppVng7Pt",
   "canonicalAlias": "https://www.seniortrusthub.com",
   "sourceOracle": "source-oracle.json",
-  "focusedGate": { "command": "npm run check:th-search-r1-007", "passed": 72, "failed": 0 },
+  "focusedGate": {
+    "command": "npm run check:th-search-r1-007",
+    "passed": 73,
+    "failed": 0
+  },
   "mutations": {
     "dropCity": "DETECTED",
     "dropState": "DETECTED",
@@ -39,16 +43,50 @@
     "otherRepositoryEdits": false
   },
   "securityScan": "secret-scan.json",
-  "remainingReleaseSteps": [
-    "Required PR CI and preview checks",
-    "Normal reviewed merge",
-    "Exact deployed SHA verification",
-    "Canonical production browser/API proof"
-  ],
+  "remainingReleaseSteps": [],
   "separateWork": [
     "Parent Ask senior-care routing",
     "Radius/service-area coverage",
     "Broader care-class and ownership workflows",
     "Move canonical docket correction pending separate approval"
-  ]
+  ],
+  "verifiedAt": "2026-09-12T02:54:25.093179+00:00",
+  "fullTests": {
+    "webPassed": 350,
+    "domainPassed": 253,
+    "existingSkipped": 6
+  },
+  "productionBrowser": {
+    "file": "production-browser.json",
+    "searchCases": 22,
+    "headerWidths": [320, 390, 768, 1024, 1280, 1440, 1920],
+    "failures": 0,
+    "errors": 0,
+    "supplement": "production-supplement.json",
+    "supplementChecks": 10,
+    "actual200PercentZoom": "production-actual-zoom.json",
+    "minimumCaseMs": 187,
+    "maximumCaseMs": 1080
+  },
+  "ci": {
+    "run": 34668542773,
+    "sha": "037032a5ce0224f1e1d164e5913122011e8c73bc",
+    "web": "PASS",
+    "ingest": "PASS",
+    "migrations": "PASS",
+    "vercelPreview": "PASS",
+    "previewInteractive": "Vercel login protected; not bypassed"
+  },
+  "baselineLimitations": [
+    "Unchanged cms-refresh.yml cannot create jobs: baseline run 34623782631 and candidate runs fail with empty jobs; required PR CI passed.",
+    "Windows CRLF full format check differs from Linux; existing Linux CI formatting passed.",
+    "Five existing dependency audit findings; lockfile unchanged.",
+    "Six existing fixture-database/environment test skips."
+  ],
+  "evidenceFollowup": {
+    "branch": "th-search-r1-007-evidence",
+    "scope": "Documentation and observed QA receipts only",
+    "mergeSha": null,
+    "note": "Not known when this artifact was authored; final follow-up deployment verified in completion report."
+  }
 }

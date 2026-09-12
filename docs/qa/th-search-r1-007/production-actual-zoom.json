@@ -1,0 +1,16 @@
+{
+  "at": "2026-09-12T02:53:43.235Z",
+  "deployedSha": "12169288367b157a4c5c0264992cae8c972270cd",
+  "method": "chrome.tabs.setZoom/getZoom in an isolated owned profile; no global/user settings changed",
+  "zoom": {
+    "factor": 2,
+    "url": "https://www.seniortrusthub.com/"
+  },
+  "dimensions": {
+    "innerWidth": 640,
+    "innerHeight": 450,
+    "devicePixelRatio": 2.0000000596046448,
+    "overflow": false
+  },
+  "keyboard": true
+}
