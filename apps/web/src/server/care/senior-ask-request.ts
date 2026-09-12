@@ -144,7 +144,10 @@ export function planSeniorRequest(input: SeniorRequestParams): {
       return invalid("Choose a supported CMS rating filter.");
     if (query.providerClass !== "nursing_home")
       return conflict("These overall/staffing/inspection ratings apply only to nursing homes.");
-    query.qualityFilters = { [fields[overrides.stars as keyof typeof fields]]: [5] };
+    query.qualityFilters = {
+      ...query.qualityFilters,
+      [fields[overrides.stars as keyof typeof fields]]: [5],
+    };
   }
   return { raw, query: validateSeniorResearchQuery(query) };
 }

@@ -151,6 +151,14 @@ describe("R1-007 recorded location integrity", () => {
   beforeEach(() => {
     database.query.mockReset().mockImplementation(fixtureDatabase);
   });
+  it("a typed rating override preserves a different requested rating family and location", () => {
+    const { query } = planSeniorRequest({
+      q: "Nursing homes in Austin Texas with 4 CMS overall stars",
+      stars: "5_staffing",
+    });
+    expect(query.qualityFilters).toEqual({ overallStars: [4], staffingStars: [5] });
+    expect(query.geography).toMatchObject({ value: "AUSTIN", state: "TX" });
+  });
   it("does not convert home-health location research into a nursing-home evidence cohort", async () => {
     const result = await executeSeniorResearchQuery(
       "Home health agencies in Houston Texas with penalties",
