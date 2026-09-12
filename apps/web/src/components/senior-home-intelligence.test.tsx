@@ -129,6 +129,25 @@ describe("senior homepage intelligence", () => {
     expect(document.body.textContent).not.toMatch(/PUBLIC & RESEARCH & SURFACES/i);
   }, 15_000);
 
+  it("renders every generated inventory value without a manual override", () => {
+    const homepage = networkMetrics.homepage!;
+    render(
+      <SeniorHomeIntelligence
+        intel={homepage.intel}
+        networkMetrics={networkMetrics}
+        evidenceInventory={homepage.evidenceInventory}
+        stateCards={homepage.stateCards}
+        tools={{ navigator: false, planner: false, workspace: false }}
+      />,
+    );
+    for (const metric of homepage.evidenceInventory) {
+      const element = document.querySelector(
+        `[data-metric-key="${metric.key}"] .intel-inventory__value`,
+      );
+      expect(element?.textContent).toBe(metric.value.toLocaleString("en-US"));
+    }
+  });
+
   it("contains no disabled legacy state-preview block", () => {
     const source = readFileSync(
       resolve(process.cwd(), "src/components/senior-home-intelligence.tsx"),

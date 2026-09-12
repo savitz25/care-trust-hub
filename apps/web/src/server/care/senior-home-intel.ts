@@ -1,16 +1,7 @@
 import "server-only";
-import { assertSeniorHomeIntel, buildSeniorHomeIntel } from "@care/domain";
-import florida from "@/data/florida-intelligence.json";
-import publication from "@/data/florida-provider-publication.json";
-import { getSeniorHubIntelligence } from "./senior-hub-intelligence";
-
+import { getSeniorNetworkMetrics } from "./senior-network-metrics";
 export function getSeniorHomeIntel() {
-  return assertSeniorHomeIntel(
-    buildSeniorHomeIntel({
-      national: getSeniorHubIntelligence(),
-      floridaIdentities: florida.providers.current,
-      floridaRegulatoryObservations: florida.regulatory.observations,
-      publishedAlfAfch: publication.n,
-    }),
-  );
+  const homepage = getSeniorNetworkMetrics().homepage;
+  if (!homepage) throw new Error("Generated Senior homepage projection missing");
+  return homepage.intel;
 }
