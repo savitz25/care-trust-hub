@@ -1,7 +1,7 @@
 {
   "ticket": "TH-SEARCH-R1-011",
-  "status": "READY_FOR_REVIEW",
-  "closed": false,
+  "status": "RELEASED_AND_VERIFIED",
+  "closed": true,
   "recordedAt": "2026-09-12T16:30:42.053591+00:00",
   "model": {
     "model": "GPT-6 Astra",
@@ -13,8 +13,8 @@
   "baseline": "1d0e33deb30ac0e7ca07c7b9b4056553c0a8681d",
   "baselineDeployment": "dpl_C9kjzMJh5yrq457T4W9rJe4g7nt6",
   "implementation": "02aa6f46d044e3532e32564805cb91f3ec99442c",
-  "runtimeMerge": null,
-  "deployedSha": null,
+  "runtimeMerge": "c81b7adcea5a969d7d6c899e4888198293696ea4",
+  "deployedSha": "c81b7adcea5a969d7d6c899e4888198293696ea4",
   "canonicalAlias": "https://www.seniortrusthub.com",
   "sourceOracle": "source-oracle.json",
   "baselineRed": {
@@ -34,9 +34,10 @@
     "failed": 0
   },
   "fullTests": {
-    "webPassed": 396,
-    "domainPassed": 253,
-    "existingSkipped": 6
+    "webPassed": 407,
+    "domainPassed": 255,
+    "existingSkipped": 6,
+    "file": "reconciled-tests.log"
   },
   "baselineTests": {
     "webPassed": 350,
@@ -98,7 +99,9 @@
     "file": "official-link-check.json",
     "url": "https://www.medicare.gov/care-compare/",
     "httpStatus": 200,
-    "interactiveLimitation": "Blank document in automation; official purpose corroborated by CMS. No live provider verification claimed."
+    "settledTitle": "Find Healthcare Providers: Compare Care Near You | Medicare",
+    "interactiveRendering": "PASS after waiting for scripts; initial blank capture was premature",
+    "liveProviderVerificationClaimed": false
   },
   "ownership": {
     "separateAssignment": "Illinois PR #33 merged by its owner; its merged main was reconciled without conflict. All existing published state recovery destinations are preserved.",
@@ -106,13 +109,7 @@
     "otherRepositoryEdits": false,
     "publicationChanges": false
   },
-  "remainingReleaseSteps": [
-    "scoped PR and normal CI/review",
-    "normal merge",
-    "exact deployment/alias verification",
-    "Production browser suite",
-    "final release receipt"
-  ],
+  "remainingReleaseSteps": [],
   "remainingScope": [
     "ultimate legal/beneficial owner reconciliation",
     "other Senior search and care capabilities",
@@ -120,5 +117,53 @@
     "Move canonical correction pending separate approval"
   ],
   "reconciledMain": "72c1ddb01a3d4f126fb9692b350f091a8eb60d72",
-  "reconciledImplementation": "41ee303c5f742f9f894397bc5aee8494375798ee"
+  "reconciledImplementation": "41ee303c5f742f9f894397bc5aee8494375798ee",
+  "verifiedAt": "2026-09-12T16:43:30.156368+00:00",
+  "deployment": "dpl_7rXBZhE7c4nqvTVSKRiCqg2sVmp4",
+  "pr": "https://github.com/savitz25/care-trust-hub/pull/34",
+  "testedPrHead": "f00bfa429fa3c8b70c87bbe4891e3f894a3731b7",
+  "ci": {
+    "run": 34705729275,
+    "head": "f00bfa429fa3c8b70c87bbe4891e3f894a3731b7",
+    "web": "PASS",
+    "ingest": "PASS",
+    "migrations": "PASS",
+    "vercel": "PASS",
+    "previewDeployment": "dpl_F5izXKB5PA9QZcLDXYgAh6DzWrGz"
+  },
+  "productionBrowser": {
+    "file": "production-browser.json",
+    "cases": 28,
+    "flows": 16,
+    "failures": [],
+    "errors": [],
+    "minimumMs": 167,
+    "maximumMs": 4106,
+    "widths": [320, 390, 768, 1280],
+    "supplement": "production-supplement.json",
+    "supplementChecks": 6,
+    "supplementFailures": []
+  },
+  "reconciledLocalBrowser": {
+    "file": "reconciled-local-browser.json",
+    "runtime": "41ee303c5f742f9f894397bc5aee8494375798ee",
+    "cases": 28,
+    "flows": 16,
+    "failures": [],
+    "errors": []
+  },
+  "baselineLimitations": [
+    "Six existing environment/database integration skips.",
+    "Windows whole-tree format check reports 556 baseline CRLF warnings; normal Linux web CI including formatting passes.",
+    "Illinois source check fingerprint drift reproduces on untouched 72c1ddb. Read-only comparison confirms CRLF bytes differ from accepted Git blob; no source rewrite performed.",
+    "Unchanged cms-refresh.yml fails before creating jobs on starting baseline run 34669207211 and candidate run 34705494817. Normal PR CI passed.",
+    "Five existing dependency audit findings; no dependency upgrade in this ticket.",
+    "Initial detached-base dependency junction omitted nested web packages; after correcting that local test setup baseline typecheck and full tests pass."
+  ],
+  "evidenceFollowup": {
+    "branch": "th-search-r1-011-evidence",
+    "scope": "Observed QA receipts only",
+    "mergeSha": null,
+    "note": "Unknown when authored. Final documentation deployment identity and smoke are reported after normal merge; no future SHA is fabricated."
+  }
 }

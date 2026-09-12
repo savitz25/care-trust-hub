@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-12T16:12:04.055Z",
+  "checkedAt": "2026-09-12T16:41:16.862Z",
   "agency": "Centers for Medicare & Medicaid Services",
   "jurisdiction": "US",
   "purpose": "Official Care Compare provider search",
@@ -7,10 +7,8 @@
   "deepLinkParameters": false,
   "limitation": "A destination check is not a live provider or license verification.",
   "status": 200,
-  "finalUrl": "https://www.medicare.gov/care-compare/",
-  "title": "",
-  "text": "",
-  "renderingLimitation": "HTTP 200 at the unchanged official URL, but this automation session returned an empty document. No challenge bypass or live provider verification was performed.",
   "officialPurposeCorroboration": "https://www.cms.gov/about-cms/what-we-do/nursing-homes/patients-caregivers/finding-nursing-home",
-  "corroborationCheckedAt": "2026-09-12"
+  "finalUrl": "https://www.medicare.gov/care-compare/",
+  "title": "Find Healthcare Providers: Compare Care Near You | Medicare",
+  "text": "Find & compare providers near you.\nNot sure what type of provider you need?\nLearn more about the types of providers.\nWelcome\nDoctors & clinicians\nHospitals\nNursing homes including rehab services\nHome health services\nHospice care\nInpatient rehabilitation facilities\nLong-term care hospitals\nDialysis facilities\nCommunity health centers\nMedical equipment & suppliers\nWelcome!\n\nYou can use this tool to find and compare different types of Medicare providers (like physicians, hospitals, nursing homes, and others). Use our maps and filters to help you identify providers that are right for you.\n\nFind out what's new\nⓘ\nMore resources\nAbout this tool\nLearn more about this tool and what it can do for you.\nResources & information\nCheck out important things to consider when choosing a provider.\nInfo for health care providers\nFind out how to keep your information up-to-date in our tools.\nLooking to explore and download provider data? Visit the data catalog on Data.cms.gov\nAbout Medicare\nNondiscrimination/Accessibility\nPrivacy Policy\nPrivacy Setting\nLinking Policy\nUsing this site\nPlain Writing\nA federal government website managed and paid for by the U.S. Centers for Medicare and Medicaid Services. 7500 Security Boulevard, Baltimore, MD 21244\n7500 Security Boulevard, Baltimore, MD 21244"
 }
