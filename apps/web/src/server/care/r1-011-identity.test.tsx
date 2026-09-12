@@ -441,3 +441,27 @@ for (const [state, path] of [
     );
     expect(mocks.db).not.toHaveBeenCalled();
   });
+
+describe("final provider-question boundary", () => {
+  for (const q of [
+    "Can you tell me who owns this nursing home?",
+    "Please tell me who owns that facility",
+    "I want to know whether this facility has been fined",
+  ])
+    it(q, async () => {
+      const r = await executeSeniorResearchQuery(q);
+      expect(r.query.terminalState).toBe("NEEDS_CLARIFICATION");
+      expect(r.entities).toEqual([]);
+      expect(mocks.db).not.toHaveBeenCalled();
+    });
+  it("quoted name location words remain identity text", () => {
+    const q = interpretSeniorAskQuery('Who owns "Harbor in Texas Nursing Home"?');
+    expect(q.identityQuery).toBe("Harbor in Texas Nursing Home");
+    expect(q.geography).toBeUndefined();
+  });
+  it("polite explicit provider question keeps the source name", async () => {
+    const r = await executeSeniorResearchQuery("Can you tell me who owns Harbor Nursing Center?");
+    expect(r.entities.map((e) => e.ccn)).toEqual(["T00001"]);
+    expect(mocks.ownership).toHaveBeenCalledWith("T00001");
+  });
+});

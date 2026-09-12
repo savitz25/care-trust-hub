@@ -20,6 +20,9 @@ const cases = [
   ["home health agencies in Houston Texas", "Houston"],
   ["Has CMS CCN 455799 been fined?", "penalty"],
   ["Did CMS CCN 455799 change owners?", "chow"],
+  ["Can you tell me who owns this nursing home?", "clarify"],
+  ["I want to know whether this facility has been fined", "clarify"],
+  ["Can you tell me who owns AUSTIN WELLNESS & REHABILITATION?", "ownership"],
 ];
 function check(ok, msg) {
   if (!ok) throw Error(msg);

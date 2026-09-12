@@ -1,7 +1,7 @@
 {
   "ticket": "TH-SEARCH-R1-011",
-  "status": "RELEASED_AND_VERIFIED",
-  "closed": true,
+  "status": "READY_FOR_REVIEW",
+  "closed": false,
   "recordedAt": "2026-09-12T16:30:42.053591+00:00",
   "model": {
     "model": "GPT-6 Astra",
@@ -109,7 +109,11 @@
     "otherRepositoryEdits": false,
     "publicationChanges": false
   },
-  "remainingReleaseSteps": [],
+  "remainingReleaseSteps": [
+    "release final deictic/polite and quoted-name guards",
+    "repeat Production suite including final boundary cases",
+    "final receipt"
+  ],
   "remainingScope": [
     "ultimate legal/beneficial owner reconciliation",
     "other Senior search and care capabilities",
@@ -165,5 +169,18 @@
     "scope": "Observed QA receipts only",
     "mergeSha": null,
     "note": "Unknown when authored. Final documentation deployment identity and smoke are reported after normal merge; no future SHA is fabricated."
+  },
+  "finalBoundaryAudit": {
+    "liveRuntime": "c81b7adcea5a969d7d6c899e4888198293696ea4",
+    "query": "Can you tell me who owns this nursing home?",
+    "observed": {
+      "terminal": "COMPLETE",
+      "mode": "evidence",
+      "rows": 20,
+      "metric": "ownership"
+    },
+    "red": "final-boundary-red.log",
+    "green": "final-boundary-green.log",
+    "meaning": "Initial certified literal cases passed, but additional paraphrase exposed a remaining in-scope bypass. Closure held pending this repair."
   }
 }

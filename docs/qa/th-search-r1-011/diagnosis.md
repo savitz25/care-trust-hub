@@ -58,3 +58,7 @@ Release identity and final browser observations are recorded only after they exi
 ## Fresh-main reconciliation
 
 Illinois PR #33 was merged by its owner at `72c1ddb01a3d4f126fb9692b350f091a8eb60d72`. The ticket branch merged that already-accepted main normally. Its state distinctions were preserved, and recovery now includes all existing published state intelligence destinations (state research is not a claim of an acquired local provider cohort). Reconciled runtime: `41ee303c5f742f9f894397bc5aee8494375798ee`. Focused gates: 56 R1-011 and 74 R1-007 passed. The Illinois raw-source fingerprint check reports ?fingerprint drifted? on both this checkout and a separate untouched 72c1ddb worktree. No raw source or global line-ending configuration was changed. Final CI and Production verification remain required.
+
+## Final paraphrase audit
+
+Before closure, Production c81b7ad still returned an ownership cohort for `Can you tell me who owns this nursing home?` (20 returned rows). The original literal cases had passed, but this polite wrapper bypassed the anchored extraction. New tests reproduced that and quoted-name location loss. The final guard accepts ordinary polite introductions and recognizes deictic facility evidence questions before cohort execution. Quoted source names retain internal place words; the wrapper consumes the same extracted location requirement rather than reparsing it. Five new behavioral checks pass. Overall ticket closure is held until this follow-up is released and the expanded Production browser suite passes.

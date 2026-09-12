@@ -634,7 +634,10 @@ function facilityQuestion(raw: string): SeniorResearchQuery | null {
     /[<>;]|\b(?:best|safest|worst|assisted living|memory care)\b/i.test(raw)
   )
     return null;
-  const q = raw.trim().replace(/[?!.]+$/, "");
+  const q = raw
+    .trim()
+    .replace(/^(?:please\s+)?(?:(?:can|could|would) you (?:please )?tell me\s+|tell me\s+)?/i, "")
+    .replace(/[?!.]+$/, "");
   let task: SeniorResearchQuery["facilityEvidence"], name: string | undefined;
   let m: RegExpMatchArray | null;
   if (
@@ -687,6 +690,24 @@ function facilityQuestion(raw: string): SeniorResearchQuery | null {
             : /\bdeficien/i.test(q)
               ? "deficiency"
               : undefined;
+  if (
+    !task &&
+    /\b(?:this|that|my|the)\s+(?:nursing home|facility|provider|home health agency|hospice|care home)\b/i.test(
+      q,
+    )
+  ) {
+    task = /\b(?:chow|change[ds]? (?:of )?owners?|change[ds]? (?:of )?ownership)\b/i.test(q)
+      ? "chow"
+      : /\b(?:owns?|ownership|owner)\b/i.test(q)
+        ? "ownership"
+        : /\b(?:fines?|fined|penalt|penalties|penalized)\b/i.test(q)
+          ? "penalty"
+          : /\binspection/i.test(q)
+            ? "inspection"
+            : /\bdeficien/i.test(q)
+              ? "deficiency"
+              : undefined;
+  }
   if (!task) return null;
   if ((q.match(/\bccn\b/gi)?.length ?? 0) > 1 || detectClass(q) === "ambiguous")
     return validateSeniorResearchQuery({
@@ -698,11 +719,17 @@ function facilityQuestion(raw: string): SeniorResearchQuery | null {
         "Choose one provider identity and class for this evidence question. No provider evidence was attached.",
       alternatives: [],
     });
-  const location = /\b(?:in|near|within)\b/i.test(q) ? parseRecordedLocation(q) : {};
-  name = name
-    ?.split(/\s+(?:located )?in\s+/i)[0]
-    ?.trim()
-    .replace(/^"|"$/g, "");
+  const locationText = q.replace(/"[^"]*"/g, "");
+  const location = /\b(?:in|near|within)\b/i.test(locationText)
+    ? parseRecordedLocation(locationText)
+    : {};
+  const quotedName = name?.match(/^"([^"]+)"(?:\s+in\s+.+)?$/i)?.[1];
+  name =
+    quotedName ??
+    name
+      ?.split(/\s+(?:located )?in\s+/i)[0]
+      ?.trim()
+      .replace(/^"|"$/g, "");
   if (
     name &&
     /^(?:(?:this|that|the|my|a|an)\s+)?(?:nursing home|facility|provider|home health agency|hospice|nursing facility)$/i.test(
@@ -762,10 +789,9 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
         "Choose the care setting. Nursing homes, Home Health and Hospice are separate CMS classes; assisted living uses state-specific research.",
       alternatives: [],
     };
-  const location =
-    plan.facilityEvidence && !/\b(?:in|located in|near|within)\b/i.test(raw)
-      ? {}
-      : parseRecordedLocation(raw);
+  const location = plan.facilityEvidence
+    ? { geography: plan.geography, locationRequirement: plan.locationRequirement }
+    : parseRecordedLocation(raw);
   const requestedClass = detectClass(raw);
   if (
     requestedClass &&
