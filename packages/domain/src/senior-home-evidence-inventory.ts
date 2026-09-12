@@ -56,6 +56,12 @@ export interface SeniorHomepageEvidenceMeasure {
 }
 
 export interface SeniorHomepageStateCard {
+  sourceClocks?: {
+    label: string;
+    sourceAsOf: string | null;
+    snapshotAsOf: string | null;
+    retrievedAt: string | null;
+  }[];
   state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA" | "NY" | "IL";
   name: string;
   href: string;

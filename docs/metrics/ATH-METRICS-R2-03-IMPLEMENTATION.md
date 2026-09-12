@@ -33,7 +33,7 @@ Colorado CDPHE and Illinois unacquired state-license universes remain SEARCH_ONL
 
 `homepage.intel`, `homepage.evidenceInventory` and `homepage.stateCards` are generated at build time from accepted inputs. Existing design is retained. Homepage changing values no longer read hard-coded `_LOCKED` counts or direct state snapshots at runtime. Generator adapters in `packages/domain/src/senior-home-accepted-inputs.ts` read the existing accepted JSON fields. Arizona crosswalk and Washington class examples use generated values. Published routes are not labeled completed specialist coverage.
 
-Every state metric retains `sourceAsOf`, `snapshotAsOf`, `retrievedAt`, and source-artifact `generatedAt` separately. Null source dates stay null (e.g. Virginia). Colorado federal source clocks are CMS's official modified dates, not the later state-overlay timestamp. The national `newestSourceAsOf` retains its existing CMS-only meaning; it is not a network-wide freshness promise.
+Every state metric retains `sourceAsOf`, `snapshotAsOf`, `retrievedAt`, and source-artifact `generatedAt` separately. Null source dates stay null (e.g. Virginia). Colorado federal source clocks are CMS's official modified dates, not the later state-overlay timestamp. State cards additionally export `sourceClocks[]` with agency labels and separate source/snapshot/retrieval dates. A mixed-source card says "Varies by source"; acquisition dates never substitute for unreported source dates. Older inventory clocks are derived from accepted nested agency fields too. The national `newestSourceAsOf` retains its existing CMS-only meaning; it is not a network-wide freshness promise.
 
 ## Ask handoff
 

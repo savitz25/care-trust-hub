@@ -239,13 +239,113 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
         generatedOrRetrievedAt: metric.retrievedAt,
       });
   }
+  // Official source clocks are separate from the date we accepted/retrieved a snapshot.
+  const clockPaths = {
+    NJ: [
+      ["NJ long-term care", "ltcAsOf"],
+      ["NJ acute care", "acuteAsOf"],
+    ],
+    CA: [
+      ["CDPH ELMS", "elms"],
+      ["CDSS RCFE", "rcfe"],
+      ["CDSS HCO", "hco"],
+      ["CDSS ARF", "arf"],
+      ["HCAI", "hcai"],
+    ],
+    TX: [
+      ["HHSC nursing facilities", "hhscNursingFacilities"],
+      ["HHSC assisted living", "hhscAssistedLiving"],
+      ["HHSC HCSSA", "hhscHcssa"],
+      ["HHSC nursing closures", "enforcement.nfClosures"],
+      ["HHSC assisted-living closures", "enforcement.alfClosures"],
+      ["HHSC HCSSA closures", "enforcement.hcssaClosures"],
+    ],
+    WA: [["DSHS acquired GIS snapshot", "dshsGis"]],
+    AZ: [["ADHS GIS extract", "adhsGis"]],
+    CO: [["CDPHE verification context", "cdphe"]],
+    VA: [
+      ["DSS assisted living", "dssAlf"],
+      ["DSS adult day care", "dssAdc"],
+    ],
+    NY: [
+      ["NY nursing-home profiles", "nursingHomeProfile"],
+      ["NY adult-care facilities", "acf"],
+      ["NY Do Not Refer", "doNotRefer"],
+      ["NY home care", "homeCare"],
+    ],
+    IL: [
+      ["IDPH Home Health", "idphHomeHealth"],
+      ["IDPH Hospice", "idphHospice"],
+      ["IDPH Home Nursing", "idphHomeNursing"],
+      ["IDPH Home Services", "idphHomeServices"],
+      ["IDPH Hospice Residence", "idphHospiceResidence"],
+      ["HFS Supportive Living", "supportiveLiving"],
+    ],
+  };
   const stateCards = structuredClone(SENIOR_HOMEPAGE_STATE_CARDS);
   for (const card of stateCards) {
+    if (card.state === "FL") continue; // Florida's accepted source clock is already explicit.
     const snapshot = snapshots[card.state];
-    card.sourceAsOf =
-      card.state === "FL" ? florida.asOf.slice(0, 10) : (snapshot?.sourceAsOf ?? null);
-    card.snapshotAsOf = snapshot?.snapshotAsOf ?? null;
-    card.retrievedAt = snapshot?.retrievedAt ?? null;
+    card.snapshotAsOf = snapshot.snapshotAsOf ?? snapshot.asOf ?? null;
+    card.retrievedAt = snapshot.retrievedAt ?? null;
+    card.sourceClocks = clockPaths[card.state].map(([label, path]) => {
+      const source = path.split(".").reduce((o, k) => o?.[k], snapshot);
+      return {
+        label,
+        sourceAsOf:
+          typeof source === "string"
+            ? source
+            : (source?.sourceAsOf ?? source?.source_as_of ?? source?.run_date ?? null),
+        snapshotAsOf: card.snapshotAsOf,
+        retrievedAt: source?.retrievedAt ?? source?.retrieved_at ?? card.retrievedAt,
+      };
+    });
+    for (const [label, clock] of Object.entries(snapshot.cmsOverlay?.clocks ?? {})) {
+      card.sourceClocks.push({
+        label: `CMS ${label}`,
+        sourceAsOf: clock.sourceModifiedAt ?? null,
+        snapshotAsOf: card.snapshotAsOf,
+        retrievedAt: clock.retrievedAt ?? null,
+      });
+    }
+    const dates = [
+      ...new Set(card.sourceClocks.map((clock) => clock.sourceAsOf?.slice(0, 10) ?? null)),
+    ];
+    card.sourceAsOf = dates.length === 1 ? dates[0] : null;
+  }
+  // Older inventory rows also use their accepted agency clocks, never curated dates.
+  const inventoryClockPaths = {
+    "nj-ltc-identities": "ltcAsOf",
+    "nj-enforcement-indexed": null,
+    "nj-enforcement-documents": null,
+    "ca-elms": "elms",
+    "ca-rcfe": "rcfe",
+    "ca-snf-crosswalk": null,
+    "tx-nf": "hhscNursingFacilities",
+    "tx-alf": "hhscAssistedLiving",
+    "tx-hcssa": "hhscHcssa",
+    "tx-nf-crosswalk": "hhscNursingFacilities",
+    "wa-residential": null,
+    "wa-afh": null,
+    "wa-nh-crosswalk": null,
+    "az-gis-all": "adhsGis",
+    "az-al-home": "adhsGis",
+    "az-nh-crosswalk": "adhsGis",
+    "az-hha-crosswalk": "adhsGis",
+    "az-hospice-crosswalk": "adhsGis",
+  };
+  for (const row of evidenceInventory) {
+    if (!Object.hasOwn(inventoryClockPaths, row.key)) continue;
+    const snapshot = snapshots[row.key.slice(0, 2).toUpperCase()];
+    const source = snapshot[inventoryClockPaths[row.key]];
+    row.sourceAsOf =
+      typeof source === "string"
+        ? source
+        : (source?.sourceAsOf ?? source?.source_as_of ?? source?.run_date ?? null);
+    row.snapshotAsOf = snapshot.snapshotAsOf ?? snapshot.asOf ?? null;
+    row.retrievedAt = source?.retrievedAt ?? source?.retrieved_at ?? snapshot.retrievedAt ?? null;
+    row.generatedAt = base.generatedAt;
+    row.generatedOrRetrievedAt = row.retrievedAt;
   }
   const intel = buildSeniorHomeIntel({
     national,

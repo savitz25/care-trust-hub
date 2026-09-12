@@ -146,3 +146,22 @@ test("homepage server projections read generated metrics; changing JSX totals ar
     m.homepage.stateCards.length,
   );
 });
+
+test("homepage state clocks preserve agency dates without substituting acquisition dates", () => {
+  const cards = Object.fromEntries(m.homepage.stateCards.map((r) => [r.state, r]));
+  const source = (state, label) => cards[state].sourceClocks.find((r) => r.label === label);
+  assert.equal(source("NJ", "NJ long-term care").sourceAsOf, "2026-08-31");
+  assert.equal(source("CA", "CDPH ELMS").sourceAsOf, "2026-08-17");
+  assert.equal(source("CA", "CDSS RCFE").sourceAsOf, "2025-05-25");
+  assert.equal(source("AZ", "ADHS GIS extract").sourceAsOf, "2025-02-03");
+  assert.equal(source("VA", "DSS assisted living").sourceAsOf, null);
+  assert.equal(source("VA", "DSS assisted living").snapshotAsOf, "2026-09-10");
+  assert.equal(source("NY", "NY nursing-home profiles").sourceAsOf, "2026-08-19");
+  assert.equal(source("IL", "IDPH Home Health").sourceAsOf, "2026-04-28");
+  assert.equal(source("IL", "HFS Supportive Living").sourceAsOf, "2026-02-06");
+  assert.equal(cards.IL.sourceAsOf, null);
+  const inventory = Object.fromEntries(m.homepage.evidenceInventory.map((r) => [r.key, r]));
+  assert.equal(inventory["ca-elms"].sourceAsOf, "2026-08-17");
+  assert.equal(inventory["wa-afh"].sourceAsOf, null);
+  assert.equal(inventory["wa-afh"].snapshotAsOf, "2026-09-04");
+});

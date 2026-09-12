@@ -498,7 +498,12 @@ export function SeniorHomeIntelligence({
           {stateCards.map((state) => (
             <li key={state.state}>
               <p className="intel-timeline__freshness">
-                Source as of: {dateLabel(state.sourceAsOf)}
+                Source as of:{" "}
+                {state.sourceAsOf
+                  ? dateLabel(state.sourceAsOf)
+                  : state.sourceClocks?.some((clock) => clock.sourceAsOf)
+                    ? "Varies by source"
+                    : "Not reported"}
               </p>
               <div>
                 <h3>{state.name} intelligence</h3>
@@ -549,7 +554,13 @@ export function SeniorHomeIntelligence({
                 </div>
                 <div>
                   <dt>Source as of</dt>
-                  <dd>{dateLabel(state.sourceAsOf)}</dd>
+                  <dd>
+                    {state.sourceAsOf
+                      ? dateLabel(state.sourceAsOf)
+                      : state.sourceClocks?.some((clock) => clock.sourceAsOf)
+                        ? "Varies by source"
+                        : "Not reported"}
+                  </dd>
                 </div>
                 <div>
                   <dt>Snapshot / retrieved</dt>
@@ -558,6 +569,19 @@ export function SeniorHomeIntelligence({
                   </dd>
                 </div>
               </dl>
+              {state.sourceClocks && (
+                <details>
+                  <summary>Source clocks</summary>
+                  <ul>
+                    {state.sourceClocks.map((clock) => (
+                      <li key={clock.label}>
+                        {clock.label}: source {dateLabel(clock.sourceAsOf)}; snapshot{" "}
+                        {dateLabel(clock.snapshotAsOf)}; retrieved {dateLabel(clock.retrievedAt)}
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
               <Link className="button button--secondary" href={state.href}>
                 Explore {state.name} intelligence →
               </Link>
