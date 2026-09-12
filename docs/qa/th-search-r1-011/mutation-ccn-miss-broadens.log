@@ -5,61 +5,72 @@
 
  RUN  v3.2.7 C:/Users/makei/th-search-r1-011-work/apps/web
 
- ✓ src/server/care/ownership-repository.test.ts (2 tests) 44ms
- ✓ src/server/care/regulatory-repository.test.ts (3 tests) 76ms
- ❯ src/server/care/r1-011-identity.test.tsx (45 tests | 2 failed) 186ms
-   ✓ R1-011 baseline reproductions > unspecified ownership requires an identity before retrieval 6ms
-   ✓ R1-011 baseline reproductions > Has this nursing home been fined? 4ms
-   ✓ R1-011 baseline reproductions > Did this facility change owners? 1ms
-   × R1-011 baseline reproductions > CCN miss has a usable official action 96ms
+ ✓ src/server/care/ownership-repository.test.ts (2 tests) 25ms
+ ✓ src/server/care/regulatory-repository.test.ts (3 tests) 82ms
+ ❯ src/server/care/r1-011-identity.test.tsx (56 tests | 2 failed) 122ms
+   ✓ R1-011 baseline reproductions > unspecified ownership requires an identity before retrieval 3ms
+   ✓ R1-011 baseline reproductions > Has this nursing home been fined? 3ms
+   ✓ R1-011 baseline reproductions > Did this facility change owners? 0ms
+   × R1-011 baseline reproductions > CCN miss has a usable official action 52ms
      → expected '<div class="senior-ask"><section clas…' to contain 'https://www.medicare.gov/care-compare/'
-   ✓ R1-011 baseline reproductions > Virginia assisted living navigates to state research 5ms
+   ✓ R1-011 baseline reproductions > Virginia assisted living navigates to state research 4ms
    ✓ R1-011 identity/evidence behavioral contract > Who owns that facility? 1ms
-   ✓ R1-011 identity/evidence behavioral contract > Who operates this provider? 0ms
-   ✓ R1-011 identity/evidence behavioral contract > Has that facility been fined? 0ms
+   ✓ R1-011 identity/evidence behavioral contract > Who operates this provider? 1ms
+   ✓ R1-011 identity/evidence behavioral contract > Has that facility been fined? 1ms
    ✓ R1-011 identity/evidence behavioral contract > Did this nursing home change owners? 0ms
    ✓ R1-011 identity/evidence behavioral contract > Inspections for this facility 1ms
-   ✓ R1-011 identity/evidence behavioral contract > Deficiencies for this nursing home 1ms
+   ✓ R1-011 identity/evidence behavioral contract > Deficiencies for this nursing home 0ms
    ✓ R1-011 identity/evidence behavioral contract > unique exact source name attaches only that CCN 2ms
    ✓ R1-011 identity/evidence behavioral contract > ambiguous name has bounded selection and no evidence assignment 2ms
    ✓ R1-011 identity/evidence behavioral contract > selection resumes original ownership task with revalidated candidate 3ms
-   ✓ R1-011 identity/evidence behavioral contract > tampered selection cannot attach unrelated evidence 1ms
+   ✓ R1-011 identity/evidence behavioral contract > tampered selection cannot attach unrelated evidence 0ms
    ✓ R1-011 identity/evidence behavioral contract > provider entry cannot replace explicitly named subject 1ms
    ✓ R1-011 identity/evidence behavioral contract > identity-required form retains question and resolves exact CCN 1ms
-   ✓ R1-011 identity/evidence behavioral contract > source-backed relationships retain role and source without category-as-owner 1ms
-   ✓ R1-011 identity/evidence behavioral contract > empty CHOW is corpus absence, not never changed owners 1ms
-   ✓ R1-011 identity/evidence behavioral contract > CHOW keeps event timing separate from source clocks 1ms
-   ✓ R1-011 identity/evidence behavioral contract > empty penalties is corpus absence, not never fined 1ms
-   ✓ R1-011 identity/evidence behavioral contract > penalty source identity mismatch is unavailable, not evidence 1ms
+   ✓ R1-011 identity/evidence behavioral contract > source-backed relationships retain role and source without category-as-owner 0ms
+   ✓ R1-011 identity/evidence behavioral contract > empty CHOW is corpus absence, not never changed owners 0ms
+   ✓ R1-011 identity/evidence behavioral contract > CHOW keeps event timing separate from source clocks 0ms
+   ✓ R1-011 identity/evidence behavioral contract > empty penalties is corpus absence, not never fined 0ms
+   ✓ R1-011 identity/evidence behavioral contract > penalty source identity mismatch is unavailable, not evidence 0ms
    ✓ R1-011 identity/evidence behavioral contract > labeled positive remains exact; bare token remains safe 1ms
-   × R1-011 identity/evidence behavioral contract > exact miss never performs name retrieval 7ms
+   × R1-011 identity/evidence behavioral contract > exact miss never performs name retrieval 5ms
      → expected [ { …(9) }, { …(9) }, { …(9) }, …(1) ] to deeply equal []
    ✓ R1-011 identity/evidence behavioral contract > absent source is unavailable, not a valid exact miss 1ms
    ✓ R1-011 identity/evidence behavioral contract > home_health does not inherit NH CHOW 1ms
    ✓ R1-011 identity/evidence behavioral contract > hospice does not inherit NH CHOW 0ms
-   ✓ R1-011 identity/evidence behavioral contract > class choice retains Austin TX 14ms
-   ✓ R1-011 identity/evidence behavioral contract > memory care cannot become NH via filter 1ms
-   ✓ R1-011 identity/evidence behavioral contract > assisted living in New York 4ms
-   ✓ R1-011 identity/evidence behavioral contract > assisted living in Arizona 4ms
-   ✓ R1-011 identity/evidence behavioral contract > memory care in Florida 3ms
-   ✓ R1-011 identity/evidence behavioral contract > official destination is exact HTTPS CMS allowlist, no guessed CCN parameter 1ms
-   ✓ R1-011 identity/evidence behavioral contract > API and common boundary agree on requested CCN evidence 11ms
+   ✓ R1-011 identity/evidence behavioral contract > class choice retains Austin TX 7ms
+   ✓ R1-011 identity/evidence behavioral contract > memory care cannot become NH via filter 0ms
+   ✓ R1-011 identity/evidence behavioral contract > assisted living in New York 2ms
+   ✓ R1-011 identity/evidence behavioral contract > assisted living in Arizona 2ms
+   ✓ R1-011 identity/evidence behavioral contract > memory care in Florida 1ms
+   ✓ R1-011 identity/evidence behavioral contract > official destination is exact HTTPS CMS allowlist, no guessed CCN parameter 0ms
+   ✓ R1-011 identity/evidence behavioral contract > API and common boundary agree on requested CCN evidence 7ms
    ✓ R1-011 identity/evidence behavioral contract > structured missing identity cannot bypass guard 0ms
    ✓ R1-011 additional boundary regressions > a state word inside a provider name is not a location predicate 0ms
    ✓ R1-011 additional boundary regressions > same exact name in different states requires selection 1ms
-   ✓ R1-011 additional boundary regressions > evidence source failure is not absence 1ms
+   ✓ R1-011 additional boundary regressions > evidence source failure is not absence 0ms
    ✓ R1-011 additional boundary regressions > unlinked source deficiency remains evidence 0ms
    ✓ R1-011 additional boundary regressions > evidence override cannot silently replace the question 0ms
    ✓ R1-011 additional boundary regressions > profile-style exact context cannot be replaced with a selected candidate 0ms
-   ✓ generic care waits for class then executes locality without a fake provider name 3ms
+   ✓ generic care waits for class then executes locality without a fake provider name 2ms
    ✓ multiple CCNs cannot select the first provider for ownership 0ms
    ✓ explicit mixed provider classes cannot acquire NH evidence 0ms
    ✓ an exact evidence answer cannot silently ignore a rating cohort filter 0ms
+   ✓ published Illinois recovery keeps its own jurisdiction 2ms
+   ✓ published New Jersey recovery keeps its own jurisdiction 2ms
+   ✓ published California recovery keeps its own jurisdiction 1ms
+   ✓ published Texas recovery keeps its own jurisdiction 1ms
+   ✓ published Washington recovery keeps its own jurisdiction 1ms
+   ✓ published Colorado recovery keeps its own jurisdiction 2ms
+   ✓ final provider-question boundary > Can you tell me who owns this nursing home? 0ms
+   ✓ final provider-question boundary > Please tell me who owns that facility 0ms
+   ✓ final provider-question boundary > I want to know whether this facility has been fined 1ms
+   ✓ final provider-question boundary > quoted name location words remain identity text 0ms
+   ✓ final provider-question boundary > polite explicit provider question keeps the source name 1ms
 
  Test Files  1 failed | 2 passed (3)
-      Tests  2 failed | 48 passed (50)
-   Start at  12:28:48
-   Duration  2.86s (transform 1.02s, setup 623ms, collect 1.58s, tests 306ms, environment 1.64s, prepare 340ms)
+      Tests  2 failed | 59 passed (61)
+   Start at  12:54:48
+   Duration  3.02s (transform 1.06s, setup 941ms, collect 1.68s, tests 230ms, environment 1.81s, prepare 524ms)
 
 
 ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯

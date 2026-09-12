@@ -5,11 +5,11 @@
 
  RUN  v3.2.7 C:/Users/makei/th-search-r1-011-work/apps/web
 
- ✓ src/server/care/ownership-repository.test.ts (2 tests) 25ms
- ✓ src/server/care/regulatory-repository.test.ts (3 tests) 55ms
- ✓ src/server/care/r1-011-identity.test.tsx (45 tests) 127ms
+ ✓ src/server/care/ownership-repository.test.ts (2 tests) 31ms
+ ✓ src/server/care/regulatory-repository.test.ts (3 tests) 54ms
+ ✓ src/server/care/r1-011-identity.test.tsx (56 tests) 96ms
 
  Test Files  3 passed (3)
-      Tests  50 passed (50)
-   Start at  12:28:54
-   Duration  2.67s (transform 947ms, setup 631ms, collect 1.49s, tests 206ms, environment 1.65s, prepare 326ms)
+      Tests  61 passed (61)
+   Start at  12:54:54
+   Duration  3.12s (transform 1.24s, setup 626ms, collect 1.94s, tests 181ms, environment 1.76s, prepare 319ms)

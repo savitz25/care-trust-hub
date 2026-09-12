@@ -1,7 +1,7 @@
 {
   "ticket": "TH-SEARCH-R1-011",
-  "status": "READY_FOR_REVIEW",
-  "closed": false,
+  "status": "RELEASED_AND_VERIFIED",
+  "closed": true,
   "recordedAt": "2026-09-12T16:30:42.053591+00:00",
   "model": {
     "model": "GPT-6 Astra",
@@ -13,8 +13,8 @@
   "baseline": "1d0e33deb30ac0e7ca07c7b9b4056553c0a8681d",
   "baselineDeployment": "dpl_C9kjzMJh5yrq457T4W9rJe4g7nt6",
   "implementation": "02aa6f46d044e3532e32564805cb91f3ec99442c",
-  "runtimeMerge": "c81b7adcea5a969d7d6c899e4888198293696ea4",
-  "deployedSha": "c81b7adcea5a969d7d6c899e4888198293696ea4",
+  "runtimeMerge": "02b1723b9e2b6fae5f7c90a181f5331d37d104d9",
+  "deployedSha": "02b1723b9e2b6fae5f7c90a181f5331d37d104d9",
   "canonicalAlias": "https://www.seniortrusthub.com",
   "sourceOracle": "source-oracle.json",
   "baselineRed": {
@@ -26,7 +26,7 @@
   },
   "focused": {
     "command": "npm run check:th-search-r1-011",
-    "passed": 56,
+    "passed": 61,
     "failed": 0
   },
   "protectedR1007": {
@@ -34,10 +34,10 @@
     "failed": 0
   },
   "fullTests": {
-    "webPassed": 407,
+    "webPassed": 412,
     "domainPassed": 255,
     "existingSkipped": 6,
-    "file": "reconciled-tests.log"
+    "file": "final-guards-tests.log"
   },
   "baselineTests": {
     "webPassed": 350,
@@ -53,7 +53,7 @@
     "IllinoisSourceCheck": "FAIL on candidate and untouched 72c1ddb baseline: fingerprint drifted; no source rewrite or gate bypass."
   },
   "mutations": {
-    "at": "2026-09-12T16:28:57.325692+00:00",
+    "at": "2026-09-12T16:54:58.417723+00:00",
     "results": [
       {
         "mutation": "identity-guard",
@@ -92,7 +92,7 @@
     }
   },
   "review": {
-    "method": "Separate self-review plus automated behavioral/UI checks; not independent human review",
+    "method": "Separate self-review plus automated behavioral/UI checks and existing Vercel Agent Review check; not independent human review",
     "file": "review.md"
   },
   "officialDestination": {
@@ -109,11 +109,7 @@
     "otherRepositoryEdits": false,
     "publicationChanges": false
   },
-  "remainingReleaseSteps": [
-    "release final deictic/polite and quoted-name guards",
-    "repeat Production suite including final boundary cases",
-    "final receipt"
-  ],
+  "remainingReleaseSteps": [],
   "remainingScope": [
     "ultimate legal/beneficial owner reconciliation",
     "other Senior search and care capabilities",
@@ -122,29 +118,30 @@
   ],
   "reconciledMain": "72c1ddb01a3d4f126fb9692b350f091a8eb60d72",
   "reconciledImplementation": "41ee303c5f742f9f894397bc5aee8494375798ee",
-  "verifiedAt": "2026-09-12T16:43:30.156368+00:00",
-  "deployment": "dpl_7rXBZhE7c4nqvTVSKRiCqg2sVmp4",
-  "pr": "https://github.com/savitz25/care-trust-hub/pull/34",
-  "testedPrHead": "f00bfa429fa3c8b70c87bbe4891e3f894a3731b7",
+  "verifiedAt": "2026-09-12T16:59:21.896503+00:00",
+  "deployment": "dpl_67EQLkYVJfTrb2HeZUvp5CZ7g7wX",
+  "pr": "https://github.com/savitz25/care-trust-hub/pull/35",
+  "testedPrHead": "cd0623215ed0c7dcd389815768d5b2d66e751fce",
   "ci": {
-    "run": 34705729275,
-    "head": "f00bfa429fa3c8b70c87bbe4891e3f894a3731b7",
+    "run": 34706329862,
+    "head": "cd0623215ed0c7dcd389815768d5b2d66e751fce",
     "web": "PASS",
     "ingest": "PASS",
     "migrations": "PASS",
     "vercel": "PASS",
-    "previewDeployment": "dpl_F5izXKB5PA9QZcLDXYgAh6DzWrGz"
+    "vercelAgentReview": "PASS",
+    "previewDeployment": "dpl_9KkLqNBYU9KAYVV85yXfdrhbmsur"
   },
   "productionBrowser": {
-    "file": "production-browser.json",
-    "cases": 28,
+    "file": "final-production-browser.json",
+    "cases": 34,
     "flows": 16,
     "failures": [],
     "errors": [],
-    "minimumMs": 167,
-    "maximumMs": 4106,
+    "minimumMs": 172,
+    "maximumMs": 4393,
     "widths": [320, 390, 768, 1280],
-    "supplement": "production-supplement.json",
+    "supplement": "final-production-supplement.json",
     "supplementChecks": 6,
     "supplementFailures": []
   },
@@ -165,10 +162,10 @@
     "Initial detached-base dependency junction omitted nested web packages; after correcting that local test setup baseline typecheck and full tests pass."
   ],
   "evidenceFollowup": {
-    "branch": "th-search-r1-011-evidence",
+    "branch": "th-search-r1-011-final-receipt",
     "scope": "Observed QA receipts only",
     "mergeSha": null,
-    "note": "Unknown when authored. Final documentation deployment identity and smoke are reported after normal merge; no future SHA is fabricated."
+    "note": "Unknown at authorship. Runtime deployment above is observed; final documentation-only merge/deployment and equivalent-code smoke will be reported after normal merge."
   },
   "finalBoundaryAudit": {
     "liveRuntime": "c81b7adcea5a969d7d6c899e4888198293696ea4",
@@ -181,6 +178,45 @@
     },
     "red": "final-boundary-red.log",
     "green": "final-boundary-green.log",
-    "meaning": "Initial certified literal cases passed, but additional paraphrase exposed a remaining in-scope bypass. Closure held pending this repair."
-  }
+    "meaning": "Initial certified literal cases passed, but additional paraphrase exposed a remaining in-scope bypass. Closure held pending this repair.",
+    "resolution": {
+      "implementation": "cd0623215ed0c7dcd389815768d5b2d66e751fce",
+      "merge": "02b1723b9e2b6fae5f7c90a181f5331d37d104d9",
+      "productionCasesPassed": true
+    }
+  },
+  "initialRuntimeMerge": "c81b7adcea5a969d7d6c899e4888198293696ea4",
+  "finalImplementation": "cd0623215ed0c7dcd389815768d5b2d66e751fce",
+  "initialProductionBrowser": {
+    "file": "production-browser.json",
+    "cases": 28,
+    "flows": 16,
+    "failures": [],
+    "errors": [],
+    "minimumMs": 167,
+    "maximumMs": 4106,
+    "widths": [320, 390, 768, 1280],
+    "supplement": "production-supplement.json",
+    "supplementChecks": 6,
+    "supplementFailures": []
+  },
+  "finalLocalBrowser": {
+    "file": "final-local-browser.json",
+    "cases": 34,
+    "flows": 16,
+    "supplementChecks": 6,
+    "failures": [],
+    "runtime": "cd0623215ed0c7dcd389815768d5b2d66e751fce"
+  },
+  "initialCi": {
+    "run": 34705729275,
+    "head": "f00bfa429fa3c8b70c87bbe4891e3f894a3731b7",
+    "web": "PASS",
+    "ingest": "PASS",
+    "migrations": "PASS",
+    "vercel": "PASS",
+    "previewDeployment": "dpl_F5izXKB5PA9QZcLDXYgAh6DzWrGz"
+  },
+  "initialPr": "https://github.com/savitz25/care-trust-hub/pull/34",
+  "rollback": "Reviewed Senior-only code revert/deployment retaining safe identity guards. No database rollback; do not revert prior R1 releases."
 }

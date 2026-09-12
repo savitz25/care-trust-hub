@@ -1,0 +1,38 @@
+{
+  "at": "2026-09-12T16:57:54.042Z",
+  "base": "https://www.seniortrusthub.com",
+  "sha": "02b1723b9e2b6fae5f7c90a181f5331d37d104d9",
+  "checks": [
+    {
+      "width": 320,
+      "flow": "CCN entry retains penalty question",
+      "url": "https://www.seniortrusthub.com/ask?q=Has+this+nursing+home+been+fined%3F&ccn=455799",
+      "answer": "Indexed penalty and enforcement observations"
+    },
+    {
+      "width": 320,
+      "flow": "server canonical profile continuation",
+      "href": "/ask?q=Who+owns+CMS+CCN+455799%3F&class=nursing_home"
+    },
+    {
+      "width": 320,
+      "flow": "miss official action focus and exact destination"
+    },
+    {
+      "width": 1280,
+      "flow": "CCN entry retains penalty question",
+      "url": "https://www.seniortrusthub.com/ask?q=Has+this+nursing+home+been+fined%3F&ccn=455799",
+      "answer": "Indexed penalty and enforcement observations"
+    },
+    {
+      "width": 1280,
+      "flow": "server canonical profile continuation",
+      "href": "/ask?q=Who+owns+CMS+CCN+455799%3F&class=nursing_home"
+    },
+    {
+      "width": 1280,
+      "flow": "miss official action focus and exact destination"
+    }
+  ],
+  "failures": []
+}
