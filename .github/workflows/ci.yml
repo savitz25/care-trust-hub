@@ -22,6 +22,7 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run check:th-search-r1-007
+      - run: npm run check:th-search-r1-011
       - run: npm test
       - run: npm run build
 

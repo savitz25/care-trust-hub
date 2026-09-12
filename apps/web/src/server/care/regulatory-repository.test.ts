@@ -111,3 +111,27 @@ describe("regulatory repository", () => {
     );
   });
 });
+
+it("retains deficiencies without an inspection link for exact-provider evidence", async () => {
+  query.mockReset();
+  query
+    .mockResolvedValueOnce({ rows: [] })
+    .mockResolvedValueOnce({
+      rows: [
+        {
+          ...common,
+          id: "unlinked",
+          inspection_event_id: null,
+          deficiency_prefix: "F",
+          deficiency_tag: "880",
+          scope_severity_code: "D",
+          official_description: "Source finding",
+        },
+      ],
+    })
+    .mockResolvedValueOnce({ rows: [] });
+  const { getProviderRegulatoryIntelligence } = await import("./regulatory-repository");
+  const r = await getProviderRegulatoryIntelligence("12A345");
+  expect(r.inspections).toEqual([]);
+  expect(r.deficiencies?.map((x) => x.tag)).toEqual(["F880"]);
+});

@@ -27,15 +27,19 @@ export async function GET(request: Request) {
     contract: result.contract,
     terminalState:
       result.query.terminalState ??
-      (result.failClosed
-        ? "UNSUPPORTED"
-        : result.entities.length ||
-            result.count ||
-            result.comparison ||
-            result.buckets ||
-            result.definition
-          ? "COMPLETE"
-          : "NO_MATCH"),
+      (result.candidateSelection
+        ? "NEEDS_CLARIFICATION"
+        : result.facilityAnswer?.status === "UNSUPPORTED"
+          ? "UNSUPPORTED"
+          : result.failClosed
+            ? "UNSUPPORTED"
+            : result.entities.length ||
+                result.count ||
+                result.comparison ||
+                result.buckets ||
+                result.definition
+              ? "COMPLETE"
+              : "NO_MATCH"),
     query: result.query,
     interpretation: result.interpretation,
     resultType: result.resultType,
@@ -50,6 +54,7 @@ export async function GET(request: Request) {
       href: e.href,
       evidence: e.evidence,
       whyMatched: e.whyMatched,
+      selectionHref: e.selectionHref,
     })),
     count: result.count,
     buckets: result.buckets,
@@ -59,6 +64,8 @@ export async function GET(request: Request) {
     provenance: result.provenance,
     limitations: result.limitations,
     failClosed: result.failClosed,
+    facilityAnswer: result.facilityAnswer,
+    candidateSelection: result.candidateSelection,
   };
   return NextResponse.json(publicSafe, {
     status: result.query.terminalState === "INVALID_INPUT" ? 400 : 200,

@@ -228,6 +228,7 @@ export interface CareFacilityHistory {
 }
 
 export interface CareRegulatoryIntelligence {
+  deficiencies?: CareDeficiencyFinding[];
   inspections: CareInspection[];
   penalties: CarePenalty[];
   repeatTags: Array<{ tag: string; inspectionCount: number }>;

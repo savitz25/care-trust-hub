@@ -1,3 +1,4 @@
+import { loadFacilityEvidence, type FacilityEvidenceAnswer } from "./senior-facility-evidence";
 import { sourceRating, type CmsRatingMetric } from "@/lib/cms-rating";
 import "server-only";
 import { getCareDatabasePool } from "./db";
@@ -18,7 +19,11 @@ import {
   type SeniorProviderClass,
   type SeniorResearchQuery,
 } from "./senior-ask-contract";
-import { planSeniorRequest, type SeniorRequestParams } from "./senior-ask-request";
+import {
+  planSeniorRequest,
+  seniorRequestHref,
+  type SeniorRequestParams,
+} from "./senior-ask-request";
 import { validState } from "./senior-location";
 
 const NH_CTE = `
@@ -60,6 +65,7 @@ export type SeniorAskEntity = {
   }>;
   whyMatched: string;
   sourceAsOf?: string | null;
+  selectionHref?: string;
 };
 
 export type SeniorAskResult = {
@@ -91,6 +97,8 @@ export type SeniorAskResult = {
   };
   limitations: string[];
   failClosed?: { reason: string; alternatives: string[] };
+  facilityAnswer?: FacilityEvidenceAnswer;
+  candidateSelection?: boolean;
 };
 
 async function getNursingHomeSourceClock(): Promise<{
@@ -186,7 +194,18 @@ function chips(query: SeniorResearchQuery): SeniorAskChip[] {
   if (query.identityQuery) rows.push({ label: "Provider", value: query.identityQuery });
   if (query.sort)
     rows.push({ label: "Sort", value: query.sort === "name" ? "Provider name" : query.sort });
-  if (query.metric) rows.push({ label: "Evidence", value: query.metric });
+  if (query.facilityEvidence)
+    rows.push({
+      label: "Facility evidence requested",
+      value: {
+        ownership: "Ownership relationships",
+        chow: "Changes of ownership",
+        penalty: "Penalty/enforcement observations",
+        inspection: "Inspection observations",
+        deficiency: "Deficiency observations",
+      }[query.facilityEvidence],
+    });
+  else if (query.metric) rows.push({ label: "Evidence", value: query.metric });
   return rows;
 }
 
@@ -243,6 +262,7 @@ async function lookupCcn(
   ccn: string,
   requestedClass?: SeniorProviderClass,
 ): Promise<SeniorAskEntity[]> {
+  if (!requestedClass || requestedClass === "nursing_home") await getNursingHomeSourceClock();
   const nh =
     !requestedClass || requestedClass === "nursing_home" ? await getProviderByCcn(ccn) : null;
   if (nh) {
@@ -269,6 +289,14 @@ async function lookupCcn(
       },
     ];
   }
+  await Promise.all([
+    !requestedClass || requestedClass === "home_health"
+      ? getCurrentAgencySourceClock("home_health")
+      : Promise.resolve(),
+    !requestedClass || requestedClass === "hospice"
+      ? getCurrentAgencySourceClock("hospice")
+      : Promise.resolve(),
+  ]);
   const [hh, hospice] = await Promise.all([
     !requestedClass || requestedClass === "home_health"
       ? searchCurrentAgencies({ providerClass: "home_health", query: ccn, limit: 2, offset: 0 })
@@ -378,6 +406,9 @@ async function searchNursingHomes(query: SeniorResearchQuery): Promise<{
       WHERE s.provider_id = cs.provider_id ORDER BY coverage_end DESC LIMIT 1
     ) st ON true`;
   }
+  const exactNameOrder = query.identityQuery
+    ? `CASE WHEN upper(provider_name)=upper(${p(query.identityQuery)}) THEN 0 ELSE 1 END, `
+    : "";
   const order =
     query.metric === "deficiency_count" || query.metric === "penalty"
       ? "extra_n DESC NULLS LAST, provider_name, ccn"
@@ -402,7 +433,7 @@ async function searchNursingHomes(query: SeniorResearchQuery): Promise<{
     FROM current_snapshots cs
     ${extraJoin}
     ${where}
-    ORDER BY ${order}
+    ORDER BY ${exactNameOrder}${order}
     LIMIT ${limit} OFFSET ${offset}`;
   const result = await getCareDatabasePool().query<{
     ccn: string;
@@ -582,8 +613,115 @@ async function executeSeniorResearchPlanUnsafe(
     };
   }
 
+  if (query.facilityEvidence) {
+    const task = query.facilityEvidence;
+    if (!query.identifier && !query.identityQuery) throw new Error("Facility identity required");
+    const candidatePlan: SeniorResearchQuery = {
+      ...query,
+      facilityEvidence: undefined,
+      selectedCcn: undefined,
+      metric: undefined,
+      mode: query.identifier ? "identifier" : "entity",
+      page: 1,
+    };
+    if (query.identityQuery)
+      await Promise.all([
+        !query.providerClass || query.providerClass === "nursing_home"
+          ? getNursingHomeSourceClock()
+          : Promise.resolve(),
+        !query.providerClass || query.providerClass === "home_health"
+          ? getCurrentAgencySourceClock("home_health")
+          : Promise.resolve(),
+        !query.providerClass || query.providerClass === "hospice"
+          ? getCurrentAgencySourceClock("hospice")
+          : Promise.resolve(),
+      ]);
+    const identity = await executeSeniorResearchPlanUnsafe(candidatePlan, raw);
+    query = { ...query, locationRequirement: identity.query.locationRequirement };
+    const candidates = identity.entities;
+    const exact = candidates.filter(
+      (e) => e.providerName.trim().toUpperCase() === query.identityQuery?.trim().toUpperCase(),
+    );
+    let chosen =
+      query.identifier && candidates.length === 1
+        ? candidates[0]
+        : exact.length === 1 && !identity.pagination.hasMore
+          ? exact[0]
+          : undefined;
+    if (query.selectedCcn) {
+      const matches = candidates.filter((e) => e.ccn === query.selectedCcn);
+      chosen = matches.length === 1 ? matches[0] : undefined;
+      if (!chosen)
+        return {
+          ...identity,
+          query,
+          entities: [],
+          candidateSelection: false,
+          failClosed: {
+            reason:
+              "That selection is not a unique current candidate for this provider-name and location request. Search and select again.",
+            alternatives: [],
+          },
+        };
+    }
+    if (!chosen)
+      return {
+        ...identity,
+        query,
+        interpretation: chips(query),
+        candidateSelection: candidates.length > 0,
+        entities: candidates.slice(0, 10).map((e) => ({
+          ...e,
+          evidence: [],
+          selectionHref: seniorRequestHref(raw, query.inputOverrides, {
+            selected: e.ccn,
+            class: e.providerClass,
+          }),
+        })),
+        limitations: [
+          ...identity.limitations,
+          "Select a provider before attaching facility-specific evidence. At most 10 candidates are shown; refine the name if needed. Similar names and classes are not merged.",
+        ],
+      };
+    const checked = await lookupCcn(chosen.ccn, chosen.providerClass);
+    if (
+      checked.length !== 1 ||
+      checked[0]!.ccn !== chosen.ccn ||
+      checked[0]!.providerName !== chosen.providerName
+    )
+      throw new Error("Selected provider changed; retry identity resolution");
+    const identityClock =
+      chosen.providerClass === "nursing_home"
+        ? await getNursingHomeSourceClock()
+        : await getCurrentAgencySourceClock(chosen.providerClass);
+    const facilityAnswer = await loadFacilityEvidence(chosen, task);
+    return {
+      ...identity,
+      query,
+      interpretation: chips(query),
+      resultType: "evidence",
+      entities: [chosen],
+      facilityAnswer,
+      pagination: { page: 1, pageSize: ASK_PAGE_SIZE, hasMore: false },
+      provenance: {
+        ...identity.provenance,
+        ...identityClock,
+        providerClass: CLASS_LABEL[chosen.providerClass],
+        metric: task,
+        identifierMethod: query.identifier
+          ? "Labeled exact CMS CCN"
+          : query.selectedCcn
+            ? "Server-revalidated name candidate selection and exact CCN"
+            : "Unique exact source provider name and revalidated CCN",
+        queryGrain: "One resolved provider; source-native evidence relationships/events",
+      },
+    };
+  }
+
   if (query.mode === "identifier" && query.identifier) {
     const entities = await lookupCcn(query.identifier.value, query.providerClass);
+    if (entities.some((e) => e.ccn !== query.identifier!.value))
+      throw new Error("Exact CCN source mismatch");
     if (query.geography) {
       const geo = query.geography;
       const established =
@@ -703,7 +841,11 @@ async function executeSeniorResearchPlanUnsafe(
       pagination: {
         page: 1,
         pageSize: ASK_PAGE_SIZE,
-        hasMore: nursing.hasMore || agencyEntities.length > ASK_PAGE_SIZE,
+        hasMore:
+          nursing.hasMore ||
+          homeHealth.length >= 8 ||
+          hospice.length >= 8 ||
+          agencyEntities.length + nursing.rows.length > ASK_PAGE_SIZE,
       },
       provenance: {
         ...provenanceBase,

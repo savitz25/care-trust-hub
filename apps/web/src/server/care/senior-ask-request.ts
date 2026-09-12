@@ -7,7 +7,16 @@ import {
 import { LOCATION_MEANING, validState } from "./senior-location";
 
 export type SeniorRequestParams = Record<string, string | string[] | undefined>;
-export const SENIOR_FILTER_KEYS = ["class", "state", "evidence", "stars", "broaden"] as const;
+export const SENIOR_FILTER_KEYS = [
+  "class",
+  "state",
+  "evidence",
+  "stars",
+  "broaden",
+  "provider",
+  "selected",
+  "ccn",
+] as const;
 const metrics: Record<string, string> = {
   deficiencies: "deficiency_count",
   penalties: "penalty",
@@ -71,8 +80,68 @@ export function planSeniorRequest(input: SeniorRequestParams): {
       return conflict(
         "The selected provider class conflicts with the question. Edit the question or the class filter; no class was substituted.",
       );
+    if (query.clarification === "state_care")
+      return conflict(
+        "This state-regulated setting cannot be replaced with a CMS class. Use the state research action or edit the question.",
+      );
     query.providerClass = overrides.class as SeniorResearchQuery["providerClass"];
+    if (query.clarification === "provider_class")
+      query = {
+        ...query,
+        mode: "entity",
+        modeBeforeClarification: "entity",
+        clarification: undefined,
+        terminalState: undefined,
+        failReason: undefined,
+        alternatives: [],
+      };
   }
+  if (overrides.ccn) {
+    if (
+      !query.facilityEvidence ||
+      query.identifier ||
+      query.identityQuery ||
+      !/^[A-Z0-9]{6}$/i.test(overrides.ccn)
+    )
+      return invalid("Enter one exact CMS CCN for the unspecified facility question.");
+    query = {
+      ...query,
+      identifier: { type: "ccn", value: overrides.ccn.toUpperCase() },
+      mode: "identifier",
+      clarification: undefined,
+      terminalState: undefined,
+      failReason: undefined,
+      alternatives: [],
+    };
+  }
+  if (overrides.provider) {
+    if (
+      !query.facilityEvidence ||
+      query.identifier ||
+      overrides.provider.length > 120 ||
+      !/^[\p{L}\p{N}&'., -]{2,120}$/u.test(overrides.provider)
+    )
+      return invalid(
+        "Enter a provider name for the current evidence question, or label the CCN in the question.",
+      );
+    if (
+      query.identityQuery &&
+      query.identityQuery.toUpperCase() !== overrides.provider.trim().toUpperCase()
+    )
+      return conflict(
+        "The provider entry conflicts with the named facility in the question. Edit the question explicitly.",
+      );
+    query = {
+      ...query,
+      identityQuery: overrides.provider.trim(),
+      mode: "evidence",
+      clarification: undefined,
+      terminalState: undefined,
+      failReason: undefined,
+      alternatives: [],
+    };
+  }
+  if (overrides.selected) query.selectedCcn = overrides.selected;
   if (overrides.state) {
     if (!validState(overrides.state)) return invalid("Choose a valid recorded state.");
     const geo = query.geography;
@@ -127,6 +196,10 @@ export function planSeniorRequest(input: SeniorRequestParams): {
     if (query.providerClass !== expected)
       return conflict(
         "This evidence filter belongs to another CMS provider class. Change the filter; the class and location were retained.",
+      );
+    if (query.facilityEvidence && metric !== query.facilityEvidence)
+      return conflict(
+        "The selected evidence filter differs from the facility question. Choose the evidence question you want to research; identity and location were retained.",
       );
     query.metric = metric;
     if (query.mode === "count" && query.providerClass === "nursing_home")

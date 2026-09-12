@@ -577,9 +577,144 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   });
 }
 
+function facilityQuestion(raw: string): SeniorResearchQuery | null {
+  if (
+    raw.trim().length > 180 ||
+    /[<>;]|\b(?:best|safest|worst|assisted living|memory care)\b/i.test(raw)
+  )
+    return null;
+  const q = raw.trim().replace(/[?!.]+$/, "");
+  let task: SeniorResearchQuery["facilityEvidence"], name: string | undefined;
+  let m: RegExpMatchArray | null;
+  if (
+    (m =
+      q.match(/^who (?:owns|operates|manages)\s+(.+)$/i) ??
+      q.match(/^who is (?:the )?owner of\s+(.+)$/i))
+  ) {
+    task = "ownership";
+    name = m[1];
+  } else if (
+    (m = q.match(
+      /^(?:did|has)\s+(.+?)\s+(?:change[d]? owners|change[d]? ownership|have a change of ownership)$/i,
+    ))
+  ) {
+    task = "chow";
+    name = m[1];
+  } else if (
+    (m = q.match(
+      /^(?:has|was)\s+(.+?)\s+(?:been )?(?:fined|penalized|had (?:any )?(?:fines|penalties))$/i,
+    ))
+  ) {
+    task = "penalty";
+    name = m[1];
+  } else if (
+    (m = q.match(
+      /^(?:show |what are (?:the )?)?(ownership|chow|penalties|fines|inspections|deficiencies)\s+(?:for|of|at)\s+(.+)$/i,
+    ))
+  ) {
+    task = /ownership/i.test(m[1]!)
+      ? "ownership"
+      : /chow/i.test(m[1]!)
+        ? "chow"
+        : /penalt|fine/i.test(m[1]!)
+          ? "penalty"
+          : /inspection/i.test(m[1]!)
+            ? "inspection"
+            : "deficiency";
+    name = m[2];
+  }
+  const ccn = labeledCcn(q);
+  if (!task && ccn)
+    task = /\b(?:chow|change owners|change of ownership)\b/i.test(q)
+      ? "chow"
+      : /\b(?:owns|ownership|owner)\b/i.test(q)
+        ? "ownership"
+        : /\b(?:fined|fine|penalt)/i.test(q)
+          ? "penalty"
+          : /\binspection/i.test(q)
+            ? "inspection"
+            : /\bdeficien/i.test(q)
+              ? "deficiency"
+              : undefined;
+  if (!task) return null;
+  if ((q.match(/\bccn\b/gi)?.length ?? 0) > 1 || detectClass(q) === "ambiguous")
+    return validateSeniorResearchQuery({
+      mode: "fail_closed",
+      facilityEvidence: task,
+      page: 1,
+      terminalState: "NEEDS_CLARIFICATION",
+      failReason:
+        "Choose one provider identity and class for this evidence question. No provider evidence was attached.",
+      alternatives: [],
+    });
+  const location = /\b(?:in|near|within)\b/i.test(q) ? parseRecordedLocation(q) : {};
+  name = name
+    ?.split(/\s+(?:located )?in\s+/i)[0]
+    ?.trim()
+    .replace(/^"|"$/g, "");
+  if (
+    name &&
+    /^(?:(?:this|that|the|my|a|an)\s+)?(?:nursing home|facility|provider|home health agency|hospice|nursing facility)$/i.test(
+      name,
+    )
+  )
+    name = undefined;
+  const cls = detectClass(q);
+  return validateSeniorResearchQuery({
+    mode: ccn ? "identifier" : name ? "evidence" : "fail_closed",
+    facilityEvidence: task,
+    identifier: ccn ? { type: "ccn", value: ccn } : undefined,
+    identityQuery: ccn ? undefined : name,
+    providerClass: cls === "ambiguous" ? undefined : cls,
+    ...location,
+    status: "current",
+    page: 1,
+    coverageState: "PARTIAL",
+    ...(!ccn && !name
+      ? {
+          clarification: "provider_identity" as const,
+          terminalState: "NEEDS_CLARIFICATION" as const,
+          failReason:
+            "Which facility do you mean? Enter its provider name or labeled CMS CCN. No ownership or evidence was attached to an unspecified provider.",
+          alternatives: [],
+        }
+      : {}),
+  });
+}
+
 export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQuery {
-  let plan = interpretSeniorAskQueryCore(raw, page);
-  const location = parseRecordedLocation(raw);
+  let plan = facilityQuestion(raw) ?? interpretSeniorAskQueryCore(raw, page);
+  if (/assisted living|memory care/i.test(raw) && plan.mode === "fail_closed")
+    plan = {
+      ...plan,
+      clarification: "state_care",
+      alternatives: [],
+      terminalState: "UNSUPPORTED",
+      failReason: /memory care/i.test(raw)
+        ? "Memory care is not a CMS provider class. The current Ask filter does not establish memory-care services; use the relevant state research and confirm the setting with its regulator."
+        : plan.failReason,
+    };
+  if (
+    !plan.facilityEvidence &&
+    !plan.clarification &&
+    !plan.identifier &&
+    !detectClass(raw) &&
+    /^(?:show |find )?(?:senior (?:care|homes?)|care)(?: in|$)/i.test(raw)
+  )
+    plan = {
+      ...plan,
+      mode: "fail_closed",
+      identityQuery: undefined,
+      clarification: "provider_class",
+      terminalState: "NEEDS_CLARIFICATION",
+      failReason:
+        "Choose the care setting. Nursing homes, Home Health and Hospice are separate CMS classes; assisted living uses state-specific research.",
+      alternatives: [],
+    };
+  const location =
+    plan.facilityEvidence && !/\b(?:in|located in|near|within)\b/i.test(raw)
+      ? {}
+      : parseRecordedLocation(raw);
   const requestedClass = detectClass(raw);
   if (
     requestedClass &&
@@ -602,6 +737,7 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
     raw.match(/^(?:find|research|provider named)\s+"([^"]+)"/i)?.[1] ??
     raw.match(/^(?:find|research|provider named)\s+(.+?)(?:\s+in\s+|$)/i)?.[1];
   if (
+    !plan.facilityEvidence &&
     explicitName &&
     raw.trim().length <= 180 &&
     !/\bCCN\b/i.test(explicitName) &&

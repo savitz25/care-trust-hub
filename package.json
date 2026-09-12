@@ -21,7 +21,8 @@
     "assert:ny-sen-001": "npm --workspace=@care/domain exec -- vitest run src/ny-intelligence.test.ts src/senior-home-intel.test.ts src/senior-home-evidence-inventory.test.ts && npm --workspace=@care/web exec -- vitest run --configLoader runner src/app/new-york/ny-publication.test.ts src/components/ny-intelligence.test.tsx src/server/care/senior-ask-parse.test.ts src/server/care/th-search-001d.test.ts src/app/sitemaps/class-landing-publication.test.ts src/components/senior-home-intelligence.test.tsx",
     "check:th-search-001d": "npm --workspace=@care/web exec -- vitest run --configLoader runner src/server/care/th-search-001d.test.ts src/server/care/senior-ask-parse.test.ts",
     "format:check": "prettier --check .",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build",
+    "check:th-search-r1-011": "npm exec --workspace=@care/web -- vitest run --configLoader runner src/server/care/r1-011-identity.test.tsx src/server/care/regulatory-repository.test.ts src/server/care/ownership-repository.test.ts"
   },
   "devDependencies": {
     "prettier": "3.6.2"
