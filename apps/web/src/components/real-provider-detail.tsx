@@ -275,6 +275,7 @@ export function RealProviderDetail({
   chain,
   providerContext = [],
   trustParticipation = false,
+  profileManagementEnabled = false,
   publishedEnrichment,
   stateIntelligence,
   facilityHistory,
@@ -297,6 +298,8 @@ export function RealProviderDetail({
     referencedSection: string | null;
   }>;
   trustParticipation?: boolean;
+  /** Whether live, managed profile tools (SeniorCustomerLayer) are enabled for this provider. */
+  profileManagementEnabled?: boolean;
   publishedEnrichment?: CarePublishedFacilityEnrichment;
   stateIntelligence?: PublishedStateIntelligence;
   facilityHistory?: CareFacilityHistory;
@@ -565,9 +568,15 @@ export function RealProviderDetail({
                 Report a source-data concern
               </Link>
               <Link className="button button--quiet" href={`/trust/claim?ccn=${provider.ccn}`}>
-                Represent this facility? Submit a profile claim
+                Represent this facility? Submit a representation claim
               </Link>
             </div>
+            {!profileManagementEnabled && (
+              <p className="filter-note">
+                Representation claims are reviewed manually. Live profile-management tools are not
+                yet enabled for this facility.
+              </p>
+            )}
             <Link href="/trust/corrections">How corrections work</Link>
           </section>
         )}
