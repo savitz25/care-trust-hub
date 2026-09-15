@@ -172,6 +172,7 @@ export default async function RealFacilityPage({
         chain={chain ?? undefined}
         providerContext={providerContext}
         trustParticipation={trustParticipation}
+        profileManagementEnabled={customerEnabled}
         publishedEnrichment={publishedEnrichment}
         stateIntelligence={stateIntelligence}
         facilityHistory={facilityHistory}
