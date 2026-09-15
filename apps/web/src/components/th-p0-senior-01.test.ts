@@ -20,10 +20,7 @@ import { describe, expect, it } from "vitest";
  */
 const here = dirname(fileURLToPath(import.meta.url));
 const detailSource = readFileSync(join(here, "real-provider-detail.tsx"), "utf8");
-const pageSource = readFileSync(
-  join(here, "../app/facility/cms/[ccn]/[slug]/page.tsx"),
-  "utf8",
-);
+const pageSource = readFileSync(join(here, "../app/facility/cms/[ccn]/[slug]/page.tsx"), "utf8");
 
 describe("nursing home facility page: claim vs. profile-management consistency", () => {
   it("RealProviderDetail no longer claims to accept a 'profile claim' unconditionally", () => {
