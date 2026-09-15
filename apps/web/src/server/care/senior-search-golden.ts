@@ -39,7 +39,12 @@ export const SENIOR_SEARCH_GOLDEN_QUESTIONS: SeniorGoldenQuestion[] = [
   { query: "best nursing home in New York", expected: "UNSUPPORTED_SAFE" },
   { query: "how many senior care providers in Colorado", expected: "UNSUPPORTED_SAFE" },
   { query: "best nursing home in Colorado", expected: "UNSUPPORTED_SAFE" },
-  { query: "nursing homes in Boca Raton", expected: "NEEDS_CLARIFICATION" },
+  // TH-DISCOVERY-RESET-001: Boca Raton has no real-world same-name collision in another state
+  // (verified against the live corpus) -- RESULTS FIRST resolves it directly instead of a
+  // dead-end jurisdiction prompt. "Miami" below stays NEEDS_CLARIFICATION: a real, current
+  // nursing home exists in Miami, OK, so that ambiguity is genuine and must not be silently
+  // resolved to FL.
+  { query: "nursing homes in Boca Raton", expected: "PASS" },
   { query: "home health agencies in Palm Beach County", expected: "UNSUPPORTED_SAFE" },
   { query: "hospice providers in Miami", expected: "NEEDS_CLARIFICATION" },
   { query: "5 CMS overall star nursing homes in Florida", expected: "PASS" },
@@ -79,7 +84,8 @@ export const SENIOR_SEARCH_GOLDEN_QUESTIONS: SeniorGoldenQuestion[] = [
   { query: "nursing homes serving my ZIP code", expected: "UNSUPPORTED_SAFE" },
   { query: "home health agency serving Broward County", expected: "UNSUPPORTED_SAFE" },
   { query: "hospice serving my address", expected: "UNSUPPORTED_SAFE" },
-  { query: "I need a nursing home for my mother in Boca Raton", expected: "NEEDS_CLARIFICATION" },
+  // TH-DISCOVERY-RESET-001: see the "nursing homes in Boca Raton" comment above.
+  { query: "I need a nursing home for my mother in Boca Raton", expected: "PASS" },
   { query: "I need home health for my father", expected: "PASS" },
   { query: "I want to research a hospice provider", expected: "PASS" },
   { query: "How do I check nursing home deficiencies", expected: "PASS" },

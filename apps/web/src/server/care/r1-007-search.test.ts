@@ -174,21 +174,40 @@ describe("R1-007 recorded location integrity", () => {
     expect(container.querySelectorAll(".cms-stars small")[0]?.textContent).toBe("4/5");
     expect(container.textContent).not.toContain("NaN/5");
   });
-  it.each(["Boca Raton", "Miami"])(
-    "requires explicit jurisdiction for %s, then completes the selected plan",
-    (city) => {
-      expect(planSeniorRequest({ q: `Nursing homes in ${city}` }).query.terminalState).toBe(
-        "NEEDS_CLARIFICATION",
-      );
-      const selected = planSeniorRequest({ q: `Nursing homes in ${city}`, state: "FL" }).query;
-      expect(selected.mode).toBe("entity");
-      expect(selected.geography).toMatchObject({
-        type: "city",
-        value: city.toUpperCase(),
-        state: "FL",
-      });
-    },
-  );
+  // TH-DISCOVERY-RESET-001: "Miami" stays genuinely ambiguous nationally -- a real, current
+  // nursing home exists in Miami, OK -- so it must keep requiring an explicit state; silently
+  // assuming FL there would hide/misattribute a genuine different-state identity. "Boca Raton"
+  // has no such real-world collision (verified against the live corpus), so RESULTS FIRST now
+  // resolves it directly instead of dead-ending on a technicality with a single obvious answer.
+  it("requires explicit jurisdiction for a genuinely ambiguous bare city (Miami), then completes the selected plan", () => {
+    expect(planSeniorRequest({ q: "Nursing homes in Miami" }).query.terminalState).toBe(
+      "NEEDS_CLARIFICATION",
+    );
+    const selected = planSeniorRequest({ q: "Nursing homes in Miami", state: "FL" }).query;
+    expect(selected.mode).toBe("entity");
+    expect(selected.geography).toMatchObject({
+      type: "city",
+      value: "MIAMI",
+      state: "FL",
+    });
+  });
+  it("resolves a bare, non-ambiguous established city (Boca Raton) directly, without a jurisdiction dead end", () => {
+    const resolved = planSeniorRequest({ q: "Nursing homes in Boca Raton" }).query;
+    expect(resolved.mode).toBe("entity");
+    expect(resolved.geography).toMatchObject({
+      type: "city",
+      value: "BOCA RATON",
+      state: "FL",
+    });
+  });
+  it("TH-DISCOVERY-RESET-001: 'near <established city>' resolves the same recorded-location grain as 'in <city>', not an unsupported radius/proximity claim", () => {
+    const resolved = planSeniorRequest({ q: "hospice near Tampa" }).query;
+    expect(resolved.mode).toBe("entity");
+    expect(resolved.providerClass).toBe("hospice");
+    expect(resolved.geography).toMatchObject({ type: "city", value: "TAMPA", state: "FL" });
+    // Genuine radius/proximity phrasing must still fail closed, never silently pick a state.
+    expect(planSeniorRequest({ q: "hospice near me" }).query.terminalState).toBe("UNSUPPORTED");
+  });
   it("does not mistake state words within a city for a conflicting jurisdiction", () => {
     expect(
       interpretSeniorAskQuery("Home health agencies in Virginia Beach Virginia").geography,
