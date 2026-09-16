@@ -99,6 +99,22 @@ const fixtures = [
     kind: "hospice",
     current: true,
   },
+  {
+    ccn: "H00030",
+    provider_name: "Tampa Home Health",
+    city: "TAMPA",
+    state_code: "FL",
+    kind: "home_health",
+    current: true,
+  },
+  {
+    ccn: "P00002",
+    provider_name: "Tampa Hospice",
+    city: "TAMPA",
+    state_code: "FL",
+    kind: "hospice",
+    current: true,
+  },
 ];
 const clock = {
   display_name: "Synthetic CMS fixture",
@@ -207,6 +223,30 @@ describe("R1-007 recorded location integrity", () => {
     expect(resolved.geography).toMatchObject({ type: "city", value: "TAMPA", state: "FL" });
     // Genuine radius/proximity phrasing must still fail closed, never silently pick a state.
     expect(planSeniorRequest({ q: "hospice near me" }).query.terminalState).toBe("UNSUPPORTED");
+  });
+  // TH-DISCOVERY-RESET-001B: a bare "senior care <state>" query is genuinely ambiguous across
+  // Nursing Home / Home Health / Hospice and must keep requiring an explicit class choice -- but
+  // requiring a second click before ANY provider is visible is the exact stonewall this ticket
+  // eliminates. Real previews from all three classes, scoped to the same requested geography, must
+  // render on this same first screen alongside the class-choice buttons.
+  it("shows real per-class provider previews on the same screen as the care-setting clarification", async () => {
+    const result = await executeSeniorResearchQuery("senior care Florida");
+    expect(result.query.mode).toBe("fail_closed");
+    expect(result.query.clarification).toBe("provider_class");
+    expect(result.query.terminalState).toBe("NEEDS_CLARIFICATION");
+    expect(result.query.geography).toMatchObject({ type: "state", value: "FL" });
+    const byClass = Object.fromEntries(
+      (result.classPreviews ?? []).map((g) => [g.providerClass, g.entities]),
+    );
+    expect(byClass.nursing_home?.map((e) => e.providerName)).toContain("Tampa One");
+    expect(byClass.home_health?.map((e) => e.providerName)).toContain("Tampa Home Health");
+    expect(byClass.hospice?.map((e) => e.providerName)).toContain("Tampa Hospice");
+    // Never merged into one generic universe -- each class's own rows stay under its own key.
+    expect(byClass.nursing_home?.some((e) => e.providerClass !== "nursing_home")).toBe(false);
+    const { container } = render(createElement(AskResultView, { result }));
+    expect(container.textContent).toContain("Tampa One");
+    expect(container.textContent).toContain("Tampa Home Health");
+    expect(container.textContent).toContain("Tampa Hospice");
   });
   it("does not mistake state words within a city for a conflicting jurisdiction", () => {
     expect(

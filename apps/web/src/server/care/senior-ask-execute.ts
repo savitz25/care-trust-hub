@@ -99,7 +99,95 @@ export type SeniorAskResult = {
   failClosed?: { reason: string; alternatives: string[] };
   facilityAnswer?: FacilityEvidenceAnswer;
   candidateSelection?: boolean;
+  classPreviews?: Array<{
+    providerClass: SeniorProviderClass;
+    label: string;
+    entities: SeniorAskEntity[];
+  }>;
 };
+
+const CLASS_PREVIEW_LIMIT = 5;
+
+// TH-DISCOVERY-RESET-001B: "senior care Florida" (no care-setting word) still needs a choice
+// between Nursing Homes / Home Health / Hospice -- those are genuinely separate CMS classes and
+// must never be merged into one generic universe. But requiring a second click before showing ANY
+// provider is the exact stonewall this ticket eliminates. Reuse the same existing per-class search
+// functions that already back the real "nursing homes in Florida" / "hospice near Tampa" PASS
+// cases, scoped to the same requested geography, and show a few real rows from each class directly
+// under the refinement choices. Each class's own search failing independently (e.g. a genuinely
+// unsupported geography) must not block the other two classes' previews.
+async function classPreviews(
+  query: SeniorResearchQuery,
+): Promise<SeniorAskResult["classPreviews"]> {
+  const base: SeniorResearchQuery = {
+    ...query,
+    page: 1,
+    identityQuery: undefined,
+    qualityFilters: undefined,
+    metric: undefined,
+    sort: undefined,
+  };
+  const [nursingHome, homeHealth, hospice] = await Promise.all([
+    searchNursingHomes({ ...base, providerClass: "nursing_home" })
+      .then((r) => r.rows.slice(0, CLASS_PREVIEW_LIMIT))
+      .catch(() => [] as SeniorAskEntity[]),
+    searchCurrentAgencies({
+      providerClass: "home_health",
+      state: query.geography?.type === "state" ? query.geography.value : query.geography?.state,
+      city: query.geography?.type === "city" ? query.geography.value : undefined,
+      zip: query.geography?.type === "zip" ? query.geography.value : undefined,
+      county: query.geography?.type === "county" ? query.geography.value : undefined,
+      limit: CLASS_PREVIEW_LIMIT,
+      offset: 0,
+    })
+      .then((rows) =>
+        rows.slice(0, CLASS_PREVIEW_LIMIT).map(
+          (row): SeniorAskEntity => ({
+            providerClass: "home_health",
+            ccn: row.ccn,
+            providerName: row.providerName,
+            recordedLocation: { city: row.city, state: row.state },
+            location: [row.city, row.state, row.zipCode].filter(Boolean).join(", "),
+            statusLabel: `Current research cohort (CMS ${CLASS_LABEL.home_health} directory)`,
+            href: row.href,
+            evidence: [],
+            whyMatched: `${row.providerName} is a current Home Health agency in the CMS directory${query.geography ? ` with recorded office location ${row.city ?? "city unreported"}, ${row.state}` : ""}. Office location is not a verified service area.`,
+          }),
+        ),
+      )
+      .catch(() => [] as SeniorAskEntity[]),
+    searchCurrentAgencies({
+      providerClass: "hospice",
+      state: query.geography?.type === "state" ? query.geography.value : query.geography?.state,
+      city: query.geography?.type === "city" ? query.geography.value : undefined,
+      zip: query.geography?.type === "zip" ? query.geography.value : undefined,
+      county: query.geography?.type === "county" ? query.geography.value : undefined,
+      limit: CLASS_PREVIEW_LIMIT,
+      offset: 0,
+    })
+      .then((rows) =>
+        rows.slice(0, CLASS_PREVIEW_LIMIT).map(
+          (row): SeniorAskEntity => ({
+            providerClass: "hospice",
+            ccn: row.ccn,
+            providerName: row.providerName,
+            recordedLocation: { city: row.city, state: row.state },
+            location: [row.city, row.state, row.zipCode].filter(Boolean).join(", "),
+            statusLabel: `Current research cohort (CMS ${CLASS_LABEL.hospice} directory)`,
+            href: row.href,
+            evidence: [],
+            whyMatched: `${row.providerName} is a current Hospice provider in the CMS directory${query.geography ? ` with recorded office location ${row.city ?? "city unreported"}, ${row.state}` : ""}. Office location is not a verified service area.`,
+          }),
+        ),
+      )
+      .catch(() => [] as SeniorAskEntity[]),
+  ]);
+  return [
+    { providerClass: "nursing_home", label: CLASS_LABEL.nursing_home, entities: nursingHome },
+    { providerClass: "home_health", label: CLASS_LABEL.home_health, entities: homeHealth },
+    { providerClass: "hospice", label: CLASS_LABEL.hospice, entities: hospice },
+  ];
+}
 
 async function getNursingHomeSourceClock(): Promise<{
   sourceRelease?: string;
@@ -594,6 +682,8 @@ async function executeSeniorResearchPlanUnsafe(
         reason: query.failReason ?? "Unsupported question.",
         alternatives: query.alternatives ?? [],
       },
+      classPreviews:
+        query.clarification === "provider_class" ? await classPreviews(query) : undefined,
     };
   }
 

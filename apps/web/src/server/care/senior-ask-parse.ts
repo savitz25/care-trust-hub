@@ -1,4 +1,5 @@
 import { parseRecordedLocation } from "./senior-location";
+import { STATE_NAMES } from "@care/domain";
 import {
   type SeniorAskMode,
   type SeniorProviderClass,
@@ -376,7 +377,44 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
     });
   }
 
+  if (providerClass === "ambiguous" && !/\bhow many\b|\bcount\b|\bcompare\b/i.test(q)) {
+    // TH-DISCOVERY-RESET-001B: this used to be a bare fail_closed with three literal re-query
+    // suggestions (and those suggestions always said "in Florida", regardless of the actually
+    // requested geography). It now sets the same "provider_class" clarification the dedicated
+    // no-signal-at-all branch already uses (see interpretSeniorAskQuery below), so the existing
+    // clarification UI's three class-choice buttons AND its real per-class provider previews
+    // (senior-ask-execute.ts's classPreviews) render immediately -- no second click just to see
+    // providers, and the requested geography is preserved rather than replaced with a fixed state.
+    // A count/comparison request ("how many...", "compare...") has no listing to preview and keeps
+    // its original bare fail_closed shape further below.
+    const place =
+      geography?.type === "county"
+        ? `${geography.value} County`
+        : geography?.type === "state"
+          ? (STATE_NAMES[geography.value] ?? geography.value)
+          : geography?.value;
+    return validateSeniorResearchQuery({
+      mode: "fail_closed",
+      page: 1,
+      failReason:
+        "“Senior care” is ambiguous. Nursing homes, Home Health and Hospice are separate CMS classes with different identifiers and evidence. Choose one class below — Ask will not silently query all three.",
+      alternatives: place
+        ? [
+            `Show nursing homes in ${place}.`,
+            `Show home health agencies in ${place}.`,
+            `Show hospice providers in ${place}.`,
+          ]
+        : ["Show nursing homes in Florida."],
+      clarification: "provider_class",
+      terminalState: "NEEDS_CLARIFICATION",
+      geography,
+      locationRequirement: location.locationRequirement,
+      coverageState: "UNSUPPORTED",
+    });
+  }
   if (providerClass === "ambiguous") {
+    // A count/comparison request across an ambiguous class has no single listing to preview --
+    // keep the original bare fail_closed shape (no clarification, no DB-backed previews).
     return fail(
       "“Senior care providers” is ambiguous. Nursing homes, home health, and hospice are different CMS classes with different identifiers and evidence. Choose one class — Ask will not silently query all three.",
       [
