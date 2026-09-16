@@ -3,6 +3,27 @@ import type { SeniorResearchQuery } from "./senior-ask-contract";
 
 export const LOCATION_MEANING =
   "Recorded provider/office location, not service territory or service area, distance or availability.";
+/**
+ * TH-DISCOVERY-RESET-001: verified against the real live CMS-backed corpus (via production
+ * queries with an explicit state) to have zero real current provider record under any other
+ * state's same city name, so silently assuming FL never hides or misattributes a genuine
+ * different-state identity. This is deliberately a much shorter list than AskTrustHub's
+ * florida-municipality-crosswalk.ts -- "Miami" (real Miami, OK nursing home), "Jacksonville"
+ * (real Jacksonville, NC nursing home), and "Clearwater" (real Clearwater, KS nursing home) are
+ * genuinely ambiguous in the actual corpus and must keep requiring an explicit state; "Tampa"
+ * looked risky (a real "Tampa, KS" exists) but the live corpus has zero current provider there.
+ */
+const ESTABLISHED_FL_CITIES = new Set([
+  "TAMPA",
+  "BOCA RATON",
+  "ORLANDO",
+  "ST PETERSBURG",
+  "ST. PETERSBURG",
+  "SAINT PETERSBURG",
+  "FORT LAUDERDALE",
+  "WEST PALM BEACH",
+  "HIALEAH",
+]);
 export const validState = (value: string) => Object.hasOwn(STATE_NAMES, value);
 const normalize = (value: string) => value.trim().replace(/\s+/g, " ").toUpperCase();
 const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -42,7 +63,14 @@ export function parseRecordedLocation(
   }
   if (!span && !radius) return {};
   const requirement = { raw: span ?? radius![0], outcome: "NEEDS_CLARIFICATION" as const };
-  if (radius || (clause && /^(?:around|near)\b/i.test(clause[0])))
+  // TH-DISCOVERY-RESET-001: "near <place>" and "around <place>" are ordinary ways to phrase a
+  // location-bound provider search ("hospice near Tampa" means the same thing as "hospice in
+  // Tampa" to a consumer) and resolve to the exact same recorded-location grain, with the exact
+  // same "not service territory/availability" disclaimer -- they must not be treated as an
+  // unsupported radius/proximity claim just because of the preposition. Only genuine
+  // radius/proximity phrasing (near me, within N miles, a bare radius, nearby, serving/service
+  // area) asks for something this source truly cannot establish and stays UNSUPPORTED.
+  if (radius)
     return {
       locationRequirement: {
         ...requirement,
@@ -120,7 +148,15 @@ export function parseRecordedLocation(
           "This county is not supported by the current county research contract. Choose a recorded city and state or explicitly search the state.",
       },
     };
-  const jurisdiction = state ?? (county && establishedCounty ? "FL" : undefined);
+  // TH-DISCOVERY-RESET-001: mirrors the established-county precedent immediately above -- a small,
+  // checked-in set of Florida cities whose state is not genuinely ambiguous (same cities
+  // AskTrustHub's shared florida-municipality-crosswalk.ts already resolves) should not dead-end
+  // asking the consumer to type "FL" when real recorded provider evidence is one query away.
+  const establishedCity = !county && ESTABLISHED_FL_CITIES.has(value);
+  const jurisdiction =
+    state ??
+    (county && establishedCounty ? "FL" : undefined) ??
+    (establishedCity ? "FL" : undefined);
   if (!jurisdiction)
     return {
       geography: { type: "city", value, meaning: LOCATION_MEANING },
