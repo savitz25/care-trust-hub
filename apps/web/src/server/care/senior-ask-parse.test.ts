@@ -113,6 +113,42 @@ describe("interpretSeniorAskQuery", () => {
     expect(hospice.providerClass).toBe("hospice");
   });
 
+  it("keeps Oregon ODHS classes, inspections, violations, and license-condition scope fail-closed", () => {
+    const al = interpretSeniorAskQuery("Find assisted living facilities in Oregon.");
+    expect(al.mode).toBe("fail_closed");
+    expect(al.failReason).toMatch(/Assisted Living/i);
+    const id = interpretSeniorAskQuery("Show the license conditions for provider 70M053.");
+    expect(id.mode).toBe("fail_closed");
+    expect(id.failReason).toMatch(/70M053/);
+    expect(id.failReason).toMatch(/license conditions only|Provider ID is not a CMS CCN/i);
+    const insp = interpretSeniorAskQuery(
+      "What inspections has this nursing facility had in Oregon?",
+    );
+    expect(insp.mode).toBe("fail_closed");
+    expect(insp.failReason).toMatch(/Event ID|not a complaint/i);
+    const viol = interpretSeniorAskQuery(
+      "Does this facility have substantiated violations in Oregon?",
+    );
+    expect(viol.mode).toBe("fail_closed");
+    expect(viol.failReason).toMatch(/not a complaint/i);
+    const actions = interpretSeniorAskQuery(
+      "Were there regulatory actions against this provider in Oregon?",
+    );
+    expect(actions.mode).toBe("fail_closed");
+    expect(actions.failReason).toMatch(/license conditions/i);
+    const count = interpretSeniorAskQuery(
+      "How many Oregon nursing facilities are in the ODHS snapshot?",
+    );
+    expect(count.mode).toBe("fail_closed");
+    expect(count.failReason).toMatch(/128/);
+    const cms = interpretSeniorAskQuery("Is this Oregon provider CMS-certified?");
+    expect(cms.mode).toBe("fail_closed");
+    expect(cms.failReason).toMatch(/0 in this snapshot|0 exact/);
+    const licensed = interpretSeniorAskQuery("Is this Oregon facility licensed?");
+    expect(licensed.mode).toBe("fail_closed");
+    expect(licensed.failReason).toMatch(/class-specific|not CMS/i);
+  });
+
   it("parses home health Florida entity", () => {
     const q = interpretSeniorAskQuery("Show home health agencies in Florida.");
     expect(q.mode).toBe("entity");

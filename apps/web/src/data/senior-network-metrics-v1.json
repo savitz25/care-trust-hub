@@ -1,6 +1,6 @@
 {
   "schemaVersion": "senior-network-metrics-v1",
-  "generatedAt": "2026-09-12T23:07:39.449Z",
+  "generatedAt": "2026-09-16T15:51:18.510Z",
   "canonicalSnapshotFingerprint": "215b9d6301a9759f53dd92324930803089d319f95fe5e46739cbbd5f326c3294",
   "newestSourceAsOf": {
     "value": "2026-08-24",
@@ -426,7 +426,7 @@
       },
       "contributingSourceSystems": ["nursing-home-provider-information"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "Latest provider_directory_status per CCN where directory_status='CURRENT_ACTIVE' and provider_type='nursing_home'.",
         "payloadKey": "providerUniverses.nursingHome.current",
@@ -465,7 +465,7 @@
       },
       "contributingSourceSystems": ["home-health-care-agencies"],
       "sourceAsOf": "2026-05-27",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "Distinct provider_id rows in home_health_snapshot (current CMS agency directory).",
         "payloadKey": "providerUniverses.homeHealth.current",
@@ -496,7 +496,7 @@
       },
       "contributingSourceSystems": ["hospice-general-information"],
       "sourceAsOf": "2026-08-19",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "Distinct provider_id rows in hospice_snapshot (GI directory). Quality-file-only CCNs are excluded.",
         "payloadKey": "providerUniverses.hospice.current",
@@ -535,7 +535,7 @@
       "coverage": { "numerator": 14696, "denominator": 14696, "display": "14,696 known CCNs" },
       "contributingSourceSystems": ["nursing-home-provider-information"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM provider WHERE provider_type='nursing_home'.",
         "payloadKey": "providerUniverses.nursingHome.known",
@@ -567,7 +567,7 @@
       "coverage": { "numerator": 6, "denominator": 14696, "display": "6 of 14,696 known CCNs" },
       "contributingSourceSystems": ["nursing-home-provider-information"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "Latest provider_directory_status per CCN where directory_status='ABSENT_FROM_CURRENT_DIRECTORY'.",
         "payloadKey": "providerUniverses.nursingHome.absentFromCurrentDirectory",
@@ -598,7 +598,7 @@
       },
       "contributingSourceSystems": ["hospice-general-information", "hospice-provider-data"],
       "sourceAsOf": "2026-08-19",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM provider WHERE provider_type='hospice'.",
         "payloadKey": "providerUniverses.hospice.typed",
@@ -629,7 +629,7 @@
       },
       "contributingSourceSystems": ["hospice-general-information", "hospice-provider-data"],
       "sourceAsOf": "2026-08-19",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "Typed hospice providers minus distinct hospice_snapshot providers.",
         "payloadKey": "providerUniverses.hospice.evidenceOnly",
@@ -660,7 +660,7 @@
       },
       "contributingSourceSystems": ["nursing-home-mds-quality-measures"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM facility_quality_measure_observation in the current cms_source_freshness release.",
         "payloadKey": "evidenceFamilies.mds_observations.currentReleaseCount",
@@ -690,7 +690,7 @@
       "coverage": { "numerator": 200327, "denominator": null, "display": "200,327 fire citations" },
       "contributingSourceSystems": ["nursing-home-fire-safety-deficiencies"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM fire_safety_citation in the current cms_source_freshness release.",
         "payloadKey": "evidenceFamilies.fire_citations.currentReleaseCount",
@@ -721,7 +721,7 @@
       },
       "contributingSourceSystems": ["nursing-home-inspection-dates"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM inspection_event constrained to the current cms_source_freshness release.",
         "payloadKey": "evidenceFamilies.inspection_events.currentReleaseCount",
@@ -760,7 +760,7 @@
       },
       "contributingSourceSystems": ["nursing-home-health-deficiencies"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM deficiency_finding constrained to the current cms_source_freshness release.",
         "payloadKey": "evidenceFamilies.health_deficiencies.currentReleaseCount",
@@ -791,7 +791,7 @@
       },
       "contributingSourceSystems": ["nursing-home-penalties"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM penalty_enforcement constrained to the current cms_source_freshness release.",
         "payloadKey": "evidenceFamilies.enforcement_records.currentReleaseCount",
@@ -834,7 +834,7 @@
       },
       "contributingSourceSystems": ["nursing-home-penalties"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM penalty_enforcement WHERE penalty_type='Fine' in the current release.",
         "payloadKey": "metrics.civil_monetary_penalties.value",
@@ -865,7 +865,7 @@
       },
       "contributingSourceSystems": ["nursing-home-penalties"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM penalty_enforcement WHERE penalty_type='Payment Denial' in the current release.",
         "payloadKey": "metrics.payment_denials.value",
@@ -896,7 +896,7 @@
       },
       "contributingSourceSystems": ["payroll-based-journal-daily-nurse-staffing"],
       "sourceAsOf": "2026-07-29",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM pbj_staffing_quarter_summary in the current cms_source_freshness release.",
         "payloadKey": "evidenceFamilies.pbj_quarter_summaries.currentReleaseCount",
@@ -931,7 +931,7 @@
       "coverage": { "numerator": 5227, "denominator": null, "display": "5,227 CHOW events" },
       "contributingSourceSystems": ["skilled-nursing-facility-change-of-ownership"],
       "sourceAsOf": "2026-08-24",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM ownership_change_event.",
         "payloadKey": "evidenceFamilies.chow_events.currentReleaseCount",
@@ -970,7 +970,7 @@
       },
       "contributingSourceSystems": ["home-health-care-agencies"],
       "sourceAsOf": "2026-05-27",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM cms_agency_quality_observation WHERE measure_family='hh_quality'.",
         "payloadKey": "evidenceFamilies.hh_quality_observations.currentReleaseCount",
@@ -1001,7 +1001,7 @@
       },
       "contributingSourceSystems": ["home-health-patient-survey-hhcahps"],
       "sourceAsOf": "2026-06-10",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM cms_agency_quality_observation WHERE measure_family='hh_hhcahps'.",
         "payloadKey": "evidenceFamilies.hh_hhcahps_observations.currentReleaseCount",
@@ -1032,7 +1032,7 @@
       },
       "contributingSourceSystems": ["hospice-provider-data"],
       "sourceAsOf": "2026-08-07",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM cms_agency_quality_observation WHERE measure_family='hospice_quality'.",
         "payloadKey": "evidenceFamilies.hospice_quality_observations.currentReleaseCount",
@@ -1063,7 +1063,7 @@
       },
       "contributingSourceSystems": ["hospice-provider-cahps"],
       "sourceAsOf": "2026-08-07",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM cms_agency_quality_observation WHERE measure_family='hospice_cahps'.",
         "payloadKey": "evidenceFamilies.hospice_cahps_observations.currentReleaseCount",
@@ -1094,7 +1094,7 @@
       },
       "contributingSourceSystems": ["nursing-home-inspection-dates"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM inspection_event with no current-release constraint.",
         "payloadKey": "evidenceFamilies.inspection_events.allIngestedReleasesCount",
@@ -1125,7 +1125,7 @@
       },
       "contributingSourceSystems": ["nursing-home-health-deficiencies"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM deficiency_finding with no current-release constraint.",
         "payloadKey": "evidenceFamilies.health_deficiencies.allIngestedReleasesCount",
@@ -1156,7 +1156,7 @@
       },
       "contributingSourceSystems": ["nursing-home-penalties"],
       "sourceAsOf": "2026-08-01",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM penalty_enforcement with no current-release constraint.",
         "payloadKey": "evidenceFamilies.enforcement_records.allIngestedReleasesCount",
@@ -1187,7 +1187,7 @@
       },
       "contributingSourceSystems": ["payroll-based-journal-daily-nurse-staffing"],
       "sourceAsOf": "2026-07-29",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM pbj_staffing_day in the current cms_source_freshness release.",
         "payloadKey": "evidenceFamilies.pbj_staffing_days.currentReleaseCount",
@@ -1219,7 +1219,7 @@
         "skilled-nursing-facility-all-owners"
       ],
       "sourceAsOf": "2026-08-17",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM organization.",
         "payloadKey": "evidenceFamilies.canonical_organizations.currentReleaseCount",
@@ -1253,7 +1253,7 @@
         "skilled-nursing-facility-all-owners"
       ],
       "sourceAsOf": "2026-08-17",
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "count(*) FROM provider_organization_edge.",
         "payloadKey": "evidenceFamilies.ownership_graph_edges.currentReleaseCount",
@@ -1280,7 +1280,7 @@
       "coverage": { "numerator": null, "denominator": null, "display": "Unsupported" },
       "contributingSourceSystems": [],
       "sourceAsOf": null,
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "Not computed. Classes stay separate.",
         "payloadKey": "combinedProviderDenominator",
@@ -1307,7 +1307,7 @@
       "coverage": { "numerator": null, "denominator": null, "display": "Rejected" },
       "contributingSourceSystems": [],
       "sourceAsOf": null,
-      "generatedAt": "2026-09-12T23:07:39.449Z",
+      "generatedAt": "2026-09-16T15:51:18.510Z",
       "trace": {
         "method": "Candidate current-release sum is retained only to prove the rejection is reconstructable.",
         "payloadKey": "combinedEvidenceDepth",
@@ -1326,7 +1326,7 @@
       "publicationStatus": "REJECTED"
     }
   ],
-  "sourceFingerprint": "fa3c792ace29445aad6d2cc66ee16bcd2cf25da31af2355c9a80d5408cc3ca5c",
+  "sourceFingerprint": "ef93972faca9ff03f4e3cfac3ebea0d6cc4cb8dbf782ca2309bb34bb47c81ef8",
   "contractRevision": "ATH-METRICS-R2-03",
   "homepage": {
     "intel": {
@@ -1348,7 +1348,7 @@
         "retrievedAt": "2026-08-26",
         "sourceHash": "215b9d6301a9759f53dd92324930803089d319f95fe5e46739cbbd5f326c3294",
         "publicationCohort": "intel-002-v1",
-        "projectionHash": "65fc22904dc1c7979d80b2451911b3473b1491f7f71d7d2130b9b6c9c74921ed",
+        "projectionHash": "f37ff80d2ff319e5656500e0891aa94c53ca02b8ce2245071dc7f646c261007d",
         "supersedesSnapshot": null
       },
       "stateOfRecord": [
@@ -1846,6 +1846,20 @@
             "IDPH Home Health is not CMS Home Health. Supportive Living is not a nursing home.",
             "The 2013-era IDPH GIS dump is not a current nursing-home roster. Search-only is not zero."
           ]
+        },
+        {
+          "family": "Licensing / registration",
+          "providerClass": "Oregon ODHS / OHA (state enrichment)",
+          "numerator": 128,
+          "denominator": null,
+          "display": "128 ODHS open Nursing Facilities; 240 ODHS open Assisted Living; 128 CMS Nursing Homes (not a combined total).",
+          "status": "partial",
+          "method": "Oregon ODHS LTC classes on /oregon plus OHA Home Health/Hospice lists and CMS overlays. Public regulatory-action data is currently limited to license conditions.",
+          "limitations": [
+            "Do not add NF, ALF, RCF, AFH, OHA licenses, and CMS classes into one senior-provider denominator.",
+            "ODHS NF is not a CMS CCN. OHA Home Health is not CMS Home Health.",
+            "Public license-condition rows are not all Oregon regulatory actions."
+          ]
         }
       ],
       "gaps": [
@@ -2299,8 +2313,8 @@
           "homeHealth": 51,
           "hospice": 66,
           "nhVolumeShare": 10.9,
-          "enrichment": "cms_directory_only",
-          "intelligenceHref": null,
+          "enrichment": "oregon_state_intelligence",
+          "intelligenceHref": "/oregon",
           "searchHref": "/search?search=1&state=OR"
         },
         {
@@ -2969,7 +2983,7 @@
         "State evidence availability differs. Florida, New Jersey, California, Texas, Washington, Arizona, and Colorado are not a national template yet.",
         "Source publication schedules differ. This page is not live data."
       ],
-      "payloadFingerprint": "65fc22904dc1c7979d80b2451911b3473b1491f7f71d7d2130b9b6c9c74921ed"
+      "payloadFingerprint": "f37ff80d2ff319e5656500e0891aa94c53ca02b8ce2245071dc7f646c261007d"
     },
     "evidenceInventory": [
       {
@@ -2983,7 +2997,7 @@
         "sourceSystem": "nursing-home-provider-information",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-08-01",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "Current CMS Nursing Home directory identities. Identity is CMS CCN.",
         "counts": "14,690 current of 14,690 current directory",
         "doesNotCount": "Known CCNs are not added into current. Absence from the current directory is not proof of closure.",
@@ -3001,7 +3015,7 @@
         "sourceSystem": "home-health-care-agencies",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-05-27",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "Current CMS Home Health Care Agencies directory identities. Identity is CMS Home Health CCN.",
         "counts": "12,460 current of 12,460 current directory",
         "doesNotCount": "An office address is not a verified service area.",
@@ -3019,7 +3033,7 @@
         "sourceSystem": "hospice-general-information",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-08-19",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "Current CMS Hospice General Information directory identities. Identity is CMS Hospice CCN.",
         "counts": "6,669 GI current of 6,911 typed identities",
         "doesNotCount": "Evidence-only identities are not current GI providers and are not proof of closure.",
@@ -3037,7 +3051,7 @@
         "sourceSystem": "nursing-home-mds-quality-measures",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-08-01",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "Facility-measure-period MDS quality-measure observations in the current CMS release.",
         "counts": "1,248,650 MDS observations",
         "doesNotCount": "An MDS observation is not an inspection and is not a provider. Measure-period rows are not star ratings.",
@@ -3055,7 +3069,7 @@
         "sourceSystem": "nursing-home-fire-safety-deficiencies",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-08-01",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "Fire-safety citation rows in the current CMS Fire Safety Deficiencies release.",
         "counts": "200,327 fire citations",
         "doesNotCount": "A fire citation is not a provider and is not a health deficiency.",
@@ -3073,7 +3087,7 @@
         "sourceSystem": "nursing-home-inspection-dates",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-08-01",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "Inspection events in the current CMS Inspection Dates release. Not stacked historical ingest copies.",
         "counts": "149,978 inspection events",
         "doesNotCount": "An inspection is not a deficiency and is not an enforcement action. Stacked historical ingest copies are not added into this public count.",
@@ -3091,7 +3105,7 @@
         "sourceSystem": "nursing-home-health-deficiencies",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-08-01",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "Health deficiency findings in the current CMS Health Deficiencies release.",
         "counts": "419,479 health deficiencies",
         "doesNotCount": "A deficiency is not automatically an enforcement action.",
@@ -3109,7 +3123,7 @@
         "sourceSystem": "nursing-home-penalties",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-08-01",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "CMS penalty_enforcement rows in the current Penalties release, including fines and payment denials.",
         "counts": "15,694 enforcement records",
         "doesNotCount": "Every CMS row is not a regulatory action of the same kind. Fines and payment denials stay separate grains.",
@@ -3127,7 +3141,7 @@
         "sourceSystem": "payroll-based-journal-daily-nurse-staffing",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-07-29",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "PBJ quarterly staffing summaries in the current CMS staffing release. Not daily hour rows and not facilities.",
         "counts": "14,487 PBJ quarterly summaries",
         "doesNotCount": "A staffing observation is not a facility. Daily PBJ hour rows are a different grain and are not the public staffing count.",
@@ -3145,7 +3159,7 @@
         "sourceSystem": "skilled-nursing-facility-change-of-ownership",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-08-24",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "SNF change-of-ownership events in the research graph.",
         "counts": "5,227 CHOW events",
         "doesNotCount": "A CHOW record is not a sale and is not a quality finding. CMS does not publish Home Health or Hospice CHOW event files.",
@@ -3163,7 +3177,7 @@
         "sourceSystem": "home-health-care-agencies",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-05-27",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "Home Health QRP quality observations. Not a Nursing Home MDS observation.",
         "counts": "199,360 Home Health quality observations",
         "doesNotCount": "Home Health quality observations are not Nursing Home MDS observations.",
@@ -3181,7 +3195,7 @@
         "sourceSystem": "home-health-patient-survey-hhcahps",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-06-10",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "HHCAHPS survey observations for Home Health agencies.",
         "counts": "74,760 HHCAHPS observations",
         "doesNotCount": "HHCAHPS is a survey family, not a CMS Quality of Patient Care star.",
@@ -3199,7 +3213,7 @@
         "sourceSystem": "hospice-provider-data",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-08-07",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "Hospice quality-measure observations. Hospice has no overall CMS star in this directory.",
         "counts": "453,492 Hospice quality observations",
         "doesNotCount": "Hospice quality observations are not an overall CMS star.",
@@ -3217,7 +3231,7 @@
         "sourceSystem": "hospice-provider-cahps",
         "acceptedArtifact": "senior-network-metrics-v1.json",
         "sourceAsOf": "2026-08-07",
-        "generatedOrRetrievedAt": "2026-09-12T23:07:39.449Z",
+        "generatedOrRetrievedAt": "2026-09-16T15:51:18.510Z",
         "definition": "CAHPS Hospice Survey observations.",
         "counts": "140,049 CAHPS Hospice observations",
         "doesNotCount": "CAHPS Hospice Survey evidence is not an overall CMS star.",
@@ -3279,7 +3293,7 @@
         "researchDestination": "/new-jersey",
         "snapshotAsOf": "2026-09-02",
         "retrievedAt": null,
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "nj-enforcement-indexed",
@@ -3300,7 +3314,7 @@
         "researchDestination": "/new-jersey",
         "snapshotAsOf": "2026-09-02",
         "retrievedAt": null,
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "nj-enforcement-documents",
@@ -3321,7 +3335,7 @@
         "researchDestination": "/new-jersey",
         "snapshotAsOf": "2026-09-02",
         "retrievedAt": null,
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "ca-elms",
@@ -3342,7 +3356,7 @@
         "researchDestination": "/california",
         "snapshotAsOf": "2026-09-03",
         "retrievedAt": "2026-09-03T18:02:21Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "ca-rcfe",
@@ -3363,7 +3377,7 @@
         "researchDestination": "/california",
         "snapshotAsOf": "2026-09-03",
         "retrievedAt": "2026-09-03T18:02:21Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "ca-snf-crosswalk",
@@ -3384,7 +3398,7 @@
         "researchDestination": "/california",
         "snapshotAsOf": "2026-09-03",
         "retrievedAt": "2026-09-03T18:02:21Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "tx-nf",
@@ -3405,7 +3419,7 @@
         "researchDestination": "/texas",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T13:53:53Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "tx-alf",
@@ -3426,7 +3440,7 @@
         "researchDestination": "/texas",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T13:53:53Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "tx-hcssa",
@@ -3447,7 +3461,7 @@
         "researchDestination": "/texas",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T13:53:53Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "tx-nf-crosswalk",
@@ -3468,7 +3482,7 @@
         "researchDestination": "/texas",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T13:53:53Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "wa-residential",
@@ -3489,7 +3503,7 @@
         "researchDestination": "/washington",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T16:38:57Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "wa-afh",
@@ -3510,7 +3524,7 @@
         "researchDestination": "/washington",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T16:38:57Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "wa-nh-crosswalk",
@@ -3531,7 +3545,7 @@
         "researchDestination": "/washington",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T16:38:57Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "az-gis-all",
@@ -3552,7 +3566,7 @@
         "researchDestination": "/arizona",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T18:37:40Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "az-al-home",
@@ -3573,7 +3587,7 @@
         "researchDestination": "/arizona",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T18:37:40Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "az-nh-crosswalk",
@@ -3594,7 +3608,7 @@
         "researchDestination": "/arizona",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T18:37:40Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "az-hha-crosswalk",
@@ -3615,7 +3629,7 @@
         "researchDestination": "/arizona",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T18:37:40Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "az-hospice-crosswalk",
@@ -3636,7 +3650,7 @@
         "researchDestination": "/arizona",
         "snapshotAsOf": "2026-09-04",
         "retrievedAt": "2026-09-04T18:37:40Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "co-cms-nh",
@@ -3658,7 +3672,7 @@
         "sourceArtifact": "artifacts/co-sen-001-public-snapshot.json",
         "snapshotAsOf": null,
         "retrievedAt": "2026-08-26T20:24:52.158102+00:00",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "co-cms-hha",
@@ -3680,7 +3694,7 @@
         "sourceArtifact": "artifacts/co-sen-001-public-snapshot.json",
         "snapshotAsOf": null,
         "retrievedAt": "2026-08-26T21:08:16.274819+00:00",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "co-cms-hospice",
@@ -3702,7 +3716,7 @@
         "sourceArtifact": "artifacts/co-sen-001-public-snapshot.json",
         "snapshotAsOf": null,
         "retrievedAt": "2026-08-26T22:15:06.243039+00:00",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "va-dss-alf",
@@ -3724,7 +3738,7 @@
         "sourceArtifact": "artifacts/va-sen-001-public-snapshot.json",
         "snapshotAsOf": "2026-09-10",
         "retrievedAt": "2026-09-10T16:02:10Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "va-dss-alf-inspections",
@@ -3746,7 +3760,7 @@
         "sourceArtifact": "artifacts/va-sen-001-public-snapshot.json",
         "snapshotAsOf": "2026-09-10",
         "retrievedAt": "2026-09-10T16:02:10Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "va-dss-adc",
@@ -3768,7 +3782,7 @@
         "sourceArtifact": "artifacts/va-sen-001-public-snapshot.json",
         "snapshotAsOf": "2026-09-10",
         "retrievedAt": "2026-09-10T16:02:10Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "ny-acf",
@@ -3790,7 +3804,7 @@
         "sourceArtifact": "artifacts/ny-sen-001-public-snapshot.json",
         "snapshotAsOf": "2026-09-11",
         "retrievedAt": "2026-09-11T16:00:00Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "il-cms-nh",
@@ -3812,7 +3826,7 @@
         "sourceArtifact": "artifacts/il-sen-001-public-snapshot.json",
         "snapshotAsOf": "2026-09-12",
         "retrievedAt": "2026-08-26T20:24:52.158102+00:00",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "il-idph-hha",
@@ -3834,7 +3848,7 @@
         "sourceArtifact": "artifacts/il-sen-001-public-snapshot.json",
         "snapshotAsOf": "2026-09-12",
         "retrievedAt": "2026-09-12T15:47:12Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "il-slp",
@@ -3856,16 +3870,38 @@
         "sourceArtifact": "artifacts/il-sen-001-public-snapshot.json",
         "snapshotAsOf": "2026-09-12",
         "retrievedAt": "2026-09-12T15:47:12Z",
-        "generatedAt": "2026-09-12T23:07:39.449Z"
+        "generatedAt": "2026-09-16T15:51:18.510Z"
+      },
+      {
+        "key": "or-odhs-nf",
+        "family": "IDENTITY_LICENSURE",
+        "label": "Oregon ODHS open Nursing Facility identities",
+        "value": 128,
+        "grain": "ODHS Provider ID where Type=NF and Status=Open",
+        "providerClass": "Nursing Facility (state license)",
+        "geography": "Oregon",
+        "sourceSystem": "ODHS Licensed Long-Term Care Settings Search",
+        "acceptedArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceAsOf": null,
+        "generatedOrRetrievedAt": "2026-09-16T15:24:44Z",
+        "definition": "Open ODHS Nursing Facility identities.",
+        "counts": "Open ODHS Nursing Facility identities.",
+        "doesNotCount": "CMS Nursing Home CCNs; ALF; RCF; AFH; a combined Oregon facilities total.",
+        "publicationEligibility": "PUBLIC",
+        "researchDestination": "/oregon",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "generatedAt": "2026-09-16T15:51:18.510Z"
       },
       {
         "key": "state-pages",
         "family": "PUBLIC_RESEARCH_SURFACES",
         "label": "Published state intelligence pages",
-        "value": 10,
+        "value": 11,
         "grain": "published state intelligence route",
         "providerClass": "Multiple source-native classes",
-        "geography": "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL",
+        "geography": "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR",
         "sourceSystem": "SeniorTrustHub accepted state artifacts",
         "acceptedArtifact": "Accepted state publication artifacts",
         "sourceAsOf": null,
@@ -4401,6 +4437,75 @@
             "retrievedAt": "2026-08-26T22:15:06.243039+00:00"
           }
         ]
+      },
+      {
+        "state": "OR",
+        "name": "Oregon",
+        "href": "/oregon",
+        "regulators": "ODHS APD + OHA + CMS",
+        "stateClasses": "128 ODHS open Nursing Facilities · 240 ODHS open Assisted Living",
+        "cmsOverlay": "Nursing Home · Home Health · Hospice",
+        "identityDepth": "128 ODHS NF · 128 CMS Nursing Homes · identities remain separate",
+        "regulatoryDepth": "ODHS inspections, substantiated violations, and license-condition regulatory actions; public actions currently exclude revocation notices",
+        "sourceAsOf": null,
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "sourceClocks": [
+          {
+            "label": "ODHS LTC providers",
+            "sourceAsOf": null,
+            "snapshotAsOf": "2026-09-16",
+            "retrievedAt": "2026-09-16T15:24:44Z"
+          },
+          {
+            "label": "ODHS inspections",
+            "sourceAsOf": null,
+            "snapshotAsOf": "2026-09-16",
+            "retrievedAt": "2026-09-16T15:24:44Z"
+          },
+          {
+            "label": "ODHS violations",
+            "sourceAsOf": null,
+            "snapshotAsOf": "2026-09-16",
+            "retrievedAt": "2026-09-16T15:24:44Z"
+          },
+          {
+            "label": "ODHS license-condition actions",
+            "sourceAsOf": null,
+            "snapshotAsOf": "2026-09-16",
+            "retrievedAt": "2026-09-16T15:24:44Z"
+          },
+          {
+            "label": "OHA Home Health",
+            "sourceAsOf": "2026-07-29",
+            "snapshotAsOf": "2026-09-16",
+            "retrievedAt": "2026-09-16T15:24:44Z"
+          },
+          {
+            "label": "OHA Hospice",
+            "sourceAsOf": "2026-07-30",
+            "snapshotAsOf": "2026-09-16",
+            "retrievedAt": "2026-09-16T15:24:44Z"
+          },
+          {
+            "label": "CMS nursingHomes",
+            "sourceAsOf": "2026-08-01T00:00:00+00:00",
+            "snapshotAsOf": "2026-09-16",
+            "retrievedAt": "2026-08-26T20:24:52.158102+00:00"
+          },
+          {
+            "label": "CMS homeHealth",
+            "sourceAsOf": "2026-05-27T00:00:00+00:00",
+            "snapshotAsOf": "2026-09-16",
+            "retrievedAt": "2026-08-26T21:08:16.274819+00:00"
+          },
+          {
+            "label": "CMS hospice",
+            "sourceAsOf": "2026-08-19T00:00:00+00:00",
+            "snapshotAsOf": "2026-09-16",
+            "retrievedAt": "2026-08-26T22:15:06.243039+00:00"
+          }
+        ]
       }
     ]
   },
@@ -4457,6 +4562,10 @@
       {
         "path": "artifacts/il-sen-001-public-snapshot.json",
         "sha256": "1e0f7e6bdab40f95cfd36d277a757ff1a3270f1ab7dd95edf9d5996785a90f18"
+      },
+      {
+        "path": "artifacts/or-sen-001-public-snapshot.json",
+        "sha256": "7aa67c356228e933b11075b688da50fe4c758c44e3cff6357f339acdada0c7f4"
       }
     ],
     "stateMetrics": [
@@ -4637,6 +4746,51 @@
         "snapshotAsOf": "2026-09-12",
         "retrievedAt": "2026-08-26T22:15:06.243039+00:00",
         "generatedAt": "2026-09-12T15:52:02Z",
+        "capabilityStatus": "FEDERAL_BASELINE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.cmsOverlay.nursingHomes",
+        "state": "OR",
+        "value": 128,
+        "grain": "CMS current-directory CCN",
+        "providerClass": "nursing_home",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "cmsOverlay.nursingHomes",
+        "sourceAsOf": "2026-08-01T00:00:00+00:00",
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-08-26T20:24:52.158102+00:00",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "FEDERAL_BASELINE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.cmsOverlay.homeHealth",
+        "state": "OR",
+        "value": 51,
+        "grain": "CMS current-directory CCN",
+        "providerClass": "home_health",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "cmsOverlay.homeHealth",
+        "sourceAsOf": "2026-05-27T00:00:00+00:00",
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-08-26T21:08:16.274819+00:00",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "FEDERAL_BASELINE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.cmsOverlay.hospice",
+        "state": "OR",
+        "value": 66,
+        "grain": "CMS current-directory CCN",
+        "providerClass": "hospice",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "cmsOverlay.hospice",
+        "sourceAsOf": "2026-08-19T00:00:00+00:00",
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-08-26T22:15:06.243039+00:00",
+        "generatedAt": "2026-09-16T15:28:12Z",
         "capabilityStatus": "FEDERAL_BASELINE",
         "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
       },
@@ -5089,6 +5243,156 @@
         "generatedAt": "2026-09-12T15:52:02Z",
         "capabilityStatus": "SEARCH_ONLY",
         "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.odhsProviders.OPEN_NF",
+        "state": "OR",
+        "value": 128,
+        "grain": "ODHS Provider ID Status=Open Type=NF",
+        "providerClass": "Nursing Facility (state license)",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "odhsProviders.OPEN_NF",
+        "sourceAsOf": null,
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "STATE_SOURCE_LIVE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.odhsProviders.OPEN_ALF",
+        "state": "OR",
+        "value": 240,
+        "grain": "ODHS Provider ID Status=Open Type=ALF",
+        "providerClass": "Assisted Living Facility",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "odhsProviders.OPEN_ALF",
+        "sourceAsOf": null,
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "STATE_SOURCE_LIVE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.odhsProviders.OPEN_RCF",
+        "state": "OR",
+        "value": 332,
+        "grain": "ODHS Provider ID Status=Open Type=RCF",
+        "providerClass": "Residential Care Facility",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "odhsProviders.OPEN_RCF",
+        "sourceAsOf": null,
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "STATE_SOURCE_LIVE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.odhsProviders.OPEN_AFH",
+        "state": "OR",
+        "value": 1580,
+        "grain": "ODHS Provider ID Status=Open Type=AFH",
+        "providerClass": "Adult Foster Home",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "odhsProviders.OPEN_AFH",
+        "sourceAsOf": null,
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "STATE_SOURCE_LIVE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.odhsInspections.INSPECTION_ROWS",
+        "state": "OR",
+        "value": 12752,
+        "grain": "ODHS inspection Event ID",
+        "providerClass": "ODHS LTC",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "odhsInspections.INSPECTION_ROWS",
+        "sourceAsOf": null,
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "STATE_SOURCE_LIVE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.odhsViolations.VIOLATION_ROWS",
+        "state": "OR",
+        "value": 48153,
+        "grain": "ODHS substantiated violation report number",
+        "providerClass": "ODHS LTC",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "odhsViolations.VIOLATION_ROWS",
+        "sourceAsOf": null,
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "STATE_SOURCE_LIVE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.odhsRegulatoryActions.REGULATORY_ACTION_ROWS",
+        "state": "OR",
+        "value": 1299,
+        "grain": "ODHS public license-condition row; not all regulatory actions",
+        "providerClass": "ODHS LTC",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "odhsRegulatoryActions.REGULATORY_ACTION_ROWS",
+        "sourceAsOf": null,
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "STATE_SOURCE_LIVE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.odhsRegulatoryActions.UNIQUE_REGULATORY_MATTERS",
+        "state": "OR",
+        "value": 1038,
+        "grain": "ODHS Sanction identifier",
+        "providerClass": "ODHS LTC",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "odhsRegulatoryActions.UNIQUE_REGULATORY_MATTERS",
+        "sourceAsOf": null,
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "STATE_SOURCE_LIVE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.ohaHomeHealth.rows",
+        "state": "OR",
+        "value": 66,
+        "grain": "OHA Home Health license number",
+        "providerClass": "Home Health Agency (state license)",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "ohaHomeHealth.rows",
+        "sourceAsOf": "2026-07-29",
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "STATE_SOURCE_LIVE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
+      },
+      {
+        "key": "or.ohaHospice.rows",
+        "state": "OR",
+        "value": 74,
+        "grain": "OHA Hospice license number",
+        "providerClass": "Hospice (state license)",
+        "sourceArtifact": "artifacts/or-sen-001-public-snapshot.json",
+        "sourceField": "ohaHospice.rows",
+        "sourceAsOf": "2026-07-30",
+        "snapshotAsOf": "2026-09-16",
+        "retrievedAt": "2026-09-16T15:24:44Z",
+        "generatedAt": "2026-09-16T15:28:12Z",
+        "capabilityStatus": "STATE_SOURCE_LIVE",
+        "aggregation": "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL"
       }
     ],
     "stateCapabilities": [
@@ -5443,11 +5747,25 @@
       },
       {
         "state": "OR",
-        "route": null,
-        "routeExists": false,
-        "stateSourceAcquired": false,
+        "route": "/oregon",
+        "routeExists": true,
+        "stateSourceAcquired": true,
         "specialistComplete": null,
-        "metricKeys": []
+        "metricKeys": [
+          "or.cmsOverlay.nursingHomes",
+          "or.cmsOverlay.homeHealth",
+          "or.cmsOverlay.hospice",
+          "or.odhsProviders.OPEN_NF",
+          "or.odhsProviders.OPEN_ALF",
+          "or.odhsProviders.OPEN_RCF",
+          "or.odhsProviders.OPEN_AFH",
+          "or.odhsInspections.INSPECTION_ROWS",
+          "or.odhsViolations.VIOLATION_ROWS",
+          "or.odhsRegulatoryActions.REGULATORY_ACTION_ROWS",
+          "or.odhsRegulatoryActions.UNIQUE_REGULATORY_MATTERS",
+          "or.ohaHomeHealth.rows",
+          "or.ohaHospice.rows"
+        ]
       },
       {
         "state": "PA",

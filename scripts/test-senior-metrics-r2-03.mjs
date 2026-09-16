@@ -41,6 +41,15 @@ test("all accepted four-state populations export with separate care/evidence gra
     "il.idphHospiceResidence.rows": 10,
     "il.supportiveLiving.operationalSites": 169,
     "il.supportiveLiving.units": 13939,
+    "or.odhsProviders.OPEN_NF": 128,
+    "or.odhsProviders.OPEN_ALF": 240,
+    "or.odhsProviders.OPEN_RCF": 332,
+    "or.odhsProviders.OPEN_AFH": 1580,
+    "or.cmsOverlay.nursingHomes": 128,
+    "or.cmsOverlay.homeHealth": 51,
+    "or.cmsOverlay.hospice": 66,
+    "or.ohaHomeHealth.rows": 66,
+    "or.ohaHospice.rows": 74,
   }))
     assert.equal(rows[key]?.value, value, key);
   assert.equal(m.providerUniverses.nursingHome.current, 14690);
@@ -160,6 +169,10 @@ test("homepage state clocks preserve agency dates without substituting acquisiti
   assert.equal(source("IL", "IDPH Home Health").sourceAsOf, "2026-04-28");
   assert.equal(source("IL", "HFS Supportive Living").sourceAsOf, "2026-02-06");
   assert.equal(cards.IL.sourceAsOf, null);
+  assert.equal(source("OR", "OHA Home Health").sourceAsOf, "2026-07-29");
+  assert.equal(source("OR", "ODHS LTC providers").sourceAsOf, null);
+  assert.equal(source("OR", "ODHS LTC providers").snapshotAsOf, "2026-09-16");
+  assert.equal(cards.OR.sourceAsOf, null);
   const inventory = Object.fromEntries(m.homepage.evidenceInventory.map((r) => [r.key, r]));
   assert.equal(inventory["ca-elms"].sourceAsOf, "2026-08-17");
   assert.equal(inventory["wa-afh"].sourceAsOf, null);

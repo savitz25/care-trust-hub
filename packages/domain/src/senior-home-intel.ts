@@ -3,6 +3,7 @@ import {
   CA_ACCEPTED,
   CO_ACCEPTED,
   IL_ACCEPTED,
+  OR_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -26,6 +27,7 @@ import { CO_PUBLIC_PATH } from "./co-intelligence";
 import { VA_PUBLIC_PATH } from "./va-intelligence";
 import { NY_PUBLIC_PATH } from "./ny-intelligence";
 import { IL_PUBLIC_PATH } from "./il-intelligence";
+import { OR_PUBLIC_PATH } from "./or-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -115,6 +117,7 @@ export interface HomeGeoRow {
     | "virginia_state_intelligence"
     | "new_york_state_intelligence"
     | "illinois_state_intelligence"
+    | "oregon_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -871,6 +874,21 @@ export function buildSeniorHomeIntel(input: {
         "The 2013-era IDPH GIS dump is not a current nursing-home roster. Search-only is not zero.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Oregon ODHS / OHA (state enrichment)",
+      numerator: OR_ACCEPTED.openNf,
+      denominator: null,
+      display: `${OR_ACCEPTED.openNf.toLocaleString("en-US")} ODHS open Nursing Facilities; ${OR_ACCEPTED.openAlf.toLocaleString("en-US")} ODHS open Assisted Living; ${OR_ACCEPTED.cmsNursingHomes.toLocaleString("en-US")} CMS Nursing Homes (not a combined total).`,
+      status: "partial",
+      method:
+        "Oregon ODHS LTC classes on /oregon plus OHA Home Health/Hospice lists and CMS overlays. Public regulatory-action data is currently limited to license conditions.",
+      limitations: [
+        "Do not add NF, ALF, RCF, AFH, OHA licenses, and CMS classes into one senior-provider denominator.",
+        "ODHS NF is not a CMS CCN. OHA Home Health is not CMS Home Health.",
+        "Public license-condition rows are not all Oregon regulatory actions.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -901,7 +919,9 @@ export function buildSeniorHomeIntel(input: {
                         ? "new_york_state_intelligence"
                         : row.state === "IL"
                           ? "illinois_state_intelligence"
-                          : "cms_directory_only",
+                          : row.state === "OR"
+                            ? "oregon_state_intelligence"
+                            : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -923,7 +943,9 @@ export function buildSeniorHomeIntel(input: {
                         ? NY_PUBLIC_PATH
                         : row.state === "IL"
                           ? IL_PUBLIC_PATH
-                          : null,
+                          : row.state === "OR"
+                            ? OR_PUBLIC_PATH
+                            : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 

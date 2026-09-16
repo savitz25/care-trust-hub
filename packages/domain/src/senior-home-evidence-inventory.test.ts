@@ -43,6 +43,7 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
       "/virginia",
       "/new-york",
       "/illinois",
+      "/oregon",
     ]);
     expect(inventory.find((row) => row.key === "fl-regulatory-observations")?.value).toBe(77219);
     expect(inventory.find((row) => row.key === "nj-enforcement-indexed")?.doesNotCount).toMatch(
@@ -65,6 +66,10 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
       /combined Colorado provider/i,
     );
     expect(inventory.some((row) => row.value === 675)).toBe(false);
+    expect(inventory.find((row) => row.key === "or-odhs-nf")?.value).toBe(128);
+    expect(inventory.find((row) => row.key === "or-odhs-nf")?.doesNotCount).toMatch(
+      /CMS Nursing Home/i,
+    );
     expect(inventory.find((row) => row.key === "state-pages")?.value).toBe(
       SENIOR_HOMEPAGE_STATE_CARDS.length,
     );

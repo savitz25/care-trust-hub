@@ -24,6 +24,8 @@ packages/domain/src/wa-public-snapshot.ts
 artifacts/wa-sen-001-public-snapshot.json
 packages/domain/src/az-public-snapshot.ts
 artifacts/az-sen-001-public-snapshot.json
+packages/domain/src/or-public-snapshot.ts
+artifacts/or-sen-001-public-snapshot.json
 apps/web/src/data/nj-county-local/*.json
 artifacts/nj-sen-005-public-snapshot.json
 artifacts/nj-sen-county-001/*.json

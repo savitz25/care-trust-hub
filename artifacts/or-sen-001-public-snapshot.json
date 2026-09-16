@@ -1,0 +1,257 @@
+{
+  "version": "senior-or-state-intel-v1",
+  "ticket": "OR-SEN-001",
+  "publicationPath": "/oregon",
+  "asOf": null,
+  "snapshotAsOf": "2026-09-16",
+  "retrievedAt": "2026-09-16T15:24:44Z",
+  "generatedAt": "2026-09-16T15:28:12Z",
+  "regulatorMap": {
+    "agency": "Oregon Department of Human Services \u2014 Aging and People with Disabilities",
+    "ltcSearch": "https://ltclicensing.oregon.gov/",
+    "providers": "https://ltclicensing.oregon.gov/Providers",
+    "inspections": "https://ltclicensing.oregon.gov/Inspections",
+    "violations": "https://ltclicensing.oregon.gov/Violations",
+    "regulatoryActions": "https://ltclicensing.oregon.gov/RegulatoryActions",
+    "ohaHhaPdf": "https://www.oregon.gov/oha/PH/PROVIDERPARTNERRESOURCES/HEALTHCAREPROVIDERSFACILITIES/HEALTHCAREHEALTHCAREREGULATIONQUALITYIMPROVEMENT/Documents/HHAList.pdf",
+    "ohaHospicePdf": "https://www.oregon.gov/oha/PH/PROVIDERPARTNERRESOURCES/HEALTHCAREPROVIDERSFACILITIES/HEALTHCAREHEALTHCAREREGULATIONQUALITYIMPROVEMENT/Documents/HOSPICEList.pdf",
+    "cmsCareCompare": "https://www.medicare.gov/care-compare/"
+  },
+  "clocks": {
+    "odhs_sourceAsOf": null,
+    "odhs_sourceAsOf_reason": "ODHS states information is updated every 24 hours. No rowsUpdatedAt field is exposed on the CSV export.",
+    "odhs_retrievedAt": "2026-09-16T15:24:44Z",
+    "oha_hha_sourceModifiedAt": "2026-07-29",
+    "oha_hospice_sourceModifiedAt": "2026-07-30",
+    "oha_retrievedAt": "2026-09-16T15:24:44Z",
+    "snapshotAsOf": "2026-09-16",
+    "generatedAt": "2026-09-16T15:28:12Z",
+    "retrievedAt_is_not_sourceAsOf": true
+  },
+  "odhsProviders": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "SOURCE_ROWS": 4716,
+    "DISTINCT_PROVIDER_IDS": 4716,
+    "ROWS_WITHOUT_ID": 0,
+    "OPEN_ROWS": 2280,
+    "CLOSED_ROWS": 2436,
+    "OPEN_BY_TYPE": {
+      "AFH": 1580,
+      "NF": 128,
+      "RCF": 332,
+      "ALF": 240
+    },
+    "ALL_BY_TYPE": {
+      "AFH": 3826,
+      "NF": 197,
+      "RCF": 438,
+      "ALF": 255
+    },
+    "OPEN_NF": 128,
+    "OPEN_ALF": 240,
+    "OPEN_RCF": 332,
+    "OPEN_AFH": 1580,
+    "identityNamespace": "OR-ODHS:{ID}",
+    "row_ne_unique_company": true,
+    "nf_ne_cms_nursing_home": true,
+    "sha256": "01a67495b5eb7fd5157df3a13ede83f889216bf93d5adfa55c506443b422912f"
+  },
+  "odhsInspections": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "INSPECTION_ROWS": 12752,
+    "DISTINCT_EVENT_IDS": 12752,
+    "DISTINCT_PROVIDER_IDS_WITH_INSPECTIONS": 2603,
+    "DATE_RANGE": {
+      "min": "2021-09-15",
+      "max": "2026-09-10"
+    },
+    "INSPECTION_TYPE_COUNTS": {
+      "Re-Licensure": 3865,
+      "Validation": 1817,
+      "Other": 1235,
+      "Complaint Investig.": 1173,
+      "State Licensure": 989,
+      "Monitoring": 569,
+      "Complaint, Licensure Complaint, State Licensure": 525,
+      "Kitchen": 471,
+      "Initial Licensure": 436,
+      "Complaint, Re-Licensure": 286,
+      "Complaint, Licensure Complaint, Re-Licensure, Recertification, State Licensure": 278,
+      "Complaint": 170,
+      "Follow-up/Revisit": 144,
+      "Change of Owner": 105,
+      "Focused Infection Control, Other-Fed": 99,
+      "Licensure Complaint": 87,
+      "Condition Monitoring": 80,
+      "Initial": 69,
+      "Complaint, Re-Licensure, Recertification": 68,
+      "Re-Licensure, Recertification, State Licensure": 56,
+      "Complaint, Licensure Complaint": 55,
+      "Focused Infection Control, Other-Fed, Other-State, State Licensure": 44,
+      "Offsite": 27,
+      "Complaint, Licensure Complaint, Re-Licensure, Recertification": 26,
+      "Federal Monitoring Survey": 25,
+      "Re-Licensure, Recertification": 22,
+      "Complaint, Focused Infection Control, Licensure Complaint, Other-Fed, Other-State, State Licensure": 13,
+      "FEOS": 6,
+      "Complaint, Licensure Complaint, Recertification": 3,
+      "Complaint, State Licensure": 2,
+      "Complaint, Licensure Complaint, Re-Licensure": 2,
+      "Health & Safety Monitoring": 2,
+      "Inspection of Care": 2,
+      "Licensure Complaint, State Licensure": 1
+    },
+    "COMPLAINT_RELATED_INSPECTION_ROWS": 2689,
+    "complaint_related_inspection_ne_complaint": true,
+    "inspection_ne_deficiency": true,
+    "five_year_history_note": "ODHS displays five years of inspection history.",
+    "sha256": "9434f547f958f40a025ecd87ab85c153abbca41ebf8d156ef37ff401e1b6377f"
+  },
+  "odhsViolations": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "VIOLATION_ROWS": 48153,
+    "DISTINCT_VIOLATION_MATTERS": 48153,
+    "DISTINCT_PROVIDER_IDS": 2521,
+    "LICENSING_VIOLATION_ROWS": 28299,
+    "ABUSE_SUBSTANTIATED_ROWS": 19854,
+    "TYPE_COUNTS": {
+      "Licensing Violation": 28299,
+      "Abuse: Neglect": 17028,
+      "Abuse: Financial abuse": 1730,
+      "Abuse: Verbal/Mental abuse": 435,
+      "Abuse: Physical Abuse": 351,
+      "Abuse: Sexual abuse": 115,
+      "Abuse: Involuntary Seclusion": 56,
+      "Abuse: Restraints": 52,
+      "Abuse: Verbal Abuse": 26,
+      "Abuse: Financial Exploitation": 23,
+      "Abuse: Sexual Abuse": 19,
+      "Abuse: Wrongful Restraint": 13,
+      "Abuse: Abandonment": 6
+    },
+    "limitation": "Open investigations and complaints being appealed by the provider are not listed.",
+    "violation_ne_complaint": true,
+    "violation_row_ne_unique_matter_unless_report_id_unique": true,
+    "sha256": "7ea0e24412efe35263d013afc8932bdcc3ae37ecb2c4e58f1c126a9a0d35c94a"
+  },
+  "odhsRegulatoryActions": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "scope": "PUBLIC ODHS REGULATORY-ACTION DATASET \u2014 CURRENTLY LIMITED TO LICENSE CONDITIONS",
+    "scopeNote": "Formal actions can range from license conditions through revocation notices, but the public section currently displays only license conditions dating back to 2010. Other regulatory-action records are to be added over time. This is not all Oregon regulatory actions.",
+    "REGULATORY_ACTION_ROWS": 1299,
+    "UNIQUE_REGULATORY_MATTERS": 1038,
+    "DISTINCT_PROVIDER_IDS": 701,
+    "ACTION_TYPE_COUNTS": {
+      "License Condition": 1074,
+      "Condition": 218,
+      "Enhanced Oversight and Supervision": 3,
+      "": 2,
+      "Civil Penalty": 1,
+      "Other": 1
+    },
+    "dedupKey": "Sanction identifier",
+    "absence_ne_clean_history": true,
+    "sha256": "36c7c434ce4ec5cb7b91b5b2f7ceab4d1647d75631b089409a762accee4be302"
+  },
+  "ohaHomeHealth": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "rows": 66,
+    "distinctLicenseNumbers": 66,
+    "identityNamespace": "OR-OHA-HHA:{license_number}",
+    "sourceAsOf": "2026-07-29",
+    "notCmsHomeHealth": true,
+    "sha256": "36bb3e8ed7b8c1a80591af610e764340303439ac3e0ab68a87d3bcdd88e540b9"
+  },
+  "ohaHospice": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "rows": 74,
+    "distinctLicenseNumbers": 74,
+    "identityNamespace": "OR-OHA-HOSPICE:{license_number}",
+    "sourceAsOf": "2026-07-30",
+    "notCmsHospice": true,
+    "homeHealth_ne_hospice": true,
+    "sha256": "982894ab2fa6da837ea2e97602c636bbe767c2262d9884cf8381c2aa390d6e56"
+  },
+  "cmsOverlay": {
+    "nursingHomes": 128,
+    "homeHealth": 51,
+    "hospice": 66,
+    "source": "senior-national-intelligence.json geography OR (CMS class directories)",
+    "asOf": "2026-08-27",
+    "nationalFingerprint": "215b9d6301a9759f53dd92324930803089d319f95fe5e46739cbbd5f326c3294",
+    "addedToNationalTotals": false,
+    "clocks": {
+      "nursingHomes": {
+        "datasetKey": "nursing-home-provider-information",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/4pq5-n9py",
+        "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T20:24:52.158102+00:00",
+        "sourcePeriod": null
+      },
+      "homeHealth": {
+        "datasetKey": "home-health-care-agencies",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/6jpm-sxkc",
+        "sourceModifiedAt": "2026-05-27T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T21:08:16.274819+00:00",
+        "sourcePeriod": null
+      },
+      "hospice": {
+        "datasetKey": "hospice-general-information",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/yc9t-dgbk",
+        "sourceModifiedAt": "2026-08-19T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T22:15:06.243039+00:00",
+        "sourcePeriod": null
+      }
+    }
+  },
+  "crosswalk": {
+    "exactStateToCmsBridges": 0,
+    "reason": "No source-native ODHS Provider ID \u2194 CMS CCN join field. Open ODHS NF count matching CMS NH count is not a bridge."
+  },
+  "identity": {
+    "EXACT_ODHS_PROVIDER_ID": 4716,
+    "EXACT_OHA_HHA_LICENSE": 66,
+    "EXACT_OHA_HOSPICE_LICENSE": 74,
+    "EXACT_CMS_CCN": 245,
+    "EXACT_SOURCE_NATIVE_CROSSWALK": 0,
+    "NAME_ONLY_UNSAFE": 0,
+    "REVIEW_REQUIRED_CROSSWALKS": 0
+  },
+  "adverse_publication": {
+    "EXACT_PROFILE_ATTACHMENTS": 0,
+    "REVIEW_REQUIRED": 0,
+    "UNRESOLVED": 0,
+    "INTERNAL_ONLY": 0,
+    "PUBLICATION_PENDING": 0,
+    "PUBLIC_READY_PROFILES": 0,
+    "PUBLICLY_RENDERED_PROFILES": 0,
+    "BUSINESS_RESPONSE_READY": false,
+    "name_only_adverse_attachment": "REJECTED",
+    "statewide_page_renders_class_aggregates_not_facility_profiles": true,
+    "publicly_rendered_ne_json_presence": true
+  },
+  "withheld_reason_counts": {
+    "PROFILE_NOT_AVAILABLE": 0,
+    "PUBLICATION_ADAPTER_NOT_READY": true,
+    "MISSING_IDENTIFIER": 0,
+    "UNSAFE_NAME_MATCH": 0,
+    "name_only_adverse_joins_not_attempted": 0
+  },
+  "claimEligibilityBroadened": false,
+  "noCombinedOregonFacilitiesTotal": true,
+  "unknownIsNotZero": true,
+  "searchOnlyIsNotZero": true,
+  "expansion_ledger": {
+    "NET_NEW_CANONICAL_ORGANIZATIONS": 0,
+    "NET_NEW_PUBLIC_PROFILES": 0,
+    "EXISTING_ORGANIZATIONS_ENRICHED": 0,
+    "GRAPH_WRITES": 0,
+    "EXACT_PROFILE_ATTACHMENTS": 0,
+    "CLAIM_ELIGIBILITY_BROADENED": false
+  },
+  "gate": {
+    "live_national_cms_not_inflated": true,
+    "passed": true
+  },
+  "fingerprint": "1041ed21b2647cb670a0b5056458df04d8272e000a5206bb22030d70d3de0cbc"
+}

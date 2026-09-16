@@ -73,3 +73,10 @@ export const IL_ACCEPTED = {
   slpSites: IL.supportiveLiving.operationalSites,
   snapshotAsOf: IL.snapshotAsOf,
 };
+import OR from "../../../artifacts/or-sen-001-public-snapshot.json";
+export const OR_ACCEPTED = {
+  openNf: OR.odhsProviders.OPEN_NF,
+  openAlf: OR.odhsProviders.OPEN_ALF,
+  cmsNursingHomes: OR.cmsOverlay.nursingHomes,
+  snapshotAsOf: OR.snapshotAsOf,
+};
