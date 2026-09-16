@@ -39,6 +39,13 @@ export const SENIOR_SEARCH_GOLDEN_QUESTIONS: SeniorGoldenQuestion[] = [
   { query: "best nursing home in New York", expected: "UNSUPPORTED_SAFE" },
   { query: "how many senior care providers in Colorado", expected: "UNSUPPORTED_SAFE" },
   { query: "best nursing home in Colorado", expected: "UNSUPPORTED_SAFE" },
+  // TH-DISCOVERY-RESET-001 (production certification fix): "senior care Florida" (no trailing
+  // "providers") previously fell through detectClass entirely and was misclassified as a literal
+  // provider-name search ("No matching published provider record"), not a genuine class
+  // ambiguity. It now correctly asks the same real, one-click class choice
+  // ("Show nursing homes/home health/hospice providers in Florida.") the "...providers..." phrasing
+  // already got -- a real state is resolved, this is not a state-support gap.
+  { query: "senior care Florida", expected: "UNSUPPORTED_SAFE" },
   // TH-DISCOVERY-RESET-001: Boca Raton has no real-world same-name collision in another state
   // (verified against the live corpus) -- RESULTS FIRST resolves it directly instead of a
   // dead-end jurisdiction prompt. "Miami" below stays NEEDS_CLARIFICATION: a real, current
