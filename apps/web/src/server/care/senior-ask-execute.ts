@@ -99,7 +99,11 @@ export type SeniorAskResult = {
   failClosed?: { reason: string; alternatives: string[] };
   facilityAnswer?: FacilityEvidenceAnswer;
   candidateSelection?: boolean;
-  classPreviews?: Array<{ providerClass: SeniorProviderClass; label: string; entities: SeniorAskEntity[] }>;
+  classPreviews?: Array<{
+    providerClass: SeniorProviderClass;
+    label: string;
+    entities: SeniorAskEntity[];
+  }>;
 };
 
 const CLASS_PREVIEW_LIMIT = 5;
@@ -678,7 +682,8 @@ async function executeSeniorResearchPlanUnsafe(
         reason: query.failReason ?? "Unsupported question.",
         alternatives: query.alternatives ?? [],
       },
-      classPreviews: query.clarification === "provider_class" ? await classPreviews(query) : undefined,
+      classPreviews:
+        query.clarification === "provider_class" ? await classPreviews(query) : undefined,
     };
   }
 

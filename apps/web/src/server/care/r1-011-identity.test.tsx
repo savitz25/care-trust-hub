@@ -401,9 +401,9 @@ it("generic care waits for class then executes locality without a fake provider 
   // fake provider name) is unchanged -- but a real-provider preview per class now renders on this
   // same clarification screen instead of behind a second click, so the source now IS queried.
   expect(mocks.db).toHaveBeenCalled();
-  expect(before.classPreviews?.find((g) => g.providerClass === "nursing_home")?.entities.length).toBeGreaterThan(
-    0,
-  );
+  expect(
+    before.classPreviews?.find((g) => g.providerClass === "nursing_home")?.entities.length,
+  ).toBeGreaterThan(0);
   const after = planSeniorRequest({ q: "care in Austin Texas", class: "nursing_home" }).query;
   expect(after.identityQuery).toBeUndefined();
   expect(after.mode).toBe("entity");

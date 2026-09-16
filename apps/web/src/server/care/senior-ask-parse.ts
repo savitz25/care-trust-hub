@@ -391,7 +391,7 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
       geography?.type === "county"
         ? `${geography.value} County`
         : geography?.type === "state"
-          ? STATE_NAMES[geography.value] ?? geography.value
+          ? (STATE_NAMES[geography.value] ?? geography.value)
           : geography?.value;
     return validateSeniorResearchQuery({
       mode: "fail_closed",
