@@ -153,7 +153,10 @@ export function parseRecordedLocation(
   // AskTrustHub's shared florida-municipality-crosswalk.ts already resolves) should not dead-end
   // asking the consumer to type "FL" when real recorded provider evidence is one query away.
   const establishedCity = !county && ESTABLISHED_FL_CITIES.has(value);
-  const jurisdiction = state ?? (county && establishedCounty ? "FL" : undefined) ?? (establishedCity ? "FL" : undefined);
+  const jurisdiction =
+    state ??
+    (county && establishedCounty ? "FL" : undefined) ??
+    (establishedCity ? "FL" : undefined);
   if (!jurisdiction)
     return {
       geography: { type: "city", value, meaning: LOCATION_MEANING },
