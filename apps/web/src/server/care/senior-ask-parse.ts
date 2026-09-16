@@ -38,7 +38,20 @@ function detectClass(q: string): SeniorProviderClass | "ambiguous" | undefined {
   if (nh) return "nursing_home";
   if (hh) return "home_health";
   if (hosp) return "hospice";
-  if (/senior care providers|senior-care providers|all providers/i.test(q)) return "ambiguous";
+  // TH-DISCOVERY-RESET-001 (production certification fix): "senior care Florida" (no trailing
+  // "providers") previously matched none of the checks above and fell through as `undefined` --
+  // the same signal as "no care-related words at all" -- so it was misclassified further
+  // downstream as a literal provider-name search instead of an ambiguous/generic care request
+  // needing clarification. "senior care"/"senior home"/"care facility" alone are already
+  // unambiguous generic-care signals, matching the same detection AskTrustHub's own care-task.ts
+  // already uses for this identical phrase.
+  if (
+    /senior care providers|senior-care providers|all providers/i.test(q) ||
+    /\bsenior\s+(?:homes?|care|facilit(?:y|ies))\b|\bcare\s+(?:home|facility|facilities|setting)\b/i.test(
+      q,
+    )
+  )
+    return "ambiguous";
   return undefined;
 }
 
