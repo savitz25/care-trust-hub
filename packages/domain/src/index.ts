@@ -57,3 +57,4 @@ export * from "./co-intelligence";
 export * from "./va-intelligence";
 export * from "./ny-intelligence";
 export * from "./il-intelligence";
+export * from "./or-intelligence";

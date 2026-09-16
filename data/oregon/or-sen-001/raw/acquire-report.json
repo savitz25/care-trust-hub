@@ -1,0 +1,55 @@
+{
+  "retrievedAt": "2026-09-16T15:24:44Z",
+  "files": {
+    "providers": {
+      "path": "data/oregon/or-sen-001/raw/odhs-providers.csv",
+      "bytes": 680191,
+      "gz_bytes": 196006,
+      "sha256": "01a67495b5eb7fd5157df3a13ede83f889216bf93d5adfa55c506443b422912f",
+      "content_type": "text/csv",
+      "page_size": "2280",
+      "export_url": "https://ltclicensing.oregon.gov/Providers/Export"
+    },
+    "inspections": {
+      "path": "data/oregon/or-sen-001/raw/odhs-inspections.csv",
+      "bytes": 1057906,
+      "gz_bytes": 268789,
+      "sha256": "9434f547f958f40a025ecd87ab85c153abbca41ebf8d156ef37ff401e1b6377f",
+      "content_type": "text/csv",
+      "page_size": "12772",
+      "export_url": "https://ltclicensing.oregon.gov/Inspections/Export"
+    },
+    "violations": {
+      "path": "data/oregon/or-sen-001/raw/odhs-violations.csv",
+      "bytes": 6584480,
+      "gz_bytes": 835970,
+      "sha256": "7ea0e24412efe35263d013afc8932bdcc3ae37ecb2c4e58f1c126a9a0d35c94a",
+      "content_type": "text/csv",
+      "page_size": "48169",
+      "export_url": "https://ltclicensing.oregon.gov/Violations/Export"
+    },
+    "actions": {
+      "path": "data/oregon/or-sen-001/raw/odhs-actions.csv",
+      "bytes": 183590,
+      "gz_bytes": 27835,
+      "sha256": "36c7c434ce4ec5cb7b91b5b2f7ceab4d1647d75631b089409a762accee4be302",
+      "content_type": "text/csv",
+      "page_size": "1299",
+      "export_url": "https://ltclicensing.oregon.gov/RegulatoryActions/Export"
+    },
+    "oha-hha.pdf": {
+      "path": "data/oregon/or-sen-001/raw/oha-hha.pdf",
+      "bytes": 249163,
+      "sha256": "36bb3e8ed7b8c1a80591af610e764340303439ac3e0ab68a87d3bcdd88e540b9",
+      "content_type": "application/pdf",
+      "url": "https://www.oregon.gov/oha/PH/PROVIDERPARTNERRESOURCES/HEALTHCAREPROVIDERSFACILITIES/HEALTHCAREHEALTHCAREREGULATIONQUALITYIMPROVEMENT/Documents/HHAList.pdf"
+    },
+    "oha-hospice.pdf": {
+      "path": "data/oregon/or-sen-001/raw/oha-hospice.pdf",
+      "bytes": 315652,
+      "sha256": "982894ab2fa6da837ea2e97602c636bbe767c2262d9884cf8381c2aa390d6e56",
+      "content_type": "application/pdf",
+      "url": "https://www.oregon.gov/oha/PH/PROVIDERPARTNERRESOURCES/HEALTHCAREPROVIDERSFACILITIES/HEALTHCAREHEALTHCAREREGULATIONQUALITYIMPROVEMENT/Documents/HOSPICEList.pdf"
+    }
+  }
+}

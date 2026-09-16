@@ -3,6 +3,7 @@ import {
   CA_ACCEPTED,
   CO_ACCEPTED,
   IL_ACCEPTED,
+  OR_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -14,6 +15,7 @@ import { CO_PUBLIC_FINGERPRINT, CO_PUBLIC_PATH } from "./co-intelligence";
 import { VA_PUBLIC_FINGERPRINT, VA_PUBLIC_PATH } from "./va-intelligence";
 import { NY_PUBLIC_FINGERPRINT, NY_PUBLIC_PATH } from "./ny-intelligence";
 import { IL_PUBLIC_FINGERPRINT, IL_PUBLIC_PATH } from "./il-intelligence";
+import { OR_PUBLIC_FINGERPRINT, OR_PUBLIC_PATH } from "./or-intelligence";
 import { CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -62,7 +64,7 @@ export interface SeniorHomepageStateCard {
     snapshotAsOf: string | null;
     retrievedAt: string | null;
   }[];
-  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA" | "NY" | "IL";
+  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA" | "NY" | "IL" | "OR";
   name: string;
   href: string;
   regulators: string;
@@ -598,13 +600,28 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       IL_PUBLIC_PATH,
     ),
     m(
+      "or-odhs-nf",
+      "IDENTITY_LICENSURE",
+      "Oregon ODHS open Nursing Facility identities",
+      OR_ACCEPTED.openNf,
+      "ODHS Provider ID where Type=NF and Status=Open",
+      "Nursing Facility (state license)",
+      "Oregon",
+      "ODHS Licensed Long-Term Care Settings Search",
+      OR_PUBLIC_FINGERPRINT,
+      OR_ACCEPTED.snapshotAsOf,
+      "Open ODHS Nursing Facility identities.",
+      "CMS Nursing Home CCNs; ALF; RCF; AFH; a combined Oregon facilities total.",
+      OR_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Published state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR",
       "SeniorTrustHub accepted state artifacts",
       "Accepted state publication artifacts",
       null,
@@ -688,6 +705,7 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "il-cms-nh",
     "il-idph-hha",
     "il-slp",
+    "or-odhs-nf",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -808,5 +826,17 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "Current NH/AL license censuses remain LLCS search-only; CMS survey evidence reused on exact CCN",
     sourceAsOf: IL_ACCEPTED.snapshotAsOf,
+  },
+  {
+    state: "OR",
+    name: "Oregon",
+    href: OR_PUBLIC_PATH,
+    regulators: "ODHS APD + OHA + CMS",
+    stateClasses: `${OR_ACCEPTED.openNf} ODHS open Nursing Facilities · ${OR_ACCEPTED.openAlf} ODHS open Assisted Living`,
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${OR_ACCEPTED.openNf} ODHS NF · ${OR_ACCEPTED.cmsNursingHomes} CMS Nursing Homes · identities remain separate`,
+    regulatoryDepth:
+      "ODHS inspections, substantiated violations, and license-condition regulatory actions; public actions currently exclude revocation notices",
+    sourceAsOf: OR_ACCEPTED.snapshotAsOf,
   },
 ];

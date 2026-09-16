@@ -177,6 +177,13 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
         "NOT_ACQUIRED",
       );
     }
+    if (/\boregon\b/i.test(q) || state?.value === "OR") {
+      return fail(
+        "Oregon Assisted Living Facilities are an ODHS license class, not CMS nursing homes, not Residential Care, and not Adult Foster Homes. Open the Oregon research page.",
+        ["Open Oregon senior-care research."],
+        "PARTIAL",
+      );
+    }
     return fail(
       "Assisted living is state-regulated and does not share the federal CMS nursing-home, Home Health, or Hospice directory contract. Use the available state-specific assisted-living research.",
       [
@@ -251,6 +258,87 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
         ["Show nursing homes in Illinois."],
       );
     }
+  }
+  const oregon = /\boregon\b/i.test(q) || state?.value === "OR" || /\bodhs\b/i.test(q);
+  const odhsId =
+    q.match(/\bprovider(?:\s+id)?\s*[:#]?\s*([A-Z0-9]{5,12})\b/i)?.[1]?.toUpperCase() ||
+    q.match(/\b(70[A-Z]\d{3}|50[A-Z]\d{3}|38[A-Z0-9]{3,4})\b/i)?.[1]?.toUpperCase();
+  if (odhsId && (oregon || /\bprovider\s+id\b/i.test(q) || /\b70[A-Z]\d{3}\b/i.test(q))) {
+    if (/license condition|regulatory action/i.test(q)) {
+      return fail(
+        `ODHS Provider ID ${odhsId} license-condition rows are on the Oregon research page and official ODHS lookup. Public regulatory-action data currently shows license conditions only. Absence of other action types is not a clean history. A Provider ID is not a CMS CCN.`,
+        ["Open Oregon senior-care research."],
+        "PARTIAL",
+      );
+    }
+    return fail(
+      `ODHS Provider ID ${odhsId} is a state identity, not a CMS CCN. Confirm the provider on official ODHS Licensed Long-Term Care Settings Search. This snapshot has 0 exact ODHS↔CMS CCN bridges.`,
+      ["Open Oregon senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (oregon && /inspection/i.test(q)) {
+    return fail(
+      "ODHS inspections are Event ID observations. A complaint-related inspection is not a complaint filing. One Event ID is one inspection even when deficiencies are cited. Open the Oregon research page.",
+      ["Open Oregon senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (oregon && /substantiated violation|violations?\b/i.test(q) && !/regulatory action/i.test(q)) {
+    return fail(
+      "ODHS listed violations are substantiated. Open investigations and appealed complaints are not listed. A substantiated violation is not a complaint. Open the Oregon research page.",
+      ["Open Oregon senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (oregon && /regulatory action|license condition/i.test(q)) {
+    return fail(
+      "Public ODHS regulatory-action data currently displays license conditions dating back to 2010, not all formal actions. Absence of revocation-notice rows is not a clean history.",
+      ["Open Oregon senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (
+    oregon &&
+    /how many|count/i.test(q) &&
+    /nursing facilit/i.test(q) &&
+    /odhs|licensed|snapshot/i.test(q)
+  ) {
+    return fail(
+      "The ODHS snapshot has 128 open Nursing Facility identities. That is not the CMS Oregon Nursing Home CCN overlay, not Assisted Living, and not a combined facilities total.",
+      [
+        "Open Oregon senior-care research.",
+        "How many CMS nursing homes are currently indexed in Oregon?",
+      ],
+      "PARTIAL",
+    );
+  }
+  if (oregon && /cms-certified|cms certified/i.test(q)) {
+    return fail(
+      "CMS certification uses CCN identity. An ODHS Provider ID is not a CCN unless an exact source-native bridge exists (0 in this snapshot). Open Oregon research for the CMS overlay kept separate from ODHS classes.",
+      ["Open Oregon senior-care research.", "Find CMS CCN 385018"],
+      "PARTIAL",
+    );
+  }
+  if (
+    oregon &&
+    /\blicensed\b|\blicense\b/i.test(q) &&
+    !ccn &&
+    !odhsId &&
+    !/license condition|regulatory action/i.test(q)
+  ) {
+    return fail(
+      "Oregon license status is class-specific. ODHS Nursing Facility, Assisted Living, Residential Care, and Adult Foster Home identities are not CMS CCNs. OHA Home Health and Hospice licenses are not CMS certifications. Name-only is not a license confirmation. Open the Oregon research page.",
+      ["Open Oregon senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (oregon && /adult foster|residential care|\brcf\b|\bafh\b/i.test(q)) {
+    return fail(
+      "Oregon Adult Foster Homes and Residential Care Facilities are ODHS license classes, not CMS nursing homes. They are not added to Assisted Living or Nursing Facility counts.",
+      ["Open Oregon senior-care research."],
+      "PARTIAL",
+    );
   }
   if (
     /\bvirginia\b/i.test(q) &&
@@ -866,10 +954,13 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
     raw.match(/^(?:find|research|provider named)\s+(.+?)(?:\s+in\s+|$)/i)?.[1];
   if (
     !plan.facilityEvidence &&
+    plan.mode !== "fail_closed" &&
     explicitName &&
     raw.trim().length <= 180 &&
     !/\bCCN\b/i.test(explicitName) &&
-    !/^(?:nursing homes?|home health agencies?|hospice providers?)$/i.test(explicitName) &&
+    !/^(?:nursing homes?|nursing facilit(?:y|ies)|home health agencies?|hospice providers?|assisted living(?: facilities)?|adult foster homes?|residential care(?: facilities)?)$/i.test(
+      explicitName,
+    ) &&
     /^[\p{L}\p{N}&'., -]{3,120}$/u.test(explicitName)
   )
     plan = validateSeniorResearchQuery({
@@ -881,7 +972,16 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
       coverageState: "PARTIAL",
     });
   if (plan.mode === "comparison" || plan.mode === "definition") return plan;
-  if (plan.mode === "fail_closed" && !location.locationRequirement) return plan;
+  if (plan.mode === "fail_closed") {
+    if (location.locationRequirement?.outcome === "APPLIED") {
+      return {
+        ...plan,
+        geography: location.geography,
+        locationRequirement: location.locationRequirement,
+      };
+    }
+    return plan;
+  }
   const result = { ...plan, ...location };
   if (location.locationRequirement && location.locationRequirement.outcome !== "APPLIED") {
     return {

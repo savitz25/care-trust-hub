@@ -17,6 +17,7 @@ const tickets = {
   VA: "001",
   NY: "001",
   IL: "001",
+  OR: "001",
 };
 export function requireCount(value, field, nullable = false) {
   if (value === null && nullable) return null;
@@ -73,7 +74,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       aggregation: "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL",
     });
   }
-  for (const state of ["CO", "VA", "NY", "IL"]) {
+  for (const state of ["CO", "VA", "NY", "IL", "OR"]) {
     const geo = base.geography.states.find((r) => r.state === state);
     assert.ok(geo, `Missing federal state partition ${state}`);
     for (const [field, setting] of [
@@ -206,6 +207,56 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "SEARCH_ONLY",
     true,
   );
+  add(
+    "OR",
+    "odhsProviders.OPEN_NF",
+    "ODHS Provider ID Status=Open Type=NF",
+    "Nursing Facility (state license)",
+  );
+  add(
+    "OR",
+    "odhsProviders.OPEN_ALF",
+    "ODHS Provider ID Status=Open Type=ALF",
+    "Assisted Living Facility",
+  );
+  add(
+    "OR",
+    "odhsProviders.OPEN_RCF",
+    "ODHS Provider ID Status=Open Type=RCF",
+    "Residential Care Facility",
+  );
+  add(
+    "OR",
+    "odhsProviders.OPEN_AFH",
+    "ODHS Provider ID Status=Open Type=AFH",
+    "Adult Foster Home",
+  );
+  add("OR", "odhsInspections.INSPECTION_ROWS", "ODHS inspection Event ID", "ODHS LTC");
+  add(
+    "OR",
+    "odhsViolations.VIOLATION_ROWS",
+    "ODHS substantiated violation report number",
+    "ODHS LTC",
+  );
+  add(
+    "OR",
+    "odhsRegulatoryActions.REGULATORY_ACTION_ROWS",
+    "ODHS public license-condition row; not all regulatory actions",
+    "ODHS LTC",
+  );
+  add(
+    "OR",
+    "odhsRegulatoryActions.UNIQUE_REGULATORY_MATTERS",
+    "ODHS Sanction identifier",
+    "ODHS LTC",
+  );
+  add(
+    "OR",
+    "ohaHomeHealth.rows",
+    "OHA Home Health license number",
+    "Home Health Agency (state license)",
+  );
+  add("OR", "ohaHospice.rows", "OHA Hospice license number", "Hospice (state license)");
   const evidenceInventory = buildSeniorHomepageEvidenceInventory({
     networkMetrics: base,
     floridaIdentities: florida.providers.current,
@@ -223,6 +274,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "il-cms-nh": "il.cmsOverlay.nursingHomes",
     "il-idph-hha": "il.idphHomeHealth.rows",
     "il-slp": "il.supportiveLiving.operationalSites",
+    "or-odhs-nf": "or.odhsProviders.OPEN_NF",
   };
   for (const row of evidenceInventory) {
     requireCount(row.value, row.key);
@@ -281,6 +333,14 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       ["IDPH Hospice Residence", "idphHospiceResidence"],
       ["HFS Supportive Living", "supportiveLiving"],
     ],
+    OR: [
+      ["ODHS LTC providers", "odhsProviders"],
+      ["ODHS inspections", "odhsInspections"],
+      ["ODHS violations", "odhsViolations"],
+      ["ODHS license-condition actions", "odhsRegulatoryActions"],
+      ["OHA Home Health", "ohaHomeHealth"],
+      ["OHA Hospice", "ohaHospice"],
+    ],
   };
   const stateCards = structuredClone(SENIOR_HOMEPAGE_STATE_CARDS);
   for (const card of stateCards) {
@@ -333,6 +393,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "az-nh-crosswalk": "adhsGis",
     "az-hha-crosswalk": "adhsGis",
     "az-hospice-crosswalk": "adhsGis",
+    "or-odhs-nf": null,
   };
   for (const row of evidenceInventory) {
     if (!Object.hasOwn(inventoryClockPaths, row.key)) continue;
