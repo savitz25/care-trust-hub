@@ -42,10 +42,11 @@ export const SENIOR_SEARCH_GOLDEN_QUESTIONS: SeniorGoldenQuestion[] = [
   // TH-DISCOVERY-RESET-001 (production certification fix): "senior care Florida" (no trailing
   // "providers") previously fell through detectClass entirely and was misclassified as a literal
   // provider-name search ("No matching published provider record"), not a genuine class
-  // ambiguity. It now correctly asks the same real, one-click class choice
-  // ("Show nursing homes/home health/hospice providers in Florida.") the "...providers..." phrasing
-  // already got -- a real state is resolved, this is not a state-support gap.
-  { query: "senior care Florida", expected: "UNSUPPORTED_SAFE" },
+  // ambiguity. TH-DISCOVERY-RESET-001B: the class choice now also surfaces real per-class provider
+  // previews on the same screen (senior-ask-execute.ts's classPreviews) instead of only a
+  // click-through suggestion, so this is NEEDS_CLARIFICATION -- not a bare unsupported dead end --
+  // matching the same class-choice UI "Miami" already uses for its own genuine ambiguity below.
+  { query: "senior care Florida", expected: "NEEDS_CLARIFICATION" },
   // TH-DISCOVERY-RESET-001: Boca Raton has no real-world same-name collision in another state
   // (verified against the live corpus) -- RESULTS FIRST resolves it directly instead of a
   // dead-end jurisdiction prompt. "Miami" below stays NEEDS_CLARIFICATION: a real, current

@@ -189,6 +189,39 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
               research sources, not a recommendation about appropriate care.
             </p>
           </details>
+          {result.classPreviews?.some((group) => group.entities.length > 0) ? (
+            <div className="senior-ask__class-previews">
+              {result.classPreviews.map((group) =>
+                group.entities.length > 0 ? (
+                  <section key={group.providerClass} aria-label={`${group.label} preview`}>
+                    <h3>{group.label}</h3>
+                    <ul>
+                      {group.entities.map((entity) => (
+                        <li key={`${entity.providerClass}-${entity.ccn}`}>
+                          <Link href={entity.href} data-specialist-event="profile_open">
+                            {entity.providerName}
+                          </Link>
+                          <p>{entity.location}</p>
+                          <p>{entity.whyMatched}</p>
+                        </li>
+                      ))}
+                    </ul>
+                    <p>
+                      <Link
+                        prefetch={false}
+                        href={seniorRequestHref(result.rawQuery, overrides, {
+                          class: group.providerClass,
+                          page: "1",
+                        })}
+                      >
+                        See all {group.label.toLowerCase()}
+                      </Link>
+                    </p>
+                  </section>
+                ) : null,
+              )}
+            </div>
+          ) : null}
         </section>
       ) : null}
       {result.query.clarification === "state_care" ? (
