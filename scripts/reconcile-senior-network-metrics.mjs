@@ -225,12 +225,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "ODHS Provider ID Status=Open Type=RCF",
     "Residential Care Facility",
   );
-  add(
-    "OR",
-    "odhsProviders.OPEN_AFH",
-    "ODHS Provider ID Status=Open Type=AFH",
-    "Adult Foster Home",
-  );
+  add("OR", "odhsProviders.OPEN_AFH", "ODHS Provider ID Status=Open Type=AFH", "Adult Foster Home");
   add("OR", "odhsInspections.INSPECTION_ROWS", "ODHS inspection Event ID", "ODHS LTC");
   add(
     "OR",
