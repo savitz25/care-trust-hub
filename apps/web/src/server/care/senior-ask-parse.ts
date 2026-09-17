@@ -184,6 +184,13 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
         "PARTIAL",
       );
     }
+    if (/\bpennsylvania\b|\bpittsburg|\bphiladelphia\b/i.test(q) || state?.value === "PA") {
+      return fail(
+        "Pennsylvania Assisted Living Residences are a DHS license class, not Personal Care Homes and not CMS nursing homes. Current ALR bulk roster was not acquired. Search-only is not zero. Open the Pennsylvania research page.",
+        ["Open Pennsylvania senior-care research."],
+        "NOT_ACQUIRED",
+      );
+    }
     return fail(
       "Assisted living is state-regulated and does not share the federal CMS nursing-home, Home Health, or Hospice directory contract. Use the available state-specific assisted-living research.",
       [
@@ -338,6 +345,73 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
       "Oregon Adult Foster Homes and Residential Care Facilities are ODHS license classes, not CMS nursing homes. They are not added to Assisted Living or Nursing Facility counts.",
       ["Open Oregon senior-care research."],
       "PARTIAL",
+    );
+  }
+  const pennsylvania =
+    /\bpennsylvania\b/i.test(q) ||
+    state?.value === "PA" ||
+    /\bphiladelphia\b|\bpittsburgh\b|\ballegheny county\b/i.test(q);
+  const paFacilityId = q.match(/\b(?:facility(?:\s+id)?|license)\s*[:#]?\s*(\d{5,8})\b/i)?.[1];
+  if (pennsylvania && /personal care home|\bpch\b/i.test(q)) {
+    return fail(
+      "Pennsylvania Personal Care Homes are a DHS license class, not Assisted Living Residences and not CMS nursing homes. Current PCH facility roster is official search-only. The August 2026 monthly report of 995 homes is an inspection-lagged aggregate, not a live roster and not facility identities.",
+      ["Open Pennsylvania senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (pennsylvania && /home care/i.test(q) && !/home health/i.test(q)) {
+    return fail(
+      "Pennsylvania Home Care agencies and registries are a DOH license class, not Home Health and not CMS Home Health. This snapshot has 4,656 Home Care rows kept separate from 659 Home Health rows. Open the Pennsylvania research page.",
+      ["Open Pennsylvania senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (pennsylvania && /adult day/i.test(q)) {
+    return fail(
+      "Pennsylvania Adult Day Centers are a Department of Aging license class, not residential PCH/ALR/nursing-home facilities. Current bulk roster was not acquired. Search-only is not zero.",
+      ["Open Pennsylvania senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (pennsylvania && /\blife\b|\bpace\b/i.test(q) && !/quality of life/i.test(q)) {
+    return fail(
+      "Pennsylvania LIFE/PACE is a program/provider network, not a residential facility license class. 24 providers and 58 centers in the August 2026 state table are not added to PCH, ALR, or nursing-home totals.",
+      ["Open Pennsylvania senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (pennsylvania && /sanction/i.test(q)) {
+    return fail(
+      "Pennsylvania nursing-home sanctions are DOH order/penalty observations. A sanction is not an inspection, not a complaint, and not a conviction. Name-only attachment is unsafe. Open the Pennsylvania research page.",
+      ["Open Pennsylvania senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (
+    pennsylvania &&
+    /inspection|survey/i.test(q) &&
+    /nursing home|personal care|assisted living/i.test(q)
+  ) {
+    return fail(
+      "Pennsylvania survey and inspection evidence is class-specific. A survey is not a sanction. A deficiency is not a complaint. A plan of correction is not an admission. Statewide survey tables remain search-only except the acquired sanctions PDF extract.",
+      ["Open Pennsylvania senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (paFacilityId && (pennsylvania || /\bfacility id\b/i.test(q))) {
+    return fail(
+      `Pennsylvania facility ID ${paFacilityId} is a state identity. Confirm it on official DOH/DHS lookup. A state Facility ID is not a CMS CCN unless the source publishes a 39xxxxx Medicare ID.`,
+      ["Open Pennsylvania senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (
+    /\b(philadelphia|pittsburgh|allegheny county)\b/i.test(q) &&
+    /nursing home|assisted living|personal care|senior/i.test(q)
+  ) {
+    return fail(
+      "SeniorTrustHub does not publish Philadelphia, Pittsburgh, or Allegheny intelligence routes. Statewide Pennsylvania research remains /pennsylvania. Ranking is unsupported.",
+      ["Show nursing homes in Pennsylvania.", "Open Pennsylvania senior-care research."],
     );
   }
   if (

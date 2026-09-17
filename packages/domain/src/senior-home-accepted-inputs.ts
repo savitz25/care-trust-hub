@@ -80,3 +80,11 @@ export const OR_ACCEPTED = {
   cmsNursingHomes: OR.cmsOverlay.nursingHomes,
   snapshotAsOf: OR.snapshotAsOf,
 };
+import PA from "../../../artifacts/pa-sen-001-public-snapshot.json";
+export const PA_ACCEPTED = {
+  nursingHomeRows: PA.nursingHomes.PA_NURSING_HOME_ROWS,
+  homeHealthRows: PA.homeHealth.PA_HOME_HEALTH_ROWS,
+  homeCareRows: PA.homeCare.PA_HOME_CARE_ROWS,
+  cmsNursingHomes: PA.cmsOverlay.nursingHomes,
+  snapshotAsOf: PA.snapshotAsOf,
+};

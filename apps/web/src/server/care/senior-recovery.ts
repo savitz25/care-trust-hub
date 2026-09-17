@@ -26,6 +26,8 @@ export function stateCareRecovery(query: SeniorResearchQuery) {
     WA: { href: "/washington", label: "Open Washington care-setting intelligence" },
     CO: { href: "/colorado", label: "Open Colorado care-setting intelligence" },
     IL: { href: "/illinois", label: "Open Illinois IDPH / HFS care-setting research" },
+    OR: { href: "/oregon", label: "Open Oregon ODHS / OHA care-setting research" },
+    PA: { href: "/pennsylvania", label: "Open Pennsylvania DHS / DOH care-setting research" },
   };
   return state
     ? (routes[state] ?? null)

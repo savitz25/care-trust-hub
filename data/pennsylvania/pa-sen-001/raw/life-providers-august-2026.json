@@ -1,0 +1,408 @@
+[
+  {
+    "PROVIDER": "Albright LIFE (Albright Care Services)",
+    "CENTERS": "Cumberland",
+    "CENTER_ADDRESS": "1920 Good Hope Road, Enola PA 17025",
+    "COUNTY": "Clinton (partial), Cumberland, Franklin (partial), Lancaster, Lebanon, Lycoming, Northumberland (partial), Perry, and Union",
+    "TELEPHONE_NUMBER": "(717) 728-5433"
+  },
+  {
+    "PROVIDER": "Albright LIFE (Albright Care Services)",
+    "CENTERS": "Franklin",
+    "CENTER_ADDRESS": "840 Fifth Avenue, Chambersburg, PA 17201",
+    "COUNTY": "Clinton (partial), Cumberland, Franklin (partial), Lancaster, Lebanon, Lycoming, Northumberland (partial), Perry, and Union",
+    "TELEPHONE_NUMBER": "(717) 264-5433"
+  },
+  {
+    "PROVIDER": "Albright LIFE (Albright Care Services)",
+    "CENTERS": "Lancaster",
+    "CENTER_ADDRESS": "417 W. Frederick St, Lancaster, PA 17603",
+    "COUNTY": "Clinton (partial), Cumberland, Franklin (partial), Lancaster, Lebanon, Lycoming, Northumberland (partial), Perry, and Union",
+    "TELEPHONE_NUMBER": "(717) 376-1133"
+  },
+  {
+    "PROVIDER": "Albright LIFE (Albright Care Services)",
+    "CENTERS": "Lebanon",
+    "CENTER_ADDRESS": "113 S. Ninth St, Lebanon, PA 17042",
+    "COUNTY": "Clinton (partial), Cumberland, Franklin (partial), Lancaster, Lebanon, Lycoming, Northumberland (partial), Perry, and Union",
+    "TELEPHONE_NUMBER": "(717) 381-4320"
+  },
+  {
+    "PROVIDER": "Albright LIFE (Albright Care Services)",
+    "CENTERS": "Lycoming",
+    "CENTER_ADDRESS": "901 Memorial Avenue, Williamsport, PA 17701",
+    "COUNTY": "Clinton (partial), Cumberland, Franklin (partial), Lancaster, Lebanon, Lycoming, Northumberland (partial), Perry, and Union",
+    "TELEPHONE_NUMBER": "(570) 322-5433"
+  },
+  {
+    "PROVIDER": "Community LIFE (Pittsburgh Care Partnership, Inc)",
+    "CENTERS": "Bedford",
+    "CENTER_ADDRESS": "9709 Lincoln Highway, Bedford, PA 15522",
+    "COUNTY": "Allegheny (partial), Bedford, Fulton, Somerset (partial), Washington (partial), and Westmoreland (partial)",
+    "TELEPHONE_NUMBER": "(866) 419-1693"
+  },
+  {
+    "PROVIDER": "Community LIFE (Pittsburgh Care Partnership, Inc)",
+    "CENTERS": "East End",
+    "CENTER_ADDRESS": "301 Meade St, Pittsburgh, PA 15221",
+    "COUNTY": "Allegheny (partial), Bedford, Fulton, Somerset (partial), Washington (partial), and Westmoreland (partial)",
+    "TELEPHONE_NUMBER": "(866) 419-1693"
+  },
+  {
+    "PROVIDER": "Community LIFE (Pittsburgh Care Partnership, Inc)",
+    "CENTERS": "Homestead",
+    "CENTER_ADDRESS": "491 E. 8th Avenue, Pittsburgh, PA 15120",
+    "COUNTY": "Allegheny (partial), Bedford, Fulton, Somerset (partial), Washington (partial), and Westmoreland (partial)",
+    "TELEPHONE_NUMBER": "(866) 419-1693"
+  },
+  {
+    "PROVIDER": "Community LIFE (Pittsburgh Care Partnership, Inc)",
+    "CENTERS": "Logans Ferry",
+    "CENTER_ADDRESS": "125 Logans Ferry Rd, Suite 2, Lower Burrell, PA 15068",
+    "COUNTY": "Allegheny (partial), Bedford, Fulton, Somerset (partial), Washington (partial), and Westmoreland (partial)",
+    "TELEPHONE_NUMBER": "(866) 419-1693"
+  },
+  {
+    "PROVIDER": "Community LIFE (Pittsburgh Care Partnership, Inc)",
+    "CENTERS": "McKeesport",
+    "CENTER_ADDRESS": "4201 Walnut St, Suite 1, McKeesport, PA 15132",
+    "COUNTY": "Allegheny (partial), Bedford, Fulton, Somerset (partial), Washington (partial), and Westmoreland (partial)",
+    "TELEPHONE_NUMBER": "(866) 419-1693"
+  },
+  {
+    "PROVIDER": "Community LIFE (Pittsburgh Care Partnership, Inc)",
+    "CENTERS": "Mon Valley",
+    "CENTER_ADDRESS": "2115 Trebella Circle, Rostraver Township, PA 15012",
+    "COUNTY": "Allegheny (partial), Bedford, Fulton, Somerset (partial), Washington (partial), and Westmoreland (partial)",
+    "TELEPHONE_NUMBER": "(866) 419-1693"
+  },
+  {
+    "PROVIDER": "Community LIFE (Pittsburgh Care Partnership, Inc)",
+    "CENTERS": "Somerset",
+    "CENTER_ADDRESS": "118 Shaeli Drive, Somerset, PA 15501",
+    "COUNTY": "Allegheny (partial), Bedford, Fulton, Somerset (partial), Washington (partial), and Westmoreland (partial)",
+    "TELEPHONE_NUMBER": "(866) 419-1693"
+  },
+  {
+    "PROVIDER": "Community LIFE (Pittsburgh Care Partnership, Inc)",
+    "CENTERS": "Tarentum",
+    "CENTER_ADDRESS": "702 Second Avenue, Tarentum, PA 15084",
+    "COUNTY": "Allegheny (partial), Bedford, Fulton, Somerset (partial), Washington (partial), and Westmoreland (partial)",
+    "TELEPHONE_NUMBER": "(866) 419-1693"
+  },
+  {
+    "PROVIDER": "LIFE Armstrong (Viecare Armstrong, LLC)",
+    "CENTERS": "Armstrong",
+    "CENTER_ADDRESS": "115 Nolte Drive Extension, Kittanning, PA 16201",
+    "COUNTY": "Armstrong",
+    "TELEPHONE_NUMBER": "(724) 545-8000"
+  },
+  {
+    "PROVIDER": "LIFE Beaver/Lawrence (Viecare Beaver, LLC)",
+    "CENTERS": "Beaver",
+    "CENTER_ADDRESS": "131 Pleasant Drive, Aliquippa, PA 15001",
+    "COUNTY": "Beaver and Lawrence",
+    "TELEPHONE_NUMBER": "(724) 378-5400"
+  },
+  {
+    "PROVIDER": "LIFE Beaver/Lawrence (Viecare Beaver, LLC)",
+    "CENTERS": "Lawrence",
+    "CENTER_ADDRESS": "2911 W. State St, New Castle, PA 16101",
+    "COUNTY": "Beaver and Lawrence",
+    "TELEPHONE_NUMBER": "(724) 657-8800"
+  },
+  {
+    "PROVIDER": "LIFE Butler (Viecare Butler, LLC)",
+    "CENTERS": "Butler",
+    "CENTER_ADDRESS": "231 W. Diamond St, Butler, PA 16001",
+    "COUNTY": "Butler",
+    "TELEPHONE_NUMBER": "(724) 287-5433"
+  },
+  {
+    "PROVIDER": "LIFE Butler (Viecare Butler, LLC)",
+    "CENTERS": "My Day Out (ACS)",
+    "CENTER_ADDRESS": "105 Burgess Drive Zelienople, PA 16063",
+    "COUNTY": "Butler",
+    "TELEPHONE_NUMBER": "(724) 287-5433"
+  },
+  {
+    "PROVIDER": "LIFE Geisinger (Geisinger Community Health Services)",
+    "CENTERS": "Kulpmont",
+    "CENTER_ADDRESS": "1100 Spruce St, Suite 100, Kulpmont PA 17834",
+    "COUNTY": "Columbia (partial), Juniata, Lackawanna, Luzerne, Mifflin, Montour (partial), Northumberland (partial), Schuylkill, Snyder, and Wyoming",
+    "TELEPHONE_NUMBER": "800-395-8759"
+  },
+  {
+    "PROVIDER": "LIFE Geisinger (Geisinger Community Health Services)",
+    "CENTERS": "Lewistown",
+    "CENTER_ADDRESS": "106 Derry Heights Blvd, Lewistown, PA 17044",
+    "COUNTY": "Columbia (partial), Juniata, Lackawanna, Luzerne, Mifflin, Montour (partial), Northumberland (partial), Schuylkill, Snyder, and Wyoming",
+    "TELEPHONE_NUMBER": "800-395-8759"
+  },
+  {
+    "PROVIDER": "LIFE Geisinger (Geisinger Community Health Services)",
+    "CENTERS": "Schuylkill",
+    "CENTER_ADDRESS": "2 Lewis Street, Minersville, PA 17954",
+    "COUNTY": "Columbia (partial), Juniata, Lackawanna, Luzerne, Mifflin, Montour (partial), Northumberland (partial), Schuylkill, Snyder, and Wyoming",
+    "TELEPHONE_NUMBER": "800-395-8759"
+  },
+  {
+    "PROVIDER": "LIFE Geisinger (Geisinger Community Health Services)",
+    "CENTERS": "Wilkes-Barre",
+    "CENTER_ADDRESS": "592 South Main St, Wilkes-Barre, PA 18702",
+    "COUNTY": "Columbia (partial), Juniata, Lackawanna, Luzerne, Mifflin, Montour (partial), Northumberland (partial), Schuylkill, Snyder, and Wyoming",
+    "TELEPHONE_NUMBER": "800-395-8759"
+  },
+  {
+    "PROVIDER": "LIFE NWPA (LIFE Northwestern Pennsylvania, LLC)",
+    "CENTERS": "Clarion",
+    "CENTER_ADDRESS": "108 E. Pinnacle Dr, Clarion, PA 16214",
+    "COUNTY": "Cameron, Centre (pending), Clarion, Clearfield, Crawford (partial), Elk, Erie (partial), Forest, Jefferson, McKean, Mercer, Venango, and Warren",
+    "TELEPHONE_NUMBER": "(814) 228-0621"
+  },
+  {
+    "PROVIDER": "LIFE NWPA (LIFE Northwestern Pennsylvania, LLC)",
+    "CENTERS": "Clearfield",
+    "CENTER_ADDRESS": "103 N. Front St, Clearfield, PA 16830",
+    "COUNTY": "Cameron, Centre (pending), Clarion, Clearfield, Crawford (partial), Elk, Erie (partial), Forest, Jefferson, McKean, Mercer, Venango, and Warren",
+    "TELEPHONE_NUMBER": "(814) 228-0621"
+  },
+  {
+    "PROVIDER": "LIFE NWPA (LIFE Northwestern Pennsylvania, LLC)",
+    "CENTERS": "Crawford",
+    "CENTER_ADDRESS": "1119 Park Avenue, Meadville, PA 16335",
+    "COUNTY": "Cameron, Centre (pending), Clarion, Clearfield, Crawford (partial), Elk, Erie (partial), Forest, Jefferson, McKean, Mercer, Venango, and Warren",
+    "TELEPHONE_NUMBER": "(814) 228-0621"
+  },
+  {
+    "PROVIDER": "LIFE NWPA (LIFE Northwestern Pennsylvania, LLC)",
+    "CENTERS": "Erie",
+    "CENTER_ADDRESS": "121 West 12th St, Erie, PA 16803",
+    "COUNTY": "Cameron, Centre (pending), Clarion, Clearfield, Crawford (partial), Elk, Erie (partial), Forest, Jefferson, McKean, Mercer, Venango, and Warren",
+    "TELEPHONE_NUMBER": "(814) 228-0621"
+  },
+  {
+    "PROVIDER": "LIFE NWPA (LIFE Northwestern Pennsylvania, LLC)",
+    "CENTERS": "Mercer",
+    "CENTER_ADDRESS": "80 E. Silver St, Suite 400, Sharon, PA 16146",
+    "COUNTY": "Cameron, Centre (pending), Clarion, Clearfield, Crawford (partial), Elk, Erie (partial), Forest, Jefferson, McKean, Mercer, Venango, and Warren",
+    "TELEPHONE_NUMBER": "(814) 228-0621"
+  },
+  {
+    "PROVIDER": "LIFE NWPA (LIFE Northwestern Pennsylvania, LLC)",
+    "CENTERS": "Venango",
+    "CENTER_ADDRESS": "800 Grandview Road, Oil City, PA 16301",
+    "COUNTY": "Cameron, Centre (pending), Clarion, Clearfield, Crawford (partial), Elk, Erie (partial), Forest, Jefferson, McKean, Mercer, Venango, and Warren",
+    "TELEPHONE_NUMBER": "(814) 228-0621"
+  },
+  {
+    "PROVIDER": "LIFE NWPA (LIFE Northwestern Pennsylvania, LLC)",
+    "CENTERS": "Warren",
+    "CENTER_ADDRESS": "1885 Market St, Warren, PA 16365",
+    "COUNTY": "Cameron, Centre (pending), Clarion, Clearfield, Crawford (partial), Elk, Erie (partial), Forest, Jefferson, McKean, Mercer, Venango, and Warren",
+    "TELEPHONE_NUMBER": "(814) 228-0621"
+  },
+  {
+    "PROVIDER": "LIFE Pittsburgh (Living Independence for the Elderly Pittsburgh, Inc)",
+    "CENTERS": "Allegheny",
+    "CENTER_ADDRESS": "3 Allegheny Center Pittsburgh, PA 15212",
+    "COUNTY": "Allegheny (partial)",
+    "TELEPHONE_NUMBER": "(412) 388-8042"
+  },
+  {
+    "PROVIDER": "LIFE Pittsburgh (Living Independence for the Elderly Pittsburgh, Inc)",
+    "CENTERS": "Greentree",
+    "CENTER_ADDRESS": "875 Greentree Road One Parkway Center, Suite 100 Pittsburgh, PA 15220",
+    "COUNTY": "Allegheny (partial)",
+    "TELEPHONE_NUMBER": "(412) 388-8042"
+  },
+  {
+    "PROVIDER": "LIFE Pittsburgh (Living Independence for the Elderly Pittsburgh, Inc)",
+    "CENTERS": "McKees Rock",
+    "CENTER_ADDRESS": "130 Chartiers Avenue McKees Rocks, PA 15136",
+    "COUNTY": "Allegheny (partial)",
+    "TELEPHONE_NUMBER": "(412) 388-8042"
+  },
+  {
+    "PROVIDER": "LIFE St. Mary",
+    "CENTERS": "LIFE St Mary",
+    "CENTER_ADDRESS": "2500 Northgate Road, Trevose, PA 19053",
+    "COUNTY": "Bucks (partial) and Montgomery (partial)",
+    "TELEPHONE_NUMBER": "(267) 991-7600"
+  },
+  {
+    "PROVIDER": "LIFE St. Mary",
+    "CENTERS": "Active Day of Bristol (ACS)",
+    "CENTER_ADDRESS": "2403 East Farragut Avenue Bristol, PA 19007",
+    "COUNTY": "Bucks (partial) and Montgomery (partial)",
+    "TELEPHONE_NUMBER": "(267) 991-7601"
+  },
+  {
+    "PROVIDER": "LIFE St. Mary",
+    "CENTERS": "Active Day of Warmister (ACS)",
+    "CENTER_ADDRESS": "720 Johnsville Boulevard Building 13, Suite 1300 Warminster, PA 18974",
+    "COUNTY": "Bucks (partial) and Montgomery (partial)",
+    "TELEPHONE_NUMBER": "(267) 991-7602"
+  },
+  {
+    "PROVIDER": "Mercy LIFE",
+    "CENTERS": "Broad Street",
+    "CENTER_ADDRESS": "1930 S. Broad Street, Philadelphia, PA 19145",
+    "COUNTY": "Chester, Delaware, Montgomery (partial), and Philadelphia (partial)",
+    "TELEPHONE_NUMBER": "(215) 339-4747"
+  },
+  {
+    "PROVIDER": "Mercy LIFE",
+    "CENTERS": "Chester",
+    "CENTER_ADDRESS": "555 Fox Chase Road, Coatesville, PA 19320",
+    "COUNTY": "Chester, Delaware, Montgomery (partial), and Philadelphia (partial)",
+    "TELEPHONE_NUMBER": "(215) 339-4747"
+  },
+  {
+    "PROVIDER": "Mercy LIFE",
+    "CENTERS": "Kinder Park",
+    "CENTER_ADDRESS": "1857 Constitution Ave, Woodlyn, PA 19094",
+    "COUNTY": "Chester, Delaware, Montgomery (partial), and Philadelphia (partial)",
+    "TELEPHONE_NUMBER": "(215) 339-4747"
+  },
+  {
+    "PROVIDER": "Mercy LIFE",
+    "CENTERS": "Norristown",
+    "CENTER_ADDRESS": "1430 DeKalb Street, Norristown, PA 19401",
+    "COUNTY": "Chester, Delaware, Montgomery (partial), and Philadelphia (partial)",
+    "TELEPHONE_NUMBER": "(215) 339-4747"
+  },
+  {
+    "PROVIDER": "Mercy LIFE",
+    "CENTERS": "Sharon Hill",
+    "CENTER_ADDRESS": "701 Chester Pike, Sharon Hill, PA 19079",
+    "COUNTY": "Chester, Delaware, Montgomery (partial), and Philadelphia (partial)",
+    "TELEPHONE_NUMBER": "(215) 339-4747"
+  },
+  {
+    "PROVIDER": "Mercy LIFE",
+    "CENTERS": "Valley View",
+    "CENTER_ADDRESS": "111 Wlwyn Road, Elwyn, PA 19063",
+    "COUNTY": "Chester, Delaware, Montgomery (partial), and Philadelphia (partial)",
+    "TELEPHONE_NUMBER": "(215) 339-4747"
+  },
+  {
+    "PROVIDER": "Mercy LIFE West Philadelpia (Trinity Health LIFE Pennsylvania, Inc)",
+    "CENTERS": "Mercy LIFE West Philadelphia",
+    "CENTER_ADDRESS": "4508 Chesnut St, Philadelphia, PA 19139",
+    "COUNTY": "Delaware (partial) and Philadelphia (partial)",
+    "TELEPHONE_NUMBER": "(267) 787-8282"
+  },
+  {
+    "PROVIDER": "InnovAge PA LIFE (InnovAge Pennsylvania LIFE, LLC)",
+    "CENTERS": "Allegheny",
+    "CENTER_ADDRESS": "1940 W. Allegheny Avenue, PA, 19132",
+    "COUNTY": "Philadelphia (partial)",
+    "TELEPHONE_NUMBER": "(844) 994-0561"
+  },
+  {
+    "PROVIDER": "InnovAge PA LIFE (InnovAge Pennsylvania LIFE, LLC)",
+    "CENTERS": "Henry Avenue",
+    "CENTER_ADDRESS": "3232 Henry Avenue, Philadelphia, PA 19129",
+    "COUNTY": "Philadelphia (partial)",
+    "TELEPHONE_NUMBER": "(844) 994-0562"
+  },
+  {
+    "PROVIDER": "InnovAge PA LIFE (InnovAge Pennsylvania LIFE, LLC)",
+    "CENTERS": "Pennypack",
+    "CENTER_ADDRESS": "4401 Megargee Street, Philadelphia, PA 19136",
+    "COUNTY": "Philadelphia (partial)",
+    "TELEPHONE_NUMBER": "(844) 994-0563"
+  },
+  {
+    "PROVIDER": "InnovAge PA LIFE (InnovAge Pennsylvania LIFE, LLC)",
+    "CENTERS": "St. Barts",
+    "CENTER_ADDRESS": "5364 Jackson Street, Philadelphia, PA 19124",
+    "COUNTY": "Philadelphia (partial)",
+    "TELEPHONE_NUMBER": "(844) 994-0564"
+  },
+  {
+    "PROVIDER": "Altoona \u2013 SeniorLIFE",
+    "CENTERS": "Altoona",
+    "CENTER_ADDRESS": "2891 Fairway Drive, Altoona, PA 16602",
+    "COUNTY": "Blair, Cambria (partial), and Indiana",
+    "TELEPHONE_NUMBER": "(814) 943-2273"
+  },
+  {
+    "PROVIDER": "Ebensburg \u2013 SeniorLIFE",
+    "CENTERS": "Ebensburg",
+    "CENTER_ADDRESS": "429 Manor Drive, Ebensburg, PA 15931",
+    "COUNTY": "Blair, Cambria (partial), and Indiana",
+    "TELEPHONE_NUMBER": "(814) 472-6060"
+  },
+  {
+    "PROVIDER": "Indiana \u2013 SeniorLIFE",
+    "CENTERS": "Indiana",
+    "CENTER_ADDRESS": "1220 Wayne Avenue, Indiana, PA 15701",
+    "COUNTY": "Blair, Cambria (partial), and Indiana",
+    "TELEPHONE_NUMBER": "(724) 464-2273"
+  },
+  {
+    "PROVIDER": "Greensburg \u2013 SeniorLIFE",
+    "CENTERS": "Geensburg",
+    "CENTER_ADDRESS": "123 Triangle Drive, Greensburg, PA 15601",
+    "COUNTY": "Westmoreland",
+    "TELEPHONE_NUMBER": "(724) 838-8300"
+  },
+  {
+    "PROVIDER": "Johnstown \u2013 SeniorLIFE",
+    "CENTERS": "Johnstown",
+    "CENTER_ADDRESS": "401 Broad Street, Johnstown, PA 15906",
+    "COUNTY": "Cambria (partial) and Somerset (partial)",
+    "TELEPHONE_NUMBER": "(814) 535-6000"
+  },
+  {
+    "PROVIDER": "Lehigh Valley \u2013 SeniorLIFE",
+    "CENTERS": "Lehigh Valley",
+    "CENTER_ADDRESS": "3365 High Point Blvd, Bethlehem, PA 18017",
+    "COUNTY": "Berks, Lehigh, and Northampton",
+    "TELEPHONE_NUMBER": "(610) 954-5433"
+  },
+  {
+    "PROVIDER": "Reading \u2013 SeniorLIFE",
+    "CENTERS": "Reading",
+    "CENTER_ADDRESS": "20 Shelbourne Rd, Suite 105, Reading PA 19606",
+    "COUNTY": "Berks, Lehigh, and Northampton",
+    "TELEPHONE_NUMBER": "(610) 404-3200"
+  },
+  {
+    "PROVIDER": "Washington \u2013 SeniorLIFE",
+    "CENTERS": "Greene",
+    "CENTER_ADDRESS": "100 Evergreene Drive, Waynesburg, PA 15370",
+    "COUNTY": "Fayette, Greene, and Washington (partial)",
+    "TELEPHONE_NUMBER": "(724) 222-5433"
+  },
+  {
+    "PROVIDER": "Uniontown \u2013 SeniorLIFE",
+    "CENTERS": "Uniontown",
+    "CENTER_ADDRESS": "89 W. Fayette St, Uniontown, PA 15401",
+    "COUNTY": "Fayette, Greene, and Washington (partial)",
+    "TELEPHONE_NUMBER": "(724) 434-5433"
+  },
+  {
+    "PROVIDER": "Greene \u2013 SeniorLIFE",
+    "CENTERS": "Washington",
+    "CENTER_ADDRESS": "2114 N. Franklin Drive, Washington, PA 15301",
+    "COUNTY": "Fayette, Greene, and Washington (partial)",
+    "TELEPHONE_NUMBER": "(724) 852-2273"
+  },
+  {
+    "PROVIDER": "Harrisburg \u2013 SeniorLIFE",
+    "CENTERS": "Harrisburg",
+    "CENTER_ADDRESS": "162 North Front St, Steelton, PA 17113",
+    "COUNTY": "Dauphin and York",
+    "TELEPHONE_NUMBER": "(717) 234-5433"
+  },
+  {
+    "PROVIDER": "York \u2013 SeniorLIFE",
+    "CENTERS": "York",
+    "CENTER_ADDRESS": "1500 Memory Lane Extension, York, PA 17402",
+    "COUNTY": "Dauphin and York",
+    "TELEPHONE_NUMBER": "(717) 757-5433"
+  }
+]

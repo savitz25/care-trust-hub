@@ -1,0 +1,267 @@
+{
+  "version": "senior-pa-state-intel-v1",
+  "ticket": "PA-SEN-001",
+  "publicationPath": "/pennsylvania",
+  "asOf": null,
+  "snapshotAsOf": "2026-09-16",
+  "retrievedAt": "2026-09-16T20:15:00Z",
+  "generatedAt": "2026-09-17T13:10:40Z",
+  "regulatorMap": {
+    "dhsDirectory": "https://www.humanservices.dhs.pa.gov/human_service_provider_directory/",
+    "pchMonthly": "https://www.pa.gov/agencies/dhs/resources/data-reports/personal-care-homes-monthly-report",
+    "bhslReports": "https://www.pa.gov/agencies/dhs/resources/for-providers/ltc-providers/personal-care-home-reports",
+    "ncfOwner": "https://apps.health.pa.gov/NCFFacilities/NCFOwnerLicensePull_202609.aspx",
+    "ncfLocator": "https://sais.health.pa.gov/commonpoc/content/publicweb/nhinformation2.asp",
+    "ncfReports": "https://www.pa.gov/agencies/health/facilities/nursing-homes/reports",
+    "dhhLicense": "https://apps.health.pa.gov/DHHLicense/DHHLicensePull_202609.aspx",
+    "life": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/life",
+    "adultDayLicensure": "https://www.pa.gov/services/aging/apply-for-adult-day-center-licensing",
+    "cmsCareCompare": "https://www.medicare.gov/care-compare/"
+  },
+  "clocks": {
+    "dhh_sourcePeriod": "2026-09",
+    "dhh_sourceAsOf": "2026-09",
+    "ncf_sourcePeriod": "2026-09",
+    "ncf_sourceAsOf": "2026-09",
+    "pch_monthly_sourcePeriod": "2026-08",
+    "pch_monthly_publication": "August 2026",
+    "pch_monthly_ne_realtime_inspection": true,
+    "life_revised": "2026-08",
+    "sanctions_period": "Q4 2025",
+    "retrievedAt": "2026-09-16T20:15:00Z",
+    "snapshotAsOf": "2026-09-16",
+    "generatedAt": "2026-09-17T13:10:40Z",
+    "retrievedAt_is_not_sourceAsOf": true
+  },
+  "pchRoster": {
+    "coverage": "OPEN_SEARCH_ONLY",
+    "PA_PCH_ROSTER_STATUS": "OPEN_SEARCH_ONLY",
+    "PA_PCH_ROWS": null,
+    "PA_PCH_DISTINCT_FACILITY_IDS": null,
+    "PA_PCH_CURRENT_LICENSE_ROWS": null,
+    "identityNamespace": "PA-DHS-PCH:{licenseNumber} when shown by official lookup",
+    "officialUrl": "https://www.humanservices.dhs.pa.gov/human_service_provider_directory/",
+    "note": "DHS Human Services Provider Directory is a live search. No bounded statewide PCH row extract was acquired. Search-only is not zero homes."
+  },
+  "alrRoster": {
+    "coverage": "OPEN_SEARCH_ONLY",
+    "PA_ALR_ROSTER_STATUS": "OPEN_SEARCH_ONLY",
+    "PA_ALR_ROWS": null,
+    "PA_ALR_DISTINCT_FACILITY_IDS": null,
+    "PA_ALR_CURRENT_LICENSE_ROWS": null,
+    "identityNamespace": "PA-DHS-ALR:{licenseNumber} when shown by official lookup",
+    "officialUrl": "https://www.humanservices.dhs.pa.gov/human_service_provider_directory/",
+    "pch_ne_alr": true
+  },
+  "pchMonthlyReport": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourcePeriod": "2026-08",
+    "PA_PCH_MONTHLY_REPORT_HOMES": 995,
+    "PA_PCH_MONTHLY_LICENSED_CAPACITY": 61906,
+    "PA_PCH_MONTHLY_RESIDENTS": 38898,
+    "ssiResidents": 3441,
+    "homesWithSsiResidents": 337,
+    "countyRows": 67,
+    "homes_ne_pch_plus_alr": true,
+    "capacity_ne_residents": true,
+    "residents_ne_homes": true,
+    "publication_date_ne_inspection_date": true,
+    "not_facility_identity_records": true,
+    "caveat": "Data is based on the most recent PCH inspection, which may have occurred within the prior year, and is not real-time."
+  },
+  "bhslAnnual": {
+    "coverage": "OPEN_SEARCH_ONLY",
+    "note": "BHSL annual reports remain official landing-page documents. Aggregate annual enforcement is not facility adverse attachment. Complaint count is not violation count."
+  },
+  "dhsInspections": {
+    "coverage": "OPEN_SEARCH_ONLY",
+    "note": "Inspection/LIS PDFs are posted per facility. No statewide bounded inspection-event table was acquired. Inspection is not a complaint. Citation is not a complaint. Plan of correction is not an admission."
+  },
+  "nursingHomes": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "source": "DOH Licensure and Ownership Information September 2026",
+    "PA_NURSING_HOME_ROWS": 659,
+    "PA_NURSING_HOME_DISTINCT_STATE_IDS": 659,
+    "PA_NURSING_HOME_DISTINCT_CCNS": 647,
+    "licenseTypes": {
+      "REGULAR": 654,
+      "PROVISIONAL I": 3,
+      "PROVISIONAL II": 2
+    },
+    "identityNamespace": "PA-DOH-NCF:{facilityId}",
+    "ccnField": "MEDICARE_ID_CCN",
+    "row_ne_cms_overlay": true,
+    "matching_659_home_health_is_not_a_bridge": true,
+    "sha256": "3637443cd7150ca0384107bbdff753ee672d15305960a83aabab4543cdb0057a"
+  },
+  "nursingHomeSanctions": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "source": "DOH Report of Recent Nursing Homes Sanctions Q4 2025 PDF",
+    "PA_NURSING_HOME_SANCTION_ROWS": 1539,
+    "PA_NURSING_HOME_UNIQUE_SANCTIONS": 1533,
+    "distinctFacilityIds": 509,
+    "issueDateMin": "01/02/2020",
+    "issueDateMax": "12/30/2024",
+    "sanction_ne_inspection": true,
+    "sanction_ne_complaint": true,
+    "sanction_ne_conviction": true,
+    "fine_ne_quality_score": true,
+    "ccn_in_source": false,
+    "name_only_join": "NAME_ONLY_UNSAFE"
+  },
+  "nursingHomeSurveys": {
+    "coverage": "OPEN_SEARCH_ONLY",
+    "PA_NURSING_HOME_SURVEY_ROWS": null,
+    "officialUrl": "https://sais.health.pa.gov/commonpoc/content/publicweb/nhinformation2.asp",
+    "survey_ne_sanction": true,
+    "deficiency_ne_complaint": true,
+    "poc_ne_admission": true
+  },
+  "nursingHomeHistorical": {
+    "coverage": "OPEN_SEARCH_ONLY",
+    "note": "DOH Nursing Home Reports 2024-2025 record-level CSVs remain official operating/statistical context, not the September 2026 license census."
+  },
+  "homeHealth": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourcePeriod": "2026-09",
+    "PA_HOME_HEALTH_ROWS": 659,
+    "PA_HOME_HEALTH_STATE_IDS": 659,
+    "PA_HOME_HEALTH_CCNS": 403,
+    "medicareCertifiedRows": 412,
+    "licensedOnlyRows": 247,
+    "home_health_ne_home_care": true,
+    "identityNamespace": "PA-DOH-DHH:{facilityId}"
+  },
+  "homeCare": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourcePeriod": "2026-09",
+    "PA_HOME_CARE_ROWS": 4656,
+    "PA_HOME_CARE_STATE_IDS": 4656,
+    "byType": {
+      "Home Care Agencies": 3431,
+      "Home Care Agency/Registry": 1177,
+      "Home Care Registry": 48
+    },
+    "medicareIdPopulatedNotCmsCcn": true,
+    "home_care_ne_home_health": true,
+    "identityNamespace": "PA-DOH-DHH:{facilityId}"
+  },
+  "hospice": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourcePeriod": "2026-09",
+    "PA_HOSPICE_ROWS": 178,
+    "PA_HOSPICE_STATE_IDS": 178,
+    "PA_HOSPICE_CCNS": 152,
+    "hospice_ne_home_health": true,
+    "identityNamespace": "PA-DOH-DHH:{facilityId}"
+  },
+  "adultDay": {
+    "coverage": "OPEN_SEARCH_ONLY",
+    "PA_ADULT_DAY_CENTER_ROWS": null,
+    "PA_ADULT_DAY_CENTER_DISTINCT_IDS": null,
+    "officialUrl": "https://www.pa.gov/services/aging/apply-for-adult-day-center-licensing",
+    "adult_day_ne_residential": true
+  },
+  "lifePace": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "revised": "2026-08",
+    "PA_LIFE_PROVIDER_ROWS": 24,
+    "PA_LIFE_CENTER_ROWS": 58,
+    "life_ne_residential_license": true,
+    "identityNamespace": "PA-LIFE:{provider}|{center}"
+  },
+  "cmsOverlay": {
+    "nursingHomes": 656,
+    "homeHealth": 415,
+    "hospice": 179,
+    "addedToNationalTotals": false,
+    "stateLicense_ne_cms": true
+  },
+  "crosswalk": {
+    "EXACT_PA_STATE_TO_CMS_BRIDGES": {
+      "nursing_home": 647,
+      "home_health_medicare": 403,
+      "hospice": 152,
+      "home_care": 0,
+      "pch": 0,
+      "alr": 0,
+      "adult_day": 0,
+      "life": 0
+    },
+    "EXACT_PA_STATE_TO_CMS_BRIDGES_TOTAL": 1202,
+    "matching_counts_are_not_a_bridge": true,
+    "home_care_medicare_id_is_not_cms_ccn": true,
+    "NAME_ONLY_UNSAFE": 0
+  },
+  "identity": {
+    "priority": [
+      "exact state facility/license identifier",
+      "exact CMS CCN",
+      "exact state-published state\u2194CMS bridge",
+      "exact inspection/sanction identifier",
+      "review_required",
+      "name-only unsafe"
+    ],
+    "NAME_ONLY_UNSAFE": 0,
+    "facility_ne_legal_entity": true
+  },
+  "expansion_ledger": {
+    "NET_NEW_STATE_RESEARCH_IDENTITIES": 6234,
+    "NET_NEW_CANONICAL_FACILITIES": 0,
+    "NET_NEW_PUBLIC_PROFILES": 0,
+    "EXISTING_FACILITIES_ENRICHED": 0,
+    "GRAPH_WRITES": 0,
+    "CLAIM_ELIGIBILITY_BROADENED": false,
+    "EXACT_PROFILE_ATTACHMENTS": 0
+  },
+  "adverse_publication": {
+    "ADVERSE_SOURCES_FOUND": [
+      "DOH Q4 2025 nursing-home sanctions PDF",
+      "DHS per-facility inspection/LIS PDFs",
+      "DOH SAIS nursing-home survey reports",
+      "BHSL annual aggregate enforcement"
+    ],
+    "ADVERSE_SOURCES_ACQUIRED": [
+      "DOH Q4 2025 nursing-home sanctions PDF"
+    ],
+    "ADVERSE_ROWS_ACQUIRED": 1539,
+    "UNIQUE_REGULATORY_MATTERS": 1533,
+    "EXACT_PROFILE_ATTACHMENTS": 0,
+    "REVIEW_REQUIRED": 0,
+    "UNRESOLVED": 0,
+    "INTERNAL_ONLY": 0,
+    "PUBLICATION_PENDING": 0,
+    "PUBLIC_READY_PROFILES": 0,
+    "PUBLICLY_RENDERED_PROFILES": 0,
+    "BUSINESS_RESPONSE_READY": 0,
+    "SEARCH_SUPPORTED": true,
+    "REMAINING_ADVERSE_GAPS": [
+      "DHS PCH/ALR inspection event table",
+      "statewide NH survey deficiency index",
+      "BHSL annual facility-level enforcement crosswalk"
+    ],
+    "WITHHELD_REASON_COUNTS": {
+      "NAME_ONLY_UNSAFE": 0,
+      "NO_EXACT_ID": 0,
+      "SEARCH_ONLY_SOURCE": 3
+    },
+    "do_not_sum_inspection_violation_sanction_complaint": true
+  },
+  "claimEligibilityBroadened": false,
+  "localWorkNeededNow": "NO",
+  "semanticGuardrails": [
+    "PCH != ALR != nursing home",
+    "Home Care != Home Health",
+    "Home Health != Hospice",
+    "Adult Day Center != residential facility",
+    "LIFE/PACE != facility license class",
+    "state Facility ID != CMS CCN unless source-published 39xxxxx",
+    "995 PCH monthly homes != PCH+ALR roster",
+    "sanction != inspection != complaint != conviction",
+    "NO TRUST SCORE",
+    "NO RANKING"
+  ],
+  "dhhSha256": "8e82ac72cb5f04480a78e94615ace81da9e0e7be00083165b9824b4bf4933e6f",
+  "ncfSha256": "3637443cd7150ca0384107bbdff753ee672d15305960a83aabab4543cdb0057a",
+  "fingerprint": "460c6865eb7c3fdb040c95768f42e8ef90009fe9f6f80571c3268d5944ae7fed"
+}

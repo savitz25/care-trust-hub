@@ -18,6 +18,7 @@ const tickets = {
   NY: "001",
   IL: "001",
   OR: "001",
+  PA: "001",
 };
 export function requireCount(value, field, nullable = false) {
   if (value === null && nullable) return null;
@@ -74,7 +75,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       aggregation: "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL",
     });
   }
-  for (const state of ["CO", "VA", "NY", "IL", "OR"]) {
+  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA"]) {
     const geo = base.geography.states.find((r) => r.state === state);
     assert.ok(geo, `Missing federal state partition ${state}`);
     for (const [field, setting] of [
@@ -252,6 +253,25 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "Home Health Agency (state license)",
   );
   add("OR", "ohaHospice.rows", "OHA Hospice license number", "Hospice (state license)");
+  add(
+    "PA",
+    "nursingHomes.PA_NURSING_HOME_ROWS",
+    "PA-DOH-NCF facility ID",
+    "Nursing home (state license)",
+  );
+  add(
+    "PA",
+    "homeHealth.PA_HOME_HEALTH_ROWS",
+    "PA-DOH-DHH Home Health facility ID",
+    "Home Health Agency (state license)",
+  );
+  add(
+    "PA",
+    "homeCare.PA_HOME_CARE_ROWS",
+    "PA-DOH-DHH Home Care facility ID",
+    "Home Care Agency (state license)",
+  );
+  add("PA", "hospice.PA_HOSPICE_ROWS", "PA-DOH-DHH Hospice facility ID", "Hospice (state license)");
   const evidenceInventory = buildSeniorHomepageEvidenceInventory({
     networkMetrics: base,
     floridaIdentities: florida.providers.current,
@@ -270,6 +290,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "il-idph-hha": "il.idphHomeHealth.rows",
     "il-slp": "il.supportiveLiving.operationalSites",
     "or-odhs-nf": "or.odhsProviders.OPEN_NF",
+    "pa-doh-nh": "pa.nursingHomes.PA_NURSING_HOME_ROWS",
   };
   for (const row of evidenceInventory) {
     requireCount(row.value, row.key);
@@ -335,6 +356,14 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       ["ODHS license-condition actions", "odhsRegulatoryActions"],
       ["OHA Home Health", "ohaHomeHealth"],
       ["OHA Hospice", "ohaHospice"],
+    ],
+    PA: [
+      ["DOH nursing homes", "nursingHomes"],
+      ["DOH Home Health", "homeHealth"],
+      ["DOH Home Care", "homeCare"],
+      ["DOH Hospice", "hospice"],
+      ["PCH monthly report", "pchMonthlyReport"],
+      ["LIFE/PACE", "lifePace"],
     ],
   };
   const stateCards = structuredClone(SENIOR_HOMEPAGE_STATE_CARDS);
