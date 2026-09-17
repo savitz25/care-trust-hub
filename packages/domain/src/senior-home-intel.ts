@@ -4,6 +4,7 @@ import {
   CO_ACCEPTED,
   IL_ACCEPTED,
   OR_ACCEPTED,
+  PA_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -28,6 +29,7 @@ import { VA_PUBLIC_PATH } from "./va-intelligence";
 import { NY_PUBLIC_PATH } from "./ny-intelligence";
 import { IL_PUBLIC_PATH } from "./il-intelligence";
 import { OR_PUBLIC_PATH } from "./or-intelligence";
+import { PA_PUBLIC_PATH } from "./pa-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -118,6 +120,7 @@ export interface HomeGeoRow {
     | "new_york_state_intelligence"
     | "illinois_state_intelligence"
     | "oregon_state_intelligence"
+    | "pennsylvania_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -889,6 +892,21 @@ export function buildSeniorHomeIntel(input: {
         "Public license-condition rows are not all Oregon regulatory actions.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Pennsylvania DHS / DOH (state enrichment)",
+      numerator: PA_ACCEPTED.nursingHomeRows,
+      denominator: null,
+      display: `${PA_ACCEPTED.nursingHomeRows.toLocaleString("en-US")} DOH nursing-home license rows; ${PA_ACCEPTED.homeHealthRows.toLocaleString("en-US")} DOH Home Health rows; ${PA_ACCEPTED.homeCareRows.toLocaleString("en-US")} DOH Home Care rows (not a combined total).`,
+      status: "partial",
+      method:
+        "Pennsylvania DOH license tables on /pennsylvania plus PCH monthly aggregates, LIFE/PACE centers, sanctions PDF extract, and CMS overlays. Current PCH/ALR facility rosters remain search-only.",
+      limitations: [
+        "Do not add PCH, ALR, nursing homes, Home Health, Home Care, Hospice, Adult Day, and LIFE into one senior-provider denominator.",
+        "Home Care is not Home Health. PCH is not ALR. DOH facility ID is not a CMS CCN unless the source publishes 39xxxxx.",
+        "The August 2026 PCH monthly report is not a current facility roster. Search-only is not zero.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -921,7 +939,9 @@ export function buildSeniorHomeIntel(input: {
                           ? "illinois_state_intelligence"
                           : row.state === "OR"
                             ? "oregon_state_intelligence"
-                            : "cms_directory_only",
+                            : row.state === "PA"
+                              ? "pennsylvania_state_intelligence"
+                              : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -945,7 +965,9 @@ export function buildSeniorHomeIntel(input: {
                           ? IL_PUBLIC_PATH
                           : row.state === "OR"
                             ? OR_PUBLIC_PATH
-                            : null,
+                            : row.state === "PA"
+                              ? PA_PUBLIC_PATH
+                              : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 

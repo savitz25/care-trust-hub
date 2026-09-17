@@ -178,4 +178,34 @@ describe("interpretSeniorAskQuery", () => {
     expect(q.providerClass).toBe("nursing_home");
     expect(q.metric).toBe("chow");
   });
+
+  it("keeps Pennsylvania PCH, home care, LIFE, and local cities fail-closed", () => {
+    const pch = interpretSeniorAskQuery("personal care homes Pennsylvania");
+    expect(pch.mode).toBe("fail_closed");
+    expect(pch.failReason).toMatch(/Personal Care Homes/i);
+    const homeCare = interpretSeniorAskQuery("home care agencies Pennsylvania");
+    expect(homeCare.mode).toBe("fail_closed");
+    expect(homeCare.failReason).toMatch(/Home Care/i);
+    const life = interpretSeniorAskQuery("LIFE program Pennsylvania");
+    expect(life.mode).toBe("fail_closed");
+    expect(life.failReason).toMatch(/LIFE\/PACE/i);
+    const phl = interpretSeniorAskQuery("senior care Philadelphia");
+    expect(phl.mode).toBe("fail_closed");
+    expect(phl.failReason).toMatch(/Philadelphia/i);
+    const pit = interpretSeniorAskQuery("assisted living Pittsburgh");
+    expect(pit.mode).toBe("fail_closed");
+    const sanc = interpretSeniorAskQuery("nursing home sanctions Pennsylvania");
+    expect(sanc.mode).toBe("fail_closed");
+    expect(sanc.failReason).toMatch(/sanction/i);
+  });
+
+  it("parses Pennsylvania nursing homes and a labeled CCN without inventing a local route", () => {
+    const q = interpretSeniorAskQuery("nursing homes in Pennsylvania");
+    expect(q.mode).toBe("entity");
+    expect(q.providerClass).toBe("nursing_home");
+    expect(q.geography?.value).toBe("PA");
+    const ccn = interpretSeniorAskQuery("Find CMS CCN 395199");
+    expect(ccn.mode).toBe("identifier");
+    expect(ccn.identifier).toEqual({ type: "ccn", value: "395199" });
+  });
 });

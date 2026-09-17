@@ -4,6 +4,7 @@ import {
   CO_ACCEPTED,
   IL_ACCEPTED,
   OR_ACCEPTED,
+  PA_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -16,6 +17,7 @@ import { VA_PUBLIC_FINGERPRINT, VA_PUBLIC_PATH } from "./va-intelligence";
 import { NY_PUBLIC_FINGERPRINT, NY_PUBLIC_PATH } from "./ny-intelligence";
 import { IL_PUBLIC_FINGERPRINT, IL_PUBLIC_PATH } from "./il-intelligence";
 import { OR_PUBLIC_FINGERPRINT, OR_PUBLIC_PATH } from "./or-intelligence";
+import { PA_PUBLIC_FINGERPRINT, PA_PUBLIC_PATH } from "./pa-intelligence";
 import { CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -64,7 +66,7 @@ export interface SeniorHomepageStateCard {
     snapshotAsOf: string | null;
     retrievedAt: string | null;
   }[];
-  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA" | "NY" | "IL" | "OR";
+  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA" | "NY" | "IL" | "OR" | "PA";
   name: string;
   href: string;
   regulators: string;
@@ -615,13 +617,28 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       OR_PUBLIC_PATH,
     ),
     m(
+      "pa-doh-nh",
+      "IDENTITY_LICENSURE",
+      "Pennsylvania DOH nursing-home license identities",
+      PA_ACCEPTED.nursingHomeRows,
+      "PA-DOH-NCF facility ID from September 2026 licensure/ownership table",
+      "Nursing home (state license)",
+      "Pennsylvania",
+      "DOH Licensure and Ownership Information",
+      PA_PUBLIC_FINGERPRINT,
+      PA_ACCEPTED.snapshotAsOf,
+      "DOH nursing-home license rows.",
+      "CMS Nursing Home CCNs; Home Health; Home Care; PCH monthly homes; a combined Pennsylvania facilities total.",
+      PA_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Published state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA",
       "SeniorTrustHub accepted state artifacts",
       "Accepted state publication artifacts",
       null,
@@ -706,6 +723,7 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "il-idph-hha",
     "il-slp",
     "or-odhs-nf",
+    "pa-doh-nh",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -838,5 +856,17 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "ODHS inspections, substantiated violations, and license-condition regulatory actions; public actions currently exclude revocation notices",
     sourceAsOf: OR_ACCEPTED.snapshotAsOf,
+  },
+  {
+    state: "PA",
+    name: "Pennsylvania",
+    href: PA_PUBLIC_PATH,
+    regulators: "DHS · DOH · Aging · CMS",
+    stateClasses: `${PA_ACCEPTED.nursingHomeRows} DOH nursing-home rows · ${PA_ACCEPTED.homeHealthRows} Home Health · ${PA_ACCEPTED.homeCareRows} Home Care`,
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${PA_ACCEPTED.nursingHomeRows} DOH NH · ${PA_ACCEPTED.cmsNursingHomes} CMS Nursing Homes · exact 39xxxxx bridges where source-published`,
+    regulatoryDepth:
+      "Q4 2025 sanctions PDF extract; PCH/ALR rosters and NH surveys remain search-only",
+    sourceAsOf: PA_ACCEPTED.snapshotAsOf,
   },
 ];

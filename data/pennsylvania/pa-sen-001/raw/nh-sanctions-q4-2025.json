@@ -1,0 +1,12 @@
+{
+  "pages": 29,
+  "SANCTION_ROWS": 1539,
+  "UNIQUE_SANCTIONS": 1533,
+  "DISTINCT_FACILITY_IDS": 509,
+  "issue_date_min": "01/02/2020",
+  "issue_date_max": "12/30/2024",
+  "identity": "PA-DOH-NCF:{facilityId} + sanction issue date",
+  "ccn_in_source": false,
+  "name_only_join": false,
+  "sha256": "5e0c1b496ff4d806f6e62e30c51277c4b640bde51ef4ee77de351d297506797f"
+}

@@ -1,0 +1,31 @@
+{
+  "ticket": "PA-SEN-001",
+  "retrievedAt": "2026-09-16T20:15:00Z",
+  "artifacts": [
+    {
+      "path": "data/pennsylvania/pa-sen-001/raw/dhh-license-202609.csv.gz",
+      "url": "https://apps.health.pa.gov/DHHLicense/DHHLicensePull_202609.aspx",
+      "sourcePeriod": "2026-09"
+    },
+    {
+      "path": "data/pennsylvania/pa-sen-001/raw/ncf-owner-202609.csv.gz",
+      "url": "https://apps.health.pa.gov/NCFFacilities/NCFOwnerLicensePull_202609.aspx",
+      "sourcePeriod": "2026-09"
+    },
+    {
+      "path": "data/pennsylvania/pa-sen-001/raw/pch-monthly-august-2026.json",
+      "url": "https://www.pa.gov/agencies/dhs/resources/data-reports/personal-care-homes-monthly-report",
+      "sourcePeriod": "2026-08"
+    },
+    {
+      "path": "data/pennsylvania/pa-sen-001/raw/life-providers-august-2026.json",
+      "url": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/life",
+      "sourcePeriod": "2026-08"
+    },
+    {
+      "path": "data/pennsylvania/pa-sen-001/raw/nh-sanctions-q4-2025.pdf",
+      "url": "https://www.pa.gov/agencies/health/facilities/nursing-homes/reports",
+      "sourcePeriod": "Q4 2025"
+    }
+  ]
+}
