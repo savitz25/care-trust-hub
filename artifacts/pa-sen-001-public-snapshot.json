@@ -221,9 +221,7 @@
       "DOH SAIS nursing-home survey reports",
       "BHSL annual aggregate enforcement"
     ],
-    "ADVERSE_SOURCES_ACQUIRED": [
-      "DOH Q4 2025 nursing-home sanctions PDF"
-    ],
+    "ADVERSE_SOURCES_ACQUIRED": ["DOH Q4 2025 nursing-home sanctions PDF"],
     "ADVERSE_ROWS_ACQUIRED": 1539,
     "UNIQUE_REGULATORY_MATTERS": 1533,
     "EXACT_PROFILE_ATTACHMENTS": 0,
