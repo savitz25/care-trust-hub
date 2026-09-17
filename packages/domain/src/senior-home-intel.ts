@@ -5,6 +5,7 @@ import {
   IL_ACCEPTED,
   OR_ACCEPTED,
   PA_ACCEPTED,
+  NC_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -30,6 +31,7 @@ import { NY_PUBLIC_PATH } from "./ny-intelligence";
 import { IL_PUBLIC_PATH } from "./il-intelligence";
 import { OR_PUBLIC_PATH } from "./or-intelligence";
 import { PA_PUBLIC_PATH } from "./pa-intelligence";
+import { NC_PUBLIC_PATH } from "./nc-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -121,6 +123,7 @@ export interface HomeGeoRow {
     | "illinois_state_intelligence"
     | "oregon_state_intelligence"
     | "pennsylvania_state_intelligence"
+    | "north_carolina_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -907,6 +910,21 @@ export function buildSeniorHomeIntel(input: {
         "The August 2026 PCH monthly report is not a current facility roster. Search-only is not zero.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "North Carolina DHSR (state enrichment)",
+      numerator: NC_ACCEPTED.adultCareHomes,
+      denominator: null,
+      display: `${NC_ACCEPTED.adultCareHomes.toLocaleString("en-US")} DHSR Adult Care Homes; ${NC_ACCEPTED.familyCareHomes.toLocaleString("en-US")} Family Care Homes; ${NC_ACCEPTED.nursingHomeRows.toLocaleString("en-US")} Nursing Homes (not a combined total).`,
+      status: "partial",
+      method:
+        "North Carolina DHSR Adult Care, Family Care, Nursing Home, Home Health, Hospice, mixed Home Care, Nursing Pool, Adult Day, PACE, CCRC, and CMS overlays on /north-carolina. NC DHSR Star Rating is official evidence, not a TrustHub score.",
+      limitations: [
+        "Do not add ACH, FCH, nursing homes, Home Care, Home Health, Hospice, Adult Day, PACE, and CCRC into one senior-provider denominator.",
+        "ACH is not FCH. Home Care All mixed file is not a Home Care agency count. State license is not a CMS CCN.",
+        "NC DHSR Star Rating is not a TrustHub rating. Missing/N/A is not zero.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -941,7 +959,9 @@ export function buildSeniorHomeIntel(input: {
                             ? "oregon_state_intelligence"
                             : row.state === "PA"
                               ? "pennsylvania_state_intelligence"
-                              : "cms_directory_only",
+                              : row.state === "NC"
+                                ? "north_carolina_state_intelligence"
+                                : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -967,7 +987,9 @@ export function buildSeniorHomeIntel(input: {
                             ? OR_PUBLIC_PATH
                             : row.state === "PA"
                               ? PA_PUBLIC_PATH
-                              : null,
+                              : row.state === "NC"
+                                ? NC_PUBLIC_PATH
+                                : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 
