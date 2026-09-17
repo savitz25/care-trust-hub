@@ -5,6 +5,7 @@ import {
   IL_ACCEPTED,
   OR_ACCEPTED,
   PA_ACCEPTED,
+  NC_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -18,6 +19,7 @@ import { NY_PUBLIC_FINGERPRINT, NY_PUBLIC_PATH } from "./ny-intelligence";
 import { IL_PUBLIC_FINGERPRINT, IL_PUBLIC_PATH } from "./il-intelligence";
 import { OR_PUBLIC_FINGERPRINT, OR_PUBLIC_PATH } from "./or-intelligence";
 import { PA_PUBLIC_FINGERPRINT, PA_PUBLIC_PATH } from "./pa-intelligence";
+import { NC_PUBLIC_FINGERPRINT, NC_PUBLIC_PATH } from "./nc-intelligence";
 import { CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -66,7 +68,7 @@ export interface SeniorHomepageStateCard {
     snapshotAsOf: string | null;
     retrievedAt: string | null;
   }[];
-  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA" | "NY" | "IL" | "OR" | "PA";
+  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA" | "NY" | "IL" | "OR" | "PA" | "NC";
   name: string;
   href: string;
   regulators: string;
@@ -632,13 +634,28 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       PA_PUBLIC_PATH,
     ),
     m(
+      "nc-dhsr-ach",
+      "IDENTITY_LICENSURE",
+      "North Carolina DHSR Adult Care Home license identities",
+      NC_ACCEPTED.adultCareHomes,
+      "NC-DHSR-ACH HAL license from 2026-07-30 Adult Care Home listing",
+      "Adult Care Home (state license)",
+      "North Carolina",
+      "DHSR Licensed Facilities Adult Care Home Listing",
+      NC_PUBLIC_FINGERPRINT,
+      NC_ACCEPTED.snapshotAsOf,
+      "DHSR Adult Care Home license rows.",
+      "Family Care Homes; Nursing Homes; CMS Nursing Home CCNs; a combined North Carolina facilities total.",
+      NC_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Published state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC",
       "SeniorTrustHub accepted state artifacts",
       "Accepted state publication artifacts",
       null,
@@ -724,6 +741,7 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "il-slp",
     "or-odhs-nf",
     "pa-doh-nh",
+    "nc-dhsr-ach",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -868,5 +886,17 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "Q4 2025 sanctions PDF extract; PCH/ALR rosters and NH surveys remain search-only",
     sourceAsOf: PA_ACCEPTED.snapshotAsOf,
+  },
+  {
+    state: "NC",
+    name: "North Carolina",
+    href: NC_PUBLIC_PATH,
+    regulators: "DHSR · DAAS · NCDOI · CMS",
+    stateClasses: `${NC_ACCEPTED.adultCareHomes} Adult Care Homes · ${NC_ACCEPTED.familyCareHomes} Family Care Homes · ${NC_ACCEPTED.nursingHomeRows} Nursing Homes`,
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${NC_ACCEPTED.adultCareHomes} ACH · ${NC_ACCEPTED.familyCareHomes} FCH · ${NC_ACCEPTED.nursingHomeRows} DHSR NH · ${NC_ACCEPTED.cmsNursingHomes} CMS Nursing Homes · identities remain separate`,
+    regulatoryDepth:
+      "NC DHSR Star Rating listing evidence and 36-month penalties; inspection SOD history remains search-only",
+    sourceAsOf: NC_ACCEPTED.snapshotAsOf,
   },
 ];

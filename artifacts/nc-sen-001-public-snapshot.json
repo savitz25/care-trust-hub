@@ -1,0 +1,358 @@
+{
+  "version": "senior-nc-state-intel-v1",
+  "ticket": "NC-SEN-001",
+  "publicationPath": "/north-carolina",
+  "asOf": null,
+  "snapshotAsOf": "2026-09-17",
+  "retrievedAt": "2026-09-17T19:39:21Z",
+  "generatedAt": "2026-09-17T19:50:25Z",
+  "regulatorMap": {
+    "dhsrListings": "https://info.ncdhhs.gov/dhsr/reports.htm",
+    "aclsListings": "https://info.ncdhhs.gov/dhsr/acls/faclistings.html",
+    "starSearch": "https://info.ncdhhs.gov/dhsr/acls/star/search.asp",
+    "starScale": "https://info.ncdhhs.gov/dhsr/acls/star/scale.html",
+    "penalties": "https://info.ncdhhs.gov/dhsr/acls/adultcarepenalties.asp",
+    "nhlcsSearch": "https://info.ncdhhs.gov/dhsr/facilities/search.asp",
+    "adultDayDirectory": "https://www.ncdhhs.gov/4-17-26-adc-provider-list/download?attachment",
+    "pace": "https://medicaid.ncdhhs.gov/providers/programs-and-services/long-term-care/program-all-inclusive-care-elderly-pace",
+    "ccrc": "https://www.ncdoi.gov/licensees/continuing-care-retirement-communities-ccrc/licensed-ccrcs",
+    "ccah": "https://www.ncdoi.gov/licensees/continuing-care-retirement-communities-ccrc/continuing-care-home",
+    "cmsCareCompare": "https://www.medicare.gov/care-compare/"
+  },
+  "clocks": {
+    "ach_list_update_date": "2026-07-30",
+    "fch_list_update_date": "2026-07-30",
+    "home_care_update_date": "2026-08-20",
+    "home_health_update_date": "2026-08-20",
+    "hospice_update_date": "2026-08-20",
+    "nursing_home_update_date": "2026-09-09",
+    "nursing_pool_update_date": "2026-08-20",
+    "star_listing_as_of": "2026-07-30",
+    "star_issue_date": null,
+    "penalty_source": "previous 36 months listing",
+    "adult_day_directory_date": "2026-04-21",
+    "pace_page_date": "2026-02-18",
+    "pace_retrievedAt": "2026-09-17T19:39:21Z",
+    "ccrc_source_retrievedAt": "2026-09-17T19:39:21Z",
+    "cms_sourceAsOf": "2026-08-27",
+    "retrievedAt": "2026-09-17T19:39:21Z",
+    "snapshotAsOf": "2026-09-17",
+    "generatedAt": "2026-09-17T19:50:25Z",
+    "retrievedAt_is_not_sourceAsOf": true
+  },
+  "adultCareHomes": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourceUpdated": "2026-07-30",
+    "sourceAsOf": "2026-07-30",
+    "NC_ADULT_CARE_HOME_ROWS": 568,
+    "NC_ADULT_CARE_HOME_DISTINCT_LICENSE_IDS": 568,
+    "NC_ADULT_CARE_HOME_CURRENT_ROWS": 568,
+    "officialFooter": 568,
+    "identityNamespace": "NC-DHSR-ACH:{HAL license}",
+    "ach_ne_fch": true,
+    "ach_ne_nursing_home": true,
+    "sha256": "f4a620ae66ea156773082574c094bdb478915496f3af667791e679d596041453"
+  },
+  "familyCareHomes": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourceUpdated": "2026-07-30",
+    "sourceAsOf": "2026-07-30",
+    "NC_FAMILY_CARE_HOME_ROWS": 515,
+    "NC_FAMILY_CARE_HOME_DISTINCT_LICENSE_IDS": 515,
+    "NC_FAMILY_CARE_HOME_CURRENT_ROWS": 515,
+    "officialFooter": 515,
+    "identityNamespace": "NC-DHSR-FCH:{FCL license}",
+    "fch_ne_ach": true,
+    "fch_ne_nursing_home": true,
+    "sha256": "84744687a140b1aae7ce1dc4c7c8a762a92734567c6f26f207295ae65189b81a"
+  },
+  "multiUnitHousing": {
+    "coverage": "OPEN_SEARCH_ONLY",
+    "NC_MULTI_UNIT_HOUSING_ROWS": null,
+    "note": "ACLS registers Multi-Unit Assisted Housing with Services. No bounded statewide structured registry was acquired. Registration is not a licensed Adult Care Home.",
+    "registration_ne_licensed_ach": true
+  },
+  "overnightRespite": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "NC_OVERNIGHT_RESPITE_ROWS": 1,
+    "identityNamespace": "NC-DHSR-ORL:{ORL license}",
+    "sampleLicense": "ORL-092-001",
+    "not_ach_or_fch": true
+  },
+  "specialCareUnits": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "NC_SPECIAL_CARE_UNIT_ROWS": 0,
+    "subset_of_adult_care_not_a_new_class": true
+  },
+  "starRatings": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "label": "NC DHSR Star Rating",
+    "not_trusthub_score": true,
+    "not_ranking": true,
+    "no_aggregate_rating": true,
+    "no_statewide_average": true,
+    "listingSourceUpdated": "2026-07-30",
+    "sourceAsOf": "2026-07-30",
+    "NC_STAR_LISTING_ROWS": 1083,
+    "NC_LATEST_STAR_OBSERVATIONS": 1057,
+    "ACH_NUMERIC_STAR_OBSERVATIONS": 557,
+    "FCH_NUMERIC_STAR_OBSERVATIONS": 500,
+    "ACH_STAR_NA_OR_BLANK": 11,
+    "FCH_STAR_NA_OR_BLANK": 15,
+    "missing_ne_zero": true,
+    "issue_date_in_listing": false,
+    "historyCoverage": "OPEN_SEARCH_ONLY",
+    "NC_STAR_HISTORY_ROWS": null,
+    "FACILITIES_WITH_STAR_HISTORY": null,
+    "fidIndex": {
+      "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+      "NC_STAR_FID_INDEX_ROWS": 1083,
+      "NC_STAR_DISTINCT_FIDS": 1083,
+      "NC_STAR_DISTINCT_LICENSES": 1083,
+      "EXACT_LICENSE_FID_ATTACHMENTS": 1083,
+      "retrievedAt": "2026-09-17T19:39:21Z",
+      "countiesWithResults": 98,
+      "identityNamespace": "NC-DHSR-FID:{fid}"
+    },
+    "officialSearch": "https://info.ncdhhs.gov/dhsr/acls/star/search.asp"
+  },
+  "adultCareInspections": {
+    "coverage": "OPEN_SEARCH_ONLY",
+    "NC_ADULT_CARE_INSPECTION_ROWS": null,
+    "note": "ACLS posts facility-level Statements of Deficiencies from November 1, 2014 on facility.asp?fid=. No statewide bounded inspection-event table was acquired. Inspection is not a complaint. SOD is not a penalty. Plan of correction is not an admission.",
+    "inspection_ne_complaint": true,
+    "inspection_ne_penalty": true
+  },
+  "adultCarePenalties": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "source": "DHSR ACLS penalties imposed previous 36 months",
+    "sourceAsOf": null,
+    "NC_ADULT_CARE_PENALTY_ROWS": 489,
+    "NC_ADULT_CARE_PENALTY_DISTINCT_EVENTS": 488,
+    "NC_ADULT_CARE_PENALTY_DISTINCT_LICENSES": 190,
+    "NC_ADULT_CARE_PENALTY_AMOUNT_TOTAL": 4634077.5,
+    "amount_ne_quality_score": true,
+    "penalty_ne_complaint": true,
+    "penalty_ne_conviction": true,
+    "penalty_ne_inspection": true,
+    "identityNamespace": "NC-DHSR-ACH/FCH:{license} + imposed date + rule"
+  },
+  "nursingHomes": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourceUpdated": "2026-09-09",
+    "sourceAsOf": "2026-09-09",
+    "NC_NURSING_HOME_ROWS": 423,
+    "NC_NURSING_HOME_DISTINCT_STATE_IDS": 423,
+    "NC_NURSING_HOME_DISTINCT_CCNS": 0,
+    "ccn_in_state_listing": false,
+    "officialFooter": 423,
+    "identityNamespace": "NC-DHSR-NH:{NH license}",
+    "row_ne_cms_overlay": true,
+    "state_license_ne_cms": true,
+    "sha256": "c1ca950920ee799eb89799d98e23b7b788f305224c26bb77c95626d44e8d41af"
+  },
+  "nursingHomeSodIndex": {
+    "coverage": "ACQUIRED_INDEX",
+    "NC_NURSING_HOME_SOD_INDEX_ROWS": 446,
+    "NC_NURSING_HOME_SOD_DISTINCT_FIDS": 446,
+    "index_ne_license_census": true,
+    "index_ne_complete_sod_universe": true,
+    "sod_content": "OPEN_SEARCH_ONLY",
+    "officialUrl": "https://info.ncdhhs.gov/dhsr/facilities/results.asp",
+    "surveys_from": "2011-03-01"
+  },
+  "nursingHomeComplaints": {
+    "coverage": "OPEN_SEARCH_ONLY",
+    "NC_NURSING_HOME_COMPLAINT_ROWS": null,
+    "note": "NHLCS receives about 3,000 nursing-home complaints per year as process context. No structured complaint-event universe was acquired. Complaint process is not a census. Missing is not zero."
+  },
+  "homeCareAllMixed": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourceUpdated": "2026-08-20",
+    "sourceAsOf": "2026-08-20",
+    "NC_HOME_CARE_ALL_MIXED_ROWS": 3336,
+    "not_home_care_agency_count": true,
+    "includes_home_health_listing": 192,
+    "includes_home_care_with_hospice_subset": 16,
+    "includes_home_health_with_hospice_subset": 17,
+    "includes_hospice_listing": 0,
+    "includes_nursing_pool_listing": 0,
+    "remainder_after_home_health_listing": 3144,
+    "remainder_is_not_pure_home_care": true,
+    "identityNamespace": "NC-DHSR-HC:{HC license} in mixed file",
+    "sha256": "79e13c9646ce21cc3c88854d70c26e30a7381f5f10ab64f6ac319a96f5fe7f1c"
+  },
+  "homeHealth": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourceUpdated": "2026-08-20",
+    "sourceAsOf": "2026-08-20",
+    "NC_HOME_HEALTH_ROWS": 192,
+    "NC_HOME_HEALTH_STATE_IDS": 192,
+    "NC_HOME_HEALTH_CCNS": 0,
+    "home_health_ne_home_care": true,
+    "identityNamespace": "NC-DHSR-HH:{HC license in Home Health listing}",
+    "sha256": "2f179b4f72300343817385d768d8ad2d91a48437e6ca11ab91224935a78a44dd"
+  },
+  "hospice": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourceUpdated": "2026-08-20",
+    "sourceAsOf": "2026-08-20",
+    "NC_HOSPICE_ROWS": 212,
+    "NC_HOSPICE_STATE_IDS": 212,
+    "NC_HOSPICE_CCNS": 0,
+    "hospice_ne_home_health": true,
+    "hospice_ne_home_care": true,
+    "identityNamespace": "NC-DHSR-HOS:{HOS license}",
+    "sha256": "adf878f1bd2932694bdbed9270042d7e2967bf3c2ca096f8a95755d9ceee6746"
+  },
+  "nursingPool": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourceUpdated": "2026-08-20",
+    "NC_NURSING_POOL_ROWS": 631,
+    "NC_NURSING_POOL_STATE_IDS": 631,
+    "nursing_pool_ne_home_care": true,
+    "identityNamespace": "NC-DHSR-NP:{NP license}",
+    "sha256": "950c128f60dc1207dabc828615516056c56ccabf4035e0e2d5291700287ac4f6"
+  },
+  "adultDay": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "directoryDate": "2026-04-21",
+    "sourceAsOf": "2026-04-21",
+    "NC_ADULT_DAY_CENTER_ROWS": 93,
+    "NC_ADULT_DAY_CERTIFIED_SLOTS": 5850,
+    "adult_day_ne_residential": true,
+    "do_not_double_count_combined_adc_adh": true,
+    "identityNamespace": "NC-DAAS-ADC:{center name+address in certified directory}",
+    "sha256": "8d5f6cb0c3411397f3ae5051a40263316dc2596018025d4e84ddf71d9fbc0906"
+  },
+  "pace": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourcePageDate": "2026-02-18",
+    "sourceAsOf": "2026-02-18",
+    "NC_PACE_ORGANIZATIONS": 11,
+    "NC_PACE_LOCATIONS": 14,
+    "NC_PACE_NPIS": 13,
+    "pace_org_ne_location": true,
+    "pace_ne_facility_license": true,
+    "identityNamespace": "NC-PACE:{NPI}",
+    "sha256": "05c44ba640ae91afe980ed4be8a6858c13018370464afb2fdc009c85fd47ffd4"
+  },
+  "ccrc": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "sourceAsOf": null,
+    "NC_CCRC_MAP_COMMUNITIES": 66,
+    "NC_CCRC_HANDBOOK_ID_ROWS": 68,
+    "identityNamespace": "NC-DOI-CCRC:{providerId}-{communityId}",
+    "ccrc_ne_dhsr_component": true,
+    "name_only_merge_to_dhsr": false,
+    "sha256": "6d9ea6308bef45216dc0b43fa9923076f0d7140b7a54ffea1acaaaa0f577a3e0"
+  },
+  "continuingCareAtHome": {
+    "coverage": "ACQUIRED_CURRENT_SNAPSHOT",
+    "NC_CCAH_ROWS": 10,
+    "ccah_ne_ccrc_count": true,
+    "identityNamespace": "NC-DOI-CCAH:{facility name in licensed CCaH table}"
+  },
+  "cmsOverlay": {
+    "nursingHomes": 419,
+    "homeHealth": 166,
+    "hospice": 76,
+    "addedToNationalTotals": false,
+    "stateLicense_ne_cms": true,
+    "sourceAsOf": "2026-08-27"
+  },
+  "crosswalk": {
+    "EXACT_NC_STATE_TO_CMS_BRIDGES": {
+      "nursing_home": 0,
+      "home_health": 0,
+      "hospice": 0,
+      "home_care": 0
+    },
+    "EXACT_NC_STATE_TO_CMS_BRIDGES_TOTAL": 0,
+    "EXACT_ACH_FCH_LICENSE_FID_BRIDGES": 1083,
+    "matching_counts_are_not_a_bridge": true,
+    "ccn_not_in_dhsr_listings": true,
+    "NAME_ONLY_UNSAFE": 0
+  },
+  "identity": {
+    "priority": [
+      "exact state facility/license identifier",
+      "exact DHSR FID",
+      "exact CMS CCN",
+      "exact state-published state\u2194CMS bridge",
+      "exact inspection/penalty/survey identifier",
+      "review_required",
+      "name-only unsafe"
+    ],
+    "NAME_ONLY_UNSAFE": 0,
+    "facility_ne_legal_entity": true
+  },
+  "expansion_ledger": {
+    "NET_NEW_STATE_RESEARCH_IDENTITIES": 2633,
+    "NET_NEW_CANONICAL_FACILITIES": 0,
+    "NET_NEW_PUBLIC_PROFILES": 0,
+    "EXISTING_FACILITIES_ENRICHED": 0,
+    "GRAPH_WRITES": 0,
+    "CLAIM_ELIGIBILITY_BROADENED": false,
+    "EXACT_PROFILE_ATTACHMENTS": 0
+  },
+  "adverse_publication": {
+    "ADVERSE_SOURCES_FOUND": [
+      "DHSR ACLS Star Rating search / facility.asp",
+      "DHSR ACLS penalties previous 36 months",
+      "DHSR ACLS facility SOD PDFs from Nov 2014",
+      "DHSR NHLCS SOD index from Mar 2011",
+      "County DSS Corrective Action Reports"
+    ],
+    "ADVERSE_SOURCES_ACQUIRED": [
+      "DHSR ACH/FCH listing Star Rating column 2026-07-30",
+      "DHSR ACLS county Star Rating/FID index",
+      "DHSR ACLS penalties previous 36 months HTML",
+      "DHSR NHLCS SOD facility index"
+    ],
+    "ADVERSE_ROWS_ACQUIRED": 2018,
+    "UNIQUE_REGULATORY_MATTERS": 488,
+    "EXACT_PROFILE_ATTACHMENTS": 0,
+    "REVIEW_REQUIRED": 0,
+    "UNRESOLVED": 0,
+    "INTERNAL_ONLY": 0,
+    "PUBLICATION_PENDING": 0,
+    "PUBLIC_READY_PROFILES": 0,
+    "PUBLICLY_RENDERED_PROFILES": 0,
+    "BUSINESS_RESPONSE_READY": 0,
+    "SEARCH_SUPPORTED": true,
+    "REMAINING_ADVERSE_GAPS": [
+      "facility-level Adult Care SOD PDF corpus",
+      "Star Rating issue-date history tables",
+      "nursing-home complaint-event universe",
+      "county CAR bulk table",
+      "nursing-home SOD document corpus"
+    ],
+    "WITHHELD_REASON_COUNTS": {
+      "NAME_ONLY_UNSAFE": 0,
+      "NO_EXACT_ID": 0,
+      "SEARCH_ONLY_SOURCE": 4
+    },
+    "do_not_sum_inspection_violation_sanction_complaint": true
+  },
+  "claimEligibilityBroadened": false,
+  "localWorkNeededNow": "NO",
+  "semanticGuardrails": [
+    "ACH != FCH != Nursing Home",
+    "Home Care != Home Health != Hospice",
+    "Adult Day != residential facility",
+    "PACE != facility license",
+    "CCRC != licensed DHSR component",
+    "state license != CMS",
+    "state Star Rating != TrustHub rating",
+    "inspection != complaint",
+    "penalty != conviction",
+    "missing != zero",
+    "Home Care All mixed file != Home Care agency count",
+    "Nursing Pool != Home Care",
+    "NO TRUST SCORE",
+    "NO RANKING",
+    "NO AggregateRating"
+  ],
+  "fingerprint": "a53e54853c351e287e8d91a7f131369d60a4e40a3f35a64d2e86899ed41d3181"
+}

@@ -19,6 +19,7 @@ const tickets = {
   IL: "001",
   OR: "001",
   PA: "001",
+  NC: "001",
 };
 export function requireCount(value, field, nullable = false) {
   if (value === null && nullable) return null;
@@ -75,7 +76,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       aggregation: "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL",
     });
   }
-  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA"]) {
+  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC"]) {
     const geo = base.geography.states.find((r) => r.state === state);
     assert.ok(geo, `Missing federal state partition ${state}`);
     for (const [field, setting] of [
@@ -272,6 +273,31 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "Home Care Agency (state license)",
   );
   add("PA", "hospice.PA_HOSPICE_ROWS", "PA-DOH-DHH Hospice facility ID", "Hospice (state license)");
+  add(
+    "NC",
+    "adultCareHomes.NC_ADULT_CARE_HOME_ROWS",
+    "NC-DHSR-ACH HAL license",
+    "Adult Care Home (state license)",
+  );
+  add(
+    "NC",
+    "familyCareHomes.NC_FAMILY_CARE_HOME_ROWS",
+    "NC-DHSR-FCH FCL license",
+    "Family Care Home (state license)",
+  );
+  add(
+    "NC",
+    "nursingHomes.NC_NURSING_HOME_ROWS",
+    "NC-DHSR-NH license",
+    "Nursing home (state license)",
+  );
+  add(
+    "NC",
+    "homeHealth.NC_HOME_HEALTH_ROWS",
+    "NC-DHSR-HH license in Home Health listing",
+    "Home Health Agency (state license)",
+  );
+  add("NC", "hospice.NC_HOSPICE_ROWS", "NC-DHSR-HOS license", "Hospice (state license)");
   const evidenceInventory = buildSeniorHomepageEvidenceInventory({
     networkMetrics: base,
     floridaIdentities: florida.providers.current,
@@ -291,6 +317,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "il-slp": "il.supportiveLiving.operationalSites",
     "or-odhs-nf": "or.odhsProviders.OPEN_NF",
     "pa-doh-nh": "pa.nursingHomes.PA_NURSING_HOME_ROWS",
+    "nc-dhsr-ach": "nc.adultCareHomes.NC_ADULT_CARE_HOME_ROWS",
   };
   for (const row of evidenceInventory) {
     requireCount(row.value, row.key);
@@ -364,6 +391,19 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       ["DOH Hospice", "hospice"],
       ["PCH monthly report", "pchMonthlyReport"],
       ["LIFE/PACE", "lifePace"],
+    ],
+    NC: [
+      ["DHSR Adult Care Homes", "adultCareHomes"],
+      ["DHSR Family Care Homes", "familyCareHomes"],
+      ["DHSR Nursing Homes", "nursingHomes"],
+      ["DHSR Home Health", "homeHealth"],
+      ["DHSR Hospice", "hospice"],
+      ["DHSR Home Care All mixed file", "homeCareAllMixed"],
+      ["NC DHSR Star Rating listing", "starRatings"],
+      ["Adult Care penalties", "adultCarePenalties"],
+      ["Adult Day directory", "adultDay"],
+      ["PACE", "pace"],
+      ["CCRC", "ccrc"],
     ],
   };
   const stateCards = structuredClone(SENIOR_HOMEPAGE_STATE_CARDS);
