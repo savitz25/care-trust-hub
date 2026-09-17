@@ -189,39 +189,7 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
               research sources, not a recommendation about appropriate care.
             </p>
           </details>
-          {result.classPreviews?.some((group) => group.entities.length > 0) ? (
-            <div className="senior-ask__class-previews">
-              {result.classPreviews.map((group) =>
-                group.entities.length > 0 ? (
-                  <section key={group.providerClass} aria-label={`${group.label} preview`}>
-                    <h3>{group.label}</h3>
-                    <ul>
-                      {group.entities.map((entity) => (
-                        <li key={`${entity.providerClass}-${entity.ccn}`}>
-                          <Link href={entity.href} data-specialist-event="profile_open">
-                            {entity.providerName}
-                          </Link>
-                          <p>{entity.location}</p>
-                          <p>{entity.whyMatched}</p>
-                        </li>
-                      ))}
-                    </ul>
-                    <p>
-                      <Link
-                        prefetch={false}
-                        href={seniorRequestHref(result.rawQuery, overrides, {
-                          class: group.providerClass,
-                          page: "1",
-                        })}
-                      >
-                        See all {group.label.toLowerCase()}
-                      </Link>
-                    </p>
-                  </section>
-                ) : null,
-              )}
-            </div>
-          ) : null}
+          <ClassPreviews result={result} overrides={overrides} />
         </section>
       ) : null}
       {result.query.clarification === "state_care" ? (
@@ -314,6 +282,16 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
               <a href={SENIOR_OFFICIAL_RECOVERY.url}>Open official CMS Care Compare</a>. Choose the
               relevant provider class and use the CCN to confirm the identity. Official destination
               checked {SENIOR_OFFICIAL_RECOVERY.checkedAt}; this is not a live provider check.
+            </p>
+          ) : result.query.identityQuery ? (
+            <p>
+              CMS directories index each facility individually under its own registered name, not a
+              parent brand or company. Enter one facility&apos;s exact published name, a labeled CMS
+              CCN, or{" "}
+              <Link href="/ask?q=Show+nursing+homes+in+Florida.">
+                search by care setting and location instead
+              </Link>
+              . No unrelated provider was substituted.
             </p>
           ) : (
             <p>
@@ -564,6 +542,55 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
           <li key={line}>{line}</li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+// TH-DISCOVERY-PARITY-001B: shared by both the CMS-trio class-choice screen and the unsupported
+// (state-regulated) class screen so a requested class that Ask cannot serve never has to be a dead
+// end when real, geography-scoped CMS Nursing Home/Home Health/Hospice data exists instead.
+function ClassPreviews({
+  result,
+  overrides,
+  heading,
+}: {
+  result: SeniorAskResult;
+  overrides: Record<string, string>;
+  heading?: string;
+}) {
+  if (!result.classPreviews?.some((group) => group.entities.length > 0)) return null;
+  return (
+    <div className="senior-ask__class-previews">
+      {heading ? <h3>{heading}</h3> : null}
+      {result.classPreviews.map((group) =>
+        group.entities.length > 0 ? (
+          <section key={group.providerClass} aria-label={`${group.label} preview`}>
+            <h3>{group.label}</h3>
+            <ul>
+              {group.entities.map((entity) => (
+                <li key={`${entity.providerClass}-${entity.ccn}`}>
+                  <Link href={entity.href} data-specialist-event="profile_open">
+                    {entity.providerName}
+                  </Link>
+                  <p>{entity.location}</p>
+                  <p>{entity.whyMatched}</p>
+                </li>
+              ))}
+            </ul>
+            <p>
+              <Link
+                prefetch={false}
+                href={seniorRequestHref(result.rawQuery, overrides, {
+                  class: group.providerClass,
+                  page: "1",
+                })}
+              >
+                See all {group.label.toLowerCase()}
+              </Link>
+            </p>
+          </section>
+        ) : null,
+      )}
     </div>
   );
 }
