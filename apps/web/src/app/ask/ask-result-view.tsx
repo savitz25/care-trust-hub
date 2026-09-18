@@ -194,7 +194,10 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
               unsupportedSeniorClassLabel() in senior-ask-parse.ts) gets an explicit "broader, not
               the requested class" heading and disclaimer. A genuine CMS-trio ambiguity ("senior care
               Florida", terminalState "NEEDS_CLARIFICATION") is not relabeled -- there, Nursing
-              Home/Home Health/Hospice previews ARE literally the requested options, not a fallback. */}
+              Home/Home Health/Hospice previews ARE literally the requested options, not a fallback.
+              TH-DISCOVERY-FINAL-REPAIR-B: when the place itself never resolved (classPreviewsScoped
+              === false), classPreviewNote() swaps in an honest "not <place>-specific, nationwide
+              sample" disclosure instead of implying these rows match the unresolved place. */}
           <ClassPreviews
             result={result}
             overrides={overrides}
@@ -205,7 +208,7 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
             }
             note={
               result.query.terminalState === "UNSUPPORTED"
-                ? "These are broader CMS-covered nursing home, home health, and hospice providers in the same recorded location -- not confirmed matches for the requested care setting."
+                ? classPreviewNote(result, "matches for the requested care setting")
                 : undefined
             }
           />
@@ -232,14 +235,19 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
           {/* TH-DISCOVERY-PARITY-001B-REVIEW: assisted living / memory care previously stopped here
               with only the state-specific link and never a provider card, even with a real, safely
               resolved city/county/state (e.g. "memory care facility around Tacoma"). classPreviews()
-              itself refuses to run a scoped query against an ambiguous/unresolved location (see
-              isCallerSafeGeography in senior-ask-execute.ts), so this can only ever add real,
-              same-location CMS previews -- never a cross-state guess. */}
+              itself refuses to run a geography-SCOPED query against an ambiguous/unresolved location
+              (see isCallerSafeGeography in senior-ask-execute.ts), so a scoped preview here can only
+              ever be for a location already proven safe.
+              TH-DISCOVERY-FINAL-REPAIR-B: when the city/county genuinely never resolved (e.g. bare
+              "Tacoma" with no state), this now shows a clearly-labeled NATIONWIDE sample instead of
+              nothing -- classPreviewNote() discloses that honestly instead of implying a local
+              match. The state refinement control above still asks for the state explicitly; nothing
+              here guesses one. */}
           <ClassPreviews
             result={result}
             overrides={overrides}
             heading="Broader senior care options"
-            note="These are broader CMS-covered nursing home, home health, and hospice providers in the same recorded location -- not confirmed assisted-living or memory-care facilities."
+            note={classPreviewNote(result, "assisted-living or memory-care facilities")}
           />
         </section>
       ) : null}
@@ -575,6 +583,30 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
       </ul>
     </div>
   );
+}
+
+// TH-DISCOVERY-FINAL-REPAIR-B: the place text used in the unscoped-preview disclosure below. Mirrors
+// the place-describing logic already used server-side in senior-ask-parse.ts's fail-closed messages,
+// but only needs a short label here (the full failReason sentence is already shown separately).
+function describeUnresolvedPlace(result: SeniorAskResult): string {
+  const geo = result.query.geography;
+  if (!geo) return "the requested location";
+  return geo.type === "county" ? `${geo.value} County` : geo.value;
+}
+
+// TH-DISCOVERY-FINAL-REPAIR-B: "memory care facility around Tacoma" (and any other unsupported-class
+// request over a city/county that never resolved to one state) now gets a real, non-empty
+// classPreviews instead of a dead end -- but ONLY as a genuinely nationwide/unscoped sample
+// (classPreviewsScoped === false; see classPreviews()/runClassPreviewGroups() in
+// senior-ask-execute.ts). That must never be presented as if it matched the unresolved place, so this
+// swaps in an explicit "not <place>-specific" disclosure instead of the ordinary "same recorded
+// location" note used once geography is safely resolved.
+function classPreviewNote(result: SeniorAskResult, requestedLabel: string): string {
+  if (result.classPreviewsScoped === false) {
+    const place = describeUnresolvedPlace(result);
+    return `Not ${place}-specific: ${place} did not resolve to one state, so these are broader CMS-covered nursing home, home health, and hospice providers from across the country -- not confirmed ${requestedLabel}, and not scoped to ${place}.`;
+  }
+  return `These are broader CMS-covered nursing home, home health, and hospice providers in the same recorded location -- not confirmed ${requestedLabel}.`;
 }
 
 // TH-DISCOVERY-PARITY-001B: shared by both the CMS-trio class-choice screen and the unsupported

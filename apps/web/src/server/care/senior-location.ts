@@ -111,6 +111,41 @@ function trailingPlaceSpan(q: string): string | undefined {
     .join(" ");
 }
 
+/**
+ * TH-DISCOVERY-FINAL-REPAIR-B: a live-audit DANGEROUS finding -- "senior care Springfield" (no
+ * preposition, no state token, no "County" keyword) parses to NO geography at all via
+ * trailingPlaceSpan()'s deliberate refusal above, so the executor silently ran an UNFILTERED
+ * NATIONAL query with zero disclosure that "Springfield" was ever typed -- the same
+ * unrelated-state/city-results-with-no-caveat hazard the Newark/Sacramento fixes blocked, reached
+ * through a gap trailingPlaceSpan() leaves open by design (it requires a state code or "County" to
+ * avoid misreading ordinary prose as a place). This is a SEPARATE, narrower detector callers use only
+ * as a last resort after parseRecordedLocation() already found nothing: it recognizes a bare trailing
+ * span as a plausible place NAME (not a full geography resolution -- it never assigns a state) using
+ * Titlecase-only matching, the same "this was actually typed as a proper noun, not ordinary lowercase
+ * prose" signal already used above for uppercase-only state codes. Requiring every character after
+ * the first to be lowercase (not just capitalized) deliberately excludes short ALL-CAPS tokens that
+ * are not place names (CCN, CHOW, PACE, VA...) while still matching real place names (Springfield,
+ * Denver, Sacramento...). Callers must gate this on already having detected a genuine CMS/senior-care
+ * class or unsupported-class signal in the query so it never reinterprets a plain provider-name/brand
+ * search (e.g. "Brookdale Senior Living", which carries no such signal) as a location query.
+ */
+export function detectUnrecognizedBarePlace(raw: string): string | undefined {
+  const q = raw
+    .replace(/"[^"]*"/g, "")
+    .replace(/[?!.]+\s*$/, "")
+    .trim();
+  const bare = (value: string) => value.replace(/^[(",]+|[).,;:"']+$/g, "");
+  const tokens = q.split(/\s+/).filter(Boolean);
+  const place: string[] = [];
+  for (let i = tokens.length - 1; i >= 0 && place.length < 3; i -= 1) {
+    const token = bare(tokens[i]!);
+    if (!/^[A-Z][\p{Ll}'.-]+$/u.test(token)) break;
+    if (PLACE_STOPWORDS.has(token.toLowerCase())) break;
+    place.unshift(token);
+  }
+  return place.length ? place.join(" ") : undefined;
+}
+
 /** State codes are recognized as tokens in a location span, not ordinary words in prose. */
 export function resolveState(value: string): string | undefined {
   const text = normalize(value);

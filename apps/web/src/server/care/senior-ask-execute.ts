@@ -105,6 +105,11 @@ export type SeniorAskResult = {
     label: string;
     entities: SeniorAskEntity[];
   }>;
+  // TH-DISCOVERY-FINAL-REPAIR-B: true when classPreviews is scoped to the resolved/requested
+  // geography (or geography-less by request); false when geography could not be resolved and these
+  // are a genuinely nationwide/unscoped sample shown instead of a dead end -- the UI must disclose
+  // this honestly (never imply the rows match the requested place). Undefined when no previews ran.
+  classPreviewsScoped?: boolean;
 };
 
 const CLASS_PREVIEW_LIMIT = 5;
@@ -191,24 +196,32 @@ async function resolveCountyGeography(query: SeniorResearchQuery): Promise<Senio
 // leakage: "provider_class"/"state_care" clarification surviving resolveCountyGeography's fail-
 // closed path while still carrying the stateless county). This is checked here, inside the shared
 // preview builder itself, rather than only at each call site, so no future caller of classPreviews()
-// can reintroduce the leak by forgetting to pre-check the geography. Fails closed to empty previews
-// (never a national guess dressed up as a local one) -- the caller's existing fail-closed message
-// already asks the user to add the state; it is not replaced with a silent nationwide result.
+// can reintroduce the leak by forgetting to pre-check the geography.
 function isCallerSafeGeography(geo: SeniorResearchQuery["geography"]): boolean {
   if (!geo) return true; // no location claimed at all is not an unresolved one -- nothing to leak
   if (geo.type === "county" || geo.type === "city") return Boolean(geo.state);
   return true; // "state" and "zip" geography are unambiguous once present
 }
-async function classPreviews(
+
+// TH-DISCOVERY-FINAL-REPAIR-B: "provider_class" (a genuinely unsupported, non-CMS class such as
+// retirement community/adult day care/in-home caregiver) and "state_care" (assisted living/memory
+// care) both mean the requested SETTING itself has no CMS data -- the broader Nursing
+// Home/Home Health/Hospice previews shown instead are never a match for what was asked regardless of
+// geography. A genuine CMS-trio ambiguity ("senior care Florida", clarification "provider_class" but
+// terminalState "NEEDS_CLARIFICATION") is different: there, Nursing/Home Health/Hospice ARE the
+// literal requested options, so an ambiguous/unresolved geography must keep failing closed to an
+// empty preview rather than silently substituting an unscoped national one under the guise of "one of
+// the three classes you asked for."
+function isUnsupportedClassClarification(query: SeniorResearchQuery): boolean {
+  return (
+    query.clarification === "state_care" ||
+    (query.clarification === "provider_class" && query.terminalState === "UNSUPPORTED")
+  );
+}
+
+async function runClassPreviewGroups(
   query: SeniorResearchQuery,
-): Promise<SeniorAskResult["classPreviews"]> {
-  if (!isCallerSafeGeography(query.geography)) {
-    return [
-      { providerClass: "nursing_home", label: CLASS_LABEL.nursing_home, entities: [] },
-      { providerClass: "home_health", label: CLASS_LABEL.home_health, entities: [] },
-      { providerClass: "hospice", label: CLASS_LABEL.hospice, entities: [] },
-    ];
-  }
+): Promise<NonNullable<SeniorAskResult["classPreviews"]>> {
   const base: SeniorResearchQuery = {
     ...query,
     page: 1,
@@ -277,6 +290,44 @@ async function classPreviews(
     { providerClass: "home_health", label: CLASS_LABEL.home_health, entities: homeHealth },
     { providerClass: "hospice", label: CLASS_LABEL.hospice, entities: hospice },
   ];
+}
+
+const EMPTY_CLASS_PREVIEW_GROUPS: NonNullable<SeniorAskResult["classPreviews"]> = [
+  { providerClass: "nursing_home", label: CLASS_LABEL.nursing_home, entities: [] },
+  { providerClass: "home_health", label: CLASS_LABEL.home_health, entities: [] },
+  { providerClass: "hospice", label: CLASS_LABEL.hospice, entities: [] },
+];
+
+/**
+ * TH-DISCOVERY-FINAL-REPAIR-B: "memory care facility around Tacoma" (and every other
+ * unsupported-class request over a bare, never-resolved city/county) used to safely refuse to guess
+ * a state and then ALSO show zero broader-CMS previews -- correct on safety, but a Results-First dead
+ * end, because isCallerSafeGeography() (see above) made classPreviews() fail closed to three empty
+ * groups whenever the geography could not be proven unambiguous.
+ *
+ * The fix is NOT to guess which state "Tacoma" means -- query.geography (and its state-picker in the
+ * UI) is untouched and still asks for the state explicitly. Instead, ONLY when the caller is asking
+ * about a genuinely unsupported/non-CMS setting (isUnsupportedClassClarification() above -- so these
+ * previews were never going to match the requested class regardless of geography), this runs the
+ * SAME preview search with geography stripped entirely, i.e. a genuinely nationwide/unscoped sample --
+ * never a single guessed candidate state dressed up as local. The `scoped: false` flag this returns
+ * tells the caller (and, via classPreviewsScoped on SeniorAskResult, the rendered page) that these
+ * rows are NOT specific to the requested place, so the UI can and must disclose that honestly instead
+ * of implying a Tacoma-area (or similar) match. A genuine CMS-trio ambiguity over the same unresolved
+ * geography still fails closed to the original empty groups -- there, Nursing/Home Health/Hospice
+ * previews would BE the literal requested answer, so an unscoped national substitute would misrepresent
+ * geography the user explicitly asked to narrow.
+ */
+async function classPreviews(
+  query: SeniorResearchQuery,
+): Promise<{ groups: NonNullable<SeniorAskResult["classPreviews"]>; scoped: boolean }> {
+  if (isCallerSafeGeography(query.geography)) {
+    return { scoped: true, groups: await runClassPreviewGroups(query) };
+  }
+  if (!isUnsupportedClassClarification(query)) {
+    return { scoped: true, groups: EMPTY_CLASS_PREVIEW_GROUPS };
+  }
+  return { scoped: false, groups: await runClassPreviewGroups({ ...query, geography: undefined }) };
 }
 
 async function getNursingHomeSourceClock(): Promise<{
@@ -783,6 +834,39 @@ async function executeSeniorResearchPlanUnsafe(
   };
 
   if (query.mode === "fail_closed") {
+    // TH-DISCOVERY-PARITY-001B: an unsupported provider class outside the CMS trio (retirement
+    // community, adult day care, elder care, in-home caregiving...) reuses this same
+    // "provider_class" clarification + preview path -- see unsupportedSeniorClassLabel() in
+    // senior-ask-parse.ts -- so it shows broader, clearly-labeled CMS options instead of a dead
+    // end.
+    //
+    // TH-DISCOVERY-PARITY-001B-REVIEW: "assisted living" and "memory care" ("state_care"
+    // clarification) previously kept only their DB-free state-specific recovery link and never
+    // showed a real provider card, so "memory care facility around Tacoma" still returned zero
+    // provider cards even with a real, safely-resolved CITY -- they now get the same broader-CMS-
+    // preview treatment as every other unsupported class.
+    //
+    // Deliberately still excludes a bare STATE-only "state_care" geography (e.g. "assisted living
+    // in Illinois") -- that is the long-established, separately-tested DB-free published-state
+    // recovery contract (see the "published <State> recovery keeps its own jurisdiction" and
+    // "assisted living in New York" / "memory care in Florida" cases in r1-011-identity.test.tsx),
+    // and a state-wide "browse some CMS providers somewhere in this state" preview does not add the
+    // same locality value that a real city/county did. City/county geography is exactly what the
+    // production gap ("...around Tacoma") was about.
+    //
+    // TH-DISCOVERY-FINAL-REPAIR-B: when the city/county geography itself never resolved (e.g. bare
+    // "Tacoma" with no state), classPreviews() no longer fails all the way to empty for these
+    // unsupported-class requests -- it falls back to a genuinely nationwide/unscoped sample and
+    // reports that via `scoped: false` (surfaced below as classPreviewsScoped) so the page can
+    // honestly disclose these rows are NOT specific to the unresolved place, never implying a match.
+    // classPreviews() itself is still what guarantees this never runs a geography-SCOPED query against
+    // an ambiguous/unresolved location -- it can only ever add previews that are either scoped to a
+    // location already proven safe, or explicitly, honestly unscoped.
+    const previewEligible =
+      query.clarification === "provider_class" ||
+      (query.clarification === "state_care" &&
+        (query.geography?.type === "city" || query.geography?.type === "county"));
+    const preview = previewEligible ? await classPreviews(query) : undefined;
     return {
       contract: SENIOR_ASK_CONTRACT,
       rawQuery: raw,
@@ -797,34 +881,8 @@ async function executeSeniorResearchPlanUnsafe(
         reason: query.failReason ?? "Unsupported question.",
         alternatives: query.alternatives ?? [],
       },
-      // TH-DISCOVERY-PARITY-001B: an unsupported provider class outside the CMS trio (retirement
-      // community, adult day care, elder care, in-home caregiving...) reuses this same
-      // "provider_class" clarification + preview path -- see unsupportedSeniorClassLabel() in
-      // senior-ask-parse.ts -- so it shows broader, clearly-labeled CMS options instead of a dead
-      // end.
-      //
-      // TH-DISCOVERY-PARITY-001B-REVIEW: "assisted living" and "memory care" ("state_care"
-      // clarification) previously kept only their DB-free state-specific recovery link and never
-      // showed a real provider card, so "memory care facility around Tacoma" still returned zero
-      // provider cards even with a real, safely-resolved CITY -- they now get the same broader-CMS-
-      // preview treatment as every other unsupported class. classPreviews() itself (see
-      // isCallerSafeGeography above) is what guarantees this never runs a scoped query against an
-      // ambiguous/unresolved location, so this cannot reintroduce the cross-state leak; it can only
-      // ever add previews for a location already proven safe.
-      //
-      // Deliberately still excludes a bare STATE-only "state_care" geography (e.g. "assisted living
-      // in Illinois") -- that is the long-established, separately-tested DB-free published-state
-      // recovery contract (see the "published <State> recovery keeps its own jurisdiction" and
-      // "assisted living in New York" / "memory care in Florida" cases in r1-011-identity.test.tsx),
-      // and a state-wide "browse some CMS providers somewhere in this state" preview does not add the
-      // same locality value that a real city/county did. City/county geography is exactly what the
-      // production gap ("...around Tacoma") was about.
-      classPreviews:
-        query.clarification === "provider_class" ||
-        (query.clarification === "state_care" &&
-          (query.geography?.type === "city" || query.geography?.type === "county"))
-          ? await classPreviews(query)
-          : undefined,
+      classPreviews: preview?.groups,
+      classPreviewsScoped: preview?.scoped,
     };
   }
 
