@@ -1,4 +1,8 @@
-import { parseRecordedLocation } from "./senior-location";
+import {
+  detectUnrecognizedBarePlace,
+  parseRecordedLocation,
+  LOCATION_MEANING,
+} from "./senior-location";
 import { STATE_NAMES } from "@care/domain";
 import {
   type SeniorAskMode,
@@ -155,6 +159,41 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   const q = raw.trim();
   const providerClass = detectClass(q);
   const location = parseRecordedLocation(q);
+  // TH-DISCOVERY-FINAL-REPAIR-B: live-audit DANGEROUS finding -- "senior care Springfield" (no
+  // preposition, no state token, no "County" keyword) parsed to NO geography at all above, so a
+  // named place silently vanished and the executor ran an unfiltered NATIONAL query/preview with no
+  // disclosure that "Springfield" was ever typed (see detectUnrecognizedBarePlace() in
+  // senior-location.ts for the full mechanism). Only applied once a genuine CMS/senior-care class
+  // signal (detectClass()) or a genuinely unsupported non-CMS class is already present in the query,
+  // so a plain provider-name/brand search ("Brookdale Senior Living", which carries no such signal)
+  // is never reinterpreted as a location query. This never assigns a state -- it only ensures the
+  // place is disclosed and routed through the same "choose the state" clarification (and, for
+  // unsupported classes, the honestly-labeled nationwide preview) as every other unresolved bare
+  // city, instead of disappearing.
+  //
+  // Requiring `!location.locationRequirement` (flagged in review) matters: parseRecordedLocation()
+  // already returns a locationRequirement of its own -- with no geography -- for genuinely different
+  // reasons (an "Austin Texas and Tampa Florida" multi-place clause, a "near me"/radius claim...).
+  // Those already correctly explain the problem and, for the multi-place case, name BOTH places; this
+  // fallback must never overwrite that with a single mangled trailing fragment ("Tampa Florida" as
+  // one city, silently dropping "Austin Texas" entirely). It only ever fires when
+  // parseRecordedLocation() found NOTHING at all to say about location.
+  const unsupportedClassLabel = !providerClass ? unsupportedSeniorClassLabel(q) : undefined;
+  if (
+    !location.geography &&
+    !location.locationRequirement &&
+    (providerClass || unsupportedClassLabel)
+  ) {
+    const bare = detectUnrecognizedBarePlace(q);
+    if (bare) {
+      location.geography = { type: "city", value: bare.toUpperCase(), meaning: LOCATION_MEANING };
+      location.locationRequirement = {
+        raw: bare,
+        outcome: "NEEDS_CLARIFICATION",
+        reason: `Choose the state for ${bare}. The provider corpus does not establish that this city name is unique nationally.`,
+      };
+    }
+  }
   const geography = location.geography;
   const county = geography?.type === "county" ? geography : undefined;
   const state =
@@ -639,7 +678,7 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   // recovery-link contract, so a supported geography shows real broader CMS options instead of a
   // dead end.
   if (!providerClass) {
-    const unsupportedLabel = unsupportedSeniorClassLabel(q);
+    const unsupportedLabel = unsupportedClassLabel;
     if (unsupportedLabel) {
       const place =
         geography?.type === "county"
