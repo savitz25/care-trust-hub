@@ -308,6 +308,29 @@ describe("TH-DISCOVERY-FINAL-REPAIR-B", () => {
       expect(result.query.clarification).toBeUndefined();
       expect(result.query.geography).toBeUndefined();
     });
+
+    // Vercel Agent Review finding on this ticket's PR: the bare-place fallback originally gated only
+    // on `!location.geography`, so it could overwrite an EXISTING locationRequirement that
+    // parseRecordedLocation() had already produced for a different, more specific reason -- here, a
+    // genuinely ambiguous "A and B" multi-place clause, which already names BOTH places. The fallback
+    // must never replace that with a single mangled trailing fragment ("Tampa Florida" read as one
+    // city) that silently drops "Austin Texas" entirely.
+    it("a genuinely ambiguous multi-place clause never loses one of its two named places to the bare-place fallback", async () => {
+      const result = await executeSeniorResearchQuery(
+        "nursing homes in Austin Texas and Tampa Florida",
+      );
+      expect(result.entities).toEqual([]);
+      expect(result.failClosed).toBeDefined();
+      // The bare-place fallback must not have run: geography stays undefined (never a single
+      // mangled "TAMPA FLORIDA" city), and the original multi-place disclosure is preserved,
+      // still naming both "Austin" and "Tampa" rather than losing one of them.
+      expect(result.query.geography).toBeUndefined();
+      expect(result.query.locationRequirement?.raw).toMatch(/Austin/i);
+      expect(result.query.locationRequirement?.raw).toMatch(/Tampa/i);
+      expect(result.failClosed?.reason).toBe(
+        "Choose one recorded city/state or use the supported county comparison.",
+      );
+    });
   });
 
   // The 7 production safety re-verification queries from this ticket, exercised here wherever a

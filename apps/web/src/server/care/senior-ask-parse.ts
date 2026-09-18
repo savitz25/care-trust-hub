@@ -170,8 +170,20 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   // place is disclosed and routed through the same "choose the state" clarification (and, for
   // unsupported classes, the honestly-labeled nationwide preview) as every other unresolved bare
   // city, instead of disappearing.
+  //
+  // Requiring `!location.locationRequirement` (flagged in review) matters: parseRecordedLocation()
+  // already returns a locationRequirement of its own -- with no geography -- for genuinely different
+  // reasons (an "Austin Texas and Tampa Florida" multi-place clause, a "near me"/radius claim...).
+  // Those already correctly explain the problem and, for the multi-place case, name BOTH places; this
+  // fallback must never overwrite that with a single mangled trailing fragment ("Tampa Florida" as
+  // one city, silently dropping "Austin Texas" entirely). It only ever fires when
+  // parseRecordedLocation() found NOTHING at all to say about location.
   const unsupportedClassLabel = !providerClass ? unsupportedSeniorClassLabel(q) : undefined;
-  if (!location.geography && (providerClass || unsupportedClassLabel)) {
+  if (
+    !location.geography &&
+    !location.locationRequirement &&
+    (providerClass || unsupportedClassLabel)
+  ) {
     const bare = detectUnrecognizedBarePlace(q);
     if (bare) {
       location.geography = { type: "city", value: bare.toUpperCase(), meaning: LOCATION_MEANING };
