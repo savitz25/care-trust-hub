@@ -9,7 +9,10 @@ function loadEnvironment(): void {
         if (!line || line.startsWith("#") || !line.includes("=")) continue;
         const [key, ...parts] = line.split("=");
         if (!process.env[key])
-          process.env[key] = parts.join("=").trim().replace(/^['"]|['"]$/g, "");
+          process.env[key] = parts
+            .join("=")
+            .trim()
+            .replace(/^['"]|['"]$/g, "");
       }
     } catch {
       // optional
