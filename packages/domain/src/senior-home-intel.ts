@@ -6,6 +6,7 @@ import {
   OR_ACCEPTED,
   PA_ACCEPTED,
   NC_ACCEPTED,
+  OH_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -32,6 +33,7 @@ import { IL_PUBLIC_PATH } from "./il-intelligence";
 import { OR_PUBLIC_PATH } from "./or-intelligence";
 import { PA_PUBLIC_PATH } from "./pa-intelligence";
 import { NC_PUBLIC_PATH } from "./nc-intelligence";
+import { OH_PUBLIC_PATH } from "./oh-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -124,6 +126,7 @@ export interface HomeGeoRow {
     | "oregon_state_intelligence"
     | "pennsylvania_state_intelligence"
     | "north_carolina_state_intelligence"
+    | "ohio_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -925,6 +928,21 @@ export function buildSeniorHomeIntel(input: {
         "NC DHSR Star Rating is not a TrustHub rating. Missing/N/A is not zero.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Ohio ODH / AGE (state enrichment)",
+      numerator: OH_ACCEPTED.nursingFacilityRows,
+      denominator: null,
+      display: `${OH_ACCEPTED.nursingFacilityRows.toLocaleString("en-US")} ODH nursing-home licenses; ${OH_ACCEPTED.rcfRows.toLocaleString("en-US")} ODH Residential Care Facilities (not a combined total).`,
+      status: "partial",
+      method:
+        "Ohio ODH OneSource nursing-home and Residential Care Facility licenses on /ohio plus CMS overlays. Navigator quality/satisfaction and Home Health/Hospice bulk remain search-only.",
+      limitations: [
+        "Do not add Nursing Homes, RCFs, Home Health, Hospice, PACE, and CMS classes into one senior-provider denominator.",
+        "RCF is Ohio's assisted-living license class. ODH license is not a CMS CCN. 923 vs 922 is not a bridge.",
+        "Navigator quality data is official evidence, not a TrustHub score. Search-only is not zero.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -961,7 +979,9 @@ export function buildSeniorHomeIntel(input: {
                               ? "pennsylvania_state_intelligence"
                               : row.state === "NC"
                                 ? "north_carolina_state_intelligence"
-                                : "cms_directory_only",
+                                : row.state === "OH"
+                                  ? "ohio_state_intelligence"
+                                  : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -989,7 +1009,9 @@ export function buildSeniorHomeIntel(input: {
                               ? PA_PUBLIC_PATH
                               : row.state === "NC"
                                 ? NC_PUBLIC_PATH
-                                : null,
+                                : row.state === "OH"
+                                  ? OH_PUBLIC_PATH
+                                  : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 
