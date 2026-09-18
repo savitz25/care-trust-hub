@@ -209,6 +209,133 @@ describe("interpretSeniorAskQuery", () => {
     expect(ccn.identifier).toEqual({ type: "ccn", value: "395199" });
   });
 
+  // TH-DISCOVERY-PARITY-001B fresh regression corpus. Distinct from the 7 FAIL + 2 DANGEROUS
+  // production-audit strings that motivated this ticket -- these exercise the same GENERAL rules
+  // (no-preposition geography, county-without-state deferral, unsupported-class detection, brand
+  // identity) with different phrasing, states, prepositions and singular/plural forms so the fix
+  // is verified as general rather than re-testing the exact audit strings.
+  describe("no-preposition and mixed-preposition geography resolves the same as an explicit 'in <place>' clause", () => {
+    it.each([
+      ["nursing homes Trenton NJ", "city", "TRENTON", "NJ"],
+      ["nursing home near Trenton, New Jersey", "city", "TRENTON", "NJ"],
+      ["home health agency Round Rock TX", "city", "ROUND ROCK", "TX"],
+      ["nursing home Fresno CA", "city", "FRESNO", "CA"],
+      ["hospice providers in San Diego, CA", "city", "SAN DIEGO", "CA"],
+      ["nursing homes Denver CO", "city", "DENVER", "CO"],
+    ] as const)("%s -> %s %s, %s", (raw, type, value, state) => {
+      const q = interpretSeniorAskQuery(raw);
+      expect(q.geography).toMatchObject({ type, value, state });
+      expect(q.mode).toBe("entity");
+    });
+    it.each([
+      ["hospice King County WA", "KING", "WA"],
+      ["nursing homes Snohomish County WA", "SNOHOMISH", "WA"],
+    ] as const)("%s resolves a no-preposition county+state", (raw, value, state) => {
+      const q = interpretSeniorAskQuery(raw);
+      expect(q.geography).toMatchObject({ type: "county", value, state });
+    });
+    it("Home Health county stays fail-closed even with a no-preposition county+state", () => {
+      expect(interpretSeniorAskQuery("home health agencies Boulder County CO").mode).toBe(
+        "fail_closed",
+      );
+    });
+    // A full state NAME mentioned anywhere in the query (as opposed to its two-letter code) is a
+    // pre-existing, separately-established precedent that takes priority and resolves the whole
+    // query to that state (see "preserves Colorado scope..." and the Boulder/Snohomish-with-full-
+    // state-name cases below) -- it is not a new gap this ticket introduces, and it never produces
+    // a WRONG state, only a less city/county-specific one.
+    it("a full state name anywhere still resolves to that state, never a wrong one", () => {
+      expect(interpretSeniorAskQuery("retirement community Boulder Colorado").geography).toEqual({
+        type: "state",
+        value: "CO",
+        meaning: expect.any(String),
+      });
+      expect(
+        interpretSeniorAskQuery("nursing homes Snohomish County Washington").geography,
+      ).toEqual({ type: "state", value: "WA", meaning: expect.any(String) });
+    });
+  });
+
+  it("Broward County, established without a state, still conflicts with an explicitly wrong state", () => {
+    expect(interpretSeniorAskQuery("hospice Broward County FL").geography).toMatchObject({
+      type: "county",
+      value: "BROWARD",
+      state: "FL",
+    });
+    const conflict = interpretSeniorAskQuery("nursing home Broward County TX");
+    expect(conflict.mode).toBe("fail_closed");
+    expect(conflict.terminalState).toBe("NEEDS_CLARIFICATION");
+  });
+
+  it("a general (non-Florida-established) county with no explicit state defers resolution instead of rejecting outright", () => {
+    const q = interpretSeniorAskQuery("nursing homes Sacramento County");
+    expect(q.mode).toBe("entity");
+    expect(q.providerClass).toBe("nursing_home");
+    expect(q.geography).toMatchObject({ type: "county", value: "SACRAMENTO" });
+    expect(q.geography?.state).toBeUndefined();
+    expect(q.locationRequirement?.outcome).toBe("APPLIED");
+  });
+
+  it("Home Health county stays unsupported regardless of preposition or established-county status", () => {
+    expect(interpretSeniorAskQuery("home health agencies Miami-Dade County").mode).toBe(
+      "fail_closed",
+    );
+    expect(interpretSeniorAskQuery("home health agency Sacramento County").mode).toBe(
+      "fail_closed",
+    );
+  });
+
+  it("a bare class with no location at all still resolves the class without crashing", () => {
+    const q = interpretSeniorAskQuery("hospice providers");
+    expect(q.providerClass).toBe("hospice");
+    expect(q.geography).toBeUndefined();
+    expect(q.mode).not.toBe("fail_closed");
+  });
+
+  describe("unsupported state-regulated classes never masquerade as a CMS class or a company-name search", () => {
+    it.each([
+      "assisted living options near Sarasota Florida",
+      "memory care near Spokane Washington",
+      "retirement communities in Scottsdale Arizona",
+      "independent living Reno Nevada",
+      "adult day services Trenton NJ",
+      "adult daycare center in Fort Worth Texas",
+      "in-home care options for seniors",
+      "caregiver agency Tampa Florida",
+      "companion care services in Denver Colorado",
+      "continuing care retirement community in Naples Florida",
+      "board and care home Fresno California",
+      "home care agency Newark New Jersey",
+      "elder care options",
+    ])("%s", (raw) => {
+      const q = interpretSeniorAskQuery(raw);
+      expect(q.mode).toBe("fail_closed");
+      // Never silently reinterpreted as a company-name/identity search.
+      expect(q.identityQuery).toBeUndefined();
+      // Always one of the two honest clarification paths, never a bare unexplained dead end.
+      expect(["provider_class", "state_care"]).toContain(q.clarification);
+      expect(q.failReason).toBeTruthy();
+    });
+  });
+
+  describe("national senior-living brand identity controls", () => {
+    it.each(["Sunrise Senior Living community", "Atria Senior Living facility"])(
+      "%s is treated as an identity search, not an unsupported class",
+      (raw) => {
+        const q = interpretSeniorAskQuery(raw);
+        expect(q.mode).toBe("entity");
+        expect(q.identityQuery).toBeTruthy();
+        expect(q.clarification).toBeUndefined();
+      },
+    );
+    it("an explicit Find prefix keeps the exact brand+city phrase as one identity", () => {
+      const q = interpretSeniorAskQuery("Find Brookdale of Boise");
+      expect(q.mode).toBe("entity");
+      expect(q.identityQuery).toBe("Brookdale of Boise");
+      expect(q.geography).toBeUndefined();
+    });
+  });
+
   it("keeps North Carolina ACH, FCH, Home Care, Star Rating, and cities fail-closed", () => {
     const al = interpretSeniorAskQuery("assisted living North Carolina");
     expect(al.mode).toBe("fail_closed");

@@ -56,6 +56,56 @@ function detectClass(q: string): SeniorProviderClass | "ambiguous" | undefined {
   return undefined;
 }
 
+/**
+ * TH-DISCOVERY-PARITY-001B: state-regulated senior-care settings outside the federal CMS Nursing
+ * Home/Home Health/Hospice trio -- general patterns, not the specific audit phrasings that
+ * motivated this fix. "assisted living" keeps its own dedicated, more detailed state-by-state
+ * block above/below this list and is intentionally not repeated here. Bare "senior living" is
+ * deliberately excluded: it is part of real national brand names (Brookdale Senior Living, Sunrise
+ * Senior Living) and must stay eligible for the identity/provider-name search path, not be
+ * intercepted as an unsupported class.
+ */
+const UNSUPPORTED_SENIOR_CLASSES: Array<{ label: string; match: (q: string) => boolean }> = [
+  { label: "Memory care", match: (q) => /\bmemory care\b/i.test(q) },
+  {
+    label: "Retirement community",
+    match: (q) => /\bretirement (?:communit(?:y|ies)|village|home|residence)s?\b/i.test(q),
+  },
+  { label: "Independent living", match: (q) => /\bindependent living\b/i.test(q) },
+  {
+    label: "Continuing care retirement community (CCRC)",
+    match: (q) => /\bcontinuing care retirement communit(?:y|ies)\b/i.test(q),
+  },
+  {
+    label: "Adult day care",
+    match: (q) => /\badult\s*day\s*(?:care|services|program|center|centers|health)?\b/i.test(q),
+  },
+  {
+    label: "In-home caregiving",
+    match: (q) =>
+      /\bin-?home\s*(?:care|caregiver(?:s|ing)?)\b/i.test(q) ||
+      /\bcaregivers?\b/i.test(q) ||
+      /\bcompanion care\b/i.test(q) ||
+      /\b(?:home care|personal care) aides?\b/i.test(q),
+  },
+  { label: "Elder care services", match: (q) => /\belder\s?care\b/i.test(q) },
+  {
+    label: "Board and care / group home",
+    match: (q) =>
+      /\bboard and care\b/i.test(q) ||
+      /\bgroup home\b/i.test(q) ||
+      /\badult family home\b/i.test(q),
+  },
+  {
+    label: "Home care agency",
+    match: (q) => /\bhome care\b/i.test(q) && !/\bhome health\b/i.test(q),
+  },
+];
+
+function unsupportedSeniorClassLabel(q: string): string | undefined {
+  return UNSUPPORTED_SENIOR_CLASSES.find((c) => c.match(q))?.label;
+}
+
 function starNumber(q: string): number | undefined {
   const m =
     q.match(/\b([1-5](?:\.5)?)\s*(?:-|–)?\s*star/i) ||
@@ -574,6 +624,46 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
     );
   }
 
+  // TH-DISCOVERY-PARITY-001B: a state-regulated class outside the CMS Nursing Home/Home
+  // Health/Hospice trio (retirement community, independent living, adult day care, in-home
+  // caregiving, elder care, board and care...) must never silently fall through to a
+  // company-name/identity search just because detectClass() found no CMS keyword -- that produced
+  // the "in-home caregiver Austin" / "elder care services" / "retirement community Boulder
+  // Colorado" / "adult day care Palm Beach FL" production failures, all of which returned a bare
+  // "No matching published provider record" with zero explanation. Only applies when no concrete
+  // or ambiguous CMS class was already detected, and runs after every state-specific override
+  // above so a Pennsylvania/Oregon/Illinois/New York/Virginia-specific message still wins for its
+  // own state. Reuses the same "provider_class" clarification (and its existing, already-tested
+  // real per-class preview rendering) that genuine Nursing/Home Health/Hospice ambiguity already
+  // uses below, rather than "assisted living"/"memory care"'s separate, DB-free "state_care"
+  // recovery-link contract, so a supported geography shows real broader CMS options instead of a
+  // dead end.
+  if (!providerClass) {
+    const unsupportedLabel = unsupportedSeniorClassLabel(q);
+    if (unsupportedLabel) {
+      const place =
+        geography?.type === "county"
+          ? `${geography.value} County${geography.state ? `, ${geography.state}` : ""}`
+          : geography?.type === "state"
+            ? (STATE_NAMES[geography.value] ?? geography.value)
+            : geography?.value
+              ? [geography.value, geography.state].filter(Boolean).join(", ")
+              : undefined;
+      return validateSeniorResearchQuery({
+        mode: "fail_closed",
+        page: 1,
+        providerClass: undefined,
+        geography,
+        locationRequirement: location.locationRequirement,
+        clarification: "provider_class",
+        terminalState: "UNSUPPORTED",
+        coverageState: "UNSUPPORTED",
+        failReason: `${unsupportedLabel} is state-regulated and is not part of the federal CMS Nursing Home, Home Health, or Hospice directory${place ? ` in ${place}` : ""}. SeniorTrustHub does not currently publish a dedicated ${unsupportedLabel.toLowerCase()} research source here. Choose a CMS-covered setting below to see current providers${place ? ` in ${place}` : ""}.`,
+        alternatives: [],
+      });
+    }
+  }
+
   if (/best owner|largest senior-care company/i.test(q)) {
     return fail(
       "SeniorTrustHub does not rank owners or publish a “best owner.” Ownership-network size is a connected-provider count, not quality.",
@@ -622,7 +712,9 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
       "PARTIAL",
     );
   }
-  if (/watch list|generator compliance|ccrc|fixed need pool|memory care/i.test(q)) {
+  // "Memory care" is handled generally (any state) by the unsupportedSeniorClassLabel() check
+  // above; the fields below are genuinely Florida AHCA extract-specific and stay scoped to Florida.
+  if (/watch list|generator compliance|ccrc|fixed need pool/i.test(q)) {
     return fail(
       "That Florida field is not available as a live Ask query on the current production extract. No new ingest is started from Ask.",
       ["Show nursing homes in Florida.", "Open Florida intelligence"],
@@ -699,10 +791,12 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
     // its original bare fail_closed shape further below.
     const place =
       geography?.type === "county"
-        ? `${geography.value} County`
+        ? `${geography.value} County${geography.state ? `, ${geography.state}` : ""}`
         : geography?.type === "state"
           ? (STATE_NAMES[geography.value] ?? geography.value)
-          : geography?.value;
+          : geography?.value
+            ? [geography.value, geography.state].filter(Boolean).join(", ")
+            : undefined;
     return validateSeniorResearchQuery({
       mode: "fail_closed",
       page: 1,

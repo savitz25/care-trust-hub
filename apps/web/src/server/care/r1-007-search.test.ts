@@ -248,6 +248,23 @@ describe("R1-007 recorded location integrity", () => {
     expect(container.textContent).toContain("Tampa Home Health");
     expect(container.textContent).toContain("Tampa Hospice");
   });
+  // TH-DISCOVERY-PARITY-001B (DANGEROUS bug B, generalized): the class-chooser preview panel must
+  // never leak another state's rows into a geography-scoped request -- this reuses the fixture
+  // corpus's existing "Austin, MN" and "Historic Austin" (not-current) distractors, which share the
+  // exact same city name as the real "Austin One" TX row, to prove the preview is genuinely
+  // state-filtered and not an unfiltered/alphabetical national slice.
+  it("class-chooser previews never leak another state's same-named city into the results", async () => {
+    const result = await executeSeniorResearchQuery("senior care in Austin Texas");
+    expect(result.query.clarification).toBe("provider_class");
+    expect(result.query.geography).toMatchObject({ type: "city", value: "AUSTIN", state: "TX" });
+    const nursingPreview = result.classPreviews?.find((g) => g.providerClass === "nursing_home");
+    expect(nursingPreview?.entities.map((e) => e.ccn)).toEqual(["T00001"]);
+    expect(nursingPreview?.entities.every((e) => e.recordedLocation?.state === "TX")).toBe(true);
+    // The Minnesota same-named-city distractor and the not-current historic record must never
+    // appear, no matter how loosely a preview query might otherwise be built.
+    expect(nursingPreview?.entities.map((e) => e.ccn)).not.toContain("T00003");
+    expect(nursingPreview?.entities.map((e) => e.ccn)).not.toContain("T00004");
+  });
   it("does not mistake state words within a city for a conflicting jurisdiction", () => {
     expect(
       interpretSeniorAskQuery("Home health agencies in Virginia Beach Virginia").geography,

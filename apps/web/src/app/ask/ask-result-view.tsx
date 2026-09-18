@@ -189,39 +189,26 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
               research sources, not a recommendation about appropriate care.
             </p>
           </details>
-          {result.classPreviews?.some((group) => group.entities.length > 0) ? (
-            <div className="senior-ask__class-previews">
-              {result.classPreviews.map((group) =>
-                group.entities.length > 0 ? (
-                  <section key={group.providerClass} aria-label={`${group.label} preview`}>
-                    <h3>{group.label}</h3>
-                    <ul>
-                      {group.entities.map((entity) => (
-                        <li key={`${entity.providerClass}-${entity.ccn}`}>
-                          <Link href={entity.href} data-specialist-event="profile_open">
-                            {entity.providerName}
-                          </Link>
-                          <p>{entity.location}</p>
-                          <p>{entity.whyMatched}</p>
-                        </li>
-                      ))}
-                    </ul>
-                    <p>
-                      <Link
-                        prefetch={false}
-                        href={seniorRequestHref(result.rawQuery, overrides, {
-                          class: group.providerClass,
-                          page: "1",
-                        })}
-                      >
-                        See all {group.label.toLowerCase()}
-                      </Link>
-                    </p>
-                  </section>
-                ) : null,
-              )}
-            </div>
-          ) : null}
+          {/* TH-DISCOVERY-PARITY-001B-REVIEW: a genuinely-unsupported class (terminalState
+              "UNSUPPORTED" -- retirement community, adult day care, in-home caregiver, etc, see
+              unsupportedSeniorClassLabel() in senior-ask-parse.ts) gets an explicit "broader, not
+              the requested class" heading and disclaimer. A genuine CMS-trio ambiguity ("senior care
+              Florida", terminalState "NEEDS_CLARIFICATION") is not relabeled -- there, Nursing
+              Home/Home Health/Hospice previews ARE literally the requested options, not a fallback. */}
+          <ClassPreviews
+            result={result}
+            overrides={overrides}
+            heading={
+              result.query.terminalState === "UNSUPPORTED"
+                ? "Broader senior care options"
+                : undefined
+            }
+            note={
+              result.query.terminalState === "UNSUPPORTED"
+                ? "These are broader CMS-covered nursing home, home health, and hospice providers in the same recorded location -- not confirmed matches for the requested care setting."
+                : undefined
+            }
+          />
         </section>
       ) : null}
       {result.query.clarification === "state_care" ? (
@@ -242,6 +229,18 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
             This state intelligence action is not a city-filtered provider list or proof that a
             facility offers memory care.
           </p>
+          {/* TH-DISCOVERY-PARITY-001B-REVIEW: assisted living / memory care previously stopped here
+              with only the state-specific link and never a provider card, even with a real, safely
+              resolved city/county/state (e.g. "memory care facility around Tacoma"). classPreviews()
+              itself refuses to run a scoped query against an ambiguous/unresolved location (see
+              isCallerSafeGeography in senior-ask-execute.ts), so this can only ever add real,
+              same-location CMS previews -- never a cross-state guess. */}
+          <ClassPreviews
+            result={result}
+            overrides={overrides}
+            heading="Broader senior care options"
+            note="These are broader CMS-covered nursing home, home health, and hospice providers in the same recorded location -- not confirmed assisted-living or memory-care facilities."
+          />
         </section>
       ) : null}
       {result.failClosed && !result.query.clarification ? (
@@ -314,6 +313,16 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
               <a href={SENIOR_OFFICIAL_RECOVERY.url}>Open official CMS Care Compare</a>. Choose the
               relevant provider class and use the CCN to confirm the identity. Official destination
               checked {SENIOR_OFFICIAL_RECOVERY.checkedAt}; this is not a live provider check.
+            </p>
+          ) : result.query.identityQuery ? (
+            <p>
+              CMS directories index each facility individually under its own registered name, not a
+              parent brand or company. Enter one facility&apos;s exact published name, a labeled CMS
+              CCN, or{" "}
+              <Link href="/ask?q=Show+nursing+homes+in+Florida.">
+                search by care setting and location instead
+              </Link>
+              . No unrelated provider was substituted.
             </p>
           ) : (
             <p>
@@ -564,6 +573,58 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
           <li key={line}>{line}</li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+// TH-DISCOVERY-PARITY-001B: shared by both the CMS-trio class-choice screen and the unsupported
+// (state-regulated) class screen so a requested class that Ask cannot serve never has to be a dead
+// end when real, geography-scoped CMS Nursing Home/Home Health/Hospice data exists instead.
+function ClassPreviews({
+  result,
+  overrides,
+  heading,
+  note,
+}: {
+  result: SeniorAskResult;
+  overrides: Record<string, string>;
+  heading?: string;
+  note?: string;
+}) {
+  if (!result.classPreviews?.some((group) => group.entities.length > 0)) return null;
+  return (
+    <div className="senior-ask__class-previews">
+      {heading ? <h3>{heading}</h3> : null}
+      {note ? <p className="senior-ask__class-previews-note">{note}</p> : null}
+      {result.classPreviews.map((group) =>
+        group.entities.length > 0 ? (
+          <section key={group.providerClass} aria-label={`${group.label} preview`}>
+            <h3>{group.label}</h3>
+            <ul>
+              {group.entities.map((entity) => (
+                <li key={`${entity.providerClass}-${entity.ccn}`}>
+                  <Link href={entity.href} data-specialist-event="profile_open">
+                    {entity.providerName}
+                  </Link>
+                  <p>{entity.location}</p>
+                  <p>{entity.whyMatched}</p>
+                </li>
+              ))}
+            </ul>
+            <p>
+              <Link
+                prefetch={false}
+                href={seniorRequestHref(result.rawQuery, overrides, {
+                  class: group.providerClass,
+                  page: "1",
+                })}
+              >
+                See all {group.label.toLowerCase()}
+              </Link>
+            </p>
+          </section>
+        ) : null,
+      )}
     </div>
   );
 }

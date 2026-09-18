@@ -8,6 +8,7 @@ import {
   getCurrentAgencySourceClock,
   searchCurrentAgencies,
   countCurrentAgencies,
+  type AgencySearchResult,
 } from "./agency-search";
 import { getProviderByCcn } from "./repository";
 import {
@@ -108,6 +109,69 @@ export type SeniorAskResult = {
 
 const CLASS_PREVIEW_LIMIT = 5;
 
+/**
+ * TH-DISCOVERY-PARITY-001B: strips a generic corporate/care-setting suffix off a provider-name
+ * search so a national brand phrase ("Brookdale Senior Living") can be retried as just its brand
+ * name ("Brookdale") once the exact phrase finds nothing -- CMS directories index each facility
+ * individually under its own registered name, not a parent brand. Returns undefined when nothing
+ * generic was stripped (so an already-bare, already-tried name is never silently re-searched).
+ */
+const GENERIC_PROVIDER_NAME_SUFFIX =
+  /\s+(?:senior living|senior care|healthcare|health care|health system|rehabilitation center|rehabilitation|rehab center|rehab|nursing center|nursing home|nursing facility|care center|assisted living|memory care)$/iu;
+function brandPrefixCandidate(name: string): string | undefined {
+  let stripped = name.trim();
+  let previous: string;
+  do {
+    previous = stripped;
+    stripped = stripped.replace(GENERIC_PROVIDER_NAME_SUFFIX, "").trim();
+  } while (stripped !== previous && stripped.length > 0);
+  if (!stripped || stripped.length < 3) return undefined;
+  if (stripped.toUpperCase() === name.trim().toUpperCase()) return undefined;
+  return stripped;
+}
+
+/**
+ * TH-DISCOVERY-PARITY-001B: a recorded county without an explicit state (e.g. "nursing home
+ * Sacramento County") is resolved against the real indexed corpus instead of being rejected
+ * outright or silently defaulted to a hardcoded state. Exactly one matching state applies it
+ * directly; zero or more than one honestly fails closed instead of ever guessing a wrong state --
+ * this is the fix for the "Sacramento County" -> wrong-state (Lancaster, PA) production bug, and it
+ * is general across every county name, not keyed to Sacramento specifically.
+ */
+async function resolveCountyGeography(query: SeniorResearchQuery): Promise<SeniorResearchQuery> {
+  const geo = query.geography;
+  if (!geo || geo.type !== "county" || geo.state) return query;
+  const result = await getCareDatabasePool().query<{ state_code: string }>(
+    `${NH_CTE} SELECT DISTINCT state_code FROM current_snapshots
+     WHERE county_name ILIKE $1 ESCAPE '\\' ORDER BY state_code`,
+    [`%${geo.value.replace(/[\\%_]/g, "\\$&")}%`],
+  );
+  const states = [...new Set(result.rows.map((r) => r.state_code))];
+  if (states.length === 1) {
+    return { ...query, geography: { ...geo, state: states[0] } };
+  }
+  const reason =
+    states.length === 0
+      ? `No current indexed provider has a recorded address county matching "${geo.value} County." Choose a recorded city and state, or add the state to this county.`
+      : `"${geo.value} County" matches more than one state in the current corpus (${states.join(", ")}). Add the state to this county; none was guessed.`;
+  // TH-DISCOVERY-PARITY-001B-REVIEW: intentionally still spreads the original `query` here, so
+  // `clarification` (e.g. "provider_class"/"state_care") and `geography` (still county-typed, still
+  // without a `state`) are both preserved rather than cleared. That is safe -- not a re-introduction
+  // of the leaked-preview bug -- ONLY because classPreviews() in this file independently refuses to
+  // run any geography-scoped query when `geography.state` is missing (see isCallerSafeGeography
+  // there). Do not remove that guard while relying on this function to "fail closed"; this function
+  // fails closed on the ANSWER (mode/terminalState/failReason), not on the geography value itself.
+  return {
+    ...query,
+    mode: "fail_closed",
+    page: 1,
+    terminalState: states.length === 0 ? "UNSUPPORTED" : "NEEDS_CLARIFICATION",
+    coverageState: states.length === 0 ? "UNSUPPORTED" : "UNKNOWN",
+    failReason: reason,
+    alternatives: [],
+  };
+}
+
 // TH-DISCOVERY-RESET-001B: "senior care Florida" (no care-setting word) still needs a choice
 // between Nursing Homes / Home Health / Hospice -- those are genuinely separate CMS classes and
 // must never be merged into one generic universe. But requiring a second click before showing ANY
@@ -116,9 +180,35 @@ const CLASS_PREVIEW_LIMIT = 5;
 // cases, scoped to the same requested geography, and show a few real rows from each class directly
 // under the refinement choices. Each class's own search failing independently (e.g. a genuinely
 // unsupported geography) must not block the other two classes' previews.
+//
+// TH-DISCOVERY-PARITY-001B-REVIEW: a county or city geography that never resolved to exactly one
+// state (a bare county/city with no `state`, whether because resolution found zero matching states,
+// more than one, or the geography was simply never resolved) must NEVER be used as this preview's
+// location filter. nhFilters()/agency-search's county and city conditions carry no state constraint
+// of their own -- they exist to narrow an ALREADY-resolved location, not to stand in for one -- so
+// passing an unresolved bare name through would let same-named counties/cities from every OTHER
+// state leak into what looks like a geography-scoped preview (the Vercel-flagged cross-state
+// leakage: "provider_class"/"state_care" clarification surviving resolveCountyGeography's fail-
+// closed path while still carrying the stateless county). This is checked here, inside the shared
+// preview builder itself, rather than only at each call site, so no future caller of classPreviews()
+// can reintroduce the leak by forgetting to pre-check the geography. Fails closed to empty previews
+// (never a national guess dressed up as a local one) -- the caller's existing fail-closed message
+// already asks the user to add the state; it is not replaced with a silent nationwide result.
+function isCallerSafeGeography(geo: SeniorResearchQuery["geography"]): boolean {
+  if (!geo) return true; // no location claimed at all is not an unresolved one -- nothing to leak
+  if (geo.type === "county" || geo.type === "city") return Boolean(geo.state);
+  return true; // "state" and "zip" geography are unambiguous once present
+}
 async function classPreviews(
   query: SeniorResearchQuery,
 ): Promise<SeniorAskResult["classPreviews"]> {
+  if (!isCallerSafeGeography(query.geography)) {
+    return [
+      { providerClass: "nursing_home", label: CLASS_LABEL.nursing_home, entities: [] },
+      { providerClass: "home_health", label: CLASS_LABEL.home_health, entities: [] },
+      { providerClass: "hospice", label: CLASS_LABEL.hospice, entities: [] },
+    ];
+  }
   const base: SeniorResearchQuery = {
     ...query,
     page: 1,
@@ -601,6 +691,31 @@ export async function executeSeniorResearchPlan(
 ): Promise<SeniorAskResult> {
   query = validateSeniorResearchQuery(query);
   if (
+    query.geography?.type === "county" &&
+    !query.geography.state &&
+    (query.mode !== "fail_closed" ||
+      query.clarification === "provider_class" ||
+      query.clarification === "state_care")
+  ) {
+    try {
+      query = await resolveCountyGeography(query);
+    } catch {
+      return executeSeniorResearchPlanUnsafe(
+        {
+          ...query,
+          mode: "fail_closed",
+          page: 1,
+          terminalState: "SOURCE_UNAVAILABLE",
+          coverageState: "UNKNOWN",
+          failReason:
+            "SeniorTrustHub could not reach the published research corpus. No provider or evidence conclusion was inferred.",
+          alternatives: ["Try the research again later or confirm a provider directly with CMS."],
+        },
+        raw,
+      );
+    }
+  }
+  if (
     query.mode !== "fail_closed" &&
     query.geography &&
     ((query.geography.type === "city" && !query.geography.state) ||
@@ -682,8 +797,34 @@ async function executeSeniorResearchPlanUnsafe(
         reason: query.failReason ?? "Unsupported question.",
         alternatives: query.alternatives ?? [],
       },
+      // TH-DISCOVERY-PARITY-001B: an unsupported provider class outside the CMS trio (retirement
+      // community, adult day care, elder care, in-home caregiving...) reuses this same
+      // "provider_class" clarification + preview path -- see unsupportedSeniorClassLabel() in
+      // senior-ask-parse.ts -- so it shows broader, clearly-labeled CMS options instead of a dead
+      // end.
+      //
+      // TH-DISCOVERY-PARITY-001B-REVIEW: "assisted living" and "memory care" ("state_care"
+      // clarification) previously kept only their DB-free state-specific recovery link and never
+      // showed a real provider card, so "memory care facility around Tacoma" still returned zero
+      // provider cards even with a real, safely-resolved CITY -- they now get the same broader-CMS-
+      // preview treatment as every other unsupported class. classPreviews() itself (see
+      // isCallerSafeGeography above) is what guarantees this never runs a scoped query against an
+      // ambiguous/unresolved location, so this cannot reintroduce the cross-state leak; it can only
+      // ever add previews for a location already proven safe.
+      //
+      // Deliberately still excludes a bare STATE-only "state_care" geography (e.g. "assisted living
+      // in Illinois") -- that is the long-established, separately-tested DB-free published-state
+      // recovery contract (see the "published <State> recovery keeps its own jurisdiction" and
+      // "assisted living in New York" / "memory care in Florida" cases in r1-011-identity.test.tsx),
+      // and a state-wide "browse some CMS providers somewhere in this state" preview does not add the
+      // same locality value that a real city/county did. City/county geography is exactly what the
+      // production gap ("...around Tacoma") was about.
       classPreviews:
-        query.clarification === "provider_class" ? await classPreviews(query) : undefined,
+        query.clarification === "provider_class" ||
+        (query.clarification === "state_care" &&
+          (query.geography?.type === "city" || query.geography?.type === "county"))
+          ? await classPreviews(query)
+          : undefined,
     };
   }
 
@@ -870,50 +1011,60 @@ async function executeSeniorResearchPlanUnsafe(
   }
 
   if (query.identityQuery && !query.providerClass) {
-    const [nursing, homeHealth, hospice] = await Promise.all([
-      searchNursingHomes(query),
-      searchCurrentAgencies({
-        providerClass: "home_health",
-        query: query.identityQuery,
-        state: query.geography?.type === "state" ? query.geography.value : query.geography?.state,
-        city: query.geography?.type === "city" ? query.geography.value : undefined,
-        limit: 8,
-        offset: 0,
-      }),
-      searchCurrentAgencies({
-        providerClass: "hospice",
-        query: query.identityQuery,
-        state: query.geography?.type === "state" ? query.geography.value : query.geography?.state,
-        city: query.geography?.type === "city" ? query.geography.value : undefined,
-        limit: 8,
-        offset: 0,
-      }),
-    ]);
-    const agencyEntities: SeniorAskEntity[] = [...homeHealth, ...hospice].map((row) => ({
-      providerClass: row.providerClass,
-      ccn: row.ccn,
-      providerName: row.providerName,
-      recordedLocation: { city: row.city, state: row.state },
-      location: [row.city, row.state, row.zipCode].filter(Boolean).join(", "),
-      statusLabel: `Current research cohort (CMS ${CLASS_LABEL[row.providerClass]} directory)`,
-      href: row.href,
-      evidence:
-        row.providerClass === "home_health"
-          ? [
-              {
-                label: "Quality of Patient Care stars",
-                ...starEvidence(row.cmsQualityStar, "Quality of Patient Care"),
-              },
-            ]
-          : [
-              {
-                label: "Overall CMS stars",
-                value: "Not applicable — hospice has no overall CMS star in this directory",
-              },
-            ],
-      whyMatched: `${row.providerName} is a bounded provider-name match in the current ${CLASS_LABEL[row.providerClass]} directory (CCN ${row.ccn}). Similar names are not merged.`,
-    }));
-    const entities = [...nursing.rows, ...agencyEntities]
+    const mapAgencyEntities = (rows: AgencySearchResult[]): SeniorAskEntity[] =>
+      rows.map((row) => ({
+        providerClass: row.providerClass,
+        ccn: row.ccn,
+        providerName: row.providerName,
+        recordedLocation: { city: row.city, state: row.state },
+        location: [row.city, row.state, row.zipCode].filter(Boolean).join(", "),
+        statusLabel: `Current research cohort (CMS ${CLASS_LABEL[row.providerClass]} directory)`,
+        href: row.href,
+        evidence:
+          row.providerClass === "home_health"
+            ? [
+                {
+                  label: "Quality of Patient Care stars",
+                  ...starEvidence(row.cmsQualityStar, "Quality of Patient Care"),
+                },
+              ]
+            : [
+                {
+                  label: "Overall CMS stars",
+                  value: "Not applicable — hospice has no overall CMS star in this directory",
+                },
+              ],
+        whyMatched: `${row.providerName} is a bounded provider-name match in the current ${CLASS_LABEL[row.providerClass]} directory (CCN ${row.ccn}). Similar names are not merged.`,
+      }));
+    const identitySearch = async (identityQuery: string) => {
+      const [nursing, homeHealth, hospice] = await Promise.all([
+        searchNursingHomes({ ...query, identityQuery }),
+        searchCurrentAgencies({
+          providerClass: "home_health",
+          query: identityQuery,
+          state: query.geography?.type === "state" ? query.geography.value : query.geography?.state,
+          city: query.geography?.type === "city" ? query.geography.value : undefined,
+          limit: 8,
+          offset: 0,
+        }),
+        searchCurrentAgencies({
+          providerClass: "hospice",
+          query: identityQuery,
+          state: query.geography?.type === "state" ? query.geography.value : query.geography?.state,
+          city: query.geography?.type === "city" ? query.geography.value : undefined,
+          limit: 8,
+          offset: 0,
+        }),
+      ]);
+      return {
+        nursing,
+        homeHealth,
+        hospice,
+        agencyEntities: mapAgencyEntities([...homeHealth, ...hospice]),
+      };
+    };
+    const primary = await identitySearch(query.identityQuery);
+    let entities = [...primary.nursing.rows, ...primary.agencyEntities]
       .sort(
         (a, b) =>
           Number(a.providerName.toUpperCase() !== query.identityQuery?.toUpperCase()) -
@@ -921,6 +1072,41 @@ async function executeSeniorResearchPlanUnsafe(
           a.providerName.localeCompare(b.providerName),
       )
       .slice(0, ASK_PAGE_SIZE);
+    let hasMore =
+      primary.nursing.hasMore ||
+      primary.homeHealth.length >= 8 ||
+      primary.hospice.length >= 8 ||
+      primary.agencyEntities.length + primary.nursing.rows.length > ASK_PAGE_SIZE;
+    let identityLimitations = [
+      ...limitations,
+      "Name matches are candidates within their displayed class. Exact CCN remains the strongest identity lookup.",
+    ];
+    let candidateSelection: boolean | undefined;
+    // TH-DISCOVERY-PARITY-001B: national senior-living brands (Brookdale, Sunrise, Atria...) are
+    // indexed under each individual facility's own registered name (e.g. "Brookdale Boise"), not
+    // the parent brand, so an exact-substring match on the full brand phrase legitimately finds
+    // nothing. Rather than a bare "no matching record," retry once against the brand's own name
+    // with a generic corporate suffix stripped ("Senior Living", "Healthcare"...) and, if that finds
+    // real current providers, disclose them as name-fragment candidates -- never as a confirmed
+    // brand-wide grouping the data does not actually support.
+    if (entities.length === 0) {
+      const brand = brandPrefixCandidate(query.identityQuery);
+      if (brand) {
+        const fallback = await identitySearch(brand);
+        const fallbackEntities = [...fallback.nursing.rows, ...fallback.agencyEntities]
+          .sort((a, b) => a.providerName.localeCompare(b.providerName))
+          .slice(0, 10);
+        if (fallbackEntities.length) {
+          entities = fallbackEntities;
+          hasMore = false;
+          candidateSelection = true;
+          identityLimitations = [
+            ...limitations,
+            `No current provider is named exactly "${query.identityQuery}". CMS directories index each facility individually under its own registered name, not a parent brand -- showing current providers whose name contains "${brand}" as name-fragment candidates, not confirmed common ownership or brand affiliation. Enter one facility's exact name, or search by class and location instead.`,
+          ];
+        }
+      }
+    }
     return {
       contract: SENIOR_ASK_CONTRACT,
       rawQuery: raw,
@@ -928,14 +1114,11 @@ async function executeSeniorResearchPlanUnsafe(
       interpretation,
       resultType: "entity",
       entities,
+      candidateSelection,
       pagination: {
         page: 1,
         pageSize: ASK_PAGE_SIZE,
-        hasMore:
-          nursing.hasMore ||
-          homeHealth.length >= 8 ||
-          hospice.length >= 8 ||
-          agencyEntities.length + nursing.rows.length > ASK_PAGE_SIZE,
+        hasMore,
       },
       provenance: {
         ...provenanceBase,
@@ -943,10 +1126,7 @@ async function executeSeniorResearchPlanUnsafe(
         queryGrain: "bounded provider-name match across separate current CMS class directories",
         identifierMethod: "Provider names searched separately by class; no fuzzy identity merge",
       },
-      limitations: [
-        ...limitations,
-        "Name matches are candidates within their displayed class. Exact CCN remains the strongest identity lookup.",
-      ],
+      limitations: identityLimitations,
     };
   }
 
