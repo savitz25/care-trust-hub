@@ -215,7 +215,11 @@ describe("TH-DISCOVERY-PARITY-001B execute-level regression corpus", () => {
   });
 
   describe("class-chooser previews never leak cross-state or cross-class garbage", () => {
-    it("a no-preposition city+state ambiguous class query scopes every class preview to that state", async () => {
+    // TH-DISCOVERY-PARITY-001B-REVIEW: re-verifies the two DANGEROUS production audit cases are
+    // still fixed after the Vercel-flagged ambiguous-county leak fix below -- neither case is a
+    // bare/ambiguous county, so classPreviews()'s new isCallerSafeGeography guard must not change
+    // their (already correct) behavior.
+    it("DANGEROUS CASE: 'senior care homes Newark NJ' returns only real Newark/Essex County NJ providers", async () => {
       const result = await executeSeniorResearchQuery("senior care homes Newark NJ");
       expect(result.query.clarification).toBe("provider_class");
       expect(result.query.geography).toMatchObject({ type: "city", value: "NEWARK", state: "NJ" });
@@ -230,6 +234,56 @@ describe("TH-DISCOVERY-PARITY-001B execute-level regression corpus", () => {
         [],
       );
     });
+    it("DANGEROUS CASE: 'nursing home Sacramento County' returns only real Sacramento CA providers", async () => {
+      const result = await executeSeniorResearchQuery("nursing home Sacramento County");
+      expect(result.failClosed).toBeUndefined();
+      expect(result.query.geography).toMatchObject({
+        type: "county",
+        value: "SACRAMENTO",
+        state: "CA",
+      });
+      expect(result.entities.map((e) => e.ccn)).toEqual(["CA0001"]);
+      // The wrong-state, wrong-record production bug ("Lancaster, PA") this ticket blocks.
+      expect(result.entities.map((e) => e.ccn)).not.toContain("HI0001");
+    });
+  });
+
+  // TH-DISCOVERY-PARITY-001B-REVIEW: the exact Vercel review finding -- "resolveCountyGeography
+  // fails closed but preserves clarification: 'provider_class' with a stateless county geography" --
+  // reproduced and fixed. A bare county that never resolves to exactly one state (zero matches, or
+  // more than one, i.e. genuinely ambiguous) must never let a "provider_class"/"state_care"
+  // clarification run a geography-scoped preview as though the county were safe/known. It must
+  // either fail closed asking the user to add the state (verified here), never a silent cross-state
+  // guess. Exercised across every clarification path that can carry this combination: a genuinely
+  // unsupported class, a genuine CMS-trio ambiguity, and a zero-match county.
+  describe("an ambiguous or unresolved bare county can never leak a cross-state preview", () => {
+    it("an unsupported class over a county shared by two states shows no leaked preview from either state", async () => {
+      const result = await executeSeniorResearchQuery("memory care Washington County");
+      expect(result.query.clarification).toBe("state_care");
+      expect(result.query.geography).toMatchObject({ type: "county", value: "WASHINGTON" });
+      expect(result.query.geography?.state).toBeUndefined();
+      const allPreviewEntities = result.classPreviews?.flatMap((g) => g.entities) ?? [];
+      expect(allPreviewEntities).toEqual([]);
+      // Neither state's "Washington County" fixture leaked into an unscoped/guessed preview.
+      expect(allPreviewEntities.map((e) => e.ccn)).not.toContain("PA0002");
+      expect(allPreviewEntities.map((e) => e.ccn)).not.toContain("OH0002");
+      expect(result.failClosed?.reason).toMatch(/matches more than one state/i);
+    });
+    it("a genuine CMS-trio ambiguity over the same ambiguous county shows no leaked preview either", async () => {
+      const result = await executeSeniorResearchQuery("senior care homes Washington County");
+      expect(result.query.clarification).toBe("provider_class");
+      const allPreviewEntities = result.classPreviews?.flatMap((g) => g.entities) ?? [];
+      expect(allPreviewEntities).toEqual([]);
+      expect(allPreviewEntities.map((e) => e.ccn)).not.toContain("PA0002");
+      expect(allPreviewEntities.map((e) => e.ccn)).not.toContain("OH0002");
+    });
+    it("an unsupported class over a county with zero current matches shows no preview at all", async () => {
+      const result = await executeSeniorResearchQuery("adult day care Atlantis County");
+      expect(result.query.clarification).toBe("provider_class");
+      expect(result.query.terminalState).toBe("UNSUPPORTED");
+      const allPreviewEntities = result.classPreviews?.flatMap((g) => g.entities) ?? [];
+      expect(allPreviewEntities).toEqual([]);
+    });
   });
 
   describe("unsupported senior-care classes show broader CMS options instead of a dead end", () => {
@@ -243,6 +297,34 @@ describe("TH-DISCOVERY-PARITY-001B execute-level regression corpus", () => {
       expect(nursing?.entities.map((e) => e.ccn)).toEqual(["OH0002"]);
       expect(nursing?.entities.map((e) => e.ccn)).not.toContain("PA0002");
     });
+
+    // TH-DISCOVERY-PARITY-001B-REVIEW: Results-First was previously incomplete for "assisted
+    // living"/"memory care" -- their dedicated "state_care" clarification never called
+    // classPreviews(), so e.g. "memory care facility around Tacoma" (a real, safely-resolved
+    // city+state) still returned zero provider cards. Every unsupported class now shows real,
+    // same-location CMS previews once geography is safely/uniquely resolved -- scoped to that exact
+    // resolved city+state, never national, and never relabeled as the requested unsupported class.
+    it.each([
+      ["assisted living Newark NJ", "state_care"],
+      ["memory care Newark NJ", "state_care"],
+      ["retirement community Newark NJ", "provider_class"],
+      ["adult day care Newark NJ", "provider_class"],
+      ["in-home caregiver Newark NJ", "provider_class"],
+    ] as const)(
+      "%s (clarification: %s) shows a real Nursing Home preview scoped to Newark, NJ only",
+      async (q, clarification) => {
+        const result = await executeSeniorResearchQuery(q);
+        expect(result.query.clarification).toBe(clarification);
+        expect(result.query.geography).toMatchObject({
+          type: "city",
+          value: "NEWARK",
+          state: "NJ",
+        });
+        const nursing = result.classPreviews?.find((g) => g.providerClass === "nursing_home");
+        expect(nursing?.entities.map((e) => e.ccn)).toEqual(["NJ0001"]);
+        expect(nursing?.entities.map((e) => e.ccn)).not.toContain("HI0001");
+      },
+    );
   });
 
   describe("brand-name identity search falls back to a name-fragment match instead of a bare dead end", () => {

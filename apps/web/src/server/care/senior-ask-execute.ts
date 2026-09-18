@@ -154,6 +154,13 @@ async function resolveCountyGeography(query: SeniorResearchQuery): Promise<Senio
     states.length === 0
       ? `No current indexed provider has a recorded address county matching "${geo.value} County." Choose a recorded city and state, or add the state to this county.`
       : `"${geo.value} County" matches more than one state in the current corpus (${states.join(", ")}). Add the state to this county; none was guessed.`;
+  // TH-DISCOVERY-PARITY-001B-REVIEW: intentionally still spreads the original `query` here, so
+  // `clarification` (e.g. "provider_class"/"state_care") and `geography` (still county-typed, still
+  // without a `state`) are both preserved rather than cleared. That is safe -- not a re-introduction
+  // of the leaked-preview bug -- ONLY because classPreviews() in this file independently refuses to
+  // run any geography-scoped query when `geography.state` is missing (see isCallerSafeGeography
+  // there). Do not remove that guard while relying on this function to "fail closed"; this function
+  // fails closed on the ANSWER (mode/terminalState/failReason), not on the geography value itself.
   return {
     ...query,
     mode: "fail_closed",
@@ -173,9 +180,35 @@ async function resolveCountyGeography(query: SeniorResearchQuery): Promise<Senio
 // cases, scoped to the same requested geography, and show a few real rows from each class directly
 // under the refinement choices. Each class's own search failing independently (e.g. a genuinely
 // unsupported geography) must not block the other two classes' previews.
+//
+// TH-DISCOVERY-PARITY-001B-REVIEW: a county or city geography that never resolved to exactly one
+// state (a bare county/city with no `state`, whether because resolution found zero matching states,
+// more than one, or the geography was simply never resolved) must NEVER be used as this preview's
+// location filter. nhFilters()/agency-search's county and city conditions carry no state constraint
+// of their own -- they exist to narrow an ALREADY-resolved location, not to stand in for one -- so
+// passing an unresolved bare name through would let same-named counties/cities from every OTHER
+// state leak into what looks like a geography-scoped preview (the Vercel-flagged cross-state
+// leakage: "provider_class"/"state_care" clarification surviving resolveCountyGeography's fail-
+// closed path while still carrying the stateless county). This is checked here, inside the shared
+// preview builder itself, rather than only at each call site, so no future caller of classPreviews()
+// can reintroduce the leak by forgetting to pre-check the geography. Fails closed to empty previews
+// (never a national guess dressed up as a local one) -- the caller's existing fail-closed message
+// already asks the user to add the state; it is not replaced with a silent nationwide result.
+function isCallerSafeGeography(geo: SeniorResearchQuery["geography"]): boolean {
+  if (!geo) return true; // no location claimed at all is not an unresolved one -- nothing to leak
+  if (geo.type === "county" || geo.type === "city") return Boolean(geo.state);
+  return true; // "state" and "zip" geography are unambiguous once present
+}
 async function classPreviews(
   query: SeniorResearchQuery,
 ): Promise<SeniorAskResult["classPreviews"]> {
+  if (!isCallerSafeGeography(query.geography)) {
+    return [
+      { providerClass: "nursing_home", label: CLASS_LABEL.nursing_home, entities: [] },
+      { providerClass: "home_health", label: CLASS_LABEL.home_health, entities: [] },
+      { providerClass: "hospice", label: CLASS_LABEL.hospice, entities: [] },
+    ];
+  }
   const base: SeniorResearchQuery = {
     ...query,
     page: 1,
@@ -768,10 +801,30 @@ async function executeSeniorResearchPlanUnsafe(
       // community, adult day care, elder care, in-home caregiving...) reuses this same
       // "provider_class" clarification + preview path -- see unsupportedSeniorClassLabel() in
       // senior-ask-parse.ts -- so it shows broader, clearly-labeled CMS options instead of a dead
-      // end. "assisted living" and "memory care" keep their own dedicated "state_care" clarification
-      // and its established, DB-free recovery-link contract; that is unchanged here.
+      // end.
+      //
+      // TH-DISCOVERY-PARITY-001B-REVIEW: "assisted living" and "memory care" ("state_care"
+      // clarification) previously kept only their DB-free state-specific recovery link and never
+      // showed a real provider card, so "memory care facility around Tacoma" still returned zero
+      // provider cards even with a real, safely-resolved CITY -- they now get the same broader-CMS-
+      // preview treatment as every other unsupported class. classPreviews() itself (see
+      // isCallerSafeGeography above) is what guarantees this never runs a scoped query against an
+      // ambiguous/unresolved location, so this cannot reintroduce the cross-state leak; it can only
+      // ever add previews for a location already proven safe.
+      //
+      // Deliberately still excludes a bare STATE-only "state_care" geography (e.g. "assisted living
+      // in Illinois") -- that is the long-established, separately-tested DB-free published-state
+      // recovery contract (see the "published <State> recovery keeps its own jurisdiction" and
+      // "assisted living in New York" / "memory care in Florida" cases in r1-011-identity.test.tsx),
+      // and a state-wide "browse some CMS providers somewhere in this state" preview does not add the
+      // same locality value that a real city/county did. City/county geography is exactly what the
+      // production gap ("...around Tacoma") was about.
       classPreviews:
-        query.clarification === "provider_class" ? await classPreviews(query) : undefined,
+        query.clarification === "provider_class" ||
+        (query.clarification === "state_care" &&
+          (query.geography?.type === "city" || query.geography?.type === "county"))
+          ? await classPreviews(query)
+          : undefined,
     };
   }
 
