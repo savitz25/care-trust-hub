@@ -1,0 +1,138 @@
+{
+  "retrievedAt": "2026-09-18T13:26:20Z",
+  "nh_source": "https://services6.arcgis.com/zxOMWqh0yAD6mMsJ/arcgis/rest/services/Nursing_Homes_Licensed_and_Certified_in_Ohio_NEW/FeatureServer/0/query",
+  "rcf_source": "https://services6.arcgis.com/zxOMWqh0yAD6mMsJ/arcgis/rest/services/Assisted_Facilities_in_Ohio_NEW/FeatureServer/0/query",
+  "nh_sourceAsOf": "2026-08-10",
+  "rcf_sourceAsOf": "2026-06-17",
+  "nh": {
+    "kind": "nursing_home",
+    "rows": 923,
+    "distinct_license": 923,
+    "missing_license": 0,
+    "distinct_names": 910,
+    "types": [
+      [
+        "02 SNF/NF DUAL CERT",
+        914
+      ],
+      [
+        "04 SNF",
+        8
+      ],
+      [
+        "03 SNF/NF DISTINCT PART",
+        1
+      ]
+    ],
+    "credential_status": [
+      [
+        "ACTIVE",
+        923
+      ]
+    ],
+    "active_flag": [
+      [
+        "TRUE",
+        923
+      ]
+    ],
+    "sample_license": [
+      "OH00323",
+      "OH00419",
+      "OH00736",
+      "OH00818",
+      "OH00827",
+      "OH03414",
+      "OH00715",
+      "OH00052"
+    ],
+    "has_ccn_field": false,
+    "fields": [
+      "OBJECTID",
+      "f_activestatusflag",
+      "f_businessname",
+      "f_businesstypecategorydesc",
+      "f_businesstypedescription",
+      "f_capability_combined",
+      "f_credentialstatus",
+      "f_datasource",
+      "f_dispensesnaloxone",
+      "f_emailaddress",
+      "f_hospital_prep_region",
+      "f_licensedbedtotal",
+      "f_licenseno",
+      "f_locationaddressline1",
+      "f_locationcity",
+      "f_locationcounty",
+      "f_locationlat",
+      "f_locationlong",
+      "f_locationstate",
+      "f_locationzip",
+      "f_voicephone"
+    ]
+  },
+  "rcf": {
+    "kind": "residential_care_facility",
+    "rows": 812,
+    "distinct_license": 812,
+    "missing_license": 0,
+    "distinct_names": 750,
+    "types": [
+      [
+        "L1  RESIDENTIAL CARE",
+        812
+      ]
+    ],
+    "credential_status": [
+      [
+        "ACTIVE",
+        812
+      ]
+    ],
+    "active_flag": [
+      [
+        "TRUE",
+        812
+      ]
+    ],
+    "sample_license": [
+      "OHL41957",
+      "OHL42075",
+      "OHL6797",
+      "OHL42019",
+      "OHL01201",
+      "OHL42093",
+      "OHL8176",
+      "OHL41329"
+    ],
+    "has_ccn_field": false,
+    "fields": [
+      "OBJECTID",
+      "f_activestatusflag",
+      "f_businessname",
+      "f_businesstypecategorydesc",
+      "f_businesstypedescription",
+      "f_capability_combined",
+      "f_credentialstatus",
+      "f_datasource",
+      "f_dispensesnaloxone",
+      "f_emailaddress",
+      "f_hospital_prep_region",
+      "f_licensedbedtotal",
+      "f_licenseno",
+      "f_locationaddressline1",
+      "f_locationcity",
+      "f_locationcounty",
+      "f_locationlat",
+      "f_locationlong",
+      "f_locationstate",
+      "f_locationzip",
+      "f_voicephone"
+    ]
+  },
+  "cms_overlay_from_national": {
+    "nursingHomes": 922,
+    "homeHealth": 835,
+    "hospice": 169
+  }
+}

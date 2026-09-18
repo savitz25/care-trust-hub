@@ -11,6 +11,11 @@ describe("PA-REL-001 Pennsylvania discovery and case normalization", () => {
     expect(normalizedPublishedStatePath("/Pennsylvania")).toBe("/pennsylvania");
     expect(normalizedPublishedStatePath("/PENNSYLVANIA")).toBe("/pennsylvania");
     expect(normalizedPublishedStatePath("/PeNnSyLvAnIa")).toBe("/pennsylvania");
+    expect(normalizedPublishedStatePath("/Ohio")).toBe("/ohio");
+    expect(normalizedPublishedStatePath("/OHIO")).toBe("/ohio");
+    expect(normalizedPublishedStatePath("/oHiO")).toBe("/ohio");
+    expect(normalizedPublishedStatePath("/ohio")).toBeNull();
+    expect(normalizedPublishedStatePath("/ohio/cleveland")).toBeNull();
     expect(normalizedPublishedStatePath("/pennsylvania")).toBeNull();
     expect(normalizedPublishedStatePath("/Pennsylvania/philadelphia")).toBeNull();
   });
@@ -35,5 +40,25 @@ describe("PA-REL-001 Pennsylvania discovery and case normalization", () => {
     expect([...sitemap.matchAll(/"\/pennsylvania"/g)]).toHaveLength(1);
     expect(sitemap).not.toMatch(/"\/Pennsylvania"/);
     expect(sitemap).not.toMatch(/"\/pennsylvania\/[a-z-]+"/);
+  });
+
+  it("header, footer, and sitemap publish lowercase /ohio with no city routes", () => {
+    const nav = read("src/components/published-state-navigation.tsx");
+    expect(nav).toMatch(/href: "\/ohio"/);
+    expect(nav).not.toMatch(/href: "\/Ohio"/);
+    const footer = readFileSync(join(webRoot, "../../packages/ui/src/index.tsx"), "utf8");
+    expect(footer).toMatch(/href="\/ohio"/);
+    expect(footer).not.toMatch(/href="\/Ohio"/);
+    const sitemap = read("src/app/sitemaps/[file]/route.ts");
+    expect([...sitemap.matchAll(/"\/ohio"/g)]).toHaveLength(1);
+    expect(sitemap).not.toMatch(/"\/Ohio"/);
+    expect(sitemap).not.toMatch(/"\/ohio\/[a-z-]+"/);
+  });
+
+  it("mixed-case redirect clones the request URL so query strings are preserved", () => {
+    const proxy = read("src/proxy.ts");
+    expect(proxy).toMatch(/request\.nextUrl\.clone\(\)/);
+    expect(proxy).toMatch(/url\.pathname = statePath/);
+    expect(proxy).toMatch(/NextResponse\.redirect\(url, 308\)/);
   });
 });

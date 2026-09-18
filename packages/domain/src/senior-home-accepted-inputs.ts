@@ -97,3 +97,10 @@ export const NC_ACCEPTED = {
   cmsNursingHomes: NC.cmsOverlay.nursingHomes,
   snapshotAsOf: NC.snapshotAsOf,
 };
+import OH from "../../../artifacts/oh-sen-001-public-snapshot.json";
+export const OH_ACCEPTED = {
+  nursingFacilityRows: OH.nursingHomes.OH_NURSING_FACILITY_ROWS,
+  rcfRows: OH.rcf.OH_RCF_ROWS,
+  cmsNursingHomes: OH.cmsOverlay.CMS_OH_NURSING_HOME_ROWS,
+  snapshotAsOf: OH.asOf,
+};

@@ -50,6 +50,11 @@ test("all accepted four-state populations export with separate care/evidence gra
     "or.cmsOverlay.hospice": 66,
     "or.ohaHomeHealth.rows": 66,
     "or.ohaHospice.rows": 74,
+    "oh.nursingHomes.OH_NURSING_FACILITY_ROWS": 923,
+    "oh.rcf.OH_RCF_ROWS": 812,
+    "oh.cmsOverlay.nursingHomes": 922,
+    "oh.cmsOverlay.homeHealth": 835,
+    "oh.cmsOverlay.hospice": 169,
   }))
     assert.equal(rows[key]?.value, value, key);
   assert.equal(m.providerUniverses.nursingHome.current, 14690);
