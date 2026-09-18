@@ -241,6 +241,17 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
         "NOT_ACQUIRED",
       );
     }
+    if (
+      /\bnorth carolina\b/i.test(q) ||
+      state?.value === "NC" ||
+      (/\b(charlotte|raleigh)\b/i.test(q) && !/\bflorida\b|\bcharlotte county\b/i.test(q))
+    ) {
+      return fail(
+        "North Carolina Adult Care Homes and Family Care Homes are the state-regulated assisted-living classes. They are not Nursing Homes, not Home Health, and not CMS directories. ACH is not FCH. NC DHSR Star Rating is official state evidence, not a TrustHub score, and TrustHub does not rank facilities. Open the North Carolina research page.",
+        ["Open North Carolina senior-care research."],
+        "PARTIAL",
+      );
+    }
     return fail(
       "Assisted living is state-regulated and does not share the federal CMS nursing-home, Home Health, or Hospice directory contract. Use the available state-specific assisted-living research.",
       [
@@ -462,6 +473,143 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
     return fail(
       "SeniorTrustHub does not publish Philadelphia, Pittsburgh, or Allegheny intelligence routes. Statewide Pennsylvania research remains /pennsylvania. Ranking is unsupported.",
       ["Show nursing homes in Pennsylvania.", "Open Pennsylvania senior-care research."],
+    );
+  }
+  const northCarolina =
+    /\bnorth carolina\b/i.test(q) ||
+    state?.value === "NC" ||
+    (/\b(charlotte|raleigh|mecklenburg|wake county)\b/i.test(q) &&
+      /nursing home|assisted living|adult care|family care|home care|home health|hospice|senior|pace|ccrc|adult day/i.test(
+        q,
+      ) &&
+      !/\bflorida\b|\bcharlotte county\b/i.test(q));
+  const ncLicense = q.match(
+    /\b((?:HAL|FCL|ORL)-\d{3}-\d+|NH\d{4}|HC\d{4}|HOS\d{4}|NP\d{4})\b/i,
+  )?.[1];
+  const ncFid = q.match(/\bfid\s*[:#=]?\s*(\d{4,8})\b/i)?.[1];
+  if (northCarolina && /adult care home|\bach\b/i.test(q) && !/family care/i.test(q)) {
+    return fail(
+      "North Carolina Adult Care Homes are a DHSR ACLS license class (HAL), not Family Care Homes and not Nursing Homes. This snapshot has 568 Adult Care Home licenses from the 2026-07-30 listing. Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (northCarolina && /family care home|\bfch\b/i.test(q)) {
+    return fail(
+      "North Carolina Family Care Homes are a DHSR ACLS license class (FCL, 2–6 beds), not Adult Care Homes and not Nursing Homes. This snapshot has 515 Family Care Home licenses from the 2026-07-30 listing. Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (
+    northCarolina &&
+    /star rating|star-rated|4 star|four star/i.test(q) &&
+    /adult care|family care|assisted living/i.test(q)
+  ) {
+    return fail(
+      "NC DHSR publishes official Star Ratings for Adult Care Homes and Family Care Homes. The listing as-of date is 2026-07-30. A Star Rating is official state evidence, not a TrustHub score, and TrustHub does not rank or select a winner. Inspect facility evidence on the DHSR search and the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (northCarolina && /penalt/i.test(q) && /adult care|family care|assisted living/i.test(q)) {
+    return fail(
+      "North Carolina Adult Care penalties are DHSR ACLS administrative penalties for the previous 36 months. A penalty is not a complaint, not an inspection, and not a conviction. Amount is not a quality score. Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (northCarolina && /inspection/i.test(q) && /adult care|family care|assisted living/i.test(q)) {
+    return fail(
+      "North Carolina Adult Care inspections are DHSR ACLS survey observations. An inspection is not a complaint. A statement of deficiencies is not a penalty. Statewide inspection-event tables remain search-only except acquired penalty and Star Rating evidence. Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (northCarolina && /home care/i.test(q) && !/home health/i.test(q)) {
+    return fail(
+      "North Carolina Home Care is a DHSR class. The Home Care All download is mixed and includes Home Health licenses, so 3,336 mixed-file rows are not a Home Care agency count. Home Health (192) and Hospice (212) stay on separate listings. Nursing Pool is not Home Care. Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (northCarolina && /home health/i.test(q)) {
+    return fail(
+      "North Carolina Home Health is a DHSR listing class (192 rows as of 2026-08-20), not Home Care and not Hospice. A DHSR Home Health license is not a CMS Home Health CCN unless an exact source-published bridge exists (0 in this snapshot). Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (northCarolina && /\bhospice\b/i.test(q)) {
+    return fail(
+      "North Carolina Hospice is a DHSR listing class (212 HOS licenses as of 2026-08-20), not Home Health and not Home Care. State hospice license is not a CMS Hospice CCN unless an exact source-published bridge exists (0 in this snapshot). Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (northCarolina && /nursing home/i.test(q) && /deficienc|inspection|survey|sod/i.test(q)) {
+    return fail(
+      "North Carolina nursing-home Statements of Deficiencies are posted from March 1, 2011. This snapshot acquired a facility SOD index, not a complete SOD document universe. A deficiency is not a complaint. State license is not a CMS CCN. Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (northCarolina && /adult day/i.test(q)) {
+    return fail(
+      "North Carolina Adult Day Care and Adult Day Health are Division of Aging certified programs, not residential Adult Care, Family Care, or Nursing Homes. The 2026-04-21 directory has 93 centers. Combined ADC/ADH programs are not double-counted. Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (northCarolina && /\bpace\b/i.test(q) && !/quality of pace/i.test(q)) {
+    return fail(
+      "North Carolina PACE is a CMS/NC Medicaid program. This snapshot has 11 organizations and 14 locations. A PACE organization is not a PACE location and not a DHSR facility license. Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (northCarolina && /ccrc|continuing care retirement/i.test(q)) {
+    return fail(
+      "North Carolina CCRCs are licensed by NCDOI, not as a DHSR facility class. A CCRC campus is not the sum of DHSR Adult Care or Nursing Home components. Continuing Care at Home is a separate licensed program. Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if ((ncLicense || ncFid) && (northCarolina || /\b(hal|fcl|orl|fid)\b/i.test(q))) {
+    const ident = ncLicense ? ncLicense.toUpperCase() : `FID ${ncFid}`;
+    return fail(
+      `North Carolina identity ${ident} is a state DHSR license or FID. Confirm it on official DHSR lookup. A state license/FID is not a CMS CCN. Name-only matching is unsafe.`,
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (
+    northCarolina &&
+    /senior care/i.test(q) &&
+    !/nursing home|assisted living|adult care|family care|home care|home health|hospice|adult day|pace|ccrc/i.test(
+      q,
+    )
+  ) {
+    return fail(
+      "North Carolina senior care is class-specific. Adult Care Home is not Family Care Home is not Nursing Home. Home Care is not Home Health is not Hospice. Adult Day, PACE, and CCRC are separate. There is no combined NC senior-provider total. Open the North Carolina research page.",
+      ["Open North Carolina senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (northCarolina && /\b(best|safest|top-rated|worst)\b/i.test(q)) {
+    return fail(
+      "SeniorTrustHub does not rank North Carolina facilities and does not convert NC DHSR Star Ratings into a TrustHub score. NC DHSR publishes official Star Ratings as evidence a consumer may consider. TrustHub does not select a winner. Statewide research remains /north-carolina.",
+      ["Open North Carolina senior-care research.", "Show nursing homes in North Carolina."],
+    );
+  }
+  if (
+    /\b(charlotte|raleigh|mecklenburg|wake county)\b/i.test(q) &&
+    /nursing home|assisted living|adult care|family care|senior/i.test(q) &&
+    !/\bflorida\b|\bcharlotte county\b/i.test(q)
+  ) {
+    return fail(
+      "SeniorTrustHub does not publish Charlotte, Raleigh, Mecklenburg, or Wake intelligence routes. Statewide North Carolina research remains /north-carolina. Ranking is unsupported.",
+      ["Show nursing homes in North Carolina.", "Open North Carolina senior-care research."],
     );
   }
   if (

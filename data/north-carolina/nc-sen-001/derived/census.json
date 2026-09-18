@@ -1,0 +1,303 @@
+{
+  "retrievedAt": "2026-09-17T19:39:21Z",
+  "listings": {
+    "ach": {
+      "rows": 568,
+      "distinct_licenses": 568,
+      "star_dist": {
+        "2": 58,
+        "3": 283,
+        "4": 166,
+        "0": 32,
+        "1": 18,
+        "N/A": 11
+      },
+      "footer": "Total number of facilities: 568",
+      "sha256": "f4a620ae66ea156773082574c094bdb478915496f3af667791e679d596041453",
+      "sourceUpdated": "2026-07-30"
+    },
+    "fch": {
+      "rows": 515,
+      "distinct_licenses": 515,
+      "star_dist": {
+        "N/A": 15,
+        "2": 26,
+        "3": 223,
+        "4": 236,
+        "0": 9,
+        "1": 6
+      },
+      "footer": "Total number of facilities: 515",
+      "sha256": "84744687a140b1aae7ce1dc4c7c8a762a92734567c6f26f207295ae65189b81a",
+      "sourceUpdated": "2026-07-30"
+    },
+    "nursing_home": {
+      "rows": 423,
+      "distinct_licenses": 423,
+      "footer": "Total number of facilities: 423",
+      "sha256": "c1ca950920ee799eb89799d98e23b7b788f305224c26bb77c95626d44e8d41af",
+      "sourceUpdated": "2026-09-09"
+    },
+    "home_health": {
+      "rows": 192,
+      "distinct_licenses": 192,
+      "sha256": "2f179b4f72300343817385d768d8ad2d91a48437e6ca11ab91224935a78a44dd",
+      "sourceUpdated": "2026-08-20"
+    },
+    "hospice": {
+      "rows": 212,
+      "distinct_licenses": 212,
+      "sha256": "adf878f1bd2932694bdbed9270042d7e2967bf3c2ca096f8a95755d9ceee6746",
+      "sourceUpdated": "2026-08-20"
+    },
+    "home_care_all_mixed": {
+      "rows": 3336,
+      "distinct_licenses": 3336,
+      "hh_licenses_inside": 192,
+      "hchos_inside": 16,
+      "hhhos_inside": 17,
+      "np_inside": 0,
+      "hos_inside": 0,
+      "sha256": "79e13c9646ce21cc3c88854d70c26e30a7381f5f10ab64f6ac319a96f5fe7f1c",
+      "sourceUpdated": "2026-08-20",
+      "not_home_care_agency_count": true
+    },
+    "home_care_with_hospice_subset": {
+      "rows": 16,
+      "distinct_licenses": 16
+    },
+    "home_health_with_hospice_subset": {
+      "rows": 17,
+      "distinct_licenses": 17
+    },
+    "nursing_pool": {
+      "rows": 631,
+      "distinct_licenses": 631,
+      "sha256": "950c128f60dc1207dabc828615516056c56ccabf4035e0e2d5291700287ac4f6",
+      "sourceUpdated": "2026-08-20"
+    },
+    "special_care_units": {
+      "rows": 274
+    }
+  },
+  "star_index": {
+    "rows": 1083,
+    "distinct_licenses": 1083,
+    "distinct_fids": 1083,
+    "missing_fid": 0,
+    "star_dist": {
+      "2": 90,
+      "3": 503,
+      "0": 42,
+      "4": 411,
+      "1": 25,
+      "BLANK": 12
+    },
+    "counties": 98
+  },
+  "penalties": {
+    "rows": 489,
+    "distinct_licenses": 190,
+    "distinct_events": 488,
+    "amount_total": 4634077.5,
+    "level_dist": {
+      "A2": 206,
+      "A1": 228,
+      "Unabated B": 35,
+      "Unabated A1": 7,
+      "Unabated A2": 10,
+      "Unabated Unabated B": 1,
+      "Uabated A1": 1,
+      "UA1": 1
+    }
+  },
+  "nh_sod_index": {
+    "rows": 446,
+    "distinct_fids": 446,
+    "missing_fid": 0
+  },
+  "ccrc": {
+    "map_communities": 66,
+    "names": [
+      "Oak Creek Apartments",
+      "The Village at Brookwood",
+      "Twin Lakes Community",
+      "Ardenwoods",
+      "Brooks-Howell Home",
+      "Deerfield Episcopal Retirement Community",
+      "Givens Estates",
+      "Givens Highland Farms",
+      "Pisgah Valley Retirement Community",
+      "Grace Ridge Retirement Community",
+      "The Gardens at Taylor Glen",
+      "Abernethy Laurels",
+      "Carolina Meadows Retirement Community",
+      "Galloway Ridge at Fearrington",
+      "Pittsboro Christian Village",
+      "Piedmont Crossing",
+      "The Cedars of Chapel Hill",
+      "Croasdaile Village Retirement Community",
+      "The Forest at Duke",
+      "Trinity Elms",
+      "Arbor Acres",
+      "Brookridge Retirement Community",
+      "Salemtowne",
+      "Covenant Village",
+      "Stanley Total Living Center",
+      "River Landing at Sandy Ridge",
+      "Friends Homes, Inc.",
+      "Well-Spring Retirement Community",
+      "Whitestone: A Masonic and Eastern Star Community",
+      "Pennybyrn at Maryfield",
+      "Providence Place",
+      "Carolina Village",
+      "Aldersgate",
+      "Brookdale Carriage Club Providence",
+      "Carmel Hills",
+      "The Sharon at Southpark",
+      "Sharon Village Apartments",
+      "Southminster",
+      "The Barclay at Southpark",
+      "The Cypress of Charlotte",
+      "The Pines at Davidson",
+      "Matthews Glen",
+      "Windsor Run Retirement Community",
+      "Quail Haven Village",
+      "Belle Meade and Pine Knoll",
+      "Penick Village",
+      "Carolina Bay at Autumn Hall",
+      "Plantation Village",
+      "Trinity Landing",
+      "Carol Woods",
+      "Cypress Glen Retirement Community",
+      "Tryon Estates",
+      "White Oak Village Apartments",
+      "Wesley Pines Retirement Community",
+      "Trinity Oaks",
+      "Scotia Village",
+      "Glenaire",
+      "Searstone",
+      "The Templeton at Cary",
+      "Windsor Point",
+      "Springmoor Life Care Retirement Community",
+      "The Cardinal at North Hills",
+      "The Cypress of Raleigh",
+      "The Oaks at Whitaker Glen",
+      "The East Tower at Cardinal North Hills",
+      "Hayes Barton Place"
+    ],
+    "handbook": {
+      "pages": 95,
+      "sha256": "c4fa77d0c4cf3ca734af6d4e2981009c228697dadec907b94eafad43f7f60b6c",
+      "id_row_hits": 68,
+      "sample": [
+        [
+          "0001",
+          "01",
+          "Aldersgate United Methodist "
+        ],
+        [
+          "0002",
+          "01",
+          "Arbor Acres United Methodist "
+        ],
+        [
+          "0004",
+          "01",
+          "Baptist Retirement Homes of "
+        ],
+        [
+          "0004",
+          "02",
+          "Baptist Retirement Homes of "
+        ],
+        [
+          "0004",
+          "03",
+          "Baptist Retirement Homes of "
+        ],
+        [
+          "0004",
+          "04",
+          "Baptist Retirement Homes of "
+        ],
+        [
+          "0005",
+          "01",
+          "Carmel Hills, Inc. Carmel Hills "
+        ],
+        [
+          "0006",
+          "01",
+          "The Chapel Hill Residential "
+        ]
+      ],
+      "has_appendix_c": true
+    }
+  },
+  "ccah": {
+    "rows": 10,
+    "names": [
+      "Carol Woods",
+      "Salemtowne",
+      "Carolina Meadows",
+      "Arbor Acres",
+      "The Cardinal at North Hills",
+      "The Forest at Duke",
+      "Givens Choice",
+      "ThriveMore at Home (Disclosure Statement)",
+      "The Sharon at Southpark",
+      "The Pines at Davidson"
+    ]
+  },
+  "adult_day": {
+    "pages": 11,
+    "sha256": "8d5f6cb0c3411397f3ae5051a40263316dc2596018025d4e84ddf71d9fbc0906",
+    "type_token_counts": {
+      "ADC": 32,
+      "ADH": 29,
+      "ADC/ALZ": 1,
+      "ADC/ADH": 67,
+      "ADC_DD": 2
+    },
+    "max_rec_num": 900,
+    "date_in_text": "4/21/2026",
+    "has_adc_label": true,
+    "excerpt_head": "CERTIFIED ADULT DAY CARE AND ADULT DAY HEALTH PROGRAMS\n4/21/2026\nREC\nNUM COUNTY CENTER DIRECTOR ADDRESS CITY ST ZIP CAPACITY PHONE\nEMAIL ADDRESS/WEBSITE\nTYPE\n1 Alamance Friendship Adult \nDay Services, Inc. Linda Vaughn 424 Rudd Street, Suite 101 Burlington NC 27217 48 (336) 222-\n7797 \nlindavaughn@friendshipadultday.org                     \nhttp://friendshipadultday.com ADC\n2 Alamance Piedmont Health \nSeniorCare Carolyn Vincent 1214 Vaughn Road Burlington NC 27217 110 (336) 532-\n0000\njohnsonc@piedmonthealth.org ADH\n3 Alamance The Harbor at Twin \nLakes Community Katie Gantos 3810 Heritage Drive Burlington NC 27215 12 (336) 585-\n2393 kgantos@twinlakescomm.org ADC/ALZ\n4 Ashe\nAshe Service for \nAging, Inc. dba \nGenerations Ashe\nJordan Myers 180 ChattyRob Lane West Jefferson NC 28694 41 (336) 246"
+  },
+  "pace": {
+    "pages": 4,
+    "sha256": "05c44ba640ae91afe980ed4be8a6858c13018370464afb2fdc009c85fd47ffd4",
+    "npi_count": 13,
+    "npis": [
+      "1063767853",
+      "1083058598",
+      "1093075905",
+      "1376986679",
+      "1538579511",
+      "1699983312",
+      "1730439571",
+      "1730470188",
+      "1750692620",
+      "1780020347",
+      "1801644901",
+      "1841449410",
+      "1902102221"
+    ],
+    "org_name_hits": [
+      "Elderhaus ",
+      "Piedmont Health SeniorCare ",
+      "PACE of the Triad ",
+      "PACE @Home ",
+      "Carolina SeniorCare ",
+      "PACE of the Southern Piedmont ",
+      "VOANS Senior CommUnity Care of North Carolina ",
+      "Senior Total Life Care ",
+      "Senior Total Life Care-West ",
+      "Randolph Health StayWell Senior Care ",
+      "CarePartners PACE "
+    ],
+    "mentions_11": false,
+    "excerpt_head": " \nPACE ORGANIZATIONS IN NORTH CAROLINA \n \nPACE ORGANIZATION SERVICE AREAS BY COUNTY & ZIP CODE* *Zip code based on Beneficiary’s residence \nElderhaus \n(NPI 1699983312) \n2222 South 17th Street, Wilmington, NC 28401 \nwww.elderhaus.com \nRuth Finch, Executive Director 910-767-0932 \nApproved as a PACE organization Feb. 2008 \nCounties: New Hanover and Brunswick \nZIP codes: 28422, 28451, 28461, 28479 \nPiedmont Health SeniorCare \n(NPI 1841449410) \n1214 Vaughn Road, Burlington, NC 27217  \n \nPiedmont Health SeniorCare – Chatham \n(NPI 1376986679) \n163 Chatham Business Drive \nPittsboro, NC 27312  \n \nwww.piedmonthealthseniorcare.org \nJeffrey Sumpter, Executive Director, 919-545-7341 \nApproved as a PACE organization Nov. 2008 \nCounties: Alamance, Caswell, Chatham, Lee and Orange, and a portion of 27278 located in Durham \nZIP codes: 27201, 27202, 27215, 27216, 27217, 27302, 27340, 27349, 24244, 27253, 27258, \n27359; 27212, 27305, 27311, 27314, 27315, 27379, 27291; 27510, 27514, 27516, 27517, 27541, \n27572, 27705, 27583, 27707, 27712; 27207, 27208, 27252, 27298, 27312, 27330, 27344, 27349, \n27355, 27502, 27516, 27517, 27519, 27523, 27559, 27562, 27713; 27330, 27332, 27505, 28326. \n \nPACE ORGANIZAT"
+  }
+}

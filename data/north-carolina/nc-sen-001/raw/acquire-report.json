@@ -1,0 +1,76 @@
+{
+  "ticket": "NC-SEN-001",
+  "retrievedAt": "2026-09-17T19:39:21Z",
+  "listingsPage": "https://info.ncdhhs.gov/dhsr/reports.htm",
+  "artifacts": [
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/Ahlist.xlsx",
+      "url": "https://info.ncdhhs.gov/dhsr/data/Ahlist.xlsx?ver=5.1",
+      "sourceUpdated": "2026-07-30",
+      "grain": "Adult Care Home license row"
+    },
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/Fchlist.xlsx",
+      "url": "https://info.ncdhhs.gov/dhsr/data/Fchlist.xlsx?ver=4.0",
+      "sourceUpdated": "2026-07-30",
+      "grain": "Family Care Home license row"
+    },
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/Nhlist_a.xlsx",
+      "url": "https://info.ncdhhs.gov/dhsr/data/Nhlist_a.xlsx?ver=1.2",
+      "sourceUpdated": "2026-09-09",
+      "grain": "Nursing Home license row"
+    },
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/hclist.xlsx",
+      "url": "https://info.ncdhhs.gov/dhsr/data/hclist.xlsx?ver=2.6",
+      "sourceUpdated": "2026-08-20",
+      "grain": "Home Care All mixed file"
+    },
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/hhlist.xlsx",
+      "url": "https://info.ncdhhs.gov/dhsr/data/hhlist.xlsx?ver=2.3",
+      "sourceUpdated": "2026-08-20",
+      "grain": "Home Health listing"
+    },
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/hoslist.xlsx",
+      "url": "https://info.ncdhhs.gov/dhsr/data/hoslist.xlsx?ver=2.4",
+      "sourceUpdated": "2026-08-20",
+      "grain": "Hospice listing"
+    },
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/nursingpool.xlsx",
+      "url": "https://info.ncdhhs.gov/dhsr/data/nursingpool.xlsx?ver=2.2",
+      "sourceUpdated": "2026-08-20",
+      "grain": "Nursing Pool listing"
+    },
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/adultcarepenalties.html",
+      "url": "https://info.ncdhhs.gov/dhsr/acls/adultcarepenalties.asp",
+      "grain": "Adult Care penalty row previous 36 months"
+    },
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/nh-sod-all.html",
+      "url": "https://info.ncdhhs.gov/dhsr/facilities/results.asp",
+      "grain": "Nursing Home SOD facility index"
+    },
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/adc-provider-list-2026-04-21.pdf",
+      "url": "https://www.ncdhhs.gov/4-17-26-adc-provider-list/download?attachment",
+      "sourceUpdated": "2026-04-21",
+      "grain": "Certified Adult Day center"
+    },
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/pace-service-area.pdf",
+      "url": "https://medicaid.ncdhhs.gov/ncpace-service-area/download?attachment=",
+      "sourcePageDate": "2026-02-18",
+      "grain": "PACE organization/location"
+    },
+    {
+      "path": "data/north-carolina/nc-sen-001/raw/ccrc-map-export.csv",
+      "url": "https://www.ncdoi.gov/tablefield/export/paragraph/3342/field_map_data/en/0",
+      "grain": "NCDOI licensed CCRC map community"
+    }
+  ]
+}

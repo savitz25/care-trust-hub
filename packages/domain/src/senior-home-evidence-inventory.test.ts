@@ -45,6 +45,7 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
       "/illinois",
       "/oregon",
       "/pennsylvania",
+      "/north-carolina",
     ]);
     expect(inventory.find((row) => row.key === "fl-regulatory-observations")?.value).toBe(77219);
     expect(inventory.find((row) => row.key === "nj-enforcement-indexed")?.doesNotCount).toMatch(
@@ -69,6 +70,7 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
     expect(inventory.some((row) => row.value === 675)).toBe(false);
     expect(inventory.find((row) => row.key === "or-odhs-nf")?.value).toBe(128);
     expect(inventory.find((row) => row.key === "pa-doh-nh")?.value).toBe(659);
+    expect(inventory.find((row) => row.key === "nc-dhsr-ach")?.value).toBe(568);
     expect(inventory.find((row) => row.key === "or-odhs-nf")?.doesNotCount).toMatch(
       /CMS Nursing Home/i,
     );
