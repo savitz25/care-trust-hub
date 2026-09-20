@@ -5,7 +5,7 @@ const database = vi.hoisted(() => ({ query: vi.fn() }));
 vi.mock("./db", () => ({ getCareDatabasePool: () => database }));
 
 import { interpretSeniorAskQuery } from "./senior-ask-parse";
-import { executeSeniorResearchQuery, executeSeniorResearchPlan } from "./senior-ask-execute";
+import { executeSeniorResearchQuery } from "./senior-ask-execute";
 import {
   executeSeniorNameCandidates,
   normalizeSeniorNameCandidatesRequest,
@@ -19,22 +19,70 @@ import {
  * and a source-failure trigger row.
  */
 const NH_FIXTURES = [
-  { ccn: "FL1001", provider_name: "ABBEY DELRAY SOUTH", city: "DELRAY BEACH", state_code: "FL", county_name: "Palm Beach" },
-  { ccn: "NY1002", provider_name: "ABIGAIL HOUSE FOR NURSING & REHABILITATION", city: "EAST NORWICH", state_code: "NY", county_name: "Nassau" },
-  { ccn: "NY1003", provider_name: "A HOLLY PATTERSON EXTENDED CARE FACILITY", city: "UNIONDALE", state_code: "NY", county_name: "Nassau" },
-  { ccn: "TX1004", provider_name: "FFIII HOUSTON SNF TENANT", city: "HOUSTON", state_code: "TX", county_name: "Harris" },
+  {
+    ccn: "FL1001",
+    provider_name: "ABBEY DELRAY SOUTH",
+    city: "DELRAY BEACH",
+    state_code: "FL",
+    county_name: "Palm Beach",
+  },
+  {
+    ccn: "NY1002",
+    provider_name: "ABIGAIL HOUSE FOR NURSING & REHABILITATION",
+    city: "EAST NORWICH",
+    state_code: "NY",
+    county_name: "Nassau",
+  },
+  {
+    ccn: "NY1003",
+    provider_name: "A HOLLY PATTERSON EXTENDED CARE FACILITY",
+    city: "UNIONDALE",
+    state_code: "NY",
+    county_name: "Nassau",
+  },
+  {
+    ccn: "TX1004",
+    provider_name: "FFIII HOUSTON SNF TENANT",
+    city: "HOUSTON",
+    state_code: "TX",
+    county_name: "Harris",
+  },
   // A second Nursing Home in the same fixture set so "nursing homes in Florida" (a category browse)
   // still returns real rows, distinct from the name-search cases above.
-  { ccn: "FL1005", provider_name: "SUNSHINE MANOR NURSING CENTER", city: "TAMPA", state_code: "FL", county_name: "Hillsborough" },
+  {
+    ccn: "FL1005",
+    provider_name: "SUNSHINE MANOR NURSING CENTER",
+    city: "TAMPA",
+    state_code: "FL",
+    county_name: "Hillsborough",
+  },
   // A source-failure trigger: this repo's fixtureDatabase throws when it sees this exact name so the
   // TECHNICAL_FAILURE path can be exercised honestly, not simulated by mocking failClosed directly.
-  { ccn: "ZZ9999", provider_name: "TRIGGER SOURCE FAILURE FIXTURE", city: "NOWHERE", state_code: "ZZ", county_name: "Nowhere" },
+  {
+    ccn: "ZZ9999",
+    provider_name: "TRIGGER SOURCE FAILURE FIXTURE",
+    city: "NOWHERE",
+    state_code: "ZZ",
+    county_name: "Nowhere",
+  },
 ];
 const HOME_HEALTH_FIXTURES = [
-  { cms_ccn: "TX2001", provider_name: "ABIGAIL HOME HEALTH OF HOUSTON", city: "HOUSTON", state_code: "TX", zip_code: "77002" },
+  {
+    cms_ccn: "TX2001",
+    provider_name: "ABIGAIL HOME HEALTH OF HOUSTON",
+    city: "HOUSTON",
+    state_code: "TX",
+    zip_code: "77002",
+  },
 ];
 const HOSPICE_FIXTURES = [
-  { cms_ccn: "NY3001", provider_name: "HOLLY PATTERSON HOSPICE CARE", city: "UNIONDALE", state_code: "NY", zip_code: "11553" },
+  {
+    cms_ccn: "NY3001",
+    provider_name: "HOLLY PATTERSON HOSPICE CARE",
+    city: "UNIONDALE",
+    state_code: "NY",
+    zip_code: "11553",
+  },
 ];
 const clock = {
   display_name: "Synthetic R1-019E fixture",
@@ -51,7 +99,11 @@ async function fixtureDatabase(sql: string, values: unknown[] = []) {
   if (sql.includes("DISTINCT state_code")) {
     const needle = likeValue(values[0]);
     const states = [
-      ...new Set(NH_FIXTURES.filter((r) => r.county_name.toUpperCase().includes(needle)).map((r) => r.state_code)),
+      ...new Set(
+        NH_FIXTURES.filter((r) => r.county_name.toUpperCase().includes(needle)).map(
+          (r) => r.state_code,
+        ),
+      ),
     ].sort();
     return { rows: states.map((state_code) => ({ state_code })) };
   }
@@ -72,7 +124,8 @@ async function fixtureDatabase(sql: string, values: unknown[] = []) {
       if (needle.includes("TRIGGER SOURCE FAILURE")) throw new Error("synthetic_source_failure");
       rows = rows.filter((r) => r.provider_name.toUpperCase().includes(needle));
     }
-    if (sql.includes("count(*)")) return { rows: [{ n: String(rows.length), as_of: clock.source_modified_at }] };
+    if (sql.includes("count(*)"))
+      return { rows: [{ n: String(rows.length), as_of: clock.source_modified_at }] };
     const limit = sql.match(/LIMIT \$(\d+)/);
     const offset = sql.match(/OFFSET \$(\d+)/);
     const start = offset ? Number(values[Number(offset[1]) - 1]) : 0;
@@ -90,7 +143,9 @@ async function fixtureDatabase(sql: string, values: unknown[] = []) {
     };
   }
   if (sql.includes("home_health_snapshot") || sql.includes("hospice_snapshot")) {
-    let rows = sql.includes("home_health_snapshot") ? [...HOME_HEALTH_FIXTURES] : [...HOSPICE_FIXTURES];
+    let rows = sql.includes("home_health_snapshot")
+      ? [...HOME_HEALTH_FIXTURES]
+      : [...HOSPICE_FIXTURES];
     const stateParam = sql.match(/c\.state_code=\$(\d+)/);
     if (stateParam) rows = rows.filter((r) => r.state_code === values[Number(stateParam[1]) - 1]);
     const cityParam = sql.match(/upper\(trim\(c\.city\)\)=\$(\d+)/);
@@ -133,33 +188,49 @@ function errorCode(fn: () => unknown): string {
 // ---------------------------------------------------------------- 1. structured request validation
 describe("1. structured provider-name request validation", () => {
   it("requires an explicit name field", () => {
-    expect(() => normalizeSeniorNameCandidatesRequest({})).toThrow(SeniorNameCandidatesRequestError);
+    expect(() => normalizeSeniorNameCandidatesRequest({})).toThrow(
+      SeniorNameCandidatesRequestError,
+    );
   });
   it("rejects an unknown top-level field", () => {
-    expect(errorCode(() => normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South", extra: 1 }))).toBe(
-      "unsupported_field",
-    );
+    expect(
+      errorCode(() =>
+        normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South", extra: 1 }),
+      ),
+    ).toBe("unsupported_field");
   });
   it("rejects a malformed operation value", () => {
     expect(
-      errorCode(() => normalizeSeniorNameCandidatesRequest({ operation: "wrong", name: "Abbey Delray South" })),
+      errorCode(() =>
+        normalizeSeniorNameCandidatesRequest({ operation: "wrong", name: "Abbey Delray South" }),
+      ),
     ).toBe("invalid_operation");
   });
   it("rejects an unsupported providerClass", () => {
     expect(
       errorCode(() =>
-        normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South", providerClass: "memory_care" }),
+        normalizeSeniorNameCandidatesRequest({
+          name: "Abbey Delray South",
+          providerClass: "memory_care",
+        }),
       ),
     ).toBe("invalid_provider_class");
   });
   it("rejects a malformed state", () => {
     expect(
-      errorCode(() => normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South", state: "Florida" })),
+      errorCode(() =>
+        normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South", state: "Florida" }),
+      ),
     ).toBe("invalid_state");
   });
   it("accepts a minimal valid request", () => {
     const req = normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South" });
-    expect(req).toEqual({ name: "Abbey Delray South", providerClass: undefined, state: undefined, page: 1 });
+    expect(req).toEqual({
+      name: "Abbey Delray South",
+      providerClass: undefined,
+      state: undefined,
+      page: 1,
+    });
   });
 });
 
@@ -197,7 +268,9 @@ describe("2-4. exact source-name search survives city words and care-category wo
   });
   it("6b. Senior's matcher does substring ILIKE, not word-level normalization -- spelling out '&' as 'and' is an honest miss, not aggressive fuzzy matching invented here", async () => {
     const result = await executeSeniorNameCandidates(
-      normalizeSeniorNameCandidatesRequest({ name: "Abigail House for Nursing and Rehabilitation" }),
+      normalizeSeniorNameCandidatesRequest({
+        name: "Abigail House for Nursing and Rehabilitation",
+      }),
     );
     expect(result.resultState).toBe("COMPLETED_NO_CANDIDATES");
   });
@@ -205,8 +278,12 @@ describe("2-4. exact source-name search survives city words and care-category wo
     // "Houston" leads no fixture name here, but FFIII Houston SNF Tenant CONTAINS the city word --
     // already covered above. This case additionally proves the city word is not silently stripped:
     // the SAME query, run twice, must consistently echo the identical supplied name.
-    const a = await executeSeniorNameCandidates(normalizeSeniorNameCandidatesRequest({ name: "FFIII Houston SNF Tenant" }));
-    const b = await executeSeniorNameCandidates(normalizeSeniorNameCandidatesRequest({ name: "FFIII Houston SNF Tenant" }));
+    const a = await executeSeniorNameCandidates(
+      normalizeSeniorNameCandidatesRequest({ name: "FFIII Houston SNF Tenant" }),
+    );
+    const b = await executeSeniorNameCandidates(
+      normalizeSeniorNameCandidatesRequest({ name: "FFIII Houston SNF Tenant" }),
+    );
     expect(a.name.supplied).toBe("FFIII Houston SNF Tenant");
     expect(b.name.supplied).toBe("FFIII Houston SNF Tenant");
   });
@@ -215,14 +292,17 @@ describe("2-4. exact source-name search survives city words and care-category wo
 // ---------------------------------------------------------------- 5. provider-class preservation
 describe("5. provider-class preservation across nursing home, home health and hospice", () => {
   it("a name shared across two different classes is never merged into one denominator", async () => {
-    const result = await executeSeniorNameCandidates(normalizeSeniorNameCandidatesRequest({ name: "Abigail" }));
+    const result = await executeSeniorNameCandidates(
+      normalizeSeniorNameCandidatesRequest({ name: "Abigail" }),
+    );
     expect(result.resultState).toBe("COMPLETED_WITH_CANDIDATES");
     if (result.resultState !== "COMPLETED_WITH_CANDIDATES") return;
     const classes = new Set(result.candidates.map((c) => c.providerClass));
     expect(classes.has("nursing_home")).toBe(true);
     expect(classes.has("home_health")).toBe(true);
     // Each row keeps its OWN class; there is no single "Abigail" total that merges them.
-    for (const c of result.candidates) expect(["nursing_home", "home_health", "hospice"]).toContain(c.providerClass);
+    for (const c of result.candidates)
+      expect(["nursing_home", "home_health", "hospice"]).toContain(c.providerClass);
   });
   it("an optional providerClass filter narrows already-returned candidates without a second query", async () => {
     const result = await executeSeniorNameCandidates(
@@ -294,7 +374,9 @@ describe("8. true care-category queries remain category queries, never a name se
     expect(plan.identityQuery).toBeUndefined();
   });
   it("a bare category phrase submitted to the structured operation is UNSUPPORTED, never a name miss", async () => {
-    const result = await executeSeniorNameCandidates(normalizeSeniorNameCandidatesRequest({ name: "senior care Florida" }));
+    const result = await executeSeniorNameCandidates(
+      normalizeSeniorNameCandidatesRequest({ name: "senior care Florida" }),
+    );
     expect(result.resultState).toBe("UNSUPPORTED_OPERATION");
     expect(result.name.predicateApplied).toBe(false);
   });
@@ -338,7 +420,9 @@ describe("10b. a genuine provider-name miss", () => {
 // ---------------------------------------------------------------- 11. pagination / cap truthfulness
 describe("11. pagination and cap truthfulness", () => {
   it("hasMore is reported honestly and never silently coerced", async () => {
-    const result = await executeSeniorNameCandidates(normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South" }));
+    const result = await executeSeniorNameCandidates(
+      normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South" }),
+    );
     expect(result.resultState).toBe("COMPLETED_WITH_CANDIDATES");
     if (result.resultState === "COMPLETED_WITH_CANDIDATES") {
       expect(result.pagination.page).toBe(1);
@@ -356,8 +440,12 @@ describe("12. native and structured operation use the same authoritative engine 
     );
     expect(structured.resultState).toBe("COMPLETED_WITH_CANDIDATES");
     if (structured.resultState !== "COMPLETED_WITH_CANDIDATES") return;
-    const nativeIdentities = native.entities.map((e) => ({ ccn: e.ccn, providerClass: e.providerClass })).sort((a, b) => a.ccn.localeCompare(b.ccn));
-    const structuredIdentities = structured.candidates.map((c) => ({ ccn: c.ccn, providerClass: c.providerClass })).sort((a, b) => a.ccn.localeCompare(b.ccn));
+    const nativeIdentities = native.entities
+      .map((e) => ({ ccn: e.ccn, providerClass: e.providerClass }))
+      .sort((a, b) => a.ccn.localeCompare(b.ccn));
+    const structuredIdentities = structured.candidates
+      .map((c) => ({ ccn: c.ccn, providerClass: c.providerClass }))
+      .sort((a, b) => a.ccn.localeCompare(b.ccn));
     expect(structuredIdentities).toEqual(nativeIdentities);
   });
 });
@@ -365,7 +453,9 @@ describe("12. native and structured operation use the same authoritative engine 
 // ---------------------------------------------------------------- 13. no invented URL/action
 describe("13. no invented profile URL or action", () => {
   it("every action href comes from the entity's own existing href, never constructed from the name", async () => {
-    const result = await executeSeniorNameCandidates(normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South" }));
+    const result = await executeSeniorNameCandidates(
+      normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South" }),
+    );
     expect(result.resultState).toBe("COMPLETED_WITH_CANDIDATES");
     if (result.resultState !== "COMPLETED_WITH_CANDIDATES") return;
     const native = await executeSeniorResearchQuery("Abbey Delray South");
@@ -379,7 +469,9 @@ describe("13. no invented profile URL or action", () => {
 // ---------------------------------------------------------------- 14. publication/scope guard
 describe("14. publication/scope guard", () => {
   it("every returned candidate is publicly published (public_profile) -- never a restricted projection", async () => {
-    const result = await executeSeniorNameCandidates(normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South" }));
+    const result = await executeSeniorNameCandidates(
+      normalizeSeniorNameCandidatesRequest({ name: "Abbey Delray South" }),
+    );
     expect(result.resultState).toBe("COMPLETED_WITH_CANDIDATES");
     if (result.resultState === "COMPLETED_WITH_CANDIDATES")
       expect(result.candidates.every((c) => c.publicationState === "public_profile")).toBe(true);

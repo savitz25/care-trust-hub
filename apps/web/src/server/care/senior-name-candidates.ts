@@ -43,7 +43,12 @@ export class SeniorNameCandidatesRequestError extends Error {
 const PROVIDER_CLASSES = new Set<SeniorProviderClass>(["nursing_home", "home_health", "hospice"]);
 const TOP_LEVEL_FIELDS = new Set(["operation", "name", "providerClass", "state", "page"]);
 
-function fail(code: string, status: number, message: string, details?: Record<string, unknown>): never {
+function fail(
+  code: string,
+  status: number,
+  message: string,
+  details?: Record<string, unknown>,
+): never {
   throw new SeniorNameCandidatesRequestError(code, status, message, details);
 }
 
@@ -62,9 +67,14 @@ export function normalizeSeniorNameCandidatesRequest(input: unknown): Normalized
   const body = input as Record<string, unknown>;
   const unsupported = Object.keys(body).filter((key) => !TOP_LEVEL_FIELDS.has(key));
   if (unsupported.length) {
-    fail("unsupported_field", 400, "Only operation, name, providerClass, state and page are accepted.", {
-      fields: unsupported,
-    });
+    fail(
+      "unsupported_field",
+      400,
+      "Only operation, name, providerClass, state and page are accepted.",
+      {
+        fields: unsupported,
+      },
+    );
   }
   if (body.operation !== undefined && body.operation !== "provider_name_candidates") {
     fail("invalid_operation", 400, 'operation must be "provider_name_candidates".');
@@ -78,7 +88,10 @@ export function normalizeSeniorNameCandidatesRequest(input: unknown): Normalized
   }
   let providerClass: SeniorProviderClass | undefined;
   if (body.providerClass !== undefined) {
-    if (typeof body.providerClass !== "string" || !PROVIDER_CLASSES.has(body.providerClass as SeniorProviderClass)) {
+    if (
+      typeof body.providerClass !== "string" ||
+      !PROVIDER_CLASSES.has(body.providerClass as SeniorProviderClass)
+    ) {
       fail(
         "invalid_provider_class",
         400,
@@ -179,7 +192,13 @@ export async function executeSeniorNameCandidates(
   // carried no geography of its own -- it narrows the SAME unscoped identity search (see
   // identitySearch() in senior-ask-execute.ts), never a second query and never overriding a place
   // already found inside the name.
-  const query = req.state && !plan.geography ? { ...plan, geography: { type: "state" as const, value: req.state, meaning: LOCATION_MEANING } } : plan;
+  const query =
+    req.state && !plan.geography
+      ? {
+          ...plan,
+          geography: { type: "state" as const, value: req.state, meaning: LOCATION_MEANING },
+        }
+      : plan;
   let result;
   try {
     result = await executeSeniorResearchPlan(query);
@@ -188,7 +207,8 @@ export async function executeSeniorNameCandidates(
       resultState: "TECHNICAL_FAILURE",
       name: { supplied: req.name, predicateApplied: false },
       failureKind: "unavailable",
-      message: "SeniorTrustHub name search is temporarily unavailable. This is not a completed miss.",
+      message:
+        "SeniorTrustHub name search is temporarily unavailable. This is not a completed miss.",
     };
   }
   if (result.query.terminalState === "SOURCE_UNAVAILABLE") {
@@ -196,10 +216,15 @@ export async function executeSeniorNameCandidates(
       resultState: "TECHNICAL_FAILURE",
       name: { supplied: req.name, predicateApplied: false },
       failureKind: "unavailable",
-      message: result.failClosed?.reason ?? "SeniorTrustHub name search is temporarily unavailable.",
+      message:
+        result.failClosed?.reason ?? "SeniorTrustHub name search is temporarily unavailable.",
     };
   }
-  if (result.failClosed || result.query.mode !== "entity" || result.query.identityQuery === undefined) {
+  if (
+    result.failClosed ||
+    result.query.mode !== "entity" ||
+    result.query.identityQuery === undefined
+  ) {
     // The supplied text was not accepted as a structured provider name by the one shared parser
     // (e.g. it was reduced to a bare, unsupported non-CMS category phrase) -- unsupported scope, not
     // a completed miss, and never silently substituted with a class browse of some other class.

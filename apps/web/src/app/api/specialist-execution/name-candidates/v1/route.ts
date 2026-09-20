@@ -41,10 +41,20 @@ async function execute(input: unknown) {
   const normalized = normalizeSeniorNameCandidatesRequest(input);
   const result = await executeSeniorNameCandidates(normalized);
   const status =
-    result.resultState === "TECHNICAL_FAILURE" ? 503 : result.resultState === "UNSUPPORTED_OPERATION" ? 422 : 200;
+    result.resultState === "TECHNICAL_FAILURE"
+      ? 503
+      : result.resultState === "UNSUPPORTED_OPERATION"
+        ? 422
+        : 200;
   return NextResponse.json(
     { contract: SENIOR_NAME_CANDIDATES_CONTRACT, hub: "senior", ...result },
-    { status, headers: status === 200 ? { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" } : {} },
+    {
+      status,
+      headers:
+        status === 200
+          ? { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" }
+          : {},
+    },
   );
 }
 
@@ -52,7 +62,8 @@ export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
     const name = url.searchParams.get("name");
-    if (!name) return NextResponse.json({ contract: SENIOR_NAME_CANDIDATES_CONTRACT, hub: "senior" });
+    if (!name)
+      return NextResponse.json({ contract: SENIOR_NAME_CANDIDATES_CONTRACT, hub: "senior" });
     return await execute({
       operation: "provider_name_candidates",
       name,
@@ -79,7 +90,11 @@ export async function POST(request: Request) {
   } catch (error) {
     if (error instanceof SyntaxError) {
       return errorResponse(
-        new SeniorNameCandidatesRequestError("invalid_json", 400, "Request body must be valid JSON."),
+        new SeniorNameCandidatesRequestError(
+          "invalid_json",
+          400,
+          "Request body must be valid JSON.",
+        ),
       );
     }
     return errorResponse(error);

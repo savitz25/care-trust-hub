@@ -31,8 +31,8 @@ const mutations = [
   {
     id: "M1_CATEGORY_FIRST_ROUTING_RESTORED",
     file: PARSE,
-    why: "Restores the pre-fix behavior: detectClass()'s class/ambiguous signal always wins, so a structured provider name containing a care word (\"A Holly Patterson Extended Care Facility\", \"FFIII Houston SNF Tenant\") is diverted to a class-clarification/cohort path instead of the identity search, discarding the supplied name.",
-    find: "  const providerClass =\n    rawProviderClass &&\n    looksLikeProviderName(q) &&\n    !isBareCategoryPhrase(q, location.geography)\n      ? undefined\n      : rawProviderClass;",
+    why: 'Restores the pre-fix behavior: detectClass()\'s class/ambiguous signal always wins, so a structured provider name containing a care word ("A Holly Patterson Extended Care Facility", "FFIII Houston SNF Tenant") is diverted to a class-clarification/cohort path instead of the identity search, discarding the supplied name.',
+    find: "  const providerClass =\n    rawProviderClass && looksLikeProviderName(q) && !isBareCategoryPhrase(q, location.geography)\n      ? undefined\n      : rawProviderClass;",
     replace: "  const providerClass = rawProviderClass;",
   },
   {
@@ -40,7 +40,8 @@ const mutations = [
     file: PARSE,
     why: 'Makes isBareCategoryPhrase() treat ANY query with a recognized place inside it as bare category regardless of other content, so "FFIII Houston SNF Tenant" (Houston recognized as a city) is misclassified as a category browse and the provider name is lost.',
     find: "  return words(q).every((w) => GENERIC_CARE_WORDS.has(w) || geoWords.has(w));",
-    replace: "  return words(q).every((w) => GENERIC_CARE_WORDS.has(w) || geoWords.has(w)) || Boolean(geography);",
+    replace:
+      "  return words(q).every((w) => GENERIC_CARE_WORDS.has(w) || geoWords.has(w)) || Boolean(geography);",
   },
   {
     id: "M3_SOURCE_FAILURE_TREATED_AS_MISS",
@@ -62,9 +63,16 @@ const mutations = [
     why: 'Both UNSUPPORTED_OPERATION guards (before AND after execution -- this operation intentionally checks twice) are bypassed together, so a bare care-category phrase ("senior care Florida") falls through to execution and its class-clarification/cohort result is read back as if it were real name-search candidates.',
     finds: [
       '  if (plan.mode !== "entity" || plan.identityQuery === undefined) {',
-      '  if (result.failClosed || result.query.mode !== "entity" || result.query.identityQuery === undefined) {',
+      '  if (\n    result.failClosed ||\n    result.query.mode !== "entity" ||\n    result.query.identityQuery === undefined\n  ) {',
     ],
     replaces: ["  if (false) {", "  if (false) {"],
+  },
+  {
+    id: "M6_RANKING_INTENT_COLLAPSES_TO_NAME_SEARCH",
+    file: PARSE,
+    why: 'Removes the ranking/quality-intent recognition in isBareCategoryPhrase(), so "top rated nursing homes in Florida" loses providerClass and geography and falls through to a literal identity/name search instead of the existing category/cohort path.',
+    find: "    /\\b(?:top|best|highest|highly|most\\s+highly)[\\s-]*rated\\b/i.test(q) ||\n    /\\btop[\\s-]+(?:rated\\s+)?(?:nursing\\s*homes?|hospice(?:s|\\s+providers?)?|home\\s*health(?:\\s*agenc(?:y|ies))?|senior\\s*(?:care|homes?))\\b/i.test(\n      q,\n    )",
+    replace: "    false",
   },
 ];
 // NOTE: no mutation targets labeledCcn()/CCN-precedence -- that logic pre-dates R1-019E and is not
@@ -72,15 +80,22 @@ const mutations = [
 // correctness against the REAL, unmutated code is exercised directly by check:th-search-r1-019e's
 // own "7. exact CCN identifier precedence" group instead of a mutation of code this ticket didn't change.
 
-const report = { generatedAt: new Date().toISOString(), cleanBefore: run(), mutations: [], cleanAfter: null };
-if (report.cleanBefore.fail !== 0) throw new Error("gate is not clean before mutation: " + JSON.stringify(report.cleanBefore));
+const report = {
+  generatedAt: new Date().toISOString(),
+  cleanBefore: run(),
+  mutations: [],
+  cleanAfter: null,
+};
+if (report.cleanBefore.fail !== 0)
+  throw new Error("gate is not clean before mutation: " + JSON.stringify(report.cleanBefore));
 for (const m of mutations) {
   const original = readFileSync(m.file);
   const before = sha(m.file);
   let text = original.toString("utf8").split(CR).join("");
   const finds = m.finds ?? [m.find];
   const replaces = m.replaces ?? [m.replace];
-  for (const f of finds) if (!text.includes(f)) throw new Error("anchor missing for " + m.id + ": " + f.slice(0, 40));
+  for (const f of finds)
+    if (!text.includes(f)) throw new Error("anchor missing for " + m.id + ": " + f.slice(0, 40));
   let result;
   try {
     for (let i = 0; i < finds.length; i++) text = text.replace(finds[i], replaces[i]);
@@ -110,6 +125,11 @@ for (const m of report.mutations)
       " | restored byte-identical: " +
       m.restoredByteIdentical,
   );
-console.log(`clean before: pass=${report.cleanBefore.pass} fail=${report.cleanBefore.fail} | clean after restore: pass=${report.cleanAfter.pass} fail=${report.cleanAfter.fail}`);
-if (report.mutations.some((m) => !m.detected || !m.restoredByteIdentical) || report.cleanAfter.fail !== 0)
+console.log(
+  `clean before: pass=${report.cleanBefore.pass} fail=${report.cleanBefore.fail} | clean after restore: pass=${report.cleanAfter.pass} fail=${report.cleanAfter.fail}`,
+);
+if (
+  report.mutations.some((m) => !m.detected || !m.restoredByteIdentical) ||
+  report.cleanAfter.fail !== 0
+)
   process.exit(1);

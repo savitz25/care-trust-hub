@@ -76,24 +76,96 @@ function detectClass(q: string): SeniorProviderClass | "ambiguous" | undefined {
  */
 const GENERIC_CARE_WORDS = new Set([
   // CMS trio + "ambiguous" vocabulary (detectClass())
-  "nursing", "home", "homes", "facility", "facilities", "skilled", "snf", "health", "hha", "hospice",
-  "provider", "providers", "senior", "seniors", "care", "all",
+  "nursing",
+  "home",
+  "homes",
+  "facility",
+  "facilities",
+  "skilled",
+  "snf",
+  "health",
+  "hha",
+  "hospice",
+  "provider",
+  "providers",
+  "senior",
+  "seniors",
+  "care",
+  "all",
   // UNSUPPORTED_SENIOR_CLASSES vocabulary
-  "memory", "retirement", "community", "communities", "village", "residence", "residences",
-  "independent", "living", "continuing", "ccrc", "adult", "day", "daycare", "program", "programs",
-  "caregiver", "caregivers", "caregiving", "companion", "elder", "eldercare", "board", "group",
-  "family", "aide", "aides", "personal", "and",
+  "memory",
+  "retirement",
+  "community",
+  "communities",
+  "village",
+  "residence",
+  "residences",
+  "independent",
+  "living",
+  "continuing",
+  "ccrc",
+  "adult",
+  "day",
+  "daycare",
+  "program",
+  "programs",
+  "caregiver",
+  "caregivers",
+  "caregiving",
+  "companion",
+  "elder",
+  "eldercare",
+  "board",
+  "group",
+  "family",
+  "aide",
+  "aides",
+  "personal",
+  "and",
   // generic descriptor/filler words that ride along with a category phrase but are never, on their
   // own, part of a facility's registered name in a bare category browse
-  "center", "centers", "centre", "centres", "service", "services", "agency", "agencies", "option",
+  "center",
+  "centers",
+  "centre",
+  "centres",
+  "service",
+  "services",
+  "agency",
+  "agencies",
+  "option",
   "options",
   // connectors/prepositions (same list the prior residue-strip regex removed)
-  "find", "show", "list", "search", "for", "in", "near", "within", "around", "county", "counties",
-  "of", "the", "a", "an", "by",
+  "find",
+  "show",
+  "list",
+  "search",
+  "for",
+  "in",
+  "near",
+  "within",
+  "around",
+  "county",
+  "counties",
+  "of",
+  "the",
+  "a",
+  "an",
+  "by",
   // quality/rating vocabulary (also covered by the early return below, kept here too for residue words
   // that appear alongside a quality clause rather than instead of one)
-  "overall", "staffing", "inspection", "rating", "ratings", "star", "stars", "quality", "patient",
-  "qpc", "hhcahps", "cahps", "cms",
+  "overall",
+  "staffing",
+  "inspection",
+  "rating",
+  "ratings",
+  "star",
+  "stars",
+  "quality",
+  "patient",
+  "qpc",
+  "hhcahps",
+  "cahps",
+  "cms",
 ]);
 
 /**
@@ -101,7 +173,10 @@ const GENERIC_CARE_WORDS = new Set([
  * "in-home" tokenizes the same as "in home"), for the word-set comparison above.
  */
 function words(text: string): string[] {
-  return text.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  return text
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean);
 }
 
 /**
@@ -144,9 +219,26 @@ function isBareCategoryPhrase(
   // rating") is legitimate category-query content on its own, distinct from both the care-category
   // vocabulary and geography stripped below -- and not something a provider's own name contains. Its
   // presence alone is conclusive: never treated as name content requiring the override.
+  //
+  // TH-SEARCH-R1-019E-R2: a ranking/quality-INTENT phrase ("top rated nursing homes in Florida",
+  // "highest rated nursing homes", "top nursing homes in Florida") is the SAME kind of query-modifying
+  // content, and belongs in this SAME early-return, not in GENERIC_CARE_WORDS -- a bare superlative
+  // ("top", "best", "premier", "five", "star") is also common inside a REAL registered provider brand
+  // ("AMERICAN PREMIER HOME HEALTH CARE", "FIVE STAR HOME HEALTH CARE", "HOLLYWOOD PREMIER HEALTHCARE
+  // CENTER" all exist in the current corpus), so those words are deliberately never added to
+  // GENERIC_CARE_WORDS as free-floating adjectives -- that would make an entire real brand name
+  // reduce to nothing but generic residue. Ranking intent is instead recognized only in the two
+  // narrow, idiomatic shapes it actually takes as a QUESTION: a superlative directly modifying
+  // "rated" ("top/best/highest/highly rated"), or a bare "top" directly modifying a CMS-trio/senior
+  // category noun ("top nursing homes", "top hospice"). Neither shape occurs inside a provider's own
+  // registered name.
   if (
     starNumber(q) !== undefined ||
     /\b(?:overall|staffing|inspection|health-inspection)\s*(?:rating|star)|quality of patient care|\bqpc\b|\bhhcahps\b|\bcahps\b/i.test(
+      q,
+    ) ||
+    /\b(?:top|best|highest|highly|most\s+highly)[\s-]*rated\b/i.test(q) ||
+    /\btop[\s-]+(?:rated\s+)?(?:nursing\s*homes?|hospice(?:s|\s+providers?)?|home\s*health(?:\s*agenc(?:y|ies))?|senior\s*(?:care|homes?))\b/i.test(
       q,
     )
   ) {
@@ -165,7 +257,11 @@ function isBareCategoryPhrase(
     if (geography.value) geoTexts.push(geography.value);
     if ("state" in geography && geography.state) geoTexts.push(geography.state);
     const stateCode =
-      geography.type === "state" ? geography.value : "state" in geography ? geography.state : undefined;
+      geography.type === "state"
+        ? geography.value
+        : "state" in geography
+          ? geography.state
+          : undefined;
     if (stateCode && STATE_NAMES[stateCode]) geoTexts.push(STATE_NAMES[stateCode]!);
     for (const text of geoTexts) for (const w of words(text)) geoWords.add(w);
   }
@@ -324,9 +420,7 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   // reinterprets a place inside the name on its own -- it only decides whether detectClass()'s class
   // signal is allowed to override the name at all.
   const providerClass =
-    rawProviderClass &&
-    looksLikeProviderName(q) &&
-    !isBareCategoryPhrase(q, location.geography)
+    rawProviderClass && looksLikeProviderName(q) && !isBareCategoryPhrase(q, location.geography)
       ? undefined
       : rawProviderClass;
   // The SAME structured-name-first override, applied to the SEPARATE non-CMS "unsupported class"

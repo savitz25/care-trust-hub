@@ -29,11 +29,17 @@ async function listingRows(scope) {
   const qs = new URLSearchParams(scope).toString();
   const res = await fetch(`${BASE}/api/specialist-execution/v2?${qs}`);
   const body = await res.json();
-  return (body.rows ?? []).map((r) => ({ name: r.name, ccn: r.cmsCcn, providerClass: r.providerClass }));
+  return (body.rows ?? []).map((r) => ({
+    name: r.name,
+    ccn: r.cmsCcn,
+    providerClass: r.providerClass,
+  }));
 }
 
 async function structuredSearch(name) {
-  const res = await fetch(`${BASE}/api/specialist-execution/name-candidates/v1?name=${encodeURIComponent(name)}`);
+  const res = await fetch(
+    `${BASE}/api/specialist-execution/name-candidates/v1?name=${encodeURIComponent(name)}`,
+  );
   const body = await res.json();
   return { status: res.status, body };
 }
@@ -49,7 +55,12 @@ for (const scope of SCOPES) {
   const rows = await listingRows(scope);
   for (const pos of FIXED_POSITIONS) {
     const row = rows[pos];
-    if (row) sample.push({ scope: `${scope.providerClass}/${scope.geographyValue}/page${scope.page}`, position: pos, ...row });
+    if (row)
+      sample.push({
+        scope: `${scope.providerClass}/${scope.geographyValue}/page${scope.page}`,
+        position: pos,
+        ...row,
+      });
   }
 }
 // Frozen sample recorded BEFORE any matching below is evaluated.
@@ -75,7 +86,9 @@ for (const row of sample) {
       httpStatus: structured.status,
       candidateCount: candidates.length,
       targetFound: found,
-      irrelevantCandidates: found ? candidates.filter((c) => c.ccn !== row.ccn).length : candidates.length,
+      irrelevantCandidates: found
+        ? candidates.filter((c) => c.ccn !== row.ccn).length
+        : candidates.length,
       nativeAlsoFound: nativeFound,
       nativeStructuredAgree: found === nativeFound,
     };
@@ -86,21 +99,39 @@ for (const row of sample) {
 const denominators = {
   totalRows: results.length,
   totalVariantChecks: results.length * 3,
-  targetFoundCount: results.reduce((n, r) => n + Object.values(r.variants).filter((v) => v.targetFound).length, 0),
-  sourceErrorCount: results.reduce((n, r) => n + Object.values(r.variants).filter((v) => v.resultState === "TECHNICAL_FAILURE").length, 0),
-  unsupportedCount: results.reduce((n, r) => n + Object.values(r.variants).filter((v) => v.resultState === "UNSUPPORTED_OPERATION").length, 0),
-  nativeStructuredAgreementCount: results.reduce((n, r) => n + Object.values(r.variants).filter((v) => v.nativeStructuredAgree).length, 0),
+  targetFoundCount: results.reduce(
+    (n, r) => n + Object.values(r.variants).filter((v) => v.targetFound).length,
+    0,
+  ),
+  sourceErrorCount: results.reduce(
+    (n, r) =>
+      n + Object.values(r.variants).filter((v) => v.resultState === "TECHNICAL_FAILURE").length,
+    0,
+  ),
+  unsupportedCount: results.reduce(
+    (n, r) =>
+      n + Object.values(r.variants).filter((v) => v.resultState === "UNSUPPORTED_OPERATION").length,
+    0,
+  ),
+  nativeStructuredAgreementCount: results.reduce(
+    (n, r) => n + Object.values(r.variants).filter((v) => v.nativeStructuredAgree).length,
+    0,
+  ),
   classesRepresented: [...new Set(results.map((r) => r.providerClass))],
 };
 
 const report = {
   ranAt: new Date().toISOString(),
-  method: "Fixed positions [0,4,9,14] within 5 deterministic cohort listing pages (nursing_home FL p1, nursing_home TX p3, home_health NY p1, hospice CA p2, nursing_home OH p2), selected before matching was evaluated. Never redrawn.",
+  method:
+    "Fixed positions [0,4,9,14] within 5 deterministic cohort listing pages (nursing_home FL p1, nursing_home TX p3, home_health NY p1, hospice CA p2, nursing_home OH p2), selected before matching was evaluated. Never redrawn.",
   base: BASE,
   sample: results,
   denominators,
   note: "Small sample (20 rows x 3 variants = 60 checks). No statistical claim (p95, recall %, etc.) is made from it.",
 };
 import { writeFileSync } from "node:fs";
-writeFileSync("docs/qa/th-search-r1-019e/holdout-frozen-results.json", JSON.stringify(report, null, 1));
+writeFileSync(
+  "docs/qa/th-search-r1-019e/holdout-frozen-results.json",
+  JSON.stringify(report, null, 1),
+);
 console.log(JSON.stringify(denominators, null, 1));
