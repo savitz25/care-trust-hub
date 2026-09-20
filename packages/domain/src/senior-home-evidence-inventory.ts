@@ -6,6 +6,7 @@ import {
   OR_ACCEPTED,
   PA_ACCEPTED,
   NC_ACCEPTED,
+  OH_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -20,6 +21,7 @@ import { IL_PUBLIC_FINGERPRINT, IL_PUBLIC_PATH } from "./il-intelligence";
 import { OR_PUBLIC_FINGERPRINT, OR_PUBLIC_PATH } from "./or-intelligence";
 import { PA_PUBLIC_FINGERPRINT, PA_PUBLIC_PATH } from "./pa-intelligence";
 import { NC_PUBLIC_FINGERPRINT, NC_PUBLIC_PATH } from "./nc-intelligence";
+import { OH_PUBLIC_FINGERPRINT, OH_PUBLIC_PATH } from "./oh-intelligence";
 import { CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -68,7 +70,21 @@ export interface SeniorHomepageStateCard {
     snapshotAsOf: string | null;
     retrievedAt: string | null;
   }[];
-  state: "FL" | "NJ" | "CA" | "TX" | "WA" | "AZ" | "CO" | "VA" | "NY" | "IL" | "OR" | "PA" | "NC";
+  state:
+    | "FL"
+    | "NJ"
+    | "CA"
+    | "TX"
+    | "WA"
+    | "AZ"
+    | "CO"
+    | "VA"
+    | "NY"
+    | "IL"
+    | "OR"
+    | "PA"
+    | "NC"
+    | "OH";
   name: string;
   href: string;
   regulators: string;
@@ -649,13 +665,28 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       NC_PUBLIC_PATH,
     ),
     m(
+      "oh-odh-nh",
+      "IDENTITY_LICENSURE",
+      "Ohio ODH nursing-home license identities",
+      OH_ACCEPTED.nursingFacilityRows,
+      "ODH OneSource f_licenseno OH##### ACTIVE nursing home",
+      "Nursing home (state license)",
+      "Ohio",
+      "ODH OneSource Nursing Homes Licensed and Certified in Ohio",
+      OH_PUBLIC_FINGERPRINT,
+      OH_ACCEPTED.snapshotAsOf,
+      "ODH nursing-home license rows.",
+      "Residential Care Facilities; CMS Nursing Home CCNs; Home Health; Hospice; a combined Ohio facilities total.",
+      OH_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Published state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC, OH",
       "SeniorTrustHub accepted state artifacts",
       "Accepted state publication artifacts",
       null,
@@ -742,6 +773,7 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "or-odhs-nf",
     "pa-doh-nh",
     "nc-dhsr-ach",
+    "oh-odh-nh",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -898,5 +930,17 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "NC DHSR Star Rating listing evidence and 36-month penalties; inspection SOD history remains search-only",
     sourceAsOf: NC_ACCEPTED.snapshotAsOf,
+  },
+  {
+    state: "OH",
+    name: "Ohio",
+    href: OH_PUBLIC_PATH,
+    regulators: "ODH · AGE · CMS",
+    stateClasses: `${OH_ACCEPTED.nursingFacilityRows} ODH nursing-home licenses · ${OH_ACCEPTED.rcfRows} ODH Residential Care Facilities`,
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${OH_ACCEPTED.nursingFacilityRows} ODH NH · ${OH_ACCEPTED.rcfRows} RCF · ${OH_ACCEPTED.cmsNursingHomes} CMS Nursing Homes · identities remain separate`,
+    regulatoryDepth:
+      "Navigator quality/satisfaction and ODH inspections remain search-only; OneSource licenses are the current freeze",
+    sourceAsOf: OH_ACCEPTED.snapshotAsOf,
   },
 ];

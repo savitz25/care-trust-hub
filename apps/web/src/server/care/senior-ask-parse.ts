@@ -437,6 +437,17 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
         "PARTIAL",
       );
     }
+    if (
+      /\bohio\b/i.test(q) ||
+      state?.value === "OH" ||
+      /\b(cleveland|columbus|cincinnati|toledo|akron|dayton)\b/i.test(q)
+    ) {
+      return fail(
+        "Ohio Residential Care Facilities are the state-native assisted-living license class. They are not Nursing Homes and not CMS directories. Assisted living in consumer language maps to RCF research. The Long-Term Care Quality Navigator is official evidence, not a TrustHub score. Cleveland and Columbus are not separate SeniorTrustHub routes. Open the Ohio research page.",
+        ["Open Ohio senior-care research."],
+        "PARTIAL",
+      );
+    }
     return fail(
       "Assisted living is state-regulated and does not share the federal CMS nursing-home, Home Health, or Hospice directory contract. Use the available state-specific assisted-living research.",
       [
@@ -795,6 +806,126 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
     return fail(
       "SeniorTrustHub does not publish Charlotte, Raleigh, Mecklenburg, or Wake intelligence routes. Statewide North Carolina research remains /north-carolina. Ranking is unsupported.",
       ["Show nursing homes in North Carolina.", "Open North Carolina senior-care research."],
+    );
+  }
+  const ohio =
+    /\bohio\b/i.test(q) ||
+    state?.value === "OH" ||
+    (/\b(cleveland|columbus|cincinnati|toledo|akron|dayton)\b/i.test(q) &&
+      /nursing home|assisted living|residential care|home health|hospice|senior|pace|adult day|navigator|rcf/i.test(
+        q,
+      ));
+  const ohLicense = q.match(/\b(OHL\d{4,6}|OH\d{5})\b/i)?.[1];
+  if (ohio && /residential care|\brcf\b/i.test(q)) {
+    return fail(
+      "Ohio Residential Care Facilities are the state-native assisted-living license class (OHL#####). They are not Nursing Homes and not a Medicaid waiver universe. Assisted living in consumer language maps to RCF research. Open the Ohio research page.",
+      ["Open Ohio senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (ohio && /navigator|quality measure|consumer satisfaction|satisfaction survey/i.test(q)) {
+    return fail(
+      "Ohio's Long-Term Care Quality Navigator publishes official quality and satisfaction comparison data. It is not a TrustHub score and is not AggregateRating. Facility-level Navigator grains remain search-only on this freeze. Open the Ohio research page.",
+      ["Open Ohio senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (
+    ohio &&
+    /nursing home/i.test(q) &&
+    /deficienc|inspection|survey|violation|complaint/i.test(q)
+  ) {
+    return fail(
+      "Ohio nursing-home inspections, deficiencies, and complaints stay separate. An inspection is not a complaint. A deficiency is not a ranking. Bulk ODH inspection and complaint tables were not acquired; missing is not zero. Open the Ohio research page and official ODH lookup.",
+      ["Open Ohio senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (
+    ohio &&
+    /assisted living|residential care|\brcf\b/i.test(q) &&
+    /violation|inspection|complaint/i.test(q)
+  ) {
+    return fail(
+      "Ohio RCF inspections, violations, and complaints stay separate. An inspection is not a complaint. Missing bulk is not zero. Open the Ohio research page.",
+      ["Open Ohio senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (ohio && /home health/i.test(q)) {
+    return fail(
+      "Ohio Home Health is a state license class, not CMS Home Health. Skilled is not nonmedical. Agency is not a nonagency provider. Statewide bulk agency/nonagency extracts remain search-only through the ODH Facility Listing. Search-only is not zero. Open the Ohio research page.",
+      ["Open Ohio senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (ohio && /\bhospice\b/i.test(q)) {
+    return fail(
+      "Ohio Hospice is a state program license, not Home Health and not a CMS Hospice CCN unless an exact source-published bridge exists (0 in this snapshot). License is not location. Bulk hospice roster remains search-only. Open the Ohio research page.",
+      ["Open Ohio senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (ohio && /\bpace\b/i.test(q) && !/quality of pace/i.test(q)) {
+    return fail(
+      "Ohio PACE is a CMS/Medicaid program, not an ODH facility license and not a Residential Care Facility. Organization is not location. Roster remains search-only. Open the Ohio research page.",
+      ["Open Ohio senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (/\bohio\b/i.test(q) && /adult day/i.test(q)) {
+    return fail(
+      "Ohio Adult Day is a program class, not a Nursing Home and not a Residential Care Facility. Statewide bulk remains search-only. Missing is not zero. Open the Ohio research page.",
+      ["Open Ohio senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (ohio && /assisted living waiver|medicaid waiver/i.test(q)) {
+    return fail(
+      "Ohio Assisted Living Waiver participation is not an RCF license and is not a Nursing Home license. Waiver enrollment is not the Residential Care Facility universe. Open the Ohio research page.",
+      ["Open Ohio senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (
+    ohLicense &&
+    (ohio || /\b(odh|licen[sc]e|facility id)\b/i.test(q) || /\bOHL?\d{4,6}\b/.test(q))
+  ) {
+    const kind = /^OHL/i.test(ohLicense)
+      ? "Residential Care Facility license"
+      : "nursing-home license";
+    return fail(
+      `Ohio identity ${ohLicense.toUpperCase()} is an ODH ${kind}. Confirm it on official ODH lookup. Exact state ID outranks geography. An ODH license is not a CMS CCN. Name-only matching is unsafe.`,
+      ["Open Ohio senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (
+    ohio &&
+    /senior care/i.test(q) &&
+    !/nursing home|assisted living|residential care|home health|hospice|adult day|pace|rcf|navigator/i.test(
+      q,
+    )
+  ) {
+    return fail(
+      "Ohio senior care is class-specific. Nursing Home is not Residential Care Facility. Home Health is not Hospice. PACE is not a facility license. There is no combined Ohio senior-provider total. Open the Ohio research page.",
+      ["Open Ohio senior-care research."],
+      "PARTIAL",
+    );
+  }
+  if (ohio && /\b(best|safest|top-rated|worst)\b/i.test(q)) {
+    return fail(
+      "SeniorTrustHub does not rank Ohio facilities and does not convert Navigator quality or satisfaction data into a TrustHub score. Ohio publishes regulatory, compliance, and quality information. CMS publishes federal measures. The state Navigator provides comparison data. TrustHub does not select a winner. Statewide research remains /ohio.",
+      ["Open Ohio senior-care research.", "Show nursing homes in Ohio."],
+    );
+  }
+  if (
+    /\b(cleveland|columbus|cincinnati|toledo|akron|dayton)\b/i.test(q) &&
+    /nursing home|assisted living|residential care|senior/i.test(q)
+  ) {
+    return fail(
+      "SeniorTrustHub does not publish Cleveland, Columbus, Cincinnati, Toledo, Akron, or Dayton intelligence routes. Statewide Ohio research remains /ohio. Ranking is unsupported.",
+      ["Show nursing homes in Ohio.", "Open Ohio senior-care research."],
     );
   }
   if (

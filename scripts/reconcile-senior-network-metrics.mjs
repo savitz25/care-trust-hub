@@ -20,6 +20,7 @@ const tickets = {
   OR: "001",
   PA: "001",
   NC: "001",
+  OH: "001",
 };
 export function requireCount(value, field, nullable = false) {
   if (value === null && nullable) return null;
@@ -76,7 +77,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       aggregation: "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL",
     });
   }
-  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC"]) {
+  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC", "OH"]) {
     const geo = base.geography.states.find((r) => r.state === state);
     assert.ok(geo, `Missing federal state partition ${state}`);
     for (const [field, setting] of [
@@ -298,6 +299,18 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "Home Health Agency (state license)",
   );
   add("NC", "hospice.NC_HOSPICE_ROWS", "NC-DHSR-HOS license", "Hospice (state license)");
+  add(
+    "OH",
+    "nursingHomes.OH_NURSING_FACILITY_ROWS",
+    "ODH OneSource f_licenseno OH#####",
+    "Nursing home (state license)",
+  );
+  add(
+    "OH",
+    "rcf.OH_RCF_ROWS",
+    "ODH OneSource f_licenseno OHL##### L1 RESIDENTIAL CARE",
+    "Residential Care Facility (state license)",
+  );
   const evidenceInventory = buildSeniorHomepageEvidenceInventory({
     networkMetrics: base,
     floridaIdentities: florida.providers.current,
@@ -318,6 +331,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "or-odhs-nf": "or.odhsProviders.OPEN_NF",
     "pa-doh-nh": "pa.nursingHomes.PA_NURSING_HOME_ROWS",
     "nc-dhsr-ach": "nc.adultCareHomes.NC_ADULT_CARE_HOME_ROWS",
+    "oh-odh-nh": "oh.nursingHomes.OH_NURSING_FACILITY_ROWS",
   };
   for (const row of evidenceInventory) {
     requireCount(row.value, row.key);
@@ -404,6 +418,12 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       ["Adult Day directory", "adultDay"],
       ["PACE", "pace"],
       ["CCRC", "ccrc"],
+    ],
+    OH: [
+      ["ODH nursing facilities", "nursingHomes"],
+      ["ODH Residential Care Facilities", "rcf"],
+      ["Long-Term Care Quality Navigator", "navigator"],
+      ["ODH inspections", "inspections"],
     ],
   };
   const stateCards = structuredClone(SENIOR_HOMEPAGE_STATE_CARDS);

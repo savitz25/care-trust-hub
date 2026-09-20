@@ -19,3 +19,5 @@ data/raw/
 data/normalized/
 data/rejected/
 data/reports/
+data/ohio/oh-sen-001/odh-nh-rows.json
+data/ohio/oh-sen-001/odh-rcf-rows.json

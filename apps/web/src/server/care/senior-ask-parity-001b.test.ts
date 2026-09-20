@@ -318,8 +318,8 @@ describe("TH-DISCOVERY-PARITY-001B execute-level regression corpus", () => {
   });
 
   describe("unsupported senior-care classes show broader CMS options instead of a dead end", () => {
-    // Ohio has no dedicated state-specific adult-day-care research page (unlike the existing
-    // Pennsylvania-specific override), so this exercises the new GENERAL unsupported-class handler.
+    // County abbreviation "OH" is not the word "Ohio". Statewide "adult day care Ohio" still
+    // fail-closes to /ohio; this county query keeps exercising the GENERAL unsupported-class handler.
     it("an unsupported class with a resolved county still shows real, geography-scoped CMS previews", async () => {
       const result = await executeSeniorResearchQuery("adult day care Washington County OH");
       expect(result.query.clarification).toBe("provider_class");

@@ -1,0 +1,199 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+	ODH Program Information
+</title><link type="text/css" rel="stylesheet" href="../includes/basic.css" />
+	<script type="text/javascript" src="/eid/includes/jquery-3.6/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="/eid/scripts/jquery-ui-1.13.2.js"></script>
+	<script type="text/javascript" src="/eid/includes/Date-Picker.js"></script>
+	<meta name="description" content="The description of my page"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script type="text/javascript">
+		$(function () {
+			$("#trBanner").on("click", function () {
+				alert($("#_ctl0_hdnServerAndDeployDate").val());
+			});
+		});
+	</script>
+</head>
+
+<body id="_ctl0_bodyEid">
+	<form name="aspnetForm" method="post" action="./EID_Report_Criteria.aspx" id="aspnetForm">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTExMTc0MjAxNDUPZBYCZg9kFgICAw9kFgICAQ9kFgICBQ9kFgJmD2QWDgIDD2QWAgIDDxAPFgYeDURhdGFUZXh0RmllbGQFDFJlcG9ydF9UaXRsZR4ORGF0YVZhbHVlRmllbGQFEFJlcG9ydF9GaWxlX05hbWUeC18hRGF0YUJvdW5kZ2QQFQUbLS0tLS0gU0VMRUNUIEEgUkVQT1JUIC0tLS0tHENFUlRJRklDQVRFIE9GIE5FRUQgUFJPSkVDVFMWRElSRUNUT1JZIE9GIEhPU1BJVEFMUxBGQUNJTElUWSBMSVNUSU5HGkZBQ0lMSVRZIExJU1RJTkcgQlkgQ09VTlRZFQUBMAxjb25fcHJvamVjdHMjL0FIUlJlcG9ydHMvQUhSRGlyZWN0b3J5T2ZIb3NwaXRhbHMQZmFjaWxpdHlfbGlzdGluZxpmYWNpbGl0eV9saXN0aW5nX2J5X2NvdW50eRQrAwVnZ2dnZxYBZmQCBQ8PFgIeB1Zpc2libGVoZBYCAgMPEGRkFgFmZAIHDw8WAh8DaGQWCAIDDxBkZBYBZmQCCA8QDxYGHwAFDEZhY3R5cGVfRGVzYx8BBQdUeXBlX2lkHwJnZBAVDRMtLSBBTEwgUFJPVklERVJTIC0tHEFtYnVsYXRvcnkgU3VyZ2ljYWwgRmFjaWxpdHkPQmlydGhpbmcgQ2VudGVyGkNvbW11bml0eSBBbHRlcm5hdGl2ZSBIb21lD0RpYWx5c2lzIENlbnRlch9FeGVtcHQgRmFjaWxpdHkgQmlydGhpbmcgQ2VudGVyA0hNTxJIb21lIEhlYWx0aCBBZ2VuY3kHSG9zcGljZQlIb3NwaXRhbHMMTnVyc2luZyBIb21lFVJlaGFiaWxpdGF0aW9uIENlbnRlciNSZXNpZGVudGlhbCBDYXJlIG9yIEFzc2lzdGVkIExpdmluZxUNEy0tIEFMTCBQUk9WSURFUlMgLS0BNAE2ATgCMTECMzUCMjUCMTMCMTQCMjQCMTcCMjECMjIUKwMNZ2dnZ2dnZ2dnZ2dnZxYBZmQCDg8QZA8WAWYWAQUETkFNRRYBZmQCEg8QDxYGHwAFCk9QRVJTVERFU0MfAQUIT1BFUlNUQVQfAmdkEBUFEC0tIEFMTCBTVEFUVVMgLS0HUEVORElORwZBQ1RJVkUISU5BQ1RJVkUGQ0xPU0VEFQUQLS0gQUxMIFNUQVRVUyAtLQIwMAIwMQIwMgIxMBQrAwVnZ2dnZxYBAgJkAgkPDxYCHwNoZBYEAgEPDxYCHwNoZBYEAgMPEGRkFgFmZAIHDxBkZBYAZAIFDxAPFgYfAAUGQ09OQU1FHwEFBkNPTkFNRR8CZ2QQFVkSLS0gQUxMIENPVU5USUVTIC0tBUFEQU1TBUFMTEVOB0FTSExBTkQJQVNIVEFCVUxBBkFUSEVOUwhBVUdMQUlaRQdCRUxNT05UBUJST1dOBkJVVExFUgdDQVJST0xMCUNIQU1QQUlHTgVDTEFSSwhDTEVSTU9OVAdDTElOVE9OCkNPTFVNQklBTkEJQ09TSE9DVE9OCENSQVdGT1JECENVWUFIT0dBBURBUktFCERFRklBTkNFCERFTEFXQVJFBEVSSUUJRkFJUkZJRUxEB0ZBWUVUVEUIRlJBTktMSU4GRlVMVE9OBkdBTExJQQZHRUFVR0EGR1JFRU5FCEdVRVJOU0VZCEhBTUlMVE9OB0hBTkNPQ0sGSEFSRElOCEhBUlJJU09OBUhFTlJZCEhJR0hMQU5EB0hPQ0tJTkcGSE9MTUVTBUhVUk9OB0pBQ0tTT04JSkVGRkVSU09OBEtOT1gETEFLRQhMQVdSRU5DRQdMSUNLSU5HBUxPR0FOBkxPUkFJTgVMVUNBUwdNQURJU09OCE1BSE9OSU5HBk1BUklPTgZNRURJTkEFTUVJR1MGTUVSQ0VSBU1JQU1JBk1PTlJPRQpNT05UR09NRVJZBk1PUkdBTgZNT1JST1cJTVVTS0lOR1VNBU5PQkxFBk9UVEFXQQhQQVVMRElORwVQRVJSWQhQSUNLQVdBWQRQSUtFB1BPUlRBR0UGUFJFQkxFBlBVVE5BTQhSSUNITEFORARST1NTCFNBTkRVU0tZBlNDSU9UTwZTRU5FQ0EGU0hFTEJZBVNUQVJLBlNVTU1JVAhUUlVNQlVMTApUVVNDQVJBV0FTBVVOSU9OCFZBTiBXRVJUBlZJTlRPTgZXQVJSRU4KV0FTSElOR1RPTgVXQVlORQhXSUxMSUFNUwRXT09EB1dZQU5ET1QVWRItLSBBTEwgQ09VTlRJRVMgLS0FQURBTVMFQUxMRU4HQVNITEFORAlBU0hUQUJVTEEGQVRIRU5TCEFVR0xBSVpFB0JFTE1PTlQFQlJPV04GQlVUTEVSB0NBUlJPTEwJQ0hBTVBBSUdOBUNMQVJLCENMRVJNT05UB0NMSU5UT04KQ09MVU1CSUFOQQlDT1NIT0NUT04IQ1JBV0ZPUkQIQ1VZQUhPR0EFREFSS0UIREVGSUFOQ0UIREVMQVdBUkUERVJJRQlGQUlSRklFTEQHRkFZRVRURQhGUkFOS0xJTgZGVUxUT04GR0FMTElBBkdFQVVHQQZHUkVFTkUIR1VFUk5TRVkISEFNSUxUT04HSEFOQ09DSwZIQVJESU4ISEFSUklTT04FSEVOUlkISElHSExBTkQHSE9DS0lORwZIT0xNRVMFSFVST04HSkFDS1NPTglKRUZGRVJTT04ES05PWARMQUtFCExBV1JFTkNFB0xJQ0tJTkcFTE9HQU4GTE9SQUlOBUxVQ0FTB01BRElTT04ITUFIT05JTkcGTUFSSU9OBk1FRElOQQVNRUlHUwZNRVJDRVIFTUlBTUkGTU9OUk9FCk1PTlRHT01FUlkGTU9SR0FOBk1PUlJPVwlNVVNLSU5HVU0FTk9CTEUGT1RUQVdBCFBBVUxESU5HBVBFUlJZCFBJQ0tBV0FZBFBJS0UHUE9SVEFHRQZQUkVCTEUGUFVUTkFNCFJJQ0hMQU5EBFJPU1MIU0FORFVTS1kGU0NJT1RPBlNFTkVDQQZTSEVMQlkFU1RBUksGU1VNTUlUCFRSVU1CVUxMClRVU0NBUkFXQVMFVU5JT04IVkFOIFdFUlQGVklOVE9OBldBUlJFTgpXQVNISU5HVE9OBVdBWU5FCFdJTExJQU1TBFdPT0QHV1lBTkRPVBQrA1lnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZxYBZmQCCw9kFgYCEQ8QZBAVBgpBbGwgU3RhdHVzDk5ldyBhbmQgQWN0aXZlA05ldw5BY3RpdmUvUGVuZGluZwZDbG9zZWQIUmV0dXJuZWQVBionTkVXJywnUEVORElORy9BQ1RJVkUnLCdDTE9TRUQnLCdSRVRVUk5FRCcWJ05ldycsJ1BFTkRJTkcvQUNUSVZFJwUnTkVXJxAnUEVORElORy9BQ1RJVkUnCCdDTE9TRUQnCidSRVRVUk5FRCcUKwMGZ2dnZ2dnFgFmZAIVDxBkEBUFC0Nhc2UgTnVtYmVyC0Nhc2UgU3RhdHVzDVByb3ZpZGVyIE5hbWUNUHJvdmlkZXIgQ2l0eQ9Qcm92aWRlciBDb3VudHkVBQ9ESVNQTEFZRURDQVNFSUQLU1RBVFVTX05BTUUETkFNRQhGQUNfQ0lUWQhDTlRZTkFNRRQrAwVnZ2dnZxYBZmQCFw8QZGQWAWZkAg0PZBYEAgMPEGRkFgECBWQCBQ8QZGQWAWZkAhIPDxYCHgRUZXh0BTYqIEhvbGQgZG93biB0aGUgKEN0cmwpIGtleSB0byBzZWxlY3QgbXVsdGlwbGUgY291bnRpZXNkZBgBBR5fX0NvbnRyb2xzUmVxdWlyZVBvc3RCYWNrS2V5X18WAQUoX2N0bDA6RWlkQ29udGVudFBsYWNlSG9sZGVyOkltYWdlQnV0dG9uMZFnnjrJHoFPuYxzGBboABii/3sj0ecbU+/PHjIQwakp" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="34524EAB" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAqAlOB6SQieC30JV1Bf+EWvdWLHJ8/7mK6ntAgjM7HafIG9/PvSvsy1Mxa9XPcNRJH6SiaNLTKhU0o4L61sLZ3U09q4ZbxAVBX8F43xgAgdwdUGqI6HtmdEtXhmdIWXVW5BRbs+gK2p6uchqkkn9MPw8hpTDqNHfFFh+dIsmZErI3TWXo9qvUCgPdbFr37FZvzDEfTaIwOv+9+OQ2/qiqvdFlctPJeMfPeW7FsYpq3A3wThemYZSiWCR2UvCWTmh2Y=" />
+		<input type="hidden" name="_ctl0:hdnServerAndDeployDate" id="_ctl0_hdnServerAndDeployDate" value="Server: ODHDNPRD02
+Dated: 3/4/2026" />
+		<div>
+			<table id="Table1" cellspacing="0" cellpadding="0" width="100%" border="0">
+				<tr>
+					<td id="_ctl0_header" style="width: 100%;" align="center" colspan="3">
+						<table cellspacing="0" cellpadding="0" width="100%" border="0" style="margin: 0px;">
+							<tr id="trBanner">
+									<td align="left" width="50%">
+                                        <img style="border: none" alt="ODH Banner" usemap="#Map" src="/EID/images/App Banner_Full Image left.jpg"/>
+                                    </td>
+                                    <td align="right" width="50%">
+										<img style="border: none" alt="ODH Banner" usemap="#Map" src="/EID/images/App Banner_Full Image right.jpg"/>
+                                    </td>
+							</tr>
+							
+						</table>
+					</td>
+
+				</tr>
+				<tr>
+					<td style="width: 10%; background-color: #ffffff;"></td>
+					<td style="width: 80%; background-color: #f2eedc;" align="center">
+						<table cellspacing="0" cellpadding="0" width="100%" border="0">
+							<tr>
+								<td>
+									<table cellspacing="0" cellpadding="0" width="100%" border="0">
+										<tr>
+											<td style="width: 100%; background-color: #ffffff;">
+												
+
+	<script type="text/javascript">
+
+		$(function () {
+			$("#_ctl0_EidContentPlaceHolder_tbxStartDate").datepicker({
+				changeMonth: true,
+				changeYear: true,
+				showOn: "both",
+				buttonImage: "/images/cal.gif",
+				buttonImageOnly: true,
+				buttonText: "Select date"
+			});
+		})
+
+		$(function () {
+			$("#_ctl0_EidContentPlaceHolder_tbxEndDate").datepicker({
+				changeMonth: true,
+				changeYear: true,
+				showOn: "both",
+				buttonImage: "/images/cal.gif",
+				buttonImageOnly: true,
+				buttonText: "Select date"
+			});
+		})
+
+	</script>
+
+	<div id="_ctl0_EidContentPlaceHolder_pnlDefault">
+	
+		<table id="Table2" cellspacing="0" cellpadding="0" width="100%" border="0">
+			<tr>
+				<td style="height: 6px;"></td>
+			</tr>
+			<tr>
+				<td style="text-align: left; vertical-align: middle">
+					<span id="_ctl0_EidContentPlaceHolder_Label7" class="regtext"><b><font size="3">Health Care Provider Report & Information Extract</font></b></span>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: left; vertical-align: middle">
+					<div id="_ctl0_EidContentPlaceHolder_Panel2">
+		
+						<table id="Table5" style="border-width: 0" cellspacing="1" cellpadding="1">
+							<tr>
+								<td style="width: 200px; text-align: right">&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td style="width: 200px; text-align: right;">
+									<span id="_ctl0_EidContentPlaceHolder_Label5" class="regtext">Report:</span>
+								</td>
+								<td>
+									<select name="_ctl0:EidContentPlaceHolder:ddlReports" id="_ctl0_EidContentPlaceHolder_ddlReports" class="regtext">
+			<option selected="selected" value="0">----- SELECT A REPORT -----</option>
+			<option value="con_projects">CERTIFICATE OF NEED PROJECTS</option>
+			<option value="/AHRReports/AHRDirectoryOfHospitals">DIRECTORY OF HOSPITALS</option>
+			<option value="facility_listing">FACILITY LISTING</option>
+			<option value="facility_listing_by_county">FACILITY LISTING BY COUNTY</option>
+
+		</select>
+									
+								</td>
+							</tr>
+							<tr>
+								<td style="width: 100px; text-align: right;"></td>
+								<td style="height: 10px"></td>
+							</tr>
+						</table>
+					
+	</div>
+					
+				</td>
+			</tr>
+			<tr>
+				<td style="vertical-align: middle; text-align: left">
+					
+					
+					
+					
+					<table id="Table1" style="width: 100px; border-width: 0" cellspacing="1" cellpadding="1">
+						<tr>
+							<td style="text-align: center; width: 200px"></td>
+							<td style="text-align: left"><font face="Arial" size="2">
+								<input type="submit" name="_ctl0:EidContentPlaceHolder:btSubmit" value="Submit" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;_ctl0:EidContentPlaceHolder:btSubmit&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" language="javascript" id="_ctl0_EidContentPlaceHolder_btSubmit" /><input type="submit" name="_ctl0:EidContentPlaceHolder:btReset" value="Reset" id="_ctl0_EidContentPlaceHolder_btReset" /></font>
+								<p></p>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: left; vertical-align: middle"></td>
+			</tr>
+			<tr>
+				<td style="text-align: left;">
+					<span id="_ctl0_EidContentPlaceHolder_lbl_footer" class="NormalBlackBold">* Hold down the (Ctrl) key to select multiple counties</span>
+				</td>
+			</tr>
+			<tr>
+				<td style="height: 10px;"></td>
+			</tr>
+			<tr>
+				<td style="text-align: left;">
+					<input type="image" name="_ctl0:EidContentPlaceHolder:ImageButton1" id="_ctl0_EidContentPlaceHolder_ImageButton1" src="../images/back.jpg" border="0" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;_ctl0:EidContentPlaceHolder:ImageButton1&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" language="javascript" />
+				</td>
+			</tr>
+			<tr>
+				<td style="height: 10px;"></td>
+			</tr>
+		</table>
+	
+</div>
+
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td style="width: 10%; background-color: #ffffff;"></td>
+				</tr>
+				<tr>
+					<td style="width: 80%; background-color: #f2eedc;" align="center" colspan="3">
+						<div style="text-align: center">
+							<table cellspacing="0" cellpadding="0" width="100%" border="0">
+								<tr>
+									<td style="text-align: center; background-color: #d4eefb" class="SmallBlackBold">Enhanced Information Dissemination Version 20.0.1</td>
+								</tr>
+								<tr>
+									<td style="text-align: center; background-color: #d4eefb" class="SmallBlackBold">Software release on: 01/27/2026</td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+</body>
+</html>
+
