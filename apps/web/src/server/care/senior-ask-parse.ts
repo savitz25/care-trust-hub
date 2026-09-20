@@ -61,6 +61,118 @@ function detectClass(q: string): SeniorProviderClass | "ambiguous" | undefined {
 }
 
 /**
+ * TH-SEARCH-R1-019E: every word that `detectClass()` and `UNSUPPORTED_SENIOR_CLASSES` (below) react
+ * to as CATEGORY vocabulary, plus the connector/quality words a bare category phrase carries along
+ * ("in", "near", "options", "agency", "county") -- never a second, independently-maintained
+ * classifier. Kept in sync BY HAND with `detectClass()` and `UNSUPPORTED_SENIOR_CLASSES`; drifting
+ * from those only ever makes `isBareCategoryPhrase()` MORE conservative about calling something a
+ * structured name, never less safe.
+ *
+ * A per-WORD set, not a phrase regex: a phrase regex has to enumerate every combination of category
+ * word + trailing descriptor ("adult day care", "adult day care center", "adult day care services
+ * center") and reliably misses one ("adult daycare center" leaves "center" stranded after matching
+ * "adult daycare"). A per-word set has no such combinatorics -- it only needs the descriptor word
+ * itself listed once, in any position, any number of times.
+ */
+const GENERIC_CARE_WORDS = new Set([
+  // CMS trio + "ambiguous" vocabulary (detectClass())
+  "nursing", "home", "homes", "facility", "facilities", "skilled", "snf", "health", "hha", "hospice",
+  "provider", "providers", "senior", "seniors", "care", "all",
+  // UNSUPPORTED_SENIOR_CLASSES vocabulary
+  "memory", "retirement", "community", "communities", "village", "residence", "residences",
+  "independent", "living", "continuing", "ccrc", "adult", "day", "daycare", "program", "programs",
+  "caregiver", "caregivers", "caregiving", "companion", "elder", "eldercare", "board", "group",
+  "family", "aide", "aides", "personal", "and",
+  // generic descriptor/filler words that ride along with a category phrase but are never, on their
+  // own, part of a facility's registered name in a bare category browse
+  "center", "centers", "centre", "centres", "service", "services", "agency", "agencies", "option",
+  "options",
+  // connectors/prepositions (same list the prior residue-strip regex removed)
+  "find", "show", "list", "search", "for", "in", "near", "within", "around", "county", "counties",
+  "of", "the", "a", "an", "by",
+  // quality/rating vocabulary (also covered by the early return below, kept here too for residue words
+  // that appear alongside a quality clause rather than instead of one)
+  "overall", "staffing", "inspection", "rating", "ratings", "star", "stars", "quality", "patient",
+  "qpc", "hhcahps", "cahps", "cms",
+]);
+
+/**
+ * Splits into lowercase alphanumeric words (punctuation and hyphens become word boundaries, so
+ * "in-home" tokenizes the same as "in home"), for the word-set comparison above.
+ */
+function words(text: string): string[] {
+  return text.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+}
+
+/**
+ * TH-SEARCH-R1-019E: the SAME "could this be a real name" shape check the pre-existing bare-name
+ * identity path already applies (see the `!providerClass` branch below) -- reused, not duplicated,
+ * so a name only ever needs to pass ONE definition of "name-shaped" in this file.
+ */
+function looksLikeProviderName(q: string): boolean {
+  return (
+    // Parentheses are part of real CMS-published names ("AMEDISYS HOME HEALTH CARE (AMHERST)"), the
+    // same location-disambiguator convention CMS applies across all three classes -- not punctuation
+    // introduced by a query's phrasing.
+    /^[a-z0-9][a-z0-9&'.,() -]{2,119}$/i.test(q) &&
+    !/\b(how|what|which|where|who|count|compare|show|need|want|is|has|did|distribution|trend|average|breakdown)\b/i.test(
+      q,
+    ) &&
+    // "distribution/broken down/grouped BY <dimension>" is an analytical/statistical request shape,
+    // never how a facility names itself -- narrow to this specific pattern so an ordinary facility
+    // name that happens to contain the word "by" (e.g. "Sunset By The Bay Nursing Home") is unaffected.
+    !/\b(?:distribut\w*|broken down|grouped)\s+by\b/i.test(q)
+  );
+}
+
+/**
+ * TH-SEARCH-R1-019E: true only when EVERY word in the query is either care-category vocabulary
+ * `detectClass()`/`UNSUPPORTED_SENIOR_CLASSES` reacted to (`GENERIC_CARE_WORDS`, a connector word)
+ * or part of the geography `parseRecordedLocation()` already recognized elsewhere in this same query
+ * ("nursing homes in Florida", "hospice near Tampa", "senior care Florida", "home health agencies in
+ * Texas"). A query that still carries ANY other word once that vocabulary and that recognized
+ * geography are removed is a STRUCTURED PROVIDER NAME, never a category browse -- even though it
+ * contains a word like "nursing"/"rehabilitation"/"care"/"home health"/"hospice". This never invents
+ * or guesses a place: it only ever removes geography `parseRecordedLocation()` itself already
+ * resolved.
+ */
+function isBareCategoryPhrase(
+  q: string,
+  geography: ReturnType<typeof parseRecordedLocation>["geography"],
+): boolean {
+  // A CMS quality/rating filter clause ("with 4 CMS overall stars", "5-star", "highest staffing
+  // rating") is legitimate category-query content on its own, distinct from both the care-category
+  // vocabulary and geography stripped below -- and not something a provider's own name contains. Its
+  // presence alone is conclusive: never treated as name content requiring the override.
+  if (
+    starNumber(q) !== undefined ||
+    /\b(?:overall|staffing|inspection|health-inspection)\s*(?:rating|star)|quality of patient care|\bqpc\b|\bhhcahps\b|\bcahps\b/i.test(
+      q,
+    )
+  ) {
+    return true;
+  }
+  const geoWords = new Set<string>();
+  // parseRecordedLocation() does not always structure a trailing city next to an explicit state
+  // ("board and care home Fresno California" resolves only the state, "CA", leaving "Fresno"
+  // unaccounted for in `geography`). Reuse the SAME trailing-place heuristic the Springfield fix
+  // above already trusts for this identical class of query, rather than inventing a second one, so a
+  // real trailing place name is not mistaken for extra name content here either.
+  const trailingPlace = detectUnrecognizedBarePlace(q);
+  if (trailingPlace) for (const w of words(trailingPlace)) geoWords.add(w);
+  if (geography) {
+    const geoTexts: string[] = [];
+    if (geography.value) geoTexts.push(geography.value);
+    if ("state" in geography && geography.state) geoTexts.push(geography.state);
+    const stateCode =
+      geography.type === "state" ? geography.value : "state" in geography ? geography.state : undefined;
+    if (stateCode && STATE_NAMES[stateCode]) geoTexts.push(STATE_NAMES[stateCode]!);
+    for (const text of geoTexts) for (const w of words(text)) geoWords.add(w);
+  }
+  return words(q).every((w) => GENERIC_CARE_WORDS.has(w) || geoWords.has(w));
+}
+
+/**
  * TH-DISCOVERY-PARITY-001B: state-regulated senior-care settings outside the federal CMS Nursing
  * Home/Home Health/Hospice trio -- general patterns, not the specific audit phrasings that
  * motivated this fix. "assisted living" keeps its own dedicated, more detailed state-by-state
@@ -157,8 +269,8 @@ function labeledCcn(q: string): string | undefined {
 
 function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery {
   const q = raw.trim();
-  const providerClass = detectClass(q);
   const location = parseRecordedLocation(q);
+  const rawProviderClass = detectClass(q);
   // TH-DISCOVERY-FINAL-REPAIR-B: live-audit DANGEROUS finding -- "senior care Springfield" (no
   // preposition, no state token, no "County" keyword) parsed to NO geography at all above, so a
   // named place silently vanished and the executor ran an unfiltered NATIONAL query/preview with no
@@ -178,11 +290,11 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   // fallback must never overwrite that with a single mangled trailing fragment ("Tampa Florida" as
   // one city, silently dropping "Austin Texas" entirely). It only ever fires when
   // parseRecordedLocation() found NOTHING at all to say about location.
-  const unsupportedClassLabel = !providerClass ? unsupportedSeniorClassLabel(q) : undefined;
+  const rawUnsupportedClassLabel = !rawProviderClass ? unsupportedSeniorClassLabel(q) : undefined;
   if (
     !location.geography &&
     !location.locationRequirement &&
-    (providerClass || unsupportedClassLabel)
+    (rawProviderClass || rawUnsupportedClassLabel)
   ) {
     const bare = detectUnrecognizedBarePlace(q);
     if (bare) {
@@ -194,6 +306,40 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
       };
     }
   }
+  // TH-SEARCH-R1-019E: STRUCTURED PROVIDER NAME FIRST. detectClass() reacts to a care-category word
+  // ANYWHERE in the text, so a real facility's own name -- "A Holly Patterson Extended Care
+  // Facility" (contains "Care Facility"), "FFIII Houston SNF Tenant" (contains "SNF") -- was
+  // classified exactly like a bare category browse and diverted into a class-clarification/cohort
+  // path before the identity/name search below ever ran, discarding the actual supplied name. A
+  // query only keeps that class signal when it is ALSO shaped like a real name (looksLikeProviderName)
+  // AND the class/ambiguous vocabulary is not the query's ENTIRE content (isBareCategoryPhrase) --
+  // "nursing homes in Florida" and "senior care Florida" still reduce to nothing else and keep their
+  // existing cohort/clarification behavior unchanged; a name carrying extra content next to the
+  // matched word never does. Computed AFTER the Springfield bare-place fallback above (which must
+  // keep using the RAW class signal to decide whether to disclose an unresolved place) so a genuine
+  // "senior care Springfield" still gets Springfield disclosed and folded into this same check --
+  // once disclosed, isBareCategoryPhrase correctly sees nothing left over and this override leaves
+  // the class alone. This never infers a provider CLASS from the name (the identity search below
+  // still returns each row's own source-recorded class, never this word), and never strips or
+  // reinterprets a place inside the name on its own -- it only decides whether detectClass()'s class
+  // signal is allowed to override the name at all.
+  const providerClass =
+    rawProviderClass &&
+    looksLikeProviderName(q) &&
+    !isBareCategoryPhrase(q, location.geography)
+      ? undefined
+      : rawProviderClass;
+  // The SAME structured-name-first override, applied to the SEPARATE non-CMS "unsupported class"
+  // signal (UNSUPPORTED_SENIOR_CLASSES, e.g. "home care" without "health" following) -- a real,
+  // published Home Health agency can carry "HOME CARE" in its own registered name ("A & T CERTIFIED
+  // HOME CARE, LLC"), which is not a CMS-trio word detectClass() reacts to and so needed its own
+  // check here, not a second copy of the one above.
+  const unsupportedClassLabel =
+    rawUnsupportedClassLabel &&
+    looksLikeProviderName(q) &&
+    !isBareCategoryPhrase(q, location.geography)
+      ? undefined
+      : rawUnsupportedClassLabel;
   const geography = location.geography;
   const county = geography?.type === "county" ? geography : undefined;
   const state =
@@ -1050,7 +1196,10 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   if (!providerClass) {
     const plausibleName = q.replace(/^find\s+|^research\s+/i, "").trim();
     if (
-      /^[a-z0-9][a-z0-9&'., -]{2,119}$/i.test(plausibleName) &&
+      // Same parenthesis allowance as looksLikeProviderName() above, for the identical reason (a
+      // real CMS-published name location disambiguator) -- kept as its own check, not merged into
+      // that one, per the existing "two independent shape checks" design in this file.
+      /^[a-z0-9][a-z0-9&'.,() -]{2,119}$/i.test(plausibleName) &&
       !/\b(how|what|which|where|who|count|compare|show|need|want|is|has|did)\b/i.test(plausibleName)
     ) {
       return validateSeniorResearchQuery({

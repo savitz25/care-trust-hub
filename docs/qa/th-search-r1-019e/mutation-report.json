@@ -1,0 +1,65 @@
+{
+ "generatedAt": "2026-09-20T00:20:17.404Z",
+ "cleanBefore": {
+  "pass": 125,
+  "fail": 0,
+  "failing": []
+ },
+ "mutations": [
+  {
+   "id": "M1_CATEGORY_FIRST_ROUTING_RESTORED",
+   "why": "Restores the pre-fix behavior: detectClass()'s class/ambiguous signal always wins, so a structured provider name containing a care word (\"A Holly Patterson Extended Care Facility\", \"FFIII Houston SNF Tenant\") is diverted to a class-clarification/cohort path instead of the identity search, discarding the supplied name.",
+   "detected": true,
+   "failedTests": [
+    "src/server/care/senior-ask-r1-019e.test.ts > 2-4. exact source-name search survives city words and care-category words inside the provider name > A Holly Patterson Extended Care Facility -> NY1003, no category gate, name intact",
+    "src/server/care/senior-ask-r1-019e.test.ts > 2-4. exact source-name search survives city words and care-category words inside the provider name > FFIII Houston SNF Tenant -> TX1004, no category gate, name intact",
+    "src/server/care/senior-ask-r1-019e.test.ts > 10b. a genuine provider-name miss > a real, well-formed name with no matching record is COMPLETED_NO_CANDIDATES",
+    "src/server/care/senior-ask-r1-019e.test.ts > 12. native and structured operation use the same authoritative engine (identity comparison, not text) > both paths return the same stable identity (CCN + provider class) for the same name"
+   ],
+   "restoredByteIdentical": true
+  },
+  {
+   "id": "M2_STRUCTURED_NAME_STRIPPED_BY_OVERREACHING_PLACE_DETECTION",
+   "why": "Makes isBareCategoryPhrase() treat ANY query with a recognized place inside it as bare category regardless of other content, so \"FFIII Houston SNF Tenant\" (Houston recognized as a city) is misclassified as a category browse and the provider name is lost.",
+   "detected": true,
+   "failedTests": [
+    "src/server/care/senior-ask-r1-019e.test.ts > 2-4. exact source-name search survives city words and care-category words inside the provider name > FFIII Houston SNF Tenant -> TX1004, no category gate, name intact"
+   ],
+   "restoredByteIdentical": true
+  },
+  {
+   "id": "M3_SOURCE_FAILURE_TREATED_AS_MISS",
+   "why": "A genuine source/database failure (SOURCE_UNAVAILABLE from executeSeniorResearchPlan) is silently reported as a completed miss (COMPLETED_NO_CANDIDATES) instead of TECHNICAL_FAILURE, hiding the outage from the caller.",
+   "detected": true,
+   "failedTests": [
+    "src/server/care/senior-ask-r1-019e.test.ts > 9. source failure != miss > a genuine source failure reports TECHNICAL_FAILURE, never COMPLETED_NO_CANDIDATES"
+   ],
+   "restoredByteIdentical": true
+  },
+  {
+   "id": "M4_MERGE_PROVIDER_CLASSES",
+   "why": "Every candidate row is mapped to the SAME provider class (\"nursing_home\") regardless of its own real source-recorded class, merging Nursing Home/Home Health/Hospice into one denominator.",
+   "detected": true,
+   "failedTests": [
+    "src/server/care/senior-ask-r1-019e.test.ts > 5. provider-class preservation across nursing home, home health and hospice > a name shared across two different classes is never merged into one denominator",
+    "src/server/care/senior-ask-r1-019e.test.ts > 5. provider-class preservation across nursing home, home health and hospice > an optional providerClass filter narrows already-returned candidates without a second query"
+   ],
+   "restoredByteIdentical": true
+  },
+  {
+   "id": "M5_UNFILTERED_COHORT_ON_BARE_CATEGORY",
+   "why": "Both UNSUPPORTED_OPERATION guards (before AND after execution -- this operation intentionally checks twice) are bypassed together, so a bare care-category phrase (\"senior care Florida\") falls through to execution and its class-clarification/cohort result is read back as if it were real name-search candidates.",
+   "detected": true,
+   "failedTests": [
+    "src/server/care/senior-ask-r1-019e.test.ts > 8. true care-category queries remain category queries, never a name search > a bare category phrase submitted to the structured operation is UNSUPPORTED, never a name miss",
+    "src/server/care/senior-ask-r1-019e.test.ts > 10. unsupported non-CMS class scope stays distinct from a miss > memory care is UNSUPPORTED at the structured layer too, never a nursing-home substitute"
+   ],
+   "restoredByteIdentical": true
+  }
+ ],
+ "cleanAfter": {
+  "pass": 125,
+  "fail": 0,
+  "failing": []
+ }
+}

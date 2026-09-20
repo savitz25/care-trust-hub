@@ -1,0 +1,801 @@
+{
+ "ranAt": "2026-09-20T00:22:10.777Z",
+ "method": "Fixed positions [0,4,9,14] within 5 deterministic cohort listing pages (nursing_home FL p1, nursing_home TX p3, home_health NY p1, hospice CA p2, nursing_home OH p2), selected before matching was evaluated. Never redrawn.",
+ "base": "http://localhost:3555",
+ "sample": [
+  {
+   "scope": "nursing_home/FL/page1",
+   "position": 0,
+   "name": "ABBEY DELRAY SOUTH",
+   "ccn": "105411",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "ABBEY DELRAY SOUTH",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "abbey delray south",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "ABBEY DELRAY SOUTH",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "nursing_home/FL/page1",
+   "position": 4,
+   "name": "ADVINIA CARE AT VENICE",
+   "ccn": "105955",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "ADVINIA CARE AT VENICE",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "advinia care at venice",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "ADVINIA CARE AT VENICE",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "nursing_home/FL/page1",
+   "position": 9,
+   "name": "ALPINE HEALTH AND REHABILITATION CENTER",
+   "ccn": "105713",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "ALPINE HEALTH AND REHABILITATION CENTER",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "alpine health and rehabilitation center",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "ALPINE HEALTH AND REHABILITATION CENTER",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "nursing_home/FL/page1",
+   "position": 14,
+   "name": "APOLLO HEALTHCARE & REHABILITATION CENTER",
+   "ccn": "105202",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "APOLLO HEALTHCARE & REHABILITATION CENTER",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "apollo healthcare & rehabilitation center",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "APOLLO HEALTHCARE & REHABILITATION CENTER",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "nursing_home/TX/page3",
+   "position": 0,
+   "name": "Avir at Arlington",
+   "ccn": "675877",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "Avir at Arlington",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "avir at arlington",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "Avir at Arlington",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "nursing_home/TX/page3",
+   "position": 4,
+   "name": "AVIR AT BANDERA",
+   "ccn": "676233",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "AVIR AT BANDERA",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "avir at bandera",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "AVIR AT BANDERA",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "nursing_home/TX/page3",
+   "position": 9,
+   "name": "Avir at Belton",
+   "ccn": "675948",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "Avir at Belton",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "avir at belton",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "Avir at Belton",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "nursing_home/TX/page3",
+   "position": 14,
+   "name": "Avir at Burkburnett",
+   "ccn": "675035",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "Avir at Burkburnett",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "avir at burkburnett",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "Avir at Burkburnett",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "home_health/NY/page1",
+   "position": 0,
+   "name": "A & T CERTIFIED HOME CARE, LLC",
+   "ccn": "337439",
+   "providerClass": "home_health",
+   "variants": {
+    "displayed": {
+     "query": "A & T CERTIFIED HOME CARE, LLC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "a & t certified home care, llc",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "A & T CERTIFIED HOME CARE LLC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "home_health/NY/page1",
+   "position": 4,
+   "name": "AMEDISYS HOME HEALTH CARE (AMHERST)",
+   "ccn": "337248",
+   "providerClass": "home_health",
+   "variants": {
+    "displayed": {
+     "query": "AMEDISYS HOME HEALTH CARE (AMHERST)",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "amedisys home health care (amherst)",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "AMEDISYS HOME HEALTH CARE (AMHERST)",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "home_health/NY/page1",
+   "position": 9,
+   "name": "ATARA HOME CARE",
+   "ccn": "337431",
+   "providerClass": "home_health",
+   "variants": {
+    "displayed": {
+     "query": "ATARA HOME CARE",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "atara home care",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "ATARA HOME CARE",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "home_health/NY/page1",
+   "position": 14,
+   "name": "CATTARAUGUS COUNTY DEPARTMENT OF HEALTH CHHA",
+   "ccn": "337004",
+   "providerClass": "home_health",
+   "variants": {
+    "displayed": {
+     "query": "CATTARAUGUS COUNTY DEPARTMENT OF HEALTH CHHA",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "cattaraugus county department of health chha",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "CATTARAUGUS COUNTY DEPARTMENT OF HEALTH CHHA",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "hospice/CA/page2",
+   "position": 0,
+   "name": "A PLUS HOSPICE CARE, INC",
+   "ccn": "A01728",
+   "providerClass": "hospice",
+   "variants": {
+    "displayed": {
+     "query": "A PLUS HOSPICE CARE, INC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "a plus hospice care, inc",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "A PLUS HOSPICE CARE INC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "hospice/CA/page2",
+   "position": 4,
+   "name": "A-1 HOSPICE CARE INC",
+   "ccn": "751756",
+   "providerClass": "hospice",
+   "variants": {
+    "displayed": {
+     "query": "A-1 HOSPICE CARE INC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "a-1 hospice care inc",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "A-1 HOSPICE CARE INC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "hospice/CA/page2",
+   "position": 9,
+   "name": "A1 PRO HOSPICE CARE",
+   "ccn": "A11557",
+   "providerClass": "hospice",
+   "variants": {
+    "displayed": {
+     "query": "A1 PRO HOSPICE CARE",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "a1 pro hospice care",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "A1 PRO HOSPICE CARE",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "hospice/CA/page2",
+   "position": 14,
+   "name": "AARIEL HOSPICE, INC",
+   "ccn": "A01576",
+   "providerClass": "hospice",
+   "variants": {
+    "displayed": {
+     "query": "AARIEL HOSPICE, INC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "aariel hospice, inc",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "AARIEL HOSPICE INC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "nursing_home/OH/page2",
+   "position": 0,
+   "name": "ALTERCARE NEWARK NORTH INC.",
+   "ccn": "365481",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "ALTERCARE NEWARK NORTH INC.",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "altercare newark north inc.",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "ALTERCARE NEWARK NORTH INC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "nursing_home/OH/page2",
+   "position": 4,
+   "name": "ALTERCARE OF CANAL WINCHESTER POST-ACUTE RC",
+   "ccn": "366367",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "ALTERCARE OF CANAL WINCHESTER POST-ACUTE RC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "altercare of canal winchester post-acute rc",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "ALTERCARE OF CANAL WINCHESTER POST-ACUTE RC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "nursing_home/OH/page2",
+   "position": 9,
+   "name": "ALTERCARE OF NAVARRE CTR FOR REHAB & NRSG CARE",
+   "ccn": "365482",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "ALTERCARE OF NAVARRE CTR FOR REHAB & NRSG CARE",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "altercare of navarre ctr for rehab & nrsg care",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "ALTERCARE OF NAVARRE CTR FOR REHAB & NRSG CARE",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  },
+  {
+   "scope": "nursing_home/OH/page2",
+   "position": 14,
+   "name": "ALTERCARE THORNVILLE INC.",
+   "ccn": "366369",
+   "providerClass": "nursing_home",
+   "variants": {
+    "displayed": {
+     "query": "ALTERCARE THORNVILLE INC.",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "lowercase": {
+     "query": "altercare thornville inc.",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    },
+    "punctuationNormalized": {
+     "query": "ALTERCARE THORNVILLE INC",
+     "resultState": "COMPLETED_WITH_CANDIDATES",
+     "httpStatus": 200,
+     "candidateCount": 1,
+     "targetFound": true,
+     "irrelevantCandidates": 0,
+     "nativeAlsoFound": true,
+     "nativeStructuredAgree": true
+    }
+   }
+  }
+ ],
+ "denominators": {
+  "totalRows": 20,
+  "totalVariantChecks": 60,
+  "targetFoundCount": 60,
+  "sourceErrorCount": 0,
+  "unsupportedCount": 0,
+  "nativeStructuredAgreementCount": 60,
+  "classesRepresented": [
+   "nursing_home",
+   "home_health",
+   "hospice"
+  ]
+ },
+ "note": "Small sample (20 rows x 3 variants = 60 checks). No statistical claim (p95, recall %, etc.) is made from it."
+}
