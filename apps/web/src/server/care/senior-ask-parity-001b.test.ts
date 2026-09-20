@@ -252,37 +252,68 @@ describe("TH-DISCOVERY-PARITY-001B execute-level regression corpus", () => {
   // fails closed but preserves clarification: 'provider_class' with a stateless county geography" --
   // reproduced and fixed. A bare county that never resolves to exactly one state (zero matches, or
   // more than one, i.e. genuinely ambiguous) must never let a "provider_class"/"state_care"
-  // clarification run a geography-scoped preview as though the county were safe/known. It must
-  // either fail closed asking the user to add the state (verified here), never a silent cross-state
-  // guess. Exercised across every clarification path that can carry this combination: a genuinely
-  // unsupported class, a genuine CMS-trio ambiguity, and a zero-match county.
+  // clarification run a GEOGRAPHY-SCOPED preview as though the county were safe/known -- i.e. it must
+  // never pick one of the candidate states and present that state's rows as if they were the answer.
+  //
+  // TH-DISCOVERY-FINAL-REPAIR-B: a genuinely unsupported class (state_care, or provider_class with
+  // terminalState UNSUPPORTED) no longer dead-ends here -- it now shows a real, honestly-labeled
+  // NATIONWIDE preview instead (classPreviewsScoped: false; see classPreviews() in
+  // senior-ask-execute.ts). That is verified below by asserting the preview is non-empty AND spans
+  // providers with no relationship to either candidate state's "Washington County" (Honolulu, Boise,
+  // Miami, Newark, Sacramento) -- proof this is a genuine national sample, not a guess of PA or OH.
+  // A genuine CMS-trio ambiguity over the same unresolved county is a DIFFERENT case and still fails
+  // closed to an empty preview (verified separately below) -- there, Nursing/Home Health/Hospice
+  // previews would BE the literal requested answer, so substituting an unscoped national sample would
+  // misrepresent the very geography the user is being asked to narrow.
   describe("an ambiguous or unresolved bare county can never leak a cross-state preview", () => {
-    it("an unsupported class over a county shared by two states shows no leaked preview from either state", async () => {
+    it("an unsupported class over a county shared by two states shows an honestly-labeled nationwide preview, never a guessed state", async () => {
       const result = await executeSeniorResearchQuery("memory care Washington County");
       expect(result.query.clarification).toBe("state_care");
       expect(result.query.geography).toMatchObject({ type: "county", value: "WASHINGTON" });
       expect(result.query.geography?.state).toBeUndefined();
-      const allPreviewEntities = result.classPreviews?.flatMap((g) => g.entities) ?? [];
-      expect(allPreviewEntities).toEqual([]);
-      // Neither state's "Washington County" fixture leaked into an unscoped/guessed preview.
-      expect(allPreviewEntities.map((e) => e.ccn)).not.toContain("PA0002");
-      expect(allPreviewEntities.map((e) => e.ccn)).not.toContain("OH0002");
       expect(result.failClosed?.reason).toMatch(/matches more than one state/i);
+      // The dead end this ticket fixes: a real, non-empty Results-First preview instead of nothing.
+      expect(result.classPreviewsScoped).toBe(false);
+      const nursing = result.classPreviews?.find((g) => g.providerClass === "nursing_home");
+      expect(nursing?.entities.length).toBeGreaterThan(0);
+      // Genuinely nationwide, not a single guessed state: this single preview includes providers
+      // from several unrelated states/cities -- a single guessed candidate state (PA or OH) could
+      // never produce this spread. Note PA0002/OH0002 (the two real Washington County fixtures) MAY
+      // legitimately also appear here -- that is fine and expected, because they are real current
+      // providers being shown as part of an honestly-disclosed nationwide sample, not because
+      // "Washington County" was ever resolved to either PA or OH.
+      const ccns = nursing?.entities.map((e) => e.ccn) ?? [];
+      const states = new Set(nursing?.entities.map((e) => e.recordedLocation?.state));
+      expect(states.size).toBeGreaterThan(1);
+      expect(ccns).toEqual(expect.arrayContaining(["HI0001", "CA0001", "NJ0001"]));
+      // No entity's "why matched" text claims a location match to a county at all (some real
+      // fixture names in this corpus happen to contain the word "Washington" as part of their own
+      // registered provider name, which is fine and expected -- it is the disclosed MATCH REASON,
+      // not the provider name, that must never claim a county-location match here).
+      for (const entity of nursing?.entities ?? []) {
+        expect(entity.whyMatched).not.toMatch(/recorded .* provider location\/address county/i);
+      }
     });
-    it("a genuine CMS-trio ambiguity over the same ambiguous county shows no leaked preview either", async () => {
+    it("a genuine CMS-trio ambiguity over the same ambiguous county still fails closed to no preview", async () => {
       const result = await executeSeniorResearchQuery("senior care homes Washington County");
       expect(result.query.clarification).toBe("provider_class");
+      expect(result.query.terminalState).toBe("NEEDS_CLARIFICATION");
       const allPreviewEntities = result.classPreviews?.flatMap((g) => g.entities) ?? [];
       expect(allPreviewEntities).toEqual([]);
       expect(allPreviewEntities.map((e) => e.ccn)).not.toContain("PA0002");
       expect(allPreviewEntities.map((e) => e.ccn)).not.toContain("OH0002");
     });
-    it("an unsupported class over a county with zero current matches shows no preview at all", async () => {
+    it("an unsupported class over a county with zero current matches shows an honestly-labeled nationwide preview", async () => {
       const result = await executeSeniorResearchQuery("adult day care Atlantis County");
       expect(result.query.clarification).toBe("provider_class");
       expect(result.query.terminalState).toBe("UNSUPPORTED");
+      expect(result.classPreviewsScoped).toBe(false);
       const allPreviewEntities = result.classPreviews?.flatMap((g) => g.entities) ?? [];
-      expect(allPreviewEntities).toEqual([]);
+      expect(allPreviewEntities.length).toBeGreaterThan(0);
+      // "Atlantis County" has zero real matches anywhere -- nothing pretends to be scoped to it.
+      for (const entity of allPreviewEntities) {
+        expect(entity.whyMatched.toUpperCase()).not.toContain("ATLANTIS");
+      }
     });
   });
 

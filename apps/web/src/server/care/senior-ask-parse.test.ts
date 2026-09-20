@@ -318,6 +318,60 @@ describe("interpretSeniorAskQuery", () => {
     });
   });
 
+  // TH-SEARCH-R1-019E-R2: ranking/quality-INTENT wording ("top rated", "highest rated", a bare
+  // "top" directly modifying a CMS category noun) must never collapse a category+geography request
+  // into a literal identity/name search -- providerClass and geography must survive.
+  describe("ranking/quality-intent wording stays a category request, never a literal name search", () => {
+    it.each([
+      "top rated nursing homes in Florida",
+      "top nursing homes in Florida",
+      "top rated hospice in Florida",
+      "highly rated nursing homes in Texas",
+      "highest rated nursing homes in Florida",
+    ])("%s", (raw) => {
+      const q = interpretSeniorAskQuery(raw);
+      expect(q.mode).toBe("entity");
+      expect(q.providerClass).toBeTruthy();
+      expect(q.geography?.value).toBeTruthy();
+      // Never silently reinterpreted as a literal-string provider-name search.
+      expect(q.identityQuery).toBeUndefined();
+    });
+
+    it("'best rated home health agencies in New York' keeps providerClass and geography even though the honest answer declines to rank", () => {
+      const q = interpretSeniorAskQuery("best rated home health agencies in New York");
+      expect(q.providerClass).toBe("home_health");
+      expect(q.geography?.value).toBe("NY");
+      expect(q.identityQuery).toBeUndefined();
+    });
+
+    it("'nursing homes with 5 stars in Florida' (digit form) also keeps providerClass and geography", () => {
+      const q = interpretSeniorAskQuery("nursing homes with 5 stars in Florida");
+      expect(q.mode).toBe("entity");
+      expect(q.providerClass).toBe("nursing_home");
+      expect(q.geography?.value).toBe("FL");
+      expect(q.identityQuery).toBeUndefined();
+    });
+  });
+
+  // A real provider's own registered name commonly carries the exact bare adjectives that signal
+  // ranking intent elsewhere ("Premier", "Five Star", "Top", "Best", "Quality") -- the fix above must
+  // recognize ranking intent only in its idiomatic phrase shapes, never by treating those words as
+  // free-floating generic vocabulary, or a genuine brand name built from them would be misread as a
+  // bare category browse.
+  describe("real provider names built from ranking-sounding words are never misread as category browses", () => {
+    it.each([
+      "AMERICAN PREMIER HOME HEALTH CARE",
+      "FIVE STAR HOME HEALTH CARE",
+      "A QUALITY HOME CARE, INC",
+      "HOLLYWOOD PREMIER HEALTHCARE CENTER",
+    ])("%s", (raw) => {
+      const q = interpretSeniorAskQuery(raw);
+      expect(q.mode).toBe("entity");
+      expect(q.identityQuery).toBe(raw);
+      expect(q.providerClass).toBeUndefined();
+    });
+  });
+
   describe("national senior-living brand identity controls", () => {
     it.each(["Sunrise Senior Living community", "Atria Senior Living facility"])(
       "%s is treated as an identity search, not an unsupported class",

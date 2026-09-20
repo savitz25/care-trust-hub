@@ -1,0 +1,101 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mC:/Users/makei/care-trust-hub-final-repair-b/apps/web[39m
+
+ [32m✓[39m src/server/care/senior-ask-final-repair-b.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m src/server/care/senior-ask-parity-001b.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m src/server/care/senior-ask-parse.test.ts [2m([22m[2m53 tests[22m[2m)[22m[32m 78[2mms[22m[39m
+ [31m❯[39m src/server/care/senior-ask-r1-019e.test.ts [2m([22m[2m32 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 72[2mms[22m[39m
+   [32m✓[39m 1. structured provider-name request validation[2m > [22mrequires an explicit name field[32m 2[2mms[22m[39m
+   [32m✓[39m 1. structured provider-name request validation[2m > [22mrejects an unknown top-level field[32m 0[2mms[22m[39m
+   [32m✓[39m 1. structured provider-name request validation[2m > [22mrejects a malformed operation value[32m 0[2mms[22m[39m
+   [32m✓[39m 1. structured provider-name request validation[2m > [22mrejects an unsupported providerClass[32m 0[2mms[22m[39m
+   [32m✓[39m 1. structured provider-name request validation[2m > [22mrejects a malformed state[32m 0[2mms[22m[39m
+   [32m✓[39m 1. structured provider-name request validation[2m > [22maccepts a minimal valid request[32m 1[2mms[22m[39m
+   [32m✓[39m 2-4. exact source-name search survives city words and care-category words inside the provider name[2m > [22mAbbey Delray South -> FL1001, no category gate, name intact[32m 16[2mms[22m[39m
+   [32m✓[39m 2-4. exact source-name search survives city words and care-category words inside the provider name[2m > [22mAbigail House for Nursing & Rehabilitation -> NY1002, no category gate, name intact[32m 4[2mms[22m[39m
+[31m   [31m×[31m 2-4. exact source-name search survives city words and care-category words inside the provider name[2m > [22mA Holly Patterson Extended Care Facility -> NY1003, no category gate, name intact[39m[32m 10[2mms[22m[39m
+[31m     → expected 'UNSUPPORTED_OPERATION' to be 'COMPLETED_WITH_CANDIDATES' // Object.is equality[39m
+[31m   [31m×[31m 2-4. exact source-name search survives city words and care-category words inside the provider name[2m > [22mFFIII Houston SNF Tenant -> TX1004, no category gate, name intact[39m[32m 2[2mms[22m[39m
+[31m     → expected 'UNSUPPORTED_OPERATION' to be 'COMPLETED_WITH_CANDIDATES' // Object.is equality[39m
+   [32m✓[39m 2-4. exact source-name search survives city words and care-category words inside the provider name[2m > [22m5. lowercase variant still finds the same record[32m 1[2mms[22m[39m
+   [32m✓[39m 2-4. exact source-name search survives city words and care-category words inside the provider name[2m > [22m6. a partial (prefix substring) form of the name -- Senior's own ILIKE matcher's real supported behavior -- still finds the record[32m 2[2mms[22m[39m
+   [32m✓[39m 2-4. exact source-name search survives city words and care-category words inside the provider name[2m > [22m6b. Senior's matcher does substring ILIKE, not word-level normalization -- spelling out '&' as 'and' is an honest miss, not aggressive fuzzy matching invented here[32m 2[2mms[22m[39m
+   [32m✓[39m 2-4. exact source-name search survives city words and care-category words inside the provider name[2m > [22m7. a name beginning with a city word is still searched as a name (not diverted to geography)[32m 1[2mms[22m[39m
+   [32m✓[39m 5. provider-class preservation across nursing home, home health and hospice[2m > [22ma name shared across two different classes is never merged into one denominator[32m 2[2mms[22m[39m
+   [32m✓[39m 5. provider-class preservation across nursing home, home health and hospice[2m > [22man optional providerClass filter narrows already-returned candidates without a second query[32m 1[2mms[22m[39m
+   [32m✓[39m 6. location semantics preservation[2m > [22mrecordedLocation is disclosed as recorded location, never service territory[32m 2[2mms[22m[39m
+   [32m✓[39m 6. location semantics preservation[2m > [22man optional state filter scopes the search itself (not a post-filter), matching native geography semantics[32m 1[2mms[22m[39m
+   [32m✓[39m 7. exact CCN identifier precedence is unaffected[2m > [22man exact CCN through the native path stays on the identifier route, never a name search[32m 1[2mms[22m[39m
+   [32m✓[39m 7. exact CCN identifier precedence is unaffected[2m > [22ma malformed CCN-shaped request never invents a fake identifier match[32m 1[2mms[22m[39m
+   [32m✓[39m 8. true care-category queries remain category queries, never a name search[2m > [22msenior care Florida stays a category request[32m 1[2mms[22m[39m
+   [32m✓[39m 8. true care-category queries remain category queries, never a name search[2m > [22mnursing homes in Florida stays a category request[32m 0[2mms[22m[39m
+   [32m✓[39m 8. true care-category queries remain category queries, never a name search[2m > [22mhospice near Tampa stays a category request[32m 7[2mms[22m[39m
+   [32m✓[39m 8. true care-category queries remain category queries, never a name search[2m > [22mhome health agencies in Texas stays a category request[32m 0[2mms[22m[39m
+   [32m✓[39m 8. true care-category queries remain category queries, never a name search[2m > [22ma bare category phrase submitted to the structured operation is UNSUPPORTED, never a name miss[32m 1[2mms[22m[39m
+   [32m✓[39m 9. source failure != miss[2m > [22ma genuine source failure reports TECHNICAL_FAILURE, never COMPLETED_NO_CANDIDATES[32m 1[2mms[22m[39m
+   [32m✓[39m 10. unsupported non-CMS class scope stays distinct from a miss[2m > [22mmemory care is UNSUPPORTED at the structured layer too, never a nursing-home substitute[32m 1[2mms[22m[39m
+[31m   [31m×[31m 10b. a genuine provider-name miss[2m > [22ma real, well-formed name with no matching record is COMPLETED_NO_CANDIDATES[39m[32m 1[2mms[22m[39m
+[31m     → expected 'UNSUPPORTED_OPERATION' to be 'COMPLETED_NO_CANDIDATES' // Object.is equality[39m
+   [32m✓[39m 11. pagination and cap truthfulness[2m > [22mhasMore is reported honestly and never silently coerced[32m 1[2mms[22m[39m
+[31m   [31m×[31m 12. native and structured operation use the same authoritative engine (identity comparison, not text)[2m > [22mboth paths return the same stable identity (CCN + provider class) for the same name[39m[32m 4[2mms[22m[39m
+[31m     → expected 'UNSUPPORTED_OPERATION' to be 'COMPLETED_WITH_CANDIDATES' // Object.is equality[39m
+   [32m✓[39m 13. no invented profile URL or action[2m > [22mevery action href comes from the entity's own existing href, never constructed from the name[32m 1[2mms[22m[39m
+   [32m✓[39m 14. publication/scope guard[2m > [22mevery returned candidate is publicly published (public_profile) -- never a restricted projection[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/server/care/senior-ask-r1-019e.test.ts[2m > [22m2-4. exact source-name search survives city words and care-category words inside the provider name[2m > [22mA Holly Patterson Extended Care Facility -> NY1003, no category gate, name intact
+[41m[1m FAIL [22m[49m src/server/care/senior-ask-r1-019e.test.ts[2m > [22m2-4. exact source-name search survives city words and care-category words inside the provider name[2m > [22mFFIII Houston SNF Tenant -> TX1004, no category gate, name intact
+[31m[1mAssertionError[22m: expected 'UNSUPPORTED_OPERATION' to be 'COMPLETED_WITH_CANDIDATES' // Object.is equality[39m
+
+Expected: [32m"COMPLETED_WITH_CANDIDATES"[39m
+Received: [31m"UNSUPPORTED_OPERATION"[39m
+
+[36m [2m❯[22m src/server/care/senior-ask-r1-019e.test.ts:[2m177:32[22m[39m
+    [90m175| [39m    [35mconst[39m req [33m=[39m [34mnormalizeSeniorNameCandidatesRequest[39m({ name })[33m;[39m
+    [90m176| [39m    [35mconst[39m result [33m=[39m [35mawait[39m [34mexecuteSeniorNameCandidates[39m(req)[33m;[39m
+    [90m177| [39m    [34mexpect[39m(result[33m.[39mresultState)[33m.[39m[34mtoBe[39m([32m"COMPLETED_WITH_CANDIDATES"[39m)[33m;[39m
+    [90m   | [39m                               [31m^[39m
+    [90m178| [39m    [35mif[39m (result[33m.[39mresultState [33m!==[39m [32m"COMPLETED_WITH_CANDIDATES"[39m) [35mreturn[39m[33m;[39m
+    [90m179| [39m    expect(result.name).toEqual({ supplied: name, predicateApplied: tr…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/server/care/senior-ask-r1-019e.test.ts[2m > [22m10b. a genuine provider-name miss[2m > [22ma real, well-formed name with no matching record is COMPLETED_NO_CANDIDATES
+[31m[1mAssertionError[22m: expected 'UNSUPPORTED_OPERATION' to be 'COMPLETED_NO_CANDIDATES' // Object.is equality[39m
+
+Expected: [32m"COMPLETED_NO_CANDIDATES"[39m
+Received: [31m"UNSUPPORTED_OPERATION"[39m
+
+[36m [2m❯[22m src/server/care/senior-ask-r1-019e.test.ts:[2m333:32[22m[39m
+    [90m331| [39m      normalizeSeniorNameCandidatesRequest({ name: "Zzqx Nonexistent S…
+    [90m332| [39m    )[33m;[39m
+    [90m333| [39m    [34mexpect[39m(result[33m.[39mresultState)[33m.[39m[34mtoBe[39m([32m"COMPLETED_NO_CANDIDATES"[39m)[33m;[39m
+    [90m   | [39m                               [31m^[39m
+    [90m334| [39m    if (result.resultState === "COMPLETED_NO_CANDIDATES") expect(resul…
+    [90m335| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/server/care/senior-ask-r1-019e.test.ts[2m > [22m12. native and structured operation use the same authoritative engine (identity comparison, not text)[2m > [22mboth paths return the same stable identity (CCN + provider class) for the same name
+[31m[1mAssertionError[22m: expected 'UNSUPPORTED_OPERATION' to be 'COMPLETED_WITH_CANDIDATES' // Object.is equality[39m
+
+Expected: [32m"COMPLETED_WITH_CANDIDATES"[39m
+Received: [31m"UNSUPPORTED_OPERATION"[39m
+
+[36m [2m❯[22m src/server/care/senior-ask-r1-019e.test.ts:[2m357:36[22m[39m
+    [90m355| [39m      normalizeSeniorNameCandidatesRequest({ name: "A Holly Patterson …
+    [90m356| [39m    )[33m;[39m
+    [90m357| [39m    [34mexpect[39m(structured[33m.[39mresultState)[33m.[39m[34mtoBe[39m([32m"COMPLETED_WITH_CANDIDATES"[39m)[33m;[39m
+    [90m   | [39m                                   [31m^[39m
+    [90m358| [39m    [35mif[39m (structured[33m.[39mresultState [33m!==[39m [32m"COMPLETED_WITH_CANDIDATES"[39m) [35mreturn[39m[33m;[39m
+    [90m359| [39m    const nativeIdentities = native.entities.map((e) => ({ ccn: e.ccn,…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m114 passed[39m[22m[90m (118)[39m
+[2m   Start at [22m 19:49:27
+[2m   Duration [22m 2.50s[2m (transform 1.04s, setup 895ms, collect 4.29s, tests 266ms, environment 2.53s, prepare 527ms)[22m
+
