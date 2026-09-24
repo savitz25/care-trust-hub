@@ -55,6 +55,7 @@ const corePaths = [
   "/pennsylvania",
   "/north-carolina",
   "/ohio",
+  "/georgia",
   "/new-jersey/monmouth-county",
   "/new-jersey/middlesex-county",
   "/new-jersey/somerset-county",

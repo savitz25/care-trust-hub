@@ -542,6 +542,20 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
         "PARTIAL",
       );
     }
+    if (/\bgeorgia\b/i.test(q) || state?.value === "GA" || /\batlanta\b/i.test(q)) {
+      if (/inspection|complaint/i.test(q)) {
+        return fail(
+          "Georgia assisted-living inspections and complaints stay separate. An Assisted Living Community (Chapter 111-8-63) is not a Personal Care Home (Chapter 111-8-62) and not a CMS nursing home. HFRD inspection reports were not indexed. A complaint form is not a complaint dataset. Open the Georgia research page.",
+          ["Open Georgia senior-care research."],
+          /complaint/i.test(q) ? "REQUEST_ONLY" : "NOT_ACQUIRED",
+        );
+      }
+      return fail(
+        "Georgia assisted living in consumer language is not one license class. An Assisted Living Community (Chapter 111-8-63) serves 25 or more residents and is distinct from a Personal Care Home (Chapter 111-8-62). Neither is a CMS nursing home. No current state roster was acquired. The department's 2,910 figure is program context across four classes, not a TrustHub count. Atlanta is not a license system. Open the Georgia research page.",
+        ["Open Georgia senior-care research."],
+        "NOT_ACQUIRED",
+      );
+    }
     return fail(
       "Assisted living is state-regulated and does not share the federal CMS nursing-home, Home Health, or Hospice directory contract. Use the available state-specific assisted-living research.",
       [
@@ -1020,6 +1034,96 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
     return fail(
       "SeniorTrustHub does not publish Cleveland, Columbus, Cincinnati, Toledo, Akron, or Dayton intelligence routes. Statewide Ohio research remains /ohio. Ranking is unsupported.",
       ["Show nursing homes in Ohio.", "Open Ohio senior-care research."],
+    );
+  }
+  const georgia =
+    /\bgeorgia\b/i.test(q) ||
+    state?.value === "GA" ||
+    (/\batlanta\b/i.test(q) &&
+      /nursing|personal care|senior|hospice|home health|inspection|licen|adult day|community living/i.test(
+        q,
+      ));
+  if (georgia && /personal care home/i.test(q)) {
+    return fail(
+      "Georgia Personal Care Homes are Chapter 111-8-62. They are not Assisted Living Communities and not CMS nursing homes. The current roster was not acquired. Open the Georgia research page.",
+      ["Open Georgia senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (georgia && /community living/i.test(q)) {
+    return fail(
+      "Georgia Community Living Arrangements are Chapter 290-9-37 and are financially supported by DBHDD. They are not Personal Care Homes and not CMS nursing homes. The roster was not acquired. Open the Georgia research page.",
+      ["Open Georgia senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (georgia && /adult day/i.test(q)) {
+    return fail(
+      "Georgia Adult Day Centers are Chapter 111-8-1. Adult day care is not adult day health, and neither is a Personal Care Home or a nursing home. The roster was not acquired. Open the Georgia research page.",
+      ["Open Georgia senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (georgia && /private home care/i.test(q)) {
+    return fail(
+      "A Georgia Private Home Care Provider is a Chapter 111-8-65 license. It is not CMS Home Health. The roster was not acquired. Open the Georgia research page.",
+      ["Open Georgia senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (georgia && /complaint/i.test(q)) {
+    return fail(
+      "Georgia provider-level complaint records were not acquired. The HFRD complaint form is an intake path, not a dataset. An inspection is not a complaint. Open the Georgia research page.",
+      ["Open Georgia senior-care research."],
+      "REQUEST_ONLY",
+    );
+  }
+  if (georgia && /inspection report|survey report/i.test(q)) {
+    return fail(
+      "HFRD inspection reports are searched on the official WebLink. TrustHub did not index or parse those reports. A retrieval date is not an inspection date. An inspection is not a complaint. Open the Georgia research page.",
+      ["Open Georgia senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (georgia && /state licen[sc]e/i.test(q) && /home health|hospice|nursing home/i.test(q)) {
+    return fail(
+      "A Georgia state license is not a CMS CCN. State license rosters for nursing homes, Home Health, and Hospice were not acquired. CMS certification for that class remains a separate directory. Open the Georgia research page.",
+      ["Open Georgia senior-care research.", "Show nursing homes in Georgia."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (georgia && /licen[sc]e number|by license|licensed in georgia/i.test(q)) {
+    return fail(
+      "Georgia license verification was not acquired as a roster. A license number is not a CMS CCN. Confirm licensure on the official HFRD finder. Name-only matching is not used. Open the Georgia research page.",
+      ["Open Georgia senior-care research."],
+      "NOT_ACQUIRED",
+    );
+  }
+  if (
+    /\batlanta\b/i.test(q) &&
+    /nursing|personal care|senior|hospice|home health|assisted/i.test(q)
+  ) {
+    return fail(
+      "Atlanta is a geography, not a Georgia license system. SeniorTrustHub does not publish an Atlanta intelligence route. Statewide Georgia research remains /georgia.",
+      ["Show nursing homes in Georgia.", "Open Georgia senior-care research."],
+      "UNSUPPORTED",
+    );
+  }
+  if (
+    georgia &&
+    /senior care|georgia facilities|all georgia/i.test(q) &&
+    !/nursing home|home health|hospice/i.test(q)
+  ) {
+    return fail(
+      "Georgia senior care is class-specific. Personal Care Home is not Assisted Living Community is not Community Living Arrangement is not Adult Day. There is no combined Georgia senior-facility total. The department's 2,910 program statement and 357 long-term-care statement are not TrustHub counts. Open the Georgia research page.",
+      ["Open Georgia senior-care research.", "Show nursing homes in Georgia."],
+      "UNSUPPORTED",
+    );
+  }
+  if (georgia && /\b(best|safest|top-rated|worst)\b/i.test(q)) {
+    return fail(
+      "SeniorTrustHub does not rank Georgia facilities. CMS publishes federal measures on certified providers. Georgia publishes state licensure through DCH HFRD. TrustHub does not select a winner. Statewide research remains /georgia.",
+      ["Open Georgia senior-care research.", "Show nursing homes in Georgia."],
     );
   }
   if (
