@@ -5,6 +5,7 @@ import {
 } from "./senior-location";
 import { STATE_NAMES } from "@care/domain";
 import { interpretMassachusettsAsk } from "./ma-ask";
+import { interpretTennesseeAsk } from "./tn-ask";
 import {
   type SeniorAskMode,
   type SeniorProviderClass,
@@ -487,6 +488,8 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   }
   const maAnswer = interpretMassachusettsAsk(q, state?.value);
   if (maAnswer) return fail(maAnswer.message, maAnswer.alternatives, maAnswer.coverage);
+  const tnAnswer = interpretTennesseeAsk(q, state?.value);
+  if (tnAnswer) return fail(tnAnswer.message, tnAnswer.alternatives, tnAnswer.coverage);
   if (/assisted living/i.test(q)) {
     if (/\bvirginia\b/i.test(q) || state?.value === "VA") {
       return fail(

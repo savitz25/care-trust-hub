@@ -34,3 +34,6 @@ services/ingest/tests/fixtures/*.html
 packages/domain/src/ma-public-snapshot.ts
 artifacts/ma-sen-001-public-snapshot.json
 apps/web/src/data/massachusetts-facility-lists.json
+packages/domain/src/tn-public-snapshot.ts
+artifacts/tn-sen-001-public-snapshot.json
+apps/web/src/data/tennessee-facility-lists.json

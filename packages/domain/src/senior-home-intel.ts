@@ -9,6 +9,7 @@ import {
   OH_ACCEPTED,
   GA_ACCEPTED,
   MA_ACCEPTED,
+  TN_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -38,6 +39,7 @@ import { NC_PUBLIC_PATH } from "./nc-intelligence";
 import { OH_PUBLIC_PATH } from "./oh-intelligence";
 import { GA_PUBLIC_PATH } from "./ga-intelligence";
 import { MA_PUBLIC_PATH } from "./ma-intelligence";
+import { TN_PUBLIC_PATH } from "./tn-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -133,6 +135,7 @@ export interface HomeGeoRow {
     | "ohio_state_intelligence"
     | "georgia_state_intelligence"
     | "massachusetts_state_intelligence"
+    | "tennessee_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -979,6 +982,21 @@ export function buildSeniorHomeIntel(input: {
         "The DPH Survey Performance Tool is DPH evidence, not a TrustHub score.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Tennessee HFC (state research)",
+      numerator: null,
+      denominator: null,
+      display: `${TN_ACCEPTED.hfcNursingHomeLicenses.toLocaleString("en-US")} HFC Nursing Homes; ${TN_ACCEPTED.hfcAclfs.toLocaleString("en-US")} Assisted Care Living Facilities; ${TN_ACCEPTED.hfcRhas.toLocaleString("en-US")} Residential Homes for the Aged. Separate classes, not added.`,
+      status: "partial",
+      method:
+        "HFC July 2026 bed reports on /tennessee, beside the existing CMS Tennessee geography. The reports have no CCN, so no state-to-CMS bridge is claimed.",
+      limitations: [
+        "An ACLF is not a Nursing Home, and a Residential Home for the Aged is neither.",
+        "An HFC license number is not a CMS CCN. Zero bridges is not zero overlap.",
+        "Home Health and Hospice county rows are service authority, not agencies.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -1021,7 +1039,9 @@ export function buildSeniorHomeIntel(input: {
                                     ? "georgia_state_intelligence"
                                     : row.state === "MA"
                                       ? "massachusetts_state_intelligence"
-                                      : "cms_directory_only",
+                                      : row.state === "TN"
+                                        ? "tennessee_state_intelligence"
+                                        : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -1055,7 +1075,9 @@ export function buildSeniorHomeIntel(input: {
                                     ? GA_PUBLIC_PATH
                                     : row.state === "MA"
                                       ? MA_PUBLIC_PATH
-                                      : null,
+                                      : row.state === "TN"
+                                        ? TN_PUBLIC_PATH
+                                        : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 

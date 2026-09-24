@@ -9,6 +9,7 @@ import {
   OH_ACCEPTED,
   GA_ACCEPTED,
   MA_ACCEPTED,
+  TN_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -26,6 +27,7 @@ import { NC_PUBLIC_FINGERPRINT, NC_PUBLIC_PATH } from "./nc-intelligence";
 import { OH_PUBLIC_FINGERPRINT, OH_PUBLIC_PATH } from "./oh-intelligence";
 import { GA_PUBLIC_FINGERPRINT, GA_PUBLIC_PATH } from "./ga-intelligence";
 import { MA_PUBLIC_FINGERPRINT, MA_PUBLIC_PATH } from "./ma-intelligence";
+import { TN_PUBLIC_FINGERPRINT, TN_PUBLIC_PATH } from "./tn-intelligence";
 import { CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -90,7 +92,8 @@ export interface SeniorHomepageStateCard {
     | "NC"
     | "OH"
     | "GA"
-    | "MA";
+    | "MA"
+    | "TN";
   name: string;
   href: string;
   regulators: string;
@@ -776,13 +779,58 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       MA_PUBLIC_PATH,
     ),
     m(
+      "tn-hfc-nh",
+      "IDENTITY_LICENSURE",
+      "Tennessee HFC Nursing Home licenses",
+      TN_ACCEPTED.hfcNursingHomeLicenses,
+      "License number on the HFC Nursing Home Full Bed Report",
+      "Nursing home (state license)",
+      "Tennessee",
+      "HFC Nursing Home Full Bed Report",
+      TN_PUBLIC_FINGERPRINT,
+      TN_ACCEPTED.reportMonth,
+      "Nursing Home licenses on the HFC July 2026 bed report.",
+      "Assisted Care Living Facilities; Residential Homes for the Aged; CMS Nursing Home CCNs; beds; a combined Tennessee facilities total.",
+      TN_PUBLIC_PATH,
+    ),
+    m(
+      "tn-hfc-aclf",
+      "IDENTITY_LICENSURE",
+      "Tennessee HFC Assisted Care Living Facilities",
+      TN_ACCEPTED.hfcAclfs,
+      "License number on the HFC ACLF Full Bed Report",
+      "Assisted Care Living Facility (state license)",
+      "Tennessee",
+      "HFC Assisted Care Living Facilities Full Bed Report",
+      TN_PUBLIC_FINGERPRINT,
+      TN_ACCEPTED.reportMonth,
+      "ACLF licenses on the HFC July 2026 bed report.",
+      "Nursing Homes; Residential Homes for the Aged; beds; a combined Tennessee facilities total.",
+      TN_PUBLIC_PATH,
+    ),
+    m(
+      "tn-hfc-rha",
+      "IDENTITY_LICENSURE",
+      "Tennessee HFC Residential Homes for the Aged",
+      TN_ACCEPTED.hfcRhas,
+      "License number on the HFC Home for the Aged Full Bed Report",
+      "Residential Home for the Aged (state license)",
+      "Tennessee",
+      "HFC Residential Home for the Aged Full Bed Report",
+      TN_PUBLIC_FINGERPRINT,
+      TN_ACCEPTED.reportMonth,
+      "RHA licenses on the HFC July 2026 bed report.",
+      "Assisted Care Living Facilities; Nursing Homes; Adult Care Homes; beds; a combined Tennessee facilities total.",
+      TN_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Published state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC, OH, GA, MA",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC, OH, GA, MA, TN",
       "SeniorTrustHub accepted state artifacts",
       "Accepted state publication artifacts",
       null,
@@ -876,6 +924,9 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "ma-dph-nh",
     "ma-dph-rest",
     "ma-age-alr",
+    "tn-hfc-nh",
+    "tn-hfc-aclf",
+    "tn-hfc-rha",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -1070,5 +1121,18 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "DPH Survey Performance Tool is linked, not indexed; complaint records were not acquired",
     sourceAsOf: MA_ACCEPTED.dphSourceAsOf,
+  },
+  {
+    state: "TN",
+    name: "Tennessee",
+    href: TN_PUBLIC_PATH,
+    regulators: "HFC · CMS",
+    stateClasses:
+      "HFC Nursing Home, Assisted Care Living Facility, and Residential Home for the Aged licenses; county-licensed Home Health and Hospice lists",
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${TN_ACCEPTED.hfcNursingHomeLicenses} HFC Nursing Homes · ${TN_ACCEPTED.hfcAclfs} ACLFs · ${TN_ACCEPTED.hfcRhas} RHAs · CMS not bridged (no CCN in the HFC reports)`,
+    regulatoryDepth:
+      "HFC monthly facility actions 2024-2026 indexed; complaint records were not acquired",
+    sourceAsOf: TN_ACCEPTED.reportMonth,
   },
 ];

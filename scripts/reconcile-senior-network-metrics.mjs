@@ -23,6 +23,7 @@ const tickets = {
   OH: "001",
   GA: "001",
   MA: "001",
+  TN: "001",
 };
 export function requireCount(value, field, nullable = false) {
   if (value === null && nullable) return null;
@@ -79,7 +80,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       aggregation: "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL",
     });
   }
-  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC", "OH", "GA", "MA"]) {
+  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC", "OH", "GA", "MA", "TN"]) {
     const geo = base.geography.states.find((r) => r.state === state);
     assert.ok(geo, `Missing federal state partition ${state}`);
     for (const [field, setting] of [
@@ -409,6 +410,94 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "REQUEST_ONLY",
     true,
   );
+  add(
+    "TN",
+    "nursingHomes.distinctLicenseNumbers",
+    "License number on the HFC Nursing Home Full Bed Report",
+    "Nursing home (state license)",
+  );
+  add(
+    "TN",
+    "nursingHomes.licensedBeds",
+    "Licensed beds on the HFC Nursing Home Full Bed Report (capacity, not residents)",
+    "Nursing home beds",
+    "nursingHomes",
+  );
+  add(
+    "TN",
+    "aclf.distinctLicenseNumbers",
+    "License number on the HFC ACLF Full Bed Report",
+    "Assisted Care Living Facility (state license)",
+  );
+  add(
+    "TN",
+    "aclf.licensedBeds",
+    "Licensed beds on the HFC ACLF Full Bed Report (capacity, not residents)",
+    "Assisted Care Living Facility beds",
+    "aclf",
+  );
+  add(
+    "TN",
+    "rha.distinctLicenseNumbers",
+    "License number on the HFC Home for the Aged Full Bed Report",
+    "Residential Home for the Aged (state license)",
+  );
+  add(
+    "TN",
+    "rha.licensedBeds",
+    "Licensed beds on the HFC Home for the Aged Full Bed Report (capacity, not residents)",
+    "Residential Home for the Aged beds",
+    "rha",
+  );
+  add(
+    "TN",
+    "homeHealth.distinctAgenciesAsPrinted",
+    "Agency name and home county as printed on the HFC county list (no license number)",
+    "Home Health Agency (state license)",
+    "homeHealth",
+    "PARTIAL",
+  );
+  add(
+    "TN",
+    "homeHealth.countyServiceRows",
+    "Agency x licensed county row (service authority, not agencies)",
+    "Home Health county service",
+    "homeHealth",
+    "PARTIAL",
+  );
+  add(
+    "TN",
+    "hospice.distinctAgenciesAsPrinted",
+    "Agency name and home county as printed on the HFC county list (no license number)",
+    "Hospice (state license)",
+    "hospice",
+    "PARTIAL",
+  );
+  add(
+    "TN",
+    "hospice.countyServiceRows",
+    "Agency x licensed county row (service authority, not agencies)",
+    "Hospice county service",
+    "hospice",
+    "PARTIAL",
+  );
+  add(
+    "TN",
+    "facilityActions.seniorClassActionRows",
+    "Licensee row in a monthly HFC Facility Action and Abuse Report (senior classes)",
+    "State facility action",
+    "facilityActions",
+    "PARTIAL",
+  );
+  add(
+    "TN",
+    "complaints.providerLevelRows",
+    "provider-level complaint record",
+    "Complaint",
+    "complaints",
+    "REQUEST_ONLY",
+    true,
+  );
   const evidenceInventory = buildSeniorHomepageEvidenceInventory({
     networkMetrics: base,
     floridaIdentities: florida.providers.current,
@@ -436,6 +525,9 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "ma-dph-nh": "ma.nursingHomes.rows",
     "ma-dph-rest": "ma.restHomes.rows",
     "ma-age-alr": "ma.assistedLiving.rows",
+    "tn-hfc-nh": "tn.nursingHomes.distinctLicenseNumbers",
+    "tn-hfc-aclf": "tn.aclf.distinctLicenseNumbers",
+    "tn-hfc-rha": "tn.rha.distinctLicenseNumbers",
   };
   for (const row of evidenceInventory) {
     requireCount(row.value, row.key);
@@ -540,6 +632,15 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       ["AGE certified ALR list", "assistedLiving"],
       ["DPH Survey Performance Tool", "surveyTool"],
       ["DPH complaints", "complaints"],
+    ],
+    TN: [
+      ["HFC Nursing Home bed report", "nursingHomes"],
+      ["HFC ACLF bed report", "aclf"],
+      ["HFC RHA bed report", "rha"],
+      ["HFC Home Health county list", "homeHealth"],
+      ["HFC Hospice county list", "hospice"],
+      ["HFC facility actions", "facilityActions"],
+      ["HFC complaints", "complaints"],
     ],
   };
   const stateCards = structuredClone(SENIOR_HOMEPAGE_STATE_CARDS);

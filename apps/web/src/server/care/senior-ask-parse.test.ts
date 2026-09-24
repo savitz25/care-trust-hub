@@ -538,6 +538,50 @@ describe("interpretSeniorAskQuery", () => {
     expect(hospice.providerClass).toBe("hospice");
   });
 
+  it("TN-SEN-001 keeps Tennessee classes separate and leaves CMS classes to CMS research", () => {
+    const fr = (q: string) => interpretSeniorAskQuery(q).failReason ?? "";
+    for (const [q, cls] of [
+      ["nursing homes Tennessee", "nursing_home"],
+      ["nursing home Tennessee", "nursing_home"],
+      ["nursing home Nashville Tennessee", "nursing_home"],
+      ["home health Tennessee", "home_health"],
+      ["home health agency Tennessee", "home_health"],
+      ["hospice Tennessee", "hospice"],
+      ["hospice provider Tennessee", "hospice"],
+    ] as const) {
+      const r = interpretSeniorAskQuery(q);
+      expect(r.mode, q).toBe("entity");
+      expect(r.providerClass, q).toBe(cls);
+      expect(r.geography?.value ?? r.geography?.state, q).toBe("TN");
+    }
+    expect(interpretSeniorAskQuery("assisted living Tennessee").coverageState).toBe("KNOWN");
+    expect(fr("assisted living Tennessee")).toMatch(/331 ACLFs/);
+    expect(fr("assisted care living Tennessee")).toMatch(/Assisted Care Living Facility \(ACLF\)/);
+    expect(fr("ACLF Tennessee")).toMatch(/not a Residential Home for the Aged/);
+    expect(fr("assisted living Nashville")).toMatch(/18 list an address in Nashville/);
+    expect(fr("home for the aged Tennessee")).toMatch(/39 RHAs/);
+    expect(fr("residential home for the aged Tennessee")).toMatch(/not an Assisted Care Living/);
+    expect(fr("nursing home inspections Tennessee")).toMatch(/Statements of Deficiencies/);
+    expect(fr("Tennessee nursing home enforcement")).toMatch(/201 actions/);
+    expect(fr("senior facility discipline Tennessee")).toMatch(/Facility Action and Abuse/);
+    expect(interpretSeniorAskQuery("facility complaints Tennessee").coverageState).toBe(
+      "REQUEST_ONLY",
+    );
+    expect(fr("Tennessee ACLF license 115")).toMatch(/Charter Senior Living of Cleveland/);
+    expect(fr("TN nursing home license 127")).toMatch(/Briarwood Community Living Center/);
+    expect(fr("senior care in Tennessee")).toMatch(/no combined Tennessee senior-facility/i);
+    expect(fr("best nursing home Tennessee")).toMatch(/does not rank Tennessee/);
+    const all = [
+      "assisted living Tennessee",
+      "home for the aged Tennessee",
+      "nursing home license Tennessee",
+    ].map(fr);
+    expect(all.join(" ")).not.toMatch(/\b696\b|\b60,?606\b|\b23,?876\b/); // no combined classes or beds
+    const ccn = interpretSeniorAskQuery("CCN 445001");
+    expect(ccn.failReason ?? "").not.toMatch(/Tennessee senior-care research/);
+    expect(interpretSeniorAskQuery("assisted living Massachusetts").failReason).toMatch(/AGE/);
+  });
+
   it("MA-SEN-001 keeps Massachusetts classes separate and leaves CMS classes to CMS research", () => {
     const fr = (q: string) => interpretSeniorAskQuery(q).failReason ?? "";
     for (const [q, cls] of [
