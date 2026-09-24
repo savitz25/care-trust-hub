@@ -8,6 +8,7 @@ import {
   NC_ACCEPTED,
   OH_ACCEPTED,
   GA_ACCEPTED,
+  MA_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -36,6 +37,7 @@ import { PA_PUBLIC_PATH } from "./pa-intelligence";
 import { NC_PUBLIC_PATH } from "./nc-intelligence";
 import { OH_PUBLIC_PATH } from "./oh-intelligence";
 import { GA_PUBLIC_PATH } from "./ga-intelligence";
+import { MA_PUBLIC_PATH } from "./ma-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -130,6 +132,7 @@ export interface HomeGeoRow {
     | "north_carolina_state_intelligence"
     | "ohio_state_intelligence"
     | "georgia_state_intelligence"
+    | "massachusetts_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -961,6 +964,21 @@ export function buildSeniorHomeIntel(input: {
         "The department's 2,910 program statement and 357 long-term-care statement are not TrustHub counts.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Massachusetts DPH / AGE (state research)",
+      numerator: null,
+      denominator: null,
+      display: `${MA_ACCEPTED.dphNursingHomes.toLocaleString("en-US")} DPH Nursing Homes; ${MA_ACCEPTED.dphRestHomes.toLocaleString("en-US")} DPH Rest Homes; ${MA_ACCEPTED.ageAssistedLivingResidences.toLocaleString("en-US")} AGE-certified Assisted Living Residences. Separate classes, not added.`,
+      status: "partial",
+      method:
+        "DPH facility workbook and AGE certified ALR list on /massachusetts, beside the existing CMS Massachusetts geography. The DPH file has no CCN, so no state-to-CMS bridge is claimed.",
+      limitations: [
+        "Rest Home is not a Nursing Home and not an Assisted Living Residence.",
+        "A DPH license row is not a CMS CCN. Zero bridges is not zero overlap.",
+        "The DPH Survey Performance Tool is DPH evidence, not a TrustHub score.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -1001,7 +1019,9 @@ export function buildSeniorHomeIntel(input: {
                                   ? "ohio_state_intelligence"
                                   : row.state === "GA"
                                     ? "georgia_state_intelligence"
-                                    : "cms_directory_only",
+                                    : row.state === "MA"
+                                      ? "massachusetts_state_intelligence"
+                                      : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -1033,7 +1053,9 @@ export function buildSeniorHomeIntel(input: {
                                   ? OH_PUBLIC_PATH
                                   : row.state === "GA"
                                     ? GA_PUBLIC_PATH
-                                    : null,
+                                    : row.state === "MA"
+                                      ? MA_PUBLIC_PATH
+                                      : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 

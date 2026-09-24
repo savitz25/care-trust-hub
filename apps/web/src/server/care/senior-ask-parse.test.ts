@@ -538,6 +538,55 @@ describe("interpretSeniorAskQuery", () => {
     expect(hospice.providerClass).toBe("hospice");
   });
 
+  it("MA-SEN-001 keeps Massachusetts classes separate and leaves CMS classes to CMS research", () => {
+    const fr = (q: string) => interpretSeniorAskQuery(q).failReason ?? "";
+    for (const [q, cls] of [
+      ["nursing homes Massachusetts", "nursing_home"],
+      ["nursing home Boston Massachusetts", "nursing_home"],
+      ["home health Massachusetts", "home_health"],
+      ["home health agency Massachusetts", "home_health"],
+      ["hospice Massachusetts", "hospice"],
+      ["hospice provider Massachusetts", "hospice"],
+    ] as const) {
+      const r = interpretSeniorAskQuery(q);
+      expect(r.mode, q).toBe("entity");
+      expect(r.providerClass, q).toBe(cls);
+      expect(r.geography?.value, q).toBe("MA");
+    }
+    expect(interpretSeniorAskQuery("assisted living Massachusetts").coverageState).toBe("KNOWN");
+    expect(fr("assisted living Massachusetts")).toMatch(/272 certified residences/);
+    expect(fr("assisted living Massachusetts")).toMatch(/not a Rest Home/);
+    expect(fr("assisted living Boston")).toMatch(/9 list an address in Boston/);
+    expect(fr("assisted living Worcester")).toMatch(/6 list an address in Worcester/);
+    expect(fr("certified assisted living Massachusetts")).toMatch(/certified by AGE/);
+    expect(fr("special care assisted living Massachusetts")).toMatch(
+      /204 residences report special-care units/,
+    );
+    expect(fr("rest homes Massachusetts")).toMatch(/58 Rest Homes/);
+    expect(fr("Massachusetts rest home")).toMatch(/not a Nursing Home/);
+    expect(fr("rest home Worcester")).toMatch(/8 list an address in Worcester/);
+    expect(fr("nursing home license Massachusetts")).toMatch(/347 Nursing Homes/);
+    expect(fr("nursing home license Massachusetts")).toMatch(/no CMS Certification Number/);
+    expect(fr("nursing home inspections Massachusetts")).toMatch(/Survey Performance Tool/);
+    expect(fr("Massachusetts nursing home survey")).toMatch(/not a TrustHub score/);
+    expect(fr("DPH nursing home inspection Massachusetts")).toMatch(/343 surveyed nursing homes/);
+    expect(interpretSeniorAskQuery("nursing home complaints Massachusetts").coverageState).toBe(
+      "REQUEST_ONLY",
+    );
+    expect(fr("senior care in Massachusetts")).toMatch(
+      /no combined Massachusetts senior-facility total/i,
+    );
+    expect(fr("best nursing home Massachusetts")).toMatch(/does not rank Massachusetts/);
+    const all = [
+      "assisted living Massachusetts",
+      "rest homes Massachusetts",
+      "nursing home license Massachusetts",
+    ].map(fr);
+    expect(all.join(" ")).not.toMatch(/\b1,?095\b|\b1,?167\b/); // no combined DPH + AGE total
+    const ccn = interpretSeniorAskQuery("CCN 225001");
+    expect(ccn.failReason ?? "").not.toMatch(/Massachusetts/);
+  });
+
   it("parses Ohio nursing homes and a labeled CCN without inventing a local route", () => {
     const q = interpretSeniorAskQuery("nursing homes in Ohio");
     expect(q.mode).toBe("entity");

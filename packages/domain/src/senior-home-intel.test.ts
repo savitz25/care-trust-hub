@@ -83,6 +83,7 @@ describe("senior-home-intel-v1", () => {
     expect(intel.geography.some((row) => row.intelligenceHref === "/north-carolina")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/ohio")).toBe(true);
     expect(intel.geography.some((row) => row.intelligenceHref === "/georgia")).toBe(true);
+    expect(intel.geography.some((row) => row.intelligenceHref === "/massachusetts")).toBe(true);
     expect(
       intel.geography
         .filter(
@@ -101,7 +102,8 @@ describe("senior-home-intel-v1", () => {
             row.state !== "PA" &&
             row.state !== "NC" &&
             row.state !== "OH" &&
-            row.state !== "GA",
+            row.state !== "GA" &&
+            row.state !== "MA",
         )
         .every((row) => row.intelligenceHref === null),
     ).toBe(true);
