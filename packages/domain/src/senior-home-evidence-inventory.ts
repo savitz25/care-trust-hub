@@ -8,6 +8,7 @@ import {
   NC_ACCEPTED,
   OH_ACCEPTED,
   GA_ACCEPTED,
+  MA_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -24,6 +25,7 @@ import { PA_PUBLIC_FINGERPRINT, PA_PUBLIC_PATH } from "./pa-intelligence";
 import { NC_PUBLIC_FINGERPRINT, NC_PUBLIC_PATH } from "./nc-intelligence";
 import { OH_PUBLIC_FINGERPRINT, OH_PUBLIC_PATH } from "./oh-intelligence";
 import { GA_PUBLIC_FINGERPRINT, GA_PUBLIC_PATH } from "./ga-intelligence";
+import { MA_PUBLIC_FINGERPRINT, MA_PUBLIC_PATH } from "./ma-intelligence";
 import { CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -87,7 +89,8 @@ export interface SeniorHomepageStateCard {
     | "PA"
     | "NC"
     | "OH"
-    | "GA";
+    | "GA"
+    | "MA";
   name: string;
   href: string;
   regulators: string;
@@ -728,13 +731,58 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       GA_PUBLIC_PATH,
     ),
     m(
+      "ma-dph-nh",
+      "IDENTITY_LICENSURE",
+      "Massachusetts DPH nursing-home rows",
+      MA_ACCEPTED.dphNursingHomes,
+      "DPH facility ID, type Nursing Home",
+      "Nursing home (state license)",
+      "Massachusetts",
+      "DPH Licensed or Certified Health Care Facility/Agency Listing",
+      MA_PUBLIC_FINGERPRINT,
+      MA_ACCEPTED.dphSourceAsOf,
+      "DPH nursing-home rows on the state facility workbook.",
+      "Rest Homes; Assisted Living Residences; CMS Nursing Home CCNs; Home Health; Hospice; a combined Massachusetts facilities total.",
+      MA_PUBLIC_PATH,
+    ),
+    m(
+      "ma-dph-rest",
+      "IDENTITY_LICENSURE",
+      "Massachusetts DPH Rest Home rows",
+      MA_ACCEPTED.dphRestHomes,
+      "DPH facility ID, type Rest Home",
+      "Rest Home (state license)",
+      "Massachusetts",
+      "DPH Licensed or Certified Health Care Facility/Agency Listing",
+      MA_PUBLIC_FINGERPRINT,
+      MA_ACCEPTED.dphSourceAsOf,
+      "DPH Rest Home rows on the state facility workbook.",
+      "Nursing Homes; Assisted Living Residences; a combined Massachusetts facilities total.",
+      MA_PUBLIC_PATH,
+    ),
+    m(
+      "ma-age-alr",
+      "IDENTITY_LICENSURE",
+      "Massachusetts AGE certified Assisted Living Residences",
+      MA_ACCEPTED.ageAssistedLivingResidences,
+      "Residence row on the AGE certified ALR list",
+      "Assisted Living Residence (state certification)",
+      "Massachusetts",
+      "AGE list of certified Assisted Living Residences",
+      MA_PUBLIC_FINGERPRINT,
+      MA_ACCEPTED.alrSourceAsOf,
+      "Certified Assisted Living Residences on the AGE list.",
+      "Rest Homes; Nursing Homes; ALR units; a combined Massachusetts facilities total.",
+      MA_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Published state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC, OH, GA",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC, OH, GA, MA",
       "SeniorTrustHub accepted state artifacts",
       "Accepted state publication artifacts",
       null,
@@ -825,6 +873,9 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "ga-cms-nh",
     "ga-cms-hha",
     "ga-cms-hospice",
+    "ma-dph-nh",
+    "ma-dph-rest",
+    "ma-age-alr",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -1006,5 +1057,18 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "CMS CCN evidence reused; HFRD inspection reports and complaint records were not acquired",
     sourceAsOf: null,
+  },
+  {
+    state: "MA",
+    name: "Massachusetts",
+    href: MA_PUBLIC_PATH,
+    regulators: "DPH · AGE · CMS",
+    stateClasses:
+      "DPH Nursing Home, Rest Home, Home Health, Hospice, and Adult Day Health; AGE-certified Assisted Living Residences",
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${MA_ACCEPTED.dphNursingHomes} DPH Nursing Homes · ${MA_ACCEPTED.dphRestHomes} DPH Rest Homes · ${MA_ACCEPTED.ageAssistedLivingResidences} certified ALRs · CMS not bridged (no CCN in the DPH file)`,
+    regulatoryDepth:
+      "DPH Survey Performance Tool is linked, not indexed; complaint records were not acquired",
+    sourceAsOf: MA_ACCEPTED.dphSourceAsOf,
   },
 ];

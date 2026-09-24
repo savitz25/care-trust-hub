@@ -22,6 +22,7 @@ const tickets = {
   NC: "001",
   OH: "001",
   GA: "001",
+  MA: "001",
 };
 export function requireCount(value, field, nullable = false) {
   if (value === null && nullable) return null;
@@ -78,7 +79,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       aggregation: "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL",
     });
   }
-  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC", "OH", "GA"]) {
+  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC", "OH", "GA", "MA"]) {
     const geo = base.geography.states.find((r) => r.state === state);
     assert.ok(geo, `Missing federal state partition ${state}`);
     for (const [field, setting] of [
@@ -364,6 +365,50 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "REQUEST_ONLY",
     true,
   );
+  add(
+    "MA",
+    "nursingHomes.rows",
+    "DPH facility ID, type Nursing Home",
+    "Nursing home (state license)",
+  );
+  add("MA", "restHomes.rows", "DPH facility ID, type Rest Home", "Rest Home (state license)");
+  add(
+    "MA",
+    "homeHealth.rows",
+    "DPH facility ID, type Certified Home Health Agency",
+    "Home Health Agency (state license)",
+  );
+  add("MA", "hospice.rows", "DPH facility ID, type Hospice", "Hospice (state license)");
+  add(
+    "MA",
+    "adultDayHealth.rows",
+    "DPH facility ID, type Adult Day Health",
+    "Adult Day Health (state license)",
+  );
+  add(
+    "MA",
+    "assistedLiving.rows",
+    "Residence row on the AGE certified ALR list",
+    "Assisted Living Residence (state certification)",
+  );
+  add(
+    "MA",
+    "surveyTool.indexedFacilityResults",
+    "DPH Survey Performance Tool facility result",
+    "Survey performance",
+    "surveyTool",
+    "NOT_ACQUIRED",
+    true,
+  );
+  add(
+    "MA",
+    "complaints.providerLevelRows",
+    "provider-level complaint record",
+    "Complaint",
+    "complaints",
+    "REQUEST_ONLY",
+    true,
+  );
   const evidenceInventory = buildSeniorHomepageEvidenceInventory({
     networkMetrics: base,
     floridaIdentities: florida.providers.current,
@@ -388,6 +433,9 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "ga-cms-nh": "ga.cmsOverlay.nursingHomes",
     "ga-cms-hha": "ga.cmsOverlay.homeHealth",
     "ga-cms-hospice": "ga.cmsOverlay.hospice",
+    "ma-dph-nh": "ma.nursingHomes.rows",
+    "ma-dph-rest": "ma.restHomes.rows",
+    "ma-age-alr": "ma.assistedLiving.rows",
   };
   for (const row of evidenceInventory) {
     requireCount(row.value, row.key);
@@ -486,6 +534,12 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       ["GaMap2Care finder", "gaMap2Care"],
       ["HFRD inspection search", "inspections"],
       ["HFRD complaints", "complaints"],
+    ],
+    MA: [
+      ["DPH facility workbook", "dphWorkbook"],
+      ["AGE certified ALR list", "assistedLiving"],
+      ["DPH Survey Performance Tool", "surveyTool"],
+      ["DPH complaints", "complaints"],
     ],
   };
   const stateCards = structuredClone(SENIOR_HOMEPAGE_STATE_CARDS);

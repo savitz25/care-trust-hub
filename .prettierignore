@@ -31,3 +31,6 @@ artifacts/nj-sen-005-public-snapshot.json
 artifacts/nj-sen-county-001/*.json
 artifacts/ca-sen-001-public-snapshot.json
 services/ingest/tests/fixtures/*.html
+packages/domain/src/ma-public-snapshot.ts
+artifacts/ma-sen-001-public-snapshot.json
+apps/web/src/data/massachusetts-facility-lists.json

@@ -21,3 +21,6 @@ data/rejected/
 data/reports/
 data/ohio/oh-sen-001/odh-nh-rows.json
 data/ohio/oh-sen-001/odh-rcf-rows.json
+
+# MA-SEN-001 raw state downloads (ALR list includes staff names and emails). Derived, sanitized JSON is committed.
+data/massachusetts/ma-sen-001/raw/

@@ -110,6 +110,16 @@ test("unknown is explicit null, required missing source fields fail, and valid z
   assert.equal(rows["ga.complaints.providerLevelRows"].capabilityStatus, "REQUEST_ONLY");
   assert.equal(rows["ga.cmsOverlay.nursingHomes"].value, 356);
   assert.equal(rows["ga.cmsOverlay.nursingHomes"].capabilityStatus, "FEDERAL_BASELINE");
+  assert.equal(rows["ma.nursingHomes.rows"].value, 347);
+  assert.equal(rows["ma.restHomes.rows"].value, 58);
+  assert.equal(rows["ma.assistedLiving.rows"].value, 272);
+  assert.equal(rows["ma.cmsOverlay.nursingHomes"].value, 341);
+  assert.equal(rows["ma.surveyTool.indexedFacilityResults"].capabilityStatus, "NOT_ACQUIRED");
+  assert.equal(rows["ma.complaints.providerLevelRows"].capabilityStatus, "REQUEST_ONLY");
+  assert.equal(
+    m.reconciliation.stateCapabilities.find((r) => r.state === "MA").stateSourceAcquired,
+    true,
+  );
   assert.throws(
     () =>
       reconcileSenior(structuredClone(m), (path) => {

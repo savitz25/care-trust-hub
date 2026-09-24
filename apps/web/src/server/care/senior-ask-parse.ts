@@ -4,6 +4,7 @@ import {
   LOCATION_MEANING,
 } from "./senior-location";
 import { STATE_NAMES } from "@care/domain";
+import { interpretMassachusettsAsk } from "./ma-ask";
 import {
   type SeniorAskMode,
   type SeniorProviderClass,
@@ -484,6 +485,8 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
       ["Show nursing homes in Florida."],
     );
   }
+  const maAnswer = interpretMassachusettsAsk(q, state?.value);
+  if (maAnswer) return fail(maAnswer.message, maAnswer.alternatives, maAnswer.coverage);
   if (/assisted living/i.test(q)) {
     if (/\bvirginia\b/i.test(q) || state?.value === "VA") {
       return fail(
