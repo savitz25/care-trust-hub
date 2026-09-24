@@ -24,3 +24,6 @@ data/ohio/oh-sen-001/odh-rcf-rows.json
 
 # MA-SEN-001 raw state downloads (ALR list includes staff names and emails). Derived, sanitized JSON is committed.
 data/massachusetts/ma-sen-001/raw/
+
+# TN-SEN-001 raw HFC downloads (abuse-registry pages name individuals). Derived JSON is committed.
+data/tennessee/tn-sen-001/raw/

@@ -49,6 +49,7 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
       "/ohio",
       "/georgia",
       "/massachusetts",
+      "/tennessee",
     ]);
     expect(inventory.find((row) => row.key === "fl-regulatory-observations")?.value).toBe(77219);
     expect(inventory.find((row) => row.key === "nj-enforcement-indexed")?.doesNotCount).toMatch(
@@ -81,6 +82,12 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
     expect(inventory.find((row) => row.key === "ma-dph-nh")?.value).toBe(347);
     expect(inventory.find((row) => row.key === "ma-dph-rest")?.value).toBe(58);
     expect(inventory.find((row) => row.key === "ma-age-alr")?.value).toBe(272);
+    expect(inventory.find((row) => row.key === "tn-hfc-nh")?.value).toBe(326);
+    expect(inventory.find((row) => row.key === "tn-hfc-aclf")?.value).toBe(331);
+    expect(inventory.find((row) => row.key === "tn-hfc-rha")?.value).toBe(39);
+    expect(inventory.find((row) => row.key === "tn-hfc-rha")?.doesNotCount).toMatch(
+      /Assisted Care Living Facilities/,
+    );
     expect(inventory.find((row) => row.key === "ma-dph-rest")?.doesNotCount).toMatch(
       /Nursing Homes/,
     );

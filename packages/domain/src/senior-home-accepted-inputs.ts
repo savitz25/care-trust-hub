@@ -100,6 +100,7 @@ export const NC_ACCEPTED = {
 import OH from "../../../artifacts/oh-sen-001-public-snapshot.json";
 import GA from "../../../artifacts/ga-sen-001-public-snapshot.json";
 import MA from "../../../artifacts/ma-sen-001-public-snapshot.json";
+import TN from "../../../artifacts/tn-sen-001-public-snapshot.json";
 export const OH_ACCEPTED = {
   nursingFacilityRows: OH.nursingHomes.OH_NURSING_FACILITY_ROWS,
   rcfRows: OH.rcf.OH_RCF_ROWS,
@@ -123,4 +124,14 @@ export const MA_ACCEPTED = {
   dphSourceAsOf: MA.dphWorkbook.sourceAsOf,
   alrSourceAsOf: MA.assistedLiving.sourceAsOf,
   snapshotAsOf: MA.snapshotAsOf,
+};
+export const TN_ACCEPTED = {
+  hfcNursingHomeLicenses: TN.nursingHomes.distinctLicenseNumbers,
+  hfcAclfs: TN.aclf.distinctLicenseNumbers,
+  hfcRhas: TN.rha.distinctLicenseNumbers,
+  cmsNursingHomes: TN.cmsOverlay.nursingHomes,
+  cmsHomeHealth: TN.cmsOverlay.homeHealth,
+  cmsHospice: TN.cmsOverlay.hospice,
+  reportMonth: TN.nursingHomes.sourceAsOf,
+  snapshotAsOf: TN.snapshotAsOf,
 };
