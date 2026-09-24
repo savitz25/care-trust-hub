@@ -7,6 +7,7 @@ import {
   PA_ACCEPTED,
   NC_ACCEPTED,
   OH_ACCEPTED,
+  GA_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -34,6 +35,7 @@ import { OR_PUBLIC_PATH } from "./or-intelligence";
 import { PA_PUBLIC_PATH } from "./pa-intelligence";
 import { NC_PUBLIC_PATH } from "./nc-intelligence";
 import { OH_PUBLIC_PATH } from "./oh-intelligence";
+import { GA_PUBLIC_PATH } from "./ga-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -127,6 +129,7 @@ export interface HomeGeoRow {
     | "pennsylvania_state_intelligence"
     | "north_carolina_state_intelligence"
     | "ohio_state_intelligence"
+    | "georgia_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -943,6 +946,21 @@ export function buildSeniorHomeIntel(input: {
         "Navigator quality data is official evidence, not a TrustHub score. Search-only is not zero.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Georgia DCH HFRD (state research)",
+      numerator: null,
+      denominator: null,
+      display: `${GA_ACCEPTED.cmsNursingHomes.toLocaleString("en-US")} CMS Nursing Homes; ${GA_ACCEPTED.cmsHomeHealth.toLocaleString("en-US")} CMS Home Health; ${GA_ACCEPTED.cmsHospice.toLocaleString("en-US")} CMS Hospice. Georgia state license rosters were not acquired.`,
+      status: "partial",
+      method:
+        "Existing CMS Georgia geography on /georgia. DCH HFRD Personal Care Homes, Assisted Living Communities, Community Living Arrangements, Adult Day, and Private Home Care stay class-specific and unacquired.",
+      limitations: [
+        "Do not add CMS classes and Georgia license classes into one senior-provider denominator.",
+        "Personal Care Home is not an Assisted Living Community. A state license is not a CMS CCN.",
+        "The department's 2,910 program statement and 357 long-term-care statement are not TrustHub counts.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -981,7 +999,9 @@ export function buildSeniorHomeIntel(input: {
                                 ? "north_carolina_state_intelligence"
                                 : row.state === "OH"
                                   ? "ohio_state_intelligence"
-                                  : "cms_directory_only",
+                                  : row.state === "GA"
+                                    ? "georgia_state_intelligence"
+                                    : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -1011,7 +1031,9 @@ export function buildSeniorHomeIntel(input: {
                                 ? NC_PUBLIC_PATH
                                 : row.state === "OH"
                                   ? OH_PUBLIC_PATH
-                                  : null,
+                                  : row.state === "GA"
+                                    ? GA_PUBLIC_PATH
+                                    : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 

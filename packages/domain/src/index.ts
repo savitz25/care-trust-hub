@@ -61,3 +61,4 @@ export * from "./or-intelligence";
 export * from "./pa-intelligence";
 export * from "./nc-intelligence";
 export * from "./oh-intelligence";
+export * from "./ga-intelligence";

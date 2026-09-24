@@ -7,6 +7,7 @@ import {
   PA_ACCEPTED,
   NC_ACCEPTED,
   OH_ACCEPTED,
+  GA_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -22,6 +23,7 @@ import { OR_PUBLIC_FINGERPRINT, OR_PUBLIC_PATH } from "./or-intelligence";
 import { PA_PUBLIC_FINGERPRINT, PA_PUBLIC_PATH } from "./pa-intelligence";
 import { NC_PUBLIC_FINGERPRINT, NC_PUBLIC_PATH } from "./nc-intelligence";
 import { OH_PUBLIC_FINGERPRINT, OH_PUBLIC_PATH } from "./oh-intelligence";
+import { GA_PUBLIC_FINGERPRINT, GA_PUBLIC_PATH } from "./ga-intelligence";
 import { CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -84,7 +86,8 @@ export interface SeniorHomepageStateCard {
     | "OR"
     | "PA"
     | "NC"
-    | "OH";
+    | "OH"
+    | "GA";
   name: string;
   href: string;
   regulators: string;
@@ -680,13 +683,58 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       OH_PUBLIC_PATH,
     ),
     m(
+      "ga-cms-nh",
+      "FEDERAL_DIRECTORY",
+      "Georgia CMS Nursing Home overlay",
+      GA_ACCEPTED.cmsNursingHomes,
+      "CMS Nursing Home CCN in Georgia geography",
+      "Nursing Home",
+      "Georgia",
+      "CMS Provider Data Catalog",
+      GA_PUBLIC_FINGERPRINT,
+      GA_ACCEPTED.overlayAsOf,
+      "Accepted CMS Nursing Home identities already in the national geography partition.",
+      "National CMS totals (already included); Georgia Personal Care Homes; Assisted Living Communities; a combined Georgia provider count.",
+      GA_PUBLIC_PATH,
+    ),
+    m(
+      "ga-cms-hha",
+      "FEDERAL_DIRECTORY",
+      "Georgia CMS Home Health overlay",
+      GA_ACCEPTED.cmsHomeHealth,
+      "CMS Home Health CCN in Georgia geography",
+      "Home Health",
+      "Georgia",
+      "CMS Provider Data Catalog",
+      GA_PUBLIC_FINGERPRINT,
+      GA_ACCEPTED.overlayAsOf,
+      "Accepted CMS Home Health identities already in the national geography partition.",
+      "National CMS totals (already included); Georgia Private Home Care Providers; a service area.",
+      GA_PUBLIC_PATH,
+    ),
+    m(
+      "ga-cms-hospice",
+      "FEDERAL_DIRECTORY",
+      "Georgia CMS Hospice overlay",
+      GA_ACCEPTED.cmsHospice,
+      "CMS Hospice CCN in Georgia geography",
+      "Hospice",
+      "Georgia",
+      "CMS Provider Data Catalog",
+      GA_PUBLIC_FINGERPRINT,
+      GA_ACCEPTED.overlayAsOf,
+      "Accepted CMS Hospice identities already in the national geography partition.",
+      "National CMS totals (already included); a Georgia state hospice license; a combined provider count.",
+      GA_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Published state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC, OH",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC, OH, GA",
       "SeniorTrustHub accepted state artifacts",
       "Accepted state publication artifacts",
       null,
@@ -774,6 +822,9 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "pa-doh-nh",
     "nc-dhsr-ach",
     "oh-odh-nh",
+    "ga-cms-nh",
+    "ga-cms-hha",
+    "ga-cms-hospice",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -942,5 +993,18 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "Navigator quality/satisfaction and ODH inspections remain search-only; OneSource licenses are the current freeze",
     sourceAsOf: OH_ACCEPTED.snapshotAsOf,
+  },
+  {
+    state: "GA",
+    name: "Georgia",
+    href: GA_PUBLIC_PATH,
+    regulators: "DCH HFRD · CMS",
+    stateClasses:
+      "Personal Care Home, Assisted Living Community, Community Living Arrangement, and Adult Day remain separate and unacquired",
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${GA_ACCEPTED.cmsNursingHomes} CMS Nursing Homes · ${GA_ACCEPTED.cmsHomeHealth} CMS Home Health · ${GA_ACCEPTED.cmsHospice} CMS Hospice · state licenses not joined`,
+    regulatoryDepth:
+      "CMS CCN evidence reused; HFRD inspection reports and complaint records were not acquired",
+    sourceAsOf: null,
   },
 ];

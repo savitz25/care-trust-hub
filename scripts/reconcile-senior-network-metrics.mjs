@@ -21,6 +21,7 @@ const tickets = {
   PA: "001",
   NC: "001",
   OH: "001",
+  GA: "001",
 };
 export function requireCount(value, field, nullable = false) {
   if (value === null && nullable) return null;
@@ -77,7 +78,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       aggregation: "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL",
     });
   }
-  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC", "OH"]) {
+  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC", "OH", "GA"]) {
     const geo = base.geography.states.find((r) => r.state === state);
     assert.ok(geo, `Missing federal state partition ${state}`);
     for (const [field, setting] of [
@@ -311,6 +312,58 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "ODH OneSource f_licenseno OHL##### L1 RESIDENTIAL CARE",
     "Residential Care Facility (state license)",
   );
+  for (const [field, grain, providerClass] of [
+    [
+      "personalCareHomes.rows",
+      "HFRD Personal Care Home license",
+      "Personal Care Home (state license)",
+    ],
+    [
+      "assistedLivingCommunities.rows",
+      "HFRD Assisted Living Community license",
+      "Assisted Living Community (state license)",
+    ],
+    [
+      "communityLivingArrangements.rows",
+      "HFRD Community Living Arrangement",
+      "Community Living Arrangement (state license)",
+    ],
+    ["adultDay.rows", "HFRD Adult Day Center", "Adult Day Center (state license)"],
+    [
+      "privateHomeCare.rows",
+      "HFRD Private Home Care Provider license",
+      "Private Home Care Provider (state license)",
+    ],
+    ["stateNursingHomeLicenses.rows", "HFRD nursing-home license", "Nursing home (state license)"],
+    [
+      "stateHomeHealthLicenses.rows",
+      "HFRD Home Health license",
+      "Home Health Agency (state license)",
+    ],
+    ["stateHospiceLicenses.rows", "HFRD Hospice license", "Hospice (state license)"],
+    ["inspections.indexedReports", "HFRD inspection report index", "Inspection report"],
+    ["enforcement.rows", "HFRD enforcement order", "Enforcement order"],
+  ]) {
+    add("GA", field, grain, providerClass, field.split(".")[0], "NOT_ACQUIRED", true);
+  }
+  add(
+    "GA",
+    "crosswalk.exactStateToCmsBridges",
+    "exact state license to CMS CCN",
+    "Identity bridge",
+    "crosswalk",
+    "UNKNOWN",
+    true,
+  );
+  add(
+    "GA",
+    "complaints.providerLevelRows",
+    "provider-level complaint record",
+    "Complaint",
+    "complaints",
+    "REQUEST_ONLY",
+    true,
+  );
   const evidenceInventory = buildSeniorHomepageEvidenceInventory({
     networkMetrics: base,
     floridaIdentities: florida.providers.current,
@@ -332,6 +385,9 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "pa-doh-nh": "pa.nursingHomes.PA_NURSING_HOME_ROWS",
     "nc-dhsr-ach": "nc.adultCareHomes.NC_ADULT_CARE_HOME_ROWS",
     "oh-odh-nh": "oh.nursingHomes.OH_NURSING_FACILITY_ROWS",
+    "ga-cms-nh": "ga.cmsOverlay.nursingHomes",
+    "ga-cms-hha": "ga.cmsOverlay.homeHealth",
+    "ga-cms-hospice": "ga.cmsOverlay.hospice",
   };
   for (const row of evidenceInventory) {
     requireCount(row.value, row.key);
@@ -425,6 +481,12 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       ["Long-Term Care Quality Navigator", "navigator"],
       ["ODH inspections", "inspections"],
     ],
+    GA: [
+      ["DCH Personal Care Home program statement", "programContext"],
+      ["GaMap2Care finder", "gaMap2Care"],
+      ["HFRD inspection search", "inspections"],
+      ["HFRD complaints", "complaints"],
+    ],
   };
   const stateCards = structuredClone(SENIOR_HOMEPAGE_STATE_CARDS);
   for (const card of stateCards) {
@@ -507,7 +569,9 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       state,
       route: stateCards.find((c) => c.state === state)?.href ?? null,
       routeExists: stateCards.some((c) => c.state === state),
-      stateSourceAcquired: stateCards.some((c) => c.state === state && state !== "CO"),
+      stateSourceAcquired: stateCards.some(
+        (c) => c.state === state && state !== "CO" && state !== "GA",
+      ),
       specialistComplete: null,
       metricKeys: stateMetrics.filter((m) => m.state === state).map((m) => m.key),
     })),

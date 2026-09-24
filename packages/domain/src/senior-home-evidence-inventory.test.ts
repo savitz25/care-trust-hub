@@ -47,6 +47,7 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
       "/pennsylvania",
       "/north-carolina",
       "/ohio",
+      "/georgia",
     ]);
     expect(inventory.find((row) => row.key === "fl-regulatory-observations")?.value).toBe(77219);
     expect(inventory.find((row) => row.key === "nj-enforcement-indexed")?.doesNotCount).toMatch(
@@ -73,6 +74,13 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
     expect(inventory.find((row) => row.key === "pa-doh-nh")?.value).toBe(659);
     expect(inventory.find((row) => row.key === "nc-dhsr-ach")?.value).toBe(568);
     expect(inventory.find((row) => row.key === "oh-odh-nh")?.value).toBe(923);
+    expect(inventory.find((row) => row.key === "ga-cms-nh")?.value).toBe(356);
+    expect(inventory.find((row) => row.key === "ga-cms-hha")?.value).toBe(105);
+    expect(inventory.find((row) => row.key === "ga-cms-hospice")?.value).toBe(261);
+    expect(inventory.find((row) => row.key === "ga-cms-nh")?.doesNotCount).toMatch(
+      /Personal Care Homes/i,
+    );
+    expect(inventory.some((row) => row.value === 2910 || row.value === 357)).toBe(false);
     expect(inventory.find((row) => row.key === "oh-odh-nh")?.doesNotCount).toMatch(
       /Residential Care/i,
     );

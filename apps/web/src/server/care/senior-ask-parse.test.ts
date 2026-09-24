@@ -504,6 +504,40 @@ describe("interpretSeniorAskQuery", () => {
     expect(senior.failReason).toMatch(/class-specific/i);
   });
 
+  it("keeps Georgia classes, Atlanta, and CMS nursing homes apart", () => {
+    const al = interpretSeniorAskQuery("assisted living in Georgia");
+    expect(al.mode).toBe("fail_closed");
+    expect(al.coverageState).toBe("NOT_ACQUIRED");
+    expect(al.failReason).toMatch(/Assisted Living Community/);
+    expect(al.failReason).toMatch(/Personal Care Home/);
+    expect(al.failReason).toMatch(/2,910/);
+    const pch = interpretSeniorAskQuery("personal care homes in Georgia");
+    expect(pch.coverageState).toBe("NOT_ACQUIRED");
+    expect(pch.failReason).toMatch(/111-8-62/);
+    const insp = interpretSeniorAskQuery("Georgia assisted living inspections");
+    expect(insp.coverageState).toBe("NOT_ACQUIRED");
+    const complaint = interpretSeniorAskQuery("complaints about a Georgia nursing home");
+    expect(complaint.coverageState).toBe("REQUEST_ONLY");
+    const license = interpretSeniorAskQuery("is Savannah Manor licensed in Georgia");
+    expect(license.mode).toBe("fail_closed");
+    expect(license.failReason).toMatch(/not a CMS CCN/i);
+    const senior = interpretSeniorAskQuery("senior care in Georgia");
+    expect(senior.failReason).toMatch(/no combined Georgia/i);
+    const atlanta = interpretSeniorAskQuery("senior care in Atlanta");
+    expect(atlanta.failReason).toMatch(/not a Georgia license system/i);
+    expect(atlanta.failReason).not.toMatch(/\/georgia\/atlanta/);
+    const nh = interpretSeniorAskQuery("nursing homes in Georgia");
+    expect(nh.mode).toBe("entity");
+    expect(nh.providerClass).toBe("nursing_home");
+    expect(nh.geography?.value).toBe("GA");
+    const hh = interpretSeniorAskQuery("home health in Georgia");
+    expect(hh.mode).toBe("entity");
+    expect(hh.providerClass).toBe("home_health");
+    const hospice = interpretSeniorAskQuery("hospice in Georgia");
+    expect(hospice.mode).toBe("entity");
+    expect(hospice.providerClass).toBe("hospice");
+  });
+
   it("parses Ohio nursing homes and a labeled CCN without inventing a local route", () => {
     const q = interpretSeniorAskQuery("nursing homes in Ohio");
     expect(q.mode).toBe("entity");
