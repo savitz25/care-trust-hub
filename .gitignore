@@ -27,3 +27,6 @@ data/massachusetts/ma-sen-001/raw/
 
 # TN-SEN-001 raw HFC downloads (abuse-registry pages name individuals). Derived JSON is committed.
 data/tennessee/tn-sen-001/raw/
+
+# NV-SEN-001 raw HCQC search/detail pages (administrator names, phones, addresses). Derived JSON is committed.
+data/nevada/nv-sen-001/raw/

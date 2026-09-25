@@ -445,6 +445,7 @@ for (const [state, path] of [
   ["Georgia", "/georgia"],
   ["Massachusetts", "/massachusetts"],
   ["Tennessee", "/tennessee"],
+  ["Nevada", "/nevada"],
 ])
   it(`published ${state} recovery keeps its own jurisdiction`, async () => {
     const r = await executeSeniorResearchQuery(`assisted living in ${state}`);

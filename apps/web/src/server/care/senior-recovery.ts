@@ -33,6 +33,7 @@ export function stateCareRecovery(query: SeniorResearchQuery) {
     GA: { href: "/georgia", label: "Open Georgia DCH / HFRD care-setting research" },
     MA: { href: "/massachusetts", label: "Open Massachusetts DPH / AGE care-setting research" },
     TN: { href: "/tennessee", label: "Open Tennessee HFC care-setting research" },
+    NV: { href: "/nevada", label: "Open Nevada HCQC care-setting research" },
   };
   return state
     ? (routes[state] ?? null)

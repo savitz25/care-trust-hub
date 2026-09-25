@@ -6,6 +6,7 @@ import {
 import { STATE_NAMES } from "@care/domain";
 import { interpretMassachusettsAsk } from "./ma-ask";
 import { interpretTennesseeAsk } from "./tn-ask";
+import { interpretNevadaAsk, nevadaIntent } from "./nv-ask";
 import {
   type SeniorAskMode,
   type SeniorProviderClass,
@@ -490,6 +491,8 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   if (maAnswer) return fail(maAnswer.message, maAnswer.alternatives, maAnswer.coverage);
   const tnAnswer = interpretTennesseeAsk(q, state?.value);
   if (tnAnswer) return fail(tnAnswer.message, tnAnswer.alternatives, tnAnswer.coverage);
+  const nvAnswer = interpretNevadaAsk(q, state?.value);
+  if (nvAnswer) return fail(nvAnswer.message, nvAnswer.alternatives, nvAnswer.coverage);
   if (/assisted living/i.test(q)) {
     if (/\bvirginia\b/i.test(q) || state?.value === "VA") {
       return fail(
@@ -1746,9 +1749,11 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
       clarification: "state_care",
       alternatives: [],
       terminalState: "UNSUPPORTED",
-      failReason: /memory care/i.test(raw)
-        ? "Memory care is not a CMS provider class. The current Ask filter does not establish memory-care services; use the relevant state research and confirm the setting with its regulator."
-        : plan.failReason,
+      // NV-SEN-001: Nevada answers memory care from the RFG Alzheimer's endorsement; keep that answer.
+      failReason:
+        /memory care/i.test(raw) && !nevadaIntent(raw, plan.geography?.value)
+          ? "Memory care is not a CMS provider class. The current Ask filter does not establish memory-care services; use the relevant state research and confirm the setting with its regulator."
+          : plan.failReason,
     };
   if (
     !plan.facilityEvidence &&
