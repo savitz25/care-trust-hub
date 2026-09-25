@@ -37,3 +37,8 @@ apps/web/src/data/massachusetts-facility-lists.json
 packages/domain/src/tn-public-snapshot.ts
 artifacts/tn-sen-001-public-snapshot.json
 apps/web/src/data/tennessee-facility-lists.json
+packages/domain/src/nv-public-snapshot.ts
+artifacts/nv-sen-001-public-snapshot.json
+apps/web/src/data/nevada-facility-lists.json
+data/nevada/nv-sen-001/hcqc-facilities.json
+data/nevada/nv-sen-001/cms-nv-ccn-classes.json

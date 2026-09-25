@@ -10,6 +10,7 @@ import {
   GA_ACCEPTED,
   MA_ACCEPTED,
   TN_ACCEPTED,
+  NV_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -40,6 +41,7 @@ import { OH_PUBLIC_PATH } from "./oh-intelligence";
 import { GA_PUBLIC_PATH } from "./ga-intelligence";
 import { MA_PUBLIC_PATH } from "./ma-intelligence";
 import { TN_PUBLIC_PATH } from "./tn-intelligence";
+import { NV_PUBLIC_PATH } from "./nv-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -136,6 +138,7 @@ export interface HomeGeoRow {
     | "georgia_state_intelligence"
     | "massachusetts_state_intelligence"
     | "tennessee_state_intelligence"
+    | "nevada_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -997,6 +1000,21 @@ export function buildSeniorHomeIntel(input: {
         "Home Health and Hospice county rows are service authority, not agencies.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Nevada HCQC (state research)",
+      numerator: null,
+      denominator: null,
+      display: `${NV_ACCEPTED.hcqcSnfLicenses.toLocaleString("en-US")} HCQC Skilled Nursing licenses; ${NV_ACCEPTED.hcqcRfgs.toLocaleString("en-US")} Residential Facilities for Groups, ${NV_ACCEPTED.hcqcRfgAssistedLiving.toLocaleString("en-US")} with the Assisted Living endorsement; ${NV_ACCEPTED.hcqcHircs.toLocaleString("en-US")} Homes for Individual Residential Care. Separate classes, not added.`,
+      status: "partial",
+      method:
+        "HCQC active-license facility search on /nevada, beside the existing CMS Nevada geography. State rows link to CMS only by an exact printed CCN of the same class.",
+      limitations: [
+        "A Residential Facility for Groups is assisted living only with the state endorsement.",
+        "An HCQC license is not CMS certification. Unlinked is not the same as no overlap.",
+        "The facility search lists active licenses only.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -1041,7 +1059,9 @@ export function buildSeniorHomeIntel(input: {
                                       ? "massachusetts_state_intelligence"
                                       : row.state === "TN"
                                         ? "tennessee_state_intelligence"
-                                        : "cms_directory_only",
+                                        : row.state === "NV"
+                                          ? "nevada_state_intelligence"
+                                          : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -1077,7 +1097,9 @@ export function buildSeniorHomeIntel(input: {
                                       ? MA_PUBLIC_PATH
                                       : row.state === "TN"
                                         ? TN_PUBLIC_PATH
-                                        : null,
+                                        : row.state === "NV"
+                                          ? NV_PUBLIC_PATH
+                                          : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 

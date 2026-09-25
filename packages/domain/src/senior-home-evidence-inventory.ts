@@ -10,6 +10,7 @@ import {
   GA_ACCEPTED,
   MA_ACCEPTED,
   TN_ACCEPTED,
+  NV_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -28,6 +29,7 @@ import { OH_PUBLIC_FINGERPRINT, OH_PUBLIC_PATH } from "./oh-intelligence";
 import { GA_PUBLIC_FINGERPRINT, GA_PUBLIC_PATH } from "./ga-intelligence";
 import { MA_PUBLIC_FINGERPRINT, MA_PUBLIC_PATH } from "./ma-intelligence";
 import { TN_PUBLIC_FINGERPRINT, TN_PUBLIC_PATH } from "./tn-intelligence";
+import { NV_PUBLIC_FINGERPRINT, NV_PUBLIC_PATH } from "./nv-intelligence";
 import { CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -93,7 +95,8 @@ export interface SeniorHomepageStateCard {
     | "OH"
     | "GA"
     | "MA"
-    | "TN";
+    | "TN"
+    | "NV";
   name: string;
   href: string;
   regulators: string;
@@ -824,13 +827,58 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       TN_PUBLIC_PATH,
     ),
     m(
+      "nv-hcqc-snf",
+      "IDENTITY_LICENSURE",
+      "Nevada HCQC Skilled Nursing licenses",
+      NV_ACCEPTED.hcqcSnfLicenses,
+      "Active SNF credential number in the HCQC facility search",
+      "Skilled nursing facility (state license)",
+      "Nevada",
+      "HCQC public facility search",
+      NV_PUBLIC_FINGERPRINT,
+      NV_ACCEPTED.retrievedAt.slice(0, 10),
+      "Active Facility for Skilled Nursing licenses in the HCQC facility search.",
+      "Hospital distinct-part SNFs; Residential Facilities for Groups; CMS Nursing Home CCNs; beds; a combined Nevada facilities total.",
+      NV_PUBLIC_PATH,
+    ),
+    m(
+      "nv-hcqc-rfg",
+      "IDENTITY_LICENSURE",
+      "Nevada HCQC Residential Facilities for Groups",
+      NV_ACCEPTED.hcqcRfgs,
+      "Active AGC credential number in the HCQC facility search",
+      "Residential Facility for Groups (state license)",
+      "Nevada",
+      "HCQC public facility search",
+      NV_PUBLIC_FINGERPRINT,
+      NV_ACCEPTED.retrievedAt.slice(0, 10),
+      "Active Residential Facility for Groups licenses, with or without endorsements.",
+      "Assisted living as a whole class (only endorsed RFGs); Skilled Nursing; Homes for Individual Residential Care; beds; a combined Nevada facilities total.",
+      NV_PUBLIC_PATH,
+    ),
+    m(
+      "nv-hcqc-rfg-al",
+      "IDENTITY_LICENSURE",
+      "Nevada RFGs with the Assisted Living endorsement",
+      NV_ACCEPTED.hcqcRfgAssistedLiving,
+      "RFG whose HCQC detail page prints the ASSISTED LIVING SERVICES endorsement",
+      "Assisted living (endorsed RFG)",
+      "Nevada",
+      "HCQC facility detail pages",
+      NV_PUBLIC_FINGERPRINT,
+      NV_ACCEPTED.retrievedAt.slice(0, 10),
+      "Residential Facilities for Groups that hold the state Assisted Living endorsement.",
+      "RFGs without the endorsement; Alzheimer's-only endorsements; Skilled Nursing; a combined Nevada facilities total.",
+      NV_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Published state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC, OH, GA, MA, TN",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC, OH, GA, MA, TN, NV",
       "SeniorTrustHub accepted state artifacts",
       "Accepted state publication artifacts",
       null,
@@ -927,6 +975,9 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "tn-hfc-nh",
     "tn-hfc-aclf",
     "tn-hfc-rha",
+    "nv-hcqc-snf",
+    "nv-hcqc-rfg",
+    "nv-hcqc-rfg-al",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -1134,5 +1185,18 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "HFC monthly facility actions 2024-2026 indexed; complaint records were not acquired",
     sourceAsOf: TN_ACCEPTED.reportMonth,
+  },
+  {
+    state: "NV",
+    name: "Nevada",
+    href: NV_PUBLIC_PATH,
+    regulators: "Nevada Health Authority HCQC · CMS",
+    stateClasses:
+      "HCQC Skilled Nursing, Residential Facility for Groups (Assisted Living and Alzheimer's endorsements), Home for Individual Residential Care, Home Health, Hospice, and Adult Day Care licenses",
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${NV_ACCEPTED.hcqcSnfLicenses} HCQC SNFs · ${NV_ACCEPTED.hcqcRfgs} RFGs (${NV_ACCEPTED.hcqcRfgAssistedLiving} Assisted Living endorsed) · ${NV_ACCEPTED.cmsNursingHomesBridged} of ${NV_ACCEPTED.cmsNursingHomes} CMS nursing homes linked by exact printed CCN`,
+    regulatoryDepth:
+      "HCQC inspection index and state sanctions on active licenses; complaint records were not acquired",
+    sourceAsOf: NV_ACCEPTED.retrievedAt.slice(0, 10),
   },
 ];

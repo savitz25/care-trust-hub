@@ -538,6 +538,64 @@ describe("interpretSeniorAskQuery", () => {
     expect(hospice.providerClass).toBe("hospice");
   });
 
+  it("NV-SEN-001 keeps Nevada classes separate, endorsements exact, and leaves CMS classes to CMS research", () => {
+    const fr = (q: string) => interpretSeniorAskQuery(q).failReason ?? "";
+    for (const [q, cls] of [
+      ["nursing homes Nevada", "nursing_home"],
+      ["skilled nursing Nevada", "nursing_home"],
+      ["nursing home Las Vegas", "nursing_home"],
+      ["home health Nevada", "home_health"],
+      ["home health agency Nevada", "home_health"],
+      ["hospice Nevada", "hospice"],
+      ["hospice care Nevada", "hospice"],
+    ] as const) {
+      const r = interpretSeniorAskQuery(q);
+      expect(r.mode, q).toBe("entity");
+      expect(r.providerClass, q).toBe(cls);
+    }
+    expect(interpretSeniorAskQuery("CCN 295102 Nevada").mode).toBe("identifier");
+    expect(fr("CCN 295102 Nevada")).not.toMatch(/Nevada senior-care research/);
+    expect(fr("assisted living Nevada")).toMatch(
+      /assisted living is an endorsement, not a separate license/,
+    );
+    expect(fr("assisted living Nevada")).toMatch(
+      /438 active RFGs .* 74 print the Assisted Living endorsement/,
+    );
+    expect(fr("assisted living facility Nevada")).toMatch(/Not every RFG is assisted living/);
+    expect(fr("Residential Facility for Groups Nevada")).toMatch(/base state license/);
+    expect(fr("RFG Nevada")).toMatch(/Residential Facility for Groups \(RFG\)/);
+    expect(fr("assisted living Las Vegas")).toMatch(
+      /270 RFGs list an address in Las Vegas, 32 of them with the Assisted Living endorsement/,
+    );
+    expect(fr("memory care Nevada")).toMatch(/223 of 438 RFGs print it/);
+    expect(fr("dementia facility Nevada")).toMatch(
+      /state-endorsed only if its license shows the endorsement/,
+    );
+    expect(fr("home for individual residential care Nevada")).toMatch(/145 active HIRCs/);
+    expect(fr("senior facility inspections Nevada")).toMatch(/3,942 state inspections/);
+    expect(interpretSeniorAskQuery("assisted living complaint Nevada").coverageState).toBe(
+      "REQUEST_ONLY",
+    );
+    expect(interpretSeniorAskQuery("nursing home complaint Nevada").coverageState).toBe(
+      "REQUEST_ONLY",
+    );
+    expect(fr("nursing home complaint Nevada")).toMatch(
+      /not a deficiency and not an enforcement finding/,
+    );
+    expect(fr("116-AGC-41")).toMatch(/FIVE STAR PREMIER RESIDENCES OF RENO/);
+    expect(fr("RFG license 116")).toMatch(/116-AGC-41/);
+    expect(fr("license 116 Nevada")).toMatch(/does not say which Nevada facility class/);
+    expect(fr("senior care in Nevada")).toMatch(/no combined Nevada senior-facility/i);
+    expect(fr("best assisted living Nevada")).toMatch(/does not rank Nevada/);
+    const all = ["assisted living Nevada", "memory care Nevada", "Nevada HCQC licenses"]
+      .map(fr)
+      .join(" ");
+    expect(all).not.toMatch(/\b676\b|\b736\b|\b1,?017\b/); // no combined classes (SNF+SFD+RFG+HIRC+ADC etc.)
+    expect(fr("memory care Tennessee")).toMatch(/Memory care is not a CMS provider class/);
+    expect(fr("assisted living Las Vegas NM")).not.toMatch(/Residential Facility for Groups/);
+    expect(interpretSeniorAskQuery("assisted living Tennessee").failReason).toMatch(/ACLF/);
+  });
+
   it("TN-SEN-001 keeps Tennessee classes separate and leaves CMS classes to CMS research", () => {
     const fr = (q: string) => interpretSeniorAskQuery(q).failReason ?? "";
     for (const [q, cls] of [

@@ -24,6 +24,7 @@ const tickets = {
   GA: "001",
   MA: "001",
   TN: "001",
+  NV: "001",
 };
 export function requireCount(value, field, nullable = false) {
   if (value === null && nullable) return null;
@@ -80,7 +81,7 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       aggregation: "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL",
     });
   }
-  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC", "OH", "GA", "MA", "TN"]) {
+  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC", "OH", "GA", "MA", "TN", "NV"]) {
     const geo = base.geography.states.find((r) => r.state === state);
     assert.ok(geo, `Missing federal state partition ${state}`);
     for (const [field, setting] of [
@@ -489,6 +490,100 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "facilityActions",
     "PARTIAL",
   );
+  for (const [field, grain, providerClass, status] of [
+    [
+      "skilledNursing.distinctCredentialNumbers",
+      "Active SNF credential number in the HCQC facility search",
+      "Skilled nursing facility (state license)",
+      "STATE_SOURCE_LIVE",
+    ],
+    [
+      "skilledNursingDistinctPart.distinctCredentialNumbers",
+      "Active SFD credential number in the HCQC facility search",
+      "Skilled nursing distinct part of hospital (state license)",
+      "STATE_SOURCE_LIVE",
+    ],
+    [
+      "rfg.distinctCredentialNumbers",
+      "Active AGC credential number in the HCQC facility search",
+      "Residential Facility for Groups (state license)",
+      "STATE_SOURCE_LIVE",
+    ],
+    [
+      "rfg.assistedLivingEndorsed",
+      "RFG with the ASSISTED LIVING SERVICES endorsement printed",
+      "Assisted living (endorsed RFG)",
+      "STATE_SOURCE_LIVE",
+    ],
+    [
+      "rfg.alzheimerEndorsed",
+      "RFG with the ALZHEIMER DISEASE endorsement printed",
+      "Alzheimer's-endorsed RFG",
+      "STATE_SOURCE_LIVE",
+    ],
+    [
+      "rfg.bedsAsPrinted",
+      "Beds printed on active RFG licenses (capacity, not residents)",
+      "Residential Facility for Groups beds",
+      "STATE_SOURCE_LIVE",
+    ],
+    [
+      "hirc.distinctCredentialNumbers",
+      "Active HIC credential number in the HCQC facility search",
+      "Home for Individual Residential Care (state license)",
+      "STATE_SOURCE_LIVE",
+    ],
+    [
+      "adultDay.distinctCredentialNumbers",
+      "Active ADC credential number in the HCQC facility search",
+      "Adult Day Care (state license)",
+      "STATE_SOURCE_LIVE",
+    ],
+    [
+      "homeHealth.distinctCredentialNumbers",
+      "Active HHA credential number in the HCQC facility search",
+      "Home Health Agency (state license)",
+      "STATE_SOURCE_LIVE",
+    ],
+    [
+      "hospiceProgram.distinctCredentialNumbers",
+      "Active HPC credential number in the HCQC facility search",
+      "Hospice program of care (state license)",
+      "STATE_SOURCE_LIVE",
+    ],
+    [
+      "hospiceFacility.distinctCredentialNumbers",
+      "Active HFS credential number in the HCQC facility search",
+      "Facility for hospice care (state license)",
+      "STATE_SOURCE_LIVE",
+    ],
+  ])
+    add("NV", field, grain, providerClass, field.split(".")[0], status);
+  add(
+    "NV",
+    "inspections.indexRows",
+    "HCQC inspection index row on an active facility page",
+    "State inspection",
+    "inspections",
+    "PARTIAL",
+  );
+  add(
+    "NV",
+    "stateSanctions.rows",
+    "HCQC State Sanctions row on an active facility page",
+    "State sanction",
+    "stateSanctions",
+    "PARTIAL",
+  );
+  add(
+    "NV",
+    "complaints.providerLevelRows",
+    "provider-level complaint record",
+    "Complaint",
+    "complaints",
+    "REQUEST_ONLY",
+    true,
+  );
   add(
     "TN",
     "complaints.providerLevelRows",
@@ -525,6 +620,9 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "ma-dph-nh": "ma.nursingHomes.rows",
     "ma-dph-rest": "ma.restHomes.rows",
     "ma-age-alr": "ma.assistedLiving.rows",
+    "nv-hcqc-snf": "nv.skilledNursing.distinctCredentialNumbers",
+    "nv-hcqc-rfg": "nv.rfg.distinctCredentialNumbers",
+    "nv-hcqc-rfg-al": "nv.rfg.assistedLivingEndorsed",
     "tn-hfc-nh": "tn.nursingHomes.distinctLicenseNumbers",
     "tn-hfc-aclf": "tn.aclf.distinctLicenseNumbers",
     "tn-hfc-rha": "tn.rha.distinctLicenseNumbers",
@@ -641,6 +739,15 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       ["HFC Hospice county list", "hospice"],
       ["HFC facility actions", "facilityActions"],
       ["HFC complaints", "complaints"],
+    ],
+    NV: [
+      ["HCQC Skilled Nursing search", "skilledNursing"],
+      ["HCQC Residential Facility for Groups search", "rfg"],
+      ["HCQC Home for Individual Residential Care search", "hirc"],
+      ["HCQC Home Health search", "homeHealth"],
+      ["HCQC Hospice program search", "hospiceProgram"],
+      ["HCQC state sanctions", "stateSanctions"],
+      ["HCQC complaints", "complaints"],
     ],
   };
   const stateCards = structuredClone(SENIOR_HOMEPAGE_STATE_CARDS);

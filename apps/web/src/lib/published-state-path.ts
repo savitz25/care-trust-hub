@@ -12,6 +12,7 @@ export const PUBLISHED_STATEWIDE_SLUGS = [
   "georgia",
   "massachusetts",
   "tennessee",
+  "nevada",
   "oregon",
   "pennsylvania",
   "texas",

@@ -128,6 +128,16 @@ test("unknown is explicit null, required missing source fields fail, and valid z
   assert.equal(rows["tn.facilityActions.seniorClassActionRows"].capabilityStatus, "PARTIAL");
   assert.equal(rows["tn.complaints.providerLevelRows"].capabilityStatus, "REQUEST_ONLY");
   assert.equal(rows["tn.cmsOverlay.nursingHomes"].value, 303);
+  assert.equal(rows["nv.rfg.distinctCredentialNumbers"].value, 438);
+  assert.equal(rows["nv.rfg.assistedLivingEndorsed"].value, 74);
+  assert.equal(rows["nv.skilledNursing.distinctCredentialNumbers"].value, 58);
+  assert.equal(rows["nv.stateSanctions.rows"].capabilityStatus, "PARTIAL");
+  assert.equal(rows["nv.complaints.providerLevelRows"].capabilityStatus, "REQUEST_ONLY");
+  assert.equal(rows["nv.cmsOverlay.nursingHomes"].value, 66);
+  assert.equal(
+    m.reconciliation.stateCapabilities.find((r) => r.state === "NV").stateSourceAcquired,
+    true,
+  );
   assert.equal(
     m.reconciliation.stateCapabilities.find((r) => r.state === "TN").stateSourceAcquired,
     true,
