@@ -30,6 +30,10 @@ describe("PA-REL-001 Pennsylvania discovery and case normalization", () => {
     expect(normalizedPublishedStatePath("/NEVADA")).toBe("/nevada");
     expect(normalizedPublishedStatePath("/nevada")).toBeNull();
     expect(normalizedPublishedStatePath("/nevada/las-vegas")).toBeNull();
+    expect(normalizedPublishedStatePath("/Minnesota")).toBe("/minnesota");
+    expect(normalizedPublishedStatePath("/MINNESOTA")).toBe("/minnesota");
+    expect(normalizedPublishedStatePath("/minnesota")).toBeNull();
+    expect(normalizedPublishedStatePath("/minnesota/minneapolis")).toBeNull();
     expect(normalizedPublishedStatePath("/ohio")).toBeNull();
     expect(normalizedPublishedStatePath("/ohio/cleveland")).toBeNull();
     expect(normalizedPublishedStatePath("/pennsylvania")).toBeNull();
@@ -68,6 +72,7 @@ describe("PA-REL-001 Pennsylvania discovery and case normalization", () => {
     expect(footer).toMatch(/href="\/massachusetts"/);
     expect(footer).toMatch(/href="\/tennessee"/);
     expect(footer).toMatch(/href="\/nevada"/);
+    expect(footer).toMatch(/href="\/minnesota"/);
     expect(footer).not.toMatch(/href="\/Ohio"/);
     const sitemap = read("src/app/sitemaps/[file]/route.ts");
     expect([...sitemap.matchAll(/"\/ohio"/g)]).toHaveLength(1);
@@ -85,6 +90,9 @@ describe("PA-REL-001 Pennsylvania discovery and case normalization", () => {
     expect(nav).toMatch(/href: "\/nevada"/);
     expect([...sitemap.matchAll(/"\/nevada"/g)]).toHaveLength(1);
     expect(sitemap).not.toMatch(/"\/nevada\/[a-z-]+"/);
+    expect(nav).toMatch(/href: "\/minnesota"/);
+    expect([...sitemap.matchAll(/"\/minnesota"/g)]).toHaveLength(1);
+    expect(sitemap).not.toMatch(/"\/minnesota\/[a-z-]+"/);
   });
 
   it("mixed-case redirect clones the request URL so query strings are preserved", () => {

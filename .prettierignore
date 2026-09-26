@@ -42,3 +42,9 @@ artifacts/nv-sen-001-public-snapshot.json
 apps/web/src/data/nevada-facility-lists.json
 data/nevada/nv-sen-001/hcqc-facilities.json
 data/nevada/nv-sen-001/cms-nv-ccn-classes.json
+packages/domain/src/mn-public-snapshot.ts
+artifacts/mn-sen-001-public-snapshot.json
+apps/web/src/data/minnesota-facility-lists.json
+data/minnesota/mn-sen-001/mdh-providers.json
+data/minnesota/mn-sen-001/mdh-findings.json
+data/minnesota/mn-sen-001/cms-profile-check.json

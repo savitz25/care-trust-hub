@@ -538,6 +538,62 @@ describe("interpretSeniorAskQuery", () => {
     expect(hospice.providerClass).toBe("hospice");
   });
 
+  it("MN-SEN-001 keeps Minnesota classes separate, dementia care source-faithful, and leaves CMS classes to CMS research", () => {
+    const fr = (q: string) => interpretSeniorAskQuery(q).failReason ?? "";
+    for (const [q, cls] of [
+      ["nursing homes Minnesota", "nursing_home"],
+      ["nursing home Minneapolis", "nursing_home"],
+      ["home health agency Minnesota", "home_health"],
+      ["hospice Minnesota", "hospice"],
+    ] as const) {
+      const r = interpretSeniorAskQuery(q);
+      expect(r.mode, q).toBe("entity");
+      expect(r.providerClass, q).toBe(cls);
+    }
+    expect(interpretSeniorAskQuery("CCN 245012 Minnesota").mode).toBe("identifier");
+    expect(fr("CCN 245012 Minnesota")).not.toMatch(/Minnesota senior-care research/);
+    expect(fr("assisted living Minnesota")).toMatch(
+      /1,571 Assisted Living Facilities, 601 Assisted Living Facilities with Dementia Care/,
+    );
+    expect(fr("assisted living Minneapolis")).toMatch(
+      /141 Assisted Living Facilities and 9 with Dementia Care list a physical address in Minneapolis/,
+    );
+    expect(fr("assisted living St Paul")).toMatch(/in St. Paul/);
+    expect(fr("dementia care assisted living Minnesota")).toMatch(
+      /Assisted Living Facility with Dementia Care as its own license type/,
+    );
+    expect(fr("memory care Minnesota")).toMatch(/"Memory care" is not an MDH license name/);
+    expect(fr("boarding care home Minnesota")).toMatch(/14 Boarding Care Home licenses/);
+    expect(fr("boarding care home Minnesota")).toMatch(/not CMS CCNs/);
+    expect(fr("home care Minnesota")).toMatch(/Home care is not Home Health/);
+    expect(fr("senior facility inspection Minnesota")).toMatch(/MDH evaluation results/);
+    expect(interpretSeniorAskQuery("assisted living complaint Minnesota").coverageState).toBe(
+      "PARTIAL",
+    );
+    expect(fr("assisted living complaint Minnesota")).toMatch(
+      /Office of Health Facility Complaints/,
+    );
+    expect(fr("assisted living complaint Minnesota")).toMatch(
+      /not a deficiency and not a sanction/,
+    );
+    expect(interpretSeniorAskQuery("nursing home enforcement Minnesota").coverageState).toBe(
+      "NOT_ACQUIRED",
+    );
+    expect(fr("HFID 00002")).toMatch(/AITKIN HEALTH SERVICES/);
+    expect(fr("license 424820 Minnesota")).toMatch(/AITKIN HEALTH SERVICES/);
+    expect(fr("license 123 Minnesota")).toMatch(
+      /does not match a Minnesota MDH license or HFID format/,
+    );
+    expect(fr("senior care in Minnesota")).toMatch(/no combined Minnesota senior-facility/i);
+    expect(fr("best memory care Minnesota")).toMatch(/does not rank Minnesota/);
+    const all = ["assisted living Minnesota", "memory care Minnesota", "MDH licenses Minnesota"]
+      .map(fr)
+      .join(" ");
+    expect(all).not.toMatch(/\b2,?172\b|\b2,?525\b|\b2,?521\b/); // no combined assisted-living total
+    expect(fr("memory care Tennessee")).toMatch(/Memory care is not a CMS provider class/);
+    expect(fr("assisted living Duluth GA")).not.toMatch(/MDH/);
+  });
+
   it("NV-SEN-001 keeps Nevada classes separate, endorsements exact, and leaves CMS classes to CMS research", () => {
     const fr = (q: string) => interpretSeniorAskQuery(q).failReason ?? "";
     for (const [q, cls] of [

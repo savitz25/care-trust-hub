@@ -11,6 +11,7 @@ import {
   MA_ACCEPTED,
   TN_ACCEPTED,
   NV_ACCEPTED,
+  MN_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -30,6 +31,7 @@ import { GA_PUBLIC_FINGERPRINT, GA_PUBLIC_PATH } from "./ga-intelligence";
 import { MA_PUBLIC_FINGERPRINT, MA_PUBLIC_PATH } from "./ma-intelligence";
 import { TN_PUBLIC_FINGERPRINT, TN_PUBLIC_PATH } from "./tn-intelligence";
 import { NV_PUBLIC_FINGERPRINT, NV_PUBLIC_PATH } from "./nv-intelligence";
+import { MN_PUBLIC_FINGERPRINT, MN_PUBLIC_PATH } from "./mn-intelligence";
 import { CA_PUBLIC_FINGERPRINT, CA_PUBLIC_PATH } from "./ca-intelligence";
 import { NJ_PUBLIC_FINGERPRINT, NJ_PUBLIC_PATH } from "./nj-intelligence";
 import type { SeniorNetworkMetricsV1 } from "./senior-network-metrics";
@@ -96,7 +98,8 @@ export interface SeniorHomepageStateCard {
     | "GA"
     | "MA"
     | "TN"
-    | "NV";
+    | "NV"
+    | "MN";
   name: string;
   href: string;
   regulators: string;
@@ -872,13 +875,58 @@ export function buildSeniorHomepageEvidenceInventory(input: {
       NV_PUBLIC_PATH,
     ),
     m(
+      "mn-mdh-nh",
+      "IDENTITY_LICENSURE",
+      "Minnesota MDH Nursing Home licenses",
+      MN_ACCEPTED.mdhNursingHomes,
+      "Nursing Homes row in the MDH Health Care Provider Directory",
+      "Nursing home (state license)",
+      "Minnesota",
+      "MDH Health Care Provider Directory",
+      MN_PUBLIC_FINGERPRINT,
+      MN_ACCEPTED.retrievedAt.slice(0, 10),
+      "Nursing Home licenses in the MDH daily directory.",
+      "Boarding Care Homes; CMS Nursing Home CCNs; beds; a combined Minnesota facilities total.",
+      MN_PUBLIC_PATH,
+    ),
+    m(
+      "mn-mdh-alf",
+      "IDENTITY_LICENSURE",
+      "Minnesota Assisted Living Facility licenses",
+      MN_ACCEPTED.mdhAssistedLiving,
+      "ASSISTED LIVING FACILITY row in the MDH directory",
+      "Assisted Living Facility (state license)",
+      "Minnesota",
+      "MDH Health Care Provider Directory",
+      MN_PUBLIC_FINGERPRINT,
+      MN_ACCEPTED.retrievedAt.slice(0, 10),
+      "Assisted Living Facility licenses (not dementia care, not provisional).",
+      "Assisted Living Facility with Dementia Care; provisional licenses; Boarding Care; a combined Minnesota facilities total.",
+      MN_PUBLIC_PATH,
+    ),
+    m(
+      "mn-mdh-alfdc",
+      "IDENTITY_LICENSURE",
+      "Minnesota Assisted Living Facility with Dementia Care licenses",
+      MN_ACCEPTED.mdhAssistedLivingDementiaCare,
+      "ASSISTED LIVING FACILITY DEMENTIA CARE row in the MDH directory",
+      "Assisted Living Facility with Dementia Care (state license)",
+      "Minnesota",
+      "MDH Health Care Provider Directory",
+      MN_PUBLIC_FINGERPRINT,
+      MN_ACCEPTED.retrievedAt.slice(0, 10),
+      "Assisted Living Facility with Dementia Care licenses, a separate MDH license type.",
+      "Facilities that only advertise memory care; Assisted Living Facility licenses; provisional licenses; a combined total.",
+      MN_PUBLIC_PATH,
+    ),
+    m(
       "state-pages",
       "PUBLIC_RESEARCH_SURFACES",
       "Published state intelligence pages",
       SENIOR_HOMEPAGE_STATE_CARDS.length,
       "published state intelligence route",
       "Multiple source-native classes",
-      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC, OH, GA, MA, TN, NV",
+      "FL, NJ, CA, TX, WA, AZ, CO, VA, NY, IL, OR, PA, NC, OH, GA, MA, TN, NV, MN",
       "SeniorTrustHub accepted state artifacts",
       "Accepted state publication artifacts",
       null,
@@ -978,6 +1026,9 @@ export function assertSeniorHomepageEvidenceInventory(rows: SeniorHomepageEviden
     "nv-hcqc-snf",
     "nv-hcqc-rfg",
     "nv-hcqc-rfg-al",
+    "mn-mdh-nh",
+    "mn-mdh-alf",
+    "mn-mdh-alfdc",
   ])
     if (!rows.some((row) => row.key === key)) throw new Error(`Missing homepage evidence ${key}`);
   return rows;
@@ -1198,5 +1249,18 @@ export const SENIOR_HOMEPAGE_STATE_CARDS: SeniorHomepageStateCard[] = [
     regulatoryDepth:
       "HCQC inspection index and state sanctions on active licenses; complaint records were not acquired",
     sourceAsOf: NV_ACCEPTED.retrievedAt.slice(0, 10),
+  },
+  {
+    state: "MN",
+    name: "Minnesota",
+    href: MN_PUBLIC_PATH,
+    regulators: "Minnesota Department of Health, Health Regulation Division · CMS",
+    stateClasses:
+      "MDH Nursing Home, Assisted Living Facility, Assisted Living Facility with Dementia Care, Boarding Care Home, Home Care, Home Health, and Hospice licenses from the daily provider directory",
+    cmsOverlay: "Nursing Home · Home Health · Hospice",
+    identityDepth: `${MN_ACCEPTED.mdhNursingHomes} MDH Nursing Homes · ${MN_ACCEPTED.mdhAssistedLiving} Assisted Living Facilities · ${MN_ACCEPTED.mdhAssistedLivingDementiaCare} with Dementia Care · ${MN_ACCEPTED.cmsNursingHomesBridged} of ${MN_ACCEPTED.cmsNursingHomes} CMS nursing homes linked by exact printed CCN`,
+    regulatoryDepth:
+      "MDH evaluation results and OHFC investigation findings attached by exact HFID; fines and license actions were not acquired",
+    sourceAsOf: MN_ACCEPTED.retrievedAt.slice(0, 10),
   },
 ];
