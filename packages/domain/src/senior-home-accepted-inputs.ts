@@ -102,6 +102,7 @@ import GA from "../../../artifacts/ga-sen-001-public-snapshot.json";
 import MA from "../../../artifacts/ma-sen-001-public-snapshot.json";
 import TN from "../../../artifacts/tn-sen-001-public-snapshot.json";
 import NV from "../../../artifacts/nv-sen-001-public-snapshot.json";
+import MN from "../../../artifacts/mn-sen-001-public-snapshot.json";
 export const OH_ACCEPTED = {
   nursingFacilityRows: OH.nursingHomes.OH_NURSING_FACILITY_ROWS,
   rcfRows: OH.rcf.OH_RCF_ROWS,
@@ -149,4 +150,18 @@ export const NV_ACCEPTED = {
   cmsNursingHomesBridged: NV.crosswalk.cmsNursingHomesBridged,
   retrievedAt: NV.retrievedAt,
   snapshotAsOf: NV.snapshotAsOf,
+};
+export const MN_ACCEPTED = {
+  mdhNursingHomes: MN.nursingHome.distinctLicenses,
+  mdhAssistedLiving: MN.assistedLiving.distinctLicenses,
+  mdhAssistedLivingDementiaCare: MN.assistedLivingDementiaCare.distinctLicenses,
+  mdhBoardingCare: MN.boardingCare.distinctLicenses,
+  mdhHomeHealthAgencies: MN.homeHealthAgency.distinctLicenses,
+  mdhHospiceProviders: MN.hospiceProvider.distinctLicenses,
+  cmsNursingHomes: MN.cmsOverlay.nursingHomes,
+  cmsHomeHealth: MN.cmsOverlay.homeHealth,
+  cmsHospice: MN.cmsOverlay.hospice,
+  cmsNursingHomesBridged: MN.crosswalk.cmsNursingHomesBridged,
+  retrievedAt: MN.retrievedAt,
+  snapshotAsOf: MN.snapshotAsOf,
 };

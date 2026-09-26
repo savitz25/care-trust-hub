@@ -11,6 +11,7 @@ import {
   MA_ACCEPTED,
   TN_ACCEPTED,
   NV_ACCEPTED,
+  MN_ACCEPTED,
   NJ_ACCEPTED,
   NY_ACCEPTED,
   TX_ACCEPTED,
@@ -42,6 +43,7 @@ import { GA_PUBLIC_PATH } from "./ga-intelligence";
 import { MA_PUBLIC_PATH } from "./ma-intelligence";
 import { TN_PUBLIC_PATH } from "./tn-intelligence";
 import { NV_PUBLIC_PATH } from "./nv-intelligence";
+import { MN_PUBLIC_PATH } from "./mn-intelligence";
 
 export const SENIOR_HOME_INTEL_VERSION = "senior-home-intel-v1";
 export const SENIOR_HOME_PUBLICATION_VERSION = "intel-002-v1";
@@ -139,6 +141,7 @@ export interface HomeGeoRow {
     | "massachusetts_state_intelligence"
     | "tennessee_state_intelligence"
     | "nevada_state_intelligence"
+    | "minnesota_state_intelligence"
     | "cms_directory_only";
   intelligenceHref: string | null;
   searchHref: string;
@@ -1015,6 +1018,21 @@ export function buildSeniorHomeIntel(input: {
         "The facility search lists active licenses only.",
       ],
     },
+    {
+      family: "Licensing / registration",
+      providerClass: "Minnesota MDH (state research)",
+      numerator: null,
+      denominator: null,
+      display: `${MN_ACCEPTED.mdhNursingHomes.toLocaleString("en-US")} MDH Nursing Home licenses; ${MN_ACCEPTED.mdhAssistedLiving.toLocaleString("en-US")} Assisted Living Facilities and ${MN_ACCEPTED.mdhAssistedLivingDementiaCare.toLocaleString("en-US")} Assisted Living Facilities with Dementia Care; ${MN_ACCEPTED.mdhBoardingCare.toLocaleString("en-US")} Boarding Care Homes. Separate classes, not added.`,
+      status: "partial",
+      method:
+        "MDH daily Health Care Provider Directory on /minnesota, beside the existing CMS Minnesota geography. State rows link to CMS only by an exact printed CCN of the same class.",
+      limitations: [
+        "Assisted Living Facility with Dementia Care is a separate MDH license; it is never inferred from a name.",
+        "An MDH license is not CMS certification. Unlinked is not the same as no overlap.",
+        "The directory lists current licenses; closed facilities are not included.",
+      ],
+    },
   ];
 
   const geography: HomeGeoRow[] = national.geography.map((row) => ({
@@ -1061,7 +1079,9 @@ export function buildSeniorHomeIntel(input: {
                                         ? "tennessee_state_intelligence"
                                         : row.state === "NV"
                                           ? "nevada_state_intelligence"
-                                          : "cms_directory_only",
+                                          : row.state === "MN"
+                                            ? "minnesota_state_intelligence"
+                                            : "cms_directory_only",
     intelligenceHref:
       row.state === "FL"
         ? "/florida"
@@ -1099,7 +1119,9 @@ export function buildSeniorHomeIntel(input: {
                                         ? TN_PUBLIC_PATH
                                         : row.state === "NV"
                                           ? NV_PUBLIC_PATH
-                                          : null,
+                                          : row.state === "MN"
+                                            ? MN_PUBLIC_PATH
+                                            : null,
     searchHref: `/search?search=1&state=${row.state}`,
   }));
 

@@ -51,6 +51,7 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
       "/massachusetts",
       "/tennessee",
       "/nevada",
+      "/minnesota",
     ]);
     expect(inventory.find((row) => row.key === "fl-regulatory-observations")?.value).toBe(77219);
     expect(inventory.find((row) => row.key === "nj-enforcement-indexed")?.doesNotCount).toMatch(
@@ -94,6 +95,12 @@ describe("SEN-HOME-003 homepage evidence inventory", () => {
     expect(inventory.find((row) => row.key === "nv-hcqc-rfg-al")?.value).toBe(74);
     expect(inventory.find((row) => row.key === "nv-hcqc-rfg")?.doesNotCount).toMatch(
       /only endorsed RFGs/,
+    );
+    expect(inventory.find((row) => row.key === "mn-mdh-nh")?.value).toBe(335);
+    expect(inventory.find((row) => row.key === "mn-mdh-alf")?.value).toBe(1571);
+    expect(inventory.find((row) => row.key === "mn-mdh-alfdc")?.value).toBe(601);
+    expect(inventory.find((row) => row.key === "mn-mdh-alfdc")?.doesNotCount).toMatch(
+      /only advertise memory care/,
     );
     expect(inventory.find((row) => row.key === "ma-dph-rest")?.doesNotCount).toMatch(
       /Nursing Homes/,

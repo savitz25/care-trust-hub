@@ -1,0 +1,896 @@
+{
+  "version": "senior-mn-state-intel-v1",
+  "ticket": "MN-SEN-001",
+  "publicationPath": "/minnesota",
+  "asOf": "2026-09-26",
+  "snapshotAsOf": "2026-09-26",
+  "retrievedAt": "2026-09-26T14:14:50Z",
+  "generatedAt": "2026-09-26T15:00:00Z",
+  "localWorkNeededNow": "NO",
+  "claimEligibilityBroadened": false,
+  "no_trust_score": true,
+  "no_aggregate_rating": true,
+  "no_rankings": true,
+  "no_city_pages": true,
+  "clocks": {
+    "mdh_directory_retrievedAt": {
+      "nursing-homes": "2026-09-26T14:14:38Z",
+      "assisted-living": "2026-09-26T14:14:40Z",
+      "board-care": "2026-09-26T14:14:43Z",
+      "home-care-home-health": "2026-09-26T14:14:45Z",
+      "hospices": "2026-09-26T14:14:47Z",
+      "supervised-living": "2026-09-26T14:14:50Z"
+    },
+    "mdh_directory_updated": "daily (MDH states the data is updated daily; the export prints no as-of date)",
+    "mdh_findings_retrievedAt": {
+      "nursing-homes": "2026-09-26T14:20:21Z",
+      "assisted-living": "2026-09-26T14:20:26Z",
+      "board-care": "2026-09-26T14:20:29Z",
+      "home-care-home-health": "2026-09-26T14:20:30Z",
+      "hospices": "2026-09-26T14:20:32Z",
+      "supervised-living": "2026-09-26T14:20:33Z"
+    },
+    "annual_directory_as_of": "2026-03-13",
+    "annual_directory_published": "2026-03-15 (published yearly on March 15)",
+    "cms_profile_check_at": "2026-09-26T14:16:17Z",
+    "license_dates_are_per_row": true,
+    "finding_dates_are_per_row": true,
+    "finding_concluded_dates_after_retrieval_as_printed": [
+      "3021-12-12"
+    ],
+    "earliest_finding_concluded": "2004-04-28",
+    "latest_finding_concluded": "2026-09-17",
+    "cms_date_is_not_minnesota_license_date": true,
+    "retrievedAt_is_not_sourceAsOf": true
+  },
+  "regulatorMap": {
+    "current": {
+      "authority": "Minnesota Department of Health",
+      "division": "Health Regulation Division",
+      "directory": "https://www.health.state.mn.us/facilities/regulation/directory/index.html",
+      "lookup": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+      "findings": "https://www.health.state.mn.us/facilities/regulation/directory/providerfindings.html",
+      "complaintOffice": "Office of Health Facility Complaints (OHFC)",
+      "complaints": "https://www.health.state.mn.us/facilities/regulation/ohfc/index.html",
+      "fileComplaint": "https://www.health.state.mn.us/facilities/regulation/ohfc/filecomp.html"
+    },
+    "cmsCareCompare": "https://www.medicare.gov/care-compare/",
+    "dhsCaseMixIsSeparate": "Nursing home Medicaid case-mix payment rates are published by the Minnesota Department of Human Services, not MDH."
+  },
+  "annualDirectory": {
+    "title": "2026 Directory of Registered, Licensed, and Certified Health Care Facilities and Services",
+    "url": "https://www.health.state.mn.us/facilities/regulation/directory/2026mdhdirectory.pdf",
+    "asOf": "2026-03-13",
+    "usedFor": "Cross-check only. The daily directory is the current state source.",
+    "table3": {
+      "nursingHomesAndUnits": {
+        "facilities": 336,
+        "beds": 23665
+      },
+      "boardingCareHomes": {
+        "facilities": 17,
+        "beds": 1166,
+        "note": "includes BCH units of other facilities"
+      },
+      "supervisedLivingFacilities": {
+        "facilities": 183,
+        "beds": 4088
+      }
+    }
+  },
+  "cmsOverlay": {
+    "nursingHomes": 338,
+    "homeHealth": 138,
+    "hospice": 81,
+    "source": "senior-national-intelligence.json geography MN (CMS class directories)",
+    "asOf": "2026-08-27",
+    "nationalFingerprint": "215b9d6301a9759f53dd92324930803089d319f95fe5e46739cbbd5f326c3294",
+    "addedToNationalTotals": false,
+    "clocks": {
+      "nursingHomes": {
+        "datasetKey": "nursing-home-provider-information",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/4pq5-n9py",
+        "sourceModifiedAt": "2026-08-01T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T20:24:52.158102+00:00",
+        "sourcePeriod": null
+      },
+      "homeHealth": {
+        "datasetKey": "home-health-care-agencies",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/6jpm-sxkc",
+        "sourceModifiedAt": "2026-05-27T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T21:08:16.274819+00:00",
+        "sourcePeriod": null
+      },
+      "hospice": {
+        "datasetKey": "hospice-general-information",
+        "officialUrl": "https://data.cms.gov/provider-data/dataset/yc9t-dgbk",
+        "sourceModifiedAt": "2026-08-19T00:00:00+00:00",
+        "retrievedAt": "2026-08-26T22:15:06.243039+00:00",
+        "sourcePeriod": null
+      }
+    }
+  },
+  "nursingHome": {
+    "providerType": [
+      "NURSING HOME",
+      "SKILLED NURSING FACILITY",
+      "SKILLED NURSING FACILITY/NURSING FACILIT"
+    ],
+    "label": "Nursing Home",
+    "rows": 335,
+    "distinctLicenses": 335,
+    "distinctHfids": 334,
+    "mnClassificationAsPrinted": {
+      "NURSING HOME": 335
+    },
+    "federalClassificationAsPrinted": {
+      "SKILLED NURSING FACILITY/NURSING FACILIT": 323,
+      "(none printed)": 5,
+      "SKILLED NURSING FACILITY": 7
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": 23718,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 327,
+    "withInvestigations": 331,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:38Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "medicareNumberPrinted": 331,
+    "medicareNumberStates": {
+      "exact_same_class": 330,
+      "none_printed": 4,
+      "printed_ccn_not_a_cms_profile_of_this_class": 1
+    },
+    "exactCmsBridges": 330,
+    "distinctBridgedCcns": 329,
+    "distinctFromCmsNursingHome": true
+  },
+  "assistedLiving": {
+    "providerType": [
+      "ASSISTED LIVING FACILITY"
+    ],
+    "label": "Assisted Living Facility",
+    "rows": 1571,
+    "distinctLicenses": 1571,
+    "distinctHfids": 1569,
+    "mnClassificationAsPrinted": {
+      "ASSISTED LIVING FACILITY": 1571
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 1571
+    },
+    "conditionalLicenses": 31,
+    "licensedBedsAsPrinted": 20825,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 1564,
+    "withInvestigations": 443,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:40Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html"
+  },
+  "assistedLivingDementiaCare": {
+    "providerType": [
+      "ASSISTED LIVING FACILITY DEMENTIA CARE"
+    ],
+    "label": "Assisted Living Facility with Dementia Care",
+    "rows": 601,
+    "distinctLicenses": 601,
+    "distinctHfids": 601,
+    "mnClassificationAsPrinted": {
+      "ASSISTED LIVING FACILITY DEMENTIA CARE": 601
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 601
+    },
+    "conditionalLicenses": 6,
+    "licensedBedsAsPrinted": 42198,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 597,
+    "withInvestigations": 418,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:40Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "separateLicenseType": true,
+    "inferredFromNameOrMarketing": false
+  },
+  "provisionalAssistedLiving": {
+    "providerType": [
+      "PROVISIONAL ASSISTED LIVING FACILITY"
+    ],
+    "label": "Provisional Assisted Living Facility",
+    "rows": 346,
+    "distinctLicenses": 346,
+    "distinctHfids": 346,
+    "mnClassificationAsPrinted": {
+      "PROVISIONAL ASSISTED LIVING FACILITY": 346
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 346
+    },
+    "conditionalLicenses": 9,
+    "licensedBedsAsPrinted": 1873,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 23,
+    "withInvestigations": 5,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:40Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "provisionalOneYearLicense": true
+  },
+  "provisionalAssistedLivingDementiaCare": {
+    "providerType": [
+      "PROVISIONAL ASSISTED LIVING W DEMENTIA C"
+    ],
+    "label": "Provisional Assisted Living Facility with Dementia Care",
+    "rows": 7,
+    "distinctLicenses": 7,
+    "distinctHfids": 7,
+    "mnClassificationAsPrinted": {
+      "PROVISIONAL ASSISTED LIVING W DEMENTIA C": 7
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 7
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": 155,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 0,
+    "withInvestigations": 0,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:40Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "provisionalOneYearLicense": true
+  },
+  "boardingCare": {
+    "providerType": [
+      "BOARD & CARE HOME",
+      "NURSING FACILITY"
+    ],
+    "label": "Boarding Care Home",
+    "rows": 14,
+    "distinctLicenses": 14,
+    "distinctHfids": 14,
+    "mnClassificationAsPrinted": {
+      "BOARD & CARE HOME": 14
+    },
+    "federalClassificationAsPrinted": {
+      "NURSING FACILITY": 8,
+      "(none printed)": 6
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": 1003,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 10,
+    "withInvestigations": 12,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:43Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "distinctFromNursingHome": true,
+    "withFederalNursingFacilityClassification": 8,
+    "medicareNumberStates": {
+      "printed_not_a_ccn": 8,
+      "none_printed": 6
+    }
+  },
+  "comprehensiveHomeCare": {
+    "providerType": [
+      "COMPREHENSIVE HOME CARE"
+    ],
+    "label": "Comprehensive Home Care provider",
+    "rows": 369,
+    "distinctLicenses": 369,
+    "distinctHfids": 369,
+    "mnClassificationAsPrinted": {
+      "COMPREHENSIVE HOME CARE": 369
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 369
+    },
+    "conditionalLicenses": 2,
+    "licensedBedsAsPrinted": null,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 364,
+    "withInvestigations": 142,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:45Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "medicareNumberPrinted": 1,
+    "medicareNumberStates": {
+      "exact_same_class": 1,
+      "none_printed": 368
+    },
+    "exactCmsBridges": 1,
+    "distinctBridgedCcns": 1
+  },
+  "temporaryComprehensiveHomeCare": {
+    "providerType": [
+      "TEMPORARY COMPREHENSIVE HOME CARE"
+    ],
+    "label": "Temporary Comprehensive Home Care provider",
+    "rows": 196,
+    "distinctLicenses": 196,
+    "distinctHfids": 196,
+    "mnClassificationAsPrinted": {
+      "TEMPORARY COMPREHENSIVE HOME CARE": 196
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 196
+    },
+    "conditionalLicenses": 2,
+    "licensedBedsAsPrinted": null,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 11,
+    "withInvestigations": 1,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:45Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html"
+  },
+  "basicHomeCare": {
+    "providerType": [
+      "BASIC HOME CARE"
+    ],
+    "label": "Basic Home Care provider",
+    "rows": 44,
+    "distinctLicenses": 44,
+    "distinctHfids": 44,
+    "mnClassificationAsPrinted": {
+      "BASIC HOME CARE": 44
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 44
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": null,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 44,
+    "withInvestigations": 15,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:45Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html"
+  },
+  "temporaryBasicHomeCare": {
+    "providerType": [
+      "TEMPORARY BASIC HOME CARE"
+    ],
+    "label": "Temporary Basic Home Care provider",
+    "rows": 244,
+    "distinctLicenses": 244,
+    "distinctHfids": 244,
+    "mnClassificationAsPrinted": {
+      "TEMPORARY BASIC HOME CARE": 244
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 244
+    },
+    "conditionalLicenses": 1,
+    "licensedBedsAsPrinted": null,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 9,
+    "withInvestigations": 0,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:45Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html"
+  },
+  "homeManagementRegistration": {
+    "providerType": [
+      "Certificate of Registration for Home Managment"
+    ],
+    "label": "Home Management registration",
+    "rows": 131,
+    "distinctLicenses": 131,
+    "distinctHfids": 131,
+    "mnClassificationAsPrinted": {
+      "Certificate of Registration for Home Management": 131
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 131
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": null,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 0,
+    "withInvestigations": 0,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:45Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "registrationNotLicense": true
+  },
+  "homeCareBranch": {
+    "providerType": [
+      "Home Care Branch"
+    ],
+    "label": "Home Care branch",
+    "rows": 146,
+    "distinctLicenses": 79,
+    "distinctHfids": 79,
+    "mnClassificationAsPrinted": {
+      "COMPREHENSIVE HOME CARE": 136,
+      "TEMPORARY COMPREHENSIVE HOME CARE": 4,
+      "BASIC HOME CARE": 3,
+      "Certificate of Registration for Home Management": 3
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 89,
+      "HOME HEALTH AGENCY": 57
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": null,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 134,
+    "withInvestigations": 62,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:45Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "medicareNumberPrinted": 57,
+    "medicareNumberStates": {
+      "exact_same_class": 57,
+      "none_printed": 89
+    },
+    "exactCmsBridges": 57,
+    "distinctBridgedCcns": 26,
+    "branchesAreNotProviders": true
+  },
+  "homeHealthAgency": {
+    "providerType": [
+      "HOME HEALTH AGENCY"
+    ],
+    "label": "Home Health Agency",
+    "rows": 142,
+    "distinctLicenses": 142,
+    "distinctHfids": 142,
+    "mnClassificationAsPrinted": {
+      "COMPREHENSIVE HOME CARE": 142
+    },
+    "federalClassificationAsPrinted": {
+      "HOME HEALTH AGENCY": 142
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": null,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 137,
+    "withInvestigations": 43,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:45Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "medicareNumberPrinted": 142,
+    "medicareNumberStates": {
+      "exact_same_class": 142
+    },
+    "exactCmsBridges": 142,
+    "distinctBridgedCcns": 142,
+    "mnLicenseIsHomeCare": true,
+    "distinctFromCmsHomeHealth": true
+  },
+  "hospiceProvider": {
+    "providerType": [
+      "Hospice Provider License"
+    ],
+    "label": "Hospice Provider license",
+    "rows": 75,
+    "distinctLicenses": 75,
+    "distinctHfids": 66,
+    "mnClassificationAsPrinted": {
+      "Hospice Provider License": 75
+    },
+    "federalClassificationAsPrinted": {
+      "Hospice License": 75
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": null,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 30,
+    "withInvestigations": 11,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:47Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "medicareNumberPrinted": 62,
+    "medicareNumberStates": {
+      "exact_same_class": 62,
+      "none_printed": 13
+    },
+    "exactCmsBridges": 62,
+    "distinctBridgedCcns": 62,
+    "distinctFromCmsHospice": true
+  },
+  "hospiceBranch": {
+    "providerType": [
+      "Hospice Provider Branches"
+    ],
+    "label": "Hospice Provider branch",
+    "rows": 46,
+    "distinctLicenses": 19,
+    "distinctHfids": 19,
+    "mnClassificationAsPrinted": {
+      "Hospice Provider Branches": 46
+    },
+    "federalClassificationAsPrinted": {
+      "Hospice License": 46
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": null,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 14,
+    "withInvestigations": 10,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:47Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "medicareNumberPrinted": 45,
+    "medicareNumberStates": {
+      "exact_same_class": 45,
+      "none_printed": 1
+    },
+    "exactCmsBridges": 45,
+    "distinctBridgedCcns": 18,
+    "branchesAreNotProviders": true
+  },
+  "residentialHospice": {
+    "providerType": [
+      "Residential Hospice License"
+    ],
+    "label": "Residential Hospice license",
+    "rows": 5,
+    "distinctLicenses": 5,
+    "distinctHfids": 5,
+    "mnClassificationAsPrinted": {
+      "Residentail Hospice Provider": 5
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 5
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": null,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 2,
+    "withInvestigations": 1,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:47Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "distinctFromHospiceProvider": true
+  },
+  "supervisedLiving": {
+    "providerType": [
+      "SUPERVISED LIVING FACILITY CLASS A/B"
+    ],
+    "label": "Supervised Living Facility (Class A/B)",
+    "rows": 95,
+    "distinctLicenses": 95,
+    "distinctHfids": 95,
+    "mnClassificationAsPrinted": {
+      "SUPERVISED LIVING FACILITY CLASS A/B": 95
+    },
+    "federalClassificationAsPrinted": {
+      "(none printed)": 95
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": 3294,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 1,
+    "withInvestigations": 6,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:50Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "notSeniorSpecific": true
+  },
+  "icfIid": {
+    "providerType": [
+      "ICF INTELLECTUALLY DISABLED"
+    ],
+    "label": "ICF for individuals with intellectual disabilities",
+    "rows": 87,
+    "distinctLicenses": 87,
+    "distinctHfids": 87,
+    "mnClassificationAsPrinted": {
+      "SUPERVISED LIVING FACILITY": 87
+    },
+    "federalClassificationAsPrinted": {
+      "ICF INTELLECTUALLY DISABLED": 87
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": 753,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 85,
+    "withInvestigations": 71,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:50Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "notSeniorCare": true
+  },
+  "prtf": {
+    "providerType": [
+      "PSYCHIATRIC RESIDENTIAL TREATMENT FACIL"
+    ],
+    "label": "Psychiatric residential treatment facility",
+    "rows": 4,
+    "distinctLicenses": 4,
+    "distinctHfids": 4,
+    "mnClassificationAsPrinted": {
+      "SUPERVISED\\ LIVING FACILITY": 3,
+      "BOARD & LODGE": 1
+    },
+    "federalClassificationAsPrinted": {
+      "PSYCHIATRIC RESIDENTIAL TREATMENT FACILITY": 4
+    },
+    "conditionalLicenses": 0,
+    "licensedBedsAsPrinted": 100,
+    "bedsAreCapacityNotResidents": true,
+    "withEvaluations": 1,
+    "withInvestigations": 3,
+    "sourceAsOf": null,
+    "retrievedAt": "2026-09-26T14:14:50Z",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providersearch.html",
+    "notSeniorCare": true
+  },
+  "findings": {
+    "capability": "PARTIAL",
+    "source": "https://www.health.state.mn.us/facilities/regulation/directory/providerfindings.html",
+    "grain": "MDH evaluation (survey) or OHFC investigation result row with its number, dates, finding, and public PDF link",
+    "retention": "MDH keeps investigation information seven years when substantiated, four when inconclusive, and three when unsubstantiated; results for closed facilities are not on the search page.",
+    "byGroup": {
+      "nursing-homes": {
+        "providersInResults": 333,
+        "attachedByExactHfid": 333,
+        "notInDirectory": 0,
+        "evaluationRows": 594,
+        "investigationRows": 6812,
+        "investigationFindings": {
+          "(none printed)": 8,
+          "INCONCLUSIVE": 5,
+          "SCREENED OUT": 6,
+          "SUBSTANTIATED": 4088,
+          "UNSUBSTANTIATED": 2705
+        },
+        "retrievedAt": "2026-09-26T14:20:21Z"
+      },
+      "assisted-living": {
+        "providersInResults": 2192,
+        "attachedByExactHfid": 2192,
+        "notInDirectory": 0,
+        "evaluationRows": 3716,
+        "investigationRows": 1984,
+        "investigationFindings": {
+          "(none printed)": 3,
+          "INCONCLUSIVE": 311,
+          "SUBSTANTIATED": 836,
+          "UNSUBSTANTIATED": 834
+        },
+        "retrievedAt": "2026-09-26T14:20:26Z"
+      },
+      "board-care": {
+        "providersInResults": 15,
+        "attachedByExactHfid": 12,
+        "notInDirectory": 3,
+        "evaluationRows": 25,
+        "investigationRows": 286,
+        "investigationFindings": {
+          "SCREENED OUT": 2,
+          "SUBSTANTIATED": 176,
+          "UNSUBSTANTIATED": 108
+        },
+        "retrievedAt": "2026-09-26T14:20:29Z"
+      },
+      "home-care-home-health": {
+        "providersInResults": 567,
+        "attachedByExactHfid": 567,
+        "notInDirectory": 0,
+        "evaluationRows": 885,
+        "investigationRows": 314,
+        "investigationFindings": {
+          "INCONCLUSIVE": 16,
+          "SCREENED OUT": 1,
+          "SUBSTANTIATED": 176,
+          "UNSUBSTANTIATED": 121
+        },
+        "retrievedAt": "2026-09-26T14:20:30Z"
+      },
+      "hospices": {
+        "providersInResults": 48,
+        "attachedByExactHfid": 32,
+        "notInDirectory": 16,
+        "evaluationRows": 84,
+        "investigationRows": 58,
+        "investigationFindings": {
+          "(none printed)": 1,
+          "SUBSTANTIATED": 37,
+          "UNSUBSTANTIATED": 20
+        },
+        "retrievedAt": "2026-09-26T14:20:32Z"
+      },
+      "supervised-living": {
+        "providersInResults": 97,
+        "attachedByExactHfid": 97,
+        "notInDirectory": 0,
+        "evaluationRows": 173,
+        "investigationRows": 574,
+        "investigationFindings": {
+          "(none printed)": 2,
+          "SCREENED OUT": 2,
+          "SUBSTANTIATED": 384,
+          "UNSUBSTANTIATED": 186
+        },
+        "retrievedAt": "2026-09-26T14:20:33Z"
+      }
+    },
+    "attachedProviders": 3233,
+    "unattachedProviders": 19,
+    "evaluationRowsAttached": 5443,
+    "investigationRowsAttached": 9943,
+    "investigationFindingsAttached": {
+      "(none printed)": 14,
+      "INCONCLUSIVE": 332,
+      "SCREENED OUT": 10,
+      "SUBSTANTIATED": 5649,
+      "UNSUBSTANTIATED": 3938
+    },
+    "attachedByExactHfidInSameGroup": true,
+    "nameOnlyJoins": 0,
+    "findingTextCopied": false,
+    "evaluationIsNotInvestigation": true,
+    "stateEvaluationIsNotCmsInspection": true,
+    "closedFacilitiesExcludedBySource": true
+  },
+  "sanctions": {
+    "capability": "NOT_ACQUIRED",
+    "note": "Fines, conditional licenses, and license actions appear inside evaluation and investigation documents; they were not parsed. The directory's conditional-license flag is kept as printed.",
+    "conditionalLicenseFlagRows": 51
+  },
+  "complaints": {
+    "capability": "KNOWN_INTAKE",
+    "intake": "https://www.health.state.mn.us/facilities/regulation/ohfc/filecomp.html",
+    "office": "https://www.health.state.mn.us/facilities/regulation/ohfc/index.html",
+    "providerLevelInvestigationRows": 9943,
+    "records": "PARTIAL",
+    "note": "Investigation results are public on MDH's results search within the retention window. Complaints that were not investigated and the allegation text are not published here.",
+    "complaintIsNotDeficiency": true,
+    "complaintIsNotSanction": true
+  },
+  "crosswalk": {
+    "method": "Medicare number printed on the MDH directory row, exactly six digits, that is a CMS provider of the same class in SeniorTrustHub's accepted CMS data",
+    "ccnInMdhSource": true,
+    "exactStateToCmsBridges": 637,
+    "cmsNursingHomesBridged": 329,
+    "cmsNursingHomesNotBridged": 9,
+    "cmsHomeHealthBridged": 135,
+    "cmsHomeHealthNotBridged": 3,
+    "outOfStateHomeHealthCcnsBridged": 8,
+    "cmsHospiceBridged": 59,
+    "cmsHospiceNotBridged": 22,
+    "outOfStateHospiceCcnsBridged": 3,
+    "boardingCareNursingFacilityNumbersAreNotCcns": true,
+    "zeroBridgesIsNotZeroOverlap": true,
+    "nameOnly": "UNSAFE"
+  },
+  "cityContext": {
+    "cities": {
+      "Minneapolis": {
+        "nursingHome": 12,
+        "assistedLiving": 141,
+        "assistedLivingDementiaCare": 9,
+        "boardingCare": 9,
+        "homeHealthAgency": 5,
+        "hospiceProvider": 1
+      },
+      "St. Paul": {
+        "nursingHome": 15,
+        "assistedLiving": 81,
+        "assistedLivingDementiaCare": 18,
+        "boardingCare": 2,
+        "homeHealthAgency": 13,
+        "hospiceProvider": 4
+      },
+      "Duluth": {
+        "nursingHome": 7,
+        "assistedLiving": 9,
+        "assistedLivingDementiaCare": 11,
+        "boardingCare": 1,
+        "homeHealthAgency": 5,
+        "hospiceProvider": 1
+      }
+    },
+    "addressIsNotServiceArea": true
+  },
+  "expansionLedger": {
+    "GRAPH_WRITES": 0,
+    "NET_NEW_CANONICAL_FACILITIES": 0,
+    "STATE_DIRECTORY_ROWS": 4458,
+    "DATABASE_WRITES": 0
+  },
+  "capabilities": [
+    {
+      "id": "mdh-daily-directory",
+      "label": "MDH Health Care Provider Directory (daily)",
+      "state": "KNOWN"
+    },
+    {
+      "id": "nursing-home-roster",
+      "label": "MDH Nursing Home licenses",
+      "state": "KNOWN"
+    },
+    {
+      "id": "assisted-living-roster",
+      "label": "Assisted Living Facility licenses",
+      "state": "KNOWN"
+    },
+    {
+      "id": "assisted-living-dementia-roster",
+      "label": "Assisted Living Facility with Dementia Care licenses",
+      "state": "KNOWN"
+    },
+    {
+      "id": "boarding-care-roster",
+      "label": "Boarding Care Home licenses",
+      "state": "KNOWN"
+    },
+    {
+      "id": "home-care-roster",
+      "label": "Home Care licenses, registrations, and branches",
+      "state": "KNOWN"
+    },
+    {
+      "id": "home-health-roster",
+      "label": "Home Health Agencies in the MDH directory",
+      "state": "KNOWN"
+    },
+    {
+      "id": "hospice-roster",
+      "label": "Hospice provider licenses, branches, and residential hospices",
+      "state": "KNOWN"
+    },
+    {
+      "id": "supervised-living-roster",
+      "label": "Supervised Living Facilities",
+      "state": "KNOWN"
+    },
+    {
+      "id": "inactive-licenses",
+      "label": "Closed or expired licenses",
+      "state": "NOT_ACQUIRED"
+    },
+    {
+      "id": "mdh-evaluations",
+      "label": "MDH evaluation (survey) results index",
+      "state": "PARTIAL"
+    },
+    {
+      "id": "ohfc-investigations",
+      "label": "OHFC investigation results and findings",
+      "state": "PARTIAL"
+    },
+    {
+      "id": "finding-document-text",
+      "label": "Evaluation and investigation document text",
+      "state": "NOT_ACQUIRED"
+    },
+    {
+      "id": "state-sanctions",
+      "label": "Fines and license actions",
+      "state": "NOT_ACQUIRED"
+    },
+    {
+      "id": "complaint-intake",
+      "label": "OHFC complaint intake",
+      "state": "KNOWN"
+    },
+    {
+      "id": "exact-ccn-bridge",
+      "label": "State row to CMS by printed Medicare number",
+      "state": "PARTIAL"
+    },
+    {
+      "id": "name-only-bridge",
+      "label": "State to CMS by name",
+      "state": "UNSUPPORTED"
+    },
+    {
+      "id": "combined-minnesota-senior-facilities",
+      "label": "Combined Minnesota senior-facility total",
+      "state": "UNSUPPORTED"
+    },
+    {
+      "id": "combined-minnesota-senior-beds",
+      "label": "Combined Minnesota senior bed total",
+      "state": "UNSUPPORTED"
+    }
+  ],
+  "fingerprint": "b453a290198d834945104aa81f2942bd1fb3bc0fda33fff8cb51fb4d18e9e223"
+}

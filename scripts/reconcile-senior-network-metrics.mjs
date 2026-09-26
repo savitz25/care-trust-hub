@@ -25,6 +25,7 @@ const tickets = {
   MA: "001",
   TN: "001",
   NV: "001",
+  MN: "001",
 };
 export function requireCount(value, field, nullable = false) {
   if (value === null && nullable) return null;
@@ -81,7 +82,21 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       aggregation: "SEPARATE_CLASS_OR_EVIDENCE_POPULATION_DO_NOT_ADD_TO_NATIONAL",
     });
   }
-  for (const state of ["CO", "VA", "NY", "IL", "OR", "PA", "NC", "OH", "GA", "MA", "TN", "NV"]) {
+  for (const state of [
+    "CO",
+    "VA",
+    "NY",
+    "IL",
+    "OR",
+    "PA",
+    "NC",
+    "OH",
+    "GA",
+    "MA",
+    "TN",
+    "NV",
+    "MN",
+  ]) {
     const geo = base.geography.states.find((r) => r.state === state);
     assert.ok(geo, `Missing federal state partition ${state}`);
     for (const [field, setting] of [
@@ -584,6 +599,80 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "REQUEST_ONLY",
     true,
   );
+  for (const [field, grain, providerClass] of [
+    [
+      "nursingHome.distinctLicenses",
+      "Nursing Homes license in the MDH daily directory",
+      "Nursing home (state license)",
+    ],
+    [
+      "assistedLiving.distinctLicenses",
+      "ASSISTED LIVING FACILITY license in the MDH directory",
+      "Assisted Living Facility (state license)",
+    ],
+    [
+      "assistedLivingDementiaCare.distinctLicenses",
+      "ASSISTED LIVING FACILITY DEMENTIA CARE license in the MDH directory",
+      "Assisted Living Facility with Dementia Care (state license)",
+    ],
+    [
+      "provisionalAssistedLiving.distinctLicenses",
+      "PROVISIONAL ASSISTED LIVING FACILITY license in the MDH directory",
+      "Provisional Assisted Living Facility (state license)",
+    ],
+    [
+      "provisionalAssistedLivingDementiaCare.distinctLicenses",
+      "PROVISIONAL ASSISTED LIVING W DEMENTIA C license in the MDH directory",
+      "Provisional Assisted Living Facility with Dementia Care (state license)",
+    ],
+    [
+      "boardingCare.distinctLicenses",
+      "Board & Care Home license in the MDH directory",
+      "Boarding Care Home (state license)",
+    ],
+    [
+      "comprehensiveHomeCare.distinctLicenses",
+      "COMPREHENSIVE HOME CARE license in the MDH directory",
+      "Comprehensive Home Care (state license)",
+    ],
+    [
+      "basicHomeCare.distinctLicenses",
+      "BASIC HOME CARE license in the MDH directory",
+      "Basic Home Care (state license)",
+    ],
+    [
+      "homeHealthAgency.distinctLicenses",
+      "HOME HEALTH AGENCY row in the MDH directory",
+      "Home Health Agency (MDH directory)",
+    ],
+    [
+      "hospiceProvider.distinctLicenses",
+      "Hospice Provider License row in the MDH directory",
+      "Hospice provider (state license)",
+    ],
+    [
+      "residentialHospice.distinctLicenses",
+      "Residential Hospice License row in the MDH directory",
+      "Residential hospice (state license)",
+    ],
+  ])
+    add("MN", field, grain, providerClass, field.split(".")[0], "STATE_SOURCE_LIVE");
+  add(
+    "MN",
+    "findings.evaluationRowsAttached",
+    "MDH evaluation result row attached by exact HFID",
+    "State evaluation",
+    "findings",
+    "PARTIAL",
+  );
+  add(
+    "MN",
+    "findings.investigationRowsAttached",
+    "OHFC investigation result row attached by exact HFID",
+    "State investigation",
+    "findings",
+    "PARTIAL",
+  );
   add(
     "TN",
     "complaints.providerLevelRows",
@@ -623,6 +712,9 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
     "nv-hcqc-snf": "nv.skilledNursing.distinctCredentialNumbers",
     "nv-hcqc-rfg": "nv.rfg.distinctCredentialNumbers",
     "nv-hcqc-rfg-al": "nv.rfg.assistedLivingEndorsed",
+    "mn-mdh-nh": "mn.nursingHome.distinctLicenses",
+    "mn-mdh-alf": "mn.assistedLiving.distinctLicenses",
+    "mn-mdh-alfdc": "mn.assistedLivingDementiaCare.distinctLicenses",
     "tn-hfc-nh": "tn.nursingHomes.distinctLicenseNumbers",
     "tn-hfc-aclf": "tn.aclf.distinctLicenseNumbers",
     "tn-hfc-rha": "tn.rha.distinctLicenseNumbers",
@@ -748,6 +840,15 @@ export function reconcileSenior(base, read = (path) => readFileSync(path, "utf8"
       ["HCQC Hospice program search", "hospiceProgram"],
       ["HCQC state sanctions", "stateSanctions"],
       ["HCQC complaints", "complaints"],
+    ],
+    MN: [
+      ["MDH Nursing Homes directory", "nursingHome"],
+      ["MDH Assisted Living directory", "assistedLiving"],
+      ["MDH Assisted Living with Dementia Care directory", "assistedLivingDementiaCare"],
+      ["MDH Home Health directory", "homeHealthAgency"],
+      ["MDH Hospice directory", "hospiceProvider"],
+      ["MDH evaluation and investigation results", "findings"],
+      ["OHFC complaints", "complaints"],
     ],
   };
   const stateCards = structuredClone(SENIOR_HOMEPAGE_STATE_CARDS);
