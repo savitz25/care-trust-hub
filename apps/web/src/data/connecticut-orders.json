@@ -1,0 +1,17 @@
+{
+  "sourceIndex": "https://portal.ct.gov/dph/facility-licensing--investigations/health-care-quality/health-care-facility-regulatory-action-orders",
+  "retrievedAt": "2026-09-28T19:30:33Z",
+  "window": "2022-01-01 through 2026-09-28",
+  "scope": "Six DPH FLIS health-care-facility order links shown in the public index, dated 2023-2024; not a census of all statewide enforcement or complaints.",
+  "rows": [
+    {"date":"2024-05-10","respondent":"Mozaic Senior Life","facilityClass":"Chronic & Convalescent Nursing Home","actionType":"Consent Order","stateLicense":"CCNH.0002431","currentRosterExactMatch":true,"source":"https://portal.ct.gov/dph/-/media/departments-and-agencies/dph/facility-licensing--investigations/consent-orders/mozaic-consent-order-may-2024-fully-executed.pdf?hash=2EA16032CA428690AA10AA5F21049876&rev=eec0dadb4f354808bfe0f413d0daca17"},
+    {"date":"2023-12-27","respondent":"Arden House","facilityClass":"Chronic & Convalescent Nursing Home","actionType":"Consent Order","stateLicense":"CCNH.002199C","currentRosterExactMatch":false,"source":"https://portal.ct.gov/dph/-/media/departments-and-agencies/dph/facility-licensing--investigations/consent-orders/arden-house--co-12-27-2023-executed.pdf?hash=5142B8C88DD9986E46338BB04AED8056&rev=c9d8f09167874d8abecc117b78d4be11"},
+    {"date":"2023-10-16","respondent":"Chesterfields Health Care Center","facilityClass":"NOT_CONFIRMED_FROM_INDEX","actionType":"Consent Order (document title)","stateLicense":null,"currentRosterExactMatch":false,"source":"https://portal.ct.gov/dph/-/media/departments-and-agencies/dph/facility-licensing--investigations/consent-orders/chesterfields-executed-co-october-2023.pdf?hash=B748084FCA1DFFE49E5FB86241460ABB&rev=70558a25818c4079bdbd9586d1e7f6aa"},
+    {"date":"2023-10-16","respondent":"Apple Rehab Uncasville","facilityClass":"NOT_CONFIRMED_FROM_INDEX","actionType":"Consent Order (document title)","stateLicense":null,"currentRosterExactMatch":false,"source":"https://portal.ct.gov/dph/-/media/departments-and-agencies/dph/facility-licensing--investigations/consent-orders/uncasville-executed-co-101623.pdf?hash=C0D4BDEA5D7376477C4E6C8A75A32618&rev=4f37758943de42eb9f1634a0086c6969"},
+    {"date":"2023-05-03","respondent":"Newtown Rehabilitation and Health Care Center","facilityClass":"Chronic & Convalescent Nursing Home","actionType":"Consent Order","stateLicense":"CCNH.0002446","currentRosterExactMatch":false,"source":"https://portal.ct.gov/dph/-/media/departments-and-agencies/dph/facility-licensing--investigations/consent-orders/newtown-consent-order--may-3-2023-3.pdf?hash=2A68E349494F57B74CECFFE1EEAB8C18&rev=cd4da5e6ad2b44128d63b2229db5e85a"},
+    {"date":"2023-03-10","respondent":"Greentree Manor Nursing and Rehabilitation Center","facilityClass":"Chronic & Convalescent Nursing Home","actionType":"Summary Order","stateLicense":"CCNH.002206C","currentRosterExactMatch":true,"source":"https://portal.ct.gov/dph/-/media/departments-and-agencies/dph/facility-licensing--investigations/consent-orders/greentree-manor---summary-order---march-10-2023-cmsr-signed.pdf?hash=E20C5539010FBBCD4BDA20565E8F793B&rev=0f0eca956bd248f69df56df3d54b0d83"}
+  ],
+  "exactPrintedLicenseRows":4,
+  "exactCurrentRosterAttachments":2,
+  "nameOnlyAttachments":0
+}
