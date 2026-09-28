@@ -112,8 +112,8 @@ export default async function ConnecticutPage({
         <p>
           The DPH credential export does not print CMS CCNs. Exact state-license-to-CMS bridges:{" "}
           {snapshot.cmsExactBridges}. This is not a finding of zero federal overlap. The existing{" "}
-          <Link href="/">SeniorTrustHub CMS nursing-home spine</Link> remains separate; no duplicate CMS
-          population or name-only bridge was created. A managed residential community, ALSA, and
+          <Link href="/">SeniorTrustHub CMS nursing-home spine</Link> remains separate; no duplicate
+          CMS population or name-only bridge was created. A managed residential community, ALSA, and
           federally certified nursing home are not interchangeable identities.
         </p>
       </section>
