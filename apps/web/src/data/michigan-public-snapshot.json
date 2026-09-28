@@ -1,0 +1,53 @@
+{
+  "afcRetrievedAt": "2026-09-28T16:00:15Z",
+  "afcSourceClock": "LARA says the file updates daily; HTTP Last-Modified observed 2026-09-26T02:38:45Z for this release.",
+  "healthRetrievedAt": "2026-09-28T16:00:15Z",
+  "disciplineRetrievedAt": "2026-09-28T15:58:00Z",
+  "afcClassCounts": {
+    "AF": 424,
+    "AG": 4,
+    "AH": 351,
+    "AI": 2,
+    "AL": 558,
+    "AM": 425,
+    "AS": 2471,
+    "XH": 234
+  },
+  "afcClassCapacity": {
+    "AF": 2204,
+    "AG": 120,
+    "AH": 27075,
+    "AI": 96,
+    "AL": 10686,
+    "AM": 4738,
+    "AS": 14037,
+    "XH": 32763
+  },
+  "healthClassCounts": {
+    "Home For The Aged - HFA Exempt": 237,
+    "Home For The Aged - HFA Licensed": 350,
+    "Hospice Agency": 191,
+    "Hospice Residence": 15,
+    "Nursing Home": 426
+  },
+  "exactHfaLegacyBridges": {
+    "licensed": 349,
+    "exempt": 234
+  },
+  "disciplineRows": 88,
+  "disciplineActionCounts": {
+    "Refusal to Renew": 14,
+    "Refusal to renew": 6,
+    "Revocation": 68
+  },
+  "disciplineCurrentOpenAttachments": 0,
+  "inspectionSample": {
+    "stateLicense": "NH00000277",
+    "facilityId": "464060",
+    "reportType": "Licensure Survey",
+    "reportDateAsPrinted": "10/23/2024",
+    "source": "https://statelicensing.apps.lara.state.mi.us/details?license=1652"
+  },
+  "exactCmsBridges": 0,
+  "graphWrites": 0
+}
