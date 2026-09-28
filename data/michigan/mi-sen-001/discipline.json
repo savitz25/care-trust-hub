@@ -1,0 +1,535 @@
+{
+  "source": "https://www.michigan.gov/lara/bureau-list/bchs/adult/online-lookups/adult-foster-care-and-homes-for-the-aged-facilities-closed-or-suspended-due-to-disciplinary-action",
+  "retrievedAt": "2026-09-28T15:58:00Z",
+  "scope": "As published: past five years of AFC/HFA revocation, suspension, refusal to renew, or administrative closure; not all complaints or violations.",
+  "rows": [
+    {
+      "license": "AS410269763",
+      "facility": "Jerry's Dream #2",
+      "closureDate": "12/06/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS410269764",
+      "facility": "Jerry's Dreams #3",
+      "closureDate": "12/06/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS730377214",
+      "facility": "Annie's Home Care",
+      "closureDate": "12/06/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AF610395832",
+      "facility": "Glenside Manor AFC",
+      "closureDate": "12/06/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AF340280762",
+      "facility": "Belleview AFC",
+      "closureDate": "11/09/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS820382715",
+      "facility": "Yarbrough AFC II",
+      "closureDate": "09/27/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS700417921",
+      "facility": "Mayabe Care",
+      "closureDate": "09/27/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AF460402901",
+      "facility": "Liberty Place",
+      "closureDate": "09/04/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AF700396107",
+      "facility": "Lee's Manor",
+      "closureDate": "09/02/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL500408375",
+      "facility": "Sandalwood Village III",
+      "closureDate": "07/08/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL500402309",
+      "facility": "Sunnydale Assisted Living & Memory Care",
+      "closureDate": "07/01/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS630398556",
+      "facility": "Blossom Hill #1-AS",
+      "closureDate": "06/19/2025",
+      "action": "Revocation"
+    },
+    {
+      "license": "AM590407641",
+      "facility": "Tranquility AFC Home LLC",
+      "closureDate": "06/02/25",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS330297845",
+      "facility": "Michigan Ave. Residential Care",
+      "closureDate": "05/19/25",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL500402308",
+      "facility": "Riverdale Assisted Living & Memory",
+      "closureDate": "04/16/25",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL630263937",
+      "facility": "Jewish Apt. & Services - Coville II",
+      "closureDate": "04/13/25",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL630276749",
+      "facility": "Jewish Apt. & Serv. Coville III",
+      "closureDate": "04/13/25",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL630276748",
+      "facility": "Jewish Apt. & Ser. - Coville I",
+      "closureDate": "04/13/25",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL390007094",
+      "facility": "Park Place Living Centre #C",
+      "closureDate": "12/22/24",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AL390007089",
+      "facility": "Park Place Living Centre #A",
+      "closureDate": "12/22/24",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AL390007090",
+      "facility": "Park Place Living Centre #B",
+      "closureDate": "12/19/24",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AL630295441",
+      "facility": "Sun Valley Senior Living",
+      "closureDate": "12/12/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS250413135",
+      "facility": "Palm Home",
+      "closureDate": "11/20/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS250402729",
+      "facility": "Welch Home I",
+      "closureDate": "11/20/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS090409450",
+      "facility": "From The Heart - 2 Mile",
+      "closureDate": "10/31/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AM630397532",
+      "facility": "Hidden Acres Manor",
+      "closureDate": "10/10/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS480393035",
+      "facility": "North Haven AFC",
+      "closureDate": "09/30/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS630403123",
+      "facility": "Pleasant Valley Senior Care",
+      "closureDate": "09/17/24",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AS500412987",
+      "facility": "Caring Professionals AFC Home 2",
+      "closureDate": "08/27/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS630405489",
+      "facility": "Genesis Home",
+      "closureDate": "08/26/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AM410390297",
+      "facility": "Care Cardinal Belmont A",
+      "closureDate": "08/14/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS330309216",
+      "facility": "Bedford House",
+      "closureDate": "08/11/24",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AF500415883",
+      "facility": "Hunters House",
+      "closureDate": "07/17/24",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AS730370289",
+      "facility": "Heavenly Realm 5",
+      "closureDate": "07/16/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL250281678",
+      "facility": "Harmony Manor",
+      "closureDate": "07/14/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS730342200",
+      "facility": "Heavenly Realm 4",
+      "closureDate": "07/14/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS630012646",
+      "facility": "Warwick Group Home",
+      "closureDate": "06/10/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AM500408293",
+      "facility": "Sandalwood Valley I",
+      "closureDate": "04/01/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AM500408396",
+      "facility": "Sandalwood Valley II",
+      "closureDate": "04/01/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS630398118",
+      "facility": "Comfort Home of Bloomfield Inc.",
+      "closureDate": "01/02/24",
+      "action": "Revocation"
+    },
+    {
+      "license": "AF110380176",
+      "facility": "Old Farm Living",
+      "closureDate": "11/29/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL630402683",
+      "facility": "Randall Residence of Auburn Hills I",
+      "closureDate": "11/13/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL630402684",
+      "facility": "Randall Residence of Auburn Hills II",
+      "closureDate": "11/13/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL630402685",
+      "facility": "Randall Residence of Auburn Hills III",
+      "closureDate": "11/13/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL630402686",
+      "facility": "Randall Residence of Auburn Hills IV",
+      "closureDate": "11/13/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS820078228",
+      "facility": "Redley AFC Inc.",
+      "closureDate": "09/05/2023",
+      "action": "Refusal to renew"
+    },
+    {
+      "license": "AS500394497",
+      "facility": "The Charlton Home",
+      "closureDate": "08/22/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS820313332",
+      "facility": "Parkside Estates",
+      "closureDate": "08/22/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS630404326",
+      "facility": "New Beginnings",
+      "closureDate": "08/21/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS820401520",
+      "facility": "Novus Living 1",
+      "closureDate": "06/20/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL820007525",
+      "facility": "Hitt AFC",
+      "closureDate": "05/23/2023",
+      "action": "Refusal to renew"
+    },
+    {
+      "license": "AS630388971",
+      "facility": "Applewood Lane Place",
+      "closureDate": "05/23/2023",
+      "action": "Refusal to renew"
+    },
+    {
+      "license": "AS110407727",
+      "facility": "Trinity Loving Home",
+      "closureDate": "05/15/2023",
+      "action": "Refusal to renew"
+    },
+    {
+      "license": "AS630369663",
+      "facility": "First Door, LLC",
+      "closureDate": "04/18/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS820238660",
+      "facility": "Younes AFC Home II",
+      "closureDate": "04/18/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AF410393455",
+      "facility": "In The Woods",
+      "closureDate": "04/11/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS500407573",
+      "facility": "Genesis Adult Foster Care Home V",
+      "closureDate": "03/29/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AF260401827",
+      "facility": "La Paz AFC",
+      "closureDate": "03/15/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AM410402715",
+      "facility": "Angels of Care #3",
+      "closureDate": "03/14/2023",
+      "action": "Refusal to renew"
+    },
+    {
+      "license": "AF500402340",
+      "facility": "Prestige Home Care",
+      "closureDate": "03/14/2023",
+      "action": "Refusal to renew"
+    },
+    {
+      "license": "AS410405484",
+      "facility": "Alto AFC",
+      "closureDate": "02/01/2023",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS740394225",
+      "facility": "Scotland Manor",
+      "closureDate": "12/22/2022",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS740282833",
+      "facility": "River's Edge Assisted Living",
+      "closureDate": "12/22/2022",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS630301760",
+      "facility": "Phillip Care LLC",
+      "closureDate": "11/22/2022",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AL110006891",
+      "facility": "Forest Beach Home Inc",
+      "closureDate": "11/17/2022",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS250349772",
+      "facility": "Beautiful Blades II",
+      "closureDate": "11/02/2022",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS330267543",
+      "facility": "Evergreen Place",
+      "closureDate": "10/10/2022",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS630401940",
+      "facility": "Johnson Estate",
+      "closureDate": "09/12/2022",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AS250010759",
+      "facility": "Elsona Foster Care Inc",
+      "closureDate": "09/06/2022",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AF390390776",
+      "facility": "Living Water AFC",
+      "closureDate": "09/06/2022",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS410397772",
+      "facility": "Angel Care Adult Foster Home II",
+      "closureDate": "08/22/2022",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS410397771",
+      "facility": "Angel Care Adult Foster Home I",
+      "closureDate": "08/22/2022",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS410397841",
+      "facility": "Angel Care Adult Foster Home III",
+      "closureDate": "08/22/2022",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS500403571",
+      "facility": "Above and Beyond Senior Care",
+      "closureDate": "01/25/2022",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AS820304672",
+      "facility": "Brighter Day",
+      "closureDate": "12/16/2021",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AL410380788",
+      "facility": "Living Well-Adult Living Facility",
+      "closureDate": "11/26/2021",
+      "action": "Revocation"
+    },
+    {
+      "license": "AL630007355",
+      "facility": "Heather Pines",
+      "closureDate": "10/29/2021",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS390306464",
+      "facility": "Mt. Vernon AFC",
+      "closureDate": "10/21/2021",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS190403364",
+      "facility": "Airport Home",
+      "closureDate": "08/24/2021",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS630279392",
+      "facility": "Wealthy",
+      "closureDate": "08/13/2021",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS730391908",
+      "facility": "Rise Again AFC Home",
+      "closureDate": "06/21/2021",
+      "action": "Revocation"
+    },
+    {
+      "license": "AF390297391",
+      "facility": "Comforts of Home",
+      "closureDate": "06/17/2021",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AS630012458",
+      "facility": "Shenkman",
+      "closureDate": "04/30/2021",
+      "action": "Revocation"
+    },
+    {
+      "license": "AG590000026",
+      "facility": "Greenville Acres Adult Care",
+      "closureDate": "04/15/2021",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS590000026",
+      "facility": "Greenville Acres Adult Care",
+      "closureDate": "04/15/2021",
+      "action": "Revocation"
+    },
+    {
+      "license": "AS630400816",
+      "facility": "Cranbrook Assisted Living of Troy",
+      "closureDate": "04/04/2021",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AS440366026",
+      "facility": "Heatherton Place Retirement Center",
+      "closureDate": "03/25/2021",
+      "action": "Refusal to Renew"
+    },
+    {
+      "license": "AS630380863",
+      "facility": "Arinas Senior Care",
+      "closureDate": "03/23/2021",
+      "action": "Revocation"
+    }
+  ]
+}

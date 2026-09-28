@@ -8,6 +8,7 @@ import { interpretMassachusettsAsk } from "./ma-ask";
 import { interpretTennesseeAsk } from "./tn-ask";
 import { interpretNevadaAsk, nevadaIntent } from "./nv-ask";
 import { interpretMinnesotaAsk, minnesotaIntent } from "./mn-ask";
+import { interpretMichiganAsk, michiganIntent } from "./mi-ask";
 import {
   type SeniorAskMode,
   type SeniorProviderClass,
@@ -496,6 +497,8 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   if (nvAnswer) return fail(nvAnswer.message, nvAnswer.alternatives, nvAnswer.coverage);
   const mnAnswer = interpretMinnesotaAsk(q, state?.value);
   if (mnAnswer) return fail(mnAnswer.message, mnAnswer.alternatives, mnAnswer.coverage);
+  const miAnswer = interpretMichiganAsk(q, state?.value);
+  if (miAnswer) return fail(miAnswer.message, miAnswer.alternatives, miAnswer.coverage);
   if (/assisted living/i.test(q)) {
     if (/\bvirginia\b/i.test(q) || state?.value === "VA") {
       return fail(
@@ -1756,7 +1759,8 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
       failReason:
         /memory care/i.test(raw) &&
         !nevadaIntent(raw, plan.geography?.value) &&
-        !minnesotaIntent(raw, plan.geography?.value)
+        !minnesotaIntent(raw, plan.geography?.value) &&
+        !michiganIntent(raw, plan.geography?.value)
           ? "Memory care is not a CMS provider class. The current Ask filter does not establish memory-care services; use the relevant state research and confirm the setting with its regulator."
           : plan.failReason,
     };
