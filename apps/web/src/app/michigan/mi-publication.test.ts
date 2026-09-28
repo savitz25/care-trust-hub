@@ -49,9 +49,16 @@ describe("MI-SEN-001 public source and routing boundary", () => {
     expect(interpretMichiganAsk("best nursing home Michigan")?.coverage).toBe("UNSUPPORTED");
     expect(interpretMichiganAsk("CCN 123456 Michigan")).toBeNull();
     expect(michiganIntent("nursing home Minnesota", "MN")).toBe(false);
-    expect(interpretSeniorAskQuery("Michigan AFC discipline").failReason).toMatch(/88 published rows/);
+    expect(interpretSeniorAskQuery("Michigan AFC discipline").failReason).toMatch(
+      /88 published rows/,
+    );
     expect(interpretSeniorAskQuery("best nursing home Michigan").mode).toBe("fail_closed");
-    expect(interpretSeniorAskQuery("best nursing home Michigan").failReason).toMatch(/does not rank/);
-    expect(interpretSeniorAskQuery("CCN 123456 Michigan").identifier).toEqual({ type: "ccn", value: "123456" });
+    expect(interpretSeniorAskQuery("best nursing home Michigan").failReason).toMatch(
+      /does not rank/,
+    );
+    expect(interpretSeniorAskQuery("CCN 123456 Michigan").identifier).toEqual({
+      type: "ccn",
+      value: "123456",
+    });
   });
 });
