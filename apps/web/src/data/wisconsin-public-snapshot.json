@@ -747,8 +747,8 @@
       "exactRosterMatch": true
     }
   ],
-  "inspectionIndex": "PARTIAL_MONTHLY_ADDITIONS",
-  "inspectionExactAttachments": 95,
+  "inspectionIndex": "NOT_ACQUIRED",
+  "inspectionExactAttachments": 0,
   "enforcementRows": "NOT_ACQUIRED",
   "enforcementExactAttachments": 0,
   "nameOnlyAdverseJoins": 0,

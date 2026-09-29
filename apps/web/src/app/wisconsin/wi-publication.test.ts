@@ -29,7 +29,8 @@ describe("Wisconsin senior publication", () => {
     expect(snapshot.cmsExactBridges).toBe(0);
     expect(snapshot.surveyAdditionsSource.rows).toBe(96);
     expect(snapshot.surveyAdditionsSource.exactRosterMatches).toBe(95);
-    expect(snapshot.inspectionExactAttachments).toBe(95);
+    expect(snapshot.inspectionIndex).toBe("NOT_ACQUIRED");
+    expect(snapshot.inspectionExactAttachments).toBe(0);
     expect(snapshot.enforcementExactAttachments).toBe(0);
     expect(snapshot.nameOnlyAdverseJoins).toBe(0);
     expect(snapshot.graphWrites).toBe(0);

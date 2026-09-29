@@ -91,7 +91,7 @@ def build() -> dict:
                                       "httpLastModified": survey_response.headers.get("Last-Modified"),
                                       "rows": len(surveys), "exactRosterMatches": sum(s["exactRosterMatch"] for s in surveys)},
             "surveyAdditions": surveys,
-            "inspectionIndex": "PARTIAL_MONTHLY_ADDITIONS", "inspectionExactAttachments": sum(s["exactRosterMatch"] for s in surveys),
+            "inspectionIndex": "NOT_ACQUIRED", "inspectionExactAttachments": 0,
             "enforcementRows": "NOT_ACQUIRED", "enforcementExactAttachments": 0,
             "nameOnlyAdverseJoins": 0, "graphWrites": 0,
             "newCanonicalFacilities": 0, "claimEligibilityChanges": 0,
