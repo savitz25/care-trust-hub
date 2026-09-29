@@ -12,6 +12,7 @@ import { interpretMichiganAsk, michiganIntent } from "./mi-ask";
 import { interpretConnecticutAsk, connecticutIntent } from "./ct-ask";
 import { interpretMarylandAsk, marylandIntent } from "./md-ask";
 import { interpretWisconsinAsk, wisconsinIntent } from "./wi-ask";
+import { indianaIntent, interpretIndianaAsk } from "./in-ask";
 import {
   type SeniorAskMode,
   type SeniorProviderClass,
@@ -508,6 +509,8 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   if (mdAnswer) return fail(mdAnswer.message, mdAnswer.alternatives, mdAnswer.coverage);
   const wiAnswer = interpretWisconsinAsk(q, state?.value);
   if (wiAnswer) return fail(wiAnswer.message, wiAnswer.alternatives, wiAnswer.coverage);
+  const inAnswer = interpretIndianaAsk(q, state?.value);
+  if (inAnswer) return fail(inAnswer.message, inAnswer.alternatives, inAnswer.coverage);
   if (/assisted living/i.test(q)) {
     if (/\bvirginia\b/i.test(q) || state?.value === "VA") {
       return fail(
@@ -1772,7 +1775,8 @@ export function interpretSeniorAskQuery(raw: string, page = 1): SeniorResearchQu
         !michiganIntent(raw, plan.geography?.value) &&
         !connecticutIntent(raw, plan.geography?.value) &&
         !marylandIntent(raw, plan.geography?.value) &&
-        !wisconsinIntent(raw, plan.geography?.value)
+        !wisconsinIntent(raw, plan.geography?.value) &&
+        !indianaIntent(raw, plan.geography?.value)
           ? "Memory care is not a CMS provider class. The current Ask filter does not establish memory-care services; use the relevant state research and confirm the setting with its regulator."
           : plan.failReason,
     };

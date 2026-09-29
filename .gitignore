@@ -33,3 +33,6 @@ data/nevada/nv-sen-001/raw/
 
 # MN-SEN-001 raw MDH directory exports and findings (administrator names, phones, emails, addresses). Derived JSON is committed.
 data/minnesota/mn-sen-001/raw/
+
+# IN-SEN-001 raw IDOH directory pages (administrator names/phones). Derived, sanitized JSON is committed.
+data/indiana/in-sen-001/raw/
