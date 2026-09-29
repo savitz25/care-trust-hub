@@ -60,6 +60,7 @@ describe("Maryland senior publication", () => {
       expect(marylandIntent(q), q).toBe(true);
     expect(interpretMarylandAsk("CCN 215123 Maryland")).toBeNull();
     expect(interpretMarylandAsk("215123")).toBeNull();
+    expect(interpretMarylandAsk("nursing home in Hollywood Maryland")).toBeNull();
     expect(interpretMarylandAsk("best nursing home Maryland")?.coverage).toBe("UNSUPPORTED");
     expect(interpretMarylandAsk("Maryland senior complaints")?.message).toContain("NOT_ACQUIRED");
   });

@@ -15,6 +15,13 @@ export function marylandIntent(q: string, stateCode?: string): boolean {
 }
 export function interpretMarylandAsk(q: string, stateCode?: string) {
   if (!marylandIntent(q, stateCode)) return null;
+  // A concrete CMS nursing-home search in a Maryland town stays on the CMS search path.
+  if (
+    /\bnursing home\b/i.test(q) &&
+    /\b(?:in|near|around)\s+([a-z ]+?)\s+maryland\b/i.test(q) &&
+    !CITY.test(q)
+  )
+    return null;
   if (/\b(?:CMS\s*)?CCN\s*[:#]?\s*[A-Z0-9]{6}\b/i.test(q) || /^\s*\d{6}\s*$/.test(q)) return null;
   const answer = (
     message: string,
