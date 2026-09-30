@@ -1,0 +1,195 @@
+{
+  "tx_icfiid": {
+    "class": "TX_ICF_IID",
+    "raw_rows": 708,
+    "parsed_rows": 708,
+    "unique_facility_ids": 708,
+    "missing_facility_ids": 0,
+    "duplicate_facility_ids": {},
+    "unique_license_numbers": 654,
+    "duplicate_license_numbers": {},
+    "program_type": {
+      "ICF/IID": 708
+    },
+    "facility_licensed": {
+      "YES": 652,
+      "NO": 56
+    },
+    "facility_certified": {
+      "YES": 705,
+      "NO": 3
+    },
+    "source_title": "Texas Health and Human Services Commission_x000D_\nDirectory of Intermediate Care Facilities for Individuals with an Intellectual Disability or Related Conditions (ICF/IID) with an Active License as of 09/28/2026",
+    "identity_key": "TX|HHSC|TX_ICF_IID|{Facility ID}",
+    "exact_existing_bridges": null,
+    "bridge_status": "unmeasured: no owned row-level facility-ID spine in this packet",
+    "denominator_treatment": "new class candidate only; no current roster publication"
+  },
+  "tx_dahs": {
+    "class": "TX_DAHS",
+    "raw_rows": 389,
+    "parsed_rows": 389,
+    "unique_facility_ids": 389,
+    "missing_facility_ids": 0,
+    "duplicate_facility_ids": {},
+    "unique_license_numbers": 389,
+    "duplicate_license_numbers": {},
+    "program_type": {
+      "DAHS-ISS": 48,
+      "DAHS": 341
+    },
+    "facility_licensed": {
+      "YES": 389
+    },
+    "facility_certified": {
+      "NO": 389
+    },
+    "source_title": "Texas Health and Human Services Commission_x000D_\nDirectory of Traditional DAHS and DAHS with Individualized Skills and Socialization Facilities with an Active License as of 09/28/2026",
+    "identity_key": "TX|HHSC|TX_DAHS|{Facility ID}",
+    "exact_existing_bridges": null,
+    "bridge_status": "unmeasured: no owned row-level facility-ID spine in this packet",
+    "denominator_treatment": "new class candidate only; no current roster publication"
+  },
+  "tx_dahs_iss_only": {
+    "class": "TX_DAHS_ISS_ONLY",
+    "raw_rows": 744,
+    "parsed_rows": 744,
+    "unique_facility_ids": 744,
+    "missing_facility_ids": 0,
+    "duplicate_facility_ids": {},
+    "unique_license_numbers": 744,
+    "duplicate_license_numbers": {},
+    "program_type": {
+      "DAHS-ISSONLY": 744
+    },
+    "facility_licensed": {
+      "YES": 744
+    },
+    "facility_certified": {
+      "NO": 743,
+      "YES": 1
+    },
+    "source_title": "Texas Health and Human Services Commission_x000D_\nDirectory of DAHS Individualized Skills and Socialization Only Facilities with an Active License as of 09/28/2026",
+    "identity_key": "TX|HHSC|TX_DAHS_ISS_ONLY|{Facility ID}",
+    "exact_existing_bridges": null,
+    "bridge_status": "unmeasured: no owned row-level facility-ID spine in this packet",
+    "denominator_treatment": "new class candidate only; no current roster publication"
+  },
+  "ca_sea_20240730": {
+    "class": "CA_PENALTY_EVIDENCE",
+    "raw_rows": 20550,
+    "parsed_rows": 20550,
+    "unique_facids": 2710,
+    "missing_facids": 0,
+    "unique_penalty_numbers": 20550,
+    "missing_penalty_numbers": 0,
+    "duplicate_penalty_numbers": {},
+    "date_range_issue": [
+      "1998-05-27",
+      "2024-06-28"
+    ],
+    "penalty_type": {
+      "Citation": 16411,
+      "Failure to Report Penalty": 1955,
+      "Administrative Penalty": 2184
+    },
+    "penalty_category": {
+      "Patient Rights": 3096,
+      "Patient Care": 8296,
+      "Other": 973,
+      "Medication": 474,
+      "Physical Environment": 397,
+      "Administration": 567,
+      "Staffing": 216,
+      "Problem Transfer": 475,
+      "Dietary": 81,
+      "Patient Record": 99,
+      "Abuse/Facility Not Self Reported": 1560,
+      "Family/Council Requirement": 1,
+      "Financial Occurrence/Fac Not Self Reported": 109,
+      "Breach to person/entity outside facility/hc system": 532,
+      "Deliberate breach by person other than a h/c worker": 27,
+      "Breach of IT system theft/loss of edevice/med rec": 61,
+      "Immediate Jeopardy": 8,
+      "Willful Material Falsification": 53,
+      "Refusal to Readmit": 23,
+      "Deliberate breach of PHI by health care worker": 238,
+      "Breach by h/c worker within facility/hc system": 198,
+      "Willful Material Omission": 1,
+      "Written Notification Remedy": 1,
+      "DHPPD: 2 - 11 Days": 660,
+      "DHPPD: 12 - 24 Days": 184,
+      "DHPPD: 1 Day (No Penalty)": 199,
+      "AE12 - Medication error": 125,
+      "AE17 - Stage 3 or 4 ulcer acquired after admission": 693,
+      "AE04 - Retention of a foreign object in a patient": 381,
+      "AE28 - Adverse event or series of adverse events": 310,
+      "AE11 - Suicide/attempted suicide": 36,
+      "AE27 - Death/injury from a physical assault": 7,
+      "AE24 - Care by impersonating licensed provider": 4,
+      "AE22 - Death associated with a fall": 37,
+      "AE05 - Death during or up to 24 hours after surgery": 10,
+      "AE08 - Death/disability due to intravascular air embolism": 11,
+      "AE03 - Wrong surgical procedure performed on a patient": 27,
+      "Other Non-Immediate Jeopardy (not an AE)": 86,
+      "Other Immediate Jeopardy (not an AE)": 115,
+      "AE01 - Surgery performed on a wrong body part": 56,
+      "AE26  - Sexual assault on a patient": 35,
+      "AE23 - Death/disab assoc with use of restraints/bedrails": 4,
+      "AE15 - Death/disability directly related to hypoglycemia": 8,
+      "AE19 - Death/disability due to electric shock": 1,
+      "AE21 - Death/disability due to a burn": 17,
+      "AE02 - Wrong patient surgery": 6,
+      "AE25 - Abduction of a patient of any age": 1,
+      "A11 - Medical/Surgical Care": 3,
+      "A1 - Critical Care": 7,
+      "AE14 - Maternal death/disab due to labor/del/post": 10,
+      "AE20 - Line contaminated or use for wrong gas": 2,
+      "AE06  -Use of contaminated drug, device, or biologic": 5,
+      "AE07 - Use of device other than as intended": 10,
+      "AE10 - Death/disability due to disappearance": 4,
+      "A5 - Combined Labor/Delivery/Postpartum": 1,
+      "A10 - Telemetry": 6,
+      "AE13 - Hemolytic reaction": 3
+    },
+    "fac_type": {
+      "SNF": 14536,
+      "ICFDDH": 1405,
+      "ICFDDN": 694,
+      "ICFDD": 417,
+      "CLHF": 276,
+      "PDHRCF": 4,
+      "ICF": 167,
+      "GACH": 2905,
+      "HHA": 33,
+      "APH": 40,
+      "HOSPICE": 16,
+      "COMTYC": 43,
+      "SPHOSP": 1,
+      "ESRD/CDC": 6,
+      "ASC": 1,
+      "CTC": 5,
+      "ASC/SURGC": 1
+    },
+    "exact_facid_bridges": null,
+    "bridge_status": "unmeasured: owned CA snapshot has FACID counts but no row-level FACID list",
+    "event_key": "PENALTY_NUMBER; preserve original row and FACID; review duplicate numbers",
+    "denominator_treatment": "evidence only; zero new facilities"
+  },
+  "il_mcis_legacy": {
+    "class": "IL_LEGACY_MOTOR_CARRIER_ORDER",
+    "raw_rows": 257,
+    "parsed_rows": 257,
+    "unique_order_ids": 256,
+    "duplicate_order_ids": {
+      "222748 MC Sub 0": 2
+    },
+    "household_goods_tagged": 55,
+    "exact_carrier_bridges": null,
+    "unmatched_orders": null,
+    "bridge_status": "no licensed current carrier ID in owned Move records supplied to this Care worktree",
+    "denominator_treatment": "historical evidence only; zero current movers",
+    "source_sha256": "769ab7461029ba52b4643465bfe49ceea1f95733b5c073133bb49ea372fa6aa3",
+    "retrieved_at": "2026-09-30T13:19:52.457170+00:00"
+  }
+}

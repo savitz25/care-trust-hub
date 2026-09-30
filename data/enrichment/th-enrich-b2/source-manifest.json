@@ -1,0 +1,57 @@
+[
+  {
+    "source_id": "tx_icfiid",
+    "official_source": "https://apps.hhs.texas.gov/providers/directories/ICFIID.xlsx",
+    "retrieved_at": "2026-09-30T13:16:15.417177+00:00",
+    "filename": "data/enrichment/th-enrich-b2/raw/ICFIID.xlsx",
+    "sha256": "dddf847544af07c80cfa3c25e4b7d8f9dedc28696e6c14f5dd307636ea67f450",
+    "bytes": 174095,
+    "grain": "facility/provider directory row",
+    "target_class": "TX_ICF_IID",
+    "ownership": "acquired_for_b2"
+  },
+  {
+    "source_id": "tx_dahs",
+    "official_source": "https://apps.hhs.texas.gov/providers/directories/DAHS.xlsx",
+    "retrieved_at": "2026-09-30T13:16:17.102715+00:00",
+    "filename": "data/enrichment/th-enrich-b2/raw/DAHS.xlsx",
+    "sha256": "fd2ff2772ac2144bc6d363e4d1b2333d59cf4b15879ec357328ca37258423bc7",
+    "bytes": 122745,
+    "grain": "day-service provider directory row",
+    "target_class": "TX_DAHS",
+    "ownership": "acquired_for_b2"
+  },
+  {
+    "source_id": "tx_dahs_iss_only",
+    "official_source": "https://apps.hhs.texas.gov/providers/directories/dahs_issonly.xlsx",
+    "retrieved_at": "2026-09-30T13:16:18.681388+00:00",
+    "filename": "data/enrichment/th-enrich-b2/raw/dahs_issonly.xlsx",
+    "sha256": "f9bdf6d39a118b4a4ff293674bab46416237cdfe51ad81a55f862aa7c94d1860",
+    "bytes": 207641,
+    "grain": "day-service provider directory row",
+    "target_class": "TX_DAHS_ISS_ONLY",
+    "ownership": "acquired_for_b2"
+  },
+  {
+    "source_id": "ca_sea_20240730",
+    "official_source": "https://data.chhs.ca.gov/dataset/1e1e2904-1bfb-448c-97e1-cf3e228c9159/resource/7c885969-3349-427f-8696-fba4374cd7f8/download/sea_final_20240730.xlsx",
+    "retrieved_at": "2026-09-30T13:16:22.366972+00:00",
+    "filename": "data/enrichment/th-enrich-b2/raw/sea_final_20240730.xlsx",
+    "sha256": "95f7fc0eab84032497250e9a69fdf7902c594f0cbcff6abc159b86b526812536",
+    "bytes": 3405460,
+    "grain": "citation/penalty event row",
+    "target_class": "CA_PENALTY_EVIDENCE",
+    "ownership": "acquired_for_b2"
+  },
+  {
+    "source_id": "il_mcis_legacy",
+    "official_source": "https://icc.illinois.gov/docket/mcis-legacy",
+    "retrieved_at": "2026-09-30T13:19:52.457170+00:00",
+    "filename": "data/enrichment/th-enrich-b2/raw/icc-mcis-legacy.html",
+    "sha256": "769ab7461029ba52b4643465bfe49ceea1f95733b5c073133bb49ea372fa6aa3",
+    "bytes": 378839,
+    "grain": "historical order card",
+    "target_class": "IL_LEGACY_MOTOR_CARRIER_ORDER",
+    "ownership": "acquired_for_b2"
+  }
+]
