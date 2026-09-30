@@ -1,4 +1,6 @@
 -- TH-ENRICH-B2 packet A rollback. PROPOSED ONLY. Founder gate required.
+DO $$ BEGIN RAISE EXCEPTION 'SUPERSEDED: old TX rollback targets rejected 1841/744 release'; END $$;
+\quit
 -- Removes only the three source releases in packet A; never changes CMS/ALF/NF rows.
 BEGIN;
 DO $$ BEGIN

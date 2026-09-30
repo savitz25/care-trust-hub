@@ -1,0 +1,98 @@
+{
+  "batch_id": "TH-ENRICH-TX-SENIOR-2026-09-30-IDR2",
+  "source_as_of": "2026-09-29",
+  "source_rows": {
+    "TX_ICF_IID": 708,
+    "TX_DAHS": 389,
+    "TX_DAHS_ISS_ONLY": 743
+  },
+  "total_locations": 1840,
+  "license_observations": 1786,
+  "location_keys_unique": 1840,
+  "cross_class_key_collisions": 0,
+  "status_by_class": {
+    "TX_ICF_IID": {
+      "facility_licensed": {
+        "YES": 652,
+        "NO": 56
+      },
+      "facility_certified": {
+        "YES": 705,
+        "NO": 3
+      },
+      "license_observations": 654
+    },
+    "TX_DAHS": {
+      "facility_licensed": {
+        "YES": 389
+      },
+      "facility_certified": {
+        "NO": 389
+      },
+      "license_observations": 389
+    },
+    "TX_DAHS_ISS_ONLY": {
+      "facility_licensed": {
+        "YES": 743
+      },
+      "facility_certified": {
+        "NO": 742,
+        "YES": 1
+      },
+      "license_observations": 743
+    }
+  },
+  "source_manifest": [
+    {
+      "file": "ICFIID.xlsx",
+      "official_url": "https://apps.hhs.texas.gov/providers/directories/ICFIID.xlsx",
+      "sha256": "20548d8398104d2a882cd018fff31786ccc77c4412b6874d5e1fada31ca02ab1",
+      "bytes": 174073,
+      "worksheet_rows": 710,
+      "worksheet_columns": 40,
+      "source_rows": 708,
+      "class": "TX_ICF_IID",
+      "as_of": "2026-09-29",
+      "retrieved_at": "2026-09-30T19:14:28.931968+00:00",
+      "source_title": "Texas Health and Human Services Commission_x000D_\nDirectory of Intermediate Care Facilities for Individuals with an Intellectual Disability or Related Conditions (ICF/IID) with an Active License as of 09/29/2026"
+    },
+    {
+      "file": "DAHS.xlsx",
+      "official_url": "https://apps.hhs.texas.gov/providers/directories/DAHS.xlsx",
+      "sha256": "ec962e57112d6600b4deec292eaee5e0620e70b5413eea71d52078a3c4dcba8f",
+      "bytes": 122736,
+      "worksheet_rows": 391,
+      "worksheet_columns": 40,
+      "source_rows": 389,
+      "class": "TX_DAHS",
+      "as_of": "2026-09-29",
+      "retrieved_at": "2026-09-30T19:14:29.766735+00:00",
+      "source_title": "Texas Health and Human Services Commission_x000D_\nDirectory of Traditional DAHS and DAHS with Individualized Skills and Socialization Facilities with an Active License as of 09/29/2026"
+    },
+    {
+      "file": "dahs_issonly.xlsx",
+      "official_url": "https://apps.hhs.texas.gov/providers/directories/dahs_issonly.xlsx",
+      "sha256": "1de6e81addd37ea016be4c2cdbd50a08648f2348c694ef0e4d9eee0eee1bd381",
+      "bytes": 207539,
+      "worksheet_rows": 745,
+      "worksheet_columns": 40,
+      "source_rows": 743,
+      "class": "TX_DAHS_ISS_ONLY",
+      "as_of": "2026-09-29",
+      "retrieved_at": "2026-09-30T19:14:30.613491+00:00",
+      "source_title": "Texas Health and Human Services Commission_x000D_\nDirectory of DAHS Individualized Skills and Socialization Only Facilities with an Active License as of 09/29/2026"
+    }
+  ],
+  "prior_112184": {
+    "present_prior": true,
+    "present_now": false,
+    "prior_facility_name": "WE ROCK THE SPECTRUM WEST HOUSTON",
+    "prior_license_number": "313235",
+    "reason_for_removal": "Not stated in the official workbooks"
+  },
+  "files": {
+    "locations.csv": "7aadc70ce2985ab1b90b3c3290ffe3b6cae886c7286f838ebdbde3f33c5438c3",
+    "license_observations.csv": "92d2e5d1380d9dceb9e5bbf8ce63fa2a8eec2bc2cbc2afed8c3449b41a884899"
+  },
+  "production_mutations": false
+}

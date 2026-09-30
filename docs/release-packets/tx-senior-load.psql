@@ -1,4 +1,6 @@
 -- TH-ENRICH-B2 packet A. PROPOSED ONLY. Do not run without Founder production gate.
+DO $$ BEGIN RAISE EXCEPTION 'SUPERSEDED: 1841/744 TX packet rejected by Evidence; use reviewed IDR2 packet only'; END $$;
+\quit
 -- Run with psql -v ON_ERROR_STOP=1 from repository root after reviewing the CSV hashes.
 -- This creates internal, source-specific identities. It does not add public roster rows.
 BEGIN;

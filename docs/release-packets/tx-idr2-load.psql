@@ -1,0 +1,113 @@
+-- TH-ENRICH-TX-SENIOR-2026-09-30-IDR2. PROPOSED ONLY; Founder gate required.
+-- Requires fresh official-file/hash check and read-only live ownership recheck first.
+-- Run from repository root with psql -v ON_ERROR_STOP=1. Never use the superseded B2 TX script.
+BEGIN;
+CREATE TEMP TABLE tx_idr2_stage (
+  batch_id text, namespaced_key text, provider_class text, facility_id text,
+  source_row integer, official_name text, program_type text,
+  facility_licensed_raw text, facility_certified_raw text,
+  county text, physical_address text, city text, state text, zip text,
+  source_sha256 text, source_url text, retrieved_at timestamptz, source_as_of date, organization_id text,
+  public_eligible text, record_sha256 text
+) ON COMMIT DROP;
+\copy tx_idr2_stage FROM 'data/enrichment/th-enrich-b2/idr2/release/locations.csv' WITH (FORMAT csv, HEADER true)
+CREATE TEMP TABLE tx_idr2_license_stage (
+  batch_id text, namespaced_key text, credential_type text, credential_number text,
+  facility_licensed_raw text, license_effective_date date, license_expiration_date date,
+  source_sha256 text
+) ON COMMIT DROP;
+\copy tx_idr2_license_stage FROM 'data/enrichment/th-enrich-b2/idr2/release/license_observations.csv' WITH (FORMAT csv, HEADER true)
+
+DO $$ BEGIN
+  IF (SELECT count(*) FROM tx_idr2_stage) <> 1840
+    OR (SELECT count(*) FROM tx_idr2_stage WHERE provider_class='TX_ICF_IID') <> 708
+    OR (SELECT count(*) FROM tx_idr2_stage WHERE provider_class='TX_DAHS') <> 389
+    OR (SELECT count(*) FROM tx_idr2_stage WHERE provider_class='TX_DAHS_ISS_ONLY') <> 743
+    OR (SELECT count(DISTINCT namespaced_key) FROM tx_idr2_stage) <> 1840
+    OR (SELECT count(*) FROM tx_idr2_license_stage) <> 1786
+    OR (SELECT count(*) FROM tx_idr2_license_stage WHERE facility_licensed_raw='NO') <> 2
+    OR (SELECT count(*) FROM tx_idr2_stage WHERE facility_id='112184') <> 0
+    OR EXISTS (SELECT 1 FROM tx_idr2_stage WHERE
+      batch_id <> 'TH-ENRICH-TX-SENIOR-2026-09-30-IDR2' OR
+      namespaced_key <> 'TX|HHSC|' || provider_class || '|' || facility_id OR
+      source_as_of <> DATE '2026-09-29' OR retrieved_at IS NULL OR
+      source_url <> CASE provider_class
+        WHEN 'TX_ICF_IID' THEN 'https://apps.hhs.texas.gov/providers/directories/ICFIID.xlsx'
+        WHEN 'TX_DAHS' THEN 'https://apps.hhs.texas.gov/providers/directories/DAHS.xlsx'
+        WHEN 'TX_DAHS_ISS_ONLY' THEN 'https://apps.hhs.texas.gov/providers/directories/dahs_issonly.xlsx'
+        ELSE '' END OR organization_id IS NOT NULL OR public_eligible <> 'NO' OR
+      (provider_class='TX_ICF_IID' AND source_sha256<>'20548d8398104d2a882cd018fff31786ccc77c4412b6874d5e1fada31ca02ab1') OR
+      (provider_class='TX_DAHS' AND source_sha256<>'ec962e57112d6600b4deec292eaee5e0620e70b5413eea71d52078a3c4dcba8f') OR
+      (provider_class='TX_DAHS_ISS_ONLY' AND source_sha256<>'1de6e81addd37ea016be4c2cdbd50a08648f2348c694ef0e4d9eee0eee1bd381'))
+    OR EXISTS (SELECT 1 FROM tx_idr2_license_stage l LEFT JOIN tx_idr2_stage s USING (namespaced_key)
+      WHERE s.namespaced_key IS NULL OR l.batch_id<>s.batch_id OR l.source_sha256<>s.source_sha256)
+    OR EXISTS (SELECT 1 FROM tx_idr2_stage s JOIN public.provider_identifier pi
+      ON pi.identifier_value=s.namespaced_key AND pi.issuer='TX_HHSC' AND pi.identifier_type='REGULATED_LOCATION')
+    OR EXISTS (SELECT 1 FROM tx_idr2_stage s JOIN public.assisted_living_provider a ON a.external_key=s.namespaced_key)
+  THEN RAISE EXCEPTION 'TX IDR2 source, namespace, ownership, or class drift; no persistent mutation'; END IF;
+END $$;
+
+CREATE TABLE IF NOT EXISTS public.tx_hhsc_location (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  namespaced_key text NOT NULL UNIQUE,
+  provider_class text NOT NULL CHECK (provider_class IN ('TX_ICF_IID','TX_DAHS','TX_DAHS_ISS_ONLY')),
+  facility_id text NOT NULL CHECK (facility_id ~ '^[0-9]+$'),
+  organization_id uuid REFERENCES public.organization(id),
+  official_name text NOT NULL, program_type text NOT NULL,
+  facility_licensed_raw text NOT NULL CHECK (facility_licensed_raw IN ('YES','NO')),
+  facility_certified_raw text NOT NULL CHECK (facility_certified_raw IN ('YES','NO')),
+  county text, physical_address text, city text, state text, zip text,
+  source_row integer NOT NULL, source_sha256 text NOT NULL,
+  source_url text NOT NULL, retrieved_at timestamptz NOT NULL,
+  source_as_of date NOT NULL, batch_id text NOT NULL,
+  record_sha256 text NOT NULL, public_eligible boolean NOT NULL DEFAULT false CHECK (public_eligible=false),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (provider_class, facility_id),
+  CHECK (namespaced_key='TX|HHSC|' || provider_class || '|' || facility_id)
+);
+CREATE TABLE IF NOT EXISTS public.tx_hhsc_location_license_observation (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  location_id uuid NOT NULL REFERENCES public.tx_hhsc_location(id) ON DELETE RESTRICT,
+  credential_type text NOT NULL CHECK (credential_type='HHSC_LICENSE_NUMBER'),
+  credential_number text NOT NULL CHECK (btrim(credential_number)<>''),
+  facility_licensed_raw text NOT NULL CHECK (facility_licensed_raw IN ('YES','NO')),
+  license_effective_date date, license_expiration_date date,
+  source_sha256 text NOT NULL, batch_id text NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (location_id, credential_type, credential_number)
+);
+ALTER TABLE public.tx_hhsc_location ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.tx_hhsc_location_license_observation ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.tx_hhsc_location FROM anon, authenticated;
+REVOKE ALL ON public.tx_hhsc_location_license_observation FROM anon, authenticated;
+
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM tx_idr2_stage s JOIN public.tx_hhsc_location l USING (namespaced_key)
+    WHERE l.record_sha256<>s.record_sha256 OR l.batch_id<>s.batch_id OR l.organization_id IS NOT NULL)
+  THEN RAISE EXCEPTION 'Existing Texas location differs from approved batch'; END IF;
+END $$;
+INSERT INTO public.tx_hhsc_location (
+  namespaced_key,provider_class,facility_id,official_name,program_type,
+  facility_licensed_raw,facility_certified_raw,county,physical_address,city,state,zip,
+  source_row,source_sha256,source_url,retrieved_at,source_as_of,batch_id,record_sha256
+)
+SELECT namespaced_key,provider_class,facility_id,official_name,program_type,
+  facility_licensed_raw,facility_certified_raw,county,physical_address,city,state,zip,
+  source_row,source_sha256,source_url,retrieved_at,source_as_of,batch_id,record_sha256
+FROM tx_idr2_stage ON CONFLICT (namespaced_key) DO NOTHING;
+INSERT INTO public.tx_hhsc_location_license_observation (
+  location_id,credential_type,credential_number,facility_licensed_raw,
+  license_effective_date,license_expiration_date,source_sha256,batch_id
+)
+SELECT p.id,l.credential_type,l.credential_number,l.facility_licensed_raw,
+  l.license_effective_date,l.license_expiration_date,l.source_sha256,l.batch_id
+FROM tx_idr2_license_stage l JOIN public.tx_hhsc_location p USING (namespaced_key)
+ON CONFLICT (location_id,credential_type,credential_number) DO NOTHING;
+DO $$ BEGIN
+  IF (SELECT count(*) FROM public.tx_hhsc_location WHERE batch_id='TH-ENRICH-TX-SENIOR-2026-09-30-IDR2')<>1840
+    OR (SELECT count(*) FROM public.tx_hhsc_location_license_observation WHERE batch_id='TH-ENRICH-TX-SENIOR-2026-09-30-IDR2')<>1786
+    OR EXISTS (SELECT 1 FROM public.tx_hhsc_location WHERE batch_id='TH-ENRICH-TX-SENIOR-2026-09-30-IDR2'
+      AND (organization_id IS NOT NULL OR public_eligible))
+  THEN RAISE EXCEPTION 'TX IDR2 post-load boundary failed'; END IF;
+END $$;
+COMMIT;

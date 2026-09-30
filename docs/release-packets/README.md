@@ -1,5 +1,7 @@
 # TH-ENRICH-B2 independent release packets
 
+**Texas supersession (IDR2):** The earlier packet A used 744 in-home rows and is rejected by Evidence. Its SQL now stops before execution. Use [the Texas IDR2 Evidence handoff](tx-idr2-evidence-handoff.md) for the fresh 708/389/743 location snapshot, namespaced location grain, and unexecuted replacement load/rollback proposal. The older Texas counts below are historical and must not be used for a gate.
+
 These are proposed, **unexecuted** internal loads. Founder approval is the production gate. The source and release hashes, row counts, and class boundaries are pinned in `data/enrichment/th-enrich-b2/release/release-receipt.json`; verify those files before any execution. No public roster or denominator changes are part of either load.
 
 ## A — Texas Senior: ready for Founder production gate

@@ -1,0 +1,29 @@
+-- TH-ENRICH-TX-SENIOR-2026-09-30-IDR2. PROPOSED ONLY; do not execute without Founder gate.
+-- Deletes only this batch's unattached, unpublished Texas location and license observations.
+BEGIN;
+DO $$ BEGIN
+  IF (SELECT count(*) FROM public.tx_hhsc_location WHERE batch_id='TH-ENRICH-TX-SENIOR-2026-09-30-IDR2')<>1840
+    OR (SELECT count(*) FROM public.tx_hhsc_location_license_observation
+        WHERE batch_id='TH-ENRICH-TX-SENIOR-2026-09-30-IDR2')<>1786
+    OR EXISTS (SELECT 1 FROM public.tx_hhsc_location WHERE batch_id='TH-ENRICH-TX-SENIOR-2026-09-30-IDR2'
+      AND (organization_id IS NOT NULL OR public_eligible OR
+        (provider_class='TX_ICF_IID' AND source_sha256<>'20548d8398104d2a882cd018fff31786ccc77c4412b6874d5e1fada31ca02ab1') OR
+        (provider_class='TX_DAHS' AND source_sha256<>'ec962e57112d6600b4deec292eaee5e0620e70b5413eea71d52078a3c4dcba8f') OR
+        (provider_class='TX_DAHS_ISS_ONLY' AND source_sha256<>'1de6e81addd37ea016be4c2cdbd50a08648f2348c694ef0e4d9eee0eee1bd381')))
+    OR EXISTS (SELECT 1 FROM public.tx_hhsc_location_license_observation c
+      JOIN public.tx_hhsc_location p ON p.id=c.location_id
+      WHERE c.batch_id='TH-ENRICH-TX-SENIOR-2026-09-30-IDR2'
+        AND (p.batch_id<>c.batch_id OR p.source_sha256<>c.source_sha256))
+  THEN RAISE EXCEPTION 'TX IDR2 rollback scope changed; stop'; END IF;
+END $$;
+DELETE FROM public.tx_hhsc_location_license_observation
+WHERE batch_id='TH-ENRICH-TX-SENIOR-2026-09-30-IDR2';
+DELETE FROM public.tx_hhsc_location
+WHERE batch_id='TH-ENRICH-TX-SENIOR-2026-09-30-IDR2' AND organization_id IS NULL AND public_eligible=false;
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM public.tx_hhsc_location WHERE batch_id='TH-ENRICH-TX-SENIOR-2026-09-30-IDR2')
+    OR EXISTS (SELECT 1 FROM public.tx_hhsc_location_license_observation
+      WHERE batch_id='TH-ENRICH-TX-SENIOR-2026-09-30-IDR2')
+  THEN RAISE EXCEPTION 'TX IDR2 rollback incomplete'; END IF;
+END $$;
+COMMIT;
