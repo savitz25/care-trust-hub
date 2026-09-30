@@ -52,6 +52,38 @@ class PacketIntegrity(unittest.TestCase):
             self.assertTrue(all(any(value is not None and str(value).strip() for value in row) for row in rows[2:]))
             self.assertEqual(len({str(row[1]) for row in rows[2:]}), expected)
 
+    def test_release_packets_exclude_unmatched_evidence_and_preserve_classes(self):
+        release = BASE / "release"
+        with (release / "tx" / "providers.csv").open(newline="", encoding="utf-8") as stream:
+            providers = list(csv.DictReader(stream))
+        with (release / "tx" / "credentials.csv").open(newline="", encoding="utf-8") as stream:
+            credentials = list(csv.DictReader(stream))
+        with (release / "ca" / "exact_penalties.csv").open(newline="", encoding="utf-8") as stream:
+            penalties = list(csv.DictReader(stream))
+        with (BASE / "exact-bridge-reconciliation.csv").open(newline="", encoding="utf-8") as stream:
+            exact_facids = {row["native_identifier"] for row in csv.DictReader(stream)}
+        self.assertEqual(len(providers), 1841)
+        self.assertEqual(len({row["facility_id"] for row in providers}), 1841)
+        self.assertEqual(len(credentials), 1787)
+        self.assertEqual(sum(row["active_license_claim"] == "YES" for row in credentials), 1785)
+        self.assertEqual(len(penalties), 13149)
+        self.assertEqual({row["facid"] for row in penalties}, exact_facids)
+        self.assertEqual(len({row["penalty_number"] for row in penalties}), 13149)
+
+    def test_new_official_subsets_have_native_ids(self):
+        with (BASE / "staged" / "ny_storage_warehouse.csv").open(newline="", encoding="utf-8") as stream:
+            warehouses = list(csv.DictReader(stream))
+        self.assertEqual(len(warehouses), 55)
+        self.assertEqual(len({row["license_nbr"] for row in warehouses}), 55)
+        self.assertEqual(sum(row["license_status"] == "Active" for row in warehouses), 35)
+        for filename, expected, label in (("fl_adult_day_care.csv", 473, "FL_ADULT_DAY_CARE"),
+                                          ("fl_nurse_registry.csv", 1356, "FL_NURSE_REGISTRY")):
+            with (BASE / "staged" / filename).open(newline="", encoding="utf-8") as stream:
+                rows = list(csv.DictReader(stream))
+            self.assertEqual(len(rows), expected)
+            self.assertEqual(len({row["ahca_file_number"] for row in rows}), expected)
+            self.assertEqual({row["source_class"] for row in rows}, {label})
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,11 @@
+{
+  "source_rows": 55,
+  "unique_license_numbers": 55,
+  "status_distribution": {
+    "Active": 35,
+    "Expired": 8,
+    "Surrendered": 12
+  },
+  "duplicate_license_numbers": 0,
+  "mover_denominator_delta": 0
+}

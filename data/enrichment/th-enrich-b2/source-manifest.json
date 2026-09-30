@@ -53,5 +53,41 @@
     "grain": "historical order card",
     "target_class": "IL_LEGACY_MOTOR_CARRIER_ORDER",
     "ownership": "acquired_for_b2"
+  },
+  {
+    "source_id": "nyc_dcwp_storage_warehouse",
+    "official_source": "https://data.cityofnewyork.us/resource/w7w3-xahh.json",
+    "retrieved_at": "2026-09-30T14:34:19.857433+00:00",
+    "filename": "data/enrichment/th-enrich-b2/raw/nyc-dcwp-storage-warehouse.json",
+    "sha256": "ae5c55e70d4c240b06ac9b537a8db8b8b227ed0148949415661db7395c294bca",
+    "bytes": 41033,
+    "grain": "DCWP Storage Warehouse license row",
+    "target_class": "NYC_STORAGE_WAREHOUSE",
+    "filter": "business_category='Storage Warehouse'",
+    "ownership": "acquired_subset_for_b2"
+  },
+  {
+    "source_id": "fl_adult_day_care",
+    "official_source": "https://quality.healthfinder.fl.gov/Facility-Provider/Adult-DayCare?handler=ExportAsCSV",
+    "retrieved_at": "2026-09-30T14:40:01.443064+00:00",
+    "filename": "data/enrichment/th-enrich-b2/raw/fl_adult_day_care.csv",
+    "sha256": "22b303dc82ad58c0f35c0eb282298029b2e48e4ebcf9b3240632e5425e3b355b",
+    "bytes": 174809,
+    "grain": "AHCA licensed facility/provider export row",
+    "target_class": "FL_ADULT_DAY_CARE",
+    "ownership": "acquired_for_b2_source_access",
+    "access": "public official CSV export form; no credentials"
+  },
+  {
+    "source_id": "fl_nurse_registry",
+    "official_source": "https://quality.healthfinder.fl.gov/Facility-Provider/Nurse-Registry?handler=ExportAsCSV",
+    "retrieved_at": "2026-09-30T14:40:36.861339+00:00",
+    "filename": "data/enrichment/th-enrich-b2/raw/fl_nurse_registry.csv",
+    "sha256": "f93658aef11e59fd1f89e1f33e248c1a50f47386a2e48c1b103063e6296467af",
+    "bytes": 489419,
+    "grain": "AHCA licensed facility/provider export row",
+    "target_class": "FL_NURSE_REGISTRY",
+    "ownership": "acquired_for_b2_source_access",
+    "access": "public official CSV export form; no credentials"
   }
 ]

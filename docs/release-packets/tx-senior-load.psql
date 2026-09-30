@@ -1,0 +1,124 @@
+-- TH-ENRICH-B2 packet A. PROPOSED ONLY. Do not run without Founder production gate.
+-- Run with psql -v ON_ERROR_STOP=1 from repository root after reviewing the CSV hashes.
+-- This creates internal, source-specific identities. It does not add public roster rows.
+BEGIN;
+
+CREATE TABLE IF NOT EXISTS public.tx_hhsc_provider (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  external_key text NOT NULL UNIQUE,
+  provider_class text NOT NULL CHECK (provider_class IN ('TX_ICF_IID','TX_DAHS','TX_DAHS_ISS_ONLY')),
+  facility_id text NOT NULL CHECK (btrim(facility_id) <> ''),
+  official_name text NOT NULL CHECK (btrim(official_name) <> ''),
+  program_type text NOT NULL,
+  facility_licensed_raw text NOT NULL CHECK (facility_licensed_raw IN ('YES','NO')),
+  facility_certified_raw text NOT NULL CHECK (facility_certified_raw IN ('YES','NO')),
+  county text, physical_address text, city text, state text, zip text,
+  source_row integer NOT NULL,
+  source_sha256 text NOT NULL CHECK (source_sha256 ~ '^[0-9a-f]{64}$'),
+  source_url text NOT NULL,
+  source_as_of date NOT NULL,
+  retrieved_at timestamptz NOT NULL,
+  record_sha256 text NOT NULL CHECK (record_sha256 ~ '^[0-9a-f]{64}$'),
+  public_eligible boolean NOT NULL DEFAULT false CHECK (public_eligible = false),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (provider_class, facility_id),
+  CHECK (external_key = 'TX|HHSC|' || provider_class || '|' || facility_id)
+);
+ALTER TABLE public.tx_hhsc_provider ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.tx_hhsc_provider FROM anon, authenticated;
+
+CREATE TABLE IF NOT EXISTS public.tx_hhsc_provider_credential (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  provider_id uuid NOT NULL REFERENCES public.tx_hhsc_provider(id) ON DELETE RESTRICT,
+  credential_type text NOT NULL CHECK (credential_type = 'HHSC_LICENSE_NUMBER'),
+  credential_number text NOT NULL CHECK (btrim(credential_number) <> ''),
+  facility_licensed_raw text NOT NULL CHECK (facility_licensed_raw IN ('YES','NO')),
+  active_license_claim boolean NOT NULL,
+  license_effective_date date,
+  license_expiration_date date,
+  source_sha256 text NOT NULL CHECK (source_sha256 ~ '^[0-9a-f]{64}$'),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (provider_id, credential_type, credential_number),
+  CHECK (active_license_claim = (facility_licensed_raw = 'YES'))
+);
+ALTER TABLE public.tx_hhsc_provider_credential ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.tx_hhsc_provider_credential FROM anon, authenticated;
+
+CREATE TEMP TABLE b2_tx_provider_stage (
+  provider_class text, facility_id text, source_row integer, official_name text,
+  program_type text, facility_licensed_raw text, facility_certified_raw text,
+  county text, physical_address text, city text, state text, zip text,
+  source_sha256 text, source_url text, retrieved_at timestamptz, source_as_of date,
+  record_sha256 text
+) ON COMMIT DROP;
+\copy b2_tx_provider_stage FROM 'data/enrichment/th-enrich-b2/release/tx/providers.csv' WITH (FORMAT csv, HEADER true)
+
+CREATE TEMP TABLE b2_tx_credential_stage (
+  provider_class text, facility_id text, credential_type text, credential_number text,
+  facility_licensed_raw text, active_license_claim text,
+  license_effective_date date, license_expiration_date date, source_sha256 text
+) ON COMMIT DROP;
+\copy b2_tx_credential_stage FROM 'data/enrichment/th-enrich-b2/release/tx/credentials.csv' WITH (FORMAT csv, HEADER true)
+
+DO $$ BEGIN
+  IF (SELECT count(*) FROM b2_tx_provider_stage) <> 1841
+     OR (SELECT count(*) FROM b2_tx_provider_stage WHERE provider_class='TX_ICF_IID') <> 708
+     OR (SELECT count(*) FROM b2_tx_provider_stage WHERE provider_class='TX_DAHS') <> 389
+     OR (SELECT count(*) FROM b2_tx_provider_stage WHERE provider_class='TX_DAHS_ISS_ONLY') <> 744
+     OR (SELECT count(DISTINCT facility_id) FROM b2_tx_provider_stage) <> 1841
+     OR (SELECT count(*) FROM b2_tx_credential_stage) <> 1787
+     OR (SELECT count(*) FROM b2_tx_credential_stage WHERE active_license_claim='YES') <> 1785
+     OR (SELECT count(*) FROM b2_tx_credential_stage WHERE active_license_claim='NO') <> 2
+     OR (SELECT count(DISTINCT credential_number) FROM b2_tx_credential_stage) <> 1787
+     OR EXISTS (SELECT 1 FROM b2_tx_provider_stage WHERE
+          (provider_class='TX_ICF_IID' AND source_sha256<>'dddf847544af07c80cfa3c25e4b7d8f9dedc28696e6c14f5dd307636ea67f450') OR
+          (provider_class='TX_DAHS' AND source_sha256<>'fd2ff2772ac2144bc6d363e4d1b2333d59cf4b15879ec357328ca37258423bc7') OR
+          (provider_class='TX_DAHS_ISS_ONLY' AND source_sha256<>'f9bdf6d39a118b4a4ff293674bab46416237cdfe51ad81a55f862aa7c94d1860'))
+  THEN RAISE EXCEPTION 'B2 TX staged counts or class boundaries changed'; END IF;
+  IF EXISTS (SELECT 1 FROM b2_tx_provider_stage s JOIN public.assisted_living_provider a
+             ON a.state_code='TX' AND a.source_facility_id=s.facility_id)
+     OR EXISTS (SELECT 1 FROM b2_tx_credential_stage s JOIN public.assisted_living_provider a
+                ON a.state_code='TX' AND a.license_id=s.credential_number)
+     OR EXISTS (SELECT 1 FROM b2_tx_credential_stage s JOIN public.facility_external_identifier e
+                ON e.namespace='STATE_TX' AND e.identifier_value=s.credential_number)
+     OR EXISTS (SELECT 1 FROM b2_tx_credential_stage s JOIN public.facility_source_observation o
+                ON o.source_type='tx-hhsc-nursing-facility-directory' AND o.source_record_identifier=s.credential_number)
+  THEN RAISE EXCEPTION 'B2 TX exact cross-class ownership changed'; END IF;
+  IF EXISTS (SELECT 1 FROM b2_tx_provider_stage s JOIN public.tx_hhsc_provider p
+             ON p.provider_class=s.provider_class AND p.facility_id=s.facility_id
+             WHERE p.record_sha256<>s.record_sha256)
+  THEN RAISE EXCEPTION 'B2 TX existing same-class identity has different source record'; END IF;
+END $$;
+
+INSERT INTO public.tx_hhsc_provider (
+  external_key, provider_class, facility_id, official_name, program_type,
+  facility_licensed_raw, facility_certified_raw, county, physical_address,
+  city, state, zip, source_row, source_sha256, source_url, retrieved_at,
+  source_as_of, record_sha256
+)
+SELECT 'TX|HHSC|' || provider_class || '|' || facility_id, provider_class, facility_id,
+       official_name, program_type, facility_licensed_raw, facility_certified_raw,
+       county, physical_address, city, state, zip, source_row, source_sha256,
+       source_url, retrieved_at, source_as_of, record_sha256
+FROM b2_tx_provider_stage
+ON CONFLICT (provider_class,facility_id) DO NOTHING;
+
+INSERT INTO public.tx_hhsc_provider_credential (
+  provider_id, credential_type, credential_number, facility_licensed_raw,
+  active_license_claim, license_effective_date, license_expiration_date, source_sha256
+)
+SELECT p.id, s.credential_type, s.credential_number, s.facility_licensed_raw,
+       s.active_license_claim='YES', s.license_effective_date, s.license_expiration_date, s.source_sha256
+FROM b2_tx_credential_stage s
+JOIN public.tx_hhsc_provider p ON p.provider_class=s.provider_class AND p.facility_id=s.facility_id
+ON CONFLICT (provider_id,credential_type,credential_number) DO NOTHING;
+
+DO $$ BEGIN
+  IF (SELECT count(*) FROM public.tx_hhsc_provider p JOIN b2_tx_provider_stage s
+      ON p.provider_class=s.provider_class AND p.facility_id=s.facility_id AND p.record_sha256=s.record_sha256) <> 1841
+     OR (SELECT count(*) FROM public.tx_hhsc_provider_credential c JOIN public.tx_hhsc_provider p ON p.id=c.provider_id
+         JOIN b2_tx_credential_stage s ON s.provider_class=p.provider_class AND s.facility_id=p.facility_id
+         AND s.credential_number=c.credential_number AND c.source_sha256=s.source_sha256) <> 1787
+  THEN RAISE EXCEPTION 'B2 TX post-load reconciliation failed'; END IF;
+END $$;
+COMMIT;

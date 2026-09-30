@@ -1,0 +1,81 @@
+-- TH-ENRICH-B2 packet B. PROPOSED ONLY. Do not run without Founder production gate.
+-- Run with psql -v ON_ERROR_STOP=1 from repository root after reviewing the CSV hash.
+-- Only 1,117 exact FACIDs / 13,149 events are in the CSV. No facility row is inserted.
+BEGIN;
+
+CREATE TABLE IF NOT EXISTS public.ca_cdph_penalty_evidence (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  provider_id uuid NOT NULL REFERENCES public.provider(id) ON DELETE RESTRICT,
+  facid text NOT NULL CHECK (btrim(facid) <> ''),
+  penalty_number text NOT NULL CHECK (btrim(penalty_number) <> ''),
+  penalty_issue_date date NOT NULL,
+  penalty_type text NOT NULL,
+  penalty_category text NOT NULL,
+  amount_due_final numeric(14,2) NOT NULL CHECK (amount_due_final >= 0),
+  source_row integer NOT NULL,
+  source_sha256 text NOT NULL CHECK (source_sha256 ~ '^[0-9a-f]{64}$'),
+  record_sha256 text NOT NULL CHECK (record_sha256 ~ '^[0-9a-f]{64}$'),
+  load_batch_key text NOT NULL,
+  raw_record jsonb NOT NULL CHECK (jsonb_typeof(raw_record)='object'),
+  public_eligible boolean NOT NULL DEFAULT false CHECK (public_eligible=false),
+  created_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (source_sha256, penalty_number)
+);
+ALTER TABLE public.ca_cdph_penalty_evidence ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.ca_cdph_penalty_evidence FROM anon, authenticated;
+
+CREATE TEMP TABLE b2_ca_penalty_stage (
+  source_row integer, penalty_number text, facid text, provider_id uuid,
+  penalty_issue_date date, penalty_type text, penalty_category text,
+  amount_due_final numeric(14,2), source_sha256 text, raw_record_json jsonb,
+  record_sha256 text
+) ON COMMIT DROP;
+\copy b2_ca_penalty_stage FROM 'data/enrichment/th-enrich-b2/release/ca/exact_penalties.csv' WITH (FORMAT csv, HEADER true)
+
+DO $$ BEGIN
+  IF (SELECT count(*) FROM b2_ca_penalty_stage) <> 13149
+     OR (SELECT count(DISTINCT facid) FROM b2_ca_penalty_stage) <> 1117
+     OR (SELECT count(DISTINCT penalty_number) FROM b2_ca_penalty_stage) <> 13149
+     OR EXISTS (SELECT 1 FROM b2_ca_penalty_stage WHERE source_sha256<>'95f7fc0eab84032497250e9a69fdf7902c594f0cbcff6abc159b86b526812536')
+  THEN RAISE EXCEPTION 'B2 CA exact subset or release hash changed'; END IF;
+  IF EXISTS (
+      SELECT 1 FROM b2_ca_penalty_stage s
+      WHERE NOT EXISTS (
+        SELECT 1 FROM public.facility_source_observation o
+        WHERE o.source_type='ca-cdph-healthcare-facility-locations'
+          AND o.source_record_identifier=s.facid AND o.provider_id=s.provider_id
+      )
+  ) THEN RAISE EXCEPTION 'B2 CA exact FACID-to-provider bridge no longer exists'; END IF;
+  IF EXISTS (
+      SELECT 1 FROM (SELECT facid, count(DISTINCT provider_id) n
+                     FROM public.facility_source_observation
+                     WHERE source_type='ca-cdph-healthcare-facility-locations'
+                       AND source_record_identifier IN (SELECT facid FROM b2_ca_penalty_stage)
+                     GROUP BY facid) x WHERE n<>1
+  ) THEN RAISE EXCEPTION 'B2 CA FACID collision appeared'; END IF;
+  IF EXISTS (SELECT 1 FROM b2_ca_penalty_stage s JOIN public.ca_cdph_penalty_evidence e
+             ON e.source_sha256=s.source_sha256 AND e.penalty_number=s.penalty_number
+             WHERE e.record_sha256<>s.record_sha256 OR e.provider_id<>s.provider_id
+                OR e.load_batch_key<>'TH-ENRICH-B2-CA-20240730')
+  THEN RAISE EXCEPTION 'B2 CA existing event conflicts with exact attachment'; END IF;
+END $$;
+
+INSERT INTO public.ca_cdph_penalty_evidence (
+  provider_id, facid, penalty_number, penalty_issue_date, penalty_type,
+  penalty_category, amount_due_final, source_row, source_sha256,
+  record_sha256, load_batch_key, raw_record
+)
+SELECT provider_id, facid, penalty_number, penalty_issue_date, penalty_type,
+       penalty_category, amount_due_final, source_row, source_sha256,
+       record_sha256, 'TH-ENRICH-B2-CA-20240730', raw_record_json
+FROM b2_ca_penalty_stage
+ON CONFLICT (source_sha256,penalty_number) DO NOTHING;
+
+DO $$ BEGIN
+  IF (SELECT count(*) FROM public.ca_cdph_penalty_evidence e JOIN b2_ca_penalty_stage s
+      ON e.source_sha256=s.source_sha256 AND e.penalty_number=s.penalty_number
+      AND e.provider_id=s.provider_id AND e.record_sha256=s.record_sha256
+      AND e.load_batch_key='TH-ENRICH-B2-CA-20240730') <> 13149
+  THEN RAISE EXCEPTION 'B2 CA post-load exact-event reconciliation failed'; END IF;
+END $$;
+COMMIT;

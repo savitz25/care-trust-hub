@@ -1,0 +1,96 @@
+{
+  "fl_adult_day_care": {
+    "source_rows": 473,
+    "parsed_rows": 473,
+    "unique_file_numbers": 473,
+    "duplicate_file_numbers": {},
+    "columns": [
+      "Name",
+      "Facility Type",
+      "AHCA Number (File Number)",
+      "Phone Number",
+      "Licensed Beds",
+      "License ID",
+      "License Number",
+      "License Status",
+      "Closed Date",
+      "License Effective Date",
+      "License Expiration Date",
+      "Street Address",
+      "Street Address 2",
+      "Street City",
+      "Street Zip",
+      "Street State",
+      "Street County",
+      "Mailing Address",
+      "Mailing Address 2",
+      "Mailing City",
+      "Mailing State",
+      "Mailing Zip",
+      "Mailing County",
+      "Owner",
+      "Owner Since",
+      "Profit Status",
+      "Web Address",
+      "Administrator",
+      "Financial Officer",
+      "Management Company"
+    ],
+    "class": "FL_ADULT_DAY_CARE",
+    "facility_type_distribution": {
+      "Adult Day Care Center": 473
+    },
+    "license_status_distribution": {
+      "LICENSED": 359,
+      "IN REVIEW": 111,
+      "IN LITIGATION": 3
+    },
+    "nonblank_license_numbers": 473
+  },
+  "fl_nurse_registry": {
+    "source_rows": 1356,
+    "parsed_rows": 1356,
+    "unique_file_numbers": 1356,
+    "duplicate_file_numbers": {},
+    "columns": [
+      "Name",
+      "Facility Type",
+      "AHCA Number (File Number)",
+      "Phone Number",
+      "Licensed Beds",
+      "License ID",
+      "License Number",
+      "License Status",
+      "Closed Date",
+      "License Effective Date",
+      "License Expiration Date",
+      "Street Address",
+      "Street Address 2",
+      "Street City",
+      "Street Zip",
+      "Street State",
+      "Street County",
+      "Mailing Address",
+      "Mailing Address 2",
+      "Mailing City",
+      "Mailing State",
+      "Mailing Zip",
+      "Mailing County",
+      "Owner",
+      "Owner Since",
+      "Profit Status",
+      "Web Address",
+      "Administrator",
+      "Financial Officer"
+    ],
+    "class": "FL_NURSE_REGISTRY",
+    "facility_type_distribution": {
+      "Nurse Registry": 1356
+    },
+    "license_status_distribution": {
+      "LICENSED": 1291,
+      "IN REVIEW": 65
+    },
+    "nonblank_license_numbers": 1356
+  }
+}

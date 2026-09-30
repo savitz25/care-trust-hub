@@ -1,0 +1,13 @@
+-- TH-ENRICH-B2 packet B rollback. PROPOSED ONLY. Founder gate required.
+-- Removes only the exact B2 batch from the CA evidence table; never deletes providers.
+BEGIN;
+DO $$ BEGIN
+  IF (SELECT count(*) FROM public.ca_cdph_penalty_evidence
+      WHERE load_batch_key='TH-ENRICH-B2-CA-20240730'
+        AND source_sha256='95f7fc0eab84032497250e9a69fdf7902c594f0cbcff6abc159b86b526812536') <> 13149
+  THEN RAISE EXCEPTION 'B2 CA rollback count changed; review before deleting'; END IF;
+END $$;
+DELETE FROM public.ca_cdph_penalty_evidence
+WHERE load_batch_key='TH-ENRICH-B2-CA-20240730'
+  AND source_sha256='95f7fc0eab84032497250e9a69fdf7902c594f0cbcff6abc159b86b526812536';
+COMMIT;

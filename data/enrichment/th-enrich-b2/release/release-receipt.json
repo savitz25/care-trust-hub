@@ -1,0 +1,38 @@
+{
+  "tx": {
+    "providers": 1841,
+    "by_class": {
+      "TX_ICF_IID": 708,
+      "TX_DAHS": 389,
+      "TX_DAHS_ISS_ONLY": 744
+    },
+    "credential_observations": 1787,
+    "active_license_claims": 1785,
+    "license_number_with_facility_licensed_no": 2,
+    "providers_without_license_number": 54,
+    "public_eligible": false
+  },
+  "ca": {
+    "matched_facids": 1117,
+    "penalty_rows": 13149,
+    "excluded_facids": 1593,
+    "excluded_penalty_rows": 7401,
+    "new_facilities": 0,
+    "public_eligible": false
+  },
+  "files": {
+    "data/enrichment/th-enrich-b2/release/tx/providers.csv": {
+      "sha256": "4979225f709e4aebba17ecaaefef27114a66343d25951e889772adc8d3fa1ce6",
+      "bytes": 648321
+    },
+    "data/enrichment/th-enrich-b2/release/tx/credentials.csv": {
+      "sha256": "d44debfe6d24c0fed139289de0aa63a397f84642de458a45dd0483c67f7c51d7",
+      "bytes": 255405
+    },
+    "data/enrichment/th-enrich-b2/release/ca/exact_penalties.csv": {
+      "sha256": "4a957fb24fb91a76464c79faad1ce3b096971e04e140dee95ecbb7dbeaa52653",
+      "bytes": 16599747
+    }
+  },
+  "production_executed": false
+}

@@ -1,0 +1,24 @@
+-- TH-ENRICH-B2 packet A rollback. PROPOSED ONLY. Founder gate required.
+-- Removes only the three source releases in packet A; never changes CMS/ALF/NF rows.
+BEGIN;
+DO $$ BEGIN
+  IF (SELECT count(*) FROM public.tx_hhsc_provider WHERE source_sha256 IN (
+      'dddf847544af07c80cfa3c25e4b7d8f9dedc28696e6c14f5dd307636ea67f450',
+      'fd2ff2772ac2144bc6d363e4d1b2333d59cf4b15879ec357328ca37258423bc7',
+      'f9bdf6d39a118b4a4ff293674bab46416237cdfe51ad81a55f862aa7c94d1860')) <> 1841
+  THEN RAISE EXCEPTION 'B2 TX rollback provider count changed'; END IF;
+  IF (SELECT count(*) FROM public.tx_hhsc_provider_credential WHERE source_sha256 IN (
+      'dddf847544af07c80cfa3c25e4b7d8f9dedc28696e6c14f5dd307636ea67f450',
+      'fd2ff2772ac2144bc6d363e4d1b2333d59cf4b15879ec357328ca37258423bc7',
+      'f9bdf6d39a118b4a4ff293674bab46416237cdfe51ad81a55f862aa7c94d1860')) <> 1787
+  THEN RAISE EXCEPTION 'B2 TX rollback credential count changed'; END IF;
+END $$;
+DELETE FROM public.tx_hhsc_provider_credential WHERE source_sha256 IN (
+  'dddf847544af07c80cfa3c25e4b7d8f9dedc28696e6c14f5dd307636ea67f450',
+  'fd2ff2772ac2144bc6d363e4d1b2333d59cf4b15879ec357328ca37258423bc7',
+  'f9bdf6d39a118b4a4ff293674bab46416237cdfe51ad81a55f862aa7c94d1860');
+DELETE FROM public.tx_hhsc_provider WHERE source_sha256 IN (
+  'dddf847544af07c80cfa3c25e4b7d8f9dedc28696e6c14f5dd307636ea67f450',
+  'fd2ff2772ac2144bc6d363e4d1b2333d59cf4b15879ec357328ca37258423bc7',
+  'f9bdf6d39a118b4a4ff293674bab46416237cdfe51ad81a55f862aa7c94d1860');
+COMMIT;
