@@ -1,0 +1,20 @@
+{
+  "TX_ICF_IID": {
+    "NEW_EXACT": 708
+  },
+  "TX_DAHS": {
+    "NEW_EXACT": 389
+  },
+  "TX_DAHS_ISS_ONLY": {
+    "NEW_EXACT": 744
+  },
+  "CA_PENALTY_EVIDENCE": {
+    "ALREADY_OWNED_EXACT": 1117,
+    "UNRESOLVED": 1593,
+    "ATTACHED_ROWS": 13149,
+    "UNATTACHED_ROWS": 7401
+  },
+  "IL_LEGACY_MOTOR_CARRIER_ORDER": {
+    "UNRESOLVED": 257
+  }
+}
