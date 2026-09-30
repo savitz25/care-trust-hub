@@ -2,6 +2,15 @@ import { seniorRequestParams } from "@/server/care/senior-ask-request";
 import { NextResponse } from "next/server";
 import { executeSeniorRequest } from "@/server/care/senior-ask-execute";
 import { SENIOR_ASK_CONTRACT } from "@/server/care/senior-ask-contract";
+import {
+  isTxHhscAskQuery,
+  loadTxHhscLocations,
+  searchTxHhscLocations,
+  txHhscAskSearch,
+  txHhscHref,
+  txHhscSource,
+  TX_HHSC_CLASSES,
+} from "@/server/care/tx-hhsc-locations";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +30,39 @@ export async function GET(request: Request) {
       },
       { status: 400 },
     );
+  }
+  if (isTxHhscAskQuery(q, url.searchParams.get("class") ?? undefined)) {
+    const rows = await loadTxHhscLocations();
+    if (rows.length) {
+      const found = searchTxHhscLocations(rows, txHhscAskSearch(q));
+      return NextResponse.json(
+        {
+          contract: SENIOR_ASK_CONTRACT,
+          terminalState: found.count ? "COMPLETE" : "NO_MATCH",
+          resultType: "regulated_location",
+          count: {
+            n: found.count,
+            grain: "Texas HHSC regulated locations/providers",
+            denominator: "Certified Texas HHSC batch only; canonical organizations excluded",
+          },
+          results: found.rows.map((row) => ({
+            identity: row.namespaced_key,
+            providerClass: row.provider_class,
+            providerClassLabel: TX_HHSC_CLASSES[row.provider_class],
+            facilityId: row.facility_id,
+            providerName: row.official_name,
+            recordedLocation: { city: row.city, state: row.state, county: row.county },
+            facilityLicensedRaw: row.facility_licensed_raw,
+            licenseNumber: row.license_number,
+            href: txHhscHref(row),
+            organizationLinkage: "Not established",
+            source: txHhscSource(row),
+          })),
+          pagination: { page: found.page, pageSize: 20, hasMore: found.count > 20 },
+        },
+        { headers: { "Cache-Control": "no-store" } },
+      );
+    }
   }
   const result = await executeSeniorRequest(seniorRequestParams(url.searchParams));
   const publicSafe = {

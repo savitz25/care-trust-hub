@@ -5,6 +5,15 @@ import { executeSeniorRequest } from "@/server/care/senior-ask-execute";
 import { AskResultView } from "./ask-result-view";
 import { SeniorSpecialistSearchShell } from "@/components/specialist-search/senior-specialist-search-shell";
 import { SearchAnalytics } from "@/components/specialist-search/search-analytics";
+import Link from "next/link";
+import {
+  isTxHhscAskQuery,
+  loadTxHhscLocations,
+  searchTxHhscLocations,
+  txHhscAskSearch,
+  txHhscHref,
+  TX_HHSC_CLASSES,
+} from "@/server/care/tx-hhsc-locations";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +31,10 @@ export default async function SeniorAskPage({
 }) {
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q : "";
-  const result = Object.keys(sp).length ? await executeSeniorRequest(sp) : null;
+  const txRequested = q && isTxHhscAskQuery(q, typeof sp.class === "string" ? sp.class : undefined);
+  const txAll = txRequested ? await loadTxHhscLocations() : [];
+  const txResult = txAll.length ? searchTxHhscLocations(txAll, txHhscAskSearch(q)) : null;
+  const result = !txResult && Object.keys(sp).length ? await executeSeniorRequest(sp) : null;
   return (
     <div className="page-shell">
       <RealDataNotice />
@@ -34,7 +46,34 @@ export default async function SeniorAskPage({
           stay separate. This is not a chatbot and not a “best nursing home” ranking.
         </p>
       </header>
-      <SeniorSpecialistSearchShell query={q} filters={result?.query.inputOverrides} />
+      <SeniorSpecialistSearchShell
+        query={q}
+        filters={txResult ? { class: "tx_hhsc_location" } : result?.query.inputOverrides}
+      />
+      {txResult ? (
+        <section
+          aria-label="Texas HHSC regulated location research"
+          className="senior-ask__results"
+        >
+          <h2>Texas HHSC regulated locations/providers</h2>
+          <p>
+            {txResult.count.toLocaleString()} matching regulated locations. These are source-native
+            locations, not canonical organizations or CMS facilities.
+          </p>
+          <ul>
+            {txResult.rows.map((row) => (
+              <li key={row.namespaced_key}>
+                <Link href={txHhscHref(row)}>{row.official_name}</Link> ·{" "}
+                {TX_HHSC_CLASSES[row.provider_class]} · Texas HHSC Facility ID {row.facility_id} ·
+                Facility Licensed: {row.facility_licensed_raw}
+              </li>
+            ))}
+          </ul>
+          <Link href="/texas/regulated-locations">
+            Open Texas location lookup for class and geography filters
+          </Link>
+        </section>
+      ) : null}
       {result ? (
         <>
           <SearchAnalytics
