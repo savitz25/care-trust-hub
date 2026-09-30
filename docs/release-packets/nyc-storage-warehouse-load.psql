@@ -1,0 +1,70 @@
+-- PROPOSED ONLY. Move Supabase. Founder execution GO required. Run from repository root.
+-- Precede this with: python scripts/prepare_pub_gate_fl_ny.py --verify-fresh
+\set ON_ERROR_STOP on
+BEGIN;
+CREATE TABLE IF NOT EXISTS public.nyc_dcwp_storage_warehouse_license (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  license_nbr text NOT NULL UNIQUE,
+  business_unique_id text,
+  business_name text NOT NULL,
+  jurisdiction text NOT NULL DEFAULT 'NYC' CHECK (jurisdiction='NYC'),
+  business_category text NOT NULL DEFAULT 'Storage Warehouse' CHECK (business_category='Storage Warehouse'),
+  license_status text NOT NULL CHECK (license_status IN ('Active','Surrendered','Expired')),
+  license_type text,
+  license_creation_on date,
+  license_expiration_on date,
+  publication_label text NOT NULL,
+  source_as_of date NOT NULL CHECK (source_as_of=DATE '2026-08-20'),
+  source_sha256 text NOT NULL,
+  source_batch_id text NOT NULL,
+  record_fingerprint text NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.nyc_dcwp_storage_warehouse_license ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.nyc_dcwp_storage_warehouse_license FROM PUBLIC, anon, authenticated;
+GRANT SELECT ON public.nyc_dcwp_storage_warehouse_license TO anon, authenticated;
+DROP POLICY IF EXISTS nyc_storage_warehouse_read ON public.nyc_dcwp_storage_warehouse_license;
+CREATE POLICY nyc_storage_warehouse_read ON public.nyc_dcwp_storage_warehouse_license
+  FOR SELECT TO anon, authenticated USING (true);
+LOCK TABLE public.nyc_dcwp_storage_warehouse_license IN SHARE ROW EXCLUSIVE MODE;
+
+CREATE TEMP TABLE gate_ny_stage (
+  license_nbr text, business_unique_id text, business_name text,
+  license_status text, license_type text, license_creation_on date,
+  license_expiration_on date, publication_label text, record_fingerprint text
+) ON COMMIT DROP;
+\copy gate_ny_stage FROM 'data/enrichment/th-enrich-b2/publication-gate/nyc_storage_warehouse_load.csv' WITH (FORMAT csv, HEADER true)
+
+DO $$ BEGIN
+  IF (SELECT count(*) FROM gate_ny_stage) <> 55
+     OR (SELECT count(DISTINCT license_nbr) FROM gate_ny_stage) <> 55
+     OR (SELECT count(*) FROM gate_ny_stage WHERE license_status='Active') <> 35
+     OR (SELECT count(*) FROM gate_ny_stage WHERE license_status='Surrendered') <> 12
+     OR (SELECT count(*) FROM gate_ny_stage WHERE license_status='Expired') <> 8
+     OR EXISTS (SELECT 1 FROM gate_ny_stage WHERE
+       publication_label <> CASE license_status
+         WHEN 'Active' THEN 'NYC storage warehouse license — active'
+         WHEN 'Surrendered' THEN 'NYC storage warehouse license — surrendered'
+         WHEN 'Expired' THEN 'NYC storage warehouse license — expired' END)
+  THEN RAISE EXCEPTION 'NYC source category, native ID, status, or label drifted'; END IF;
+  IF EXISTS (SELECT 1 FROM public.nyc_dcwp_storage_warehouse_license)
+  THEN RAISE EXCEPTION 'NYC warehouse ownership must be reconciled before this first release'; END IF;
+END $$;
+
+INSERT INTO public.nyc_dcwp_storage_warehouse_license (
+  license_nbr, business_unique_id, business_name, license_status, license_type,
+  license_creation_on, license_expiration_on, publication_label, source_as_of,
+  source_sha256, source_batch_id, record_fingerprint
+)
+SELECT license_nbr, business_unique_id, business_name, license_status, license_type,
+       license_creation_on, license_expiration_on, publication_label, DATE '2026-08-20',
+       'ae5c55e70d4c240b06ac9b537a8db8b8b227ed0148949415661db7395c294bca',
+       'TH-ENRICH-2026-09-30-PUB-GATE-PREP-NYC-WH', record_fingerprint
+FROM gate_ny_stage;
+DO $$ BEGIN
+  IF (SELECT count(*) FROM public.nyc_dcwp_storage_warehouse_license
+      WHERE source_batch_id='TH-ENRICH-2026-09-30-PUB-GATE-PREP-NYC-WH'
+        AND source_sha256='ae5c55e70d4c240b06ac9b537a8db8b8b227ed0148949415661db7395c294bca') <> 55
+  THEN RAISE EXCEPTION 'NYC post-insert reconciliation failed'; END IF;
+END $$;
+COMMIT;

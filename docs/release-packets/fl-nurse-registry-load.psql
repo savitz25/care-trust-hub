@@ -1,0 +1,69 @@
+-- PROPOSED ONLY. Care Supabase. Founder execution GO required. Run from repository root.
+-- Precede this with: python scripts/prepare_pub_gate_fl_ny.py --verify-fresh
+\set ON_ERROR_STOP on
+BEGIN;
+ALTER TABLE public.state_licensed_provider ADD COLUMN IF NOT EXISTS closed_on date;
+ALTER TABLE public.state_licensed_provider ADD COLUMN IF NOT EXISTS source_batch_id text;
+ALTER TABLE public.state_licensed_provider ADD COLUMN IF NOT EXISTS publication_status_label text;
+LOCK TABLE public.state_licensed_provider IN SHARE ROW EXCLUSIVE MODE;
+
+CREATE TEMP TABLE gate_fl_stage (
+  ahca_file_number text, license_number text, healthfinder_lid text, official_name text,
+  license_status_raw text, closed_on date, license_effective_on date,
+  license_expires_on date, publication_label text, record_fingerprint text
+) ON COMMIT DROP;
+\copy gate_fl_stage FROM 'data/enrichment/th-enrich-b2/publication-gate/fl_nurse_registry_load.csv' WITH (FORMAT csv, HEADER true)
+
+DO $$ BEGIN
+  IF (SELECT count(*) FROM gate_fl_stage) <> 1356
+     OR (SELECT count(DISTINCT ahca_file_number) FROM gate_fl_stage) <> 1356
+     OR EXISTS (SELECT 1 FROM gate_fl_stage WHERE nullif(btrim(ahca_file_number),'') IS NULL OR nullif(btrim(license_number),'') IS NULL)
+     OR (SELECT count(*) FROM gate_fl_stage WHERE license_status_raw='LICENSED') <> 1291
+     OR (SELECT count(*) FROM gate_fl_stage WHERE license_status_raw='IN REVIEW') <> 65
+     OR (SELECT count(*) FROM gate_fl_stage WHERE license_status_raw='LICENSED' AND closed_on IS NOT NULL) <> 2
+     OR EXISTS (SELECT 1 FROM gate_fl_stage WHERE
+          publication_label <> CASE WHEN license_status_raw='IN REVIEW' THEN 'In review'
+                                    WHEN closed_on IS NOT NULL THEN 'Licensed — closed date reported'
+                                    ELSE 'Licensed' END)
+  THEN RAISE EXCEPTION 'Florida release count, native IDs, status, or label drifted'; END IF;
+  IF EXISTS (SELECT 1 FROM public.state_licensed_provider WHERE provider_class='FL_NURSE_REGISTRY')
+     OR EXISTS (SELECT 1 FROM gate_fl_stage s JOIN public.state_licensed_provider p USING (ahca_file_number))
+  THEN RAISE EXCEPTION 'Florida owned identity or cross-class overlap changed; recompute INSERT set'; END IF;
+  IF (SELECT count(*) FROM gate_fl_stage s LEFT JOIN public.state_licensed_provider p
+        ON p.provider_class='FL_NURSE_REGISTRY' AND p.ahca_file_number=s.ahca_file_number
+        WHERE p.id IS NULL) <> 1356
+  THEN RAISE EXCEPTION 'Florida proposed INSERT set no longer equals 1356'; END IF;
+END $$;
+
+INSERT INTO public.state_licensed_provider (
+  external_key, state_code, regulator_code, provider_class, ahca_file_number,
+  license_number, healthfinder_lid, official_name, license_status_raw,
+  license_status_normalized, license_effective_on, license_expires_on, closed_on,
+  identity_state, publication_state, publication_status_label, source_as_of,
+  retrieved_at, source_locator, source_fingerprint, source_batch_id,
+  adapter_version, record_fingerprint
+)
+SELECT 'FL|AHCA|FL_NURSE_REGISTRY|' || ahca_file_number, 'FL', 'FL_AHCA',
+       'FL_NURSE_REGISTRY', ahca_file_number, license_number, healthfinder_lid,
+       official_name, license_status_raw,
+       CASE WHEN license_status_raw='LICENSED' AND closed_on IS NULL THEN 'CURRENT' ELSE NULL END,
+       license_effective_on, license_expires_on, closed_on,
+       'VERIFIED',
+       CASE WHEN license_status_raw='LICENSED' AND closed_on IS NULL
+            THEN 'PUBLISHABLE_CURRENT' ELSE 'PUBLISHABLE_WITH_STATUS' END,
+       publication_label, TIMESTAMPTZ '2026-09-30 14:40:36.861339+00',
+       TIMESTAMPTZ '2026-09-30 14:40:36.861339+00',
+       'https://quality.healthfinder.fl.gov/Facility-Provider/Nurse-Registry?handler=ExportAsCSV',
+       'f93658aef11e59fd1f89e1f33e248c1a50f47386a2e48c1b103063e6296467af',
+       'TH-ENRICH-2026-09-30-PUB-GATE-PREP-FL-NR',
+       'th-enrich-pub-gate-2026-09-30-v1', record_fingerprint
+FROM gate_fl_stage;
+
+DO $$ BEGIN
+  IF (SELECT count(*) FROM public.state_licensed_provider
+      WHERE provider_class='FL_NURSE_REGISTRY'
+        AND source_batch_id='TH-ENRICH-2026-09-30-PUB-GATE-PREP-FL-NR'
+        AND source_fingerprint='f93658aef11e59fd1f89e1f33e248c1a50f47386a2e48c1b103063e6296467af') <> 1356
+  THEN RAISE EXCEPTION 'Florida post-insert reconciliation failed'; END IF;
+END $$;
+COMMIT;

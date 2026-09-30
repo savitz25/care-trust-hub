@@ -1,0 +1,23 @@
+-- PROPOSED ONLY. Remove only this source batch; abort if any downstream attachment exists.
+\set ON_ERROR_STOP on
+BEGIN;
+LOCK TABLE public.state_licensed_provider IN SHARE ROW EXCLUSIVE MODE;
+DO $$ BEGIN
+  IF (SELECT count(*) FROM public.state_licensed_provider WHERE provider_class='FL_NURSE_REGISTRY'
+      AND source_batch_id='TH-ENRICH-2026-09-30-PUB-GATE-PREP-FL-NR'
+      AND source_fingerprint='f93658aef11e59fd1f89e1f33e248c1a50f47386a2e48c1b103063e6296467af') <> 1356
+  THEN RAISE EXCEPTION 'Florida rollback batch count changed'; END IF;
+  IF EXISTS (SELECT 1 FROM public.state_licensed_provider p
+    WHERE p.source_batch_id='TH-ENRICH-2026-09-30-PUB-GATE-PREP-FL-NR'
+      AND (EXISTS (SELECT 1 FROM public.state_license_credential c WHERE c.provider_id=p.id)
+        OR EXISTS (SELECT 1 FROM public.state_provider_contact c WHERE c.provider_id=p.id)
+        OR EXISTS (SELECT 1 FROM public.state_service_geography g WHERE g.provider_id=p.id)
+        OR EXISTS (SELECT 1 FROM public.state_regulatory_event e WHERE e.provider_id=p.id)
+        OR EXISTS (SELECT 1 FROM public.state_provider_profile x WHERE x.provider_id=p.id)))
+  THEN RAISE EXCEPTION 'Florida downstream attachments exist; review before rollback'; END IF;
+END $$;
+DELETE FROM public.state_licensed_provider
+WHERE provider_class='FL_NURSE_REGISTRY'
+  AND source_batch_id='TH-ENRICH-2026-09-30-PUB-GATE-PREP-FL-NR'
+  AND source_fingerprint='f93658aef11e59fd1f89e1f33e248c1a50f47386a2e48c1b103063e6296467af';
+COMMIT;

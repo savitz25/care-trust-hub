@@ -1,0 +1,14 @@
+-- PROPOSED ONLY. Deletes only the exact 55-license source batch, never mover rows.
+\set ON_ERROR_STOP on
+BEGIN;
+LOCK TABLE public.nyc_dcwp_storage_warehouse_license IN SHARE ROW EXCLUSIVE MODE;
+DO $$ BEGIN
+  IF (SELECT count(*) FROM public.nyc_dcwp_storage_warehouse_license
+      WHERE source_batch_id='TH-ENRICH-2026-09-30-PUB-GATE-PREP-NYC-WH'
+        AND source_sha256='ae5c55e70d4c240b06ac9b537a8db8b8b227ed0148949415661db7395c294bca') <> 55
+  THEN RAISE EXCEPTION 'NYC rollback batch count changed'; END IF;
+END $$;
+DELETE FROM public.nyc_dcwp_storage_warehouse_license
+WHERE source_batch_id='TH-ENRICH-2026-09-30-PUB-GATE-PREP-NYC-WH'
+  AND source_sha256='ae5c55e70d4c240b06ac9b537a8db8b8b227ed0148949415661db7395c294bca';
+COMMIT;

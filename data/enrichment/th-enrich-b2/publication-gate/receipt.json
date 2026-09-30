@@ -1,0 +1,10 @@
+{
+  "fl_source_sha256": "f93658aef11e59fd1f89e1f33e248c1a50f47386a2e48c1b103063e6296467af",
+  "fl_csv_sha256": "793d55c849a21cf32a44a44b950978fb79e56bcceab8ff7f757148610d086478",
+  "fl_rows": 1356,
+  "ny_source_sha256": "ae5c55e70d4c240b06ac9b537a8db8b8b227ed0148949415661db7395c294bca",
+  "ny_csv_sha256": "2b9794a64516bc48c0bbd7e1370ac247e6966130ca116898ea2508ea437808ab",
+  "ny_rows": 55,
+  "source_as_of_ny": "2026-08-20",
+  "production_mutations": false
+}
