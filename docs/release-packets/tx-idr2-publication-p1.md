@@ -8,7 +8,9 @@ The location identity is `TX|HHSC|<class>|<Facility ID>`. ICF/IID, DAHS, and in-
 
 The server-side gate is **off by default**. Future activation requires both `CARE_ENABLE_REAL_PROVIDER_UI=true` and `CARE_ENABLE_TX_HHSC_LOCATION_BATCH=TH-ENRICH-TX-SENIOR-2026-09-30-IDR2`. This ticket does **not** set either production value. With the gate off, the Texas lookup and profile routes return 404 and the Texas batch contributes zero results to Ask.
 
-For local Founder review only, `NODE_ENV=development` with `CARE_TX_HHSC_SIMULATE_BATCH=true` loads a snapshot derived from the certified CSV. It cannot activate in production mode. The simulated gate exposes 1,840 locations, with 1,786 license numbers, split 708 ICF/IID, 389 DAHS, and 743 in-home-only. The preview fixture has no organization data. The live-gate database query is bounded by the exact batch and revalidates counts, namespaced keys, official source hashes and URLs, source date, null organization links, unpublished storage status, and license linkage before returning any location. Any mismatch fails closed.
+For local simulation, `NODE_ENV=development` with `CARE_TX_HHSC_SIMULATE_BATCH=true` loads a snapshot derived from the certified CSV. It cannot activate in production mode. The simulated gate exposes 1,840 locations, with 1,786 license numbers, split 708 ICF/IID, 389 DAHS, and 743 in-home-only. The preview fixture has no organization data. The live-gate database query is bounded by the exact batch and revalidates counts, namespaced keys, official source hashes and URLs, source date, null organization links, unpublished storage status, and license linkage before returning any location. Any mismatch fails closed.
+
+The P1 Vercel deployment is SSO protected: an unauthenticated request redirects to `vercel.com/sso-api`. The certified fixture is also available only when Vercel reports `VERCEL_ENV=preview` and the exact Git owner, repository, and `th-tx-senior-publish-p1` branch. Production and other preview branches remain off. No Vercel project setting, credential, or production environment variable was changed.
 
 ## Surfaces
 
@@ -22,6 +24,8 @@ All routes are noindex. Existing `/search` CMS business/facility results and can
 ## Preview and QA
 
 Loopback-only local preview: `http://127.0.0.1:3100/texas/regulated-locations` with `CARE_TX_HHSC_SIMULATE_BATCH=true`. This is a local development preview, not a public deployment. Representative profiles: ICF/IID `003868` (license number), ICF/IID `007606` (no license number), DAHS `110993`, and in-home-only `110784`.
+
+Protected Founder preview: `https://care-trust-hub-git-th-tx-senior-publish-p1-savitz25-s-projects.vercel.app/texas/regulated-locations` (Vercel SSO required).
 
 Captured review views: [desktop lookup](tx-idr2-preview-lookup-desktop.png), [mobile lookup](tx-idr2-preview-lookup-mobile.png), and [mobile profile without a reported license number](tx-idr2-preview-no-license-mobile.png).
 

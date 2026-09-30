@@ -40,6 +40,15 @@ const URLS: Record<TxHhscClass, string> = {
 export function txHhscGate(
   environment: Readonly<Record<string, string | undefined>> = process.env,
 ) {
+  // This exact PR preview is protected by Vercel SSO. Production and other preview
+  // branches never use the certified fixture.
+  if (
+    environment.VERCEL_ENV === "preview" &&
+    environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-publish-p1" &&
+    environment.VERCEL_GIT_REPO_OWNER === "savitz25" &&
+    environment.VERCEL_GIT_REPO_SLUG === "care-trust-hub"
+  )
+    return "local-preview" as const;
   if (environment.NODE_ENV === "development" && environment.CARE_TX_HHSC_SIMULATE_BATCH === "true")
     return "local-preview" as const;
   if (

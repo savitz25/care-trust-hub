@@ -12,6 +12,15 @@ describe("certified Texas HHSC regulated-location publication gate", () => {
       "off",
     );
     expect(m.txHhscGate(previewEnv)).toBe("local-preview");
+    const protectedPreview = {
+      VERCEL_ENV: "preview",
+      VERCEL_GIT_COMMIT_REF: "th-tx-senior-publish-p1",
+      VERCEL_GIT_REPO_OWNER: "savitz25",
+      VERCEL_GIT_REPO_SLUG: "care-trust-hub",
+    };
+    expect(m.txHhscGate(protectedPreview)).toBe("local-preview");
+    expect(m.txHhscGate({ ...protectedPreview, VERCEL_ENV: "production" })).toBe("off");
+    expect(m.txHhscGate({ ...protectedPreview, VERCEL_GIT_COMMIT_REF: "main" })).toBe("off");
     expect(
       m.txHhscGate({
         CARE_ENABLE_REAL_PROVIDER_UI: "true",
