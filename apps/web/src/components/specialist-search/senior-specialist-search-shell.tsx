@@ -1,6 +1,7 @@
 import { STATE_NAMES } from "@care/domain";
 import Link from "next/link";
 import { SearchShellAnalytics } from "./search-shell-analytics";
+import { txHhscGate } from "@/server/care/tx-hhsc-locations";
 
 const EXAMPLES = [
   "CMS CCN 105502",
@@ -66,6 +67,9 @@ export function SeniorSpecialistSearchShell({
                 <option value="nursing_home">Nursing Home</option>
                 <option value="home_health">Home Health</option>
                 <option value="hospice">Hospice</option>
+                {txHhscGate() !== "off" ? (
+                  <option value="tx_hhsc_location">Texas HHSC regulated location/provider</option>
+                ) : null}
               </select>
             </label>
             <label>

@@ -5,6 +5,10 @@ import { StructuredData } from "@/components/structured-data";
 import { brand } from "@/config/brand";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getTxIntelligence } from "@/server/care/tx-intelligence";
+import Link from "next/link";
+import { txHhscGate } from "@/server/care/tx-hhsc-locations";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/texas");
@@ -84,6 +88,16 @@ export default function TexasPage() {
           </p>
         </section>
         <TxIntelligenceView intel={intel} />
+        {txHhscGate() !== "off" ? (
+          <section aria-label="Texas HHSC regulated location lookup">
+            <h2>Texas HHSC regulated locations</h2>
+            <p>
+              Search ICF/IID, Adult Day Health / DAHS, and in-home-only provider/location records
+              separately from canonical organizations.
+            </p>
+            <Link href="/texas/regulated-locations">Find a Texas HHSC regulated location</Link>
+          </section>
+        ) : null}
       </div>
       <TrustStrip />
     </>
