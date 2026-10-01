@@ -78,4 +78,47 @@ describe("certified Texas HHSC regulated-location publication gate", () => {
       q: "003868",
     });
   });
+
+  it("discovers exact and punctuation-normalized names without a Texas cue in all three classes", async () => {
+    const m = await import("./tx-hhsc-locations");
+    const rows = await m.loadTxHhscLocations(previewEnv);
+    const icf = m.resolveTxHhscAsk(rows, "KIRBYVILLE GROUP HOME");
+    expect(icf?.found.rows.map((row) => row.namespaced_key)).toEqual(["TX|HHSC|TX_ICF_IID|003906"]);
+    expect(m.resolveTxHhscAsk(rows, "kirbyville, group-home")?.found.rows[0].facility_id).toBe(
+      "003906",
+    );
+    expect(m.resolveTxHhscAsk(rows, "Kirbyville Group Home Texas")?.found.rows[0].facility_id).toBe(
+      "003906",
+    );
+    expect(m.resolveTxHhscAsk(rows, "Kirbyville Group Home HHSC")?.found.rows[0].facility_id).toBe(
+      "003906",
+    );
+    expect(
+      m.resolveTxHhscAsk(rows, "Kirbyville Group Home ICF/IID")?.found.rows[0].facility_id,
+    ).toBe("003906");
+    expect(
+      m.resolveTxHhscAsk(rows, "Kirbyville Group Home", "tx_hhsc_location")?.found.rows[0]
+        .facility_id,
+    ).toBe("003906");
+    expect(
+      m.resolveTxHhscAsk(rows, "La Esperanza Adult Activity Center")?.found.rows[0].provider_class,
+    ).toBe("TX_DAHS");
+    expect(
+      m.resolveTxHhscAsk(rows, "Oak Creek Day Habilitationvocational Center")?.found.rows[0]
+        .provider_class,
+    ).toBe("TX_DAHS_ISS_ONLY");
+  });
+
+  it("does not turn fragments, unpublished names or bare federal identifiers into Texas matches", async () => {
+    const m = await import("./tx-hhsc-locations");
+    const rows = await m.loadTxHhscLocations(previewEnv);
+    expect(m.resolveTxHhscAsk(rows, "group home")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "Unpublished Texas Sample Home")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "CMS CCN 003906")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "003906")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "Kirbyville Group Home", "nursing_home")).toBeNull();
+    expect(
+      m.resolveTxHhscAsk(rows, "EDUCARE COMMUNITY LIVING LIMITED PARTNERSHIP")?.found.count,
+    ).toBeGreaterThan(1);
+  });
 });

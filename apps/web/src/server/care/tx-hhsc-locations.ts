@@ -44,7 +44,8 @@ export function txHhscGate(
   // branches never use the certified fixture.
   if (
     environment.VERCEL_ENV === "preview" &&
-    environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-publish-p1" &&
+    (environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-publish-p1" ||
+      environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-ask-discovery-p1") &&
     environment.VERCEL_GIT_REPO_OWNER === "savitz25" &&
     environment.VERCEL_GIT_REPO_SLUG === "care-trust-hub"
   )
@@ -182,6 +183,43 @@ export function isTxHhscAskQuery(q: string, selectedClass?: string): boolean {
         q,
       ))
   );
+}
+
+export function normalizeProviderName(value: string): string {
+  return value
+    .normalize("NFKC")
+    .toLocaleUpperCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+export function discoverTxHhscByName(rows: TxHhscLocation[], q: string) {
+  // Bare identifiers and generic fragments are never authority for a location match.
+  if (/^\s*\d+\s*$/.test(q) || /\b(?:CMS|CCN|USDOT|MC)\b/i.test(q)) return [];
+  const name = normalizeProviderName(q);
+  if (name.length < 12 || name.split(" ").length < 3) return [];
+  return rows.filter((row) => normalizeProviderName(row.official_name) === name);
+}
+
+export function resolveTxHhscAsk(rows: TxHhscLocation[], q: string, selectedClass?: string) {
+  if (selectedClass && selectedClass !== "tx_hhsc_location") return null;
+  if (selectedClass === "tx_hhsc_location" || isTxHhscAskQuery(q, selectedClass))
+    return { found: searchTxHhscLocations(rows, txHhscAskSearch(q)), bareName: false };
+  const qualified =
+    /\b(?:texas|TX|HHSC|ICF\/IID|ICF|DAHS|adult day health|in.home.only|ISS.only)\b/i.test(q);
+  const name = qualified ? txHhscAskSearch(q).q : q;
+  const matches = discoverTxHhscByName(rows, name);
+  const providerClass = qualified ? txHhscAskSearch(q).providerClass : undefined;
+  const filtered = providerClass
+    ? matches.filter((row) => row.provider_class === providerClass)
+    : matches;
+  return filtered.length
+    ? {
+        found: { count: filtered.length, rows: filtered.slice(0, 20), page: 1 },
+        bareName: !qualified,
+      }
+    : null;
 }
 
 export function txHhscAskSearch(q: string) {

@@ -5,8 +5,8 @@ import { SENIOR_ASK_CONTRACT } from "@/server/care/senior-ask-contract";
 import {
   isTxHhscAskQuery,
   loadTxHhscLocations,
-  searchTxHhscLocations,
-  txHhscAskSearch,
+  normalizeProviderName,
+  resolveTxHhscAsk,
   txHhscHref,
   txHhscSource,
   TX_HHSC_CLASSES,
@@ -31,37 +31,69 @@ export async function GET(request: Request) {
       { status: 400 },
     );
   }
-  if (isTxHhscAskQuery(q, url.searchParams.get("class") ?? undefined)) {
+  if (
+    isTxHhscAskQuery(q, url.searchParams.get("class") ?? undefined) ||
+    q.trim().split(/\s+/).length >= 3
+  ) {
     const rows = await loadTxHhscLocations();
     if (rows.length) {
-      const found = searchTxHhscLocations(rows, txHhscAskSearch(q));
-      return NextResponse.json(
-        {
-          contract: SENIOR_ASK_CONTRACT,
-          terminalState: found.count ? "COMPLETE" : "NO_MATCH",
-          resultType: "regulated_location",
-          count: {
-            n: found.count,
-            grain: "Texas HHSC regulated locations/providers",
-            denominator: "Certified Texas HHSC batch only; canonical organizations excluded",
+      const match = resolveTxHhscAsk(rows, q, url.searchParams.get("class") ?? undefined);
+      if (match) {
+        const { found, bareName } = match;
+        const cms = bareName
+          ? await executeSeniorRequest(seniorRequestParams(url.searchParams))
+          : null;
+        const otherMatches =
+          cms?.entities.filter(
+            (entity) => normalizeProviderName(entity.providerName) === normalizeProviderName(q),
+          ) ?? [];
+        return NextResponse.json(
+          {
+            contract: SENIOR_ASK_CONTRACT,
+            terminalState:
+              otherMatches.length || (bareName && found.count > 1)
+                ? "NEEDS_CLARIFICATION"
+                : found.count
+                  ? "COMPLETE"
+                  : "NO_MATCH",
+            resultType:
+              otherMatches.length || (bareName && found.count > 1)
+                ? "ambiguous_provider_name"
+                : "regulated_location",
+            ambiguity: otherMatches.length
+              ? "The same published name occurs in another provider class or jurisdiction. Narrow by state and provider class; these records are not the same organization."
+              : bareName && found.count > 1
+                ? "Multiple Texas HHSC locations use this published name. Choose the Facility ID and provider class; they are not one organization."
+                : undefined,
+            otherMatches: otherMatches.map((entity) => ({
+              providerName: entity.providerName,
+              providerClass: entity.providerClass,
+              recordedLocation: entity.recordedLocation,
+              href: entity.href,
+            })),
+            count: {
+              n: found.count,
+              grain: "Texas HHSC regulated locations/providers",
+              denominator: "Certified Texas HHSC batch only; canonical organizations excluded",
+            },
+            results: found.rows.map((row) => ({
+              identity: row.namespaced_key,
+              providerClass: row.provider_class,
+              providerClassLabel: TX_HHSC_CLASSES[row.provider_class],
+              facilityId: row.facility_id,
+              providerName: row.official_name,
+              recordedLocation: { city: row.city, state: row.state, county: row.county },
+              facilityLicensedRaw: row.facility_licensed_raw,
+              licenseNumber: row.license_number,
+              href: txHhscHref(row),
+              organizationLinkage: "Not established",
+              source: txHhscSource(row),
+            })),
+            pagination: { page: found.page, pageSize: 20, hasMore: found.count > 20 },
           },
-          results: found.rows.map((row) => ({
-            identity: row.namespaced_key,
-            providerClass: row.provider_class,
-            providerClassLabel: TX_HHSC_CLASSES[row.provider_class],
-            facilityId: row.facility_id,
-            providerName: row.official_name,
-            recordedLocation: { city: row.city, state: row.state, county: row.county },
-            facilityLicensedRaw: row.facility_licensed_raw,
-            licenseNumber: row.license_number,
-            href: txHhscHref(row),
-            organizationLinkage: "Not established",
-            source: txHhscSource(row),
-          })),
-          pagination: { page: found.page, pageSize: 20, hasMore: found.count > 20 },
-        },
-        { headers: { "Cache-Control": "no-store" } },
-      );
+          { headers: { "Cache-Control": "no-store" } },
+        );
+      }
     }
   }
   const result = await executeSeniorRequest(seniorRequestParams(url.searchParams));
