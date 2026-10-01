@@ -34,7 +34,7 @@ export default async function SeniorAskPage({
   const txRequested =
     q &&
     (isTxHhscAskQuery(q, typeof sp.class === "string" ? sp.class : undefined) ||
-      q.trim().split(/\s+/).length >= 3);
+      normalizeProviderName(q).split(" ").length >= 3);
   const txAll = txRequested ? await loadTxHhscLocations() : [];
   const txMatch = txAll.length
     ? resolveTxHhscAsk(txAll, q, typeof sp.class === "string" ? sp.class : undefined)

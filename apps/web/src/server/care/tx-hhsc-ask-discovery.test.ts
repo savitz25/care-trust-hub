@@ -74,6 +74,12 @@ describe("Texas location Ask discovery", () => {
       organizationLinkage: "Not established",
     });
     expect(payload.results[0].href).toContain("/texas/regulated-locations/");
+    const punctuationResponse = await GET(
+      new Request("https://test.invalid/api/ask?q=kirbyville%2C%20group-home"),
+    );
+    const punctuation = await punctuationResponse.json();
+    expect(punctuation.resultType).toBe("regulated_location");
+    expect(punctuation.results[0].identity).toBe("TX|HHSC|TX_ICF_IID|003906");
     const cmsResponse = await GET(
       new Request("https://test.invalid/api/ask?q=KIRBYVILLE%20GROUP%20HOME&class=nursing_home"),
     );

@@ -33,7 +33,7 @@ export async function GET(request: Request) {
   }
   if (
     isTxHhscAskQuery(q, url.searchParams.get("class") ?? undefined) ||
-    q.trim().split(/\s+/).length >= 3
+    normalizeProviderName(q).split(" ").length >= 3
   ) {
     const rows = await loadTxHhscLocations();
     if (rows.length) {
