@@ -27,6 +27,32 @@ afterEach(() => {
 });
 
 describe("Texas location Ask discovery", () => {
+  it("discloses every matching location for the distinctive Educare name prefix", async () => {
+    Object.assign(process.env, {
+      VERCEL_ENV: "preview",
+      VERCEL_GIT_COMMIT_REF: "th-tx-senior-ask-discovery-r2",
+      VERCEL_GIT_REPO_OWNER: "savitz25",
+      VERCEL_GIT_REPO_SLUG: "care-trust-hub",
+    });
+    const { GET } = await import("@/app/api/ask/route");
+    const response = await GET(
+      new Request("https://test.invalid/api/ask?q=Educare%20Community%20Living"),
+    );
+    const payload = await response.json();
+    expect(payload.terminalState).toBe("NEEDS_CLARIFICATION");
+    expect(payload.resultType).toBe("ambiguous_provider_name");
+    expect(payload.count.n).toBe(131);
+    expect(payload.results).toHaveLength(20);
+    expect(payload.pagination.hasMore).toBe(true);
+    expect(payload.ambiguity).toContain("Showing the first 20");
+    expect(
+      payload.results.every(
+        (row: { identity: string; organizationLinkage: string }) =>
+          row.identity.startsWith("TX|HHSC|") && row.organizationLinkage === "Not established",
+      ),
+    ).toBe(true);
+  }, 15000);
+
   it("returns a bare published name at regulated-location grain and preserves CMS class selection", async () => {
     Object.assign(process.env, {
       VERCEL_ENV: "preview",

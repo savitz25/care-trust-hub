@@ -45,7 +45,8 @@ export function txHhscGate(
   if (
     environment.VERCEL_ENV === "preview" &&
     (environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-publish-p1" ||
-      environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-ask-discovery-p1") &&
+      environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-ask-discovery-p1" ||
+      environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-ask-discovery-r2") &&
     environment.VERCEL_GIT_REPO_OWNER === "savitz25" &&
     environment.VERCEL_GIT_REPO_SLUG === "care-trust-hub"
   )
@@ -199,7 +200,13 @@ export function discoverTxHhscByName(rows: TxHhscLocation[], q: string) {
   if (/^\s*\d+\s*$/.test(q) || /\b(?:CMS|CCN|USDOT|MC)\b/i.test(q)) return [];
   const name = normalizeProviderName(q);
   if (name.length < 12 || name.split(" ").length < 3) return [];
-  return rows.filter((row) => normalizeProviderName(row.official_name) === name);
+  const exact = rows.filter((row) => normalizeProviderName(row.official_name) === name);
+  if (exact.length) return exact;
+  // A published name may include a legal suffix or longer program name. A
+  // word-boundary prefix is discovery only: every matching location stays
+  // separate and the caller discloses ambiguity rather than selecting one.
+  if (name.length < 20) return [];
+  return rows.filter((row) => normalizeProviderName(row.official_name).startsWith(`${name} `));
 }
 
 export function resolveTxHhscAsk(rows: TxHhscLocation[], q: string, selectedClass?: string) {

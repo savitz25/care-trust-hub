@@ -63,7 +63,7 @@ export async function GET(request: Request) {
             ambiguity: otherMatches.length
               ? "The same published name occurs in another provider class or jurisdiction. Narrow by state and provider class; these records are not the same organization."
               : bareName && found.count > 1
-                ? "Multiple Texas HHSC locations use this published name. Choose the Facility ID and provider class; they are not one organization."
+                ? `Multiple Texas HHSC locations match this published name. Choose the Facility ID and provider class; they are not one organization.${found.count > 20 ? " Showing the first 20; add a city or class to narrow the search." : ""}`
                 : undefined,
             otherMatches: otherMatches.map((entity) => ({
               providerName: entity.providerName,

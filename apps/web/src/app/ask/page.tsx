@@ -77,8 +77,11 @@ export default async function SeniorAskPage({
             </p>
           ) : txMatch?.bareName && txResult.count > 1 ? (
             <p role="status">
-              Multiple Texas HHSC locations use this published name. Choose the Facility ID and
-              provider class; they are not one organization.
+              Multiple Texas HHSC locations match this published name. Choose the Facility ID and
+              provider class; they are not one organization.{" "}
+              {txResult.count > 20
+                ? "Showing the first 20; add a city or class to narrow the search."
+                : ""}
             </p>
           ) : null}
           <p>

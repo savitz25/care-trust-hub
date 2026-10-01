@@ -120,5 +120,16 @@ describe("certified Texas HHSC regulated-location publication gate", () => {
     expect(
       m.resolveTxHhscAsk(rows, "EDUCARE COMMUNITY LIVING LIMITED PARTNERSHIP")?.found.count,
     ).toBeGreaterThan(1);
+    const educare = m.resolveTxHhscAsk(rows, "Educare Community Living");
+    expect(educare?.found.count).toBe(131);
+    expect(educare?.bareName).toBe(true);
+    expect(new Set(educare?.found.rows.map((row) => row.namespaced_key)).size).toBe(20);
+    expect(m.resolveTxHhscAsk(rows, "Educare Community Living ICF/IID")?.found.count).toBe(123);
+    expect(m.resolveTxHhscAsk(rows, "Educare Community Living Texas")?.found.count).toBe(131);
+    expect(
+      m.resolveTxHhscAsk(rows, "La Esperanza Adult Activity Center")?.found.rows[0].provider_class,
+    ).toBe("TX_DAHS");
+    expect(m.resolveTxHhscAsk(rows, "Educare Community")?.found.count).toBeUndefined();
+    expect(m.resolveTxHhscAsk(rows, "Educare Community Livings")).toBeNull();
   });
 });
