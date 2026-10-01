@@ -131,5 +131,15 @@ describe("certified Texas HHSC regulated-location publication gate", () => {
     ).toBe("TX_DAHS");
     expect(m.resolveTxHhscAsk(rows, "Educare Community")?.found.count).toBeUndefined();
     expect(m.resolveTxHhscAsk(rows, "Educare Community Livings")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "Down Home Ranch")?.found.rows[0].namespaced_key).toBe(
+      "TX|HHSC|TX_DAHS|110993",
+    );
+    expect(m.resolveTxHhscAsk(rows, "Down Home Ranch, Inc.")?.found.rows[0].facility_id).toBe(
+      "110993",
+    );
+    expect(m.resolveTxHhscAsk(rows, "down-home, ranch")?.found.rows[0].facility_id).toBe("110993");
+    expect(m.resolveTxHhscAsk(rows, "Home Ranch")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "Community Living")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "Adult Day Health")).toBeNull();
   });
 });

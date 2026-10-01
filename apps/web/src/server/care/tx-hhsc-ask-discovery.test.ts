@@ -84,6 +84,12 @@ describe("Texas location Ask discovery", () => {
       new Request("https://test.invalid/api/ask?q=KIRBYVILLE%20GROUP%20HOME&class=nursing_home"),
     );
     expect((await cmsResponse.json()).resultType).not.toBe("regulated_location");
+    const downHomeResponse = await GET(
+      new Request("https://test.invalid/api/ask?q=Down%20Home%20Ranch"),
+    );
+    const downHome = await downHomeResponse.json();
+    expect(downHome.resultType).toBe("regulated_location");
+    expect(downHome.results[0].identity).toBe("TX|HHSC|TX_DAHS|110993");
   }, 15000);
 
   it("discloses multiple Texas locations with one name", async () => {

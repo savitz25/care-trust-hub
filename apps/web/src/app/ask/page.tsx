@@ -8,6 +8,7 @@ import { SearchAnalytics } from "@/components/specialist-search/search-analytics
 import Link from "next/link";
 import {
   isTxHhscAskQuery,
+  isPotentialTxHhscNameQuery,
   loadTxHhscLocations,
   normalizeProviderName,
   resolveTxHhscAsk,
@@ -34,7 +35,7 @@ export default async function SeniorAskPage({
   const txRequested =
     q &&
     (isTxHhscAskQuery(q, typeof sp.class === "string" ? sp.class : undefined) ||
-      normalizeProviderName(q).split(" ").length >= 3);
+      isPotentialTxHhscNameQuery(q));
   const txAll = txRequested ? await loadTxHhscLocations() : [];
   const txMatch = txAll.length
     ? resolveTxHhscAsk(txAll, q, typeof sp.class === "string" ? sp.class : undefined)

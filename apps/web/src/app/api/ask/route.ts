@@ -4,6 +4,7 @@ import { executeSeniorRequest } from "@/server/care/senior-ask-execute";
 import { SENIOR_ASK_CONTRACT } from "@/server/care/senior-ask-contract";
 import {
   isTxHhscAskQuery,
+  isPotentialTxHhscNameQuery,
   loadTxHhscLocations,
   normalizeProviderName,
   resolveTxHhscAsk,
@@ -33,7 +34,7 @@ export async function GET(request: Request) {
   }
   if (
     isTxHhscAskQuery(q, url.searchParams.get("class") ?? undefined) ||
-    normalizeProviderName(q).split(" ").length >= 3
+    isPotentialTxHhscNameQuery(q)
   ) {
     const rows = await loadTxHhscLocations();
     if (rows.length) {

@@ -195,17 +195,51 @@ export function normalizeProviderName(value: string): string {
     .replace(/\s+/g, " ");
 }
 
+const GENERIC_NAME_TOKENS = new Set([
+  "ADULT",
+  "ASSISTED",
+  "CARE",
+  "CENTER",
+  "COMMUNITY",
+  "FACILITY",
+  "GROUP",
+  "HEALTH",
+  "HOME",
+  "LIVING",
+  "NURSING",
+  "PROVIDER",
+  "SERVICES",
+]);
+
+export function isPotentialTxHhscNameQuery(q: string): boolean {
+  if (/^\s*\d+\s*$/.test(q) || /\b(?:CMS|CCN|USDOT|MC)\b/i.test(q)) return false;
+  const name = normalizeProviderName(q);
+  const tokens = name.split(" ").filter(Boolean);
+  return (
+    name.length >= 12 &&
+    tokens.filter((token) => token.length >= 3 && !["INC", "LLC", "THE"].includes(token)).length >=
+      2 &&
+    tokens.some((token) => token.length >= 3 && !GENERIC_NAME_TOKENS.has(token))
+  );
+}
+
 export function discoverTxHhscByName(rows: TxHhscLocation[], q: string) {
   // Bare identifiers and generic fragments are never authority for a location match.
-  if (/^\s*\d+\s*$/.test(q) || /\b(?:CMS|CCN|USDOT|MC)\b/i.test(q)) return [];
+  if (!isPotentialTxHhscNameQuery(q)) return [];
   const name = normalizeProviderName(q);
-  if (name.length < 12 || name.split(" ").length < 3) return [];
   const exact = rows.filter((row) => normalizeProviderName(row.official_name) === name);
   if (exact.length) return exact;
   // A published name may include a legal suffix or longer program name. A
   // word-boundary prefix is discovery only: every matching location stays
   // separate and the caller discloses ambiguity rather than selecting one.
-  if (name.length < 20) return [];
+  // Short prefixes need two distinctive tokens, so fragments such as
+  // "Educare Community" do not broaden into a provider family.
+  if (
+    name.length < 20 &&
+    name.split(" ").filter((token) => token.length >= 3 && !GENERIC_NAME_TOKENS.has(token)).length <
+      2
+  )
+    return [];
   return rows.filter((row) => normalizeProviderName(row.official_name).startsWith(`${name} `));
 }
 
