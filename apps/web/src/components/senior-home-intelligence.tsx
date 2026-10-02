@@ -7,6 +7,12 @@ import {
   type SeniorHomepageStateCard,
   type SeniorNetworkMetricsV1,
 } from "@care/domain";
+import {
+  NEWEST_PUBLISHED_STATES,
+  PUBLISHED_STATE_COUNT,
+  PUBLISHED_STATES,
+  publishedStateHref,
+} from "@/lib/published-states";
 import { SeniorHomeChecklist } from "./senior-home-checklist";
 import { SeniorSpecialistSearchShell } from "./specialist-search/senior-specialist-search-shell";
 
@@ -75,12 +81,15 @@ export function SeniorHomeIntelligence({
     if (!metric) throw new Error(`Missing generated homepage metric: ${key}`);
     return metric.value.toLocaleString("en-US");
   };
-  const inventoryFamilies = evidenceInventory.reduce<
-    Record<string, SeniorHomepageEvidenceMeasure[]>
-  >((groups, row) => {
-    (groups[row.family] ??= []).push(row);
-    return groups;
-  }, {});
+  // Published-state counts follow the local published-state list, not the detailed card set.
+  const cardCodes = new Set<string>(stateCards.map((state) => state.state));
+  const moreStates = PUBLISHED_STATES.filter((state) => !cardCodes.has(state.code));
+  const inventoryFamilies = evidenceInventory
+    .map((row) => (row.key === "state-pages" ? { ...row, value: PUBLISHED_STATE_COUNT } : row))
+    .reduce<Record<string, SeniorHomepageEvidenceMeasure[]>>((groups, row) => {
+      (groups[row.family] ??= []).push(row);
+      return groups;
+    }, {});
   const evidenceMetrics = HOMEPAGE_EVIDENCE_METRIC_KEYS.map((key) => {
     const metric = metricByKey(networkMetrics, key);
     if (!metric || metric.publicationStatus !== "PUBLIC" || metric.value == null) {
@@ -119,6 +128,55 @@ export function SeniorHomeIntelligence({
             <Link href="/hospice">Hospice</Link>
             <Link href="/assisted-living">Assisted Living by state</Link>
           </nav>
+        </div>
+      </section>
+
+      <section className="intel-section" id="footprint" aria-labelledby="footprint-title">
+        <div className="section-heading">
+          <p className="eyebrow">Research footprint</p>
+          <h2 id="footprint-title">
+            {PUBLISHED_STATE_COUNT} states with published senior-care intelligence
+          </h2>
+          <p>
+            Each state page is built from that state&rsquo;s own licensing and regulatory sources,
+            alongside national CMS evidence. Coverage keeps expanding state by state.
+          </p>
+        </div>
+        <div className="intel-metric-rail">
+          <article className="intel-metric">
+            <p className="intel-metric__value">{PUBLISHED_STATE_COUNT}</p>
+            <h3>Published state intelligence pages</h3>
+          </article>
+          {intel.stateOfRecord
+            .filter((metric) => metric.id !== "ownership-orgs")
+            .slice(0, 3)
+            .map((metric) => (
+              <article className="intel-metric" key={`footprint-${metric.id}`}>
+                <p className="intel-metric__value">{metric.display}</p>
+                <h3>{metric.label}</h3>
+              </article>
+            ))}
+        </div>
+        <p className="hub-kicker">
+          These are different kinds of records and are never added into one total.
+        </p>
+        <p>
+          <strong>Newest state pages:</strong>
+        </p>
+        <nav className="senior-ask__examples" aria-label="Newest state intelligence pages">
+          {NEWEST_PUBLISHED_STATES.map((state) => (
+            <Link key={state.slug} href={state.href} title={state.newestSummary}>
+              {state.name}
+            </Link>
+          ))}
+        </nav>
+        <div className="intel-hero__actions">
+          <a className="button button--primary" href="#explore">
+            Explore all {PUBLISHED_STATE_COUNT} states
+          </a>
+          <a className="button button--secondary" href="#evidence-inventory">
+            See the evidence inventory
+          </a>
         </div>
       </section>
 
@@ -522,7 +580,7 @@ export function SeniorHomeIntelligence({
           <p className="eyebrow">Localize</p>
           <h2 id="explore-title">Explore senior-care intelligence by state</h2>
           <p>
-            {stateCards.length} published state intelligence surfaces connect source-native
+            {PUBLISHED_STATE_COUNT} published state intelligence pages connect source-native
             licensing and regulatory systems to CMS overlays where accepted identity evidence
             supports the relationship.
           </p>
@@ -588,6 +646,27 @@ export function SeniorHomeIntelligence({
             </article>
           ))}
         </div>
+        {moreStates.length > 0 && (
+          <>
+            <h3>Newest published states</h3>
+            <ul className="intel-timeline">
+              {moreStates.map((state) => (
+                <li key={state.slug}>
+                  <p className="intel-timeline__freshness">New state page</p>
+                  <div>
+                    <h3>{state.name} intelligence</h3>
+                    <p>{state.newestSummary ?? `${state.name} senior-care licensing research`}</p>
+                    <p>
+                      <Link className="text-link" href={state.href}>
+                        Explore {state.name} intelligence <span aria-hidden="true">→</span>
+                      </Link>
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
         <details className="intel-national-map">
           <summary>Browse the national CMS Nursing Home directory by state</summary>
           <p className="intel-legend">
@@ -602,7 +681,7 @@ export function SeniorHomeIntelligence({
                 <a
                   key={row.state}
                   className="intel-geo-cell"
-                  href={row.intelligenceHref ?? row.searchHref}
+                  href={row.intelligenceHref ?? publishedStateHref(row.state) ?? row.searchHref}
                   style={{ ["--intel-volume" as string]: String(row.nhVolumeShare / 100) }}
                 >
                   <strong>{row.state}</strong>
@@ -610,7 +689,7 @@ export function SeniorHomeIntelligence({
                     {row.name}. Nursing Homes {row.nursingHomes.toLocaleString("en-US")}, Home
                     Health {row.homeHealth.toLocaleString("en-US")}, Hospice{" "}
                     {row.hospice.toLocaleString("en-US")}.
-                    {row.intelligenceHref
+                    {(row.intelligenceHref ?? publishedStateHref(row.state))
                       ? ` Opens ${row.name} state intelligence.`
                       : " Opens CMS Nursing Home search."}
                   </span>
@@ -624,9 +703,8 @@ export function SeniorHomeIntelligence({
           <div className="hub-table-scroll">
             <table className="hub-table">
               <caption>
-                Current CMS directory counts by jurisdiction. Florida, New Jersey, California,
-                Texas, Washington, Arizona, and Colorado link to state intelligence; other
-                jurisdictions open Nursing Home search.
+                Current CMS directory counts by jurisdiction. States with a published intelligence
+                page link to it; other jurisdictions open Nursing Home search.
               </caption>
               <thead>
                 <tr>
@@ -640,7 +718,11 @@ export function SeniorHomeIntelligence({
                 {intel.geography.map((row) => (
                   <tr key={`list-${row.state}`}>
                     <th scope="row">
-                      <Link href={row.intelligenceHref ?? row.searchHref}>
+                      <Link
+                        href={
+                          row.intelligenceHref ?? publishedStateHref(row.state) ?? row.searchHref
+                        }
+                      >
                         {row.state} · {row.name}
                       </Link>
                     </th>
