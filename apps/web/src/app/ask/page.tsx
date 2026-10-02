@@ -8,9 +8,10 @@ import { SearchAnalytics } from "@/components/specialist-search/search-analytics
 import Link from "next/link";
 import {
   isTxHhscAskQuery,
+  isPotentialTxHhscNameQuery,
   loadTxHhscLocations,
-  searchTxHhscLocations,
-  txHhscAskSearch,
+  normalizeProviderName,
+  resolveTxHhscAsk,
   txHhscHref,
   TX_HHSC_CLASSES,
 } from "@/server/care/tx-hhsc-locations";
@@ -31,10 +32,24 @@ export default async function SeniorAskPage({
 }) {
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q : "";
-  const txRequested = q && isTxHhscAskQuery(q, typeof sp.class === "string" ? sp.class : undefined);
+  const txRequested =
+    q &&
+    (isTxHhscAskQuery(q, typeof sp.class === "string" ? sp.class : undefined) ||
+      isPotentialTxHhscNameQuery(q));
   const txAll = txRequested ? await loadTxHhscLocations() : [];
-  const txResult = txAll.length ? searchTxHhscLocations(txAll, txHhscAskSearch(q)) : null;
-  const result = !txResult && Object.keys(sp).length ? await executeSeniorRequest(sp) : null;
+  const txMatch = txAll.length
+    ? resolveTxHhscAsk(txAll, q, typeof sp.class === "string" ? sp.class : undefined)
+    : null;
+  const txResult = txMatch?.found ?? null;
+  const result =
+    (!txResult || txMatch?.bareName) && Object.keys(sp).length
+      ? await executeSeniorRequest(sp)
+      : null;
+  const otherMatches = txMatch?.bareName
+    ? (result?.entities.filter(
+        (entity) => normalizeProviderName(entity.providerName) === normalizeProviderName(q),
+      ) ?? [])
+    : [];
   return (
     <div className="page-shell">
       <RealDataNotice />
@@ -56,6 +71,20 @@ export default async function SeniorAskPage({
           className="senior-ask__results"
         >
           <h2>Texas HHSC regulated locations/providers</h2>
+          {otherMatches.length ? (
+            <p role="status">
+              This name also occurs in another published provider class or jurisdiction. Narrow by
+              state and class; these records are not the same organization.
+            </p>
+          ) : txMatch?.bareName && txResult.count > 1 ? (
+            <p role="status">
+              Multiple Texas HHSC locations match this published name. Choose the Facility ID and
+              provider class; they are not one organization.{" "}
+              {txResult.count > 20
+                ? "Showing the first 20; add a city or class to narrow the search."
+                : ""}
+            </p>
+          ) : null}
           <p>
             {txResult.count.toLocaleString()} matching regulated locations. These are source-native
             locations, not canonical organizations or CMS facilities.
@@ -69,12 +98,22 @@ export default async function SeniorAskPage({
               </li>
             ))}
           </ul>
+          {otherMatches.length ? (
+            <ul>
+              {otherMatches.map((row) => (
+                <li key={`${row.providerClass}:${row.ccn}`}>
+                  <Link href={row.href}>{row.providerName}</Link> · {row.providerClass} ·{" "}
+                  {row.recordedLocation?.state}
+                </li>
+              ))}
+            </ul>
+          ) : null}
           <Link href="/texas/regulated-locations">
             Open Texas location lookup for class and geography filters
           </Link>
         </section>
       ) : null}
-      {result ? (
+      {result && !txResult ? (
         <>
           <SearchAnalytics
             dimensions={{

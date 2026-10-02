@@ -78,4 +78,68 @@ describe("certified Texas HHSC regulated-location publication gate", () => {
       q: "003868",
     });
   });
+
+  it("discovers exact and punctuation-normalized names without a Texas cue in all three classes", async () => {
+    const m = await import("./tx-hhsc-locations");
+    const rows = await m.loadTxHhscLocations(previewEnv);
+    const icf = m.resolveTxHhscAsk(rows, "KIRBYVILLE GROUP HOME");
+    expect(icf?.found.rows.map((row) => row.namespaced_key)).toEqual(["TX|HHSC|TX_ICF_IID|003906"]);
+    expect(m.resolveTxHhscAsk(rows, "kirbyville, group-home")?.found.rows[0].facility_id).toBe(
+      "003906",
+    );
+    expect(m.resolveTxHhscAsk(rows, "Kirbyville Group Home Texas")?.found.rows[0].facility_id).toBe(
+      "003906",
+    );
+    expect(m.resolveTxHhscAsk(rows, "Kirbyville Group Home HHSC")?.found.rows[0].facility_id).toBe(
+      "003906",
+    );
+    expect(
+      m.resolveTxHhscAsk(rows, "Kirbyville Group Home ICF/IID")?.found.rows[0].facility_id,
+    ).toBe("003906");
+    expect(
+      m.resolveTxHhscAsk(rows, "Kirbyville Group Home", "tx_hhsc_location")?.found.rows[0]
+        .facility_id,
+    ).toBe("003906");
+    expect(
+      m.resolveTxHhscAsk(rows, "La Esperanza Adult Activity Center")?.found.rows[0].provider_class,
+    ).toBe("TX_DAHS");
+    expect(
+      m.resolveTxHhscAsk(rows, "Oak Creek Day Habilitationvocational Center")?.found.rows[0]
+        .provider_class,
+    ).toBe("TX_DAHS_ISS_ONLY");
+  });
+
+  it("does not turn fragments, unpublished names or bare federal identifiers into Texas matches", async () => {
+    const m = await import("./tx-hhsc-locations");
+    const rows = await m.loadTxHhscLocations(previewEnv);
+    expect(m.resolveTxHhscAsk(rows, "group home")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "Unpublished Texas Sample Home")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "CMS CCN 003906")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "003906")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "Kirbyville Group Home", "nursing_home")).toBeNull();
+    expect(
+      m.resolveTxHhscAsk(rows, "EDUCARE COMMUNITY LIVING LIMITED PARTNERSHIP")?.found.count,
+    ).toBeGreaterThan(1);
+    const educare = m.resolveTxHhscAsk(rows, "Educare Community Living");
+    expect(educare?.found.count).toBe(131);
+    expect(educare?.bareName).toBe(true);
+    expect(new Set(educare?.found.rows.map((row) => row.namespaced_key)).size).toBe(20);
+    expect(m.resolveTxHhscAsk(rows, "Educare Community Living ICF/IID")?.found.count).toBe(123);
+    expect(m.resolveTxHhscAsk(rows, "Educare Community Living Texas")?.found.count).toBe(131);
+    expect(
+      m.resolveTxHhscAsk(rows, "La Esperanza Adult Activity Center")?.found.rows[0].provider_class,
+    ).toBe("TX_DAHS");
+    expect(m.resolveTxHhscAsk(rows, "Educare Community")?.found.count).toBeUndefined();
+    expect(m.resolveTxHhscAsk(rows, "Educare Community Livings")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "Down Home Ranch")?.found.rows[0].namespaced_key).toBe(
+      "TX|HHSC|TX_DAHS|110993",
+    );
+    expect(m.resolveTxHhscAsk(rows, "Down Home Ranch, Inc.")?.found.rows[0].facility_id).toBe(
+      "110993",
+    );
+    expect(m.resolveTxHhscAsk(rows, "down-home, ranch")?.found.rows[0].facility_id).toBe("110993");
+    expect(m.resolveTxHhscAsk(rows, "Home Ranch")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "Community Living")).toBeNull();
+    expect(m.resolveTxHhscAsk(rows, "Adult Day Health")).toBeNull();
+  });
 });

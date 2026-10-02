@@ -44,7 +44,9 @@ export function txHhscGate(
   // branches never use the certified fixture.
   if (
     environment.VERCEL_ENV === "preview" &&
-    environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-publish-p1" &&
+    (environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-publish-p1" ||
+      environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-ask-discovery-p1" ||
+      environment.VERCEL_GIT_COMMIT_REF === "th-tx-senior-ask-discovery-r2") &&
     environment.VERCEL_GIT_REPO_OWNER === "savitz25" &&
     environment.VERCEL_GIT_REPO_SLUG === "care-trust-hub"
   )
@@ -182,6 +184,83 @@ export function isTxHhscAskQuery(q: string, selectedClass?: string): boolean {
         q,
       ))
   );
+}
+
+export function normalizeProviderName(value: string): string {
+  return value
+    .normalize("NFKC")
+    .toLocaleUpperCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+const GENERIC_NAME_TOKENS = new Set([
+  "ADULT",
+  "ASSISTED",
+  "CARE",
+  "CENTER",
+  "COMMUNITY",
+  "FACILITY",
+  "GROUP",
+  "HEALTH",
+  "HOME",
+  "LIVING",
+  "NURSING",
+  "PROVIDER",
+  "SERVICES",
+]);
+
+export function isPotentialTxHhscNameQuery(q: string): boolean {
+  if (/^\s*\d+\s*$/.test(q) || /\b(?:CMS|CCN|USDOT|MC)\b/i.test(q)) return false;
+  const name = normalizeProviderName(q);
+  const tokens = name.split(" ").filter(Boolean);
+  return (
+    name.length >= 12 &&
+    tokens.filter((token) => token.length >= 3 && !["INC", "LLC", "THE"].includes(token)).length >=
+      2 &&
+    tokens.some((token) => token.length >= 3 && !GENERIC_NAME_TOKENS.has(token))
+  );
+}
+
+export function discoverTxHhscByName(rows: TxHhscLocation[], q: string) {
+  // Bare identifiers and generic fragments are never authority for a location match.
+  if (!isPotentialTxHhscNameQuery(q)) return [];
+  const name = normalizeProviderName(q);
+  const exact = rows.filter((row) => normalizeProviderName(row.official_name) === name);
+  if (exact.length) return exact;
+  // A published name may include a legal suffix or longer program name. A
+  // word-boundary prefix is discovery only: every matching location stays
+  // separate and the caller discloses ambiguity rather than selecting one.
+  // Short prefixes need two distinctive tokens, so fragments such as
+  // "Educare Community" do not broaden into a provider family.
+  if (
+    name.length < 20 &&
+    name.split(" ").filter((token) => token.length >= 3 && !GENERIC_NAME_TOKENS.has(token)).length <
+      2
+  )
+    return [];
+  return rows.filter((row) => normalizeProviderName(row.official_name).startsWith(`${name} `));
+}
+
+export function resolveTxHhscAsk(rows: TxHhscLocation[], q: string, selectedClass?: string) {
+  if (selectedClass && selectedClass !== "tx_hhsc_location") return null;
+  if (selectedClass === "tx_hhsc_location" || isTxHhscAskQuery(q, selectedClass))
+    return { found: searchTxHhscLocations(rows, txHhscAskSearch(q)), bareName: false };
+  const qualified =
+    /\b(?:texas|TX|HHSC|ICF\/IID|ICF|DAHS|adult day health|in.home.only|ISS.only)\b/i.test(q);
+  const name = qualified ? txHhscAskSearch(q).q : q;
+  const matches = discoverTxHhscByName(rows, name);
+  const providerClass = qualified ? txHhscAskSearch(q).providerClass : undefined;
+  const filtered = providerClass
+    ? matches.filter((row) => row.provider_class === providerClass)
+    : matches;
+  return filtered.length
+    ? {
+        found: { count: filtered.length, rows: filtered.slice(0, 20), page: 1 },
+        bareName: !qualified,
+      }
+    : null;
 }
 
 export function txHhscAskSearch(q: string) {
