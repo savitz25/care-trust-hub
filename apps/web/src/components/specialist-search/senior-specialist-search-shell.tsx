@@ -6,7 +6,7 @@ import { txHhscGate } from "@/server/care/tx-hhsc-locations";
 const EXAMPLES = [
   "CMS CCN 105502",
   "Nursing homes in Palm Beach County",
-  "Nursing homes in Indiana",
+  "Residential care facilities in Indiana",
   "Assisted living in Wisconsin",
   "Home health agencies in Florida",
   "Nursing homes with civil monetary penalties",
