@@ -23,6 +23,7 @@ export const PUBLISHED_STATE_NAVIGATION = [
   { href: "/nevada", label: "Nevada" },
   { href: "/minnesota", label: "Minnesota" },
   { href: "/michigan", label: "Michigan" },
+  { href: "/connecticut", label: "Connecticut" },
   { href: "/maryland", label: "Maryland" },
   { href: "/wisconsin", label: "Wisconsin" },
   { href: "/indiana", label: "Indiana" },
