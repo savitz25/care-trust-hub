@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   HOME_PROHIBITED_LANGUAGE,
   assertSeniorHomeIntel,
@@ -14,7 +14,10 @@ import {
 } from "@care/domain";
 import payload from "@/data/senior-national-intelligence.json";
 import networkPayload from "@/data/senior-network-metrics-v1.json";
+import { PUBLISHED_STATE_COUNT } from "@/lib/published-states";
 import { SeniorHomeIntelligence } from "./senior-home-intelligence";
+
+vi.mock("server-only", () => ({}));
 
 const intel = assertSeniorHomeIntel(
   buildSeniorHomeIntel({
@@ -177,7 +180,11 @@ describe("senior homepage intelligence", () => {
       const element = document.querySelector(
         `[data-metric-key="${metric.key}"] .intel-inventory__value`,
       );
-      expect(element?.textContent).toBe(metric.value.toLocaleString("en-US"));
+      const expected =
+        metric.key === "state-pages"
+          ? String(PUBLISHED_STATE_COUNT)
+          : metric.value.toLocaleString("en-US");
+      expect(element?.textContent).toBe(expected);
     }
   });
 
