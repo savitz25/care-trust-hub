@@ -6,11 +6,11 @@ Branch-only packet, prepared 2026-09-30. **No production SQL was executed.** The
 
 Fresh downloads from the [Texas HHSC provider directory](https://apps.hhs.texas.gov/providers/directories/) were saved separately under `data/enrichment/th-enrich-b2/idr2/raw/`. The three workbook titles each say **as of 2026-09-29**. The prior workbooks remain immutable.
 
-| Class | Official file | Fresh SHA-256 | Worksheet rows × columns | Data locations | License observations |
-| --- | --- | --- | ---: | ---: | ---: |
-| ICF/IID | [ICFIID.xlsx](https://apps.hhs.texas.gov/providers/directories/ICFIID.xlsx) | `20548d8398104d2a882cd018fff31786ccc77c4412b6874d5e1fada31ca02ab1` | 710 × 40 | 708 | 654 |
-| DAHS | [DAHS.xlsx](https://apps.hhs.texas.gov/providers/directories/DAHS.xlsx) | `ec962e57112d6600b4deec292eaee5e0620e70b5413eea71d52078a3c4dcba8f` | 391 × 40 | 389 | 389 |
-| In-home-only | [dahs_issonly.xlsx](https://apps.hhs.texas.gov/providers/directories/dahs_issonly.xlsx) | `1de6e81addd37ea016be4c2cdbd50a08648f2348c694ef0e4d9eee0eee1bd381` | 745 × 40 | 743 | 743 |
+| Class        | Official file                                                                           | Fresh SHA-256                                                      | Worksheet rows × columns | Data locations | License observations |
+| ------------ | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | -----------------------: | -------------: | -------------------: |
+| ICF/IID      | [ICFIID.xlsx](https://apps.hhs.texas.gov/providers/directories/ICFIID.xlsx)             | `20548d8398104d2a882cd018fff31786ccc77c4412b6874d5e1fada31ca02ab1` |                 710 × 40 |            708 |                  654 |
+| DAHS         | [DAHS.xlsx](https://apps.hhs.texas.gov/providers/directories/DAHS.xlsx)                 | `ec962e57112d6600b4deec292eaee5e0620e70b5413eea71d52078a3c4dcba8f` |                 391 × 40 |            389 |                  389 |
+| In-home-only | [dahs_issonly.xlsx](https://apps.hhs.texas.gov/providers/directories/dahs_issonly.xlsx) | `1de6e81addd37ea016be4c2cdbd50a08648f2348c694ef0e4d9eee0eee1bd381` |                 745 × 40 |            743 |                  743 |
 
 Each workbook has one title row and one header row. Totals: **1,840 locations, 1,786 license-number observations**. All native Facility IDs are unique within class; all 1,840 namespaced keys are unique. No bare Facility ID occurs in two of these three current files. The workbook row's `Facility Licensed` and `Facility Certified` fields are preserved independently of the directory title.
 
@@ -34,19 +34,19 @@ SELECT count(*) FROM public.assisted_living_provider
 WHERE state_code='TX' AND external_key LIKE 'TX|HHSC|%';
 ```
 
-| Class | Source rows | Exact existing location matches | New candidates | Duplicate namespaced keys | Ambiguous | Cross-class key collisions |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| ICF/IID | 708 | 0 | 708 | 0 | 0 | 0 |
-| DAHS | 389 | 0 | 389 | 0 | 0 | 0 |
-| In-home-only | 743 | 0 | 743 | 0 | 0 | 0 |
+| Class        | Source rows | Exact existing location matches | New candidates | Duplicate namespaced keys | Ambiguous | Cross-class key collisions |
+| ------------ | ----------: | ------------------------------: | -------------: | ------------------------: | --------: | -------------------------: |
+| ICF/IID      |         708 |                               0 |            708 |                         0 |         0 |                          0 |
+| DAHS         |         389 |                               0 |            389 |                         0 |         0 |                          0 |
+| In-home-only |         743 |                               0 |            743 |                         0 |         0 |                          0 |
 
 ## Status and license observations
 
-| Class | Program type | Facility Licensed | Facility Certified | Numbered license observations | No license number |
-| --- | --- | --- | --- | ---: | ---: |
-| ICF/IID | 708 ICF/IID | 652 YES; 56 NO | 705 YES; 3 NO | 654 (652 YES, 2 NO) | 54 |
-| DAHS | 341 DAHS; 48 DAHS-ISS | 389 YES | 389 NO | 389 | 0 |
-| In-home-only | 743 DAHS-ISSONLY | 743 YES | 742 NO; 1 YES | 743 | 0 |
+| Class        | Program type          | Facility Licensed | Facility Certified | Numbered license observations | No license number |
+| ------------ | --------------------- | ----------------- | ------------------ | ----------------------------: | ----------------: |
+| ICF/IID      | 708 ICF/IID           | 652 YES; 56 NO    | 705 YES; 3 NO      |           654 (652 YES, 2 NO) |                54 |
+| DAHS         | 341 DAHS; 48 DAHS-ISS | 389 YES           | 389 NO             |                           389 |                 0 |
+| In-home-only | 743 DAHS-ISSONLY      | 743 YES           | 742 NO; 1 YES      |                           743 |                 0 |
 
 The two ICF/IID rows with a license number and `Facility Licensed=NO` remain raw license-number observations, not active-license claims. No number is invented for the other 54.
 

@@ -8,11 +8,11 @@ Before either execution, run `python scripts/prepare_pub_gate_fl_ny.py --verify-
 
 Target: Care project `wiuiwgbablgyssuxrjho`, existing `public.state_licensed_provider` identity table. The official AHCA file number is the identity key; the license number and HealthFinder LID remain separate source fields. Existing exact class ownership and cross-class file-number matches were **0** on the 2026-09-30 read-only check. Proposed inserts at that check: **1,356**. SQL rechecks this count just before inserting and never creates a CMS, residential, assisted-living, nursing-home, or home-health identity.
 
-| Raw status / condition | Rows | Exact display label | Existing publication state |
-| --- | ---: | --- | --- |
-| `LICENSED`, no closed date | 1,289 | `Licensed` | `PUBLISHABLE_CURRENT` |
-| `LICENSED`, closed date present | 2 | `Licensed — closed date reported` plus the source closed date | `PUBLISHABLE_WITH_STATUS` |
-| `IN REVIEW` | 65 | `In review` | `PUBLISHABLE_WITH_STATUS` |
+| Raw status / condition          |  Rows | Exact display label                                           | Existing publication state |
+| ------------------------------- | ----: | ------------------------------------------------------------- | -------------------------- |
+| `LICENSED`, no closed date      | 1,289 | `Licensed`                                                    | `PUBLISHABLE_CURRENT`      |
+| `LICENSED`, closed date present |     2 | `Licensed — closed date reported` plus the source closed date | `PUBLISHABLE_WITH_STATUS`  |
+| `IN REVIEW`                     |    65 | `In review`                                                   | `PUBLISHABLE_WITH_STATUS`  |
 
 The two licensed rows have reported closed dates **2026-03-19** and **2026-11-19**. The label reports the source fact and does not imply either row is simply active or already closed. The load adds nullable `closed_on`, `source_batch_id`, and `publication_status_label` fields to the existing table, preserves raw status, sets normalized status only for unqualified licensed rows, and inserts all 1,356 records from `fl_nurse_registry_load.csv`. The source export does not provide a distinct as-of date, so `source_as_of` is the recorded retrieval time **2026-09-30 14:40:36 UTC**. The [load](fl-nurse-registry-load.psql) and [rollback](fl-nurse-registry-rollback.psql) are transactional. Rollback requires exactly 1,356 matching class/hash/batch rows and aborts if downstream Florida attachments exist. Schema columns remain available after rollback; no other class rows are changed.
 

@@ -1,0 +1,88 @@
+{
+ "regulator": "Louisiana Department of Health, Health Standards Section",
+ "retrievedAt": "2026-10-05",
+ "retrievedAtNote": "Directory pages were read on 2026-10-05. Counts are source rows, not a deduplicated campus census and not a summed senior denominator.",
+ "sources": [
+  {
+   "class": "nursing-home",
+   "label": "HSS - Nursing Homes",
+   "rowCount": 266,
+   "pageCount": 14,
+   "sourceUrl": "https://ldh.la.gov/directory/category/173",
+   "retrievedAt": "2026-10-05",
+   "distinctDirectoryLinks": 266,
+   "distinctPrintedNames": 266,
+   "rowsAreDeduplicatedLicensedCampuses": false
+  },
+  {
+   "class": "adult-residential-care",
+   "label": "HSS - Adult Residential Care",
+   "rowCount": 164,
+   "pageCount": 9,
+   "sourceUrl": "https://ldh.la.gov/directory/category/161",
+   "retrievedAt": "2026-10-05",
+   "distinctDirectoryLinks": 164,
+   "distinctPrintedNames": 162,
+   "rowsAreDeduplicatedLicensedCampuses": false
+  },
+  {
+   "class": "home-health",
+   "label": "HSS - Home Health Agencies",
+   "rowCount": 196,
+   "pageCount": 10,
+   "sourceUrl": "https://ldh.la.gov/directory/category/167",
+   "retrievedAt": "2026-10-05",
+   "distinctDirectoryLinks": 196,
+   "distinctPrintedNames": 165,
+   "rowsAreDeduplicatedLicensedCampuses": false
+  },
+  {
+   "class": "hospice",
+   "label": "HSS - Hospice",
+   "rowCount": 127,
+   "pageCount": 7,
+   "sourceUrl": "https://ldh.la.gov/directory/category/168",
+   "retrievedAt": "2026-10-05",
+   "distinctDirectoryLinks": 127,
+   "distinctPrintedNames": 106,
+   "rowsAreDeduplicatedLicensedCampuses": false
+  },
+  {
+   "class": "adult-day-health-care",
+   "label": "HSS - Adult Day Health Care",
+   "rowCount": 28,
+   "pageCount": 2,
+   "sourceUrl": "https://ldh.la.gov/directory/category/238",
+   "retrievedAt": "2026-10-05",
+   "distinctDirectoryLinks": 28,
+   "distinctPrintedNames": 28,
+   "rowsAreDeduplicatedLicensedCampuses": false
+  },
+  {
+   "class": "icf-iid",
+   "label": "HSS - Intermediate Care for Dev. Disabled",
+   "rowCount": 450,
+   "pageCount": 23,
+   "sourceUrl": "https://ldh.la.gov/directory/category/170",
+   "retrievedAt": "2026-10-05",
+   "distinctDirectoryLinks": 450,
+   "distinctPrintedNames": 449,
+   "rowsAreDeduplicatedLicensedCampuses": false
+  }
+ ],
+ "combinedSeniorDenominator": null,
+ "cmsExactBridges": 0,
+ "cmsBridgeReason": "CMS Care Compare is a federal overlay and was not bridged. Directory cards did not print a CCN.",
+ "surveyProgram": "KNOWN",
+ "surveyProgramUrl": "https://ldh.la.gov/health-standards-section",
+ "inspectionEventRows": "NOT_ACQUIRED",
+ "complaintIntake": "KNOWN",
+ "complaintIntakeUrl": "https://ldh.la.gov/page/file-a-complaint",
+ "complaintProviderRows": "NOT_ACQUIRED",
+ "enforcementRows": "NOT_ACQUIRED",
+ "nameOnlyAdverseJoins": 0,
+ "newCanonicalFacilities": 0,
+ "graphWrites": 0,
+ "claimEligibilityChanges": 0,
+ "parishRoutes": 0
+}
