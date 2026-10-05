@@ -52,7 +52,7 @@ export default function MississippiSeniorPage() {
               <th scope="row">Nursing facilities</th>
               <td>{n(snapshot.nursingFacilities)}</td>
               <td>
-                {n(snapshot.nursingFacilitiesWithAlzheimersUnit)} also carry an Alzheimer's-unit
+                {n(snapshot.nursingFacilitiesWithAlzheimersUnit)} also carry an Alzheimers-unit
                 mark. That mark is not added. No bed sum was printed.
               </td>
             </tr>
