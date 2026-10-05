@@ -1,0 +1,223 @@
+{
+  "publicationId": "SC-SEN-001",
+  "regulator": "South Carolina Department of Public Health",
+  "source": {
+    "mapPage": "https://dph.sc.gov/professionals/healthcare-quality/find-facility",
+    "app": "https://dataviz.dph.sc.gov/Health_Facility/",
+    "featureService": "https://services5.arcgis.com/G4BLIH7rTQoIjCFv/arcgis/rest/services/Health_Facilities/FeatureServer/0",
+    "layerName": "facility",
+    "dataLastEditDate": "2026-10-05T16:13:47.060Z",
+    "retrievedAt": "2026-10-05",
+    "extractSha256": "609594e99239a60164ddd0337f393aae3cdbb371ee92f92c9dd14cfba2a784f1",
+    "extractBytes": 2105872,
+    "webpageUpdateDateIsNotTheRosterClock": true
+  },
+  "regulations": {
+    "comparisonDocument": "https://dph.sc.gov/sites/scdph/files/media/document/2024_NH_CRCF_Comparison_CR-013481_0.pdf",
+    "comparisonSha256": "d14db48b85088e3e879797bafa2e46d6d2a659e88a9d4214e583af61f851465c",
+    "comparisonBytes": 366719,
+    "nursingHomeStateLicensure": "Regulation 61-17",
+    "communityResidentialCare": "Regulation 61-84",
+    "comparisonDocumentIsNotTheRoster": true,
+    "administratorLicensor": "SC State Board of Long-Term Health Care Administrators",
+    "administratorIsNotFacilityLicense": true
+  },
+  "nursingHomes": {
+    "permitType": "HLNURSINGCARE",
+    "printedDetail": "HL- Nursing Home",
+    "rows": 192,
+    "distinctLicenseNumbers": 192,
+    "operatingCodeAct": 192,
+    "officeState": {
+      "SC": 192
+    },
+    "licensedBedSum": 20576,
+    "nursingHomeBedSum": 20413,
+    "nursingHomeBedPrintedZeroRows": 1,
+    "printedZeroNursingHomeBedsIsAPrintedZero": true,
+    "institutionalBedNumericRows": 91,
+    "institutionalBedBlankRows": 101,
+    "institutionalBedSum": 163,
+    "blankInstitutionalBedsAreNotZero": true,
+    "licensedEqualsNursingHomeBedsPlusInstitutionalWhenBlankContributesNothing": true,
+    "printedZeroExample": {
+      "licenseNumber": "NCF-0579",
+      "name": "METHODIST MANOR HEALTHCARE CENTER",
+      "nursingHomeBeds": 0,
+      "institutionalBeds": 32,
+      "licensedBeds": 32
+    },
+    "cmsIndicatorYes": 86,
+    "cmsIndicatorBlank": 106,
+    "blankCmsIndicatorIsNotUncertified": true
+  },
+  "communityResidentialCare": {
+    "permitType": "HLRESIDENTIALCARE",
+    "rows": 428,
+    "distinctLicenseNumbers": 428,
+    "operatingCodeAct": 428,
+    "officeState": {
+      "SC": 428
+    },
+    "licensedNumberSum": 21164,
+    "crcTotalBedsNumericRows": 155,
+    "crcTotalBedsBlankRows": 273,
+    "crcTotalBedsSum": 4887,
+    "blankCrcTotalBedsAreNotZero": true,
+    "licensedNumberEqualsCrcTotalBedsOnBothPopulatedRows": false,
+    "mayBeMarketedAsAssistedLiving": true,
+    "isNotAnAssistedLivingCensus": true,
+    "alzheimerFlags": {
+      "unitYCareY": 137,
+      "unitNCareN": 257,
+      "unitNCareY": 32,
+      "unitYCareN": 2
+    },
+    "alzheimerFlagsAreNotALicenseClass": true,
+    "sameNameTwoLicenses": {
+      "name": "LAKESIDE PLACE SENIOR LIVING",
+      "licenses": [
+        "CRC-2011",
+        "CRC-2431"
+      ],
+      "cities": [
+        "LEXINGTON",
+        "LEXINGTON"
+      ]
+    },
+    "cmsIndicatorYes": 9,
+    "cmsIndicatorBlank": 419,
+    "blankCmsIndicatorIsNotUncertified": true
+  },
+  "homeHealth": {
+    "permitType": "HLHOMEHEALTH",
+    "rows": 106,
+    "distinctLicenseNumbers": 106,
+    "operatingCodeAct": 106,
+    "officeState": {
+      "SC": 106
+    },
+    "isNotInHomeCare": true,
+    "isNotASeniorOnlyCensus": true,
+    "restrictionPrintedRows": 14,
+    "restrictionBlankRows": 92,
+    "blankRestrictionIsNotAFindingOfNoRestriction": true,
+    "sameNameTwoLicenses": {
+      "name": "ADORATION HOME HEALTH",
+      "licenses": [
+        "HHA-0395",
+        "HHA-0603"
+      ],
+      "cities": [
+        "ROCK HILL",
+        "LANCASTER"
+      ]
+    },
+    "licensedNumberWasNotTreatedAsBeds": true,
+    "cmsIndicatorYes": 35,
+    "cmsIndicatorBlank": 71
+  },
+  "hospiceFacilities": {
+    "permitType": "HLHOSPICEFACILITY",
+    "rows": 13,
+    "distinctLicenseNumbers": 13,
+    "operatingCodeAct": 13,
+    "licensedBedSum": 271,
+    "cmsIndicatorYes": 0,
+    "cmsIndicatorBlank": 13,
+    "printedZeroCmsYesIsACountedZero": true
+  },
+  "hospicePrograms": {
+    "permitType": "HLHOSPICEPROGRAM",
+    "rows": 98,
+    "distinctLicenseNumbers": 98,
+    "operatingCodeAct": 98,
+    "licensedNumberEqualsCountiesServed": true,
+    "rowsPrinting46Counties": 24,
+    "countyCellSumIsNotACensus": true,
+    "sameNameTwoLicenses": {
+      "name": "GENTIVA",
+      "licenses": [
+        "HPC-0007",
+        "HPC-0085"
+      ],
+      "cities": [
+        "NORTH CHARLESTON",
+        "AIKEN"
+      ]
+    },
+    "cmsIndicatorYes": 33,
+    "cmsIndicatorBlank": 65
+  },
+  "adultDay": {
+    "permitType": "HLADULTDAYCARE",
+    "rows": 96,
+    "distinctLicenseNumbers": 96,
+    "operatingCodeAct": 96,
+    "participantNumericRows": 95,
+    "participantBlankRows": 1,
+    "participantSum": 5163,
+    "blankParticipantsAreNotZero": true,
+    "licensedNumberEqualsParticipants": true,
+    "blankExample": {
+      "licenseNumber": "ADC-0549",
+      "name": "A&T ADULT DAY CARE",
+      "city": "KERSHAW"
+    }
+  },
+  "inHomeCare": {
+    "permitType": "HLINHOMECARE",
+    "rows": 1403,
+    "distinctLicenseNumbers": 1403,
+    "operatingCodeAct": 1403,
+    "officeState": {
+      "SC": 1377,
+      "NC": 16,
+      "GA": 10
+    },
+    "officeOutsideSouthCarolinaDoesNotRemoveTheLicense": true,
+    "isNotHomeHealth": true,
+    "licensedNumberSentinel": -1,
+    "licensedNumberSentinelRows": 1403,
+    "sentinelIsNotABedCount": true,
+    "sentinelIsNotZero": true
+  },
+  "intermediateCare15OrFewer": {
+    "permitType": "HLHABITATIONR15",
+    "layerTitle": "Intermediate Care Facilities; 15- Beds",
+    "rows": 56,
+    "distinctLicenseNumbers": 56,
+    "licensedNumberSum": 462,
+    "isNotANursingHome": true,
+    "isNotASeniorCensus": true,
+    "cmsIndicatorYes": 55,
+    "cmsIndicatorBlank": 1,
+    "blankCmsIndicatorIsNotUncertified": true
+  },
+  "intermediateCare16OrMore": {
+    "permitType": "HLHABITATIONR16",
+    "layerTitle": "Intermediate Care Facilities; 16+ Beds",
+    "rows": 8,
+    "distinctLicenseNumbers": 8,
+    "licensedNumberSum": 1107,
+    "isNotANursingHome": true,
+    "isNotASeniorCensus": true,
+    "cmsIndicatorYes": 8,
+    "cmsIndicatorBlank": 0
+  },
+  "combinedSeniorDenominator": null,
+  "cmsExactBridges": null,
+  "cmsBridgeAttempted": false,
+  "inspectionSearch": "KNOWN",
+  "inspectionSearchUrl": "https://apps.dhec.sc.gov/health/cmssurveys/",
+  "inspectionCorpus": "NOT_ACQUIRED",
+  "complaintRows": "NOT_ACQUIRED",
+  "enforcementCorpus": "NOT_ACQUIRED",
+  "openRecordsRequest": "NOT_FILED",
+  "administratorRoster": "NOT_ACQUIRED",
+  "graphWrites": 0,
+  "newCanonicalFacilities": 0,
+  "claimEligibilityChanges": 0,
+  "nameOnlyAdverseJoins": 0,
+  "cityRoutes": 0
+}
