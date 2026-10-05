@@ -28,6 +28,7 @@ import { WhatToReview } from "./what-to-review";
 import { RealDataNotice } from "./evidence";
 import { facilityInterviewBuilderHref } from "./interview-builder-bridge";
 import { WorkspaceAddButton } from "./workspace-add-button";
+import { SaveFacilityToggle } from "./save-facility-toggle";
 import { NhProfileIntelligence } from "./nh-profile-intelligence";
 import { NjProfileEvidenceModule } from "./nj-profile-evidence";
 import { isProviderIntelV1, type NursingHomeProviderIntelligence } from "@care/domain";
@@ -370,6 +371,7 @@ export function RealProviderDetail({
             <Link className="button button--primary" href={`/compare?real=${provider.ccn}`}>
               Compare
             </Link>
+            <SaveFacilityToggle ccn={provider.ccn} name={provider.providerName} />
             <Link className="button button--secondary" href="/shortlist">
               Save to shortlist
             </Link>
