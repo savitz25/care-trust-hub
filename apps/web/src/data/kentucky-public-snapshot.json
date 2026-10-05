@@ -1,0 +1,168 @@
+{
+  "contract": "senior-ky-state-intel-v1",
+  "publicationId": "KY-SEN-001",
+  "regulator": "Kentucky Cabinet for Health and Family Services, Office of Inspector General, Division of Health Care",
+  "directoryIndex": "https://www.chfs.ky.gov/agencies/os/oig/dhc/Pages/hcf.aspx",
+  "directoryMonth": "October 2026",
+  "sheetName": "October 2026",
+  "retrievedAt": "2026-10-05",
+  "sheetNameIsNotADay": true,
+  "priorSeptemberPdfUsedAsPopulation": false,
+  "countyArrangementFilesLoaded": false,
+  "combinedSeniorDenominator": null,
+  "graphWrites": 0,
+  "newCanonicalFacilities": 0,
+  "claimEligibilityChanges": 0,
+  "cityRoutes": 0,
+  "nameOnlyAdverseJoins": 0,
+  "cmsExactBridges": null,
+  "cmsBridgeAttempted": false,
+  "medicaidEnrollment": "NOT_ACQUIRED",
+  "inspectionSearch": "KNOWN",
+  "inspectionCorpus": "NOT_ACQUIRED",
+  "inspectionSearchUrl": "https://www.chfs.ky.gov/agencies/os/oig/dhc/Pages/ltcinspections.aspx",
+  "complaintRows": "NOT_ACQUIRED",
+  "enforcementCorpus": "NOT_ACQUIRED",
+  "openRecordsRequest": "NOT_FILED",
+  "openRecordsUrl": "https://www.chfs.ky.gov/agencies/os/oig/Pages/open-records-requests.aspx",
+  "assistedLivingRegulation": "https://apps.legislature.ky.gov/law/kar/titles/902/020/480/",
+  "longTermCare": {
+    "file": "Long Term Care Directory.xlsx",
+    "url": "https://www.chfs.ky.gov/agencies/os/oig/dhc/Documents/Long%20Term%20Care%20Directory.xlsx",
+    "sha256": "2b5a6e0c2a5020ac7fcbb4b7c3b3efc340bb0e4849543421cf72b37d456d980b",
+    "bytes": 73999,
+    "sheetRows": 313,
+    "facilityRows": 312,
+    "distinctLicenseNumbers": 312,
+    "noteRow": "*licensed under 100326",
+    "noteRowIsAFacility": false,
+    "certifiedBedNumericRows": 286,
+    "certifiedBedBlankFacilityRows": 26,
+    "certifiedBedSum": 26236,
+    "blankCertifiedBedsAreNotZero": true,
+    "levelColumnsNotAdded": ["NF", "NH", "ICF", "ALZ", "PC", "ICF/IID"]
+  },
+  "assistedLiving": {
+    "file": "Assisted Living Community Directory.xlsx",
+    "url": "https://www.chfs.ky.gov/agencies/os/oig/dhc/Documents/Assisted%20Living%20Community%20Directory.xlsx",
+    "sha256": "670fcbf1add526ff488bb19737f1e97b11e529c0bdab57c481f858d873cc12dd",
+    "bytes": 45752,
+    "typeRows": 247,
+    "distinctPrintedLicenseNumbers": 244,
+    "distinctFacilities": null,
+    "types": { "ALC": 88, "ALC-BH": 74, "ALC-DC": 85 },
+    "unitsCellSum": 9901,
+    "distinctCampusUnitCapacity": null,
+    "pendingRenewalRows": 76,
+    "rowWithoutLicenseNumber": {
+      "type": "ALC-DC",
+      "name": "FOREST HILLS COMMON",
+      "city": "JEFFERSONTOWN",
+      "county": "JEFFERSON",
+      "units": 20,
+      "licenseExpiration": "04/30/2027"
+    },
+    "sameFacilityTwoTypes": {
+      "licenseNumber": "101294",
+      "name": "BLUEGRASS WAY SENIOR LIVING",
+      "city": "CAMPBELLSVILLE",
+      "county": "TAYLOR",
+      "types": ["ALC", "ALC-DC"],
+      "unitsPrintedOnEachRow": 24
+    },
+    "sameLicenseTwoFacilities": {
+      "licenseNumber": "101513",
+      "type": "ALC-DC",
+      "facilities": [
+        {
+          "name": "ASPEN ALCOVE AT ELIZABETHTOWN",
+          "city": "ELIZABETHTOWN",
+          "county": "HARDIN",
+          "units": 19
+        },
+        {
+          "name": "THE WILLOWS AT SPRINGHURST",
+          "city": "LOUISVILLE",
+          "county": "JEFFERSON",
+          "units": 16
+        }
+      ]
+    }
+  },
+  "personalCareHomes": {
+    "file": "Personal Care Home Directory.xlsx",
+    "url": "https://www.chfs.ky.gov/agencies/os/oig/dhc/Documents/Personal%20Care%20Home%20Directory.xlsx",
+    "sha256": "c869e877c9122cfd4a6f8211074a77f023d9035a4572fb3ee87f15d890eb36a7",
+    "bytes": 26500,
+    "rows": 47,
+    "distinctLicenseNumbers": 47,
+    "bedSum": 2548,
+    "pendingRenewalRows": 5
+  },
+  "familyCareHomes": {
+    "file": "Family Care Home Directory.xlsx",
+    "url": "https://www.chfs.ky.gov/agencies/os/oig/dhc/Documents/Family%20Care%20Home%20Directory.xlsx",
+    "sha256": "46d6a037d038ea8de365197f3de17ec29f5fbf127c4f854c0820d0917756adfb",
+    "bytes": 23631,
+    "rows": 24,
+    "distinctLicenseNumbers": 24,
+    "bedsPrinted3": 14,
+    "bedsPrinted0": 10,
+    "printedBedCellSum": 42,
+    "printedZeroIsAPrintedZero": true,
+    "ownerBlankRows": 2,
+    "pendingRenewalRows": 14
+  },
+  "miscellaneous": {
+    "file": "Miscellaneous Directory.xlsx",
+    "url": "https://www.chfs.ky.gov/agencies/os/oig/dhc/Documents/Miscellaneous%20Directory.xlsx",
+    "sha256": "bddf825bf8a9b92a2209a9a6ae9e06a5d75c68d93b09fb5fcd07975bf94f17c5",
+    "bytes": 208876,
+    "rows": 1671,
+    "typeLabels": 33,
+    "isSeniorCensus": false,
+    "adultDayHealth": {
+      "label": "ADULT DAY HEALTH",
+      "rows": 112,
+      "distinctFacilityIds": 112,
+      "pendingRenewalRows": 6,
+      "stateKyRows": 112
+    },
+    "homeHealth": {
+      "label": "Home Health Agency",
+      "rows": 91,
+      "distinctFacilityIds": 86,
+      "rowsWithoutFacilityId": 4,
+      "repeatedFacilityId": "187093",
+      "repeatedFacilityIdRows": 2,
+      "renewalPendingRows": 2,
+      "renewalPendingLabel": "Renewal Pending",
+      "ownerColumn": "NOT_POPULATED",
+      "stateKyRows": 91
+    },
+    "hospice": {
+      "label": "Hospice",
+      "rows": 27,
+      "distinctFacilityIds": 23,
+      "sharedLocationId": "181500",
+      "sharedLocationRows": 5,
+      "datedExpirationRows": 27,
+      "ownerColumn": "NOT_POPULATED",
+      "stateKyRows": 27
+    }
+  },
+  "personalServicesAgencies": {
+    "grain": "personal services agency license",
+    "isFacilityLicense": false,
+    "file": "Personal Services Agency Directory.xlsx",
+    "url": "https://www.chfs.ky.gov/agencies/os/oig/dhc/Documents/Personal%20Services%20Agency%20Directory.xlsx",
+    "sha256": "598bb43e035c6ddebb66d770b918769d9f21a9d370136609b7376d258c2c2159",
+    "bytes": 54223,
+    "rows": 313,
+    "distinctLicenseNumbers": 313,
+    "officeState": { "KY": 299, "IN": 5, "OH": 5, "TN": 3, "WV": 1 },
+    "pendingRenewalRows": 184,
+    "datedExpirationRows": 129,
+    "outOfStateOfficeIsNotAServiceArea": true
+  }
+}
