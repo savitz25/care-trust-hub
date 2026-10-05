@@ -1,0 +1,397 @@
+{
+  "ticket": "AL-SEN-001",
+  "regulator": "Alabama Department of Public Health, Bureau of Health Provider Standards",
+  "directoryUrl": "https://dph1.adph.state.al.us/FacilitiesDirectory/",
+  "directoryExplainerUrl": "https://www.alabamapublichealth.gov/providerstandards/directory.html",
+  "directoryExplainerPageUpdated": "2026-06-23",
+  "directoryExplainerPageUpdatedIsRosterAsOf": false,
+  "descriptionsUrl": "https://www.alabamapublichealth.gov/providerstandards/descriptions.html",
+  "descriptionsPageUpdated": "2023-10-17",
+  "bureauUrl": "https://www.alabamapublichealth.gov/providerstandards/",
+  "bureauPageUpdated": "2026-10-02",
+  "retrievedAt": "2026-10-05",
+  "retrievedAtNote": "Directory exports and the Division of Provider Services statistical summary were retrieved on 2026-10-05. The directory explainer page update of June 23, 2026 is not a roster-as-of date. The statistical summary report clock is 2026-10-05 9:58 AM. The 2027 license-renewal season is not a roster clock.",
+  "licenseNumberColumn": "NOT_IN_SOURCE",
+  "facilityIdentifierColumn": "Fac ID",
+  "ownerLegalNameColumn": "NOT_IN_SOURCE",
+  "licenseRenewal": {
+    "season": "2026-10-01 through 2026-12-31",
+    "statedExpirationOf2026Licenses": "2026-12-31",
+    "isRosterAsOf": false
+  },
+  "statisticalSummary": {
+    "issuer": "Alabama Department of Public Health, Division of Provider Services",
+    "title": "Statistical Summary",
+    "reportClock": "2026-10-05 9:58 AM",
+    "generatedFileName": "ReportStats-2026-10-05-0958306065125.pdf",
+    "sha256": "2cd408f0acf160ff3401e56fbc94812fe55537b38468370411fc6c5ab858d64b",
+    "byteLength": 4296,
+    "pageCount": 2,
+    "allFacilityGrandTotalUsed": false,
+    "classes": [
+      {
+        "class": "assisted-living",
+        "label": "Assisted Living Facilities",
+        "lines": [
+          {
+            "label": "Congregate",
+            "licensedFacilities": 119,
+            "certifiedFacilities": 0,
+            "licensedBedsOrStations": 6339
+          },
+          {
+            "label": "Family",
+            "licensedFacilities": 1,
+            "certifiedFacilities": 0,
+            "licensedBedsOrStations": 50
+          },
+          {
+            "label": "Group",
+            "licensedFacilities": 67,
+            "certifiedFacilities": 0,
+            "licensedBedsOrStations": 1057
+          },
+          {
+            "label": "Total",
+            "licensedFacilities": 187,
+            "certifiedFacilities": 0,
+            "licensedBedsOrStations": 7446
+          }
+        ]
+      },
+      {
+        "class": "specialty-care-assisted-living",
+        "label": "Assisted Living Facilities (Specialty Care)",
+        "lines": [
+          {
+            "label": "Congregate",
+            "licensedFacilities": 63,
+            "certifiedFacilities": 0,
+            "licensedBedsOrStations": 2644
+          },
+          {
+            "label": "Group",
+            "licensedFacilities": 44,
+            "certifiedFacilities": 0,
+            "licensedBedsOrStations": 855
+          },
+          {
+            "label": "Total",
+            "licensedFacilities": 107,
+            "certifiedFacilities": 0,
+            "licensedBedsOrStations": 3499
+          }
+        ]
+      },
+      {
+        "class": "home-health",
+        "label": "Home Health Agencies",
+        "lines": [
+          {
+            "label": "Home Health Agencies",
+            "licensedFacilities": 0,
+            "certifiedFacilities": 134,
+            "licensedBedsOrStations": 0
+          }
+        ]
+      },
+      {
+        "class": "hospice",
+        "label": "Hospices",
+        "lines": [
+          {
+            "label": "Hospices",
+            "licensedFacilities": 187,
+            "certifiedFacilities": 89,
+            "licensedBedsOrStations": 100
+          }
+        ]
+      },
+      {
+        "class": "nursing-home",
+        "label": "Nursing Homes",
+        "printedSectionTotalIncludesIcfIid": true,
+        "lines": [
+          {
+            "label": "Intermediate Care Facility/Individuals with Intellectual Disabilities",
+            "licensedFacilities": 0,
+            "certifiedFacilities": 2,
+            "licensedBedsOrStations": 0
+          },
+          {
+            "label": "Nursing Facility",
+            "licensedFacilities": 3,
+            "certifiedFacilities": 2,
+            "licensedBedsOrStations": 187
+          },
+          {
+            "label": "Skilled Nursing Facility",
+            "licensedFacilities": 227,
+            "certifiedFacilities": 222,
+            "licensedBedsOrStations": 27155
+          },
+          {
+            "label": "Total",
+            "licensedFacilities": 230,
+            "certifiedFacilities": 226,
+            "licensedBedsOrStations": 27342
+          }
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "class": "nursing-home",
+      "label": "Nursing Homes",
+      "facilityTypeCode": "N",
+      "directoryRows": 232,
+      "distinctFacIds": 232,
+      "distinctPrintedNames": 232,
+      "licensedBedsSum": 27342,
+      "licensedBedsBlankRows": 0,
+      "medicareNumberPrintedRows": 226,
+      "licenseStatus": [
+        { "label": "Regular", "count": 230 },
+        { "label": "Not subject to licensure", "count": 2 }
+      ],
+      "class1": [
+        { "label": "Skilled Nursing Facility", "count": 227 },
+        { "label": "Nursing Facility", "count": 3 },
+        {
+          "label": "Intermediate Care Facility/Individuals with Intellectual Disabilities",
+          "count": 2
+        }
+      ],
+      "licenseeType": [
+        { "label": "Limited Liability Company", "count": 137 },
+        { "label": "Corporation", "count": 50 },
+        { "label": "Nonprofit Corporation", "count": 15 },
+        { "label": "Hospital Authority", "count": 13 },
+        { "label": "Limited Liability Partnership", "count": 11 },
+        { "label": "Limited Partnership", "count": 2 },
+        { "label": "County", "count": 2 },
+        { "label": "State of Alabama", "count": 1 },
+        { "label": "No Data Provided", "count": 1 }
+      ],
+      "deemedYes": 0,
+      "deemedNo": 0,
+      "deemedBlank": 232,
+      "sha256": "67b4c97ed752c01a2fa41759cc5ebf0cacc944fe296aa5a31af8e5cd16a19c91",
+      "byteLength": 138240,
+      "retrievedAt": "2026-10-05",
+      "rowsAreDeduplicatedLicensedCampuses": false
+    },
+    {
+      "class": "assisted-living",
+      "label": "Assisted Living Facilities",
+      "facilityTypeCode": "D",
+      "directoryRows": 187,
+      "distinctFacIds": 187,
+      "distinctPrintedNames": 187,
+      "licensedBedsSum": 7446,
+      "licensedBedsBlankRows": 0,
+      "medicareNumberPrintedRows": 0,
+      "licenseStatus": [{ "label": "Regular", "count": 187 }],
+      "class1": [
+        { "label": "Congregate Assisted Living Facility", "count": 119 },
+        { "label": "Group Assisted Living Facility", "count": 67 },
+        { "label": "Family Assisted Living Facility", "count": 1 }
+      ],
+      "licenseeType": [
+        { "label": "Limited Liability Company", "count": 125 },
+        { "label": "Corporation", "count": 42 },
+        { "label": "Nonprofit Corporation", "count": 11 },
+        { "label": "Sole Proprietorship", "count": 5 },
+        { "label": "Hospital Authority", "count": 2 },
+        { "label": "Limited Partnership", "count": 2 }
+      ],
+      "deemedYes": 0,
+      "deemedNo": 0,
+      "deemedBlank": 187,
+      "sha256": "f6d647ca754cfec4b501cc54670746b967e6c79242bca7f75f4bb7955cbe6f43",
+      "byteLength": 109568,
+      "retrievedAt": "2026-10-05",
+      "rowsAreDeduplicatedLicensedCampuses": false
+    },
+    {
+      "class": "specialty-care-assisted-living",
+      "label": "Assisted Living Facilities (Specialty Care)",
+      "facilityTypeCode": "P",
+      "directoryRows": 107,
+      "distinctFacIds": 107,
+      "distinctPrintedNames": 107,
+      "licensedBedsSum": 3499,
+      "licensedBedsBlankRows": 0,
+      "medicareNumberPrintedRows": 0,
+      "licenseStatus": [
+        { "label": "Regular", "count": 106 },
+        { "label": "Probational", "count": 1 }
+      ],
+      "class1": [
+        { "label": "Congregate Specialty Care Assisted Living Facility", "count": 63 },
+        { "label": "Group Specialty Care Assisted Living Facility", "count": 44 }
+      ],
+      "licenseeType": [
+        { "label": "Limited Liability Company", "count": 78 },
+        { "label": "Corporation", "count": 17 },
+        { "label": "Nonprofit Corporation", "count": 5 },
+        { "label": "Hospital Authority", "count": 4 },
+        { "label": "Sole Proprietorship", "count": 2 },
+        { "label": "Limited Partnership", "count": 1 }
+      ],
+      "deemedYes": 0,
+      "deemedNo": 0,
+      "deemedBlank": 107,
+      "sha256": "55a84bbf6b6b431c5cb6c7c3c9603634c1f885a5ffc20e78c5ccde879302943b",
+      "byteLength": 69120,
+      "retrievedAt": "2026-10-05",
+      "rowsAreDeduplicatedLicensedCampuses": false
+    },
+    {
+      "class": "home-health",
+      "label": "Home Health Agencies",
+      "facilityTypeCode": "A",
+      "directoryRows": 197,
+      "distinctFacIds": 197,
+      "distinctPrintedNames": 133,
+      "licensedBedsSum": null,
+      "licensedBedsBlankRows": 197,
+      "medicareNumberPrintedRows": 134,
+      "licenseStatus": [{ "label": "Not subject to licensure", "count": 197 }],
+      "class1": [{ "label": "Home Health Agency", "count": 197 }],
+      "licenseeType": [
+        { "label": "Limited Liability Company", "count": 97 },
+        { "label": "Corporation", "count": 51 },
+        { "label": "No Data Provided", "count": 17 },
+        { "label": "State of Alabama", "count": 15 },
+        { "label": "Nonprofit Corporation", "count": 8 },
+        { "label": "County", "count": 3 },
+        { "label": "Limited Partnership", "count": 2 },
+        { "label": "City", "count": 1 },
+        { "label": "City-County", "count": 1 },
+        { "label": "Hospital Authority", "count": 1 },
+        { "label": "Limited Liability Partnership", "count": 1 }
+      ],
+      "deemedYes": 0,
+      "deemedNo": 197,
+      "deemedBlank": 0,
+      "sha256": "4393999a32c77a0d390e23502c266b7d11938764094eddd5bdefedf08b8abdb4",
+      "byteLength": 113664,
+      "retrievedAt": "2026-10-05",
+      "rowsAreDeduplicatedLicensedCampuses": false
+    },
+    {
+      "class": "hospice",
+      "label": "Hospices",
+      "facilityTypeCode": "E",
+      "directoryRows": 188,
+      "distinctFacIds": 188,
+      "distinctPrintedNames": 188,
+      "licensedBedsSum": 99,
+      "licensedBedsBlankRows": 181,
+      "medicareNumberPrintedRows": 89,
+      "licenseStatus": [
+        { "label": "Regular", "count": 187 },
+        { "label": "Not subject to licensure", "count": 1 }
+      ],
+      "class1": [
+        { "label": "In-Home Hospice", "count": 181 },
+        { "label": "In-Patient Hospice", "count": 7 }
+      ],
+      "licenseeType": [
+        { "label": "Limited Liability Company", "count": 102 },
+        { "label": "Corporation", "count": 62 },
+        { "label": "Nonprofit Corporation", "count": 16 },
+        { "label": "Limited Partnership", "count": 3 },
+        { "label": "Hospital Authority", "count": 2 },
+        { "label": "No Data Provided", "count": 2 },
+        { "label": "County", "count": 1 }
+      ],
+      "deemedYes": 137,
+      "deemedNo": 51,
+      "deemedBlank": 0,
+      "sha256": "e32fedc2e1a6cf72f10893c4ec0a1db0cdea7401c11504fe13c5e19d4b81eb5a",
+      "byteLength": 104448,
+      "retrievedAt": "2026-10-05",
+      "rowsAreDeduplicatedLicensedCampuses": false
+    }
+  ],
+  "directoryExceptions": [
+    {
+      "class": "nursing-home",
+      "name": "Davis/Orman Intermediate Care Facility",
+      "facId": "N0806",
+      "licenseStatus": "Not subject to licensure",
+      "class1": "Intermediate Care Facility/Individuals with Intellectual Disabilities",
+      "licensedBeds": 0
+    },
+    {
+      "class": "nursing-home",
+      "name": "Strickland/Stringfellow ICF/IID",
+      "facId": "N6104",
+      "licenseStatus": "Not subject to licensure",
+      "class1": "Intermediate Care Facility/Individuals with Intellectual Disabilities",
+      "licensedBeds": 0
+    },
+    {
+      "class": "specialty-care-assisted-living",
+      "name": "Kauhale Port City Specialty Care Assisted Living",
+      "facId": "P4903",
+      "licenseStatus": "Probational",
+      "class1": "Congregate Specialty Care Assisted Living Facility",
+      "licensedBeds": 20
+    },
+    {
+      "class": "hospice",
+      "name": "ProHealth Hospice-Cherokee",
+      "facId": "E1004",
+      "licenseStatus": "Not subject to licensure",
+      "class1": "In-Home Hospice",
+      "licensedBeds": null
+    }
+  ],
+  "hospiceInpatientBedRows": [
+    { "name": "Compassus -Auburn Bethany House", "facId": "E4102", "licensedBeds": 10 },
+    { "name": "Compassus Hospice Care Suite", "facId": "E3738", "licensedBeds": 10 },
+    { "name": "Hospice Family Care - Inpatient", "facId": "E4520", "licensedBeds": 15 },
+    { "name": "Hospice of West Alabama", "facId": "E6301", "licensedBeds": 15 },
+    { "name": "Saad Hospice at Providence", "facId": "E4925", "licensedBeds": 15 },
+    { "name": "Shepherd's Cove IPU", "facId": "E4804", "licensedBeds": 10 },
+    { "name": "The Retreat Hospice Inpatient By Saad", "facId": "E4922", "licensedBeds": 24 }
+  ],
+  "specialFocusFacility": {
+    "sourceUrl": "https://www.alabamapublichealth.gov/providerstandards/nursing-homes.html",
+    "pageUpdated": "2026-09-21",
+    "name": "Birmingham Nursing and Rehabilitation Center, LLC",
+    "addressAsPrintedByAdph": "1000 Dugan Avenue, Birmingham, AL 35214",
+    "notified": "2023-01-12",
+    "joinedToDirectoryFacId": false
+  },
+  "adultDay": {
+    "count": null,
+    "reason": "The Facilities Directory facility-type list does not include adult day. No adult-day count is published."
+  },
+  "alabamaDepartmentOfSeniorServices": {
+    "usedAsFacilityRoster": false,
+    "role": "aging-services network"
+  },
+  "combinedSeniorDenominator": null,
+  "cmsExactBridges": 0,
+  "cmsBridgeReason": "A non-blank Medicare number cell was counted. The numbers were not stored and were not matched to CMS Care Compare.",
+  "surveyProgram": "KNOWN",
+  "surveyProgramUrl": "https://www.alabamapublichealth.gov/providerstandards/",
+  "deficienciesUrl": "https://dph1.adph.state.al.us/Deficiencies/",
+  "inspectionEventRows": "NOT_ACQUIRED",
+  "deficiencyRows": "NOT_ACQUIRED",
+  "complaintIntake": "KNOWN",
+  "complaintIntakeUrl": "https://www.alabamapublichealth.gov/providerstandards/complaints.html",
+  "complaintPageUpdated": "2026-03-30",
+  "complaintProviderRows": "NOT_ACQUIRED",
+  "enforcementRows": "NOT_ACQUIRED",
+  "nameOnlyAdverseJoins": 0,
+  "newCanonicalFacilities": 0,
+  "graphWrites": 0,
+  "claimEligibilityChanges": 0,
+  "cityRoutes": 0
+}
