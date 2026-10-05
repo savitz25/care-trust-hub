@@ -2,11 +2,11 @@
 
 The immutable Texas workbooks acquired for B2 on 2026-09-30 each state **active-license directory as of 2026-09-28**. The worksheet's first row is a title and its second row is the column header. Every row from row 3 through the final worksheet row is nonblank and has a unique `Facility ID`.
 
-| Official workbook | Worksheet dimensions | Title + header | Nonblank data rows | Unique Facility IDs | Blank data rows | Duplicate Facility IDs | Scout estimate |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| `ICFIID.xlsx` | 710 × 40 | 2 | 708 | 708 | 0 | 0 | ~709 |
-| `DAHS.xlsx` | 391 × 40 | 2 | 389 | 389 | 0 | 0 | ~389 |
-| `dahs_issonly.xlsx` | 746 × 40 | 2 | 744 | 744 | 0 | 0 | ~740 |
+| Official workbook   | Worksheet dimensions | Title + header | Nonblank data rows | Unique Facility IDs | Blank data rows | Duplicate Facility IDs | Scout estimate |
+| ------------------- | -------------------: | -------------: | -----------------: | ------------------: | --------------: | ---------------------: | -------------: |
+| `ICFIID.xlsx`       |             710 × 40 |              2 |                708 |                 708 |               0 |                      0 |           ~709 |
+| `DAHS.xlsx`         |             391 × 40 |              2 |                389 |                 389 |               0 |                      0 |           ~389 |
+| `dahs_issonly.xlsx` |             746 × 40 |              2 |                744 |                 744 |               0 |                      0 |           ~740 |
 
 The current ICF/IID count is **708**, one below Scout's approximate 709. The current ISS-only count is **744**, four above Scout's approximate 740. The full worksheets account for every row; there is no parser omission, footer, hidden blank row, or duplicate native ID explaining a different count. Scout's observations were expressed as approximations and have no saved file checksum or as-of date in this packet, so **source drift cannot be proved or ruled out**. No parser change is warranted.
 
