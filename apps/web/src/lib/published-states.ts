@@ -42,10 +42,13 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   louisiana: "LA",
   alabama: "AL",
   kentucky: "KY",
+  "south-carolina": "SC",
 };
 
 /** Newest state pages first. */
 const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>> = {
+  "south-carolina":
+    "DPH nursing home, community residential care, home health, hospice, adult day, in-home care, and intermediate care license rows, counted separately",
   kentucky:
     "OIG long-term care, assisted living, personal care, family care, adult day, home health, hospice, and personal services directories, counted separately",
   alabama:
