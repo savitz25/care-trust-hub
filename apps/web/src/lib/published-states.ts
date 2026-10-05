@@ -39,10 +39,13 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   texas: "TX",
   virginia: "VA",
   washington: "WA",
+  louisiana: "LA",
 };
 
 /** Newest state pages first. */
 const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>> = {
+  louisiana:
+    "LDH Health Standards nursing home, adult residential care, home health, hospice, adult day health care and ICF/IID directories, counted separately",
   indiana:
     "Department of Health Comprehensive Care, Residential Care, Home Health Agency and Hospice license directories",
   wisconsin: "DHS statewide AFH, CBRF, RCAC, nursing home, hospice and home health directories",
