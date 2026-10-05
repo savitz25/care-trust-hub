@@ -41,10 +41,13 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   washington: "WA",
   louisiana: "LA",
   alabama: "AL",
+  kentucky: "KY",
 };
 
 /** Newest state pages first. */
 const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>> = {
+  kentucky:
+    "OIG long-term care, assisted living, personal care, family care, adult day, home health, hospice, and personal services directories, counted separately",
   alabama:
     "ADPH nursing home, assisted living, specialty care assisted living, home health, and hospice directory exports, counted separately",
   louisiana:
