@@ -28,6 +28,7 @@ export const PUBLISHED_STATE_NAVIGATION = [
   { href: "/wisconsin", label: "Wisconsin" },
   { href: "/indiana", label: "Indiana" },
   { href: "/louisiana", label: "Louisiana" },
+  { href: "/alabama", label: "Alabama" },
 ] as const;
 
 export function PublishedStateNavigation({
