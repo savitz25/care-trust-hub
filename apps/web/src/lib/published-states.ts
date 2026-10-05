@@ -43,10 +43,13 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   alabama: "AL",
   kentucky: "KY",
   "south-carolina": "SC",
+  mississippi: "MS",
 };
 
 /** Newest state pages first. */
 const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>> = {
+  mississippi:
+    "MSDH 18 Sep 2026 directory: nursing facilities, personal care homes, home health, hospice, and ICF/IID providers, counted separately",
   "south-carolina":
     "DPH nursing home, community residential care, home health, hospice, adult day, in-home care, and intermediate care license rows, counted separately",
   kentucky:
