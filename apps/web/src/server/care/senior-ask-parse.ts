@@ -22,6 +22,7 @@ import { interpretOklahomaAsk } from "./ok-ask";
 import { interpretArkansasAsk } from "./ar-ask";
 import { interpretNewMexicoAsk } from "./nm-ask";
 import { interpretNebraskaAsk } from "./ne-ask";
+import { interpretIdahoAsk } from "./id-ask";
 import {
   type SeniorAskMode,
   type SeniorProviderClass,
@@ -538,6 +539,8 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   if (nmAnswer) return fail(nmAnswer.message, nmAnswer.alternatives, nmAnswer.coverage);
   const neAnswer = interpretNebraskaAsk(q, state?.value);
   if (neAnswer) return fail(neAnswer.message, neAnswer.alternatives, neAnswer.coverage);
+  const idAnswer = interpretIdahoAsk(q, state?.value);
+  if (idAnswer) return fail(idAnswer.message, idAnswer.alternatives, idAnswer.coverage);
   if (/assisted living/i.test(q)) {
     if (/\bvirginia\b/i.test(q) || state?.value === "VA") {
       return fail(
