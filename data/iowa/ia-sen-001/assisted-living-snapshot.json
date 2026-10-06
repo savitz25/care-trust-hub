@@ -1,0 +1,23 @@
+{
+  "contract": "iowa-assisted-living-programs-v1",
+  "catalog": "https://data.iowa.gov/catalog/dataset/562",
+  "source": "https://idh-be.iowa.gov/api/v1/datasets/562/rows.csv",
+  "regulator": "Iowa Department of Inspections, Appeals, and Licensing",
+  "grain": "Assisted living program certification number; not a unique campus or nursing facility license",
+  "retrievedAt": "2026-10-06T15:59:28.282008+00:00",
+  "catalogLastUpdated": "2025-10-30",
+  "sha256": "c9214ad432d9dca06bf2fb64ff1af1fe19f01e83b1c4f31b5c450645fa3d2036",
+  "rawRows": 335,
+  "distinctCertificationNumbers": 335,
+  "dementiaSpecific": [
+    {
+      "sourceValue": "No",
+      "programs": 223
+    },
+    {
+      "sourceValue": "Yes",
+      "programs": 112
+    }
+  ],
+  "graphWrites": 0
+}
