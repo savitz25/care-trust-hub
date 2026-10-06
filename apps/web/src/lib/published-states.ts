@@ -50,10 +50,13 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   arkansas: "AR",
   "new-mexico": "NM",
   nebraska: "NE",
+  idaho: "ID",
 };
 
 /** Newest state pages first. */
 const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>> = {
+  idaho:
+    "Department of Health and Welfare facility search is a WebLink browser. Assisted living, nursing homes, certified family homes, home health, hospice, and adult day were not acquired as rosters",
   nebraska:
     "DHHS September 15, 2026 rosters for assisted living, long-term care, and adult day, counted separately",
   "new-mexico":
