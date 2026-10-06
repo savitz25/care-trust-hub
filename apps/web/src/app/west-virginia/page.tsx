@@ -39,7 +39,9 @@ export default function WestVirginiaSeniorPage() {
           NOT_ACQUIRED. The rows are not added. An administrator is not a facility.
         </p>
         <table>
-          <caption>West Virginia senior classes. Not a current roster and not a combined census.</caption>
+          <caption>
+            West Virginia senior classes. Not a current roster and not a combined census.
+          </caption>
           <thead>
             <tr>
               <th scope="col">Class</th>
@@ -60,16 +62,14 @@ export default function WestVirginiaSeniorPage() {
       <section aria-labelledby="wv-surveys">
         <h2 id="wv-surveys">Surveys and complaints stay separate</h2>
         <p>
-          Facility detail pages can show completed surveys and complaint-survey history. Those
-          pages were not scraped. Survey count: {snapshot.surveyCount}. Deficiency count:{" "}
-          {snapshot.deficiencyCount}. Complaint investigations: {snapshot.complaintInvestigationCount}.
-          Enforcement: {snapshot.enforcementCount}. A survey is not enforcement. A complaint
-          investigation is not a violation. A survey with no deficiencies would still be a survey
-          observation, and none was counted here.
+          Facility detail pages can show completed surveys and complaint-survey history. Those pages
+          were not scraped. Survey count: {snapshot.surveyCount}. Deficiency count:{" "}
+          {snapshot.deficiencyCount}. Complaint investigations:{" "}
+          {snapshot.complaintInvestigationCount}. Enforcement: {snapshot.enforcementCount}. A survey
+          is not enforcement. A complaint investigation is not a violation. A survey with no
+          deficiencies would still be a survey observation, and none was counted here.
         </p>
-        <p>
-          CMS remains a federal overlay. No state-to-CMS bridge was made.
-        </p>
+        <p>CMS remains a federal overlay. No state-to-CMS bridge was made.</p>
       </section>
 
       <section aria-labelledby="wv-limits">

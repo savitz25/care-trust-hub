@@ -31,7 +31,10 @@ export function interpretWestVirginiaAsk(q: string, stateCode?: string) {
       "UNSUPPORTED",
     );
   }
-  if (/\b(how many|number of|count of|total|census)\b/i.test(q) && /\b(senior|facilities|all classes|combined)\b/i.test(q)) {
+  if (
+    /\b(how many|number of|count of|total|census)\b/i.test(q) &&
+    /\b(senior|facilities|all classes|combined)\b/i.test(q)
+  ) {
     return answer(
       `West Virginia senior classes cannot be combined. Nursing homes, assisted living, home health, hospice, adult day, ICF/IID, residential board and care, and residential care communities were each NOT_ACQUIRED. Missing is not zero.${geography}`,
       "NOT_ACQUIRED",

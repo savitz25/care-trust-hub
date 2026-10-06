@@ -49,7 +49,7 @@ describe("West Virginia senior publication", () => {
     expect(page).toContain("A search form is not a roster");
     expect(page).toContain("The rows are not added");
     expect(page).toContain("An administrator is not a facility");
-    expect(page).toContain("A survey is not enforcement");
+    expect(page).toMatch(/A survey\s+is not enforcement/);
     expect(page).toContain("A complaint");
     expect(page).toMatch(/investigation is not a\s+violation/);
     expect(page).not.toMatch(/AggregateRating|Trust Score|ratingValue/);
@@ -69,9 +69,9 @@ describe("West Virginia senior publication", () => {
     expect(PUBLISHED_STATEWIDE_SLUGS).toContain("west-virginia");
     expect(PUBLISHED_STATEWIDE_SLUGS).toContain("idaho");
     expect(PUBLISHED_STATEWIDE_SLUGS).toContain("kansas");
-    expect(PUBLISHED_STATES.some((state) => state.slug === "west-virginia" && state.code === "WV")).toBe(
-      true,
-    );
+    expect(
+      PUBLISHED_STATES.some((state) => state.slug === "west-virginia" && state.code === "WV"),
+    ).toBe(true);
   });
 
   it("fails closed without a senior census", () => {
@@ -89,9 +89,9 @@ describe("West Virginia senior publication", () => {
     expect(interpretSeniorAskQuery("best nursing home in West Virginia").failReason).toMatch(
       /does not rank/,
     );
-    expect(interpretSeniorAskQuery("assisted living in Charleston, West Virginia").failReason).toMatch(
-      /geography only/,
-    );
+    expect(
+      interpretSeniorAskQuery("assisted living in Charleston, West Virginia").failReason,
+    ).toMatch(/geography only/);
     expect(interpretSeniorAskQuery("assisted living in West Virginia").failReason).not.toMatch(
       /Virginia assisted living is a DSS/,
     );
