@@ -47,10 +47,13 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   oklahoma: "OK",
   missouri: "MO",
   arkansas: "AR",
+  "new-mexico": "NM",
 };
 
 /** Newest state pages first. */
 const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>> = {
+  "new-mexico":
+    "Health Care Authority Division of Health Improvement: nursing facilities, assisted living, adult residential care, home health, hospice, adult day, and ICF/IID were not acquired as state rosters",
   arkansas:
     "DHS SFY 2022 narrative for nursing facilities, ICF/IID, and psychiatric residential care, kept separate from surveys and complaints",
   oklahoma:
