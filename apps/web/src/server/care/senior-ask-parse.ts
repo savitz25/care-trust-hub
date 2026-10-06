@@ -19,6 +19,7 @@ import { interpretKentuckyAsk, kentuckyIntent } from "./ky-ask";
 import { interpretSouthCarolinaAsk, southCarolinaIntent } from "./sc-ask";
 import { interpretMississippiAsk, mississippiIntent } from "./ms-ask";
 import { interpretOklahomaAsk } from "./ok-ask";
+import { interpretArkansasAsk } from "./ar-ask";
 import {
   type SeniorAskMode,
   type SeniorProviderClass,
@@ -529,6 +530,8 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   if (msAnswer) return fail(msAnswer.message, msAnswer.alternatives, msAnswer.coverage);
   const okAnswer = interpretOklahomaAsk(q, state?.value);
   if (okAnswer) return fail(okAnswer.message, okAnswer.alternatives, okAnswer.coverage);
+  const arAnswer = interpretArkansasAsk(q, state?.value);
+  if (arAnswer) return fail(arAnswer.message, arAnswer.alternatives, arAnswer.coverage);
   if (/assisted living/i.test(q)) {
     if (/\bvirginia\b/i.test(q) || state?.value === "VA") {
       return fail(
