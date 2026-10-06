@@ -46,10 +46,13 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   mississippi: "MS",
   oklahoma: "OK",
   missouri: "MO",
+  arkansas: "AR",
 };
 
 /** Newest state pages first. */
 const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>> = {
+  arkansas:
+    "DHS SFY 2022 narrative for nursing facilities, ICF/IID, and psychiatric residential care, kept separate from surveys and complaints",
   oklahoma:
     "OSDH April 2026 facility directories and the August 26, 2026 provider-call counts, kept on separate clocks",
   missouri:

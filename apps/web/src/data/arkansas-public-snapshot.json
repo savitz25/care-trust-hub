@@ -1,0 +1,74 @@
+{
+  "contract": "care-ar-state-intel-v1",
+  "ticket": "AR-SEN-001",
+  "regulator": "Arkansas Department of Human Services, Division of Provider Services and Quality Assurance",
+  "office": "Office of Long Term Care",
+  "sourceUrl": "https://humanservices.arkansas.gov/wp-content/uploads/Annual-Statistical-Report-v7.pdf",
+  "sourceTitle": "Arkansas Department of Human Services Annual Statistical Report for State Fiscal Year 2022",
+  "transmittalDate": "2023-07-10",
+  "stateFiscalYear": "2022",
+  "stateFiscalYearStart": "2021-07-01",
+  "stateFiscalYearEnd": "2022-06-30",
+  "sha256": "4ef0ebd66e1d7abac127bad129e434b6c3e738075f48b6b597f6346577b591a2",
+  "bytes": 4075651,
+  "pages": 260,
+  "examinedAt": "2026-10-06",
+  "combinedSeniorDenominator": null,
+  "cmsBridgeAttempted": false,
+  "newCanonicalFacilities": 0,
+  "graphWrites": 0,
+  "evidenceAttachments": 0,
+  "nameOnlyAdverseJoins": 0,
+  "page228LicenseTablePublished": false,
+  "narrativeResidence": {
+    "page": "DPSQA-1",
+    "qualifier": "approximately",
+    "nursingFacilities": 224,
+    "icfIid": 40,
+    "psychiatricResidentialCareFacilities": 13,
+    "added": false,
+    "isCurrentRoster": false
+  },
+  "medicaidNursingClassification": {
+    "page": "DPSQA-2",
+    "publicFacilities": 1,
+    "publicFacilityNamed": "Arkansas Health Center",
+    "privateUnderMedicaid": 223,
+    "additionalPrivateWithoutMedicaidFunding": 1,
+    "sameAsNarrativeNursingCount": false
+  },
+  "icfIidDivision": {
+    "page": "DPSQA-2",
+    "stateOwnedHumanDevelopmentCenters": 5,
+    "privatePediatricFacilities": 5,
+    "adultFacilitiesFifteenBedsOrFewer": 30,
+    "addedToOtherClasses": false
+  },
+  "surveys": {
+    "page": "DPSQA-1",
+    "focusedInfectionControl": 260,
+    "complaintSurveys": 1281,
+    "recertificationSurveys": 154,
+    "surveyIsViolation": false,
+    "surveyIsFacilityCount": false
+  },
+  "complaints": {
+    "nursingHomeComplaintsReceived": 1400,
+    "hcbsComplaintsReceived": 423,
+    "complaintIsFinding": false,
+    "addedToSurveys": false
+  },
+  "medicalNeedApplicationsAreLicenses": false,
+  "notAcquired": [
+    "current assisted-living roster",
+    "current adult-day roster",
+    "current residential-care roster",
+    "current home-health roster",
+    "current hospice roster",
+    "facility-level inspection findings",
+    "enforcement order roster",
+    "named facility census",
+    "bed or capacity chart",
+    "CMS certification bridge"
+  ]
+}
