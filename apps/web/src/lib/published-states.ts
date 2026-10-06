@@ -51,10 +51,13 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   "new-mexico": "NM",
   nebraska: "NE",
   idaho: "ID",
+  "west-virginia": "WV",
 };
 
 /** Newest state pages first. */
 const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>> = {
+  "west-virginia":
+    "OHFLAC facility lookup is a server-side search. Nursing homes, assisted living, home health, hospice, adult day, ICF/IID, and residential care were not acquired as rosters",
   idaho:
     "Department of Health and Welfare facility search is a WebLink browser. Assisted living, nursing homes, certified family homes, home health, hospice, and adult day were not acquired as rosters",
   nebraska:
