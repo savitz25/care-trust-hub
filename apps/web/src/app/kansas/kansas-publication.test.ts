@@ -13,16 +13,28 @@ describe("KS-SEN-001 Kansas facility publication", () => {
     const health = snapshot.sourceSets.healthFacilities;
     expect(adult.rawRowCount).toBe(783);
     expect(adult.distinctFacilityStateIds).toBe(783);
-    expect(adult.typeObservations["Nursing Facility"]).toEqual({ rows: 271, distinctStateIds: 271 });
-    expect(adult.typeObservations["Assisted Living Facility"]).toEqual({ rows: 233, distinctStateIds: 233 });
-    expect(adult.typeObservations["Residential Health Care Facility"]).toEqual({ rows: 118, distinctStateIds: 118 });
+    expect(adult.typeObservations["Nursing Facility"]).toEqual({
+      rows: 271,
+      distinctStateIds: 271,
+    });
+    expect(adult.typeObservations["Assisted Living Facility"]).toEqual({
+      rows: 233,
+      distinctStateIds: 233,
+    });
+    expect(adult.typeObservations["Residential Health Care Facility"]).toEqual({
+      rows: 118,
+      distinctStateIds: 118,
+    });
     expect(adult.lastSurveyPostingDateRows).toBe(732);
     expect(adult.rowsWithoutSurveyPostingDate).toBe(51);
     expect(adult.latestPrintedSurveyPostingDate).toBe("12/31/2025");
     expect(health.rawRowCount).toBe(962);
     expect(health.distinctFacilityStateIds).toBe(959);
     expect(health.typeObservations.Hospice).toEqual({ rows: 94, distinctStateIds: 93 });
-    expect(health.typeObservations["Home Health Agency STATE ONLY"]).toEqual({ rows: 254, distinctStateIds: 254 });
+    expect(health.typeObservations["Home Health Agency STATE ONLY"]).toEqual({
+      rows: 254,
+      distinctStateIds: 254,
+    });
     expect(adult.rawSha256).toMatch(/^[a-f0-9]{64}$/);
     expect(health.rawSha256).toMatch(/^[a-f0-9]{64}$/);
   });
@@ -38,6 +50,8 @@ describe("KS-SEN-001 Kansas facility publication", () => {
     expect(normalizedPublishedStatePath("/KANSAS")).toBe("/kansas");
     expect(normalizedPublishedStatePath("/kansas")).toBeNull();
     expect(normalizedPublishedStatePath("/kansas/wichita")).toBeNull();
-    expect(PUBLISHED_STATES.some((state) => state.slug === "kansas" && state.code === "KS")).toBe(true);
+    expect(PUBLISHED_STATES.some((state) => state.slug === "kansas" && state.code === "KS")).toBe(
+      true,
+    );
   });
 });
