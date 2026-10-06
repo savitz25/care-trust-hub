@@ -1,0 +1,63 @@
+{
+  "contract": "care-nm-state-intel-v1",
+  "ticket": "NM-SEN-001",
+  "regulator": "New Mexico Health Care Authority, Division of Health Improvement (DHI)",
+  "licensingOffice": "Health Facility Licensing and Certification",
+  "assistedLivingSearchOffice": "Licensed Oversight Bureau",
+  "examinedAt": "2026-10-06",
+  "licensingScope": "Health Facility Licensing and Certification covers long-term care, assisted living, home care, and hospice, among other health facilities.",
+  "combinedSeniorDenominator": null,
+  "classesAdded": false,
+  "cmsCertificationDownloaded": false,
+  "cmsBridgeAttempted": false,
+  "cmsIsFederalOverlay": true,
+  "facilitySearchInteractive": true,
+  "facilityDirectoryExportDownloaded": false,
+  "temporaryOrProvisionalLicenseCount": "NOT_ACQUIRED",
+  "temporaryLicenseIsFullLicense": false,
+  "capacity": "NOT_ACQUIRED",
+  "surveyCount": "NOT_ACQUIRED",
+  "deficiencyCount": "NOT_ACQUIRED",
+  "complaintCount": "NOT_ACQUIRED",
+  "complaintIsFinding": false,
+  "complaintIntakeIsCensus": false,
+  "enforcementCount": "NOT_ACQUIRED",
+  "netNewEntities": 0,
+  "newCanonicalFacilities": 0,
+  "graphWrites": 0,
+  "evidenceAttachments": 0,
+  "nameOnlyAdverseJoins": 0,
+  "recordsPath": "hca.ipra@hca.nm.gov",
+  "recordsPathIsCensus": false,
+  "federalOverlays": ["CMS Nursing Home Compare", "S&C QCOR"],
+  "notStateLicenseCounts": [
+    "association directory",
+    "third-party CMS recount",
+    "magazine figure"
+  ],
+  "geographyOnly": ["Albuquerque", "Santa Fe"],
+  "cityRoutesPublished": false,
+  "sources": {
+    "dhiOverview": "https://www.hca.nm.gov/division-of-health-improvement/",
+    "assistedLivingHome": "https://alf.hca.nm.gov/",
+    "facilitySearch": "https://alf.hca.nm.gov/facility-search/",
+    "surveyReports": "https://www.hca.nm.gov/dhi-survey-reports/"
+  },
+  "resourceGuide": {
+    "title": "FY2025 Licensed Oversight Bureau facility resource directory, revised 2.19.25",
+    "url": "https://alf.hca.nm.gov/wp-content/uploads/2025/06/LOB-Facility-Resource-Directory_revised-2.19.25.pdf",
+    "revised": "2.19.25",
+    "publicExtract": "bureau contact and rules guide: who we are, NMAC citations, and team contacts",
+    "isFacilityRoster": false,
+    "isFacilityCount": false
+  },
+  "classes": [
+    { "name": "Nursing facilities", "roster": "NOT_ACQUIRED" },
+    { "name": "Assisted living facilities", "roster": "NOT_ACQUIRED" },
+    { "name": "Adult residential care", "roster": "NOT_ACQUIRED" },
+    { "name": "Home health", "roster": "NOT_ACQUIRED" },
+    { "name": "Hospice", "roster": "NOT_ACQUIRED" },
+    { "name": "Adult day", "roster": "NOT_ACQUIRED" },
+    { "name": "ICF/IID", "roster": "NOT_ACQUIRED" }
+  ]
+}
