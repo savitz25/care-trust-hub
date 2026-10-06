@@ -19,20 +19,35 @@ describe("Oklahoma senior publication", () => {
     expect(snapshot.combinedSeniorDenominator).toBeNull();
     expect(snapshot.directories.assistedLiving.facilityIds).not.toBe(call.assistedLivingCenters);
     expect(snapshot.directories.nursingHome.facilityIds).not.toBe(call.nursingHomesFederal);
-    expect(snapshot.directories.nursingHome.nhPrefix + snapshot.directories.nursingHome.continuumPrefix).toBe(
-      snapshot.directories.nursingHome.facilityIds,
-    );
+    expect(
+      snapshot.directories.nursingHome.nhPrefix + snapshot.directories.nursingHome.continuumPrefix,
+    ).toBe(snapshot.directories.nursingHome.facilityIds);
     expect(
       snapshot.directories.assistedLiving.alPrefix +
         snapshot.directories.assistedLiving.nursingIdWithAlSuffix +
         snapshot.directories.assistedLiving.continuumIdWithAlSuffix,
     ).toBe(snapshot.directories.assistedLiving.facilityIds);
-    expect(snapshot.directories.residentialCare.parsedFacilityIds).toBe(snapshot.directories.residentialCare.printedFacilities);
-    expect(snapshot.directories.adultDay.parsedFacilityIds).toBe(snapshot.directories.adultDay.printedCenters);
-    const cites = snapshot.surveyCitationsSfy2026;
-    expect(cites.A + cites.B + cites.C + cites.D + cites.E + cites.F + cites.G + cites.H + cites.I + cites.J + cites.K + cites.L).toBe(
-      cites.printedCellSum,
+    expect(snapshot.directories.residentialCare.parsedFacilityIds).toBe(
+      snapshot.directories.residentialCare.printedFacilities,
     );
+    expect(snapshot.directories.adultDay.parsedFacilityIds).toBe(
+      snapshot.directories.adultDay.printedCenters,
+    );
+    const cites = snapshot.surveyCitationsSfy2026;
+    expect(
+      cites.A +
+        cites.B +
+        cites.C +
+        cites.D +
+        cites.E +
+        cites.F +
+        cites.G +
+        cites.H +
+        cites.I +
+        cites.J +
+        cites.K +
+        cites.L,
+    ).toBe(cites.printedCellSum);
     expect(cites.sumIsFacilityCount).toBe(false);
     expect(snapshot.cmsBridgeAttempted).toBe(false);
     expect(snapshot.graphWrites).toBe(0);
@@ -62,8 +77,12 @@ describe("Oklahoma senior publication", () => {
     const total = interpretSeniorAskQuery("how many senior facilities in Oklahoma");
     expect(total.failReason).toContain("659");
     expect(total.failReason).toContain("not a Trust Hub senior census");
-    expect(interpretSeniorAskQuery("best nursing home in Oklahoma").failReason).toMatch(/does not rank/);
-    expect(interpretSeniorAskQuery("assisted living in Tulsa Oklahoma").failReason).toMatch(/geography only/);
+    expect(interpretSeniorAskQuery("best nursing home in Oklahoma").failReason).toMatch(
+      /does not rank/,
+    );
+    expect(interpretSeniorAskQuery("assisted living in Tulsa Oklahoma").failReason).toMatch(
+      /geography only/,
+    );
     expect(interpretOklahomaAsk("nursing home Tulsa")).toBeNull();
     expect(interpretOklahomaAsk("nursing homes in Missouri")).toBeNull();
     expect(interpretOklahomaAsk("nursing homes in Arkansas")).toBeNull();

@@ -1,7 +1,6 @@
 import snapshot from "@/data/oklahoma-public-snapshot.json";
 
-const OTHER =
-  /\b(arkansas|missouri|utah|mississippi)\b|\bin (?:ar|mo|ut|ms)\b/i;
+const OTHER = /\b(arkansas|missouri|utah|mississippi)\b|\bin (?:ar|mo|ut|ms)\b/i;
 const CITY = /\b(oklahoma city|tulsa|norman|lawton|edmond|broken arrow)\b/i;
 
 export function oklahomaIntent(q: string, stateCode?: string): boolean {
