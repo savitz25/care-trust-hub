@@ -21,6 +21,7 @@ import { interpretMississippiAsk, mississippiIntent } from "./ms-ask";
 import { interpretOklahomaAsk } from "./ok-ask";
 import { interpretArkansasAsk } from "./ar-ask";
 import { interpretNewMexicoAsk } from "./nm-ask";
+import { interpretNebraskaAsk } from "./ne-ask";
 import {
   type SeniorAskMode,
   type SeniorProviderClass,
@@ -535,6 +536,8 @@ function interpretSeniorAskQueryCore(raw: string, page = 1): SeniorResearchQuery
   if (arAnswer) return fail(arAnswer.message, arAnswer.alternatives, arAnswer.coverage);
   const nmAnswer = interpretNewMexicoAsk(q, state?.value);
   if (nmAnswer) return fail(nmAnswer.message, nmAnswer.alternatives, nmAnswer.coverage);
+  const neAnswer = interpretNebraskaAsk(q, state?.value);
+  if (neAnswer) return fail(neAnswer.message, neAnswer.alternatives, neAnswer.coverage);
   if (/assisted living/i.test(q)) {
     if (/\bvirginia\b/i.test(q) || state?.value === "VA") {
       return fail(
