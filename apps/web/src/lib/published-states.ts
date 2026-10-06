@@ -44,10 +44,13 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   kentucky: "KY",
   "south-carolina": "SC",
   mississippi: "MS",
+  oklahoma: "OK",
 };
 
 /** Newest state pages first. */
 const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>> = {
+  oklahoma:
+    "OSDH April 2026 facility directories and the August 26, 2026 provider-call counts, kept on separate clocks",
   mississippi:
     "MSDH 18 Sep 2026 directory: nursing facilities, personal care homes, home health, hospice, and ICF/IID providers, counted separately",
   "south-carolina":
