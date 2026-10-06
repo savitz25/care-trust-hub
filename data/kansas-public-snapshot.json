@@ -1,0 +1,204 @@
+{
+  "state": "KS",
+  "retrievedAt": "2026-10-06",
+  "existingKansasRowsFound": 0,
+  "existingStateRoute": false,
+  "canonicalEntityMatches": "NOT_ACQUIRED",
+  "newCanonicalEntities": 0,
+  "graphWrites": 0,
+  "sourceSets": {
+    "adultCare": {
+      "sourcePage": "https://webapps.kdads.ks.gov/prod/f?p=113:901:",
+      "csvDownload": "https://webapps.kdads.ks.gov/prod/f?p=113:901:0:CSV:RP",
+      "retrievedAt": "2026-10-06",
+      "rawRowCount": 783,
+      "distinctFacilityStateIds": 783,
+      "missingStateIds": 0,
+      "rawSha256": "485df1fc2da4d1b21cef373659a93cabb072189fabf68b8c8ad7cc73daef8d1f",
+      "typeObservations": {
+        "Accredited Hospital/Psychiatric CERT": {
+          "rows": 1,
+          "distinctStateIds": 1
+        },
+        "Adult Day Care": {
+          "rows": 20,
+          "distinctStateIds": 20
+        },
+        "Assisted Living Facility": {
+          "rows": 233,
+          "distinctStateIds": 233
+        },
+        "Boarding Care Home": {
+          "rows": 1,
+          "distinctStateIds": 1
+        },
+        "Home Plus": {
+          "rows": 258,
+          "distinctStateIds": 258
+        },
+        "Intermediate Care Facility for Individuals with Intellectual Disability STATE ONLY": {
+          "rows": 7,
+          "distinctStateIds": 7
+        },
+        "Long Term Care Unit": {
+          "rows": 16,
+          "distinctStateIds": 16
+        },
+        "Mental Health Nursing Facility": {
+          "rows": 10,
+          "distinctStateIds": 10
+        },
+        "Non-Accredited Hospital SPEC": {
+          "rows": 1,
+          "distinctStateIds": 1
+        },
+        "Nursing Facility": {
+          "rows": 271,
+          "distinctStateIds": 271
+        },
+        "Nursing Facility STATE ONLY": {
+          "rows": 2,
+          "distinctStateIds": 2
+        },
+        "Residential Health Care Facility": {
+          "rows": 118,
+          "distinctStateIds": 118
+        }
+      },
+      "lastSurveyPostingDateRows": 732,
+      "latestPrintedSurveyPostingDate": "12/31/2025",
+      "rowsWithoutSurveyPostingDate": 51,
+      "bedCountLastChangeRows": 200,
+      "lastChangeDateRows": 779,
+      "latestPrintedLastChangeDate": "2026-10-06",
+      "rowsWithoutLastChangeDate": 4
+    },
+    "healthFacilities": {
+      "sourcePage": "https://webapps.kdads.ks.gov/prod/f?p=184:901",
+      "csvDownload": "https://webapps.kdads.ks.gov/prod/f?p=184:901:0:CSV:RP",
+      "retrievedAt": "2026-10-06",
+      "rawRowCount": 962,
+      "distinctFacilityStateIds": 959,
+      "missingStateIds": 0,
+      "rawSha256": "367f903e6b72f6bfa9cbce2b2a61483ae9eba3b794f3b1fe40ecda910ea5331c",
+      "typeObservations": {
+        "Abortion Facility": {
+          "rows": 1,
+          "distinctStateIds": 1
+        },
+        "Accredited Ambulatory Surgical Center": {
+          "rows": 10,
+          "distinctStateIds": 10
+        },
+        "Accredited Ambulatory Surgical Center DUAL CERT": {
+          "rows": 10,
+          "distinctStateIds": 10
+        },
+        "Accredited Home Health Agency": {
+          "rows": 20,
+          "distinctStateIds": 20
+        },
+        "Accredited Hospital SPEC": {
+          "rows": 10,
+          "distinctStateIds": 10
+        },
+        "Accredited Hospital/Critical Access Hospital": {
+          "rows": 5,
+          "distinctStateIds": 5
+        },
+        "Accredited Hospital/Psychiatric CERT": {
+          "rows": 2,
+          "distinctStateIds": 2
+        },
+        "Accredited Long-Term Care Hospital": {
+          "rows": 36,
+          "distinctStateIds": 36
+        },
+        "Ambulatory Surgical Center": {
+          "rows": 10,
+          "distinctStateIds": 10
+        },
+        "Ambulatory Surgical Center DUAL CERT": {
+          "rows": 36,
+          "distinctStateIds": 36
+        },
+        "Ambulatory Surgical Center STATE ONLY": {
+          "rows": 11,
+          "distinctStateIds": 11
+        },
+        "Birth Centers": {
+          "rows": 4,
+          "distinctStateIds": 4
+        },
+        "End Stage Renal Disease": {
+          "rows": 61,
+          "distinctStateIds": 60
+        },
+        "Home Health Agency - Medicare": {
+          "rows": 69,
+          "distinctStateIds": 69
+        },
+        "Home Health Agency MEDICAID ONLY": {
+          "rows": 4,
+          "distinctStateIds": 4
+        },
+        "Home Health Agency STATE ONLY": {
+          "rows": 254,
+          "distinctStateIds": 254
+        },
+        "Hospice": {
+          "rows": 94,
+          "distinctStateIds": 93
+        },
+        "Hospital/Critical Access Hospital": {
+          "rows": 78,
+          "distinctStateIds": 78
+        },
+        "Hospital/Psychiatric CERT": {
+          "rows": 1,
+          "distinctStateIds": 1
+        },
+        "Intermediate Care Facility for Individuals with Intellectual Disability SPEC": {
+          "rows": 2,
+          "distinctStateIds": 2
+        },
+        "Intermediate Care Facility for Individuals with Intellectual Disability STATE ONLY": {
+          "rows": 7,
+          "distinctStateIds": 7
+        },
+        "Long Term Care Unit": {
+          "rows": 16,
+          "distinctStateIds": 16
+        },
+        "Non-Accredited Hospital SPEC": {
+          "rows": 8,
+          "distinctStateIds": 8
+        },
+        "Non-Accredited Long-Term Care Hospital": {
+          "rows": 11,
+          "distinctStateIds": 11
+        },
+        "Nursing Facility": {
+          "rows": 4,
+          "distinctStateIds": 4
+        },
+        "Other": {
+          "rows": 1,
+          "distinctStateIds": 1
+        },
+        "Outpatient Physical Therapy/Speech Pathology Services": {
+          "rows": 15,
+          "distinctStateIds": 15
+        },
+        "Portable X-Ray": {
+          "rows": 4,
+          "distinctStateIds": 4
+        },
+        "Rural Health Clinics": {
+          "rows": 181,
+          "distinctStateIds": 180
+        }
+      }
+    }
+  }
+}

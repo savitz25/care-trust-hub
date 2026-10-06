@@ -27,6 +27,7 @@ export const PUBLISHED_STATEWIDE_SLUGS = [
   "louisiana",
   "alabama",
   "kentucky",
+  "kansas",
   "south-carolina",
   "mississippi",
   "oklahoma",
