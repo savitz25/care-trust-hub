@@ -1,0 +1,43 @@
+{
+  "classes": {
+    "Abortion Clinic": 3,
+    "Ambulatory Surgical Facility": 55,
+    "Assisted Living Facility - Type I": 48,
+    "Assisted Living Facility - Type II": 176,
+    "Birthing Center": 4,
+    "End Stage Renal Disease Facility": 52,
+    "Home Health Agency": 111,
+    "Hospice": 85,
+    "Hospital": 64,
+    "Mammography": 64,
+    "Nursing Care Facility": 100,
+    "Personal Care Agency": 124,
+    "Small Health Care Facility": 5
+  },
+  "exactEntityMatches": "NOT_ACQUIRED",
+  "graphWrites": 0,
+  "idNumberUniqueByClass": {
+    "Assisted Living Facility - Type I": 48,
+    "Assisted Living Facility - Type II": 176,
+    "Home Health Agency": 111,
+    "Hospice": 85,
+    "Nursing Care Facility": 100,
+    "Personal Care Agency": 124,
+    "Small Health Care Facility": 5
+  },
+  "netNewEntities": 0,
+  "rawRows": 891,
+  "rawSha256": "ae5d3810ba79d60105e7e2a30d5bedad08099d015e69415b381e78a63566704f",
+  "retrievedAt": "2026-10-06T13:22:52.592941+00:00",
+  "seniorRelevantClasses": [
+    "Assisted Living Facility - Type I",
+    "Assisted Living Facility - Type II",
+    "Home Health Agency",
+    "Hospice",
+    "Nursing Care Facility",
+    "Personal Care Agency",
+    "Small Health Care Facility"
+  ],
+  "source": "https://services1.arcgis.com/99lidPhWCzftIe9K/ArcGIS/rest/services/LicensedHealthCareFacilities/FeatureServer/0",
+  "sourceDataLastEditEpochMs": 1772842942445
+}
