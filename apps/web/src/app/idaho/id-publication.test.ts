@@ -3,7 +3,10 @@ import fs from "node:fs";
 import snapshot from "@/data/idaho-public-snapshot.json";
 import { interpretIdahoAsk } from "@/server/care/id-ask";
 import { interpretSeniorAskQuery } from "@/server/care/senior-ask-parse";
-import { normalizedPublishedStatePath, PUBLISHED_STATEWIDE_SLUGS } from "@/lib/published-state-path";
+import {
+  normalizedPublishedStatePath,
+  PUBLISHED_STATEWIDE_SLUGS,
+} from "@/lib/published-state-path";
 import { PUBLISHED_STATES } from "@/lib/published-states";
 
 const BANNED = /\b(107|108)\b/;
@@ -41,8 +44,8 @@ describe("Idaho senior publication", () => {
     expect(page).toContain("publicRobots(true)");
     expect(page).toContain("NOT_ACQUIRED");
     expect(page).toContain("not a roster clock");
-    expect(page).toContain("A browser is not a roster");
-    expect(page).toContain("not a violation");
+    expect(page).toMatch(/A browser is not a\s+roster/);
+    expect(page).toMatch(/not a\s+violation/);
     expect(page).not.toMatch(/AggregateRating|Trust Score|ratingValue/);
     expect(page).not.toMatch(BANNED);
     expect(page).not.toMatch(/\/idaho\/boise/);
@@ -54,7 +57,9 @@ describe("Idaho senior publication", () => {
     expect(normalizedPublishedStatePath("/idaho")).toBeNull();
     expect(normalizedPublishedStatePath("/idaho/boise")).toBeNull();
     expect(PUBLISHED_STATEWIDE_SLUGS).toContain("idaho");
-    expect(PUBLISHED_STATES.some((state) => state.slug === "idaho" && state.code === "ID")).toBe(true);
+    expect(PUBLISHED_STATES.some((state) => state.slug === "idaho" && state.code === "ID")).toBe(
+      true,
+    );
   });
 
   it("fails closed without a senior census", () => {
@@ -65,9 +70,15 @@ describe("Idaho senior publication", () => {
     expect(postal.failReason).toMatch(/NOT_ACQUIRED/);
     const total = interpretSeniorAskQuery("how many senior facilities in Idaho");
     expect(total.failReason).toMatch(/cannot be combined/);
-    expect(interpretSeniorAskQuery("best nursing home in Idaho").failReason).toMatch(/does not rank/);
-    expect(interpretSeniorAskQuery("assisted living in Boise Idaho").failReason).toMatch(/geography only/);
-    expect(interpretSeniorAskQuery("certified family homes in Idaho").failReason).toMatch(/NOT_ACQUIRED/);
+    expect(interpretSeniorAskQuery("best nursing home in Idaho").failReason).toMatch(
+      /does not rank/,
+    );
+    expect(interpretSeniorAskQuery("assisted living in Boise Idaho").failReason).toMatch(
+      /geography only/,
+    );
+    expect(interpretSeniorAskQuery("certified family homes in Idaho").failReason).toMatch(
+      /NOT_ACQUIRED/,
+    );
     expect(interpretIdahoAsk("nursing homes id")).toBeNull();
     expect(interpretIdahoAsk("nursing homes ID")).toBeNull();
     const nm = interpretSeniorAskQuery("nursing homes in New Mexico");

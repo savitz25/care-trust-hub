@@ -23,24 +23,21 @@ export default function IdahoSeniorPage() {
         <p className="eyebrow">Idaho senior care research</p>
         <h1 id="id-title">Idaho senior facility limits</h1>
         <p className="home-hero__lede">
-          The {snapshot.regulator} find-a-facility page names nursing homes,
-          assisted living, Home and Community Based Services, and Certified Family
-          Homes. No class was acquired as a state roster, and this page does not
-          publish one Idaho senior-facility census. CMS certification was not
-          downloaded. It stays a federal overlay.
+          The {snapshot.regulator} find-a-facility page names nursing homes, assisted living, Home
+          and Community Based Services, and Certified Family Homes. No class was acquired as a state
+          roster, and this page does not publish one Idaho senior-facility census. CMS certification
+          was not downloaded. It stays a federal overlay.
         </p>
       </section>
 
       <section aria-labelledby="id-classes">
         <h2 id="id-classes">State rosters were not acquired</h2>
         <p>
-          Source{" "}
-          <a href={snapshot.sources.findFacility}>find a facility or agency</a>,
-          examined {snapshot.examinedAt}. The saved page is {snapshot.findFacilityHtmlBytes}{" "}
-          bytes, SHA-256 {snapshot.findFacilityHtmlSha256}. The page chrome prints
-          last updated {snapshot.findFacilityPageChromeUpdated}. That chrome date
-          is not a roster clock. Each class below is NOT_ACQUIRED. The rows are
-          not added.
+          Source <a href={snapshot.sources.findFacility}>find a facility or agency</a>, examined{" "}
+          {snapshot.examinedAt}. The saved page is {snapshot.findFacilityHtmlBytes} bytes, SHA-256{" "}
+          {snapshot.findFacilityHtmlSha256}. The page chrome prints last updated{" "}
+          {snapshot.findFacilityPageChromeUpdated}. That chrome date is not a roster clock. Each
+          class below is NOT_ACQUIRED. The rows are not added.
         </p>
         <table>
           <caption>Idaho senior classes. Not a current roster and not a combined census.</caption>
@@ -65,16 +62,16 @@ export default function IdahoSeniorPage() {
         <h2 id="id-search">The public list is a browser</h2>
         <p>
           The find-a-facility page links to a{" "}
-          <a href={snapshot.sources.webLinkBrowser}>WebLink browser</a> for facility
-          and agency lists. That browser was not opened and was not downloaded as
-          a CSV. A browser is not a roster. Residential Assisted Living Facilities
-          and Certified Family Homes are separate program pages. Survey,
-          inspection, complaint-investigation, enforcement, capacity, and Medicaid
-          participation counts were NOT_ACQUIRED. A complaint investigation is not a violation.
+          <a href={snapshot.sources.webLinkBrowser}>WebLink browser</a> for facility and agency
+          lists. That browser was not opened and was not downloaded as a CSV. A browser is not a
+          roster. Residential Assisted Living Facilities and Certified Family Homes are separate
+          program pages. Survey, inspection, complaint-investigation, enforcement, capacity, and
+          Medicaid participation counts were NOT_ACQUIRED. A complaint investigation is not a
+          violation.
         </p>
         <p>
-          CMS remains a federal overlay. No state-to-CMS bridge was made. A
-          third-party magazine or association figure is not an Idaho license count.
+          CMS remains a federal overlay. No state-to-CMS bridge was made. A third-party magazine or
+          association figure is not an Idaho license count.
         </p>
       </section>
 
@@ -93,8 +90,7 @@ export default function IdahoSeniorPage() {
             {snapshot.nameOnlyAdverseJoins}.
           </li>
           <li>
-            Boise is geography only. <Link href="/idaho">/idaho</Link> is the only
-            new route.
+            Boise is geography only. <Link href="/idaho">/idaho</Link> is the only new route.
           </li>
         </ul>
       </section>

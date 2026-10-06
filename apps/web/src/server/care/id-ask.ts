@@ -39,10 +39,7 @@ export function interpretIdahoAsk(q: string, stateCode?: string) {
     );
   }
   if (/\b(beds?|capacity|slots?)\b/i.test(q)) {
-    return answer(
-      `Idaho licensed capacity was NOT_ACQUIRED.${geography}`,
-      "NOT_ACQUIRED",
-    );
+    return answer(`Idaho licensed capacity was NOT_ACQUIRED.${geography}`, "NOT_ACQUIRED");
   }
   if (/\b(enforcement|sanction|penalt|revok)\b/i.test(q)) {
     return answer(
