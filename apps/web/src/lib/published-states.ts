@@ -42,6 +42,7 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   louisiana: "LA",
   alabama: "AL",
   kentucky: "KY",
+  kansas: "KS",
   "south-carolina": "SC",
   mississippi: "MS",
   oklahoma: "OK",
@@ -69,6 +70,8 @@ const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>
     "DPH nursing home, community residential care, home health, hospice, adult day, in-home care, and intermediate care license rows, counted separately",
   kentucky:
     "OIG long-term care, assisted living, personal care, family care, adult day, home health, hospice, and personal services directories, counted separately",
+  kansas:
+    "KDADS facility classes, separate KDHE health-facility types, and source-specific survey posting clocks",
   alabama:
     "ADPH nursing home, assisted living, specialty care assisted living, home health, and hospice directory exports, counted separately",
   louisiana:
