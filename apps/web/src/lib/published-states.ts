@@ -45,6 +45,7 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   "south-carolina": "SC",
   mississippi: "MS",
   oklahoma: "OK",
+  missouri: "MO",
   arkansas: "AR",
 };
 
@@ -54,6 +55,8 @@ const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>
     "DHS SFY 2022 narrative for nursing facilities, ICF/IID, and psychiatric residential care, kept separate from surveys and complaints",
   oklahoma:
     "OSDH April 2026 facility directories and the August 26, 2026 provider-call counts, kept on separate clocks",
+  missouri:
+    "DHSS long-term care directory: SNF, ICF, RCF, RCF*, ALF and ALF** licensure levels kept separate",
   mississippi:
     "MSDH 18 Sep 2026 directory: nursing facilities, personal care homes, home health, hospice, and ICF/IID providers, counted separately",
   "south-carolina":

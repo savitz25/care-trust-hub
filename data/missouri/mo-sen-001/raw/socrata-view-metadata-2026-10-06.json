@@ -1,0 +1,2313 @@
+{
+  "id": "fenu-sipv",
+  "name": "LTC DIRECTORY",
+  "assetType": "dataset",
+  "averageRating": 0,
+  "category": "Health",
+  "createdAt": 1763144819,
+  "description": "The LTC DIRECTORY contains all Long Term Care (LTC) facilities licensed by the Missouri Department of Health and Senior Services, Section for Long-Term Care Regulation.  The directory includes residential care facilities (RCF and RCF*), assisted living facilities (ALF and ALF**), intermediate care facilities (ICF), and skilled nursing facilities (SNF).",
+  "diciBackend": false,
+  "displayType": "table",
+  "downloadCount": 9706,
+  "hideFromCatalog": false,
+  "hideFromDataJson": false,
+  "locked": false,
+  "newBackend": true,
+  "numberOfComments": 0,
+  "oid": 42415618,
+  "provenance": "official",
+  "publicationAppendEnabled": false,
+  "publicationDate": 1787076177,
+  "publicationGroup": 20159261,
+  "publicationStage": "published",
+  "rowsUpdatedAt": 1791217597,
+  "rowsUpdatedBy": "xtvs-e69e",
+  "tableId": 20527250,
+  "totalTimesRated": 0,
+  "viewCount": 22148,
+  "viewLastModified": 1791217594,
+  "viewType": "tabular",
+  "approvals": [
+    {
+      "reviewedAt": 1763145123,
+      "reviewedAutomatically": true,
+      "state": "approved",
+      "submissionId": 7627016,
+      "submissionObject": "public_audience_request",
+      "submissionOutcome": "change_audience",
+      "submittedAt": 1763145123,
+      "targetAudience": "public",
+      "workflowId": 2177,
+      "submissionDetails": {
+        "permissionType": "READ"
+      },
+      "submissionOutcomeApplication": {
+        "endedAt": 1763145123,
+        "failureCount": 0,
+        "startedAt": 1763145123,
+        "status": "success"
+      },
+      "submitter": {
+        "id": "khna-4i6r",
+        "displayName": "LISA V"
+      }
+    }
+  ],
+  "clientContext": {
+    "clientContextVariables": [],
+    "inheritedVariables": {}
+  },
+  "columns": [
+    {
+      "id": 641814217,
+      "name": "Region",
+      "dataTypeName": "number",
+      "description": "",
+      "fieldName": "region",
+      "position": 1,
+      "renderTypeName": "number",
+      "tableColumnId": 163286160,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "7",
+        "null": "0",
+        "top": [
+          {
+            "item": "7",
+            "count": "221"
+          },
+          {
+            "item": "2",
+            "count": "196"
+          },
+          {
+            "item": "6",
+            "count": "181"
+          },
+          {
+            "item": "1",
+            "count": "180"
+          },
+          {
+            "item": "3",
+            "count": "120"
+          },
+          {
+            "item": "4",
+            "count": "110"
+          },
+          {
+            "item": "5",
+            "count": "93"
+          }
+        ],
+        "smallest": "1",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {
+        "decimalSeparator": ".",
+        "groupSeparator": ","
+      }
+    },
+    {
+      "id": 641814218,
+      "name": "Facility Number",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "facility_number",
+      "position": 2,
+      "renderTypeName": "text",
+      "tableColumnId": 163286179,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "99932",
+        "null": "0",
+        "top": [
+          {
+            "item": "01602",
+            "count": "3"
+          },
+          {
+            "item": "27570",
+            "count": "3"
+          },
+          {
+            "item": "22664",
+            "count": "3"
+          },
+          {
+            "item": "21512",
+            "count": "3"
+          },
+          {
+            "item": "18157",
+            "count": "3"
+          },
+          {
+            "item": "18442",
+            "count": "3"
+          },
+          {
+            "item": "00342",
+            "count": "2"
+          },
+          {
+            "item": "29084",
+            "count": "2"
+          },
+          {
+            "item": "00199",
+            "count": "2"
+          },
+          {
+            "item": "02336",
+            "count": "2"
+          },
+          {
+            "item": "18509",
+            "count": "2"
+          },
+          {
+            "item": "17458",
+            "count": "2"
+          },
+          {
+            "item": "04152",
+            "count": "2"
+          },
+          {
+            "item": "04750",
+            "count": "2"
+          },
+          {
+            "item": "09756",
+            "count": "2"
+          },
+          {
+            "item": "05117",
+            "count": "2"
+          },
+          {
+            "item": "03051",
+            "count": "2"
+          },
+          {
+            "item": "06181",
+            "count": "2"
+          },
+          {
+            "item": "05326",
+            "count": "2"
+          },
+          {
+            "item": "16964",
+            "count": "2"
+          }
+        ],
+        "smallest": "00032",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {
+        "decimalSeparator": ".",
+        "groupSeparator": ","
+      }
+    },
+    {
+      "id": 641814219,
+      "name": "Level of Care",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "level_of_care",
+      "position": 3,
+      "renderTypeName": "text",
+      "tableColumnId": 163286161,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "SNF",
+        "null": "0",
+        "top": [
+          {
+            "item": "SNF",
+            "count": "484"
+          },
+          {
+            "item": "ALF**",
+            "count": "271"
+          },
+          {
+            "item": "RCF",
+            "count": "166"
+          },
+          {
+            "item": "RCF*",
+            "count": "103"
+          },
+          {
+            "item": "ALF",
+            "count": "60"
+          },
+          {
+            "item": "ICF",
+            "count": "17"
+          }
+        ],
+        "smallest": "ALF",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814220,
+      "name": "Level of Care Code",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "level_of_care_code",
+      "position": 4,
+      "renderTypeName": "text",
+      "tableColumnId": 167051430,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "N",
+        "null": "0",
+        "top": [
+          {
+            "item": "A",
+            "count": "484"
+          },
+          {
+            "item": "N",
+            "count": "271"
+          },
+          {
+            "item": "D",
+            "count": "166"
+          },
+          {
+            "item": "C",
+            "count": "103"
+          },
+          {
+            "item": "M",
+            "count": "60"
+          },
+          {
+            "item": "B",
+            "count": "17"
+          }
+        ],
+        "smallest": "A",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814221,
+      "name": "Capacity",
+      "dataTypeName": "number",
+      "description": "",
+      "fieldName": "capacity",
+      "position": 5,
+      "renderTypeName": "number",
+      "tableColumnId": 163286162,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "400",
+        "null": "0",
+        "top": [
+          {
+            "item": "12",
+            "count": "81"
+          },
+          {
+            "item": "120",
+            "count": "79"
+          },
+          {
+            "item": "60",
+            "count": "74"
+          },
+          {
+            "item": "90",
+            "count": "41"
+          },
+          {
+            "item": "20",
+            "count": "37"
+          },
+          {
+            "item": "40",
+            "count": "24"
+          },
+          {
+            "item": "66",
+            "count": "17"
+          },
+          {
+            "item": "30",
+            "count": "17"
+          },
+          {
+            "item": "36",
+            "count": "16"
+          },
+          {
+            "item": "72",
+            "count": "15"
+          },
+          {
+            "item": "100",
+            "count": "15"
+          },
+          {
+            "item": "24",
+            "count": "15"
+          },
+          {
+            "item": "55",
+            "count": "14"
+          },
+          {
+            "item": "48",
+            "count": "14"
+          },
+          {
+            "item": "98",
+            "count": "14"
+          },
+          {
+            "item": "50",
+            "count": "14"
+          },
+          {
+            "item": "38",
+            "count": "14"
+          },
+          {
+            "item": "32",
+            "count": "13"
+          },
+          {
+            "item": "42",
+            "count": "13"
+          },
+          {
+            "item": "70",
+            "count": "12"
+          }
+        ],
+        "smallest": "3",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {
+        "decimalSeparator": ".",
+        "groupSeparator": ","
+      }
+    },
+    {
+      "id": 641814222,
+      "name": "LicenseNumber",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "fcilicensenumber",
+      "position": 6,
+      "renderTypeName": "text",
+      "tableColumnId": 166144016,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "058899",
+        "null": "0",
+        "top": [
+          {
+            "item": "053095",
+            "count": "2"
+          },
+          {
+            "item": "053459",
+            "count": "2"
+          },
+          {
+            "item": "053960",
+            "count": "2"
+          },
+          {
+            "item": "053144",
+            "count": "2"
+          },
+          {
+            "item": "052292",
+            "count": "2"
+          },
+          {
+            "item": "054078",
+            "count": "2"
+          },
+          {
+            "item": "053789",
+            "count": "2"
+          },
+          {
+            "item": "052823",
+            "count": "2"
+          },
+          {
+            "item": "053141",
+            "count": "1"
+          },
+          {
+            "item": "053967",
+            "count": "1"
+          },
+          {
+            "item": "054048",
+            "count": "1"
+          },
+          {
+            "item": "052767",
+            "count": "1"
+          },
+          {
+            "item": "053801",
+            "count": "1"
+          },
+          {
+            "item": "052987",
+            "count": "1"
+          },
+          {
+            "item": "052502",
+            "count": "1"
+          },
+          {
+            "item": "052692",
+            "count": "1"
+          },
+          {
+            "item": "051780",
+            "count": "1"
+          },
+          {
+            "item": "052865",
+            "count": "1"
+          },
+          {
+            "item": "052315",
+            "count": "1"
+          },
+          {
+            "item": "053596",
+            "count": "1"
+          }
+        ],
+        "smallest": "005899",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814223,
+      "name": "LicenseEffDate",
+      "dataTypeName": "calendar_date",
+      "description": "",
+      "fieldName": "fcilicenseeffdate",
+      "position": 7,
+      "renderTypeName": "calendar_date",
+      "tableColumnId": 166144014,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "2026-11-01T00:00:00.000",
+        "null": "0",
+        "top": [
+          {
+            "item": "2026-06-01T00:00:00.000",
+            "count": "47"
+          },
+          {
+            "item": "2026-07-01T00:00:00.000",
+            "count": "23"
+          },
+          {
+            "item": "2026-02-01T00:00:00.000",
+            "count": "20"
+          },
+          {
+            "item": "2025-11-01T00:00:00.000",
+            "count": "20"
+          },
+          {
+            "item": "2025-10-01T00:00:00.000",
+            "count": "19"
+          },
+          {
+            "item": "2026-01-01T00:00:00.000",
+            "count": "18"
+          },
+          {
+            "item": "2025-01-01T00:00:00.000",
+            "count": "18"
+          },
+          {
+            "item": "2025-05-01T00:00:00.000",
+            "count": "18"
+          },
+          {
+            "item": "2025-07-01T00:00:00.000",
+            "count": "17"
+          },
+          {
+            "item": "2025-04-01T00:00:00.000",
+            "count": "16"
+          },
+          {
+            "item": "2026-05-01T00:00:00.000",
+            "count": "16"
+          },
+          {
+            "item": "2025-08-01T00:00:00.000",
+            "count": "15"
+          },
+          {
+            "item": "2026-10-01T00:00:00.000",
+            "count": "14"
+          },
+          {
+            "item": "2025-12-01T00:00:00.000",
+            "count": "14"
+          },
+          {
+            "item": "2026-08-01T00:00:00.000",
+            "count": "14"
+          },
+          {
+            "item": "2025-02-01T00:00:00.000",
+            "count": "13"
+          },
+          {
+            "item": "2024-11-01T00:00:00.000",
+            "count": "13"
+          },
+          {
+            "item": "2025-06-01T00:00:00.000",
+            "count": "13"
+          },
+          {
+            "item": "2025-03-01T00:00:00.000",
+            "count": "13"
+          },
+          {
+            "item": "2025-09-01T00:00:00.000",
+            "count": "12"
+          }
+        ],
+        "smallest": "2024-10-01T00:00:00.000",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814224,
+      "name": "License Expiration",
+      "dataTypeName": "calendar_date",
+      "description": "",
+      "fieldName": "license_expiration",
+      "position": 8,
+      "renderTypeName": "calendar_date",
+      "tableColumnId": 166144015,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "2028-10-31T00:00:00.000",
+        "null": "0",
+        "top": [
+          {
+            "item": "2026-11-30T00:00:00.000",
+            "count": "28"
+          },
+          {
+            "item": "2026-10-31T00:00:00.000",
+            "count": "23"
+          },
+          {
+            "item": "2026-12-31T00:00:00.000",
+            "count": "20"
+          },
+          {
+            "item": "2027-12-31T00:00:00.000",
+            "count": "18"
+          },
+          {
+            "item": "2028-01-31T00:00:00.000",
+            "count": "17"
+          },
+          {
+            "item": "2027-07-31T00:00:00.000",
+            "count": "17"
+          },
+          {
+            "item": "2027-06-30T00:00:00.000",
+            "count": "17"
+          },
+          {
+            "item": "2027-02-28T00:00:00.000",
+            "count": "16"
+          },
+          {
+            "item": "2028-04-30T00:00:00.000",
+            "count": "16"
+          },
+          {
+            "item": "2027-04-30T00:00:00.000",
+            "count": "15"
+          },
+          {
+            "item": "2028-06-30T00:00:00.000",
+            "count": "14"
+          },
+          {
+            "item": "2027-03-31T00:00:00.000",
+            "count": "14"
+          },
+          {
+            "item": "2027-01-31T00:00:00.000",
+            "count": "14"
+          },
+          {
+            "item": "2027-08-31T00:00:00.000",
+            "count": "13"
+          },
+          {
+            "item": "2027-11-30T00:00:00.000",
+            "count": "13"
+          },
+          {
+            "item": "2028-09-30T00:00:00.000",
+            "count": "12"
+          },
+          {
+            "item": "2027-05-31T00:00:00.000",
+            "count": "12"
+          },
+          {
+            "item": "2027-09-30T00:00:00.000",
+            "count": "11"
+          },
+          {
+            "item": "2027-10-31T00:00:00.000",
+            "count": "11"
+          },
+          {
+            "item": "2028-07-31T00:00:00.000",
+            "count": "9"
+          }
+        ],
+        "smallest": "2026-10-11T00:00:00.000",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814225,
+      "name": "Facility Name",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "facility_name",
+      "position": 9,
+      "renderTypeName": "text",
+      "tableColumnId": 163286163,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "WORTH COUNTY CONVALESCENT CENTER",
+        "null": "0",
+        "top": [
+          {
+            "item": "LAKEVIEW HEALTH CARE & REHABILITATION CENTER",
+            "count": "3"
+          },
+          {
+            "item": "ST JOE MANOR",
+            "count": "3"
+          },
+          {
+            "item": "ST FRANCOIS MANOR",
+            "count": "3"
+          },
+          {
+            "item": "HIDDEN LAKE HEALTH CARE CENTER",
+            "count": "3"
+          },
+          {
+            "item": "OAKDALE CARE CENTER",
+            "count": "3"
+          },
+          {
+            "item": "ABERDEEN HEIGHTS",
+            "count": "3"
+          },
+          {
+            "item": "STEELVILLE CARE & REHAB CENTER",
+            "count": "2"
+          },
+          {
+            "item": "TROY MANOR",
+            "count": "2"
+          },
+          {
+            "item": "COUNTRY CLUB REHAB AND HEALTHCARE CENTER",
+            "count": "2"
+          },
+          {
+            "item": "BROOKING PARK",
+            "count": "2"
+          },
+          {
+            "item": "RAINTREE VILLAGE",
+            "count": "2"
+          },
+          {
+            "item": "STONEBRIDGE LAKE OZARK",
+            "count": "2"
+          },
+          {
+            "item": "BEAUTIFUL SAVIOR HOME",
+            "count": "2"
+          },
+          {
+            "item": "BELLEVIEW CARE CENTER",
+            "count": "2"
+          },
+          {
+            "item": "GARDENS AT BARRY ROAD, THE",
+            "count": "2"
+          },
+          {
+            "item": "STONEBRIDGE OAK TREE",
+            "count": "2"
+          },
+          {
+            "item": "NEW HAVEN CARE CENTER",
+            "count": "2"
+          },
+          {
+            "item": "PACIFIC CARE CENTER",
+            "count": "2"
+          },
+          {
+            "item": "STONEBRIDGE WESTPHALIA",
+            "count": "2"
+          },
+          {
+            "item": "ABBEY SENIOR HEALTH",
+            "count": "2"
+          }
+        ],
+        "smallest": "ABBEY SENIOR HEALTH",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814226,
+      "name": "Address",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "address",
+      "position": 10,
+      "renderTypeName": "text",
+      "tableColumnId": 163286164,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "TWO MCKNIGHT PL",
+        "null": "0",
+        "top": [
+          {
+            "item": "11728 HIDDEN LAKE DR",
+            "count": "3"
+          },
+          {
+            "item": "2702 DEBBIE LN",
+            "count": "3"
+          },
+          {
+            "item": "10 LAKE DR",
+            "count": "3"
+          },
+          {
+            "item": "505 COUCH AVE",
+            "count": "3"
+          },
+          {
+            "item": "1450 ASHLEY RD",
+            "count": "3"
+          },
+          {
+            "item": "1180 OLD JACKSON RD",
+            "count": "3"
+          },
+          {
+            "item": "1827 CRADER DR",
+            "count": "2"
+          },
+          {
+            "item": "801 SOUTH COLBY",
+            "count": "2"
+          },
+          {
+            "item": "5791 COMPASSION CIRCLE",
+            "count": "2"
+          },
+          {
+            "item": "3302 NORTH WOODBINE ROAD",
+            "count": "2"
+          },
+          {
+            "item": "1301 N ST JOE DR",
+            "count": "2"
+          },
+          {
+            "item": "1202 HEARTLAND RD",
+            "count": "2"
+          },
+          {
+            "item": "19235 STATE ROUTE EE",
+            "count": "2"
+          },
+          {
+            "item": "1201 WEST 19TH ST",
+            "count": "2"
+          },
+          {
+            "item": "3850 CARTWRIGHT LANE",
+            "count": "2"
+          },
+          {
+            "item": "810 EAST EDWARDS ST",
+            "count": "2"
+          },
+          {
+            "item": "503 REGENT DR",
+            "count": "2"
+          },
+          {
+            "item": "4009 GENE FIELD RD",
+            "count": "2"
+          },
+          {
+            "item": "620 NORTH EMMERSON",
+            "count": "2"
+          },
+          {
+            "item": "4616 HIGHWAY D",
+            "count": "2"
+          }
+        ],
+        "smallest": "10000 WORNALL RD",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814227,
+      "name": "City",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "city",
+      "position": 11,
+      "renderTypeName": "text",
+      "tableColumnId": 163286165,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "WRIGHT CITY",
+        "null": "0",
+        "top": [
+          {
+            "item": "SAINT LOUIS",
+            "count": "90"
+          },
+          {
+            "item": "KANSAS CITY",
+            "count": "54"
+          },
+          {
+            "item": "SPRINGFIELD",
+            "count": "36"
+          },
+          {
+            "item": "FARMINGTON",
+            "count": "23"
+          },
+          {
+            "item": "JEFFERSON CITY",
+            "count": "18"
+          },
+          {
+            "item": "COLUMBIA",
+            "count": "17"
+          },
+          {
+            "item": "CHESTERFIELD",
+            "count": "16"
+          },
+          {
+            "item": "INDEPENDENCE",
+            "count": "16"
+          },
+          {
+            "item": "POPLAR BLUFF",
+            "count": "15"
+          },
+          {
+            "item": "SAINT JOSEPH",
+            "count": "15"
+          },
+          {
+            "item": "CAPE GIRARDEAU",
+            "count": "15"
+          },
+          {
+            "item": "SAINT CHARLES",
+            "count": "13"
+          },
+          {
+            "item": "OZARK",
+            "count": "12"
+          },
+          {
+            "item": "FLORISSANT",
+            "count": "11"
+          },
+          {
+            "item": "JOPLIN",
+            "count": "11"
+          },
+          {
+            "item": "SAINT PETERS",
+            "count": "11"
+          },
+          {
+            "item": "SEDALIA",
+            "count": "11"
+          },
+          {
+            "item": "LEE'S SUMMIT",
+            "count": "11"
+          },
+          {
+            "item": "BLUE SPRINGS",
+            "count": "9"
+          },
+          {
+            "item": "WASHINGTON",
+            "count": "9"
+          }
+        ],
+        "smallest": "ADRIAN",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814228,
+      "name": "Zip Code",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "zip_code",
+      "position": 12,
+      "renderTypeName": "text",
+      "tableColumnId": 163286166,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "65810-2989",
+        "null": "0",
+        "top": [
+          {
+            "item": "63124-1900",
+            "count": "3"
+          },
+          {
+            "item": "65721-9499",
+            "count": "3"
+          },
+          {
+            "item": "63640-3428",
+            "count": "3"
+          },
+          {
+            "item": "65233-2141",
+            "count": "3"
+          },
+          {
+            "item": "63901-2650",
+            "count": "3"
+          },
+          {
+            "item": "63628-1820",
+            "count": "3"
+          },
+          {
+            "item": "63138-1757",
+            "count": "3"
+          },
+          {
+            "item": "63122-5536",
+            "count": "3"
+          },
+          {
+            "item": "63601-1965",
+            "count": "2"
+          },
+          {
+            "item": "64020-9643",
+            "count": "2"
+          },
+          {
+            "item": "65065-2754",
+            "count": "2"
+          },
+          {
+            "item": "63129-4715",
+            "count": "2"
+          },
+          {
+            "item": "64683-1103",
+            "count": "2"
+          },
+          {
+            "item": "64057-1805",
+            "count": "2"
+          },
+          {
+            "item": "64153-1634",
+            "count": "2"
+          },
+          {
+            "item": "65265-2199",
+            "count": "2"
+          },
+          {
+            "item": "65109-6901",
+            "count": "2"
+          },
+          {
+            "item": "65401-2512",
+            "count": "2"
+          },
+          {
+            "item": "65453-8089",
+            "count": "2"
+          },
+          {
+            "item": "63343-3126",
+            "count": "2"
+          }
+        ],
+        "smallest": "63010-2011",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814229,
+      "name": "County",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "county",
+      "position": 13,
+      "renderTypeName": "text",
+      "tableColumnId": 163286167,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "WRIGHT",
+        "null": "0",
+        "top": [
+          {
+            "item": "SAINT LOUIS COUNTY",
+            "count": "143"
+          },
+          {
+            "item": "JACKSON",
+            "count": "82"
+          },
+          {
+            "item": "SAINT CHARLES",
+            "count": "44"
+          },
+          {
+            "item": "GREENE",
+            "count": "44"
+          },
+          {
+            "item": "SAINT FRANCOIS",
+            "count": "34"
+          },
+          {
+            "item": "SAINT LOUIS CITY",
+            "count": "34"
+          },
+          {
+            "item": "FRANKLIN",
+            "count": "26"
+          },
+          {
+            "item": "JEFFERSON",
+            "count": "25"
+          },
+          {
+            "item": "BOONE",
+            "count": "25"
+          },
+          {
+            "item": "CLAY",
+            "count": "23"
+          },
+          {
+            "item": "JASPER",
+            "count": "19"
+          },
+          {
+            "item": "COLE",
+            "count": "19"
+          },
+          {
+            "item": "CAPE GIRARDEAU",
+            "count": "19"
+          },
+          {
+            "item": "CHRISTIAN",
+            "count": "18"
+          },
+          {
+            "item": "PLATTE",
+            "count": "17"
+          },
+          {
+            "item": "BUTLER",
+            "count": "15"
+          },
+          {
+            "item": "BUCHANAN",
+            "count": "15"
+          },
+          {
+            "item": "CASS",
+            "count": "14"
+          },
+          {
+            "item": "LINCOLN",
+            "count": "12"
+          },
+          {
+            "item": "NEWTON",
+            "count": "12"
+          }
+        ],
+        "smallest": "ADAIR",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814230,
+      "name": "Facility Mailing Address",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "facility_mailing_address",
+      "position": 14,
+      "renderTypeName": "text",
+      "tableColumnId": 163286168,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "TWO MCKNIGHT PL",
+        "null": "0",
+        "top": [
+          {
+            "item": "11300 DOLAN WAY",
+            "count": "6"
+          },
+          {
+            "item": "PO BOX 272",
+            "count": "4"
+          },
+          {
+            "item": "1450 ASHLEY RD",
+            "count": "3"
+          },
+          {
+            "item": "11728 HIDDEN LAKE DR",
+            "count": "3"
+          },
+          {
+            "item": "1180 OLD JACKSON RD",
+            "count": "3"
+          },
+          {
+            "item": "2702 DEBBIE LN",
+            "count": "3"
+          },
+          {
+            "item": "10 LAKE DR",
+            "count": "3"
+          },
+          {
+            "item": "505 COUCH AVE",
+            "count": "3"
+          },
+          {
+            "item": "PO BOX 187",
+            "count": "3"
+          },
+          {
+            "item": "1201 WEST 19TH ST",
+            "count": "2"
+          },
+          {
+            "item": "801 SOUTH COLBY",
+            "count": "2"
+          },
+          {
+            "item": "1202 HEARTLAND RD",
+            "count": "2"
+          },
+          {
+            "item": "19235 STATE ROUTE EE",
+            "count": "2"
+          },
+          {
+            "item": "105 S SIXTH ST",
+            "count": "2"
+          },
+          {
+            "item": "PO BOX 707",
+            "count": "2"
+          },
+          {
+            "item": "1827 CRADER DR",
+            "count": "2"
+          },
+          {
+            "item": "3850 CARTWRIGHT LANE",
+            "count": "2"
+          },
+          {
+            "item": "810 EAST EDWARDS ST",
+            "count": "2"
+          },
+          {
+            "item": "3260 BAISCH DR",
+            "count": "2"
+          },
+          {
+            "item": "1301 N ST JOE DR",
+            "count": "2"
+          }
+        ],
+        "smallest": "10000 WORNALL RD",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814231,
+      "name": "Facility Mailing City",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "facility_mailing_city",
+      "position": 15,
+      "renderTypeName": "text",
+      "tableColumnId": 163286169,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "WRIGHT CITY",
+        "null": "0",
+        "top": [
+          {
+            "item": "SAINT LOUIS",
+            "count": "92"
+          },
+          {
+            "item": "KANSAS CITY",
+            "count": "54"
+          },
+          {
+            "item": "SPRINGFIELD",
+            "count": "35"
+          },
+          {
+            "item": "FARMINGTON",
+            "count": "25"
+          },
+          {
+            "item": "JEFFERSON CITY",
+            "count": "18"
+          },
+          {
+            "item": "COLUMBIA",
+            "count": "17"
+          },
+          {
+            "item": "INDEPENDENCE",
+            "count": "16"
+          },
+          {
+            "item": "CHESTERFIELD",
+            "count": "16"
+          },
+          {
+            "item": "POPLAR BLUFF",
+            "count": "15"
+          },
+          {
+            "item": "SAINT JOSEPH",
+            "count": "15"
+          },
+          {
+            "item": "CAPE GIRARDEAU",
+            "count": "15"
+          },
+          {
+            "item": "SAINT CHARLES",
+            "count": "13"
+          },
+          {
+            "item": "OZARK",
+            "count": "12"
+          },
+          {
+            "item": "JOPLIN",
+            "count": "11"
+          },
+          {
+            "item": "SAINT PETERS",
+            "count": "11"
+          },
+          {
+            "item": "SEDALIA",
+            "count": "11"
+          },
+          {
+            "item": "FLORISSANT",
+            "count": "11"
+          },
+          {
+            "item": "LEE'S SUMMIT",
+            "count": "11"
+          },
+          {
+            "item": "BLUE SPRINGS",
+            "count": "9"
+          },
+          {
+            "item": "WASHINGTON",
+            "count": "9"
+          }
+        ],
+        "smallest": "ADRIAN",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814232,
+      "name": "Facility Mailing Zip",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "facility_mailing_zip",
+      "position": 16,
+      "renderTypeName": "text",
+      "tableColumnId": 163286170,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "65810-2989",
+        "null": "0",
+        "top": [
+          {
+            "item": "63146-",
+            "count": "5"
+          },
+          {
+            "item": "63640-0675",
+            "count": "3"
+          },
+          {
+            "item": "63138-1757",
+            "count": "3"
+          },
+          {
+            "item": "63122-5536",
+            "count": "3"
+          },
+          {
+            "item": "65233-2141",
+            "count": "3"
+          },
+          {
+            "item": "63124-1900",
+            "count": "3"
+          },
+          {
+            "item": "63901-2650",
+            "count": "3"
+          },
+          {
+            "item": "63628-1820",
+            "count": "3"
+          },
+          {
+            "item": "63640-3428",
+            "count": "3"
+          },
+          {
+            "item": "65721-9499",
+            "count": "3"
+          },
+          {
+            "item": "64116-2639",
+            "count": "2"
+          },
+          {
+            "item": "63129-4715",
+            "count": "2"
+          },
+          {
+            "item": "64683-1103",
+            "count": "2"
+          },
+          {
+            "item": "64057-1805",
+            "count": "2"
+          },
+          {
+            "item": "65804-3608",
+            "count": "2"
+          },
+          {
+            "item": "65065-2754",
+            "count": "2"
+          },
+          {
+            "item": "63601-1965",
+            "count": "2"
+          },
+          {
+            "item": "65401-2512",
+            "count": "2"
+          },
+          {
+            "item": "63379-2308",
+            "count": "2"
+          },
+          {
+            "item": "65109-6901",
+            "count": "2"
+          }
+        ],
+        "smallest": "63010-2030",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814233,
+      "name": "Facility Phone Number",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "facility_phone_number",
+      "position": 17,
+      "renderTypeName": "text",
+      "tableColumnId": 163286171,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "(816) 988-4545",
+        "null": "0",
+        "top": [
+          {
+            "item": "(314) 993-9500",
+            "count": "4"
+          },
+          {
+            "item": "(314) 355-8833",
+            "count": "3"
+          },
+          {
+            "item": "(573) 686-5242",
+            "count": "3"
+          },
+          {
+            "item": "(573) 760-1700",
+            "count": "3"
+          },
+          {
+            "item": "(573) 358-2800",
+            "count": "3"
+          },
+          {
+            "item": "(314) 909-6000",
+            "count": "3"
+          },
+          {
+            "item": "(660) 882-7007",
+            "count": "3"
+          },
+          {
+            "item": "(816) 671-8500",
+            "count": "2"
+          },
+          {
+            "item": "(636) 271-4222",
+            "count": "2"
+          },
+          {
+            "item": "(816) 789-0900",
+            "count": "2"
+          },
+          {
+            "item": "(660) 582-7447",
+            "count": "2"
+          },
+          {
+            "item": "(636) 939-5223",
+            "count": "2"
+          },
+          {
+            "item": "(816) 363-5141",
+            "count": "2"
+          },
+          {
+            "item": "(417) 258-2573",
+            "count": "2"
+          },
+          {
+            "item": "(573) 335-0158",
+            "count": "2"
+          },
+          {
+            "item": "(660) 429-4444",
+            "count": "2"
+          },
+          {
+            "item": "(573) 431-2889",
+            "count": "2"
+          },
+          {
+            "item": "(816) 931-2225",
+            "count": "2"
+          },
+          {
+            "item": "(417) 667-5000",
+            "count": "2"
+          },
+          {
+            "item": "(573) 243-8989",
+            "count": "2"
+          }
+        ],
+        "smallest": "(314) 209-8814",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814234,
+      "name": "First Name Administrator",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "first_name_administrator",
+      "position": 18,
+      "renderTypeName": "text",
+      "tableColumnId": 163286172,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "YALONDA",
+        "null": "0",
+        "top": [
+          {
+            "item": "AMANDA",
+            "count": "15"
+          },
+          {
+            "item": "JENNIFER",
+            "count": "15"
+          },
+          {
+            "item": "AMY",
+            "count": "13"
+          },
+          {
+            "item": "KIMBERLY",
+            "count": "12"
+          },
+          {
+            "item": "JESSICA",
+            "count": "11"
+          },
+          {
+            "item": "ASHLEY",
+            "count": "10"
+          },
+          {
+            "item": "SAMANTHA",
+            "count": "10"
+          },
+          {
+            "item": "CYNTHIA",
+            "count": "10"
+          },
+          {
+            "item": "MICHAEL",
+            "count": "10"
+          },
+          {
+            "item": "RACHEL",
+            "count": "9"
+          },
+          {
+            "item": "MELISSA",
+            "count": "9"
+          },
+          {
+            "item": "ANGELA",
+            "count": "9"
+          },
+          {
+            "item": "MISTY",
+            "count": "9"
+          },
+          {
+            "item": "CHRISTINA",
+            "count": "9"
+          },
+          {
+            "item": "TINA",
+            "count": "9"
+          },
+          {
+            "item": "MARY",
+            "count": "8"
+          },
+          {
+            "item": "RYAN",
+            "count": "8"
+          },
+          {
+            "item": "KELLY",
+            "count": "7"
+          },
+          {
+            "item": "LISA",
+            "count": "7"
+          },
+          {
+            "item": "MICHELLE",
+            "count": "7"
+          }
+        ],
+        "smallest": "AARON",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814235,
+      "name": "Last Name Administrator",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "last_name_administrator",
+      "position": 19,
+      "renderTypeName": "text",
+      "tableColumnId": 163286173,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "ZYKAN-FINKELSTEIN",
+        "null": "0",
+        "top": [
+          {
+            "item": "BROWN",
+            "count": "17"
+          },
+          {
+            "item": "ANDERSON",
+            "count": "11"
+          },
+          {
+            "item": "WILLIAMS",
+            "count": "11"
+          },
+          {
+            "item": "MILLER",
+            "count": "10"
+          },
+          {
+            "item": "SMITH",
+            "count": "9"
+          },
+          {
+            "item": "JOHNSON",
+            "count": "8"
+          },
+          {
+            "item": "DAVIS",
+            "count": "7"
+          },
+          {
+            "item": "JONES",
+            "count": "7"
+          },
+          {
+            "item": "LEWIS",
+            "count": "6"
+          },
+          {
+            "item": "MOORE",
+            "count": "6"
+          },
+          {
+            "item": "EVANS",
+            "count": "5"
+          },
+          {
+            "item": "WILSON",
+            "count": "5"
+          },
+          {
+            "item": "HARRIS",
+            "count": "5"
+          },
+          {
+            "item": "COLE",
+            "count": "5"
+          },
+          {
+            "item": "WEST",
+            "count": "5"
+          },
+          {
+            "item": "KING",
+            "count": "4"
+          },
+          {
+            "item": "MITCHELL",
+            "count": "4"
+          },
+          {
+            "item": "WRIGHT",
+            "count": "4"
+          },
+          {
+            "item": "WHITE",
+            "count": "4"
+          },
+          {
+            "item": "HOWARD",
+            "count": "4"
+          }
+        ],
+        "smallest": "ABBINK",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814237,
+      "name": "DMH Licensed",
+      "dataTypeName": "checkbox",
+      "description": "",
+      "fieldName": "dmh_licensed",
+      "position": 20,
+      "renderTypeName": "checkbox",
+      "tableColumnId": 163286175,
+      "cachedContents": {
+        "non_null": "1101",
+        "null": "0",
+        "top": [
+          {
+            "item": false,
+            "count": "943"
+          },
+          {
+            "item": true,
+            "count": "158"
+          }
+        ],
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814238,
+      "name": "Alzheimer's SCU",
+      "dataTypeName": "checkbox",
+      "description": "",
+      "fieldName": "alzheimer_s_scu",
+      "position": 21,
+      "renderTypeName": "checkbox",
+      "tableColumnId": 163286176,
+      "cachedContents": {
+        "non_null": "1101",
+        "null": "0",
+        "top": [
+          {
+            "item": false,
+            "count": "783"
+          },
+          {
+            "item": true,
+            "count": "318"
+          }
+        ],
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814239,
+      "name": "Alz SCU Capacity",
+      "dataTypeName": "number",
+      "description": "",
+      "fieldName": "scucapacity",
+      "position": 22,
+      "renderTypeName": "number",
+      "tableColumnId": 165861296,
+      "cachedContents": {
+        "non_null": "322",
+        "largest": "148",
+        "null": "779",
+        "top": [
+          {
+            "item": "20",
+            "count": "33"
+          },
+          {
+            "item": "16",
+            "count": "30"
+          },
+          {
+            "item": "24",
+            "count": "26"
+          },
+          {
+            "item": "12",
+            "count": "14"
+          },
+          {
+            "item": "14",
+            "count": "13"
+          },
+          {
+            "item": "30",
+            "count": "13"
+          },
+          {
+            "item": "40",
+            "count": "12"
+          },
+          {
+            "item": "18",
+            "count": "12"
+          },
+          {
+            "item": "22",
+            "count": "12"
+          },
+          {
+            "item": "32",
+            "count": "11"
+          },
+          {
+            "item": "10",
+            "count": "8"
+          },
+          {
+            "item": "15",
+            "count": "7"
+          },
+          {
+            "item": "13",
+            "count": "7"
+          },
+          {
+            "item": "26",
+            "count": "7"
+          },
+          {
+            "item": "23",
+            "count": "6"
+          },
+          {
+            "item": "21",
+            "count": "6"
+          },
+          {
+            "item": "34",
+            "count": "5"
+          },
+          {
+            "item": "33",
+            "count": "5"
+          },
+          {
+            "item": "25",
+            "count": "5"
+          },
+          {
+            "item": "50",
+            "count": "5"
+          }
+        ],
+        "smallest": "0",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814240,
+      "name": "Entity Name",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "entity_name",
+      "position": 23,
+      "renderTypeName": "text",
+      "tableColumnId": 163286177,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "WREIN, DOROTHY (DIANN)",
+        "null": "0",
+        "top": [
+          {
+            "item": "BRISTOL CARE, INC",
+            "count": "61"
+          },
+          {
+            "item": "BAPTIST HOME, THE",
+            "count": "10"
+          },
+          {
+            "item": "LUTHERAN SENIOR SERVICES",
+            "count": "10"
+          },
+          {
+            "item": "WILLOW HEALTH CARE, INC",
+            "count": "8"
+          },
+          {
+            "item": "CITIZENS MEMORIAL HEALTH CARE FOUNDATION",
+            "count": "8"
+          },
+          {
+            "item": "CURA, INC",
+            "count": "6"
+          },
+          {
+            "item": "RETIREMENT AT CENTURY PINES, INC",
+            "count": "5"
+          },
+          {
+            "item": "GOOD SHEPHERD NURSING HOME DISTRICT #1",
+            "count": "4"
+          },
+          {
+            "item": "BETHESDA LONG TERM CARE, INC",
+            "count": "4"
+          },
+          {
+            "item": "PRESBYTERIAN MANORS, INC",
+            "count": "4"
+          },
+          {
+            "item": "HIDDEN LAKE OPCO LLC",
+            "count": "3"
+          },
+          {
+            "item": "ASPEN VALLEY SENIOR HOMES LLC",
+            "count": "3"
+          },
+          {
+            "item": "WELLTOWER OPCO GROUP LLC",
+            "count": "3"
+          },
+          {
+            "item": "MISSOURI RESIDENTIAL CARE, LLC",
+            "count": "3"
+          },
+          {
+            "item": "N & R OF FARMINGTON, LLC",
+            "count": "3"
+          },
+          {
+            "item": "BSLC II",
+            "count": "3"
+          },
+          {
+            "item": "ASHFIELD ACTIVE LIVING AND WELLNESS COMMUNITIES, INC",
+            "count": "3"
+          },
+          {
+            "item": "MEDICALODGES, INC",
+            "count": "3"
+          },
+          {
+            "item": "JOHN KNOX VILLAGE",
+            "count": "3"
+          },
+          {
+            "item": "AMERICAN NURSING & REHAB, LLC",
+            "count": "3"
+          }
+        ],
+        "smallest": "1000 LANDING CIRCLE OPCO LLC",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814241,
+      "name": "Definition",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "definition",
+      "position": 24,
+      "renderTypeName": "text",
+      "tableColumnId": 163286178,
+      "cachedContents": {
+        "non_null": "1101",
+        "largest": "SOLE PROPRIETOR",
+        "null": "0",
+        "top": [
+          {
+            "item": "LIMITED LIABILITY COMPANY",
+            "count": "668"
+          },
+          {
+            "item": "PROFIT CORPORATION",
+            "count": "242"
+          },
+          {
+            "item": "NOT FOR PROFIT CORPORATION",
+            "count": "140"
+          },
+          {
+            "item": "NURSING HOME DISTRICT",
+            "count": "38"
+          },
+          {
+            "item": "SOLE PROPRIETOR",
+            "count": "7"
+          },
+          {
+            "item": "LIMITED PARTNERSHIP",
+            "count": "4"
+          },
+          {
+            "item": "CITY GOVERNMENT",
+            "count": "1"
+          },
+          {
+            "item": "GENERAL PARTNERSHIP",
+            "count": "1"
+          }
+        ],
+        "smallest": "CITY GOVERNMENT",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814236,
+      "name": "Certification",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "certification",
+      "position": 25,
+      "renderTypeName": "text",
+      "tableColumnId": 163286174,
+      "cachedContents": {
+        "non_null": "483",
+        "largest": "PEND",
+        "null": "618",
+        "top": [
+          {
+            "item": "PEND",
+            "count": "2"
+          },
+          {
+            "item": "26A292",
+            "count": "2"
+          },
+          {
+            "item": "265522",
+            "count": "2"
+          },
+          {
+            "item": "265071",
+            "count": "1"
+          },
+          {
+            "item": "265108",
+            "count": "1"
+          },
+          {
+            "item": "265110",
+            "count": "1"
+          },
+          {
+            "item": "265105",
+            "count": "1"
+          },
+          {
+            "item": "265118",
+            "count": "1"
+          },
+          {
+            "item": "265120",
+            "count": "1"
+          },
+          {
+            "item": "265121",
+            "count": "1"
+          },
+          {
+            "item": "265123",
+            "count": "1"
+          },
+          {
+            "item": "265130",
+            "count": "1"
+          },
+          {
+            "item": "265136",
+            "count": "1"
+          },
+          {
+            "item": "265140",
+            "count": "1"
+          },
+          {
+            "item": "265149",
+            "count": "1"
+          },
+          {
+            "item": "265142",
+            "count": "1"
+          },
+          {
+            "item": "265155",
+            "count": "1"
+          },
+          {
+            "item": "265156",
+            "count": "1"
+          },
+          {
+            "item": "265157",
+            "count": "1"
+          },
+          {
+            "item": "265112",
+            "count": "1"
+          }
+        ],
+        "smallest": "265001",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    },
+    {
+      "id": 641814242,
+      "name": "Certification Cat",
+      "dataTypeName": "text",
+      "description": "",
+      "fieldName": "certification_cat",
+      "position": 26,
+      "renderTypeName": "text",
+      "tableColumnId": 170678178,
+      "cachedContents": {
+        "non_null": "483",
+        "largest": "Medicare/Medicaid",
+        "null": "618",
+        "top": [
+          {
+            "item": "Medicare/Medicaid",
+            "count": "467"
+          },
+          {
+            "item": "Medicaid",
+            "count": "9"
+          },
+          {
+            "item": "Medicare",
+            "count": "7"
+          }
+        ],
+        "smallest": "Medicaid",
+        "count": "1101",
+        "cardinality": "1101"
+      },
+      "format": {}
+    }
+  ],
+  "grants": [
+    {
+      "inherited": false,
+      "type": "viewer",
+      "flags": [
+        "public"
+      ]
+    }
+  ],
+  "metadata": {
+    "availableDisplayTypes": [
+      "table",
+      "fatrow",
+      "page"
+    ]
+  },
+  "owner": {
+    "id": "khna-4i6r",
+    "displayName": "LISA V",
+    "screenName": "LISA V",
+    "type": "interactive",
+    "flags": [
+      "acceptedEula"
+    ]
+  },
+  "query": {},
+  "rights": [
+    "read"
+  ],
+  "tableAuthor": {
+    "id": "khna-4i6r",
+    "displayName": "LISA V",
+    "screenName": "LISA V",
+    "type": "interactive",
+    "flags": [
+      "acceptedEula"
+    ]
+  },
+  "flags": [
+    "default",
+    "ownerMayBeContacted",
+    "restorable",
+    "restorePossibleForType"
+  ]
+}

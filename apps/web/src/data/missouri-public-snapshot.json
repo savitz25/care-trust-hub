@@ -1,0 +1,75 @@
+{
+  "source": "Missouri Department of Health and Senior Services, Section for Long-Term Care Regulation",
+  "dataset": "LTC DIRECTORY (fenu-sipv)",
+  "sourceUrl": "https://data.mo.gov/d/fenu-sipv",
+  "csvUrl": "https://data.mo.gov/api/v3/views/fenu-sipv/export.csv?accessType=DOWNLOAD",
+  "levelDefinitionsUrl": "https://health.mo.gov/providers/nursing-homes-other-long-term-care/level-licensure-long-term-care-facilities",
+  "showMeLtcUrl": "https://healthapps.dhss.mo.gov/showmeltc/default.aspx",
+  "administratorUrl": "https://health.mo.gov/board-nursing-home-administrators",
+  "sourceRowsUpdatedAt": "2026-10-05T16:26:37+00:00",
+  "retrievedAt": "2026-10-06",
+  "sourceSha256": "084d21c33a215e25c507a0d6e4796aa86bbac7a3cc2be2909979d9a5f43ad09c",
+  "rows": 1101,
+  "distinctFacilityNumbersAcrossClasses": 986,
+  "distinctLicenseNumbersAcrossClasses": 1093,
+  "facilityNumbersWithMultipleClasses": 109,
+  "classes": [
+    {
+      "code": "SNF",
+      "rows": 484,
+      "facilityNumbers": 484,
+      "licenseNumbers": 481,
+      "licensedCapacitySum": 50871
+    },
+    {
+      "code": "ICF",
+      "rows": 17,
+      "facilityNumbers": 17,
+      "licenseNumbers": 17,
+      "licensedCapacitySum": 1141
+    },
+    {
+      "code": "RCF",
+      "rows": 166,
+      "facilityNumbers": 166,
+      "licenseNumbers": 166,
+      "licensedCapacitySum": 4203
+    },
+    {
+      "code": "RCF*",
+      "rows": 103,
+      "facilityNumbers": 103,
+      "licenseNumbers": 103,
+      "licensedCapacitySum": 3760
+    },
+    {
+      "code": "ALF",
+      "rows": 60,
+      "facilityNumbers": 60,
+      "licenseNumbers": 60,
+      "licensedCapacitySum": 2565
+    },
+    {
+      "code": "ALF**",
+      "rows": 271,
+      "facilityNumbers": 271,
+      "licenseNumbers": 270,
+      "licensedCapacitySum": 17373
+    }
+  ],
+  "certificationCategoryRows": {
+    "Medicare/Medicaid": 467,
+    "blank": 618,
+    "Medicaid": 9,
+    "Medicare": 7
+  },
+  "hospitalBasedLtc": "NOT_ACQUIRED",
+  "inspections": "NOT_ACQUIRED",
+  "complaints": "NOT_ACQUIRED",
+  "deficiencies": "NOT_ACQUIRED",
+  "enforcement": "NOT_ACQUIRED",
+  "administratorLicenses": "NOT_ACQUIRED",
+  "cmsOverlay": "NOT_ACQUIRED",
+  "newCanonicalFacilities": 0,
+  "evidenceAttachments": 0
+}
