@@ -36,7 +36,10 @@ describe("Nebraska senior publication", () => {
     expect(sitemap).toContain('"/utah"');
     expect(sitemap).toContain('"/arkansas"');
     expect(fs.existsSync("src/app/iowa/page.tsx")).toBe(true);
-    expect(fs.readdirSync("src/app/nebraska").sort()).toEqual(["ne-publication.test.ts", "page.tsx"]);
+    expect(fs.readdirSync("src/app/nebraska").sort()).toEqual([
+      "ne-publication.test.ts",
+      "page.tsx",
+    ]);
     expect(normalizedPublishedStatePath("/Nebraska")).toBe("/nebraska");
     expect(normalizedPublishedStatePath("/nebraska")).toBeNull();
     expect(normalizedPublishedStatePath("/nebraska/omaha")).toBeNull();
