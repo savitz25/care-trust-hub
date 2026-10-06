@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
-import snapshot from "@/data/kansas-public-snapshot.json";
+import snapshot from "../../../../../data/kansas-public-snapshot.json";
 
 const adult = snapshot.sourceSets.adultCare;
 const health = snapshot.sourceSets.healthFacilities;

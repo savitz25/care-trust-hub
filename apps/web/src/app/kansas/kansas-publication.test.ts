@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import snapshot from "@/data/kansas-public-snapshot.json";
+import snapshot from "../../../../../data/kansas-public-snapshot.json";
 import { normalizedPublishedStatePath } from "@/lib/published-state-path";
 import { PUBLISHED_STATES } from "@/lib/published-states";
 
