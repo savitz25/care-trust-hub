@@ -30,6 +30,7 @@ export const PUBLISHED_STATEWIDE_SLUGS = [
   "south-carolina",
   "mississippi",
   "oklahoma",
+  "missouri",
 ] as const;
 
 const SLUGS = new Set<string>(PUBLISHED_STATEWIDE_SLUGS);
