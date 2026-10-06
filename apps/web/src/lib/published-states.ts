@@ -48,10 +48,13 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   missouri: "MO",
   arkansas: "AR",
   "new-mexico": "NM",
+  nebraska: "NE",
 };
 
 /** Newest state pages first. */
 const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>> = {
+  nebraska:
+    "DHHS September 15, 2026 rosters for assisted living, long-term care, and adult day, counted separately",
   "new-mexico":
     "Health Care Authority Division of Health Improvement: nursing facilities, assisted living, adult residential care, home health, hospice, adult day, and ICF/IID were not acquired as state rosters",
   arkansas:
