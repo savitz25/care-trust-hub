@@ -1,11 +1,14 @@
 import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import snapshot from "../../../../../data/kansas-public-snapshot.json";
 import { normalizedPublishedStatePath } from "@/lib/published-state-path";
 import { PUBLISHED_STATES } from "@/lib/published-states";
 
-const page = readFileSync(new URL("./page.tsx", import.meta.url), "utf8");
-const sitemap = readFileSync(new URL("../sitemaps/[file]/route.ts", import.meta.url), "utf8");
+const here = dirname(fileURLToPath(import.meta.url));
+const page = readFileSync(join(here, "page.tsx"), "utf8");
+const sitemap = readFileSync(join(here, "../sitemaps/[file]/route.ts"), "utf8");
 
 describe("KS-SEN-001 Kansas facility publication", () => {
   it("preserves facility IDs, distinct class rows, and source clocks", () => {
