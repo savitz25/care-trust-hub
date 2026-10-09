@@ -59,7 +59,9 @@ describe("R1-007 shared header", () => {
     render(<PublishedStateNavigation items={items} />);
     expect(screen.queryAllByRole("link")).toHaveLength(0);
     fireEvent.click(screen.getByRole("button", { name: "By state" }));
-    expect(screen.getAllByRole("link")).toHaveLength(60);
+    // 60 fixture states plus the fixed "All states" index link.
+    expect(screen.getAllByRole("link")).toHaveLength(61);
+    expect(screen.getByRole("link", { name: "All states" })).toHaveAttribute("href", "/states");
   });
   it("does not leave state and hub disclosures open together", () => {
     render(<SiteHeader />);

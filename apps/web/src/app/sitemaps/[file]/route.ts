@@ -39,6 +39,7 @@ const corePaths = [
   "/terms",
   "/contact",
   "/trust/corrections",
+  "/states",
   "/home-health",
   "/hospice",
   "/florida",

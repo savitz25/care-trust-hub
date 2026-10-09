@@ -110,6 +110,7 @@ export function Footer({
             <a href="/methodology">Methodology</a>
             <a href="/sources">Sources</a>
             <a href="/independence">Independence</a>
+            <a href="/states">All states</a>
             <a href="/florida">Florida</a>
             <a href="/new-jersey">New Jersey</a>
             <a href="/california">California</a>
