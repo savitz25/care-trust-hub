@@ -38,6 +38,7 @@ export const PUBLISHED_STATE_NAVIGATION = [
   { href: "/new-mexico", label: "New Mexico" },
   { href: "/nebraska", label: "Nebraska" },
   { href: "/utah", label: "Utah" },
+  { href: "/iowa", label: "Iowa" },
 ] as const;
 
 export function PublishedStateNavigation({

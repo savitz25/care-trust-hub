@@ -74,6 +74,7 @@ const corePaths = [
   "/mississippi",
   "/oklahoma",
   "/utah",
+  "/iowa",
   "/missouri",
   "/arkansas",
   "/new-mexico",

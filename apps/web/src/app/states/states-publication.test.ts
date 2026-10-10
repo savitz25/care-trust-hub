@@ -29,8 +29,8 @@ describe("Published state discovery", () => {
   });
 
   it("counts every published state route exactly once", () => {
-    expect(PUBLISHED_STATEWIDE_SLUGS).toHaveLength(38);
-    expect(PUBLISHED_STATE_COUNT).toBe(38);
+    expect(PUBLISHED_STATEWIDE_SLUGS).toHaveLength(39);
+    expect(PUBLISHED_STATE_COUNT).toBe(39);
     expect(new Set(PUBLISHED_STATEWIDE_SLUGS).size).toBe(PUBLISHED_STATEWIDE_SLUGS.length);
     for (const slug of PUBLISHED_STATEWIDE_SLUGS) {
       expect(fs.existsSync(`src/app/${slug}/page.tsx`)).toBe(true);
@@ -38,9 +38,11 @@ describe("Published state discovery", () => {
     }
   });
 
-  it("leaves Iowa unpublished pending a publish-vs-noindex decision", () => {
-    expect(PUBLISHED_STATEWIDE_SLUGS).not.toContain("iowa");
-    expect(core).not.toContain('"/iowa"');
+  it("publishes Iowa in every list, exactly like Utah", () => {
+    expect(PUBLISHED_STATEWIDE_SLUGS).toContain("iowa");
+    expect(PUBLISHED_STATES.map((state) => state.slug)).toContain("iowa");
+    expect(PUBLISHED_STATE_NAVIGATION).toContainEqual({ href: "/iowa", label: "Iowa" });
+    expect([...core.matchAll(/"\/iowa"/g)]).toHaveLength(1);
   });
 
   it("serves a self-canonical, indexable /states index from the shared list", () => {
