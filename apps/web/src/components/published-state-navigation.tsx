@@ -37,6 +37,8 @@ export const PUBLISHED_STATE_NAVIGATION = [
   { href: "/arkansas", label: "Arkansas" },
   { href: "/new-mexico", label: "New Mexico" },
   { href: "/nebraska", label: "Nebraska" },
+  { href: "/utah", label: "Utah" },
+  { href: "/iowa", label: "Iowa" },
 ] as const;
 
 export function PublishedStateNavigation({
@@ -55,6 +57,11 @@ export function PublishedStateNavigation({
               </Link>
             </li>
           ))}
+          <li>
+            <Link prefetch={false} href="/states" className="th-drawer-link">
+              All states
+            </Link>
+          </li>
         </ul>
       </nav>
     </HeaderDisclosure>

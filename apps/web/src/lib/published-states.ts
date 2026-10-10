@@ -52,6 +52,8 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   nebraska: "NE",
   idaho: "ID",
   "west-virginia": "WV",
+  utah: "UT",
+  iowa: "IA",
 };
 
 /** Newest state pages first. */
