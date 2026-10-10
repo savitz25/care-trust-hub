@@ -150,7 +150,10 @@ export function SaveFacilityToggle({ ccn, name }: { ccn: string; name: string })
     if (saved) {
       const reachParent = direct && parentSync(localStorage, ccn) !== null;
       // The device removal is immediate and never depends on the parent.
-      unsaveFacility(ccn);
+      if (!unsaveFacility(ccn)) {
+        setNote("Could not remove from this device. Your saved list was not updated. Try again.");
+        return;
+      }
       if (!reachParent) {
         setNote("Removed from your saved facilities on this device");
         return;
