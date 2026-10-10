@@ -61,7 +61,7 @@ describe("Senior My TrustHub account navigation", () => {
   it("provides one neutral, focusable desktop account link and preserves Shortlist", () => {
     render(<SiteHeader />);
     const header = within(screen.getByRole("banner"));
-    const links = header.getAllByRole("link", { name: ACCOUNT_NAME, exact: true });
+    const links = header.getAllByRole("link", { name: ACCOUNT_NAME });
     expect(links).toHaveLength(1);
     expect(links[0]).toHaveAttribute("href", ACCOUNT_URL);
     expect(links[0]).not.toHaveAttribute("target");
@@ -70,14 +70,14 @@ describe("Senior My TrustHub account navigation", () => {
     expect(links[0]).toHaveFocus();
     expect(header.getByRole("link", { name: "Shortlist" })).toHaveAttribute("href", "/shortlist");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: ACCOUNT_NAME, exact: true })).toHaveLength(1);
+    expect(screen.getAllByRole("link", { name: ACCOUNT_NAME })).toHaveLength(1);
   });
 
   it("provides one mobile account link without replacing the existing research navigation", () => {
     render(<SiteHeader />);
     const { dialog } = openMenu();
     const menu = within(dialog);
-    const links = menu.getAllByRole("link", { name: ACCOUNT_NAME, exact: true });
+    const links = menu.getAllByRole("link", { name: ACCOUNT_NAME });
     expect(links).toHaveLength(1);
     expect(links[0]).toHaveAttribute("href", ACCOUNT_URL);
     expect(links[0]).not.toHaveAttribute("target");
@@ -90,7 +90,7 @@ describe("Senior My TrustHub account navigation", () => {
       ["Compare", "/compare"],
       ["Care Needs Navigator", "/tools/care-needs-navigator"],
     ]) {
-      expect(menu.getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
+      expect(menu.getByRole("link", { name })).toHaveAttribute("href", href);
     }
     expect(menu.queryByText(/sign up|sync|automatically saved/i)).not.toBeInTheDocument();
   });
@@ -98,7 +98,7 @@ describe("Senior My TrustHub account navigation", () => {
   it("closes the mobile drawer and restores focus when the account link is selected", () => {
     render(<SiteHeader />);
     const { trigger, dialog } = openMenu();
-    const account = within(dialog).getByRole("link", { name: ACCOUNT_NAME, exact: true });
+    const account = within(dialog).getByRole("link", { name: ACCOUNT_NAME });
     // Suppress jsdom's cross-site navigation, while retaining the real React click.
     account.addEventListener("click", (event) => event.preventDefault());
     account.focus();
@@ -107,7 +107,7 @@ describe("Senior My TrustHub account navigation", () => {
     expect(trigger).toHaveAttribute("aria-expanded", "false");
     expect(trigger).toHaveFocus();
     expect(document.body.style.overflow).not.toBe("hidden");
-    expect(screen.getAllByRole("link", { name: ACCOUNT_NAME, exact: true })).toHaveLength(1);
+    expect(screen.getAllByRole("link", { name: ACCOUNT_NAME })).toHaveLength(1);
   });
 
   it("keeps dialog cancellation and Shortlist navigation closing behavior", () => {
