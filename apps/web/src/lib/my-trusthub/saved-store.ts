@@ -51,7 +51,7 @@ export function saveFacility(ccn: string): SaveResult {
   if (current.length >= SAVED_MAX) return "full";
   return write([...current, ccn]) ? "saved" : "unavailable";
 }
-export function unsaveFacility(ccn: string): void {
+export function unsaveFacility(ccn: string): boolean {
   const current = read();
-  if (current.includes(ccn)) write(current.filter((item) => item !== ccn));
+  return !current.includes(ccn) || write(current.filter((item) => item !== ccn));
 }

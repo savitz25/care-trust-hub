@@ -74,8 +74,45 @@ describe("Save toggle, device mode (parent sync off)", () => {
     render(<SaveFacilityToggle ccn="015009" name="BURNS NURSING HOME, INC." />);
     const button = screen.getByRole("button");
     expect(button).toHaveTextContent("Saved");
-    await act(async () => unsaveFacility("015009"));
+    await act(async () => void unsaveFacility("015009"));
     expect(button).toHaveTextContent("Save");
+  });
+
+  it("reports failed removal, retains Saved, and allows a successful retry", async () => {
+    saveFacility("015009");
+    render(<SaveFacilityToggle ccn="015009" name="Synthetic facility" />);
+    const button = screen.getByRole("button");
+    const write = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new DOMException("Storage full", "QuotaExceededError");
+    });
+    try {
+      await act(async () => void fireEvent.click(button));
+      expect(button).toHaveAttribute("aria-pressed", "true");
+      expect(listSavedFacilities()).toEqual(["015009"]);
+      expect(screen.getByRole("status")).toHaveTextContent("Could not remove");
+      expect(screen.getByRole("status")).not.toHaveTextContent("Removed");
+      expect(network).not.toHaveBeenCalled();
+    } finally {
+      write.mockRestore();
+    }
+    await act(async () => void fireEvent.click(button));
+    expect(button).toHaveAttribute("aria-pressed", "false");
+    expect(listSavedFacilities()).toEqual([]);
+    expect(screen.getByRole("status")).toHaveTextContent("Removed");
+  });
+
+  it("removal reports persistence failure and already-absent success", () => {
+    saveFacility("015009");
+    const write = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new DOMException("Denied", "SecurityError");
+    });
+    try {
+      expect(unsaveFacility("015009")).toBe(false);
+      expect(isFacilitySaved("015009")).toBe(true);
+      expect(unsaveFacility("055223")).toBe(true);
+    } finally {
+      write.mockRestore();
+    }
   });
 
   it("the device store is idempotent, bounded and CCN-only", () => {
