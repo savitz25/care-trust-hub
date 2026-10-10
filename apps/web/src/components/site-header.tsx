@@ -7,6 +7,8 @@ import { BrandLogo } from "@/components/brand-logo";
 import { PublishedStateNavigation } from "@/components/published-state-navigation";
 import { SwitchHubMenu } from "@/components/switch-hub-menu";
 
+const MY_TRUSTHUB_ACCOUNT_URL = "https://www.asktrusthub.com/my";
+
 const PRIMARY_NAV = [
   { href: "/ask", label: "Ask" },
   { href: "/search", label: "Find care" },
@@ -112,6 +114,9 @@ export function SiteHeader() {
             </Link>
           </nav>
           <div className="th-header-actions">
+            <a href={MY_TRUSTHUB_ACCOUNT_URL} className="th-btn-secondary">
+              My TrustHub account
+            </a>
             <Link href="/shortlist" prefetch={false} className="th-btn-primary">
               Shortlist
             </Link>
@@ -174,6 +179,13 @@ export function SiteHeader() {
             Close menu
           </button>
           <nav aria-label="Mobile" className="th-drawer-nav">
+            <a
+              href={MY_TRUSTHUB_ACCOUNT_URL}
+              className="th-drawer-link"
+              onClick={() => setOpen(false)}
+            >
+              My TrustHub account
+            </a>
             <Link
               href="/shortlist"
               className="th-btn-primary th-drawer-cta"
