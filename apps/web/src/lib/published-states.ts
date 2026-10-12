@@ -54,6 +54,7 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   "west-virginia": "WV",
   utah: "UT",
   iowa: "IA",
+  "rhode-island": "RI",
 };
 
 /** Newest state pages first. */
@@ -92,6 +93,8 @@ const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>
     "OHCQ assisted living, long term care, home health, hospice and adult medical day care license directories",
   michigan:
     "LARA/BCHS AFC, Home for the Aged, nursing home and hospice license snapshots and discipline evidence",
+  "rhode-island":
+    "RIDOH active facility licenses by source class, including nursing, assisted living, home care, hospice, adult day and ICF/MR",
 };
 
 function nameFor(slug: string): string {
