@@ -9,7 +9,10 @@ const sources = [
   ],
   ["RSA 151:2: facilities requiring a license", "https://gc.nh.gov/rsa/html/XI/151/151-2.htm"],
   ["RSA 151:5: annual license classes", "https://gc.nh.gov/rsa/html/XI/151/151-5.htm"],
-  ["NH DHHS facility license verification", "https://forms.nh.gov/licenseverification/Search.aspx?facility="],
+  [
+    "NH DHHS facility license verification",
+    "https://forms.nh.gov/licenseverification/Search.aspx?facility=",
+  ],
   [
     "NH DHHS initial and renewal facility application",
     "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/documents2/initial-renewal-app-facilities.pdf",
@@ -35,17 +38,17 @@ export default function NewHampshirePage() {
         <p className="eyebrow">New Hampshire senior care licensing research</p>
         <h1 id="nh-title">New Hampshire DHHS facility licensing classes</h1>
         <p className="home-hero__lede">
-          DHHS licenses distinct facility and service-provider classes under RSA 151. This page keeps
-          those state classes separate; it does not combine unlike populations or substitute CMS
-          certification data.
+          DHHS licenses distinct facility and service-provider classes under RSA 151. This page
+          keeps those state classes separate; it does not combine unlike populations or substitute
+          CMS certification data.
         </p>
       </section>
       <section aria-labelledby="nh-classes">
         <h2 id="nh-classes">State source classes</h2>
         <ul>
           <li>
-            <strong>Nursing facilities:</strong> a state facility-license population. Medicare/Medicaid
-            certification and CMS records are separate.
+            <strong>Nursing facilities:</strong> a state facility-license population.
+            Medicare/Medicaid certification and CMS records are separate.
           </li>
           <li>
             <strong>Assisted living and residential care:</strong> residential and supported
@@ -66,9 +69,10 @@ export default function NewHampshirePage() {
         </ul>
         <p>
           Current source rows, retrieval attachments, and validated class-specific counts:{" "}
-          <strong>NOT_ACQUIRED</strong>. The DHHS online verification portal was not accessible for a
-          dated export in this acquisition pass. A blank acquisition is not a zero population. Survey
-          and inspection records are not enforcement orders; facilities are not administrators.
+          <strong>NOT_ACQUIRED</strong>. The DHHS online verification portal was not accessible for
+          a dated export in this acquisition pass. A blank acquisition is not a zero population.
+          Survey and inspection records are not enforcement orders; facilities are not
+          administrators.
         </p>
       </section>
       <section aria-labelledby="nh-sources">
