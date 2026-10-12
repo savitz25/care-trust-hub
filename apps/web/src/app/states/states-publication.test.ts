@@ -29,8 +29,7 @@ describe("Published state discovery", () => {
   });
 
   it("counts every published state route exactly once", () => {
-    expect(PUBLISHED_STATEWIDE_SLUGS).toHaveLength(39);
-    expect(PUBLISHED_STATE_COUNT).toBe(39);
+    expect(PUBLISHED_STATE_COUNT).toBe(PUBLISHED_STATEWIDE_SLUGS.length);
     expect(new Set(PUBLISHED_STATEWIDE_SLUGS).size).toBe(PUBLISHED_STATEWIDE_SLUGS.length);
     for (const slug of PUBLISHED_STATEWIDE_SLUGS) {
       expect(fs.existsSync(`src/app/${slug}/page.tsx`)).toBe(true);

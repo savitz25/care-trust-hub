@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html class="qh__t__misquamicut no-js" lang="en" >
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SFRR5ZVSCW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SFRR5ZVSCW');
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-K34QDT4M');</script>
+<!-- End Google Tag Manager -->
+<meta name="title" content="State of Rhode Island: Department of Health">
+<meta name="description" content="State of Rhode Island: Department of Health">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<meta charset="utf-8">
+<meta name="originatorJurisdiction" content="State of Rhode Island and Providence Plantations">
+<meta name="originatorDepartment" content="State of Rhode Island: Department of Health">
+<meta name="originatorDivision" content=" ">
+<meta name="originatorOffice" content="State of Rhode Island: Department of Health">
+<meta name="createDate" content="">
+<meta name="dateofLastModification" content="">
+<meta name="timePeriodTextual" content="current">
+<meta name="medium" content="website">
+<meta name="govType" content="state">
+<meta name="subjects" content="Government">
+<meta name="contactName" content="">
+<meta name="contactOrganization" content="State of Rhode Island: Department of Health">
+<meta name="contactStreetAddress1" content="Three Capitol Hill">
+<meta name="contactCity" content="Providence">
+<meta name="contactState" content="Rhode Island">
+<meta name="contactZipcode" content="02908">
+<meta name="contactPhoneNumber" content="401 222-5960">
+<!-- For Home Screen Names -->
+<meta name="apple-mobile-web-app-title" content="Department of Health">
+<meta name="application-name" content="Department of Health">
+<!-- Windows 8 Tile Image -->
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!--Touch device Homescreen Images -->
+<link rel="image_src" href="https://www.ri.gov/img/seal.gif">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" sizes="144x144" href="/assets/img/icons/apple/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="/assets/img/icons/apple/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="/assets/img/icons/apple/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon" href="/assets/img/icons/apple/apple-touch-icon.png" />
+
+<!--Import Google Icon Font-->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<title>Find People or Businesses: Department of Health</title>
+
+<!--Import Google Icon Font-->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    
+<link rel="stylesheet" type="text/css" href="/includes/style-doh.css" />
+<link rel="stylesheet" type="text/css" href="https://state-of-rhode-island-ecms.github.io/ecms_patternlab/public/css/style.css" />
+<style>
+   #color_scheme {
+      background-color: var(--fc__default__fg);
+      color: var(--fc__default__bg);
+      padding: 0.15em 0.4em;
+      margin-top: -0.1em;
+}
+   }
+</style>
+</head>
+
+<body>
+   <!-- Google Tag Manager (noscript) -->
+   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K34QDT4M"
+   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+   <!-- End Google Tag Manager (noscript) -->
+   <div id="google_translate_element"></div>
+   <script type="text/javascript">
+   function googleTranslateElementInit() {
+     new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'en,es,fr,pt,pt-PT,ar,km,ht,zh-CN,lo,hmn,sw,ru,uk', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false, gaTrack: true, gaId: 'UA-1141659-7'}, 'google_translate_element');
+   }
+   </script>
+   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+   <div id="color_scheme"></div>
+   <script>
+   const htmlTag = document.querySelector('html');
+   // Get the element that will be clicked
+   const toggleButton = document.getElementById('color_scheme');
+
+   // Add an event listener to the element
+   toggleButton.addEventListener('click', function() {
+     // Check the current text content of the element
+     if (toggleButton.textContent === 'Switch to Dark') {
+       // Update the text content to 'Switch to light'
+       htmlTag.classList.remove('light');
+       htmlTag.classList.add('dark');
+       toggleButton.textContent = 'Switch to Light';
+     } else {
+       // Update the text content to 'Switch to dark'
+       toggleButton.textContent = 'Switch to Dark';
+       htmlTag.classList.remove('dark');
+       htmlTag.classList.add('light');
+     }
+   });
+   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+     // User prefers dark mode
+      if (!htmlTag.classList.contains('dark')) {
+         // 'dark' class is added in the class list
+         htmlTag.classList.add('dark');
+      }
+      toggleButton.textContent = 'Switch to Light';
+   } else {
+     // User prefers light mode
+      if (!htmlTag.classList.contains('light')) {
+         // 'light' class is added in the class list
+         htmlTag.classList.add('light');
+      }
+      toggleButton.textContent = 'Switch to Dark';
+   }
+   </script>
+<script>
+// written by A.HerrerA: May 21, 2020
+// Updated on Jan 28, 2025
+$(function() {
+	$("a[target!='_blank']").each(function(index) {
+		var href = $(this).attr("href");
+		if (href !== undefined) {
+			var pdf = /\.pdf$/i;
+			var result = href.match(pdf);
+			if (result) {
+				return $(this).attr("target", "_blank");
+			}
+		}
+		var target = $(this).attr("target");
+      if((this.href.indexOf(location.hostname) == -1) && (this.href.indexOf('javascript') == -1) && (this.href.indexOf('mailto') == -1) && (this.target.indexOf("popup") == -1)) {
+
+         // attach a do-nothing event handler to ensure we can 'trigger' a click on this link
+         $(this).click(function() { return true; }); 
+
+         $(this).attr({
+            target: "_blank",
+            title: "Opens in a New Window"
+         });
+
+         $(this).click(); // trigger it
+      }
+
+	});
+});
+</script>
+<!--Special styles-->
+<style>
+#profNote {
+	color: darkred;
+	font-weight: bold;
+	font-size: 0.9em;
+	margin-top: -20px;
+	padding-left: 8px;
+	display: none;
+}
+.searchTable {
+	display: none;
+	height: 1000px;
+	overflow-x: scroll;
+	border-top: 1px solid var(--fc__table__border__v);
+}
+.fixed_header {
+	width: 400px;
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+.fixed_header tbody {
+	display: block;
+	width: 100%;
+	overflow: auto;
+	height: 100px;
+}
+.fixed_header thead tr {
+	display: block;
+}
+.fixed_header thead {
+	background: black;
+	color: #fff;
+}
+.fixed_header th, .fixed_header td {
+	padding: 5px;
+	text-align: left;
+	width: 200px;
+}
+.spinner {
+	display: none;
+	position: absolute;
+	left: 40%;
+	top: 30%;
+	height: 200px;
+	width: 200px;
+	margin: 0px auto;
+	-webkit-animation: rotation .6s infinite linear;
+	-moz-animation: rotation .6s infinite linear;
+	-o-animation: rotation .6s infinite linear;
+	animation: rotation .6s infinite linear;
+	border-left: 30px solid rgba(0,174,239,.15);
+	border-right: 30px solid rgba(0,174,239,.15);
+	border-bottom: 30px solid rgba(0,174,239,.15);
+	border-top: 30px solid rgba(0,174,239,.8);
+	border-radius: 100%;
+}
+@-webkit-keyframes rotation {
+from {
+-webkit-transform: rotate(0deg);
+}
+to {
+-webkit-transform: rotate(359deg);
+}
+}
+@-moz-keyframes rotation {
+from {
+-moz-transform: rotate(0deg);
+}
+to {
+-moz-transform: rotate(359deg);
+}
+}
+@-o-keyframes rotation {
+from {
+-o-transform: rotate(0deg);
+}
+to {
+-o-transform: rotate(359deg);
+}
+}
+@keyframes rotation {
+from {
+transform: rotate(0deg);
+}
+to {
+transform: rotate(359deg);
+}
+}
+#grid {
+	border: 1px solid var(--fc__table__border__v);
+}
+#grid thead th {
+	background-color: var(--fc__default__bg)!important;
+	/*position: sticky;*/
+	top: 0;
+	vertical-align: middle;
+}
+.cssbuttons {
+margin-top: calc(var(--body-text-spacer) * 1.5);
+margin-bottom: calc(var(--body-text-spacer) * 0.5);
+}
+#info {
+	border-bottom: 1px solid var(--fc__table__border__v);
+}
+@media (min-width: 40em) {
+   p { max-width: 100%!important}
+}
+</style>
+<script type="text/javascript">
+function refreshLicense(thisValue)
+{
+   if (thisValue == 'Emergency Medical Services') {
+      $('#profNote').html('Note: EMT Address information is not included in the extract.');
+      $('#profNote').show();
+   } else {
+      $('#profNote').html('');
+      $('#profNote').hide();
+   }
+   $('#prof').val(thisValue);
+   $.ajax({
+      type: 'post',
+      url: 'refreshLicense.php',
+      data: {
+         profession : thisValue
+      },
+      success: function (response) {
+          // get the info from loadTbl.php and displays it on below div
+         $( '#licenseList' ).html(response);
+      },
+      error: function(request, status, error) {
+         var val = request.responseText;
+         console.log("Error: "+val+"\nError:"+error);
+         //alert("Error: "+val+"\nError:"+error);
+      }
+   });
+}
+
+// performs query
+function doQuery() {
+   if (!$('#jx-profession').val()) { alert('Please select a Profession. Thank you.'); return false;}
+   document.body.style.cursor = "progress";
+   $('.spinner').show();
+   $('#output').text('');
+   $.ajax({
+      type: 'post',
+      url: 'getList.php',
+      data: {
+         jxProfession : $('#jx-profession').val(),
+         jxLicense : $('#jx-license').val()
+      },
+      success: function (response) {
+         // hides loading spinner
+         document.body.style.cursor = "auto";
+         $('.spinner').hide();
+         $('.searchTable').show();
+         // get the info from getList.php and displays it on below div
+         $( '#tableBody' ).html(response);
+         $('#NumbRows').html("<p style='font-size: 1.2em;margin-top: 1.25em;'>Total Number of Records : "+numbRows+"</p>");
+         $('#preview').show();
+         $('#output').text(outputQry);
+         $('#info').html(info);
+         $('#licType').val($('#jx-license').val());
+         document.getElementById('output').style.display="inline";
+         document.getElementById('output').readOnly = true;
+         document.getElementById('downloadbutton').style.display="inline";
+      },
+      error: function(request, status, error) {
+         var val = request.responseText;
+         console.log("Error: "+val+"\nError:"+error);
+               }
+   });
+}
+        
+</script>
+<p style='text-align: left;'>Last Updated on: Monday, 12th October 2026</p>
+<!--Start of Content for Form-->
+<h4>Profession or Facility</h4>
+<div class="qh-layout-section--col-size-100">
+   <div class="qh-layout-section--col-size-50">
+      <select name='jx-profession' id='jx-profession' onChange='refreshLicense(this.value);' style='padding: 3px;border-top: solid 1px #ccc !important;border: 1px solid #cccccc;height: auto !important;margin-bottom: .5em;box-sizing: border-box;'>
+<option value='' selected></option>
+<option value="Acupuncture">Acupuncture</option>
+<option value="Adult Day Care Program">Adult Day Care Program</option>
+<option value="Ambulatory Surgery Center ">Ambulatory Surgery Center </option>
+<option value="Applied Behavior Analyst">Applied Behavior Analyst</option>
+<option value="Aquatic Venue">Aquatic Venue</option>
+<option value="Asbestos Program">Asbestos Program</option>
+<option value="Assisted Living Residence">Assisted Living Residence</option>
+<option value="Athletic Trainer">Athletic Trainer</option>
+<option value="Blood Testing Screening">Blood Testing Screening</option>
+<option value="Chemical Dependency Profession">Chemical Dependency Profession</option>
+<option value="Chiropractic">Chiropractic</option>
+<option value="Compact Nurse Other State">Compact Nurse Other State</option>
+<option value="Cosmetology/Barbering">Cosmetology/Barbering</option>
+<option value="Dairy Industry">Dairy Industry</option>
+<option value="Dental">Dental</option>
+<option value="Dietitian/Nutritionist">Dietitian/Nutritionist</option>
+<option value="Drinking Water Operator">Drinking Water Operator</option>
+<option value="Electrology">Electrology</option>
+<option value="Embalming/Funeral Directing">Embalming/Funeral Directing</option>
+<option value="Emergency Medical Services">Emergency Medical Services</option>
+<option value="Food Processor">Food Processor</option>
+<option value="Food Safety">Food Safety</option>
+<option value="Food Service">Food Service</option>
+<option value="Freestanding Amb. Surg. Center">Freestanding Amb. Surg. Center</option>
+<option value="Freestanding Emer. Care Fac.">Freestanding Emer. Care Fac.</option>
+<option value="Genetic Counselors">Genetic Counselors</option>
+<option value="Harm Reduction Center">Harm Reduction Center</option>
+<option value="Hearing Aid Dealers">Hearing Aid Dealers</option>
+<option value="Home Care Provider">Home Care Provider</option>
+<option value="Home Nursing Care Provider">Home Nursing Care Provider</option>
+<option value="Hospice Provider">Hospice Provider</option>
+<option value="Hospital">Hospital</option>
+<option value="ICF/MR (Group Home)">ICF/MR (Group Home)</option>
+<option value="Interpreters for the Deaf">Interpreters for the Deaf</option>
+<option value="Kidney Disease Treat. Center">Kidney Disease Treat. Center</option>
+<option value="Kratom">Kratom</option>
+<option value="Laboratory">Laboratory</option>
+<option value="Lactation Professional">Lactation Professional</option>
+<option value="Lead Program">Lead Program</option>
+<option value="Markets">Markets</option>
+<option value="Marriage & Fam. Ther./Mental">Marriage & Fam. Ther./Mental</option>
+<option value="Massage">Massage</option>
+<option value="Meat/Poultry Processor">Meat/Poultry Processor</option>
+<option value="Midwifery">Midwifery</option>
+<option value="Music Therapy">Music Therapy</option>
+<option value="Naturopathic Medicine">Naturopathic Medicine</option>
+<option value="Nursing">Nursing</option>
+<option value="Nursing Assistant">Nursing Assistant</option>
+<option value="Nursing Facility">Nursing Facility</option>
+<option value="Nursing Home Administrator">Nursing Home Administrator</option>
+<option value="Nursing Service Agency">Nursing Service Agency</option>
+<option value="Occupational Therapy">Occupational Therapy</option>
+<option value="Optometry">Optometry</option>
+<option value="Organized Amb. Care Facility">Organized Amb. Care Facility</option>
+<option value="Patient Safety Organization">Patient Safety Organization</option>
+<option value="Pharmacy">Pharmacy</option>
+<option value="Phlebotomy Station">Phlebotomy Station</option>
+<option value="Physical Therapy">Physical Therapy</option>
+<option value="Physician">Physician</option>
+<option value="Physician Assistant">Physician Assistant</option>
+<option value="Podiatric Medicine">Podiatric Medicine</option>
+<option value="Portable x-ray">Portable x-ray</option>
+<option value="Private Drinking Water Systems">Private Drinking Water Systems</option>
+<option value="Psychology">Psychology</option>
+<option value="Public Water System">Public Water System</option>
+<option value="Radiologic Technology">Radiologic Technology</option>
+<option value="Radon Program">Radon Program</option>
+<option value="Recreation Facility">Recreation Facility</option>
+<option value="Respiratory Care">Respiratory Care</option>
+<option value="School Based Health Center">School Based Health Center</option>
+<option value="Shellfish Business">Shellfish Business</option>
+<option value="Social Work">Social Work</option>
+<option value="Speech Language Path./Audio">Speech Language Path./Audio</option>
+<option value="Tanning Facility Registration">Tanning Facility Registration</option>
+<option value="Tattooing/Body Piercing">Tattooing/Body Piercing</option>
+<option value="Veterinary Medicine">Veterinary Medicine</option>
+<option value="X-ray Facility Registrations">X-ray Facility Registrations</option>
+</select>
+<div id='profNote'></div>
+   </div>
+   <div class="qh-layout-section--col-size-50">&nbsp;</div>
+</div>
+<h4>License Type</h4>
+<div class="qh-layout-section--col-size-100">
+   <div class="qh-layout-section--col-size-50">
+      <div id="licenseList">
+         <select name="jx-license" id="jx-license" disabled="" style="padding: 3px;border-top: solid 1px #ccc !important;border: 1px solid #cccccc;height: auto !important;margin-bottom: .5em;box-sizing: border-box;">
+            <option value="" selected=""></option>
+         </select>
+      </div>
+   </div>
+   <div class="qh-layout-section--col-size-50">
+      <p>Narrow your search (optional)</p>
+   </div>
+</div>
+<div class="qh-layout-section--col-size-50">
+   <div class="cssbuttons">
+      <button type="submit" class="positive" id="countbutton" onClick="doQuery();">Search Active Licensees</button>
+   </div>
+   <div id="msgNote">
+      <p>Note: this will be slow if there are thousands of licensees.</p>
+   </div>
+</div>
+<div class="qh-layout-section--col-size-100"> 
+   
+   <!--End of content for query - Start of Content for presentation  - well sort of the count is above--> 
+   <span id="NumbRows"></span>
+   <div class="searchTable"> <span id="tableBody"></span> </div>
+   <div id="info"></div>
+   <!--Content to pull data-->
+   <form action="download.php" method="post" name="form1">
+      <h4 id="preview" style="display: none;">Preview Licensee List</h4>
+      <textarea style="display:none; height: 200px;" cols="50" rows="20" name="output" id="output"></textarea>
+      <input type="hidden" id="prof" name="prof" value="">
+      <input type="hidden" id="licType" name="licType" value="">
+      <div class="cssbutton" style="margin-top: 1em;">
+         <button class="positive" type="submit" style="display:none" id="downloadbutton">Download Licensee List</button><br>&nbsp;
+      </div>
+   </form>
+</div>
