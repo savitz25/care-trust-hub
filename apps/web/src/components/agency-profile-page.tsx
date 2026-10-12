@@ -1,14 +1,21 @@
-import type { HomeHealthProviderIntelligence, HospiceProviderIntelligence } from "@care/domain";
+import type {
+  HomeHealthProviderIntelligence,
+  HospiceProviderIntelligence,
+  PublicProviderBusinessContact,
+} from "@care/domain";
 import {
   HomeHealthProfileIntelligence,
   HospiceProfileIntelligence,
 } from "./agency-profile-intelligence";
 import { NjProfileEvidenceModule } from "./nj-profile-evidence";
+import { ProviderBusinessContact } from "./provider-business-contact";
 
 export function AgencyProfilePage({
   intel,
+  businessContact = null,
 }: {
   intel: HomeHealthProviderIntelligence | HospiceProviderIntelligence;
+  businessContact?: PublicProviderBusinessContact | null;
 }) {
   const office = intel.common.office;
   const name = intel.common.display_name ?? "CMS provider";
@@ -48,6 +55,7 @@ export function AgencyProfilePage({
         ) : (
           <HospiceProfileIntelligence intel={intel} />
         )}
+        <ProviderBusinessContact contact={businessContact} />
         <NjProfileEvidenceModule ccn={intel.canonical_id} state={office.state} />
       </div>
     </div>

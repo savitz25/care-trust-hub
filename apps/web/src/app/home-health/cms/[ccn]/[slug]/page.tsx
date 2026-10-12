@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { AgencyProfilePage } from "@/components/agency-profile-page";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
-import { getHomeHealthProviderIntelligenceForPage } from "@/server/care/cached-repository";
+import {
+  getHomeHealthProviderIntelligenceForPage,
+  getPublicProviderBusinessContactForPage,
+} from "@/server/care/cached-repository";
 import { homeHealthResearchDescription } from "@care/domain";
 import {
   homeHealthHref,
@@ -72,9 +75,10 @@ export default async function HomeHealthProfileRoute({
   const customer = customerEnabled
     ? await fetchCustomerLayer(claimProfile.nativeProfileId)
     : { profile: null, replies: null };
+  const businessContact = await getPublicProviderBusinessContactForPage("home_health", ccn);
   return (
     <>
-      <AgencyProfilePage intel={intel} />
+      <AgencyProfilePage intel={intel} businessContact={businessContact} />
       <SeniorCustomerLayer
         providerClass="home_health"
         ccn={ccn}

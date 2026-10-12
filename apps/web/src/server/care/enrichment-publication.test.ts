@@ -27,7 +27,8 @@ describe("published facility enrichment reads", () => {
           },
         ],
       })
-      .mockResolvedValueOnce({ rows: [{ resolution_state: "VERIFIED" }] });
+      .mockResolvedValueOnce({ rows: [{ resolution_state: "VERIFIED" }] })
+      .mockResolvedValueOnce({ rows: [] });
     const { getPublishedFacilityEnrichment } = await import("./enrichment-publication");
     const published = await getPublishedFacilityEnrichment("01a193", {
       providerName: "Harborview Care And Rehab",
@@ -57,7 +58,8 @@ describe("published facility enrichment reads", () => {
           },
         ],
       })
-      .mockResolvedValueOnce({ rows: [{ resolution_state: "PROBABLE" }] });
+      .mockResolvedValueOnce({ rows: [{ resolution_state: "PROBABLE" }] })
+      .mockResolvedValueOnce({ rows: [] });
     const { getPublishedFacilityEnrichment } = await import("./enrichment-publication");
     const published = await getPublishedFacilityEnrichment("01A193", {
       providerName: "Example",
@@ -66,5 +68,67 @@ describe("published facility enrichment reads", () => {
     expect(published.website).toBeNull();
     expect(published.phone).toBeNull();
     expect(published.publicAlias).toBeNull();
+    expect(published.businessContact).toBeNull();
+  });
+
+  it("returns a public business website and email when Google has no website", async () => {
+    query
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            provider_type: "nursing_home",
+            provider_key: "01A193",
+            website_url: "https://harborview.example",
+            email: "admin@harborview.example",
+            phone_override: null,
+            source_urls: ["https://harborview.example"],
+            source_type: "enrichment_file",
+            verified_at: new Date("2026-10-01T00:00:00.000Z"),
+            is_public: true,
+            updated_at: new Date("2026-10-02T00:00:00.000Z"),
+          },
+        ],
+      });
+    const { getPublishedFacilityEnrichment } = await import("./enrichment-publication");
+    const published = await getPublishedFacilityEnrichment("01A193", {
+      providerName: "Harborview Care And Rehab",
+      telephone: null,
+    });
+    expect(query.mock.calls[2][0]).toContain("provider_business_contact");
+    expect(query.mock.calls[2][1]).toEqual(["nursing_home", "01A193"]);
+    expect(published.website).toBeNull();
+    expect(published.businessContact?.websiteUrl).toBe("https://harborview.example/");
+    expect(published.businessContact?.email).toBe("admin@harborview.example");
+  });
+
+  it("keeps a non-public business contact off the enrichment result", async () => {
+    query
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            provider_type: "nursing_home",
+            provider_key: "01A193",
+            website_url: "https://hidden.example",
+            email: "hidden@example.com",
+            phone_override: null,
+            source_urls: [],
+            source_type: "enrichment_file",
+            verified_at: null,
+            is_public: false,
+            updated_at: new Date("2026-10-02T00:00:00.000Z"),
+          },
+        ],
+      });
+    const { getPublishedFacilityEnrichment } = await import("./enrichment-publication");
+    const published = await getPublishedFacilityEnrichment("01A193", {
+      providerName: "Example",
+      telephone: null,
+    });
+    expect(published.businessContact).toBeNull();
+    expect(JSON.stringify(published)).not.toContain("hidden.example");
   });
 });

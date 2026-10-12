@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { AgencyProfilePage } from "@/components/agency-profile-page";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
-import { getHospiceProviderIntelligenceForPage } from "@/server/care/cached-repository";
+import {
+  getHospiceProviderIntelligenceForPage,
+  getPublicProviderBusinessContactForPage,
+} from "@/server/care/cached-repository";
 import { hospiceResearchDescription } from "@care/domain";
 import { hospiceHref, hospiceResearchDocumentTitle, providerSlug } from "@/server/care/consumer";
 import { isAgencyProfileIndexableForPage } from "@/server/care/agency-publication";
@@ -68,9 +71,10 @@ export default async function HospiceProfileRoute({
   const customer = customerEnabled
     ? await fetchCustomerLayer(claimProfile.nativeProfileId)
     : { profile: null, replies: null };
+  const businessContact = await getPublicProviderBusinessContactForPage("hospice", ccn);
   return (
     <>
-      <AgencyProfilePage intel={intel} />
+      <AgencyProfilePage intel={intel} businessContact={businessContact} />
       <SeniorCustomerLayer
         providerClass="hospice"
         ccn={ccn}

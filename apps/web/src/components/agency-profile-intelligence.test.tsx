@@ -1,10 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import type { HomeHealthProviderIntelligence, HospiceProviderIntelligence } from "@care/domain";
+import type {
+  HomeHealthProviderIntelligence,
+  HospiceProviderIntelligence,
+  PublicProviderBusinessContact,
+} from "@care/domain";
 import {
   HomeHealthProfileIntelligence,
   HospiceProfileIntelligence,
 } from "./agency-profile-intelligence";
+import { AgencyProfilePage } from "./agency-profile-page";
 
 const ownership = {
   current_owners: [
@@ -192,5 +197,29 @@ describe("agency profile intelligence", () => {
     expect(screen.getByText(/UNKNOWN does not mean former owner/i)).toBeTruthy();
     expect(screen.queryByText(/\bclosed\b/i)).toBeNull();
     expect(screen.getByText(/CMS Hospice CCN/)).toBeTruthy();
+  });
+
+  it("shows a public business website and email and hides them when absent", () => {
+    const businessContact: PublicProviderBusinessContact = {
+      websiteUrl: "https://agency.example/start",
+      email: "hello@agency.example",
+      phoneOverride: null,
+      sourceType: "enrichment_file",
+      sourceUrls: [],
+      verifiedAt: null,
+      updatedAt: null,
+    };
+    const { rerender } = render(<AgencyProfilePage intel={hh} businessContact={businessContact} />);
+    expect(screen.getByRole("link", { name: "Visit business website" })).toHaveAttribute(
+      "rel",
+      "nofollow noopener noreferrer",
+    );
+    expect(screen.getByRole("link", { name: "hello@agency.example" })).toHaveAttribute(
+      "href",
+      "mailto:hello@agency.example",
+    );
+    rerender(<AgencyProfilePage intel={hospice} businessContact={null} />);
+    expect(screen.queryByRole("link", { name: "Visit business website" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "hello@agency.example" })).not.toBeInTheDocument();
   });
 });

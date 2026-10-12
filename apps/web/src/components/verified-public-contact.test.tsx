@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import type { PublicProviderBusinessContact } from "@care/domain";
 import type { CareProviderDetail, CarePublishedFacilityEnrichment } from "@/server/care/types";
 import { RealProviderDetail } from "./real-provider-detail";
 import { VerifiedPublicContact } from "./verified-public-contact";
@@ -48,6 +49,7 @@ const empty: CarePublishedFacilityEnrichment = {
   phone: null,
   publicAlias: null,
   phoneMatchesCms: false,
+  businessContact: null,
 };
 
 describe("verified public contact publication", () => {
@@ -65,6 +67,7 @@ describe("verified public contact publication", () => {
       },
       publicAlias: null,
       phoneMatchesCms: true,
+      businessContact: null,
     };
     render(<VerifiedPublicContact provider={provider} enrichment={enrichment} />);
     expect(screen.getByRole("link", { name: "Visit facility website" })).toHaveAttribute(
@@ -134,5 +137,39 @@ describe("verified public contact publication", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: "Harborview Care And Rehab" }),
     ).toBeVisible();
+  });
+
+  it("renders a public business website and email on the facility profile", () => {
+    const businessContact: PublicProviderBusinessContact = {
+      websiteUrl: "https://harborview.example/about",
+      email: "admin@harborview.example",
+      phoneOverride: null,
+      sourceType: "enrichment_file",
+      sourceUrls: ["https://source.example/listing"],
+      verifiedAt: "2026-10-01T00:00:00.000Z",
+      updatedAt: "2026-10-02T00:00:00.000Z",
+    };
+    render(
+      <RealProviderDetail
+        provider={provider}
+        publishedEnrichment={empty}
+        businessContact={businessContact}
+      />,
+    );
+    const website = screen.getByRole("link", { name: "Visit business website" });
+    expect(website).toHaveAttribute("href", "https://harborview.example/about");
+    expect(website).toHaveAttribute("rel", "nofollow noopener noreferrer");
+    expect(screen.getByRole("link", { name: "admin@harborview.example" })).toHaveAttribute(
+      "href",
+      "mailto:admin@harborview.example",
+    );
+  });
+
+  it("renders no business website or email when contact is absent", () => {
+    render(
+      <RealProviderDetail provider={provider} publishedEnrichment={empty} businessContact={null} />,
+    );
+    expect(screen.queryByRole("link", { name: "Visit business website" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /@harborview/ })).not.toBeInTheDocument();
   });
 });

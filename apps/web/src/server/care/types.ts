@@ -1,3 +1,5 @@
+import type { PublicProviderBusinessContact } from "@care/domain";
+
 export interface CareProviderLocation {
   address: string | null;
   city: string | null;
@@ -62,6 +64,8 @@ export interface CarePublishedFacilityEnrichment {
   phone: CarePublishedEnrichmentField | null;
   publicAlias: CarePublishedEnrichmentField | null;
   phoneMatchesCms: boolean;
+  /** First-party website and email. Null when absent or not public. */
+  businessContact: PublicProviderBusinessContact | null;
 }
 
 export interface CareProviderSearchResult extends CareProviderSummary {

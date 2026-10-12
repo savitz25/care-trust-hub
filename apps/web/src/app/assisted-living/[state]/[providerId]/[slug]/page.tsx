@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
-import { assistedLivingNameSlug, publishedAssistedLivingPath } from "@care/domain";
+import {
+  assistedLivingBusinessContactKey,
+  assistedLivingNameSlug,
+  publishedAssistedLivingPath,
+} from "@care/domain";
 import { AssistedLivingProviderDetail } from "@/components/assisted-living-provider";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, isPublicLaunchEnabled, publicRobots } from "@/config/deployment";
@@ -10,6 +14,7 @@ import {
   isFacilityInterviewBuilderEnabled,
 } from "@/server/care/feature-flags";
 import { getPublishedAssistedLivingProvider } from "@/server/care/assisted-living-publication";
+import { getPublicProviderBusinessContactForPage } from "@/server/care/cached-repository";
 
 export const dynamic = "force-dynamic";
 
@@ -65,6 +70,14 @@ export default async function AssistedLivingProviderPage({
       }),
     );
   }
+  const contactKey = assistedLivingBusinessContactKey(
+    provider.stateCode,
+    provider.regulatorCode,
+    provider.sourceFacilityId,
+  );
+  const businessContact = contactKey
+    ? await getPublicProviderBusinessContactForPage("assisted_living", contactKey)
+    : null;
   const href = publishedAssistedLivingPath({
     stateCode: provider.stateCode,
     id: provider.id,
@@ -87,6 +100,8 @@ export default async function AssistedLivingProviderPage({
               addressRegion: provider.stateCode,
               postalCode: provider.officialZip ?? undefined,
             },
+            ...(businessContact?.email ? { email: businessContact.email } : {}),
+            ...(businessContact?.websiteUrl ? { sameAs: businessContact.websiteUrl } : {}),
           }}
         />
       ) : null}
@@ -94,6 +109,7 @@ export default async function AssistedLivingProviderPage({
         provider={provider}
         workspaceEnabled={isFamilyComparisonWorkspaceEnabled()}
         interviewEnabled={isFacilityInterviewBuilderEnabled()}
+        businessContact={businessContact}
       />
     </div>
   );

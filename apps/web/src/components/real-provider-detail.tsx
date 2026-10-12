@@ -11,7 +11,12 @@ import type {
   CareNhEvidence,
 } from "@/server/care/types";
 import { NursingHomeEvidencePanel } from "./nh-evidence-panel";
-import type { PublishedStateIntelligence } from "@care/domain";
+import {
+  isProviderIntelV1,
+  type NursingHomeProviderIntelligence,
+  type PublicProviderBusinessContact,
+  type PublishedStateIntelligence,
+} from "@care/domain";
 import { VerifiedPublicContact } from "./verified-public-contact";
 import { StateLicenseOversight } from "./state-license-oversight";
 import { FacilityHistory } from "./facility-history";
@@ -31,7 +36,7 @@ import { WorkspaceAddButton } from "./workspace-add-button";
 import { SaveFacilityToggle } from "./save-facility-toggle";
 import { NhProfileIntelligence } from "./nh-profile-intelligence";
 import { NjProfileEvidenceModule } from "./nj-profile-evidence";
-import { isProviderIntelV1, type NursingHomeProviderIntelligence } from "@care/domain";
+import { ProviderBusinessContact } from "./provider-business-contact";
 
 const additionalLayers = ["Home health national spine", "Hospice national spine"];
 
@@ -79,6 +84,7 @@ export function FacilitySourceRegister({
   chain,
   publishedEnrichment,
   stateIntelligence,
+  businessContact,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
@@ -87,6 +93,7 @@ export function FacilitySourceRegister({
   chain?: CareChainIntelligence;
   publishedEnrichment?: CarePublishedFacilityEnrichment;
   stateIntelligence?: PublishedStateIntelligence;
+  businessContact?: PublicProviderBusinessContact | null;
 }) {
   const sources: FacilitySourceEntry[] = [
     {
@@ -209,6 +216,23 @@ export function FacilitySourceRegister({
         "Independently verified public website, phone, or publicly used name. Not a CMS rating or regulatory status.",
     });
   }
+  const contactSource = businessContact?.sourceUrls[0];
+  if (businessContact && contactSource) {
+    sources.push({
+      key: "provider-business-contact",
+      sourceOrganization: "Business contact record",
+      datasetName: businessContact.sourceType,
+      datasetIdentifier: `provider-business-contact:${businessContact.sourceType}`,
+      officialSourceUrl: contactSource,
+      sourceModifiedAt: businessContact.verifiedAt,
+      retrievedAt:
+        businessContact.verifiedAt ??
+        businessContact.updatedAt ??
+        provider.source.freshness.retrievedAt,
+      supports:
+        "Business website or email kept apart from CMS and state snapshot tables. Not a rating.",
+    });
+  }
   if (stateIntelligence?.licenseId) {
     sources.push({
       key: `state-regulator-${stateIntelligence.stateCode}`,
@@ -255,12 +279,21 @@ export function FacilitySourceRegister({
               <dd>{source.supports}</dd>
             </div>
           </dl>
-          <a href={source.officialSourceUrl} rel="noreferrer">
-            {source.datasetIdentifier.startsWith("commercial-corroboration")
-              ? "How sources work"
-              : source.datasetIdentifier.startsWith("state-regulator:")
-                ? "View official state source"
-                : "View official CMS source"}
+          <a
+            href={source.officialSourceUrl}
+            rel={
+              source.datasetIdentifier.startsWith("provider-business-contact:")
+                ? "nofollow noopener noreferrer"
+                : "noreferrer"
+            }
+          >
+            {source.datasetIdentifier.startsWith("provider-business-contact:")
+              ? "View contact source"
+              : source.datasetIdentifier.startsWith("commercial-corroboration")
+                ? "How sources work"
+                : source.datasetIdentifier.startsWith("state-regulator:")
+                  ? "View official state source"
+                  : "View official CMS source"}
           </a>
         </details>
       ))}
@@ -285,6 +318,7 @@ export function RealProviderDetail({
   workspaceEnabled = false,
   nhEvidence = null,
   nhIntel = null,
+  businessContact = null,
 }: {
   provider: CareProviderDetail;
   regulatory?: CareRegulatoryIntelligence;
@@ -309,6 +343,7 @@ export function RealProviderDetail({
   workspaceEnabled?: boolean;
   nhEvidence?: CareNhEvidence | null;
   nhIntel?: NursingHomeProviderIntelligence | null;
+  businessContact?: PublicProviderBusinessContact | null;
 }) {
   const intel = nhIntel && isProviderIntelV1(nhIntel) ? nhIntel : null;
   const freshness = formatFreshnessLabels(provider.source.freshness);
@@ -419,6 +454,7 @@ export function RealProviderDetail({
         {publishedEnrichment ? (
           <VerifiedPublicContact provider={provider} enrichment={publishedEnrichment} />
         ) : null}
+        <ProviderBusinessContact contact={businessContact} />
 
         {stateIntelligence ? (
           <StateLicenseOversight provider={provider} intelligence={stateIntelligence} />
@@ -456,6 +492,7 @@ export function RealProviderDetail({
             provider.telephone) ? (
             <a href="#contact">Contact</a>
           ) : null}
+          {businessContact ? <a href="#business-contact">Business contact</a> : null}
           <a href="#sources">Sources</a>
         </nav>
 
@@ -600,6 +637,7 @@ export function RealProviderDetail({
             chain={chain}
             publishedEnrichment={publishedEnrichment}
             stateIntelligence={stateIntelligence}
+            businessContact={businessContact}
           />
           <p className="independence-statement">
             No paid placements. Facilities cannot pay to rank higher. We cite. You decide.

@@ -7,6 +7,7 @@ import {
   type ResolutionState,
 } from "@care/domain";
 import { getCareDatabasePool } from "./db";
+import { getPublicProviderBusinessContact } from "./provider-business-contact";
 import type { CarePublishedFacilityEnrichment, CareProviderDetail } from "./types";
 
 interface ClaimRow {
@@ -44,13 +45,17 @@ export async function getPublishedFacilityEnrichment(
   cms: Pick<CareProviderDetail, "providerName" | "telephone">,
 ): Promise<CarePublishedFacilityEnrichment> {
   const normalized = ccn.trim().toUpperCase();
-  const empty: CarePublishedFacilityEnrichment = {
-    website: null,
-    phone: null,
-    publicAlias: null,
+  const absent = (): CarePublishedFacilityEnrichment => ({
+    ...selectPublishedFacilityEnrichment({
+      claims: [],
+      identityState: null,
+      cmsName: cms.providerName,
+      cmsPhone: cms.telephone,
+    }),
     phoneMatchesCms: false,
-  };
-  if (!/^[A-Z0-9]{6}$/.test(normalized)) return empty;
+    businessContact: null,
+  });
+  if (!/^[A-Z0-9]{6}$/.test(normalized)) return absent();
 
   const pool = getCareDatabasePool();
   const [claims, identity] = await Promise.all([
@@ -85,8 +90,10 @@ export async function getPublishedFacilityEnrichment(
     cmsName: cms.providerName,
     cmsPhone: cms.telephone,
   });
+  const businessContact = await getPublicProviderBusinessContact("nursing_home", normalized);
   return {
     ...selected,
     phoneMatchesCms: publicPhonesMatch(selected.phone?.value ?? null, cms.telephone),
+    businessContact,
   };
 }
