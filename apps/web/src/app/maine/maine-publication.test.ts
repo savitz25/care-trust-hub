@@ -1,9 +1,13 @@
 import { describe, expect, it } from "vitest";
 import fs from "node:fs";
+import path from "node:path";
 
 describe("Maine senior publication", () => {
   it("keeps source classes distinct and the missing extract explicit", () => {
-    const page = fs.readFileSync(new URL("./page.tsx", import.meta.url), "utf8");
+    const workspacePage = path.resolve(process.cwd(), "src/app/maine/page.tsx");
+    const repositoryPage = path.resolve(process.cwd(), "apps/web/src/app/maine/page.tsx");
+    const pagePath = fs.existsSync(workspacePage) ? workspacePage : repositoryPage;
+    const page = fs.readFileSync(pagePath, "utf8");
     expect(page).toContain('canonicalUrl("/maine")');
     expect(page).toContain("NOT_ACQUIRED");
     expect(page).toContain("Nursing facilities");
