@@ -1,0 +1,8 @@
+source_class,directory_observations,distinct_license_ids,rows_with_expiration_date,listed_expiration_on_or_before_snapshot
+Nursing facilities,47,47,0,0
+Assisted living,38,38,0,0
+Adult day care,10,10,10,2
+Home health agencies - aides only,13,13,13,4
+Home health agencies - skilled,35,35,34,8
+Hospice,13,11,13,0
+Personal assistance services agencies,91,91,89,20
