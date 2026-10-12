@@ -10,15 +10,15 @@ Checked and acquired: 2026-10-12. Source classes were audited before adding the 
 
 ## Observed class populations
 
-| DHSS source class | Directory observations | Distinct license identifiers | Expiration-date observations at/before 2026-10-12 |
-| --- | ---: | ---: | ---: |
-| Nursing facilities | 47 | 47 | Not displayed in directory rows |
-| Assisted living | 38 | 38 | Not displayed in directory rows |
-| Adult day care | 10 | 10 | 2 |
-| Home health agencies – aides only | 13 | 13 | 4 |
-| Home health agencies – skilled | 35 | 35 | 8 (34 of 35 show a date) |
-| Hospice | 13 | 11 | 0 |
-| Personal assistance services agencies | 91 | 91 | 20 (89 of 91 show a date) |
+| DHSS source class                     | Directory observations | Distinct license identifiers | Expiration-date observations at/before 2026-10-12 |
+| ------------------------------------- | ---------------------: | ---------------------------: | ------------------------------------------------: |
+| Nursing facilities                    |                     47 |                           47 |                   Not displayed in directory rows |
+| Assisted living                       |                     38 |                           38 |                   Not displayed in directory rows |
+| Adult day care                        |                     10 |                           10 |                                                 2 |
+| Home health agencies – aides only     |                     13 |                           13 |                                                 4 |
+| Home health agencies – skilled        |                     35 |                           35 |                          8 (34 of 35 show a date) |
+| Hospice                               |                     13 |                           11 |                                                 0 |
+| Personal assistance services agencies |                     91 |                           91 |                         20 (89 of 91 show a date) |
 
 Hospice identifier `HSPC-010C` occurs on three directory entries. These entries were not collapsed. Expiration dates at or before the retrieval date are flags from the source page, not proof that the business stopped operating or that the state has not renewed a license. Conversely, the directory may not expose a renewal update. Current license validity for every entry remains NOT_RECONCILED. The script `scripts/summarize_de_sen_001.py` parses the preserved pages and writes class-specific observation counts; it intentionally produces no cross-class total.
 
