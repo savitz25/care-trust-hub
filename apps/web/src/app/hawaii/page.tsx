@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 
@@ -66,8 +66,8 @@ export default function HawaiiPage() {
         <p className="home-hero__lede">
           The Department of Health Office of Health Care Assurance (OHCA) maintains state facility
           licensing and inspection resources. Each source-defined care class is separate. This page
-          links to OHCA's current public directories and reports; it does not add unlike populations
-          into one senior-facility census.
+          links to OHCA&apos;s current public directories and reports; it does not add unlike
+          populations into one senior-facility census.
         </p>
       </section>
       <section aria-labelledby="hi-populations">
@@ -102,10 +102,11 @@ export default function HawaiiPage() {
         <h2 id="hi-limits">Keep records and clocks separate</h2>
         <p>
           Facility identity, license, licensed capacity, inspection or survey, complaint,
-          enforcement action, and CMS certification are different records. A facility's inspection
-          report does not by itself establish a sanction. Federal CMS certification remains an
-          overlay and is not counted as a state license. Administrators are people, not facilities.
-          No local licensing, provider ranking, combined total, or Trust Score is asserted.
+          enforcement action, and CMS certification are different records. A facility&apos;s
+          inspection report does not by itself establish a sanction. Federal CMS certification
+          remains an overlay and is not counted as a state license. Administrators are people, not
+          facilities. No local licensing, provider ranking, combined total, or Trust Score is
+          asserted.
         </p>
         <p>
           Source review date: October 14, 2026. The linked state pages publish independently updated
