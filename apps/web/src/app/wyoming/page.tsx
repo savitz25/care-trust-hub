@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: { absolute: "Wyoming Senior Care Facility Licensing | SeniorTrustHub" },
     description:
-      "Wyoming facility directory observations by state-defined class, with license and CMS distinctions preserved.",
+      "Wyoming facility directory rows by source class, with license and CMS distinctions preserved.",
     alternates: canonical ? { canonical } : undefined,
     robots: publicRobots(true),
   };
@@ -55,7 +55,9 @@ export default function WyomingSeniorPage() {
         <ul>
           <li>Facility directory rows and license identifiers are reported by source type.</li>
           <li>Licensed beds, when shown by the directory, are not CMS-certified beds.</li>
-          <li>Inspections, surveys, complaints, and enforcement are separate records and clocks.</li>
+          <li>
+            Inspections, surveys, complaints, and enforcement are separate records and clocks.
+          </li>
           <li>CMS certification remains a separate federal population.</li>
         </ul>
       </section>
