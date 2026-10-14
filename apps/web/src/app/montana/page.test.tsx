@@ -5,7 +5,9 @@ import MontanaSeniorPage from "./page";
 describe("Montana senior-care licensing publication", () => {
   it("keeps the acquired LTC location list distinct from license counts", () => {
     render(<MontanaSeniorPage />);
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/Montana senior-care facility licensing evidence/i);
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+      /Montana senior-care facility licensing evidence/i,
+    );
     expect(screen.getByText("61 location rows")).toBeInTheDocument();
     expect(screen.getByText(/61 exact-distinct displayed names/)).toBeInTheDocument();
     expect(screen.getByText(/not a verified active-license count/)).toBeInTheDocument();
@@ -26,7 +28,10 @@ describe("Montana senior-care licensing publication", () => {
       expect(screen.getByText(label)).toBeInTheDocument();
     }
     expect(screen.getByText(/a survey is not enforcement/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /CMS Care Compare data/ })).toHaveAttribute("href", "https://data.cms.gov/provider-data/");
+    expect(screen.getByRole("link", { name: /CMS Care Compare data/ })).toHaveAttribute(
+      "href",
+      "https://data.cms.gov/provider-data/",
+    );
     expect(screen.queryByText(/AggregateRating|Trust Score/)).not.toBeInTheDocument();
   });
 });
