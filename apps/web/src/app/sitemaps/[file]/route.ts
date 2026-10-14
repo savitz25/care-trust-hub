@@ -31,6 +31,7 @@ export const dynamic = "force-dynamic";
 
 const corePaths = [
   "/",
+  "/montana",
   "/about",
   "/methodology",
   "/sources",
