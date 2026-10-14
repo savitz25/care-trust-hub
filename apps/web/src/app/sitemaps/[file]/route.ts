@@ -65,6 +65,7 @@ const corePaths = [
   "/connecticut",
   "/maryland",
   "/wisconsin",
+  "/hawaii",
   "/indiana",
   "/louisiana",
   "/alabama",
