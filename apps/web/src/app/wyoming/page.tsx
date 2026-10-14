@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: { absolute: "Wyoming Senior Care Facility Licensing | SeniorTrustHub" },
     description:
-      "Wyoming facility directory rows by source class, with license and CMS distinctions preserved.",
+      "Wyoming facility rows by source class, with license and CMS distinctions preserved.",
     alternates: canonical ? { canonical } : undefined,
     robots: publicRobots(true),
   };
