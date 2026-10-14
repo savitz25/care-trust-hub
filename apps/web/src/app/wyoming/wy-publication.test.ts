@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import snapshot from "@/data/wyoming/wy-sen-001/summary.json";
+import snapshot from "../../../../../data/wyoming/wy-sen-001/summary.json";
 import { normalizedPublishedStatePath } from "@/lib/published-state-path";
 
 const here = dirname(fileURLToPath(import.meta.url));
