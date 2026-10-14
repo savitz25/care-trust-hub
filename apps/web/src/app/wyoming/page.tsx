@@ -40,8 +40,8 @@ export default function WyomingSeniorPage() {
           2026. It contains 275 facility rows across 18 directory types. Relevant source classes
           include 3 Adult Day Care (ADC), 31 Assisted Living Facility (ALF), 61 Home Health Agency
           (HHA), 21 Hospice (HSPC), 1 ICF/IID, and 36 Nursing Home (NH) rows. Each listed class has
-          the same number of distinct license identifiers as rows in this snapshot. These counts
-          are class-specific directory observations, not a combined denominator.
+          the same number of distinct license identifiers as rows in this snapshot. These counts are
+          class-specific directory observations, not a combined denominator.
         </p>
         <p>
           The spreadsheet does not provide a current license-status field. These figures describe
