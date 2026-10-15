@@ -8,7 +8,6 @@ import {
   type SeniorNetworkMetricsV1,
 } from "@care/domain";
 import {
-  NEWEST_PUBLISHED_STATES,
   PUBLISHED_STATE_COUNT,
   PUBLISHED_STATES,
   publishedStateHref,
@@ -84,6 +83,25 @@ export function SeniorHomeIntelligence({
   // Published-state counts follow the local published-state list, not the detailed card set.
   const cardCodes = new Set<string>(stateCards.map((state) => state.state));
   const moreStates = PUBLISHED_STATES.filter((state) => !cardCodes.has(state.code));
+  const publishedHrefs = new Set(PUBLISHED_STATES.map((state) => state.href));
+  const featuredDestinations = new Set<string>();
+  const featuredRosters: SeniorHomepageEvidenceMeasure[] = [];
+  for (const item of evidenceInventory
+    .filter((entry) => {
+      if (entry.family !== "IDENTITY_LICENSURE" && entry.family !== "STATE_CARE_ECOSYSTEM")
+        return false;
+      if (entry.publicationEligibility !== "PUBLIC" || typeof entry.value !== "number")
+        return false;
+      if (!publishedHrefs.has(entry.researchDestination)) return false;
+      const blob = `${entry.key} ${entry.label} ${entry.grain} ${entry.providerClass} ${entry.doesNotCount}`;
+      return !/non-senior|\bELMS\b|all licensed-facility|crosswalk/i.test(blob);
+    })
+    .sort((a, b) => b.value - a.value)) {
+    if (featuredDestinations.has(item.researchDestination)) continue;
+    featuredDestinations.add(item.researchDestination);
+    featuredRosters.push(item);
+    if (featuredRosters.length === 4) break;
+  }
   const inventoryFamilies = evidenceInventory
     .map((row) => (row.key === "state-pages" ? { ...row, value: PUBLISHED_STATE_COUNT } : row))
     .reduce<Record<string, SeniorHomepageEvidenceMeasure[]>>((groups, row) => {
@@ -161,15 +179,31 @@ export function SeniorHomeIntelligence({
           These are different kinds of records and are never added into one total.
         </p>
         <p>
-          <strong>Newest state pages:</strong>
+          <strong>Featured state rosters</strong>
         </p>
-        <nav className="senior-ask__examples" aria-label="Newest state intelligence pages">
-          {NEWEST_PUBLISHED_STATES.map((state) => (
-            <Link key={state.slug} href={state.href} title={state.newestSummary}>
-              {state.name}
-            </Link>
+        <p className="hub-kicker">
+          These are source-native facility or license records. They are not added to the federal
+          directory counts, and unlike classes are not added together. Populations that were not
+          acquired stay disclosed and are not shown as zero.
+        </p>
+        <div className="intel-metric-rail">
+          {featuredRosters.map((item) => (
+            <article className="intel-metric" key={item.key}>
+              <p className="intel-metric__value">{item.value.toLocaleString("en-US")}</p>
+              <h3>{item.label}</h3>
+              <p>{item.grain}</p>
+              <p>
+                {item.sourceAsOf
+                  ? `Source as of ${item.sourceAsOf}`
+                  : item.retrievedAt
+                    ? `Retrieved ${item.retrievedAt.slice(0, 10)}`
+                    : "Source date not reported"}
+              </p>
+              <p>Does not count: {item.doesNotCount}</p>
+              <Link href={item.researchDestination}>Review the published evidence</Link>
+            </article>
           ))}
-        </nav>
+        </div>
         <div className="intel-hero__actions">
           <a className="button button--primary" href="#explore">
             Explore all {PUBLISHED_STATE_COUNT} states
