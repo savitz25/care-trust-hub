@@ -1,0 +1,104 @@
+{
+  "state": "Wyoming",
+  "source": "Wyoming Healthcare Facility Directory 2026-2027",
+  "source_url": "https://health.wyo.gov/wp-content/uploads/2026/09/2026-2027-Facility-Directory.xlsx",
+  "landing_page": "https://health.wyo.gov/aging/hls/healthcare-facility-directory/",
+  "source_updated": "2026-10-12",
+  "retrieved": "2026-10-14",
+  "raw_entity_rows": 275,
+  "distinct_directory_types": 18,
+  "source_status_field_present": false,
+  "classes": [
+    {
+      "source_type": "ADC",
+      "observations": 3,
+      "distinct_license_ids": 3
+    },
+    {
+      "source_type": "ALF",
+      "observations": 31,
+      "distinct_license_ids": 31
+    },
+    {
+      "source_type": "ASC",
+      "observations": 20,
+      "distinct_license_ids": 20
+    },
+    {
+      "source_type": "BH",
+      "observations": 3,
+      "distinct_license_ids": 3
+    },
+    {
+      "source_type": "CAH",
+      "observations": 20,
+      "distinct_license_ids": 19
+    },
+    {
+      "source_type": "CORF/\nREHAB",
+      "observations": 1,
+      "distinct_license_ids": 1
+    },
+    {
+      "source_type": "ESRD",
+      "observations": 11,
+      "distinct_license_ids": 11
+    },
+    {
+      "source_type": "FQHC",
+      "observations": 24,
+      "distinct_license_ids": 1
+    },
+    {
+      "source_type": "HHA",
+      "observations": 61,
+      "distinct_license_ids": 61
+    },
+    {
+      "source_type": "HOSP",
+      "observations": 8,
+      "distinct_license_ids": 8
+    },
+    {
+      "source_type": "HSPC",
+      "observations": 21,
+      "distinct_license_ids": 21
+    },
+    {
+      "source_type": "ICF/IID",
+      "observations": 1,
+      "distinct_license_ids": 1
+    },
+    {
+      "source_type": "NH",
+      "observations": 36,
+      "distinct_license_ids": 36
+    },
+    {
+      "source_type": "OPT",
+      "observations": 3,
+      "distinct_license_ids": 1
+    },
+    {
+      "source_type": "PSYCH",
+      "observations": 2,
+      "distinct_license_ids": 2
+    },
+    {
+      "source_type": "PXR",
+      "observations": 1,
+      "distinct_license_ids": 1
+    },
+    {
+      "source_type": "R-HOSP",
+      "observations": 1,
+      "distinct_license_ids": 1
+    },
+    {
+      "source_type": "RHC",
+      "observations": 28,
+      "distinct_license_ids": 1
+    }
+  ],
+  "sha256": "6878B97767D7B825FF4D6663A6F16257ED0DC3C7DF3265961FD29682FC3502E9"
+}

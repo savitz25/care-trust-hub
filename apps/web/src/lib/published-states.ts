@@ -55,6 +55,7 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   utah: "UT",
   iowa: "IA",
   "rhode-island": "RI",
+  wyoming: "WY",
 };
 
 /** Newest state pages first. */
@@ -95,6 +96,8 @@ const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>
     "LARA/BCHS AFC, Home for the Aged, nursing home and hospice license snapshots and discipline evidence",
   "rhode-island":
     "RIDOH active facility licenses by source class, including nursing, assisted living, home care, hospice, adult day and ICF/MR",
+  wyoming:
+    "DPHHS 2026–2027 directory: adult day, assisted living, home health, hospice, ICF/IID, and nursing facility rows kept separate",
 };
 
 function nameFor(slug: string): string {
