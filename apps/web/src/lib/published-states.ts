@@ -56,6 +56,7 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   iowa: "IA",
   "rhode-island": "RI",
   wyoming: "WY",
+  "south-dakota": "SD",
 };
 
 /** Newest state pages first. */
@@ -98,6 +99,8 @@ const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>
     "RIDOH active facility licenses by source class, including nursing, assisted living, home care, hospice, adult day and ICF/MR",
   wyoming:
     "DPHHS 2026–2027 directory: adult day, assisted living, home health, hospice, ICF/IID, and nursing facility rows kept separate",
+  "south-dakota":
+    "Department of Health license and registration classes stay separate. The SDHLS lookup was not acquired as a dated roster",
 };
 
 function nameFor(slug: string): string {
