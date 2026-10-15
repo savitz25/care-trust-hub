@@ -14,7 +14,7 @@ describe("SD-SEN-001 South Dakota facility-class publication", () => {
     expect(page).toContain("NOT_ACQUIRED");
     expect(page).toContain("not a count of zero");
     expect(page).toContain("living centers are registered annually");
-    expect(page).toContain("CMS certification is a separate federal population");
+    expect(page).toContain("CMS certification is a separate federal");
     expect(page).toContain("not a license roster");
     expect(page).not.toMatch(/\b\d{2,}\s+(nursing|assisted|facilities|beds)\b/i);
     expect(page).not.toMatch(/aggregateRating|ratingValue|reviewCount|Trust Score/);
@@ -26,9 +26,9 @@ describe("SD-SEN-001 South Dakota facility-class publication", () => {
     expect([...sitemap.matchAll(/"\/south-dakota"/g)]).toHaveLength(1);
     expect(normalizedPublishedStatePath("/South-Dakota")).toBe("/south-dakota");
     expect(normalizedPublishedStatePath("/south-dakota/sioux-falls")).toBeNull();
-    expect(PUBLISHED_STATES.some((state) => state.slug === "south-dakota" && state.code === "SD")).toBe(
-      true,
-    );
+    expect(
+      PUBLISHED_STATES.some((state) => state.slug === "south-dakota" && state.code === "SD"),
+    ).toBe(true);
     expect(PUBLISHED_STATE_COUNT).toBe(PUBLISHED_STATES.length);
   });
 });

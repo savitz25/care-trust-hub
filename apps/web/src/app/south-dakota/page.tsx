@@ -45,9 +45,9 @@ export default function SouthDakotaSeniorPage() {
         <p className="eyebrow">South Dakota Department of Health</p>
         <h1 id="sd-title">South Dakota senior-care facility classes</h1>
         <p className="home-hero__lede">
-          The Office of Health Facilities Licensure and Certification licenses or registers
-          distinct facility classes. Those classes are not one senior-care census, and a current
-          statewide roster was not acquired.
+          The Office of Health Facilities Licensure and Certification licenses or registers distinct
+          facility classes. Those classes are not one senior-care census, and a current statewide
+          roster was not acquired.
         </p>
       </section>
       <section aria-labelledby="sd-classes">
@@ -56,10 +56,10 @@ export default function SouthDakotaSeniorPage() {
           Official pages checked October 14, 2026. South Dakota requires licensure for hospitals,
           nursing facilities, assisted living centers, ambulatory surgery centers, adult foster care
           homes, birthing centers, community living homes, X-ray facilities, mammography units,
-          inpatient hospice units, and inpatient chemical dependency treatment facilities. Residential
-          living centers are registered annually under SDCL 34-12-32. They are not licensed under
-          that section. Current row-level records for every class are <strong>NOT_ACQUIRED</strong>.
-          That is not a count of zero.
+          inpatient hospice units, and inpatient chemical dependency treatment facilities.
+          Residential living centers are registered annually under SDCL 34-12-32. They are not
+          licensed under that section. Current row-level records for every class are{" "}
+          <strong>NOT_ACQUIRED</strong>. That is not a count of zero.
         </p>
         <p>
           The public SDHLS provider list is a lookup that asks for a license, certification, or
@@ -77,11 +77,20 @@ export default function SouthDakotaSeniorPage() {
       <section aria-labelledby="sd-boundaries">
         <h2 id="sd-boundaries">Identity and oversight boundaries</h2>
         <ul>
-          <li>Nursing facilities, assisted living centers, and adult foster care homes are separate license classes.</li>
+          <li>
+            Nursing facilities, assisted living centers, and adult foster care homes are separate
+            license classes.
+          </li>
           <li>Residential living center registration is not a health-facility license.</li>
-          <li>Community living homes are a separate license class, limited by the Department to small adult residences.</li>
+          <li>
+            Community living homes are a separate license class, limited by the Department to small
+            adult residences.
+          </li>
           <li>Inpatient hospice is a listed license class and is not a nursing-facility row.</li>
-          <li>Licensed beds are not CMS-certified beds. CMS certification is a separate federal population.</li>
+          <li>
+            Licensed beds are not CMS-certified beds. CMS certification is a separate federal
+            population.
+          </li>
           <li>Inspections, complaints, and enforcement are separate records and clocks.</li>
           <li>Nursing facility administrators are licensed persons, not facilities.</li>
         </ul>
