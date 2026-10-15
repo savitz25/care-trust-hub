@@ -12,7 +12,7 @@ vi.mock("@/components/switch-hub-menu", () => ({
 }));
 
 const ACCOUNT_NAME = "My TrustHub account";
-const ACCOUNT_URL = "https://www.asktrusthub.com/my";
+const ACCOUNT_URL = "https://www.asktrusthub.com/my/sign-in";
 const dialogPrototype = HTMLDialogElement.prototype;
 const originalShowModal = Object.getOwnPropertyDescriptor(dialogPrototype, "showModal");
 const originalClose = Object.getOwnPropertyDescriptor(dialogPrototype, "close");

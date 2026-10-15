@@ -7,7 +7,7 @@ import { BrandLogo } from "@/components/brand-logo";
 import { PublishedStateNavigation } from "@/components/published-state-navigation";
 import { SwitchHubMenu } from "@/components/switch-hub-menu";
 
-const MY_TRUSTHUB_ACCOUNT_URL = "https://www.asktrusthub.com/my";
+const MY_TRUSTHUB_ACCOUNT_URL = "https://www.asktrusthub.com/my/sign-in";
 
 const PRIMARY_NAV = [
   { href: "/ask", label: "Ask" },
