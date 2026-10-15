@@ -159,6 +159,15 @@ describe("senior homepage intelligence", () => {
     expect(document.body.textContent).toMatch(/source-as-of dates are agency evidence clocks/i);
     expect(document.body.textContent).toMatch(/not dates the state was added/i);
     expect(screen.queryByText(/Recently added \/ updated/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Newest state pages/i)).not.toBeInTheDocument();
+    expect(screen.getByText("Featured state rosters")).toBeInTheDocument();
+    const featured = screen.getAllByRole("link", { name: "Review the published evidence" });
+    expect(featured.map((link) => link.getAttribute("href")).sort()).toEqual([
+      "/california",
+      "/florida",
+      "/texas",
+      "/washington",
+    ]);
     expect(document.querySelector("#recent-intelligence time")).toBeNull();
     expect(document.body.textContent).toMatch(/Federal directories & certification/i);
     expect(document.body.textContent).toMatch(/Public research surfaces/i);

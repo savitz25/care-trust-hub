@@ -57,6 +57,14 @@ const CODES: Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string> = {
   "rhode-island": "RI",
   wyoming: "WY",
   "south-dakota": "SD",
+  alaska: "AK",
+  delaware: "DE",
+  hawaii: "HI",
+  maine: "ME",
+  montana: "MT",
+  "new-hampshire": "NH",
+  "north-dakota": "ND",
+  vermont: "VT",
 };
 
 /** Newest state pages first. */
@@ -101,6 +109,22 @@ const NEWEST: Partial<Record<(typeof PUBLISHED_STATEWIDE_SLUGS)[number], string>
     "DPHHS 2026–2027 directory: adult day, assisted living, home health, hospice, ICF/IID, and nursing facility rows kept separate",
   "south-dakota":
     "Department of Health license and registration classes stay separate. The SDHLS lookup was not acquired as a dated roster",
+  alaska:
+    "Assisted living open-home roster dated August 31, 2026: 814 homes and 814 license numbers, kept separate from the health-facility list",
+  delaware:
+    "DHSS directory observations stay class-specific, including 47 nursing-facility entries and 38 assisted-living entries. Classes are not added together",
+  hawaii:
+    "Department of Health facility classes are published. Current source row counts and a unified source clock were not acquired and are not zero",
+  maine:
+    "DHHS facility-license populations were not acquired as rosters. A blank acquisition is not a zero population",
+  montana:
+    "61 long-term-care location observations are not a verified license count. Nursing-facility and assisted-living license rosters were not acquired",
+  "new-hampshire":
+    "DHHS facility classes are published. Current roster rows were not acquired and are not shown as zero",
+  "north-dakota":
+    "Facility classes stay separate. Current licensee counts and several class rosters were not acquired and are not zero",
+  vermont:
+    "Facility classes stay separate. Current roster rows and statuses were not acquired and are not shown as zero",
 };
 
 function nameFor(slug: string): string {
