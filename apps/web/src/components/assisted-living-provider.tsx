@@ -13,8 +13,10 @@ import {
   publishedAssistedLivingPath,
   regulatorDisplayName,
   type AssistedLivingPublicProvider,
+  type PublicProviderBusinessContact,
 } from "@care/domain";
 import { RealDataNotice } from "./evidence";
+import { ProviderBusinessContact } from "./provider-business-contact";
 import { WorkspaceAddButton } from "./workspace-add-button";
 
 export function AssistedLivingCoverageNote() {
@@ -81,10 +83,12 @@ export function AssistedLivingProviderDetail({
   provider,
   workspaceEnabled = false,
   interviewEnabled = false,
+  businessContact = null,
 }: {
   provider: AssistedLivingPublicProvider;
   workspaceEnabled?: boolean;
   interviewEnabled?: boolean;
+  businessContact?: PublicProviderBusinessContact | null;
 }) {
   const memory = memoryCarePublicLabel(provider.memoryDesignation);
   const sourceUrl = officialAssistedLivingSourceUrl(provider.stateCode);
@@ -145,6 +149,8 @@ export function AssistedLivingProviderDetail({
           </div>
         </dl>
       </section>
+
+      <ProviderBusinessContact contact={businessContact} />
 
       {memory ? (
         <section className="facility-section" aria-labelledby="al-memory">

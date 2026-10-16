@@ -222,3 +222,28 @@ def test_pbj_migration_is_next_and_preserves_prior_migrations() -> None:
     assert "google" not in assisted.lower()
     assert "PUBLISHABLE_WITH_STATUS" in assisted
     assert "CHECK (discovery_eligible = false OR identity_state = 'VERIFIED')" in assisted
+
+    contact = (migrations / "0037_provider_business_contact.sql").read_text(encoding="utf-8")
+    rollback = (migrations.parent / "rollbacks" / "0037_provider_business_contact.sql").read_text(
+        encoding="utf-8"
+    )
+    assert "CREATE TABLE provider_business_contact (" in contact
+    assert "UNIQUE (provider_type, provider_key)" in contact
+    assert "website_url" in contact
+    assert "is_public boolean NOT NULL DEFAULT false" in contact
+    assert "ALTER TABLE facility_snapshot" not in contact
+    assert "ALTER TABLE home_health_snapshot" not in contact
+    assert "ALTER TABLE hospice_snapshot" not in contact
+    assert "ALTER TABLE assisted_living_provider" not in contact
+    assert "REVOKE ALL ON TABLE public.provider_business_contact FROM anon" in contact
+    assert "REVOKE ALL ON TABLE public.provider_business_contact FROM authenticated" in contact
+    assert "GRANT SELECT ON TABLE public.provider_business_contact TO service_role" in contact
+    assert "ENABLE ROW LEVEL SECURITY" in contact
+    assert "FORCE ROW LEVEL SECURITY" not in contact
+    assert "GRANT INSERT" not in contact
+    assert "GRANT UPDATE" not in contact
+    assert "DROP TABLE IF EXISTS public.provider_business_contact" in rollback
+    assert "DROP TABLE" in rollback
+    assert "facility_snapshot" not in rollback
+    assert "DROP TABLE facility_identity_candidate" not in rollback
+    assert "DROP TABLE facility_claim" not in rollback

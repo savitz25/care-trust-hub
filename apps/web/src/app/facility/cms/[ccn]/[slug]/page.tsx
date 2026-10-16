@@ -16,6 +16,7 @@ import {
   getProviderStaffingSummaryForPage,
   getApprovedProviderContextForPage,
   getPublishedFacilityEnrichmentForPage,
+  getPublicProviderBusinessContactForPage,
   getPublishedStateIntelligenceForPage,
   getPublishedFacilityHistoryForPage,
   getOwnershipOperationSummaryForPage,
@@ -117,6 +118,9 @@ export default async function RealFacilityPage({
   const publishedEnrichment = isVerifiedEnrichmentEnabled()
     ? await getPublishedFacilityEnrichmentForPage(provider.ccn, provider)
     : undefined;
+  const businessContact = publishedEnrichment
+    ? publishedEnrichment.businessContact
+    : await getPublicProviderBusinessContactForPage("nursing_home", provider.ccn);
   const stateIntelligence = isStateRegulatoryIntelligenceEnabled()
     ? ((await getPublishedStateIntelligenceForPage(provider.ccn, provider.location.state)) ??
       undefined)
@@ -174,6 +178,7 @@ export default async function RealFacilityPage({
         trustParticipation={trustParticipation}
         profileManagementEnabled={customerEnabled}
         publishedEnrichment={publishedEnrichment}
+        businessContact={businessContact}
         stateIntelligence={stateIntelligence}
         facilityHistory={facilityHistory}
         ownershipOperation={ownershipOperation}

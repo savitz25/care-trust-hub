@@ -1107,6 +1107,38 @@ fieldset legend span {
   display: inline-flex;
   align-items: center;
 }
+.provider-business-contact {
+  padding-block: var(--space-5);
+}
+.provider-business-contact .provider-business-contact__facts div {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.provider-business-contact .provider-business-contact__facts dd {
+  display: grid;
+  gap: var(--space-1);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+.provider-business-contact .provider-business-contact__facts small {
+  display: block;
+  color: var(--color-slate-600);
+  font-size: 0.85rem;
+}
+.provider-business-contact .provider-business-contact__facts a {
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  overflow-wrap: anywhere;
+}
+@media (min-width: 40rem) {
+  .provider-business-contact__facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+}
 .state-license-oversight {
   padding-block: var(--space-5);
 }
