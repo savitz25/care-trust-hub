@@ -254,31 +254,33 @@ export function FloridaProviderProfileView({
           <p>{regulatory.absence_language}</p>
         )}
         {regulatory.recent.length > 0 ? (
-          <table className="hub-table">
-            <caption>Up to eight recent connected observations</caption>
-            <thead>
-              <tr>
-                <th scope="col">Family</th>
-                <th scope="col">Observation</th>
-                <th scope="col">Date</th>
-                <th scope="col">Case</th>
-                <th scope="col">Finality</th>
-              </tr>
-            </thead>
-            <tbody>
-              {regulatory.recent.map((event, index) => (
-                <tr key={`${event.event_family}-${index}`}>
-                  <td>{event.event_family}</td>
-                  <td>{inspectionDisplayLabel(event.event_family, event.event_type)}</td>
-                  <td>{formatDay(event.event_date)}</td>
-                  <td>{asText(event.case_number)}</td>
-                  <td>
-                    {event.is_final == null ? "Unknown" : event.is_final ? "Final" : "Not final"}
-                  </td>
+          <div className="hub-table-scroll">
+            <table className="hub-table florida-profile-observations">
+              <caption>Up to eight recent connected observations</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Family</th>
+                  <th scope="col">Observation</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Case</th>
+                  <th scope="col">Finality</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {regulatory.recent.map((event, index) => (
+                  <tr key={`${event.event_family}-${index}`}>
+                    <td>{event.event_family}</td>
+                    <td>{inspectionDisplayLabel(event.event_family, event.event_type)}</td>
+                    <td>{formatDay(event.event_date)}</td>
+                    <td>{asText(event.case_number)}</td>
+                    <td>
+                      {event.is_final == null ? "Unknown" : event.is_final ? "Final" : "Not final"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : null}
         {regulatory.recent_final_orders.length > 0 ? (
           <ul>

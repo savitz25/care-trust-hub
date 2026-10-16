@@ -40,6 +40,8 @@ describe("Florida assisted-living lookup", () => {
     expect(document.body.textContent).toMatch(/does not mean good standing/i);
     expect(document.body.textContent).toMatch(/not a clean record/i);
     expect(document.body.textContent).toMatch(/does not establish a substantiated violation/i);
+    expect(document.body.textContent).toMatch(/published official name/i);
+    expect(document.body.textContent).toMatch(/has to match that published name/i);
     expect(document.body.textContent).toMatch(/not a ranking/i);
     expect(document.body.textContent).not.toMatch(/nursing home results|good standing license/i);
   });
