@@ -3468,6 +3468,14 @@ html {
   margin: 0;
   overflow-wrap: anywhere;
 }
+.florida-profile-qa > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.florida-profile-qa .hub-table-scroll {
+  min-width: 0;
+  max-width: 100%;
+}
 .florida-profile-qa .hub-table {
   width: 100%;
   min-width: 0;
@@ -3478,6 +3486,11 @@ html {
   width: max-content;
   min-width: 40rem;
   overflow-x: visible;
+}
+.florida-profile-qa .hub-table-scroll > .florida-profile-observations th,
+.florida-profile-qa .hub-table-scroll > .florida-profile-observations td {
+  overflow-wrap: normal;
+  word-break: normal;
 }
 .florida-profile-qa .hub-card h3 {
   font-size: 1.15rem;
@@ -3496,6 +3509,11 @@ html {
     width: max-content;
     min-width: 40rem;
     overflow-x: visible;
+  }
+  .florida-profile-qa .hub-table-scroll > .florida-profile-observations th,
+  .florida-profile-qa .hub-table-scroll > .florida-profile-observations td {
+    overflow-wrap: normal;
+    word-break: normal;
   }
 }
 
