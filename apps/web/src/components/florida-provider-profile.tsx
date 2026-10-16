@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { inspectionDisplayLabel } from "@care/domain";
+import { FLORIDA_ALF_LOOKUP_PATH, inspectionDisplayLabel } from "@care/domain";
 import { brand } from "@/config/brand";
 
 type PublicPayload = {
@@ -322,6 +322,12 @@ export function FloridaProviderProfileView({
           ))}
         </ul>
         <p>
+          {identity.profile_kind === "assisted-living" ? (
+            <>
+              <Link href={FLORIDA_ALF_LOOKUP_PATH}>Published assisted-living records</Link>
+              {" · "}
+            </>
+          ) : null}
           <Link href="/florida">Florida senior care research</Link>
           {" · "}
           <Link href="/methodology">Methodology</Link>

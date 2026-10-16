@@ -47,6 +47,7 @@ export * from "./senior-home-evidence-inventory";
 export * from "./florida-county";
 export * from "./florida-intelligence";
 export * from "./florida-provider-profile";
+export * from "./florida-alf-lookup";
 export * from "./nj-intelligence";
 export * from "./nj-county-intelligence";
 export * from "./ca-intelligence";

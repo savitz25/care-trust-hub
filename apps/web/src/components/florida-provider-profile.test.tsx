@@ -80,5 +80,8 @@ describe("Florida public provider profile", () => {
     expect(document.body.textContent).toMatch(
       /Historical\/non-current Florida identities are not represented/,
     );
+    expect(
+      screen.getByRole("link", { name: /published assisted-living records/i }),
+    ).toHaveAttribute("href", "/florida/assisted-living");
   });
 });
