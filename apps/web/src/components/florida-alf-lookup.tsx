@@ -34,9 +34,10 @@ export function FloridaAlfLookup({
         <p className="eyebrow">Florida assisted living</p>
         <h1>Florida assisted-living records</h1>
         <p className="lede">
-          Look up one of the {cohortCount} published Phase 1 Florida assisted-living records by
-          facility name or AHCA file number. This page does not list every CURRENT assisted-living
-          identity. It does not include nursing homes, home health, hospice, or adult family care.
+          Look up one of the {cohortCount} published Phase 1 Florida assisted-living records by the
+          facility’s published official name or by AHCA file number. The facility name has to match
+          that published name. This page does not list every CURRENT assisted-living identity. It
+          does not include nursing homes, home health, hospice, or adult family care.
         </p>
         <p>
           <Link href="/florida">Florida senior care research</Link>
@@ -51,12 +52,16 @@ export function FloridaAlfLookup({
       >
         <div className="field">
           <label htmlFor="alf-name">Facility name</label>
+          <p id="alf-name-hint" className="hub-stat__note">
+            Published official name.
+          </p>
           <input
             id="alf-name"
             name="name"
             defaultValue={query.name}
             autoComplete="off"
             spellCheck={false}
+            aria-describedby="alf-name-hint"
           />
         </div>
         <div className="field">
@@ -116,7 +121,7 @@ export function FloridaAlfLookup({
         ) : null}
         {!countyBlocked && result.records.length > 0 ? (
           <div className="hub-table-scroll">
-            <table className="hub-table">
+            <table className="hub-table florida-alf-results">
               <caption>
                 {result.status === "browse"
                   ? `${cohortCount} published Phase 1 assisted-living records. Listed by facility name. This is not a ranking.`

@@ -3472,6 +3472,13 @@ html {
   width: 100%;
   min-width: 0;
 }
+.hub-table.florida-alf-results,
+.florida-profile-qa .hub-table-scroll > .florida-profile-observations {
+  display: table;
+  width: max-content;
+  min-width: 40rem;
+  overflow-x: visible;
+}
 .florida-profile-qa .hub-card h3 {
   font-size: 1.15rem;
 }
@@ -3482,6 +3489,13 @@ html {
   .florida-profile-qa .hub-table {
     display: block;
     overflow-x: auto;
+  }
+  .hub-table.florida-alf-results,
+  .florida-profile-qa .hub-table-scroll > .florida-profile-observations {
+    display: table;
+    width: max-content;
+    min-width: 40rem;
+    overflow-x: visible;
   }
 }
 

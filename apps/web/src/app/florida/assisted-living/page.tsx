@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
       absolute: "Florida Assisted Living Records — AHCA File Lookup | SeniorTrustHub",
     },
     description:
-      "Look up the published Phase 1 Florida assisted-living records by facility name or AHCA file number, then open the source-backed record.",
+      "Look up the published Phase 1 Florida assisted-living records by the published official facility name or AHCA file number, then open the source-backed record.",
     alternates: canonical ? { canonical } : undefined,
     robots: publicRobots(true),
   };
