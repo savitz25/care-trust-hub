@@ -23,5 +23,11 @@ describe("Florida intelligence page", () => {
     );
     expect(document.body.textContent).toMatch(/not “no violations,”/i);
     expect(screen.getByRole("table", { name: /observations vs distinct/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /look up the published assisted-living records/i }),
+    ).toHaveAttribute("href", "/florida/assisted-living");
+    expect(document.body.textContent).toMatch(
+      /does not open every CURRENT assisted-living identity/i,
+    );
   });
 });

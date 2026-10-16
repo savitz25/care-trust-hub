@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { coverageShare, formatHubCount, type FloridaIntelligence } from "@care/domain";
+import {
+  coverageShare,
+  FLORIDA_ALF_LOOKUP_PATH,
+  formatHubCount,
+  type FloridaIntelligence,
+} from "@care/domain";
 
 function Stat({ label, value, note }: { label: string; value: string; note?: string }) {
   return (
@@ -91,6 +96,20 @@ export function FloridaIntelligenceView({ intel }: { intel: FloridaIntelligence 
                   {note}
                 </p>
               ))}
+              {card.id === "FL_ALF" ? (
+                <>
+                  <p>
+                    <Link href={FLORIDA_ALF_LOOKUP_PATH}>
+                      Look up the published assisted-living records
+                    </Link>
+                  </p>
+                  <p className="hub-stat__note">
+                    Opens the Phase 1 published assisted-living records. It does not open every
+                    CURRENT assisted-living identity. It does not include nursing homes, home
+                    health, hospice, or adult family care.
+                  </p>
+                </>
+              ) : null}
             </article>
           ))}
         </div>
