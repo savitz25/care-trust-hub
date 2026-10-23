@@ -12,7 +12,7 @@ describe("national hub intelligence", () => {
     expect(screen.getAllByText(/14,690/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/12,460/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/6,669/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/not available/i).length).toBe(2);
+    expect(screen.getAllByText("not yet linked", { selector: "strong" })).toHaveLength(2);
     expect(document.body.textContent).toMatch(/UNKNOWN is not a former owner/i);
     expect(document.body.textContent).not.toMatch(
       /best nursing homes|worst nursing homes|250 indexed|aggregateRating|Trust Score/i,

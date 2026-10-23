@@ -56,7 +56,7 @@ const ownership = {
 
 const chow = {
   ownership_change_history_available: false as const,
-  reason: "NO_PUBLIC_CMS_CHOW_SOURCE" as const,
+  reason: "NOT_YET_LINKED" as const,
   confirmed_event_count: null,
   events: null,
   zero_does_not_mean_no_change_occurred: true as const,
@@ -128,7 +128,9 @@ const hh = {
   },
   evidence_as_of_by_family: {},
   availability: { CHOW: "UNSUPPORTED" },
-  limitations: ["CMS does not publish a Home Health ownership-change event file."],
+  limitations: [
+    "CMS publishes Home Health change-of-ownership (CHOW) files with its enrollment data. They are not yet linked to profiles on SeniorTrustHub. If no CHOW record is shown here, that does not prove ownership never changed.",
+  ],
   person_publication_policy: "SOURCE_EVIDENCE_ONLY_NO_PUBLIC_PROFILE",
   organization_public_route: false as const,
   fingerprint: "x",
@@ -168,7 +170,9 @@ const hospice = {
     ],
     synthetic_trust_hub_rating: false as const,
   },
-  limitations: ["CMS does not publish a Hospice ownership-change event file."],
+  limitations: [
+    "CMS publishes Hospice change-of-ownership (CHOW) files with its enrollment data. They are not yet linked to profiles on SeniorTrustHub. If no CHOW record is shown here, that does not prove ownership never changed.",
+  ],
 } as HospiceProviderIntelligence;
 
 describe("agency profile intelligence", () => {
@@ -179,7 +183,7 @@ describe("agency profile intelligence", () => {
     expect(screen.getAllByText("Not reported").length).toBeGreaterThan(0);
     expect(screen.queryByText(/Trust Score/i)).toBeNull();
     expect(screen.queryByText(/was sold/i)).toBeNull();
-    expect(screen.getAllByText(/not proof that ownership never changed/i).length).toBeGreaterThan(
+    expect(screen.getAllByText(/does not prove ownership never changed/i).length).toBeGreaterThan(
       0,
     );
     expect(screen.getByText(/LONG EXAMPLE HOME HEALTH HOLDINGS LLC/)).toBeTruthy();
@@ -192,5 +196,82 @@ describe("agency profile intelligence", () => {
     expect(screen.getByText(/UNKNOWN does not mean former owner/i)).toBeTruthy();
     expect(screen.queryByText(/\bclosed\b/i)).toBeNull();
     expect(screen.getByText(/CMS Hospice CCN/)).toBeTruthy();
+    expect(document.body.textContent ?? "").not.toMatch(
+      /does not publish a hospice ownership-change/i,
+    );
+  });
+
+  it("labels hospice box statistics separately and does not star Not Applicable", () => {
+    const measure = hospice.quality_summary.families[0]?.measures[0];
+    if (!measure) throw new Error("fixture missing");
+    const intel = {
+      ...hospice,
+      quality_summary: {
+        families: [
+          {
+            family: "hospice_cahps" as const,
+            observation_count: 4,
+            by_availability: { REPORTED: 3, NOT_APPLICABLE: 1 },
+            measures: [
+              {
+                ...measure,
+                measure_code: "H_001_TOP_BOX",
+                official_name: "Family caregiver survey rating",
+                statistic_type: "TOP_BOX",
+                unit: "percent",
+                score: 72,
+                score_text: "72",
+                availability: "REPORTED" as const,
+                star_rating: null,
+              },
+              {
+                ...measure,
+                measure_code: "H_001_MIDDLE_BOX",
+                official_name: "Family caregiver survey rating",
+                statistic_type: "MIDDLE_BOX",
+                unit: "percent",
+                score: 18,
+                score_text: "18",
+                availability: "REPORTED" as const,
+                star_rating: null,
+              },
+              {
+                ...measure,
+                measure_code: "H_001_BOTTOM_BOX",
+                official_name: "Family caregiver survey rating",
+                statistic_type: "BOTTOM_BOX",
+                unit: "percent",
+                score: 10,
+                score_text: "10",
+                availability: "REPORTED" as const,
+                star_rating: 3,
+              },
+              {
+                ...measure,
+                measure_code: "SUMMARY_STAR_RATING",
+                official_name: "Family caregiver survey rating",
+                statistic_type: "STAR_RATING",
+                unit: "star",
+                score: null,
+                score_text: "Not Applicable",
+                availability: "NOT_APPLICABLE" as const,
+                star_rating: 4,
+                suppression_state: "NOT_APPLICABLE",
+              },
+            ],
+          },
+        ],
+        synthetic_trust_hub_rating: false as const,
+      },
+    };
+    render(<HospiceProfileIntelligence intel={intel} />);
+    expect(screen.getByRole("heading", { name: "Family caregiver survey rating" })).toBeTruthy();
+    expect(screen.getByText(/Family caregiver survey rating — top box/i)).toBeTruthy();
+    expect(screen.getByText(/Family caregiver survey rating — middle box/i)).toBeTruthy();
+    expect(screen.getByText(/Family caregiver survey rating — bottom box/i)).toBeTruthy();
+    expect(screen.getByText("72%")).toBeTruthy();
+    expect(screen.getByText("Not applicable")).toBeTruthy();
+    expect(screen.queryByText("4/5")).toBeNull();
+    expect(screen.queryByText("3/5")).toBeNull();
   });
 });

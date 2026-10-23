@@ -515,7 +515,7 @@ export function buildSeniorHomeIntel(input: {
       payloadKey: "nursingHome.chow.events",
       limitations: [
         "A CHOW record is not a sale and is not a quality finding.",
-        "CMS does not publish Home Health or Hospice CHOW event files.",
+        "CMS publishes Home Health and Hospice CHOW files with its enrollment data. SeniorTrustHub has not linked them to profiles yet.",
       ],
     },
   ];
@@ -607,7 +607,7 @@ export function buildSeniorHomeIntel(input: {
       storyId: "ownership-coverage-gap",
       storyType: "GAP",
       title: "Ownership evidence is uneven — and UNKNOWN is not a clean history",
-      summary: `CURRENT OWNED_BY evidence is on file for ${share(nh.coverage.ownedByProviders, nh.current)} Nursing Homes, ${share(hh.coverage.ownedByProviders, hh.current)} Home Health agencies, and ${share(hospice.coverage.ownedByProviders, hospice.current)} Hospice providers. Internal graph-edge counts are not a homepage measure. Nursing Home CHOW events exist (${nh.chow.events.toLocaleString("en-US")}); Home Health and Hospice CHOW files do not.`,
+      summary: `CURRENT OWNED_BY evidence is on file for ${share(nh.coverage.ownedByProviders, nh.current)} Nursing Homes, ${share(hh.coverage.ownedByProviders, hh.current)} Home Health agencies, and ${share(hospice.coverage.ownedByProviders, hospice.current)} Hospice providers. Internal graph-edge counts are not a homepage measure. Nursing Home CHOW events exist (${nh.chow.events.toLocaleString("en-US")}); Home Health and Hospice CHOW files are published by CMS but not yet linked here.`,
       chartType: "coverage",
       chart: {
         caption: "Share of each current directory with resolved CURRENT OWNED_BY evidence.",
@@ -636,7 +636,7 @@ export function buildSeniorHomeIntel(input: {
       doesNotMean: [
         "That a larger ownership network is better or worse care.",
         "That UNKNOWN is a former owner or a confirmed sale.",
-        "That Home Health or Hospice have no owners — CMS does not publish class-equivalent CHOW files.",
+        "That Home Health or Hospice have no owners. CMS CHOW files for these classes are not yet linked here.",
       ],
       sourceIds: [
         "nursing-home-ownership",
@@ -734,7 +734,7 @@ export function buildSeniorHomeIntel(input: {
       display: share(hh.coverage.ownedByProviders, hh.current),
       status: coverageStatus(hh.coverage.ownedByProviders, hh.current),
       method: "Current directory with resolved CURRENT OWNED_BY evidence.",
-      limitations: ["No CMS Home Health CHOW event file."],
+      limitations: ["CMS Home Health CHOW file not yet linked."],
     },
     {
       family: "Ownership / affiliations",
@@ -744,7 +744,7 @@ export function buildSeniorHomeIntel(input: {
       display: share(hospice.coverage.ownedByProviders, hospice.current),
       status: coverageStatus(hospice.coverage.ownedByProviders, hospice.current),
       method: "Current GI with resolved CURRENT OWNED_BY evidence.",
-      limitations: ["No CMS Hospice CHOW event file."],
+      limitations: ["CMS Hospice CHOW file not yet linked."],
     },
     {
       family: "Regulatory history",
@@ -1155,7 +1155,7 @@ export function buildSeniorHomeIntel(input: {
       "Most U.S. states do not yet have a SeniorTrustHub state-intelligence page. Florida, New Jersey, California, Texas, Washington, Arizona, Colorado, and Virginia currently have state intelligence pages.",
       "CMS stars, staffing, inspections, and penalties are not interchangeable across Nursing Home, Home Health, and Hospice.",
       "Internal ownership graph edges are not homepage publication measures. Missing public ownership evidence is not proof of independence.",
-      "Home Health and Hospice have no CMS CHOW event file in this research graph.",
+      "Home Health and Hospice CMS CHOW files are not yet loaded into this research graph.",
       "Assisted Living is state-regulated and is not a CMS national directory class.",
       "No authoritative nationwide AHCA↔CMS File Number to CCN bridge is published. Internal candidates are not shown here.",
     ],

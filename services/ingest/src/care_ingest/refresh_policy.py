@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from importlib.resources import files
 from typing import Any
 from urllib.error import HTTPError, URLError
@@ -181,7 +181,18 @@ def source_changed(
     return True
 
 
-def freshness_band(source_modified_at: datetime | None, sla_days: int, now: datetime) -> str:
+OBSERVED_UPSTREAM_CATALOG_MODIFIED = {
+    "skilled-nursing-facility-change-of-ownership": date(2026, 10, 19),
+    "skilled-nursing-facility-change-of-ownership-owner-information": date(2026, 10, 19),
+}
+
+
+def freshness_band(
+    source_modified_at: datetime | None,
+    sla_days: int,
+    now: datetime,
+    upstream_modified_at: datetime | date | None = None,
+) -> str:
     if source_modified_at is None:
         return "UNKNOWN"
     modified = (
@@ -192,10 +203,27 @@ def freshness_band(source_modified_at: datetime | None, sla_days: int, now: date
     current = now.replace(tzinfo=UTC) if now.tzinfo is None else now
     age = current - modified
     if age <= timedelta(days=sla_days):
-        return "CURRENT"
-    if age <= timedelta(days=sla_days * 2):
-        return "AGING"
-    return "STALE"
+        band = "CURRENT"
+    elif age <= timedelta(days=sla_days * 2):
+        band = "AGING"
+    else:
+        band = "STALE"
+    if band == "CURRENT" and upstream_modified_at is not None:
+        upstream = (
+            upstream_modified_at
+            if isinstance(upstream_modified_at, datetime)
+            else datetime(
+                upstream_modified_at.year,
+                upstream_modified_at.month,
+                upstream_modified_at.day,
+                tzinfo=UTC,
+            )
+        )
+        if upstream.tzinfo is None:
+            upstream = upstream.replace(tzinfo=UTC)
+        if upstream.date() > modified.date():
+            return "AGING"
+    return band
 
 
 def platform_health(

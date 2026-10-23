@@ -378,7 +378,7 @@ const DEFINITIONS: Record<string, { title: string; body: string }> = {
   },
   chow: {
     title: "CHOW — change of ownership",
-    body: "A CHOW record is a CMS skilled-nursing-facility ownership-change event in this research graph. It is not a sale finding and not quality. Comparable Home Health and Hospice CHOW files are not published in this system.",
+    body: "A CHOW record is a CMS skilled-nursing-facility ownership-change event in this research graph. It is not a sale finding and not quality. CMS publishes Home Health and Hospice CHOW files; this system has not linked them yet.",
   },
 };
 

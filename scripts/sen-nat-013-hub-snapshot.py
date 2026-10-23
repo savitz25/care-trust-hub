@@ -10,13 +10,13 @@ import time
 from collections import Counter
 from pathlib import Path
 
-import psycopg
-
 ROOT = Path(__file__).resolve().parents[1]
-for line in (ROOT / ".env.local").read_text(encoding="utf-8").splitlines():
-    if line and not line.startswith("#") and "=" in line:
-        key, _, value = line.partition("=")
-        os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+_REFRESH_CHOW_COPY = __name__ == "__main__" and "--refresh-chow-copy" in sys.argv
+if not _REFRESH_CHOW_COPY:
+    for line in (ROOT / ".env.local").read_text(encoding="utf-8").splitlines():
+        if line and not line.startswith("#") and "=" in line:
+            key, _, value = line.partition("=")
+            os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
 
 EXPECTED = {
     "nh_current": 14690,
@@ -28,6 +28,101 @@ EXPECTED = {
     "unknown_edges": 554644,
     "chow_events": 5227,
 }
+
+CHOW_COPY_REPLACEMENTS = (
+    (
+        "CMS does not publish a Home Health ownership-change event file.",
+        "CMS publishes Home Health change-of-ownership (CHOW) files with its enrollment data. "
+        "They are not yet linked to profiles on SeniorTrustHub. If no CHOW record is shown "
+        "here, that does not prove ownership never changed.",
+    ),
+    (
+        "CMS does not publish a Hospice ownership-change event file.",
+        "CMS publishes Hospice change-of-ownership (CHOW) files with its enrollment data. "
+        "They are not yet linked to profiles on SeniorTrustHub. If no CHOW record is shown "
+        "here, that does not prove ownership never changed.",
+    ),
+    (
+        "That Home Health or Hospice have no owners — CMS does not publish class-equivalent CHOW files.",
+        "That Home Health or Hospice have no owners. CMS CHOW files for these classes are not yet linked here.",
+    ),
+    (
+        "CMS does not publish Home Health or Hospice CHOW event files.",
+        "CMS publishes Home Health and Hospice CHOW files with its enrollment data. "
+        "SeniorTrustHub has not linked them to profiles yet.",
+    ),
+    ("No CMS Home Health CHOW event file.", "CMS Home Health CHOW file not yet linked."),
+    ("No CMS Hospice CHOW event file.", "CMS Hospice CHOW file not yet linked."),
+    (
+        "Home Health and Hospice have no CMS CHOW event file in this research graph.",
+        "Home Health and Hospice CMS CHOW files are not yet loaded into this research graph.",
+    ),
+    (
+        "Home Health and Hospice CHOW files do not.",
+        "Home Health and Hospice CHOW files are published by CMS but not yet linked here.",
+    ),
+)
+
+
+def _stable_json(value):
+    if value is None or not isinstance(value, (dict, list)):
+        return json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+    if isinstance(value, list):
+        return "[" + ",".join(_stable_json(item) for item in value) + "]"
+    return (
+        "{"
+        + ",".join(
+            json.dumps(key, ensure_ascii=False) + ":" + _stable_json(value[key])
+            for key in sorted(value)
+        )
+        + "}"
+    )
+
+
+def refresh_chow_copy() -> None:
+    """Replace generated CHOW sentences and recompute the network-metrics fingerprint.
+
+    Does not read a database and does not change hub or canonical snapshot fingerprints.
+    """
+    import hashlib
+
+    paths = (
+        ROOT / "apps/web/src/data/senior-national-intelligence.json",
+        ROOT / "apps/web/src/data/senior-network-metrics-v1.json",
+    )
+    for path in paths:
+        text = path.read_text(encoding="utf-8")
+        for old, new in CHOW_COPY_REPLACEMENTS:
+            text = text.replace(old, new)
+        path.write_text(text, encoding="utf-8")
+    metrics_path = paths[1]
+    metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
+    canonical = metrics["canonicalSnapshotFingerprint"]
+    generated_at = metrics["generatedAt"]
+    body = json.loads(json.dumps(metrics))
+    body.pop("generatedAt", None)
+    body.pop("sourceFingerprint", None)
+    digest = hashlib.sha256(_stable_json(body).encode()).hexdigest()
+    text = metrics_path.read_text(encoding="utf-8")
+    old_fingerprint = metrics["sourceFingerprint"]
+    if old_fingerprint not in text:
+        raise SystemExit("network metrics sourceFingerprint was not found")
+    text = text.replace(old_fingerprint, digest, 1)
+    metrics_path.write_text(text, encoding="utf-8")
+    checked = json.loads(metrics_path.read_text(encoding="utf-8"))
+    if checked["canonicalSnapshotFingerprint"] != canonical:
+        raise SystemExit("canonical snapshot fingerprint changed")
+    if checked["generatedAt"] != generated_at:
+        raise SystemExit("generatedAt changed")
+    if checked["sourceFingerprint"] != digest:
+        raise SystemExit("sourceFingerprint was not updated")
+    hub = json.loads(paths[0].read_text(encoding="utf-8"))
+    if hub["homeHealth"]["chow"]["status"] != "UNSUPPORTED":
+        raise SystemExit("home health CHOW status must stay UNSUPPORTED")
+    if hub["hospice"]["chow"]["status"] != "UNSUPPORTED":
+        raise SystemExit("hospice CHOW status must stay UNSUPPORTED")
+    print(json.dumps({"ok": True, "sourceFingerprint": digest, "database": False}))
+
 
 def num(value) -> int:
     if value is None:
@@ -61,7 +156,17 @@ def dist_payload(counter: Counter[str], total: int) -> dict[str, object]:
 
 
 started = time.perf_counter()
-with psycopg.connect(os.environ["CARE_DATABASE_URL"], autocommit=True) as conn:
+if _REFRESH_CHOW_COPY:
+    refresh_chow_copy()
+    raise SystemExit(0)
+
+def _open_database():
+    import psycopg
+
+    return psycopg.connect(os.environ["CARE_DATABASE_URL"], autocommit=True)
+
+
+with _open_database() as conn:
     conn.execute("SET statement_timeout = '180s'")
     snap = conn.execute(
         """
@@ -341,7 +446,7 @@ payload = {
         },
         "chow": {
             "status": "UNSUPPORTED",
-            "reason": "CMS does not publish a Home Health ownership-change event file.",
+            "reason": "CMS publishes Home Health change-of-ownership (CHOW) files with its enrollment data. They are not yet linked to profiles on SeniorTrustHub. If no CHOW record is shown here, that does not prove ownership never changed.",
         },
     },
     "hospice": {
@@ -356,7 +461,7 @@ payload = {
         },
         "chow": {
             "status": "UNSUPPORTED",
-            "reason": "CMS does not publish a Hospice ownership-change event file.",
+            "reason": "CMS publishes Hospice change-of-ownership (CHOW) files with its enrollment data. They are not yet linked to profiles on SeniorTrustHub. If no CHOW record is shown here, that does not prove ownership never changed.",
         },
     },
     "ownership": {

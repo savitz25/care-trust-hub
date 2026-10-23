@@ -3,6 +3,8 @@ import {
   STATE_NAMES,
   coverageShare,
   formatHubCount,
+  observedUpstreamCatalogDate,
+  presentFreshnessBand,
   type SeniorNationalIntelligence,
   type StarDistribution,
 } from "@care/domain";
@@ -297,10 +299,10 @@ export function NationalHubIntelligence({ intel }: { intel: SeniorNationalIntell
           CHOW record is not a sale and is not a quality finding.
         </p>
         <p>
-          Home Health CHOW: <strong>not available</strong>. {hh.chow.reason}
+          Home Health CHOW: <strong>not yet linked</strong>. {hh.chow.reason}
         </p>
         <p>
-          Hospice CHOW: <strong>not available</strong>. {hospice.chow.reason}
+          Hospice CHOW: <strong>not yet linked</strong>. {hospice.chow.reason}
         </p>
       </section>
 
@@ -350,7 +352,9 @@ export function NationalHubIntelligence({ intel }: { intel: SeniorNationalIntell
               <tr>
                 <th scope="col">Dataset</th>
                 <th scope="col">Agency</th>
-                <th scope="col">Source as-of</th>
+                <th scope="col">Loaded source as-of</th>
+                <th scope="col">Catalog modified</th>
+                <th scope="col">Retrieved</th>
                 <th scope="col">Reporting period</th>
                 <th scope="col">Last ingest success</th>
                 <th scope="col">Band</th>
@@ -362,9 +366,17 @@ export function NationalHubIntelligence({ intel }: { intel: SeniorNationalIntell
                   <th scope="row">{source.displayName}</th>
                   <td>{source.sourceAgency}</td>
                   <td>{source.sourceModifiedAt?.slice(0, 10) ?? "Not reported"}</td>
+                  <td>{observedUpstreamCatalogDate(source.datasetKey) ?? "Not recorded"}</td>
+                  <td>{source.retrievedAt?.slice(0, 10) ?? "Not reported"}</td>
                   <td>{source.sourcePeriod ?? "Not reported"}</td>
                   <td>{source.lastIngestSuccessAt?.slice(0, 10) ?? "Not reported"}</td>
-                  <td>{source.freshnessBand ?? "UNKNOWN"}</td>
+                  <td>
+                    {presentFreshnessBand(
+                      source.datasetKey,
+                      source.freshnessBand,
+                      source.sourceModifiedAt,
+                    ) ?? "UNKNOWN"}
+                  </td>
                 </tr>
               ))}
             </tbody>

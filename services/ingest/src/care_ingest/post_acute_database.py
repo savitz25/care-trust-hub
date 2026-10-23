@@ -233,7 +233,8 @@ def load_post_acute_source(
                     INSERT INTO cms_agency_quality_observation (
                       provider_id, cms_ccn, provider_type, measure_family, measure_code,
                       official_name, reporting_period, score, score_text, star_rating,
-                      availability, footnote, source_release_id, raw_object_id,
+                      availability, footnote, statistic_type, unit, denominator,
+                      suppression_state, source_release_id, raw_object_id,
                       ingest_run_id, source_record_locator, raw_record,
                       transformation_version
                     )
@@ -244,6 +245,10 @@ def load_post_acute_source(
                       s.payload->>'score_text',
                       NULLIF(s.payload->>'star_rating','')::smallint,
                       s.payload->>'availability', s.payload->>'footnote',
+                      NULLIF(s.payload->>'statistic_type',''),
+                      NULLIF(s.payload->>'unit',''),
+                      NULLIF(s.payload->>'denominator',''),
+                      NULLIF(s.payload->>'suppression_state',''),
                       %s, %s, %s, s.payload->>'source_record_locator',
                       coalesce(s.payload->'raw_record', '{}'::jsonb), %s
                     FROM (

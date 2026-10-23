@@ -17,6 +17,7 @@ from .downloader import resolve_distribution
 from .provider_information import SchemaDriftError
 from .refresh_execute import execute_source_write
 from .refresh_policy import (
+    OBSERVED_UPSTREAM_CATALOG_MODIFIED,
     classify_failure,
     freshness_band,
     load_refresh_program,
@@ -634,7 +635,13 @@ def run_refresh(
                 modified = datetime.fromisoformat(str(previous["modified"]).replace("Z", "+00:00"))
             except ValueError:
                 modified = None
-        bands[dataset_key] = freshness_band(modified, int(spec["freshness_sla_days"]), _now())
+        upstream = OBSERVED_UPSTREAM_CATALOG_MODIFIED.get(dataset_key)
+        bands[dataset_key] = freshness_band(
+            modified,
+            int(spec["freshness_sla_days"]),
+            _now(),
+            datetime(upstream.year, upstream.month, upstream.day, tzinfo=UTC) if upstream else None,
+        )
 
     report.directory = current_directory_counts(database_url)
     report.health = platform_health(statuses, bands, program.critical_sources)

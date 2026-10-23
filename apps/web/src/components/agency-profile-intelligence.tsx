@@ -1,9 +1,12 @@
 import {
   agencyDirectoryBanner,
-  chowUnsupportedCopy,
+  chowLoadedCopy,
+  chowNotYetIntegratedCopy,
   cmsMeasureAvailabilityCopy,
   partyCapCopy,
+  statisticTypeLabel,
   type AgencyQualityFamily,
+  type AgencyQualityMeasure,
   type HomeHealthProviderIntelligence,
   type HospiceProviderIntelligence,
   type ProviderIntelParty,
@@ -52,9 +55,66 @@ function PartyList({
           ))}
         </ul>
       )}
+      {parties.some((party) => (party.observation_count ?? 1) > 1) ? (
+        <p>
+          Each row is one ownership party and role. Duplicate CMS observations are collapsed for
+          display. Earlier rows remain in the research record.
+        </p>
+      ) : null}
       {cap ? <p className="nh-intel-cap">{cap}</p> : null}
     </section>
   );
+}
+
+function ChowNote({
+  intel,
+  providerType,
+}: {
+  intel: HomeHealthProviderIntelligence | HospiceProviderIntelligence;
+  providerType: "home_health" | "hospice";
+}) {
+  if (
+    intel.chow.ownership_change_history_available &&
+    intel.chow.confirmed_event_count &&
+    intel.chow.events
+  ) {
+    return (
+      <>
+        <p>
+          {chowLoadedCopy(
+            intel.chow.file_dated ?? "the loaded CMS file",
+            intel.chow.confirmed_event_count,
+          )}
+        </p>
+        <ul>
+          {intel.chow.events.map((event) => (
+            <li key={event.event_id}>
+              <strong>{event.effective_date ?? "Date not reported"}</strong>
+              <span>
+                {event.cms_raw_type_text ?? event.normalized_type ?? "Ownership change"}
+                {event.cms_raw_type_code ? ` (${event.cms_raw_type_code})` : ""}
+              </span>
+              <span>
+                Buyer {event.buyer_legal_entity ?? "Not reported"} · Seller{" "}
+                {event.seller_legal_entity ?? "Not reported"}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </>
+    );
+  }
+  return <p>{chowNotYetIntegratedCopy(providerType)}</p>;
+}
+
+function groupMeasures(measures: AgencyQualityMeasure[]) {
+  const groups: { name: string; measures: AgencyQualityMeasure[] }[] = [];
+  for (const measure of measures) {
+    const current = groups.at(-1);
+    if (current && current.name === measure.official_name) current.measures.push(measure);
+    else groups.push({ name: measure.official_name, measures: [measure] });
+  }
+  return groups;
 }
 
 function familyTitle(family: AgencyQualityFamily["family"]): string {
@@ -80,21 +140,46 @@ function FamilyList({ families }: { families: AgencyQualityFamily[] }) {
             {family.observation_count === 1 ? "" : "s"} in this family. Survey scores are not
             clinical quality scores.
           </p>
-          <ul>
-            {family.measures.map((measure) => (
-              <li key={`${measure.family}-${measure.measure_code}-${measure.reporting_period}`}>
-                <strong>{measure.official_name}</strong>
-                <span>
-                  {cmsMeasureAvailabilityCopy(
-                    measure.availability,
-                    measure.score,
-                    measure.score_text,
-                  )}
-                </span>
-                {measure.star_rating != null ? <CmsStarRating value={measure.star_rating} /> : null}
-              </li>
-            ))}
-          </ul>
+          {groupMeasures(family.measures).map((group) => (
+            <div key={`${family.family}-${group.name}`}>
+              <h4>{group.name}</h4>
+              <ul>
+                {group.measures.map((measure) => {
+                  const statistic = statisticTypeLabel(measure.statistic_type);
+                  const showStar =
+                    measure.statistic_type === "STAR_RATING" &&
+                    measure.availability === "REPORTED" &&
+                    measure.star_rating != null;
+                  return (
+                    <li
+                      key={`${measure.family}-${measure.measure_code}-${measure.statistic_type ?? "measure"}-${measure.reporting_period}`}
+                    >
+                      <strong>
+                        {measure.official_name}
+                        {statistic ? ` — ${statistic}` : ""}
+                      </strong>
+                      <span>{measure.measure_code}</span>
+                      <span>Period {measure.reporting_period ?? "Not reported"}</span>
+                      {measure.unit ? <span>Unit {measure.unit}</span> : null}
+                      {measure.denominator ? <span>Denominator {measure.denominator}</span> : null}
+                      <span>
+                        {cmsMeasureAvailabilityCopy(
+                          measure.availability,
+                          measure.score,
+                          measure.score_text,
+                          { unit: measure.unit, statisticType: measure.statistic_type },
+                        )}
+                      </span>
+                      {measure.suppression_state && measure.suppression_state !== "NONE" ? (
+                        <span>Suppression {measure.suppression_state}</span>
+                      ) : null}
+                      {showStar ? <CmsStarRating value={measure.star_rating} /> : null}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </section>
       ))}
     </>
@@ -247,7 +332,7 @@ export function HomeHealthProfileIntelligence({
           </div>
           <div>
             <h3>CMS ownership-change history</h3>
-            <p>{chowUnsupportedCopy("home_health")}</p>
+            <ChowNote intel={intel} providerType="home_health" />
           </div>
         </div>
         <p className="provider-overview__note">
@@ -298,7 +383,7 @@ export function HomeHealthProfileIntelligence({
           <p className="eyebrow">Ownership change history</p>
           <h2 id="chow-title">CMS ownership-change records</h2>
         </div>
-        <p>{chowUnsupportedCopy("home_health")}</p>
+        <ChowNote intel={intel} providerType="home_health" />
       </section>
       <FreshnessAndMethod intel={intel} />
     </div>
@@ -351,7 +436,7 @@ export function HospiceProfileIntelligence({ intel }: { intel: HospiceProviderIn
           </div>
           <div>
             <h3>CMS ownership-change history</h3>
-            <p>{chowUnsupportedCopy("hospice")}</p>
+            <ChowNote intel={intel} providerType="hospice" />
           </div>
         </div>
         <p className="provider-overview__note">
@@ -380,7 +465,7 @@ export function HospiceProfileIntelligence({ intel }: { intel: HospiceProviderIn
           <p className="eyebrow">Ownership change history</p>
           <h2 id="chow-title">CMS ownership-change records</h2>
         </div>
-        <p>{chowUnsupportedCopy("hospice")}</p>
+        <ChowNote intel={intel} providerType="hospice" />
       </section>
       <FreshnessAndMethod intel={intel} />
     </div>

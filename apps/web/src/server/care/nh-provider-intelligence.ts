@@ -2,10 +2,12 @@ import "server-only";
 import { createHash } from "node:crypto";
 import {
   PROVIDER_INTEL_VERSION,
+  presentFreshnessBand,
   type NursingHomeProviderIntelligence,
   type ProviderIntelParty,
 } from "@care/domain";
 import { getCareDatabasePool } from "./db";
+import { COLLAPSED_PARTY_SQL } from "./ownership-display";
 
 const PERSON_POLICY = "SOURCE_EVIDENCE_ONLY_NO_PUBLIC_PROFILE";
 const OWNER_CAP = 25;
@@ -94,17 +96,10 @@ export async function getNursingHomeProviderIntelligence(
       party_id: string;
       organization_id: string | null;
       confidence: string;
-    }>(
-      `SELECT e.relationship_type, e.temporal_status, e.party_kind, e.raw_role_text,
-              e.ownership_percentage::text, e.effective_from::text, op.display_name, op.id AS party_id,
-              e.organization_id::text, e.confidence
-       FROM provider_organization_edge e
-       JOIN ownership_party op ON op.id=e.ownership_party_id
-       WHERE e.provider_id=$1::uuid
-         AND e.relationship_type IN ('OWNED_BY','OPERATED_BY','MANAGED_BY','ENROLLED_UNDER')
-       ORDER BY e.relationship_type, e.temporal_status, op.display_name`,
-      [id],
-    ),
+      observation_count: number | null;
+      observed_from: string | null;
+      observed_through: string | null;
+    }>(COLLAPSED_PARTY_SQL, [id]),
     pool.query<{
       id: string;
       effective_date: string | null;
@@ -192,6 +187,9 @@ export async function getNursingHomeProviderIntelligence(
       confidence: row.confidence,
       person_publication_policy: row.party_kind === "individual" ? PERSON_POLICY : null,
       public_profile: false,
+      observation_count: row.observation_count ?? undefined,
+      observed_from: row.observed_from,
+      observed_through: row.observed_through,
     };
     const key =
       row.relationship_type === "OWNED_BY" && row.temporal_status === "CURRENT"
@@ -274,7 +272,7 @@ export async function getNursingHomeProviderIntelligence(
       freshness.rows.map((row) => [
         row.dataset_key,
         {
-          band: row.freshness_band,
+          band: presentFreshnessBand(row.dataset_key, row.freshness_band, row.source_modified_at),
           source_modified_at: row.source_modified_at,
           age_days: row.age_days,
         },

@@ -6,6 +6,8 @@ import hashlib
 import json
 from typing import Any
 
+from .chow_copy import chow_not_yet_integrated_copy
+
 CONTRACT_VERSION = "provider-intel-v1"
 TRANSFORMATION_VERSION = "provider-intel-v1"
 NATIONAL_INTEL_SNAPSHOT = "senior-national-intel-v1"
@@ -118,7 +120,7 @@ def chow_history_available(provider_type: str) -> bool | None:
 
 def chow_unavailability_reason(provider_type: str) -> str | None:
     if provider_type in {"home_health", "hospice"}:
-        return "NO_PUBLIC_CMS_CHOW_SOURCE"
+        return "NOT_YET_LINKED"
     return None
 
 
@@ -164,14 +166,14 @@ def limitations_for(provider_type: str) -> list[str]:
         return [
             *common,
             "CMS ZIP coverage records are not a verified county service area.",
-            "CMS does not publish a Home Health ownership-change event file.",
+            chow_not_yet_integrated_copy("Home Health"),
         ]
     return [
         *common,
         "The Hospice General Information directory is the current-provider denominator.",
         "Quality-only typed CCNs are not current-directory providers.",
         "CMS ZIP coverage records are not a verified county service area.",
-        "CMS does not publish a Hospice ownership-change event file.",
+        chow_not_yet_integrated_copy("Hospice"),
     ]
 
 

@@ -102,8 +102,8 @@ def test_prof24_32_zip_not_county() -> None:
 def test_prof25_33_hh_hospice_chow_unsupported() -> None:
     assert chow_history_available("home_health") is False
     assert chow_history_available("hospice") is False
-    assert chow_unavailability_reason("home_health") == "NO_PUBLIC_CMS_CHOW_SOURCE"
-    assert chow_unavailability_reason("hospice") == "NO_PUBLIC_CMS_CHOW_SOURCE"
+    assert chow_unavailability_reason("home_health") == "NOT_YET_LINKED"
+    assert chow_unavailability_reason("hospice") == "NOT_YET_LINKED"
 
 
 def test_prof30_hospice_evidence_only() -> None:

@@ -17,6 +17,9 @@ export interface ProviderIntelParty {
   confidence: string;
   person_publication_policy: string | null;
   public_profile: boolean;
+  observation_count?: number;
+  observed_from?: string | null;
+  observed_through?: string | null;
 }
 
 export interface ProviderIntelChowEvent {
@@ -119,6 +122,13 @@ export function isProviderIntelV1(value: unknown): value is NursingHomeProviderI
   );
 }
 
+export type AgencyMeasureAvailability =
+  | "REPORTED"
+  | "SUPPRESSED"
+  | "NOT_AVAILABLE"
+  | "INSUFFICIENT_DATA"
+  | "NOT_APPLICABLE";
+
 export interface AgencyQualityMeasure {
   family: "hh_quality" | "hh_hhcahps" | "hospice_quality" | "hospice_cahps";
   measure_code: string;
@@ -127,8 +137,12 @@ export interface AgencyQualityMeasure {
   score: number | null;
   score_text: string | null;
   star_rating: number | null;
-  availability: "REPORTED" | "SUPPRESSED" | "NOT_AVAILABLE" | "INSUFFICIENT_DATA";
+  availability: AgencyMeasureAvailability;
   footnote: string | null;
+  statistic_type?: string | null;
+  unit?: string | null;
+  denominator?: string | null;
+  suppression_state?: string | null;
 }
 
 export interface AgencyQualityFamily {
@@ -155,11 +169,12 @@ interface AgencyIntelBase {
   common: NursingHomeProviderIntelligence["common"];
   ownership_summary: NursingHomeProviderIntelligence["ownership_summary"];
   chow: {
-    ownership_change_history_available: false;
-    reason: "NO_PUBLIC_CMS_CHOW_SOURCE";
-    confirmed_event_count: null;
-    events: null;
+    ownership_change_history_available: boolean;
+    reason: "NOT_YET_LINKED" | "NO_PUBLIC_CMS_CHOW_SOURCE" | null;
+    confirmed_event_count: number | null;
+    events: ProviderIntelChowEvent[] | null;
     zero_does_not_mean_no_change_occurred: true;
+    file_dated?: string | null;
   };
   geography: {
     coverage: {
@@ -252,9 +267,48 @@ export function chowAbsenceCopy(): string {
   return "No CMS ownership-change event is currently attached to this profile in the Trust Hub research graph. That is not proof that ownership never changed.";
 }
 
-export function chowUnsupportedCopy(providerType: "home_health" | "hospice"): string {
+export function chowNotYetIntegratedCopy(providerType: "home_health" | "hospice"): string {
   const program = providerType === "home_health" ? "Home Health" : "Hospice";
-  return `CMS does not publish a ${program} ownership-change event file. Absence of a CHOW record here is not proof that ownership never changed.`;
+  return `CMS publishes ${program} change-of-ownership (CHOW) files with its enrollment data. They are not yet linked to profiles on SeniorTrustHub. If no CHOW record is shown here, that does not prove ownership never changed.`;
+}
+
+export function chowLoadedCopy(fileDate: string, count: number): string {
+  const noun = count === 1 ? "event" : "events";
+  return `CMS CHOW records (enrollment data, file dated ${fileDate}) list ${count} ownership-change ${noun} for this enrollment. They only cover currently approved enrollments, so this is not a full ownership history.`;
+}
+
+/** @deprecated Use chowNotYetIntegratedCopy. Kept so existing imports stay valid. */
+export function chowUnsupportedCopy(providerType: "home_health" | "hospice"): string {
+  return chowNotYetIntegratedCopy(providerType);
+}
+
+export const SNF_CHOW_UPSTREAM_CATALOG_DATE = "2026-10-19";
+
+const SNF_CHOW_FRESHNESS_KEYS = new Set([
+  "skilled-nursing-facility-change-of-ownership",
+  "skilled-nursing-facility-change-of-ownership-owner-information",
+]);
+
+export function observedUpstreamCatalogDate(datasetKey: string): string | null {
+  return SNF_CHOW_FRESHNESS_KEYS.has(datasetKey) ? SNF_CHOW_UPSTREAM_CATALOG_DATE : null;
+}
+
+export function presentFreshnessBand(
+  datasetKey: string,
+  band: string | null,
+  sourceModifiedAt: string | null,
+  upstreamModifiedAt?: string | null,
+): string | null {
+  const upstream = upstreamModifiedAt ?? observedUpstreamCatalogDate(datasetKey);
+  if (
+    band === "CURRENT" &&
+    upstream &&
+    sourceModifiedAt &&
+    upstream.slice(0, 10) > sourceModifiedAt.slice(0, 10)
+  ) {
+    return "AGING";
+  }
+  return band;
 }
 
 export function agencyDirectoryBanner(
@@ -278,13 +332,33 @@ export function cmsMeasureAvailabilityCopy(
   availability: AgencyQualityMeasure["availability"],
   score: number | null,
   scoreText: string | null,
+  options?: { unit?: string | null; statisticType?: string | null },
 ): string {
+  if (availability === "NOT_APPLICABLE") return "Not applicable";
   if (availability === "SUPPRESSED") return "Suppressed";
   if (availability === "INSUFFICIENT_DATA") return "Insufficient data";
   if (availability === "NOT_AVAILABLE") return "Not reported";
+  if (options?.statisticType === "STAR_RATING" && score != null) return `${score} of 5 stars`;
+  if (options?.unit === "percent" && score != null) return `${score}%`;
   if (scoreText?.trim()) return scoreText.trim();
   if (score == null) return "Not reported";
   return String(score);
+}
+
+export function statisticTypeLabel(statisticType: string | null | undefined): string | null {
+  if (!statisticType) return null;
+  const labels: Record<string, string> = {
+    DENOMINATOR: "denominator",
+    STAR_RATING: "star rating",
+    TOP_BOX: "top box",
+    MIDDLE_BOX: "middle box",
+    BOTTOM_BOX: "bottom box",
+    OBSERVED: "observed",
+    LINEAR: "linear score",
+    NATIONAL: "national",
+    OTHER: "other",
+  };
+  return labels[statisticType] ?? statisticType.toLowerCase().replaceAll("_", " ");
 }
 
 export function partyCapCopy(shown: number, total: number): string | null {
