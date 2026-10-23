@@ -293,6 +293,22 @@ def build_parser() -> argparse.ArgumentParser:
     snap.add_argument("--acute-xlsx", type=Path)
     snap.add_argument("--ltc-xlsx", type=Path)
     snap.add_argument("--output", type=Path)
+    chow = commands.add_parser(
+        "stage-hh-hospice-chow",
+        help="Stage HH/Hospice CHOW files. Dry-run unless --write is set",
+    )
+    chow.add_argument("--hh-events", type=Path, required=True)
+    chow.add_argument("--hh-owners", type=Path, required=True)
+    chow.add_argument("--hospice-events", type=Path, required=True)
+    chow.add_argument("--hospice-owners", type=Path, required=True)
+    chow.add_argument("--identifiers", type=Path, help="JSON list of identifier rows")
+    chow.add_argument(
+        "--write",
+        action="store_true",
+        help="Require --dry-run-reviewed and a connection",
+    )
+    chow.add_argument("--dry-run-reviewed", action="store_true")
+    chow.add_argument("--database-url", default=None)
     return parser
 
 
@@ -305,6 +321,35 @@ def main(argv: list[str] | None = None) -> int:
     )
     data_root = args.data_root.resolve()
 
+    if args.command == "stage-hh-hospice-chow":
+        from .hh_hospice_chow import stage_chow_files
+        from .hh_hospice_chow_database import apply_chow_plan
+
+        identifiers = []
+        if args.identifiers:
+            identifiers = json.loads(args.identifiers.read_text(encoding="utf-8"))
+        plan = stage_chow_files(
+            hh_events=args.hh_events,
+            hh_owners=args.hh_owners,
+            hospice_events=args.hospice_events,
+            hospice_owners=args.hospice_owners,
+            identifiers=identifiers,
+        )
+        if not args.write:
+            summary = apply_chow_plan(plan)
+            print(json.dumps(summary, indent=2, sort_keys=True))
+            return 0 if plan.passed else 1
+        if not args.dry_run_reviewed or not args.database_url:
+            parser.error("write requires --dry-run-reviewed and --database-url")
+        import psycopg
+
+        with psycopg.connect(args.database_url) as connection:
+            summary = apply_chow_plan(
+                plan, write=True, dry_run_reviewed=True, connection=connection
+            )
+        public_summary = {key: value for key, value in summary.items() if key != "events"}
+        print(json.dumps(public_summary, indent=2))
+        return 0 if plan.passed else 1
     if args.command == "cms-refresh":
         from .refresh import run_refresh
         from .refresh_policy import topological_refresh_order

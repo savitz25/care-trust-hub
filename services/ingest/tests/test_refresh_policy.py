@@ -112,6 +112,17 @@ def test_freshness_bands_use_per_source_sla() -> None:
     assert freshness_band(now - timedelta(days=50), 45, now) == "AGING"
     assert freshness_band(now - timedelta(days=100), 45, now) == "STALE"
     assert freshness_band(None, 45, now) == "UNKNOWN"
+    loaded = datetime(2026, 8, 24, tzinfo=UTC)
+    assert freshness_band(loaded, 120, datetime(2026, 10, 23, tzinfo=UTC)) == "CURRENT"
+    assert (
+        freshness_band(
+            loaded,
+            120,
+            datetime(2026, 10, 23, tzinfo=UTC),
+            datetime(2026, 10, 19, tzinfo=UTC),
+        )
+        == "AGING"
+    )
 
 
 def test_platform_health_failed_critical_beats_aging() -> None:

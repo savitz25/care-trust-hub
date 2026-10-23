@@ -704,7 +704,7 @@ def main() -> int:
             ],
             limitations=[
                 "A CHOW record is not a sale and is not a quality finding.",
-                "CMS does not publish Home Health or Hospice CHOW event files.",
+                "CMS publishes Home Health and Hospice CHOW files with its enrollment data. SeniorTrustHub has not linked them to profiles yet.",
             ],
             publication="PUBLIC",
         ),

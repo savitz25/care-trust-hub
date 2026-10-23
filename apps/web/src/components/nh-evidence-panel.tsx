@@ -62,8 +62,9 @@ export function NursingHomeEvidencePanel({ evidence }: { evidence: CareNhEvidenc
             <p className="eyebrow">Enrollment identity</p>
             <h2 id="npi-title">{ENROLLMENT_NPI_LABEL}</h2>
             <p>
-              These identifiers come from CMS SNF enrollment records linked to this CCN. They are
-              not a substitute for the CMS Certification Number.
+              These identifiers come from CMS SNF enrollment records linked to this CCN. The latest
+              enrollment release is shown for each NPI. Earlier releases remain in the research
+              record. They are not a substitute for the CMS Certification Number.
             </p>
           </div>
           <ul>

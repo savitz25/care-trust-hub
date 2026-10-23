@@ -142,8 +142,8 @@ def test_source_inventory_classes() -> None:
 
 
 def test_hh_and_hospice_have_no_event_source() -> None:
-    assert home_health_event_availability() == "NOT AVAILABLE"
-    assert hospice_event_availability() == "NOT AVAILABLE"
+    assert home_health_event_availability() == "NOT YET LINKED"
+    assert hospice_event_availability() == "NOT YET LINKED"
 
 
 def test_snf_chow_is_effective_only() -> None:

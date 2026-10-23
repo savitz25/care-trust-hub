@@ -110,7 +110,7 @@
     },
     "chow": {
       "status": "UNSUPPORTED",
-      "reason": "CMS does not publish a Home Health ownership-change event file."
+      "reason": "CMS publishes Home Health change-of-ownership (CHOW) files with its enrollment data. They are not yet linked to profiles on SeniorTrustHub. If no CHOW record is shown here, that does not prove ownership never changed."
     }
   },
   "hospice": {
@@ -125,7 +125,7 @@
     },
     "chow": {
       "status": "UNSUPPORTED",
-      "reason": "CMS does not publish a Hospice ownership-change event file."
+      "reason": "CMS publishes Hospice change-of-ownership (CHOW) files with its enrollment data. They are not yet linked to profiles on SeniorTrustHub. If no CHOW record is shown here, that does not prove ownership never changed."
     }
   },
   "ownership": {

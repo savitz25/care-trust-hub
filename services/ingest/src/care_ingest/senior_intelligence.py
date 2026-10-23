@@ -300,14 +300,14 @@ METRICS: tuple[dict[str, object], ...] = (
         provider_type="home_health",
         family="ownership_change",
         entity="NONE",
-        definition="No public CMS CHOW event source for Home Health.",
+        definition="CMS publishes Home Health CHOW files. They are not yet linked to profiles.",
         derivation="DIRECT",
         sources=(),
         grain="national",
         freshness="n/a",
         computability="UNSUPPORTED",
         publication="DO_NOT_PUBLISH",
-        safe="CMS does not publish a Home Health ownership-change event file",
+        safe="CMS publishes a Home Health ownership-change event file; it is not yet linked",
         unsafe="Home health agencies with ownership-change history",
         limitations="Do not infer events from All Owners snapshot differences.",
     ),
@@ -317,14 +317,14 @@ METRICS: tuple[dict[str, object], ...] = (
         provider_type="hospice",
         family="ownership_change",
         entity="NONE",
-        definition="No public CMS CHOW event source for Hospice.",
+        definition="CMS publishes Hospice CHOW files. They are not yet linked to profiles.",
         derivation="DIRECT",
         sources=(),
         grain="national",
         freshness="n/a",
         computability="UNSUPPORTED",
         publication="DO_NOT_PUBLISH",
-        safe="CMS does not publish a Hospice ownership-change event file",
+        safe="CMS publishes a Hospice ownership-change event file; it is not yet linked",
         unsafe="Hospice providers with ownership-change history",
         limitations="Do not infer events from All Owners snapshot differences.",
     ),
@@ -761,10 +761,11 @@ LIMITATIONS: tuple[dict[str, str], ...] = (
     },
     {
         "limitation_key": "hh_hospice_no_chow",
-        "title": "No public HH or Hospice CHOW file",
+        "title": "HH/Hospice CHOW files not yet integrated",
         "body": (
-            "CMS does not publish an explicit Home Health or Hospice change-of-ownership "
-            "event file. Snapshot differences are not events."
+            "CMS publishes Home Health and Hospice CHOW files with its enrollment data. "
+            "SeniorTrustHub has not linked them to profiles yet. "
+            "Snapshot differences are not events."
         ),
         "provider_type": "national",
         "publication_status": "INTERNAL_ONLY",

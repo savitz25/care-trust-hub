@@ -312,7 +312,7 @@ export function ClassResearchLanding({
           good or bad here.
         </p>
         <p>
-          CHOW (change of ownership) events: <strong>not available</strong>.{" "}
+          CHOW (change of ownership) events: <strong>not yet linked</strong>.{" "}
           {isHh ? hh.chow.reason : hospice.chow.reason} That is not the same as zero ownership
           changes, and it does not mean ownership never changed.
         </p>

@@ -18,7 +18,7 @@ describe("class research landings", () => {
     expect(screen.getByLabelText(/CMS Home Health CCN/i)).toBeInTheDocument();
     expect(screen.getByText(/CMS Quality of Patient Care stars/i)).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Understand HHCAHPS/i })).toBeInTheDocument();
-    expect(document.body.textContent).toMatch(/not available/i);
+    expect(document.body.textContent).toMatch(/not yet linked/i);
     expect(document.body.textContent).toMatch(/not a verified service area/i);
     expect(document.body.textContent).not.toMatch(
       /best home health|Trust Score|0 ownership changes|aggregateRating/i,

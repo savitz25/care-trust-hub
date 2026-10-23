@@ -41,10 +41,13 @@ export async function getNursingHomeEvidence(ccn: string): Promise<CareNhEvidenc
         enrollment_id: string | null;
         multiple_npi_flag: boolean | null;
       }>(
-        `SELECT npi, enrollment_id, multiple_npi_flag
-         FROM published_provider_npi_relationship
-         WHERE ccn = $1
-         ORDER BY npi`,
+        `SELECT DISTINCT ON (n.npi)
+                n.npi, n.enrollment_id, n.multiple_npi_flag
+         FROM provider_npi_relationship n
+         JOIN source_release sr ON sr.id = n.source_release_id
+         WHERE n.ccn = $1
+           AND n.confidence = 'CONFIRMED'
+         ORDER BY n.npi, sr.source_modified_at DESC NULLS LAST, sr.retrieved_at DESC`,
         [value],
       ),
       pool.query<{

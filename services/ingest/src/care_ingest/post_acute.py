@@ -119,15 +119,31 @@ def parse_offered(raw: str | None) -> tuple[bool | None, str]:
     return None, value
 
 
+_NOT_APPLICABLE = {"not applicable", "not available", "n/a", "na"}
+
+_STATISTIC_SUFFIXES = (
+    ("_DENOMINATOR", "DENOMINATOR", "count"),
+    ("_STAR_RATING", "STAR_RATING", "star"),
+    ("_TOP_BOX", "TOP_BOX", "percent"),
+    ("_MIDDLE_BOX", "MIDDLE_BOX", "percent"),
+    ("_BOTTOM_BOX", "BOTTOM_BOX", "percent"),
+    ("_OBSERVED", "OBSERVED", "percent"),
+    ("_LINEAR", "LINEAR", "rate"),
+    ("_NATIONAL", "NATIONAL", "percent"),
+)
+
+
 def classify_availability(
     score: str | None, footnote: str | None
 ) -> tuple[str, Decimal | None, str | None]:
     text = (score or "").strip()
     note = (footnote or "").strip() or None
+    if text.lower() in _NOT_APPLICABLE:
+        return "NOT_APPLICABLE", None, note
     if not text:
         lowered = (note or "").lower()
         if note and any(
-            token in lowered for token in ("suppressed", "too small", "not enough", "insufficient")
+            token in lowered for token in ("insufficient", "suppressed", "too small", "not enough")
         ):
             return "INSUFFICIENT_DATA", None, note
         if note:
@@ -138,6 +154,15 @@ def classify_availability(
     except InvalidOperation:
         return "REPORTED", None, note
     return "REPORTED", number, note
+
+
+def hospice_statistic(measure_code: str) -> tuple[str, str]:
+    """Longest suffix wins so _DENOMINATOR is not classified as _OBSERVED."""
+    upper = (measure_code or "").strip().upper()
+    for suffix, statistic, unit in _STATISTIC_SUFFIXES:
+        if upper.endswith(suffix):
+            return statistic, unit
+    return "OTHER", "rate"
 
 
 def parse_star(raw: str | None) -> int | None:
@@ -302,7 +327,21 @@ def _normalize_row(
             return None
         availability, score, footnote = classify_availability(row.get("Score"), row.get("Footnote"))
         period = (row.get("Measure Date Range") or row.get("Date") or "").strip() or None
-        star = parse_star(row.get("Star Rating"))
+        statistic_type, unit = hospice_statistic(code)
+        star = None
+        if statistic_type == "STAR_RATING" and availability == "REPORTED":
+            star = parse_star(row.get("Star Rating"))
+            if star is None and score is not None and score == int(score) and 1 <= int(score) <= 5:
+                star = int(score)
+        denominator = None
+        for column in ("Denominator", "Denominator Count", "Number of Cases"):
+            raw_denominator = (row.get(column) or "").strip()
+            if raw_denominator:
+                denominator = raw_denominator
+                break
+        if statistic_type == "DENOMINATOR" and score is not None:
+            denominator = str(score)
+        suppression_state = "NONE" if availability == "REPORTED" else availability
         return {
             "record_kind": "quality",
             "provider_type": "hospice",
@@ -316,8 +355,20 @@ def _normalize_row(
             "star_rating": star,
             "availability": availability,
             "footnote": footnote,
+            "statistic_type": statistic_type,
+            "unit": unit,
+            "denominator": denominator,
+            "suppression_state": suppression_state,
             "source_record_locator": locator,
-            "raw_record": {"Measure Code": code, "Measure Name": name, "Score": row.get("Score")},
+            "raw_record": {
+                "Measure Code": code,
+                "Measure Name": name,
+                "Score": row.get("Score"),
+                "Star Rating": row.get("Star Rating"),
+                "Footnote": row.get("Footnote"),
+                "Date": row.get("Date"),
+                "Measure Date Range": row.get("Measure Date Range"),
+            },
         }
     raise ValueError(key)
 

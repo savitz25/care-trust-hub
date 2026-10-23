@@ -3,7 +3,9 @@ import {
   PROVIDER_INTEL_VERSION,
   agencyDirectoryBanner,
   chowAbsenceCopy,
+  chowNotYetIntegratedCopy,
   chowUnsupportedCopy,
+  presentFreshnessBand,
   cmsMeasureAvailabilityCopy,
   cmsStarConsumerLabel,
   currentOwnedByStatement,
@@ -60,6 +62,29 @@ describe("provider intelligence presentation", () => {
     expect(cmsMeasureAvailabilityCopy("SUPPRESSED", 0, null)).toBe("Suppressed");
     expect(cmsMeasureAvailabilityCopy("INSUFFICIENT_DATA", null, null)).toBe("Insufficient data");
     expect(cmsMeasureAvailabilityCopy("REPORTED", null, null)).toBe("Not reported");
+    expect(cmsMeasureAvailabilityCopy("NOT_APPLICABLE", null, "Not Applicable")).toBe(
+      "Not applicable",
+    );
+    expect(
+      cmsMeasureAvailabilityCopy("REPORTED", 72, "72", {
+        unit: "percent",
+        statisticType: "TOP_BOX",
+      }),
+    ).toBe("72%");
+    expect(
+      cmsMeasureAvailabilityCopy("REPORTED", 4, "4", {
+        unit: "star",
+        statisticType: "STAR_RATING",
+      }),
+    ).toBe("4 of 5 stars");
+    expect(chowNotYetIntegratedCopy("home_health")).toBe(chowUnsupportedCopy("home_health"));
+    expect(chowNotYetIntegratedCopy("hospice").toLowerCase()).not.toContain("does not publish");
+    expect(
+      presentFreshnessBand("skilled-nursing-facility-change-of-ownership", "CURRENT", "2026-08-24"),
+    ).toBe("AGING");
+    expect(presentFreshnessBand("hospice-general-information", "CURRENT", "2026-08-19")).toBe(
+      "CURRENT",
+    );
     expect(agencyDirectoryBanner("hospice", "EVIDENCE_ONLY")?.toLowerCase()).not.toMatch(
       /\bclosed\b/,
     );

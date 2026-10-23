@@ -58,11 +58,11 @@ def classify_source_dataset(dataset_key: str) -> str:
 
 
 def home_health_event_availability() -> str:
-    return "NOT AVAILABLE"
+    return "NOT YET LINKED"
 
 
 def hospice_event_availability() -> str:
-    return "NOT AVAILABLE"
+    return "NOT YET LINKED"
 
 
 def snf_chow_has_pending_status() -> bool:

@@ -2,6 +2,9 @@ import "server-only";
 import { createHash } from "node:crypto";
 import {
   PROVIDER_INTEL_VERSION,
+  chowLoadedCopy,
+  chowNotYetIntegratedCopy,
+  presentFreshnessBand,
   type AgencyQualityFamily,
   type AgencyQualityMeasure,
   type HomeHealthProviderIntelligence,
@@ -9,6 +12,7 @@ import {
   type ProviderIntelParty,
 } from "@care/domain";
 import { getCareDatabasePool } from "./db";
+import { COLLAPSED_PARTY_SQL, PUBLIC_AGENCY_CHOW_SQL } from "./ownership-display";
 
 const PERSON_POLICY = "SOURCE_EVIDENCE_ONLY_NO_PUBLIC_PROFILE";
 const OWNER_CAP = 25;
@@ -42,6 +46,9 @@ function bucketOwners(
     party_id: string;
     organization_id: string | null;
     confidence: string;
+    observation_count?: number | null;
+    observed_from?: string | null;
+    observed_through?: string | null;
   }>,
 ) {
   const buckets = {
@@ -74,6 +81,9 @@ function bucketOwners(
       confidence: row.confidence,
       person_publication_policy: row.party_kind === "individual" ? PERSON_POLICY : null,
       public_profile: false,
+      observation_count: row.observation_count ?? undefined,
+      observed_from: row.observed_from ?? null,
+      observed_through: row.observed_through ?? null,
     };
     const key =
       row.relationship_type === "OWNED_BY" && row.temporal_status === "CURRENT"
@@ -95,13 +105,57 @@ function bucketOwners(
   return { ...buckets, counts, unresolved_edges_included: false as const };
 }
 
-const unsupportedChow = {
-  ownership_change_history_available: false as const,
-  reason: "NO_PUBLIC_CMS_CHOW_SOURCE" as const,
-  confirmed_event_count: null,
-  events: null,
-  zero_does_not_mean_no_change_occurred: true as const,
-};
+function chowFromEvents(
+  rows: Array<{
+    id: string;
+    effective_date: string | null;
+    change_type_code: string | null;
+    change_type_text: string | null;
+    normalized_event_type: string | null;
+    buyer: string | null;
+    seller: string | null;
+    source_dataset_key: string | null;
+    confidence: string | null;
+    file_dated: string | null;
+  }>,
+) {
+  if (rows.length === 0) {
+    return {
+      ownership_change_history_available: false as const,
+      reason: "NOT_YET_LINKED" as const,
+      confirmed_event_count: null,
+      events: null,
+      zero_does_not_mean_no_change_occurred: true as const,
+      file_dated: null,
+    };
+  }
+  const fileDated = rows
+    .map((row) => row.file_dated?.slice(0, 10))
+    .filter((value): value is string => Boolean(value))
+    .sort()
+    .at(-1);
+  return {
+    ownership_change_history_available: true as const,
+    reason: null,
+    confirmed_event_count: rows.length,
+    events: rows.map((row) => ({
+      event_id: row.id,
+      effective_date: row.effective_date,
+      cms_raw_type_code: row.change_type_code,
+      cms_raw_type_text: row.change_type_text,
+      normalized_type: row.normalized_event_type,
+      buyer_legal_entity: row.buyer,
+      seller_legal_entity: row.seller,
+      source_dataset_key: row.source_dataset_key,
+      source_dataset_id: null,
+      confidence: row.confidence,
+      safe_language: chowLoadedCopy(fileDated ?? "the loaded CMS file", rows.length),
+      not_labeled_sale: true,
+    })),
+    zero_does_not_mean_no_change_occurred: true as const,
+    file_dated: fileDated ?? null,
+  };
+}
 
 async function loadAgencyCore(providerType: "home_health" | "hospice", ccn: string) {
   const canonical = ccn.trim().toUpperCase();
@@ -138,7 +192,8 @@ async function loadAgencyCore(providerType: "home_health" | "hospice", ccn: stri
           "hospice-all-owners",
           "hospice-zip-data",
         ];
-  const [directory, owners, quality, zipCount, freshness] = await Promise.all([
+  const chowDatasets = providerType === "home_health" ? ["home-health-chow"] : ["hospice-chow"];
+  const [directory, owners, quality, zipCount, freshness, chowRows] = await Promise.all([
     pool.query<{ directory_status: string | null }>(
       `SELECT directory_status FROM provider_directory_status
        WHERE provider_id=$1::uuid ORDER BY observed_at DESC, ingested_at DESC LIMIT 1`,
@@ -155,23 +210,17 @@ async function loadAgencyCore(providerType: "home_health" | "hospice", ccn: stri
       party_id: string;
       organization_id: string | null;
       confidence: string;
-    }>(
-      `SELECT e.relationship_type, e.temporal_status, e.party_kind, e.raw_role_text,
-              e.ownership_percentage::text, e.effective_from::text, op.display_name, op.id AS party_id,
-              e.organization_id::text, e.confidence
-       FROM provider_organization_edge e
-       JOIN ownership_party op ON op.id=e.ownership_party_id
-       WHERE e.provider_id=$1::uuid
-         AND e.relationship_type IN ('OWNED_BY','OPERATED_BY','MANAGED_BY','ENROLLED_UNDER')
-       ORDER BY e.relationship_type, e.temporal_status, op.display_name`,
-      [id],
-    ),
+      observation_count: number | null;
+      observed_from: string | null;
+      observed_through: string | null;
+    }>(COLLAPSED_PARTY_SQL, [id]),
     pool.query<AgencyQualityMeasure>(
       `SELECT measure_family AS family, measure_code, official_name, reporting_period,
-              score::float8 AS score, score_text, star_rating, availability, footnote
+              score::float8 AS score, score_text, star_rating, availability, footnote,
+              statistic_type, unit, denominator, suppression_state
        FROM cms_agency_quality_observation
        WHERE provider_id=$1::uuid
-       ORDER BY measure_family, official_name`,
+       ORDER BY official_name, statistic_type, measure_code, measure_family`,
       [id],
     ),
     pool.query<{ n: string }>(
@@ -188,6 +237,18 @@ async function loadAgencyCore(providerType: "home_health" | "hospice", ccn: stri
        FROM cms_source_freshness WHERE dataset_key = ANY($1) ORDER BY dataset_key`,
       [freshnessKeys],
     ),
+    pool.query<{
+      id: string;
+      effective_date: string | null;
+      change_type_code: string | null;
+      change_type_text: string | null;
+      normalized_event_type: string | null;
+      buyer: string | null;
+      seller: string | null;
+      source_dataset_key: string | null;
+      confidence: string | null;
+      file_dated: string | null;
+    }>(PUBLIC_AGENCY_CHOW_SQL, [id, chowDatasets]),
   ]);
   const families = new Map<string, AgencyQualityFamily>();
   for (const row of quality.rows) {
@@ -208,7 +269,7 @@ async function loadAgencyCore(providerType: "home_health" | "hospice", ccn: stri
     freshness.rows.map((row) => [
       row.dataset_key,
       {
-        band: row.freshness_band,
+        band: presentFreshnessBand(row.dataset_key, row.freshness_band, row.source_modified_at),
         source_modified_at: row.source_modified_at,
         age_days: row.age_days,
       },
@@ -222,6 +283,7 @@ async function loadAgencyCore(providerType: "home_health" | "hospice", ccn: stri
     families: [...families.values()],
     zipCount: Number(zipCount.rows[0]?.n ?? 0),
     evidence_as_of_by_family,
+    chow: chowFromEvents(chowRows.rows),
   };
 }
 
@@ -301,7 +363,7 @@ export async function getHomeHealthProviderIntelligence(
     },
     services: services.rows,
     ownership_summary: core.ownership,
-    chow: unsupportedChow,
+    chow: core.chow,
     geography: {
       coverage: {
         zip_observation_count: core.zipCount,
@@ -314,7 +376,7 @@ export async function getHomeHealthProviderIntelligence(
     availability: {
       QUALITY: star.value != null || core.families.length ? "AVAILABLE" : "NOT_REPORTED",
       OWNERSHIP: core.ownership.counts.current_owners ? "AVAILABLE" : "NOT_REPORTED",
-      CHOW: "UNSUPPORTED",
+      CHOW: core.chow.ownership_change_history_available ? "AVAILABLE" : "UNSUPPORTED",
       ZIP_COVERAGE: core.zipCount ? "AVAILABLE" : "NOT_REPORTED",
       SERVICES: services.rows.length ? "AVAILABLE" : "NOT_REPORTED",
     },
@@ -323,7 +385,12 @@ export async function getHomeHealthProviderIntelligence(
       "Missing evidence is not a zero score.",
       "CMS ratings are CMS ratings, not Trust Hub ratings.",
       "CMS ZIP coverage records are not a verified county service area.",
-      "CMS does not publish a Home Health ownership-change event file.",
+      core.chow.ownership_change_history_available
+        ? chowLoadedCopy(
+            core.chow.file_dated ?? "the loaded CMS file",
+            core.chow.confirmed_event_count ?? 0,
+          )
+        : chowNotYetIntegratedCopy("home_health"),
     ],
     person_publication_policy: PERSON_POLICY,
     organization_public_route: false,
@@ -402,7 +469,7 @@ export async function getHospiceProviderIntelligence(
       synthetic_trust_hub_rating: false,
     },
     ownership_summary: core.ownership,
-    chow: unsupportedChow,
+    chow: core.chow,
     geography: {
       coverage: {
         zip_observation_count: core.zipCount,
@@ -415,7 +482,7 @@ export async function getHospiceProviderIntelligence(
     availability: {
       QUALITY: core.families.length ? "AVAILABLE" : "NOT_REPORTED",
       OWNERSHIP: core.ownership.counts.current_owners ? "AVAILABLE" : "NOT_REPORTED",
-      CHOW: "UNSUPPORTED",
+      CHOW: core.chow.ownership_change_history_available ? "AVAILABLE" : "UNSUPPORTED",
       ZIP_COVERAGE: core.zipCount ? "AVAILABLE" : "NOT_REPORTED",
     },
     limitations: [
@@ -425,7 +492,12 @@ export async function getHospiceProviderIntelligence(
       "The Hospice General Information directory is the current-provider denominator.",
       "Quality-only typed CCNs are not current-directory providers.",
       "CMS ZIP coverage records are not a verified county service area.",
-      "CMS does not publish a Hospice ownership-change event file.",
+      core.chow.ownership_change_history_available
+        ? chowLoadedCopy(
+            core.chow.file_dated ?? "the loaded CMS file",
+            core.chow.confirmed_event_count ?? 0,
+          )
+        : chowNotYetIntegratedCopy("hospice"),
     ],
     person_publication_policy: PERSON_POLICY,
     organization_public_route: false,

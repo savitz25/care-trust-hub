@@ -1,6 +1,7 @@
 from care_ingest.directory_status import interpret_missing_current_pi
 from care_ingest.post_acute import (
     classify_availability,
+    hospice_statistic,
     normalize_agency_ccn,
     parse_offered,
     parse_star,
@@ -109,3 +110,24 @@ def test_registry_includes_home_health_and_hospice() -> None:
     assert "home_health" in types
     assert "hospice" in types
     assert "nursing_home" in types
+
+
+def test_not_applicable_scores_are_not_reported_numbers() -> None:
+    availability, score, _note = classify_availability("Not Applicable", "")
+    assert availability == "NOT_APPLICABLE"
+    assert score is None
+    availability, score, _note = classify_availability("Not Available", "footnote")
+    assert availability == "NOT_APPLICABLE"
+    assert score is None
+    availability, score, _note = classify_availability("", "The number of cases is too small")
+    assert availability == "INSUFFICIENT_DATA"
+    assert score is None
+
+
+def test_hospice_statistic_uses_the_longest_suffix() -> None:
+    assert hospice_statistic("H_001_OBSERVED") == ("OBSERVED", "percent")
+    assert hospice_statistic("H_001_DENOMINATOR") == ("DENOMINATOR", "count")
+    assert hospice_statistic("SUMMARY_STAR_RATING") == ("STAR_RATING", "star")
+    assert hospice_statistic("H_001_TOP_BOX") == ("TOP_BOX", "percent")
+    assert hospice_statistic("H_001_LINEAR") == ("LINEAR", "rate")
+    assert hospice_statistic("CUSTOM") == ("OTHER", "rate")

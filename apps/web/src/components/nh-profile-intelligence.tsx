@@ -49,6 +49,12 @@ function PartyList({
           ))}
         </ul>
       )}
+      {parties.some((party) => (party.observation_count ?? 1) > 1) ? (
+        <p>
+          Each row is one ownership party and role. Duplicate CMS observations are collapsed for
+          display. Earlier rows remain in the research record.
+        </p>
+      ) : null}
       {cap ? <p className="nh-intel-cap">{cap}</p> : null}
     </section>
   );

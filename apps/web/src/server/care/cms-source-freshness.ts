@@ -1,4 +1,5 @@
 import "server-only";
+import { presentFreshnessBand } from "@care/domain";
 import { getCareDatabasePool } from "./db";
 
 export interface CmsSourceFreshnessRow {
@@ -69,7 +70,11 @@ export async function loadCmsSourceFreshness(): Promise<CmsSourceFreshnessRow[]>
     retrievedAt: iso(row.retrieved_at),
     lastSuccessAt: iso(row.last_success_at),
     lastIngestStatus: row.last_ingest_status,
-    freshnessBand: row.freshness_band,
+    freshnessBand: presentFreshnessBand(
+      row.dataset_key,
+      row.freshness_band,
+      iso(row.source_modified_at),
+    ) as CmsSourceFreshnessRow["freshnessBand"],
     ageDays: row.age_days === null ? null : Number(row.age_days),
     lastSourceRunStatus: row.last_source_run_status,
     lastFailureAt: iso(row.last_failure_at),
