@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { brand } from "./brand";
-import { isPublicLaunchEnabled } from "./deployment";
+import { canonicalUrl, isPublicLaunchEnabled } from "./deployment";
 import { SHARE_HUB, resolveShareOrigin } from "./share-hub";
 
 const localDevelopmentOrigin = "http://localhost:3000";
@@ -72,3 +72,23 @@ export const siteMetadata: Metadata = {
   },
   robots: { index: isPublicLaunchEnabled(), follow: isPublicLaunchEnabled() },
 };
+
+/** Metadata for public information routes that need their own page canonical. */
+export function publicInformationMetadata(
+  title: string,
+  pathname: string,
+  environment: Readonly<Record<string, string | undefined>> = process.env,
+): Metadata {
+  const canonical = canonicalUrl(pathname, environment);
+  return {
+    title,
+    ...(canonical ? { alternates: { canonical } } : {}),
+  };
+}
+
+// Source-content commit dates for these static public information pages.
+export const publicInformationLastModified = {
+  "/about": "2026-08-16",
+  "/methodology": "2026-08-18",
+  "/privacy": "2026-08-16",
+} as const;
