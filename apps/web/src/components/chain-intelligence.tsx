@@ -22,11 +22,11 @@ export function ChainIntelligence({
     <section className="profile-section" id="chain" aria-labelledby="chain-title">
       <div className="section-heading">
         <p className="eyebrow">Chain context</p>
-        <h2 id="chain-title">
-          {facility
-            ? `CMS groups this facility with ${chain.current.chainName}`
-            : chain.current.chainName}
-        </h2>
+        {facility ? (
+          <h2 id="chain-title">CMS groups this facility with {chain.current.chainName}</h2>
+        ) : (
+          <h1 id="chain-title">{chain.current.chainName} Nursing Home Chain Research</h1>
+        )}
         <p>
           Chain-level values describe this CMS-defined group, not any one facility. CMS Chain ID{" "}
           {chain.cmsChainId} is a grouping identifier, not a legal organization.

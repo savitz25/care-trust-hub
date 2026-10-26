@@ -28,6 +28,13 @@ const chain: CareChainIntelligence = {
   },
 };
 describe("chain intelligence", () => {
+  it("server page variant renders one meaningful page-level H1", () => {
+    render(<ChainIntelligence chain={chain} />);
+    expect(
+      screen.getByRole("heading", { level: 1, name: "EXAMPLE CHAIN Nursing Home Chain Research" }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
+  });
   it("links chain facilities to canonical review URLs while preserving CCN leading zeros", () => {
     const chainWithFacility: CareChainIntelligence = {
       ...chain,
@@ -193,6 +200,13 @@ describe("chain intelligence", () => {
 
   it("labels CMS group evidence without a score or ranking", () => {
     const { container } = render(<ChainIntelligence chain={chain} facility />);
+    expect(
+      screen.getByRole("heading", {
+        level: 2,
+        name: "CMS groups this facility with EXAMPLE CHAIN",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument();
     expect(screen.getByText(/CMS groups this facility with EXAMPLE CHAIN/)).toBeInTheDocument();
     expect(screen.getByText(/grouping identifier, not a legal organization/)).toBeInTheDocument();
     expect(container.textContent).not.toMatch(
