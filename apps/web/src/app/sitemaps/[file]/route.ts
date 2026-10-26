@@ -236,7 +236,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
       rows
         .map(
           (row) =>
-            `<url><loc>${new URL(`/facility/cms/${row.ccn}/${providerSlug(row.provider_name)}`, productionOrigin).href}</loc>${row.observed_at ? `<lastmod>${row.observed_at.toISOString().slice(0, 10)}</lastmod>` : ""}</url>`,
+            `<url><loc>${new URL(`/facility/cms/${row.ccn}/${providerSlug(row.provider_name)}`, productionOrigin).href}</loc>${row.last_modified_at ? `<lastmod>${row.last_modified_at.toISOString().slice(0, 10)}</lastmod>` : ""}</url>`,
         )
         .join(""),
     ),
