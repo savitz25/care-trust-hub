@@ -27,6 +27,25 @@ const chain: CareChainIntelligence = {
   },
 };
 describe("chain intelligence", () => {
+  it("links chain facilities to canonical review URLs while preserving CCN leading zeros", () => {
+    const chainWithFacility: CareChainIntelligence = {
+      ...chain,
+      facilities: [
+        {
+          ccn: "001234",
+          providerName: "Example Facility",
+          state: "NY",
+          overallRating: 4,
+        },
+      ],
+    };
+    render(<ChainIntelligence chain={chainWithFacility} />);
+    expect(screen.getByRole("link", { name: "Example Facility" })).toHaveAttribute(
+      "href",
+      "/facility/cms/001234/example-facility",
+    );
+  });
+
   it("labels CMS group evidence without a score or ranking", () => {
     const { container } = render(<ChainIntelligence chain={chain} facility />);
     expect(screen.getByText(/CMS groups this facility with EXAMPLE CHAIN/)).toBeInTheDocument();

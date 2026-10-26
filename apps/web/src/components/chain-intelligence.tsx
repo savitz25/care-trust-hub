@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { CareChainIntelligence } from "@/server/care/types";
-import { chainHref } from "@/server/care/consumer";
+import { chainHref, providerHref } from "@/server/care/consumer";
 const metric = (chain: CareChainIntelligence, key: string) => chain.current.metrics[key];
 export function ChainIntelligence({
   chain,
@@ -96,8 +96,10 @@ export function ChainIntelligence({
           <ul>
             {chain.facilities.map((p) => (
               <li key={p.ccn}>
-                <Link href={`/facility/cms/${p.ccn}/review`}>{p.providerName}</Link> — {p.state} ·
-                CMS overall {p.overallRating ?? "not reported"}
+                <Link href={providerHref({ ccn: p.ccn, providerName: p.providerName })}>
+                  {p.providerName}
+                </Link>{" "}
+                — {p.state} · CMS overall {p.overallRating ?? "not reported"}
               </li>
             ))}
           </ul>
