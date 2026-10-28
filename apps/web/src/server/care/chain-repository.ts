@@ -62,11 +62,20 @@ export async function getChainIntelligence(
     current: snapshot(first),
     history: snapshots.rows.map(snapshot),
     facilities: facilities.rows.flatMap((r) => {
-      const ccn = chainFacilityCcn(r.canonical_ccn, r.stored_ccn);
-      if (!ccn || ccn === exclude) return [];
+      const resolved = chainFacilityCcn(r.canonical_ccn, r.stored_ccn);
+      const storedIdentity = normalizeLinkableCmsCcn(r.stored_ccn);
+      const canonicalIdentity = normalizeLinkableCmsCcn(r.canonical_ccn);
+      if (
+        exclude !== null &&
+        (resolved === exclude || storedIdentity === exclude || canonicalIdentity === exclude)
+      ) {
+        return [];
+      }
+      const preserved = resolved ?? (typeof r.stored_ccn === "string" ? r.stored_ccn.trim() : "");
+      if (!preserved) return [];
       return [
         {
-          ccn,
+          ccn: preserved,
           providerName: r.provider_name,
           state: r.state_code,
           overallRating: r.overall === null ? null : Number(r.overall),

@@ -18,22 +18,22 @@ export function normalizeLinkableCmsCcn(value: string | null | undefined): strin
 }
 
 /**
- * Prefer a six-character CMS identifier already on the provider.
- * Pad the stored membership identifier only when that canonical value is absent.
+ * Prefer the provider's canonical CMS identifier. A five-digit canonical value
+ * is restored to six characters. A five-digit membership value with no canonical
+ * identifier stays unresolved so the link layer does not invent a provider.
  */
 export function chainFacilityCcn(
   canonical: string | null | undefined,
   stored: string | null | undefined,
 ): string | null {
-  const canonicalSix = sixCharacterCcn(canonical);
-  if (canonicalSix) return canonicalSix;
-  const storedSix = sixCharacterCcn(stored);
-  if (storedSix) return storedSix;
-  return normalizeLinkableCmsCcn(canonical) ?? normalizeLinkableCmsCcn(stored);
+  const canonicalCcn = normalizeLinkableCmsCcn(canonical);
+  if (canonicalCcn) return canonicalCcn;
+  return sixCharacterCcn(stored);
 }
 
+/** Link only an already resolved six-character CCN. */
 export function chainFacilityHref(ccn: string, providerName: string): string | null {
-  const normalized = normalizeLinkableCmsCcn(ccn);
+  const normalized = sixCharacterCcn(ccn);
   if (!normalized) return null;
   return providerHref({ ccn: normalized, providerName });
 }

@@ -9,6 +9,8 @@ import {
 } from "./cms-ccn";
 
 const reported = [
+  ["15010", "015010", "Example Indiana Facility", "example-indiana-facility"],
+  ["55170", "055170", "Example California Facility", "example-california-facility"],
   ["55305", "055305", "Sherwood Healthcare Center", "sherwood-healthcare-center"],
   [
     "56158",
@@ -16,18 +18,17 @@ const reported = [
     "College Oak Nursing and Rehabilitation Center",
     "college-oak-nursing-and-rehabilitation-center",
   ],
-  ["55491", "055491", "Oak Ridge Healthcare Center", "oak-ridge-healthcare-center"],
-  ["55417", "055417", "Saylor Lane Healthcare Center", "saylor-lane-healthcare-center"],
 ] as const;
 
 describe("CMS CCN normalization", () => {
-  it("pads the four reported five-digit chain identifiers and keeps their canonical slugs", () => {
-    for (const [stored, padded, name, slug] of reported) {
-      expect(normalizeCmsCcn(stored)).toBe(padded);
-      expect(normalizeLinkableCmsCcn(stored)).toBe(padded);
-      expect(chainFacilityCcn(null, stored)).toBe(padded);
-      expect(chainFacilityCcn(padded, stored)).toBe(padded);
-      expect(chainFacilityHref(stored, name)).toBe(`/facility/cms/${padded}/${slug}`);
+  it("uses the canonical six-character CCN for membership lookup and facility links", () => {
+    for (const [stored, canonical, name, slug] of reported) {
+      expect(normalizeCmsCcn(stored)).toBe(canonical);
+      expect(chainFacilityCcn(canonical, stored)).toBe(canonical);
+      expect(chainFacilityCcn(stored, stored)).toBe(canonical);
+      expect(cmsCcnMembershipKeys(canonical)).toEqual([canonical, stored]);
+      expect(chainFacilityHref(canonical, name)).toBe(`/facility/cms/${canonical}/${slug}`);
+      expect(chainFacilityHref(stored, name)).toBeNull();
       expect(isCanonicalProviderSlug({ providerName: name }, slug)).toBe(true);
     }
   });
@@ -57,7 +58,12 @@ describe("CMS CCN normalization", () => {
     expect(normalizeLinkableCmsCcn(null)).toBeNull();
     expect(normalizeLinkableCmsCcn(undefined)).toBeNull();
     expect(chainFacilityCcn("nope", "1234")).toBeNull();
+    expect(chainFacilityCcn(null, "15010")).toBeNull();
+    expect(chainFacilityCcn(undefined, "55170")).toBeNull();
+    expect(chainFacilityCcn("", "55305")).toBeNull();
+    expect(chainFacilityHref("15010", "Unmatched Facility")).toBeNull();
     expect(chainFacilityCcn("055999", "55305")).toBe("055999");
+    expect(chainFacilityCcn("015010", "555180")).toBe("015010");
   });
 
   it("looks up a facility CCN and the one-zero-dropped membership key", () => {

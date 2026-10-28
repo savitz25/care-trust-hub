@@ -46,33 +46,28 @@ describe("chain intelligence", () => {
     );
   });
 
-  it("pads reported five-digit membership CCNs and does not emit those short URLs", () => {
+  it("links resolved six-character CCNs and leaves five-digit identifiers unresolved", () => {
     const chainWithFacilities: CareChainIntelligence = {
       ...chain,
       facilities: [
+        { ccn: "015010", providerName: "Example Indiana Facility", state: "IN", overallRating: 3 },
         {
-          ccn: "55305",
+          ccn: "055170",
+          providerName: "Example California Facility",
+          state: "CA",
+          overallRating: 3,
+        },
+        {
+          ccn: "055305",
           providerName: "Sherwood Healthcare Center",
           state: "CA",
           overallRating: 2,
         },
         {
-          ccn: "56158",
+          ccn: "056158",
           providerName: "College Oak Nursing and Rehabilitation Center",
           state: "CA",
           overallRating: 3,
-        },
-        {
-          ccn: "55491",
-          providerName: "Oak Ridge Healthcare Center",
-          state: "CA",
-          overallRating: 4,
-        },
-        {
-          ccn: "55417",
-          providerName: "Saylor Lane Healthcare Center",
-          state: "CA",
-          overallRating: 1,
         },
         {
           ccn: "055640",
@@ -87,10 +82,19 @@ describe("chain intelligence", () => {
           overallRating: 4,
         },
         { ccn: "01A193", providerName: "Example & Care, Inc.", state: "AL", overallRating: null },
+        { ccn: "15010", providerName: "Unmatched Five Digit", state: "IN", overallRating: null },
         { ccn: "not-a-ccn", providerName: "Unlinked Facility", state: "CA", overallRating: null },
       ],
     };
     const { container } = render(<ChainIntelligence chain={chainWithFacilities} />);
+    expect(screen.getByRole("link", { name: "Example Indiana Facility" })).toHaveAttribute(
+      "href",
+      "/facility/cms/015010/example-indiana-facility",
+    );
+    expect(screen.getByRole("link", { name: "Example California Facility" })).toHaveAttribute(
+      "href",
+      "/facility/cms/055170/example-california-facility",
+    );
     expect(screen.getByRole("link", { name: "Sherwood Healthcare Center" })).toHaveAttribute(
       "href",
       "/facility/cms/055305/sherwood-healthcare-center",
@@ -98,14 +102,6 @@ describe("chain intelligence", () => {
     expect(
       screen.getByRole("link", { name: "College Oak Nursing and Rehabilitation Center" }),
     ).toHaveAttribute("href", "/facility/cms/056158/college-oak-nursing-and-rehabilitation-center");
-    expect(screen.getByRole("link", { name: "Oak Ridge Healthcare Center" })).toHaveAttribute(
-      "href",
-      "/facility/cms/055491/oak-ridge-healthcare-center",
-    );
-    expect(screen.getByRole("link", { name: "Saylor Lane Healthcare Center" })).toHaveAttribute(
-      "href",
-      "/facility/cms/055417/saylor-lane-healthcare-center",
-    );
     expect(screen.getByRole("link", { name: "Grass Valley Healthcare Center" })).toHaveAttribute(
       "href",
       "/facility/cms/055640/grass-valley-healthcare-center",
@@ -118,9 +114,11 @@ describe("chain intelligence", () => {
       "href",
       "/facility/cms/01A193/example-and-care-inc",
     );
+    expect(screen.queryByRole("link", { name: "Unmatched Five Digit" })).not.toBeInTheDocument();
+    expect(screen.getByText(/Unmatched Five Digit/)).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Unlinked Facility" })).not.toBeInTheDocument();
     expect(screen.getByText(/Unlinked Facility/)).toBeInTheDocument();
-    expect(container.innerHTML).not.toMatch(/\/facility\/cms\/(?:55305|56158|55491|55417)(?:\/|")/);
+    expect(container.innerHTML).not.toMatch(/\/facility\/cms\/(?:15010|55170|55305|56158)(?:\/|")/);
   });
 
   it("labels CMS group evidence without a score or ranking", () => {
