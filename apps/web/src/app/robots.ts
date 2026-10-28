@@ -16,7 +16,7 @@ export default function robots(): MetadataRoute.Robots {
         "/compare",
         "/research",
         "/trust/claim",
-        "/trust/correction",
+        "/trust/correction$",
         "/trust/source-concern",
         "/trust/provider-context",
         "/florida/internal",
