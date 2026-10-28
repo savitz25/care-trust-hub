@@ -1,7 +1,8 @@
 import { PublicInformationPage } from "@/components/public-information-page";
 import Link from "next/link";
 import { brand } from "@/config/brand";
-export const metadata = { title: "Contact SeniorTrustHub" };
+import { publicInformationMetadata } from "@/config/metadata";
+export const metadata = publicInformationMetadata("Contact SeniorTrustHub", "/contact");
 export default function Page() {
   return (
     <PublicInformationPage

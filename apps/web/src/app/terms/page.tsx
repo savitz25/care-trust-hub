@@ -1,5 +1,6 @@
 import { PublicInformationPage } from "@/components/public-information-page";
-export const metadata = { title: "Terms of use" };
+import { publicInformationMetadata } from "@/config/metadata";
+export const metadata = publicInformationMetadata("Terms of use", "/terms");
 export default function Page() {
   return (
     <PublicInformationPage

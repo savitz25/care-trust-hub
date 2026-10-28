@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { publicInformationMetadata } from "@/config/metadata";
 
-export const metadata = { title: "How corrections work" };
+export const metadata = publicInformationMetadata("How corrections work", "/trust/corrections");
 
 export default function CorrectionsPage() {
   return (

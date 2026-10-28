@@ -1,5 +1,9 @@
 import { PublicInformationPage } from "@/components/public-information-page";
-export const metadata = { title: "Independence and no paid placement" };
+import { publicInformationMetadata } from "@/config/metadata";
+export const metadata = publicInformationMetadata(
+  "Independence and no paid placement",
+  "/independence",
+);
 export default function Page() {
   return (
     <PublicInformationPage
