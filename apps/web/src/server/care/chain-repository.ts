@@ -1,4 +1,5 @@
 import "server-only";
+import { chainFacilityCcn, cmsCcnMembershipKeys, normalizeLinkableCmsCcn } from "./cms-ccn";
 import { getCareDatabasePool } from "./db";
 import type { CareChainIntelligence, CareChainSnapshot } from "./types";
 const ID = "97ecfad1-d3f1-4d42-b774-d74661d830bc";
@@ -27,8 +28,8 @@ export async function getProviderChainIntelligence(
   if (!/^[A-Z0-9]{6}$/.test(value)) throw new RangeError("Invalid CMS CCN");
   const pool = getCareDatabasePool();
   const membership = await pool.query(
-    `SELECT cp.chain_id,c.cms_chain_id,sr.source_modified_at,sr.retrieved_at FROM cms_chain_provider cp JOIN cms_chain c ON c.id=cp.chain_id JOIN source_release sr ON sr.id=cp.source_release_id WHERE cp.provider_identifier=$1 ORDER BY sr.source_modified_at DESC LIMIT 1`,
-    [value],
+    `SELECT cp.chain_id,c.cms_chain_id,sr.source_modified_at,sr.retrieved_at FROM cms_chain_provider cp JOIN cms_chain c ON c.id=cp.chain_id JOIN source_release sr ON sr.id=cp.source_release_id WHERE btrim(cp.provider_identifier) = ANY($1::text[]) ORDER BY sr.source_modified_at DESC LIMIT 1`,
+    [cmsCcnMembershipKeys(value)],
   );
   if (!membership.rows[0]) return null;
   return getChainIntelligence(membership.rows[0].cms_chain_id, value);
@@ -45,8 +46,8 @@ export async function getChainIntelligence(
       [cmsChainId],
     ),
     pool.query(
-      `SELECT DISTINCT ON (cp.provider_id) cp.provider_identifier ccn,fs.provider_name,fs.state_code,fs.overall_rating overall FROM cms_chain_provider cp JOIN cms_chain c ON c.id=cp.chain_id JOIN facility_snapshot fs ON fs.provider_id=cp.provider_id WHERE c.cms_chain_id=$1 AND ($2::text IS NULL OR cp.provider_identifier<>$2) ORDER BY cp.provider_id,fs.observed_at DESC NULLS LAST LIMIT 100`,
-      [cmsChainId, excludeCcn ?? null],
+      `SELECT DISTINCT ON (cp.provider_id) cp.provider_identifier stored_ccn,(SELECT pi.identifier_value FROM provider_identifier pi WHERE pi.provider_id=cp.provider_id AND pi.issuer='CMS' AND pi.identifier_type='CCN' AND pi.valid_from IS NULL ORDER BY pi.identifier_value LIMIT 1) canonical_ccn,fs.provider_name,fs.state_code,fs.overall_rating overall FROM cms_chain_provider cp JOIN cms_chain c ON c.id=cp.chain_id JOIN facility_snapshot fs ON fs.provider_id=cp.provider_id WHERE c.cms_chain_id=$1 ORDER BY cp.provider_id,fs.observed_at DESC NULLS LAST LIMIT 100`,
+      [cmsChainId],
     ),
     pool.query(
       `SELECT sr.source_modified_at,sr.retrieved_at FROM cms_chain_provider cp JOIN cms_chain c ON c.id=cp.chain_id JOIN source_release sr ON sr.id=cp.source_release_id WHERE c.cms_chain_id=$1 ORDER BY sr.source_modified_at DESC LIMIT 1`,
@@ -55,16 +56,23 @@ export async function getChainIntelligence(
   ]);
   const first = snapshots.rows[0];
   if (!first) return null;
+  const exclude = normalizeLinkableCmsCcn(excludeCcn);
   return {
     cmsChainId,
     current: snapshot(first),
     history: snapshots.rows.map(snapshot),
-    facilities: facilities.rows.map((r) => ({
-      ccn: r.ccn,
-      providerName: r.provider_name,
-      state: r.state_code,
-      overallRating: r.overall === null ? null : Number(r.overall),
-    })),
+    facilities: facilities.rows.flatMap((r) => {
+      const ccn = chainFacilityCcn(r.canonical_ccn, r.stored_ccn);
+      if (!ccn || ccn === exclude) return [];
+      return [
+        {
+          ccn,
+          providerName: r.provider_name,
+          state: r.state_code,
+          overallRating: r.overall === null ? null : Number(r.overall),
+        },
+      ];
+    }),
     source: {
       datasetIdentifier: ID,
       versionIdentifier: first.source_version_identifier,
