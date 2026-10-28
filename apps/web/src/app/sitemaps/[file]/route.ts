@@ -1,4 +1,5 @@
 import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
+import { publicInformationLastModified } from "@/config/metadata";
 import {
   chainHref,
   homeHealthHref,
@@ -128,7 +129,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
     return response(
       urlset(
         paths
-          .map((path) => `<url><loc>${new URL(path, productionOrigin).href}</loc></url>`)
+          .map((path) => {
+            const lastModified =
+              publicInformationLastModified[path as keyof typeof publicInformationLastModified];
+            return `<url><loc>${new URL(path, productionOrigin).href}</loc>${lastModified ? `<lastmod>${lastModified}</lastmod>` : ""}</url>`;
+          })
           .join(""),
       ),
     );

@@ -1,9 +1,10 @@
 import { PublicInformationPage } from "@/components/public-information-page";
+import { publicInformationMetadata } from "@/config/metadata";
 import {
   isCareNeedsNavigatorEnabled,
   isSeniorCareCostPlannerEnabled,
 } from "@/server/care/feature-flags";
-export const metadata = { title: "Data methodology" };
+export const metadata = publicInformationMetadata("Data methodology", "/methodology");
 export default function Page() {
   return (
     <PublicInformationPage

@@ -1,5 +1,7 @@
 import { PublicInformationPage } from "@/components/public-information-page";
-export const metadata = { title: "About SeniorTrustHub" };
+import { publicInformationMetadata } from "@/config/metadata";
+
+export const metadata = publicInformationMetadata("About SeniorTrustHub", "/about");
 export default function Page() {
   return (
     <PublicInformationPage
