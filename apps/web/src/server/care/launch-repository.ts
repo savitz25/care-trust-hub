@@ -17,14 +17,20 @@ export async function getFacilitySitemapPage(page: number) {
   const result = await getCareDatabasePool().query<{
     ccn: string;
     provider_name: string;
-    observed_at: Date | null;
+    last_modified_at: Date | null;
   }>(
-    `SELECT DISTINCT ON (pi.identifier_value) pi.identifier_value ccn, fs.provider_name, fs.observed_at
+    `SELECT DISTINCT ON (pi.identifier_value)
+       pi.identifier_value ccn,
+       fs.provider_name,
+       COALESCE(fs.observed_at, sr.source_modified_at, sr.source_published_at) last_modified_at
      FROM provider_identifier pi
      JOIN facility_snapshot fs ON fs.provider_id=pi.provider_id
+     JOIN source_release sr ON sr.id=fs.source_release_id
      JOIN ingest_run ir ON ir.id=fs.ingest_run_id AND ir.status='succeeded'
      WHERE pi.issuer='CMS' AND pi.identifier_type='CCN' AND pi.valid_from IS NULL
-     ORDER BY pi.identifier_value,fs.observed_at DESC NULLS LAST,fs.id DESC
+     ORDER BY pi.identifier_value,
+       COALESCE(fs.observed_at, sr.source_modified_at, sr.source_published_at) DESC NULLS LAST,
+       fs.id DESC
      LIMIT $1 OFFSET $2`,
     [FACILITY_SITEMAP_PAGE_SIZE, page * FACILITY_SITEMAP_PAGE_SIZE],
   );
