@@ -4,10 +4,14 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { isCanonicalProviderSlug } from "./consumer";
 import {
+  chainFacilitiesFromSources,
   chainFacilityCcn,
   chainFacilityFromSources,
   chainFacilityHref,
+  cmsCcnAuthorityKeys,
+  cmsCcnAuthorityKeysFromSources,
   cmsCcnMembershipKeys,
+  collidingCanonicalCmsCcns,
   normalizeCmsCcn,
   normalizeLinkableCmsCcn,
   resolveChainMembership,
@@ -298,5 +302,143 @@ describe("CMS CCN normalization", () => {
     expect(facilityQuery).not.toContain("ORDER BY pi.identifier_value");
     expect(facilityQuery).not.toContain("ORDER BY identifier_value");
     expect(source.match(/LIMIT 1(?!\d)/g)).toHaveLength(1);
+    const chainRead = source.slice(source.indexOf("export async function getChainIntelligence"));
+    const authorityQuery = chainRead.slice(chainRead.indexOf("identifier_value = ANY"));
+    expect(chainRead).toContain("cmsCcnAuthorityKeysFromSources");
+    expect(chainRead).toContain(
+      "pi.issuer='CMS' AND pi.identifier_type='CCN' AND pi.valid_from IS NULL AND pi.identifier_value = ANY($1::text[])",
+    );
+    expect(chainRead.slice(chainRead.indexOf("facilities:"))).not.toContain("pool.query");
+    expect(authorityQuery).not.toContain("ORDER BY");
+    expect(authorityQuery).not.toContain("LIMIT");
+  });
+
+  it("unlinks a normalized CCN shared by different providers, including one outside the page", () => {
+    const indiana = {
+      storedCcn: "15010",
+      canonicalCcns: ["15010"],
+      providerName: "Example Indiana Facility",
+      state: "IN",
+      overallRating: 3,
+    };
+    const padded = {
+      storedCcn: "015010",
+      canonicalCcns: ["015010"],
+      providerName: "Padded Indiana Facility",
+      state: "IN",
+      overallRating: 4,
+    };
+    const sameProvider = collidingCanonicalCmsCcns([
+      { providerId: "provider-a", identifierValue: "15010" },
+      { providerId: "provider-a", identifierValue: "015010" },
+      { providerId: "provider-a", identifierValue: "015010" },
+    ]);
+    expect(sameProvider.size).toBe(0);
+    const linked = chainFacilitiesFromSources(
+      [indiana],
+      [
+        { providerId: "provider-a", identifierValue: "15010" },
+        { providerId: "provider-a", identifierValue: "015010" },
+      ],
+    );
+    expect(linked).toHaveLength(1);
+    expect(chainFacilityHref(linked[0].ccn, linked[0].providerName)).toBe(
+      "/facility/cms/015010/example-indiana-facility",
+    );
+
+    const crossed = collidingCanonicalCmsCcns([
+      { providerId: "provider-a", identifierValue: "15010" },
+      { providerId: "provider-b", identifierValue: "015010" },
+    ]);
+    expect(crossed).toEqual(new Set(["015010"]));
+    const both = chainFacilitiesFromSources(
+      [indiana, padded],
+      [
+        { providerId: "provider-a", identifierValue: "15010" },
+        { providerId: "provider-b", identifierValue: "015010" },
+      ],
+    );
+    expect(both).toHaveLength(2);
+    for (const facility of both) {
+      expect(chainFacilityHref(facility.ccn, facility.providerName)).toBeNull();
+    }
+
+    const pageKeys = cmsCcnAuthorityKeysFromSources([indiana]);
+    expect(pageKeys).toEqual(["015010", "15010"]);
+    expect(pageKeys).not.toContain("055305");
+    const pageOfOneHundred = Array.from({ length: 100 }, (_, index) => {
+      const stored = String(index).padStart(5, "0");
+      return { storedCcn: stored, canonicalCcns: [stored] };
+    });
+    expect(cmsCcnAuthorityKeysFromSources(pageOfOneHundred).length).toBe(200);
+    const outsidePage = chainFacilitiesFromSources(
+      [padded],
+      [
+        { providerId: "provider-a", identifierValue: "015010" },
+        { providerId: "provider-outside", identifierValue: "15010" },
+      ],
+    );
+    expect(outsidePage).toHaveLength(1);
+    expect(chainFacilityHref(outsidePage[0].ccn, outsidePage[0].providerName)).toBeNull();
+    const unambiguous = chainFacilitiesFromSources(
+      [padded],
+      [{ providerId: "provider-a", identifierValue: "015010" }],
+    );
+    expect(chainFacilityHref(unambiguous[0].ccn, unambiguous[0].providerName)).toBe(
+      "/facility/cms/015010/padded-indiana-facility",
+    );
+  });
+
+  it("keeps one canonical provider and the known examples linkable", () => {
+    expect(cmsCcnAuthorityKeys(["01A193", "555180", "1234", "nope"])).toEqual(["01A193", "555180"]);
+    const facilities = chainFacilitiesFromSources(
+      reported.map(([stored, canonical, name]) => ({
+        storedCcn: stored,
+        canonicalCcns: [canonical],
+        providerName: name,
+        state: "CA",
+        overallRating: 4,
+      })),
+      reported.map(([, canonical], index) => ({
+        providerId: `provider-${index}`,
+        identifierValue: canonical,
+      })),
+    );
+    reported.forEach(([, canonical, name, slug], index) => {
+      expect(facilities[index]?.ccn).toBe(canonical);
+      expect(chainFacilityHref(facilities[index].ccn, name)).toBe(
+        `/facility/cms/${canonical}/${slug}`,
+      );
+    });
+    const malformed = chainFacilitiesFromSources(
+      [
+        {
+          storedCcn: "1234",
+          canonicalCcns: ["nope"],
+          providerName: "Malformed Facility",
+          state: "CA",
+          overallRating: null,
+        },
+      ],
+      [{ providerId: "provider-a", identifierValue: "1234" }],
+    );
+    expect(malformed[0]?.ccn).toBe("1234");
+    expect(chainFacilityHref(malformed[0].ccn, "Malformed Facility")).toBeNull();
+    const manyCurrent = chainFacilitiesFromSources(
+      [
+        {
+          storedCcn: "055640",
+          canonicalCcns: ["055640", "555180"],
+          providerName: "Grass Valley Healthcare Center",
+          state: "CA",
+          overallRating: 5,
+        },
+      ],
+      [
+        { providerId: "provider-a", identifierValue: "055640" },
+        { providerId: "provider-a", identifierValue: "555180" },
+      ],
+    );
+    expect(chainFacilityHref(manyCurrent[0].ccn, manyCurrent[0].providerName)).toBeNull();
   });
 });

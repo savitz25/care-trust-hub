@@ -1,5 +1,10 @@
 import "server-only";
-import { chainFacilityFromSources, cmsCcnMembershipKeys, resolveChainMembership } from "./cms-ccn";
+import {
+  chainFacilitiesFromSources,
+  cmsCcnAuthorityKeysFromSources,
+  cmsCcnMembershipKeys,
+  resolveChainMembership,
+} from "./cms-ccn";
 import { getCareDatabasePool } from "./db";
 import type { CareChainIntelligence, CareChainSnapshot } from "./types";
 const ID = "97ecfad1-d3f1-4d42-b774-d74661d830bc";
@@ -75,23 +80,32 @@ export async function getChainIntelligence(
   ]);
   const first = snapshots.rows[0];
   if (!first) return null;
+  const sources = facilities.rows.map((row) => ({
+    storedCcn: row.stored_ccn,
+    canonicalCcns: row.canonical_ccns,
+    providerName: row.provider_name,
+    state: row.state_code,
+    overallRating: row.overall === null ? null : Number(row.overall),
+  }));
+  const authorityKeys = cmsCcnAuthorityKeysFromSources(sources);
+  const authority = authorityKeys.length
+    ? await pool.query<{ provider_id: string; identifier_value: string }>(
+        `SELECT pi.provider_id,pi.identifier_value FROM provider_identifier pi WHERE pi.issuer='CMS' AND pi.identifier_type='CCN' AND pi.valid_from IS NULL AND pi.identifier_value = ANY($1::text[])`,
+        [authorityKeys],
+      )
+    : { rows: [] };
   return {
     cmsChainId,
     current: snapshot(first),
     history: snapshots.rows.map(snapshot),
-    facilities: facilities.rows.flatMap((r) => {
-      const facility = chainFacilityFromSources(
-        {
-          storedCcn: r.stored_ccn,
-          canonicalCcns: r.canonical_ccns,
-          providerName: r.provider_name,
-          state: r.state_code,
-          overallRating: r.overall === null ? null : Number(r.overall),
-        },
-        excludeCcn,
-      );
-      return facility ? [facility] : [];
-    }),
+    facilities: chainFacilitiesFromSources(
+      sources,
+      authority.rows.map((row) => ({
+        providerId: row.provider_id,
+        identifierValue: row.identifier_value,
+      })),
+      excludeCcn,
+    ),
     source: {
       datasetIdentifier: ID,
       versionIdentifier: first.source_version_identifier,

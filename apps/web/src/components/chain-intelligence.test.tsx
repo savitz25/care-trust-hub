@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { ChainIntelligence } from "./chain-intelligence";
+import { chainFacilitiesFromSources } from "@/server/care/cms-ccn";
 import type { CareChainIntelligence } from "@/server/care/types";
 const chain: CareChainIntelligence = {
   cmsChainId: "123",
@@ -119,6 +120,75 @@ describe("chain intelligence", () => {
     expect(screen.queryByRole("link", { name: "Unlinked Facility" })).not.toBeInTheDocument();
     expect(screen.getByText(/Unlinked Facility/)).toBeInTheDocument();
     expect(container.innerHTML).not.toMatch(/\/facility\/cms\/(?:15010|55170|55305|56158)(?:\/|")/);
+  });
+
+  it("renders no profile link when 15010 and 015010 belong to different providers", () => {
+    const facilities = chainFacilitiesFromSources(
+      [
+        {
+          storedCcn: "15010",
+          canonicalCcns: ["15010"],
+          providerName: "Example Indiana Facility",
+          state: "IN",
+          overallRating: 3,
+        },
+        {
+          storedCcn: "015010",
+          canonicalCcns: ["015010"],
+          providerName: "Second Indiana Facility",
+          state: "IN",
+          overallRating: 2,
+        },
+        {
+          storedCcn: "055305",
+          canonicalCcns: ["055305"],
+          providerName: "Sherwood Healthcare Center",
+          state: "CA",
+          overallRating: 4,
+        },
+      ],
+      [
+        { providerId: "provider-a", identifierValue: "15010" },
+        { providerId: "provider-b", identifierValue: "015010" },
+        { providerId: "provider-c", identifierValue: "055305" },
+      ],
+    );
+    const { container } = render(<ChainIntelligence chain={{ ...chain, facilities }} />);
+    expect(
+      screen.queryByRole("link", { name: "Example Indiana Facility" }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Second Indiana Facility" })).not.toBeInTheDocument();
+    expect(screen.getByText(/Example Indiana Facility/)).toBeInTheDocument();
+    expect(screen.getByText(/Second Indiana Facility/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Sherwood Healthcare Center" })).toHaveAttribute(
+      "href",
+      "/facility/cms/055305/sherwood-healthcare-center",
+    );
+    expect(container.innerHTML).not.toMatch(/\/facility\/cms\/015010\//);
+    expect(container.innerHTML).not.toMatch(/\/facility\/cms\/15010(?:\/|")/);
+  });
+
+  it("renders no profile link when the conflicting provider is outside the chain page", () => {
+    const facilities = chainFacilitiesFromSources(
+      [
+        {
+          storedCcn: "015010",
+          canonicalCcns: ["015010"],
+          providerName: "Example Indiana Facility",
+          state: "IN",
+          overallRating: 3,
+        },
+      ],
+      [
+        { providerId: "provider-on-page", identifierValue: "015010" },
+        { providerId: "provider-outside-page", identifierValue: "15010" },
+      ],
+    );
+    render(<ChainIntelligence chain={{ ...chain, facilities }} />);
+    expect(
+      screen.queryByRole("link", { name: "Example Indiana Facility" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText(/Example Indiana Facility/)).toBeInTheDocument();
   });
 
   it("labels CMS group evidence without a score or ranking", () => {

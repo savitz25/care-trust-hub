@@ -125,14 +125,80 @@ export type ChainFacilityIdentity = {
   overallRating: number | null;
 };
 
+export type CmsCcnAuthorityRow = {
+  providerId: string | null;
+  identifierValue: string | null | undefined;
+};
+
+/**
+ * Lookup keys for one chain page. A leading-zero CCN also probes the five-digit
+ * spelling. The caller must pass only that page's candidate values.
+ */
+export function cmsCcnAuthorityKeys(values: readonly (string | null | undefined)[]): string[] {
+  const keys = new Set<string>();
+  for (const value of values) {
+    const linkable = normalizeLinkableCmsCcn(value);
+    if (!linkable) continue;
+    keys.add(linkable);
+    if (/^0\d{5}$/.test(linkable)) keys.add(linkable.slice(1));
+  }
+  return [...keys];
+}
+
+export function cmsCcnAuthorityKeysFromSources(
+  sources: readonly Pick<ChainFacilitySource, "storedCcn" | "canonicalCcns">[],
+): string[] {
+  const values: (string | null | undefined)[] = [];
+  for (const source of sources) {
+    values.push(source.storedCcn);
+    const listed = canonicalCmsCcnList(source.canonicalCcns);
+    if (!listed.unreadable) values.push(...listed.values);
+  }
+  return cmsCcnAuthorityKeys(values);
+}
+
+/** Normalized CCNs whose current rows belong to more than one provider id. */
+export function collidingCanonicalCmsCcns(
+  rows: readonly CmsCcnAuthorityRow[],
+): ReadonlySet<string> {
+  const providersByCcn = new Map<string, Set<string>>();
+  for (const row of rows) {
+    if (!row.providerId) continue;
+    const ccn = normalizeLinkableCmsCcn(row.identifierValue);
+    if (!ccn) continue;
+    const providers = providersByCcn.get(ccn) ?? new Set<string>();
+    providers.add(row.providerId);
+    providersByCcn.set(ccn, providers);
+  }
+  const colliding = new Set<string>();
+  for (const [ccn, providers] of providersByCcn) {
+    if (providers.size > 1) colliding.add(ccn);
+  }
+  return colliding;
+}
+
+export function chainFacilitiesFromSources(
+  sources: readonly ChainFacilitySource[],
+  authorityRows: readonly CmsCcnAuthorityRow[],
+  excludeCcn?: string | null,
+): ChainFacilityIdentity[] {
+  const blocked = collidingCanonicalCmsCcns(authorityRows);
+  return sources.flatMap((source) => {
+    const facility = chainFacilityFromSources(source, excludeCcn, blocked);
+    return facility ? [facility] : [];
+  });
+}
+
 /**
  * A single canonical CCN becomes the link. No canonical CCN keeps a stored
  * six-character CCN and leaves a five-digit value unlinked. Multiple canonical
- * CCNs stay on the chain list without a profile link.
+ * CCNs, and a CCN owned by more than one provider, stay on the list without a
+ * profile link.
  */
 export function chainFacilityFromSources(
   source: ChainFacilitySource,
   excludeCcn?: string | null,
+  blockedCcns?: ReadonlySet<string> | null,
 ): ChainFacilityIdentity | null {
   const listed = canonicalCmsCcnList(source.canonicalCcns);
   const canonical = listed.unreadable
@@ -163,6 +229,15 @@ export function chainFacilityFromSources(
   );
   const preserved = resolved ?? storedRaw;
   if (!preserved) return null;
+  const linked = normalizeLinkableCmsCcn(preserved);
+  if (linked && blockedCcns?.has(linked)) {
+    return {
+      ccn: unlinkableChainCcn(storedRaw || preserved),
+      providerName: source.providerName,
+      state: source.state,
+      overallRating: source.overallRating,
+    };
+  }
   return {
     ccn: preserved,
     providerName: source.providerName,
