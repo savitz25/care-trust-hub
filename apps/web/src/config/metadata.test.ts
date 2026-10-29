@@ -56,11 +56,16 @@ describe("public information page metadata", () => {
     });
   });
 
-  it("uses source-content commit dates for trust-page lastmod values", () => {
+  it("uses source-content commit dates for public-information lastmod values", () => {
     expect(publicInformationLastModified).toEqual({
       "/about": "2026-08-16",
       "/methodology": "2026-08-18",
       "/privacy": "2026-08-16",
+      "/sources": "2026-08-26",
+      "/independence": "2026-08-16",
+      "/terms": "2026-08-16",
+      "/contact": "2026-08-24",
+      "/trust/corrections": "2026-08-16",
     });
   });
 

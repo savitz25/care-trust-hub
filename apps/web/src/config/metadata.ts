@@ -91,4 +91,15 @@ export const publicInformationLastModified = {
   "/about": "2026-08-16",
   "/methodology": "2026-08-18",
   "/privacy": "2026-08-16",
+  "/sources": "2026-08-26",
+  "/independence": "2026-08-16",
+  "/terms": "2026-08-16",
+  "/contact": "2026-08-24",
+  "/trust/corrections": "2026-08-16",
 } as const;
+
+export function publicInformationLastModifiedTag(pathname: string): string {
+  const lastModified =
+    publicInformationLastModified[pathname as keyof typeof publicInformationLastModified];
+  return lastModified ? `<lastmod>${lastModified}</lastmod>` : "";
+}
