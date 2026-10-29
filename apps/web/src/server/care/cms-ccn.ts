@@ -46,6 +46,170 @@ export function cmsCcnMembershipKeys(ccn: string): string[] {
   return [value];
 }
 
+export type CanonicalCmsCcnResolution = {
+  kind: "none" | "one" | "many";
+  ccn: string | null;
+};
+
+/**
+ * Current CMS CCN rows for one provider. Leading-zero forms of the same
+ * identifier count once. Two distinct identifiers is ambiguous: return no CCN
+ * rather than picking one by sort order.
+ */
+export function resolveUniqueCanonicalCmsCcn(
+  values: readonly (string | null | undefined)[] | null | undefined,
+): CanonicalCmsCcnResolution {
+  const distinct = new Set<string>();
+  for (const value of values ?? []) {
+    const normalized = normalizeLinkableCmsCcn(value);
+    if (normalized) distinct.add(normalized);
+  }
+  if (distinct.size === 0) return { kind: "none", ccn: null };
+  if (distinct.size > 1) return { kind: "many", ccn: null };
+  return { kind: "one", ccn: [...distinct][0] ?? null };
+}
+
+export type ChainMembershipCandidate<T extends string | null = string | null> = {
+  providerId: T;
+  cmsChainId: string;
+  sourceModifiedAt?: Date | string | null;
+  retrievedAt?: Date | string | null;
+};
+
+/**
+ * One chain and one provider is a membership. Several releases of that same
+ * pair keep the newest source timestamp. More than one chain or provider is
+ * ambiguous and matches nothing.
+ */
+export function resolveChainMembership<T extends ChainMembershipCandidate>(
+  rows: readonly T[],
+): T | null {
+  if (rows.length === 0) return null;
+  const chainIds = new Set(rows.map((row) => row.cmsChainId));
+  if (chainIds.size !== 1) return null;
+  const providerIds = new Set(rows.map((row) => row.providerId));
+  if (providerIds.size !== 1) return null;
+  return rows.reduce((latest, row) =>
+    membershipTime(row) > membershipTime(latest) ? row : latest,
+  );
+}
+
+export type ChainFacilitySource = {
+  storedCcn: string | null | undefined;
+  canonicalCcns: unknown;
+  providerName: string;
+  state: string;
+  overallRating: number | null;
+};
+
+/** Current CMS CCN values from a driver array or a PostgreSQL text-array literal. */
+export function canonicalCmsCcnList(value: unknown): {
+  values: readonly (string | null)[];
+  unreadable: boolean;
+} {
+  if (value == null) return { values: [], unreadable: false };
+  if (Array.isArray(value)) {
+    return {
+      values: value.map((item) => (item == null ? null : String(item))),
+      unreadable: false,
+    };
+  }
+  if (typeof value === "string") return postgresCcnArray(value);
+  return { values: [], unreadable: true };
+}
+
+export type ChainFacilityIdentity = {
+  ccn: string;
+  providerName: string;
+  state: string;
+  overallRating: number | null;
+};
+
+/**
+ * A single canonical CCN becomes the link. No canonical CCN keeps a stored
+ * six-character CCN and leaves a five-digit value unlinked. Multiple canonical
+ * CCNs stay on the chain list without a profile link.
+ */
+export function chainFacilityFromSources(
+  source: ChainFacilitySource,
+  excludeCcn?: string | null,
+): ChainFacilityIdentity | null {
+  const listed = canonicalCmsCcnList(source.canonicalCcns);
+  const canonical = listed.unreadable
+    ? { kind: "many" as const, ccn: null }
+    : resolveUniqueCanonicalCmsCcn(listed.values);
+  const storedRaw = typeof source.storedCcn === "string" ? source.storedCcn.trim() : "";
+  const exclude = normalizeLinkableCmsCcn(excludeCcn);
+  const storedIdentity = normalizeLinkableCmsCcn(source.storedCcn);
+  const excluded =
+    exclude !== null &&
+    (storedIdentity === exclude ||
+      (canonical.kind === "one" && canonical.ccn === exclude) ||
+      listed.values.some((value) => normalizeLinkableCmsCcn(value) === exclude));
+  if (excluded) return null;
+
+  if (canonical.kind === "many") {
+    return {
+      ccn: unlinkableChainCcn(storedRaw),
+      providerName: source.providerName,
+      state: source.state,
+      overallRating: source.overallRating,
+    };
+  }
+
+  const resolved = chainFacilityCcn(
+    canonical.kind === "one" ? canonical.ccn : null,
+    source.storedCcn,
+  );
+  const preserved = resolved ?? storedRaw;
+  if (!preserved) return null;
+  return {
+    ccn: preserved,
+    providerName: source.providerName,
+    state: source.state,
+    overallRating: source.overallRating,
+  };
+}
+
+function unlinkableChainCcn(stored: string): string {
+  if (chainFacilityHref(stored, "facility")) return `unresolved:${stored}`;
+  return stored || "unresolved";
+}
+
+function membershipTime(row: ChainMembershipCandidate): number {
+  const modified = timestamp(row.sourceModifiedAt);
+  if (modified !== Number.NEGATIVE_INFINITY) return modified;
+  return timestamp(row.retrievedAt);
+}
+
+function postgresCcnArray(value: string): {
+  values: (string | null)[];
+  unreadable: boolean;
+} {
+  const text = value.trim();
+  if (text === "{}") return { values: [], unreadable: false };
+  if (!(text.startsWith("{") && text.endsWith("}"))) return { values: [], unreadable: true };
+  const values: (string | null)[] = [];
+  for (const part of text.slice(1, -1).split(",")) {
+    const raw = part.trim();
+    const quoted = raw.startsWith('"') && raw.endsWith('"');
+    const token = quoted ? raw.slice(1, -1).replace(/""/g, '"') : raw;
+    if (!quoted && token === "NULL") {
+      values.push(null);
+      continue;
+    }
+    if (!/^[A-Za-z0-9]+$/.test(token)) return { values: [], unreadable: true };
+    values.push(token);
+  }
+  return { values, unreadable: false };
+}
+
+function timestamp(value: Date | string | null | undefined): number {
+  if (value == null || value === "") return Number.NEGATIVE_INFINITY;
+  const time = value instanceof Date ? value.getTime() : new Date(value).getTime();
+  return Number.isNaN(time) ? Number.NEGATIVE_INFINITY : time;
+}
+
 function sixCharacterCcn(value: string | null | undefined): string | null {
   if (typeof value !== "string") return null;
   const normalized = value.trim().toUpperCase();
