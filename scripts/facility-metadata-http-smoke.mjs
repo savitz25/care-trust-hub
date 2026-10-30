@@ -7,10 +7,7 @@ function assert(condition, message) {
 
 function metas(html, name) {
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const pattern = new RegExp(
-    `<meta\\b(?=[^>]*\\bname=["']${escaped}["'])[^>]*>`,
-    "gi",
-  );
+  const pattern = new RegExp(`<meta\\b(?=[^>]*\\bname=["']${escaped}["'])[^>]*>`, "gi");
   return [...html.matchAll(pattern)].map(
     ([tag]) => tag.match(/\bcontent=["']([^"']*)["']/i)?.[1] ?? "",
   );
@@ -18,10 +15,7 @@ function metas(html, name) {
 
 function properties(html, property) {
   const escaped = property.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const pattern = new RegExp(
-    `<meta\\b(?=[^>]*\\bproperty=["']${escaped}["'])[^>]*>`,
-    "gi",
-  );
+  const pattern = new RegExp(`<meta\\b(?=[^>]*\\bproperty=["']${escaped}["'])[^>]*>`, "gi");
   return [...html.matchAll(pattern)].map(
     ([tag]) => tag.match(/\bcontent=["']([^"']*)["']/i)?.[1] ?? "",
   );
@@ -59,7 +53,10 @@ function assert404Metadata(label, result, expectedTitle) {
   const { response, firstChunk, fullHtml } = result;
   assert(response.status === 404, `${label}_status_expected_404_actual_${response.status}`);
   const robotValues = metas(fullHtml, "robots").map((value) => value.toLowerCase());
-  assert(robotValues.some((value) => value.includes("noindex")), `${label}_missing_noindex`);
+  assert(
+    robotValues.some((value) => value.includes("noindex")),
+    `${label}_missing_noindex`,
+  );
   assert(
     robotValues.every((value) => !/(^|[,\s])index([,\s]|$)/.test(value)),
     `${label}_contains_indexable_robots:${robotValues.join("|")}`,
