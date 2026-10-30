@@ -4,7 +4,7 @@ set -euo pipefail
 export CARE_DATABASE_URL='postgresql://smoke:synthetic-ci-only@127.0.0.1:5432/facility_smoke'
 export CARE_ENABLE_REAL_PROVIDER_UI=true
 
-node_modules/.bin/next start --hostname 127.0.0.1 --port 3000 >/tmp/facility-next.log 2>&1 &
+(cd apps/web && ../../node_modules/.bin/next start --hostname 127.0.0.1 --port 3000) >/tmp/facility-next.log 2>&1 &
 app_pid=$!
 error_pid=''
 cleanup() {
@@ -25,6 +25,11 @@ wait_for_server() {
       return 0
     fi
     if ! kill -0 "$pid" 2>/dev/null; then
+      if [ "$port" = '3000' ]; then
+        cat /tmp/facility-next.log
+      else
+        cat /tmp/facility-next-db-error.log
+      fi
       return 1
     fi
     sleep 1
@@ -58,7 +63,8 @@ rm -f "$body"
 
 CARE_DATABASE_URL='postgresql://smoke:synthetic-ci-only@127.0.0.1:55432/facility_smoke' \
   CARE_ENABLE_REAL_PROVIDER_UI=true \
-  node_modules/.bin/next start --hostname 127.0.0.1 --port 3001 >/tmp/facility-next-db-error.log 2>&1 &
+  bash -c 'cd apps/web && ../../node_modules/.bin/next start --hostname 127.0.0.1 --port 3001' \
+    >/tmp/facility-next-db-error.log 2>&1 &
 error_pid=$!
 
 if ! wait_for_server 3001 "$error_pid"; then
