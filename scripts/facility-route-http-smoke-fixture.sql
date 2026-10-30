@@ -57,8 +57,32 @@ CREATE TABLE provider_identifier (
   issuer text NOT NULL,
   identifier_type text NOT NULL,
   identifier_value text NOT NULL,
-  valid_from date
+  valid_from date,
+  valid_to date
 );
+
+CREATE TABLE facility_claim (
+  id uuid PRIMARY KEY,
+  provider_id uuid NOT NULL,
+  claim_type text NOT NULL,
+  claim_value jsonb NOT NULL,
+  resolution_state text NOT NULL,
+  publication_eligible boolean NOT NULL,
+  resolved_at timestamptz NOT NULL,
+  created_at timestamptz NOT NULL,
+  effective_to date
+);
+
+CREATE VIEW published_facility_claim AS
+SELECT c.*
+FROM facility_claim c
+WHERE c.resolution_state = 'VERIFIED'
+  AND c.claim_type IN ('google_official_website', 'google_public_phone', 'google_public_name')
+  AND c.effective_to IS NULL
+  AND c.claim_value IS NOT NULL
+  AND c.claim_value <> 'null'::jsonb
+  AND jsonb_typeof(c.claim_value) = 'string'
+  AND btrim(c.claim_value #>> '{}') <> '';
 
 INSERT INTO source_dataset (id, dataset_key, source_organization, display_name, official_url)
 VALUES (
