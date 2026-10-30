@@ -235,6 +235,9 @@ jobs:
           --health-retries 20
     env:
       PGPASSWORD: synthetic-ci-only
+      VERCEL_ENV: production
+      CARE_ENABLE_PUBLIC_LAUNCH: "true"
+      NEXT_PUBLIC_SITE_URL: https://www.seniortrusthub.com
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

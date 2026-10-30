@@ -73,6 +73,29 @@ export const siteMetadata: Metadata = {
   robots: { index: isPublicLaunchEnabled(), follow: isPublicLaunchEnabled() },
 };
 
+/** Metadata for a genuine 404; explicitly clears inherited homepage metadata. */
+export function notFoundMetadata(title: string): Metadata {
+  const description = "The requested page could not be found.";
+  return {
+    title,
+    description,
+    alternates: { canonical: null },
+    robots: { index: false, follow: false },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      images: [],
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+      images: [],
+    },
+  };
+}
+
 /** Metadata for public information routes that need their own page canonical. */
 export function publicInformationMetadata(
   title: string,
