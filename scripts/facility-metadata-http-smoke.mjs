@@ -28,9 +28,8 @@ function properties(html, property) {
 }
 
 function canonicalLinks(html) {
-  return [...html.matchAll(/<link\b(?=[^>]*\brel=["']canonical["'])[^>]*>/gi)].map(([tag]) =>
-    tag.match(/\bhref=["']([^"']*)["']/i)?.[1] ?? "",
-  );
+  const tags = [...html.matchAll(/<link\b(?=[^>]*\brel=["']canonical["'])[^>]*>/gi)];
+  return tags.map(([tag]) => tag.match(/\bhref=["']([^"']*)["']/i)?.[1] ?? "");
 }
 
 async function request(path, { userAgent } = {}) {
@@ -88,11 +87,20 @@ function assert404Metadata(label, result, expectedTitle) {
   assert(fullHtml.includes(expectedTitle), `${label}_missing_route_title`);
   const headEnd = fullHtml.indexOf("</head>");
   const head = fullHtml.slice(0, headEnd + 7);
-  const fullHasNoindex = metas(fullHtml, "robots").some((value) => value.toLowerCase().includes("noindex"));
-  const headHasNoindex = metas(head, "robots").some((value) => value.toLowerCase().includes("noindex"));
+  const fullHasNoindex = metas(fullHtml, "robots").some((value) =>
+    value.toLowerCase().includes("noindex"),
+  );
+  const headHasNoindex = metas(head, "robots").some((value) =>
+    value.toLowerCase().includes("noindex"),
+  );
   console.log(`${label}_status=${response.status}`);
   console.log(`${label}_initial_html_bytes=${new TextEncoder().encode(firstChunk).length}`);
-  console.log(`${label}_noindex_location=${headHasNoindex ? "initial-head" : fullHasNoindex ? "streamed-html" : "missing"}`);
+  const noindexLocation = headHasNoindex
+    ? "initial-head"
+    : fullHasNoindex
+      ? "streamed-html"
+      : "missing";
+  console.log(`${label}_noindex_location=${noindexLocation}`);
   const initialChunkHasNoindex = metas(firstChunk, "robots").some((value) =>
     value.toLowerCase().includes("noindex"),
   );
@@ -122,7 +130,10 @@ assert(
 );
 
 const valid = await request("/facility/cms/010001/synthetic-ci-facility");
-assert(valid.response.status === 200, `valid_provider_status_expected_200_actual_${valid.response.status}`);
+assert(
+  valid.response.status === 200,
+  `valid_provider_status_expected_200_actual_${valid.response.status}`,
+);
 assert(
   canonicalLinks(valid.fullHtml).includes(
     "https://www.seniortrusthub.com/facility/cms/010001/synthetic-ci-facility",
