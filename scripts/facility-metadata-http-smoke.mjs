@@ -7,19 +7,30 @@ function assert(condition, message) {
 
 function metas(html, name) {
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return [...html.matchAll(new RegExp(`<meta\\b(?=[^>]*\\bname=["']${escaped}["'])[^>]*>`, "gi"))]
-    .map(([tag]) => tag.match(/\bcontent=["']([^"']*)["']/i)?.[1] ?? "");
+  const pattern = new RegExp(
+    `<meta\\b(?=[^>]*\\bname=["']${escaped}["'])[^>]*>`,
+    "gi",
+  );
+  return [...html.matchAll(pattern)].map(
+    ([tag]) => tag.match(/\bcontent=["']([^"']*)["']/i)?.[1] ?? "",
+  );
 }
 
 function properties(html, property) {
   const escaped = property.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return [...html.matchAll(new RegExp(`<meta\\b(?=[^>]*\\bproperty=["']${escaped}["'])[^>]*>`, "gi"))]
-    .map(([tag]) => tag.match(/\bcontent=["']([^"']*)["']/i)?.[1] ?? "");
+  const pattern = new RegExp(
+    `<meta\\b(?=[^>]*\\bproperty=["']${escaped}["'])[^>]*>`,
+    "gi",
+  );
+  return [...html.matchAll(pattern)].map(
+    ([tag]) => tag.match(/\bcontent=["']([^"']*)["']/i)?.[1] ?? "",
+  );
 }
 
 function canonicalLinks(html) {
-  return [...html.matchAll(/<link\b(?=[^>]*\brel=["']canonical["'])[^>]*>/gi)]
-    .map(([tag]) => tag.match(/\bhref=["']([^"']*)["']/i)?.[1] ?? "");
+  return [...html.matchAll(/<link\b(?=[^>]*\brel=["']canonical["'])[^>]*>/gi)].map(([tag]) =>
+    tag.match(/\bhref=["']([^"']*)["']/i)?.[1] ?? "",
+  );
 }
 
 async function request(path, { userAgent } = {}) {
@@ -66,16 +77,26 @@ function assert404Metadata(label, result, expectedTitle) {
   const twitterTitles = metas(fullHtml, "twitter:title");
   assert(!titles.includes(homeTitle), `${label}_inherited_homepage_open_graph_title`);
   assert(!twitterTitles.includes(homeTitle), `${label}_inherited_homepage_twitter_title`);
-  assert(properties(fullHtml, "og:image").length === 0, `${label}_inherited_homepage_open_graph_image`);
-  assert(metas(fullHtml, "twitter:image").length === 0, `${label}_inherited_homepage_twitter_image`);
+  assert(
+    properties(fullHtml, "og:image").length === 0,
+    `${label}_inherited_homepage_open_graph_image`,
+  );
+  assert(
+    metas(fullHtml, "twitter:image").length === 0,
+    `${label}_inherited_homepage_twitter_image`,
+  );
   assert(fullHtml.includes(expectedTitle), `${label}_missing_route_title`);
-  const head = fullHtml.slice(0, fullHtml.indexOf("</head>") + 7);
+  const headEnd = fullHtml.indexOf("</head>");
+  const head = fullHtml.slice(0, headEnd + 7);
   const fullHasNoindex = metas(fullHtml, "robots").some((value) => value.toLowerCase().includes("noindex"));
   const headHasNoindex = metas(head, "robots").some((value) => value.toLowerCase().includes("noindex"));
   console.log(`${label}_status=${response.status}`);
   console.log(`${label}_initial_html_bytes=${new TextEncoder().encode(firstChunk).length}`);
   console.log(`${label}_noindex_location=${headHasNoindex ? "initial-head" : fullHasNoindex ? "streamed-html" : "missing"}`);
-  console.log(`${label}_noindex_in_initial_network_chunk=${metas(firstChunk, "robots").some((value) => value.toLowerCase().includes("noindex"))}`);
+  const initialChunkHasNoindex = metas(firstChunk, "robots").some((value) =>
+    value.toLowerCase().includes("noindex"),
+  );
+  console.log(`${label}_noindex_in_initial_network_chunk=${initialChunkHasNoindex}`);
   console.log(`${label}_canonical_count=${canonicals.length}`);
   console.log(`${label}_robots=${robotValues.join("|")}`);
 }
@@ -89,20 +110,36 @@ assert404Metadata("missing_provider", missingProvider, "Facility not found");
 const malformed = await request("/facility/cms/55305/x");
 assert404Metadata("malformed_provider", malformed, "Facility not found");
 
-const bot = await request("/definitely-missing-ci-route", { userAgent: "facebookexternalhit/1.1" });
+const bot = await request("/definitely-missing-ci-route", {
+  userAgent: "facebookexternalhit/1.1",
+});
 assert404Metadata("generic_missing_bot", bot, "Page not found");
-const botHead = bot.fullHtml.slice(0, bot.fullHtml.indexOf("</head>") + 7);
-assert(metas(botHead, "robots").some((value) => value.toLowerCase().includes("noindex")), "bot_metadata_not_in_initial_head");
+const botHeadEnd = bot.fullHtml.indexOf("</head>");
+const botHead = bot.fullHtml.slice(0, botHeadEnd + 7);
+assert(
+  metas(botHead, "robots").some((value) => value.toLowerCase().includes("noindex")),
+  "bot_metadata_not_in_initial_head",
+);
 
 const valid = await request("/facility/cms/010001/synthetic-ci-facility");
 assert(valid.response.status === 200, `valid_provider_status_expected_200_actual_${valid.response.status}`);
 assert(
-  canonicalLinks(valid.fullHtml).includes("https://www.seniortrusthub.com/facility/cms/010001/synthetic-ci-facility"),
+  canonicalLinks(valid.fullHtml).includes(
+    "https://www.seniortrusthub.com/facility/cms/010001/synthetic-ci-facility",
+  ),
   "valid_provider_missing_self_canonical",
 );
 const validRobots = metas(valid.fullHtml, "robots").map((value) => value.toLowerCase());
-assert(validRobots.some((value) => value.includes("index") && value.includes("follow") && !value.includes("noindex")), "valid_provider_not_indexable");
-assert(properties(valid.fullHtml, "og:title").some((value) => value.includes("Synthetic CI Facility")), "valid_provider_missing_open_graph_title");
+assert(
+  validRobots.some(
+    (value) => value.includes("index") && value.includes("follow") && !value.includes("noindex"),
+  ),
+  "valid_provider_not_indexable",
+);
+assert(
+  properties(valid.fullHtml, "og:title").some((value) => value.includes("Synthetic CI Facility")),
+  "valid_provider_missing_open_graph_title",
+);
 console.log(`valid_provider_status=${valid.response.status}`);
 console.log(`valid_provider_canonical=${canonicalLinks(valid.fullHtml).join("|")}`);
 console.log(`valid_provider_robots=${validRobots.join("|")}`);
