@@ -24,6 +24,7 @@ jobs:
       - run: npm run check:metrics-r2-03
       - run: npm run check:th-search-r1-007
       - run: npm run check:th-search-r1-011
+      - run: npm exec --workspace=@care/web -- vitest run --configLoader runner src/server/care/facility-route.test.ts
       - run: npm test
       - run: npm run build
 
@@ -215,3 +216,34 @@ jobs:
         run: |
           python -m pip install -e ".[dev]"
           pytest -m integration
+
+  facility-http-smoke:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: facility_smoke
+          POSTGRES_USER: smoke
+          POSTGRES_PASSWORD: synthetic-ci-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U smoke -d facility_smoke"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      PGPASSWORD: synthetic-ci-only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Create a disposable synthetic provider fixture
+        run: psql -h localhost -U smoke -d facility_smoke -v ON_ERROR_STOP=1 -f scripts/facility-route-http-smoke-fixture.sql
+      - name: Verify real HTTP responses from the built Next server
+        run: bash scripts/facility-route-http-smoke.sh

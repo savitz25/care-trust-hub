@@ -9,7 +9,6 @@ import {
   providerHref,
 } from "@/server/care/consumer";
 import {
-  getProviderByCcnForPage,
   getProviderChainIntelligenceForPage,
   getProviderOwnershipIntelligenceForPage,
   getProviderRegulatoryIntelligenceForPage,
@@ -45,6 +44,7 @@ import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-h
 import { SeniorCustomerLayer } from "@/components/senior-customer-layer";
 import { seniorClaimProfile, claimCtaEnabledFor } from "@/server/customer-integration/eligibility";
 import { fetchCustomerLayer } from "@/server/customer-integration/public";
+import { getFacilityRouteProvider } from "@/server/care/facility-route";
 
 export const dynamic = "force-dynamic";
 
@@ -55,7 +55,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   if (!isRealProviderUiEnabled())
     return { title: "Facility not found", robots: { index: false, follow: false } };
-  const provider = await getProviderByCcnForPage((await params).ccn).catch(() => null);
+  const provider = await getFacilityRouteProvider((await params).ccn);
   if (!provider) return { title: "Facility not found", robots: { index: false, follow: false } };
   const href = providerHref(provider);
   const location = [provider.location.city, provider.location.state].filter(Boolean).join(", ");
@@ -95,7 +95,7 @@ export default async function RealFacilityPage({
 }) {
   if (!isRealProviderUiEnabled()) notFound();
   const { ccn, slug } = await params;
-  const provider = await getProviderByCcnForPage(ccn);
+  const provider = await getFacilityRouteProvider(ccn);
   if (!provider) notFound();
   if (!isCanonicalProviderSlug(provider, slug)) permanentRedirect(providerHref(provider));
   const regulatory = isInspectionIntelligenceEnabled()
