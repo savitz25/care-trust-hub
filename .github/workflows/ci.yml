@@ -18,6 +18,12 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Export formatter output for the metadata smoke probe
+        run: npx prettier scripts/facility-metadata-http-smoke.mjs > "$RUNNER_TEMP/facility-metadata-http-smoke.mjs"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: formatted-metadata-smoke-probe
+          path: ${{ runner.temp }}/facility-metadata-http-smoke.mjs
       - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
