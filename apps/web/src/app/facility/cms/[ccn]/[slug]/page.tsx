@@ -45,6 +45,7 @@ import { SeniorCustomerLayer } from "@/components/senior-customer-layer";
 import { seniorClaimProfile, claimCtaEnabledFor } from "@/server/customer-integration/eligibility";
 import { fetchCustomerLayer } from "@/server/customer-integration/public";
 import { getFacilityRouteProvider } from "@/server/care/facility-route";
+import { notFoundMetadata } from "@/config/metadata";
 
 export const dynamic = "force-dynamic";
 
@@ -53,10 +54,9 @@ export async function generateMetadata({
 }: {
   params: Promise<{ ccn: string; slug: string }>;
 }): Promise<Metadata> {
-  if (!isRealProviderUiEnabled())
-    return { title: "Facility not found", robots: { index: false, follow: false } };
+  if (!isRealProviderUiEnabled()) return notFoundMetadata("Facility not found");
   const provider = await getFacilityRouteProvider((await params).ccn);
-  if (!provider) return { title: "Facility not found", robots: { index: false, follow: false } };
+  if (!provider) return notFoundMetadata("Facility not found");
   const href = providerHref(provider);
   const location = [provider.location.city, provider.location.state].filter(Boolean).join(", ");
   const image = {

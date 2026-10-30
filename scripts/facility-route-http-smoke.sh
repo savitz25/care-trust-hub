@@ -4,6 +4,9 @@ set -euo pipefail
 export CARE_DATABASE_URL='postgresql://smoke:synthetic-ci-only@127.0.0.1:5432/facility_smoke'
 export CARE_ENABLE_REAL_PROVIDER_UI=true
 export CARE_DATABASE_SSL=disable
+export VERCEL_ENV=production
+export CARE_ENABLE_PUBLIC_LAUNCH=true
+export NEXT_PUBLIC_SITE_URL=https://www.seniortrusthub.com
 
 (cd apps/web && ../../node_modules/.bin/next start --hostname 127.0.0.1 --port 3000) >/tmp/facility-next.log 2>&1 &
 app_pid=$!
@@ -72,6 +75,7 @@ status=$(http_status 'http://127.0.0.1:3000/facility/cms/010001/synthetic-ci-fac
 echo "synthetic_valid_profile_status=${status}"
 expect_status synthetic_valid_profile "$status" 200 /tmp/facility-next.log
 grep --fixed-strings --quiet 'Synthetic CI Facility' "$body"
+node scripts/facility-metadata-http-smoke.mjs
 rm -f "$body"
 
 CARE_DATABASE_URL='postgresql://smoke:synthetic-ci-only@127.0.0.1:55432/facility_smoke' \

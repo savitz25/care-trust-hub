@@ -8,6 +8,7 @@ import {
   publicInformationLastModified,
   publicInformationMetadata,
   resolveSiteOrigin,
+  notFoundMetadata,
 } from "./metadata";
 
 vi.mock("@/server/care/feature-flags", () => ({
@@ -85,5 +86,24 @@ describe("public information page metadata", () => {
     const html = renderToStaticMarkup(createElement(Page));
     expect(html).toContain(`<h1>${heading}</h1>`);
     expect(html.length).toBeGreaterThan(200);
+  });
+});
+
+describe("not-found metadata", () => {
+  it("clears inherited homepage canonical and social metadata", () => {
+    const metadata = notFoundMetadata("Facility not found");
+
+    expect(metadata.alternates?.canonical).toBeNull();
+    expect(metadata.robots).toEqual({ index: false, follow: false });
+    expect(metadata.openGraph).toMatchObject({
+      title: "Facility not found",
+      description: "The requested page could not be found.",
+      images: [],
+    });
+    expect(metadata.twitter).toMatchObject({
+      title: "Facility not found",
+      description: "The requested page could not be found.",
+      images: [],
+    });
   });
 });
