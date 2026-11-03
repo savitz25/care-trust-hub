@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const assisted = "https://health.alaska.gov/en/services/assisted-living-licensing-and-renewals/";
 const facilities =
@@ -28,6 +29,7 @@ export default function AlaskaSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="AK" stateName="Alaska" />
       <section className="home-hero" aria-labelledby="ak-title">
         <p className="eyebrow">Alaska facility licensing evidence</p>
         <h1 id="ak-title">Alaska senior-care facility classes</h1>

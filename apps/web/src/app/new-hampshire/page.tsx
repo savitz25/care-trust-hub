@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const sources = [
   [
@@ -34,6 +35,7 @@ export default function NewHampshirePage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="NH" stateName="New Hampshire" />
       <section className="home-hero" aria-labelledby="nh-title">
         <p className="eyebrow">New Hampshire senior care licensing research</p>
         <h1 id="nh-title">New Hampshire DHHS facility licensing classes</h1>

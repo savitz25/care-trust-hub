@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const sources = [
   [
@@ -46,6 +47,7 @@ export default function DelawarePage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="DE" stateName="Delaware" />
       <section className="home-hero" aria-labelledby="de-title">
         <p className="eyebrow">Delaware senior-care licensing research</p>
         <h1 id="de-title">Delaware DHSS facility and service-license classes</h1>
@@ -98,8 +100,9 @@ export default function DelawarePage() {
           on or before the retrieval date. Those rows remain directory observations and are not
           classified as active or inactive without renewed-status confirmation. DHSS nursing-home
           and assisted-living directory pages do not show license expiration dates in their listing
-          rows. Current license validity is therefore NOT_RECONCILED. Facility ≠ administrator;
-          inspection/survey ≠ enforcement. No combined denominator is asserted.
+          rows. Current license validity is therefore NOT_RECONCILED. A facility record and an
+          administrator record stay separate. An inspection record and an enforcement record stay
+          separate. Each class keeps its own denominator.
         </p>
       </section>
       <section aria-labelledby="de-sources">

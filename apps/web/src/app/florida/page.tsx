@@ -5,6 +5,7 @@ import { StructuredData } from "@/components/structured-data";
 import { brand } from "@/config/brand";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getFloridaIntelligence } from "@/server/care/florida-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/florida");
@@ -27,6 +28,7 @@ export default function FloridaPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="FL" stateName="Florida" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

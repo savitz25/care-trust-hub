@@ -44,15 +44,12 @@ export function NcIntelligenceView({ intel }: { intel: NcPublicSnapshot }) {
     <div className="national-hub florida-intel">
       <section className="hub-scale" aria-labelledby="nc-caveats-title">
         <div className="section-heading">
-          <p className="eyebrow">Public page grain caveats</p>
-          <h2 id="nc-caveats-title">
-            Separate classes, not one North Carolina senior-facilities total
-          </h2>
+          <p className="eyebrow">License classes</p>
+          <h2 id="nc-caveats-title">North Carolina license classes stay separate</h2>
           <p>
-            ACH ≠ FCH ≠ Nursing Home. Home Care ≠ Home Health ≠ Hospice. Adult Day ≠ residential
-            facility. PACE ≠ facility license. CCRC ≠ licensed DHSR component. State license ≠ CMS.
-            State Star Rating ≠ TrustHub rating. Inspection ≠ complaint. Penalty ≠ conviction.
-            Missing ≠ zero. No Trust Score. No AggregateRating. No ranking.
+            Adult care, family care, nursing homes, home care, home health, hospice, adult day,
+            PACE, and CCRC each keep their own count. CMS nursing homes are named in the table on
+            this page. Field meanings are in About this data.
           </p>
         </div>
         <div className="hub-stat-grid">
@@ -208,11 +205,11 @@ export function NcIntelligenceView({ intel }: { intel: NcPublicSnapshot }) {
             {formatHubCount(intel.adultDay.NC_ADULT_DAY_CERTIFIED_SLOTS)} certified slots. Combined
             ADC/ADH programs are not double-counted as two centers. PACE is{" "}
             {formatHubCount(intel.pace.NC_PACE_ORGANIZATIONS)} organizations and{" "}
-            {formatHubCount(intel.pace.NC_PACE_LOCATIONS)} locations (13 NPIs); organization ≠
-            location ≠ DHSR facility license. NCDOI licensed CCRC map lists{" "}
-            {formatHubCount(intel.ccrc.NC_CCRC_MAP_COMMUNITIES)} communities; handbook identity rows{" "}
-            {formatHubCount(intel.ccrc.NC_CCRC_HANDBOOK_ID_ROWS)}. CCRC is not the sum of DHSR
-            campus components. Continuing Care at Home:{" "}
+            {formatHubCount(intel.pace.NC_PACE_LOCATIONS)} locations (13 NPIs). An organization, a
+            location, and a DHSR facility license each stay their own record. NCDOI licensed CCRC
+            map lists {formatHubCount(intel.ccrc.NC_CCRC_MAP_COMMUNITIES)} communities; handbook
+            identity rows {formatHubCount(intel.ccrc.NC_CCRC_HANDBOOK_ID_ROWS)}. CCRC is not the sum
+            of DHSR campus components. Continuing Care at Home:{" "}
             {formatHubCount(intel.continuingCareAtHome.NC_CCAH_ROWS)} licensed programs, not added
             to CCRC counts. Multi-Unit Assisted Housing remains official search-only. Charlotte and
             Raleigh are not SeniorTrustHub intelligence routes.

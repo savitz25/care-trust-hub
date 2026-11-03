@@ -4,6 +4,7 @@ import { TnIntelligenceView } from "@/components/tn-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getTnFacilityLists, getTnIntelligence } from "@/server/care/tn-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/tennessee");
@@ -27,6 +28,7 @@ export default function TennesseePage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="TN" stateName="Tennessee" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

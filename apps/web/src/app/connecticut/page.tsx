@@ -4,6 +4,7 @@ import { RealDataNotice, TrustStrip } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import snapshot from "@/data/connecticut-public-snapshot.json";
 import orders from "@/data/connecticut-orders.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const classes = [
   ["Chronic & Convalescent Nursing Home", "Nursing home (CCNH)"],
@@ -40,6 +41,7 @@ export default async function ConnecticutPage({
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="CT" stateName="Connecticut" />
       <section className="home-hero" aria-labelledby="connecticut-title">
         <p className="eyebrow">Connecticut senior care research</p>
         <h1 id="connecticut-title">Connecticut Senior Care License Research</h1>

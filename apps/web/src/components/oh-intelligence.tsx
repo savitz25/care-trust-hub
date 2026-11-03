@@ -41,15 +41,12 @@ export function OhIntelligenceView({ intel }: { intel: OhPublicSnapshot }) {
     <div className="national-hub florida-intel">
       <section className="hub-scale" aria-labelledby="oh-caveats-title">
         <div className="section-heading">
-          <p className="eyebrow">Public page grain caveats</p>
-          <h2 id="oh-caveats-title">Separate classes, not one Ohio senior-facilities total</h2>
+          <p className="eyebrow">License classes</p>
+          <h2 id="oh-caveats-title">Ohio license classes stay separate</h2>
           <p>
-            Nursing Home ≠ Residential Care Facility. RCF is Ohio&apos;s formal assisted-living
-            license class. State license ≠ CMS certification. Navigator quality/satisfaction is
-            official evidence, not a TrustHub rating. Skilled ≠ nonmedical Home Health. Agency ≠
-            nonagency. Home Health ≠ Hospice. PACE ≠ facility license. Medicaid waiver ≠ RCF
-            license. Inspection ≠ complaint. Missing ≠ zero. No Trust Score. No AggregateRating. No
-            ranking.
+            Nursing Home and Residential Care Facility each keep their own ODH count. RCF is
+            Ohio&apos;s formal assisted-living license class. CMS nursing homes are named in the
+            table on this page. Field meanings are in About this data.
           </p>
         </div>
         <div className="hub-stat-grid">
@@ -153,10 +150,10 @@ export function OhIntelligenceView({ intel }: { intel: OhPublicSnapshot }) {
           <p>
             Home Health agency/nonagency and skilled/nonmedical classes remain{" "}
             {intel.homeHealth.coverage} through the ODH Facility Listing extract. Hospice programs
-            remain {intel.hospice.coverage}. License ≠ location. PACE is{" "}
-            {intel.programs.OH_PACE_ROSTER_STATUS} and is not a facility license. Adult Day is{" "}
-            {intel.programs.OH_ADULT_DAY_ROSTER_STATUS}. Assisted Living Medicaid Waiver is not the
-            RCF license universe. Ownership is not facility identity.
+            remain {intel.hospice.coverage}. A license record and a location record stay separate.
+            PACE is {intel.programs.OH_PACE_ROSTER_STATUS} and is not a facility license. Adult Day
+            is {intel.programs.OH_ADULT_DAY_ROSTER_STATUS}. Assisted Living Medicaid Waiver is not
+            the RCF license universe. Ownership is not facility identity.
           </p>
         </div>
         <div className="hub-stat-grid">

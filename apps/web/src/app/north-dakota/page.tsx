@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const HHS = "https://www.hhs.nd.gov/health/health-facilities-unit";
 const BASIC = `${HHS}/basic-care-facilities`;
@@ -42,6 +43,7 @@ export default function NorthDakotaSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="ND" stateName="North Dakota" />
       <section className="home-hero" aria-labelledby="nd-title">
         <p className="eyebrow">North Dakota Health and Human Services facility evidence</p>
         <h1 id="nd-title">North Dakota senior-care facility classes</h1>

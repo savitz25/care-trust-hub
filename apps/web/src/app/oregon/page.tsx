@@ -4,6 +4,7 @@ import { OrIntelligenceView } from "@/components/or-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getOrIntelligence } from "@/server/care/or-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/oregon");
@@ -26,6 +27,7 @@ export default function OregonPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="OR" stateName="Oregon" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

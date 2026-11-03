@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const facilities = "https://dlp.vermont.gov/survey-cert/facilities-list";
 const counties = "https://dlp.vermont.gov/survey-cert/facilities-by-county";
@@ -28,6 +29,7 @@ export default function VermontSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="VT" stateName="Vermont" />
       <section className="home-hero" aria-labelledby="vt-title">
         <p className="eyebrow">Vermont facility licensing evidence</p>
         <h1 id="vt-title">Vermont senior-care facility classes</h1>

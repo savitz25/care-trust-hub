@@ -3,6 +3,7 @@ import Link from "next/link";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import snapshot from "@/data/idaho-public-snapshot.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/idaho");
@@ -19,6 +20,7 @@ export default function IdahoSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="ID" stateName="Idaho" />
       <section className="home-hero" aria-labelledby="id-title">
         <p className="eyebrow">Idaho senior care research</p>
         <h1 id="id-title">Idaho senior facility limits</h1>

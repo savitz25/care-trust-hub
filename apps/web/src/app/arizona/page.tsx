@@ -4,6 +4,7 @@ import { AzIntelligenceView } from "@/components/az-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getAzIntelligence } from "@/server/care/az-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/arizona");
@@ -25,6 +26,7 @@ export default function ArizonaPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="AZ" stateName="Arizona" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import snapshot from "@/data/wisconsin-public-snapshot.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const names: Record<string, string> = {
   "adult-family-home": "Adult Family Home (AFH)",
@@ -29,6 +30,7 @@ export default function WisconsinPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="WI" stateName="Wisconsin" />
       <section className="home-hero" aria-labelledby="wi-title">
         <p className="eyebrow">Wisconsin senior care research</p>
         <h1 id="wi-title">Wisconsin DHS Facility Directories</h1>

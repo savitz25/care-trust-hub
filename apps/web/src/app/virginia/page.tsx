@@ -4,6 +4,7 @@ import { VaIntelligenceView } from "@/components/va-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getVaIntelligence } from "@/server/care/va-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/virginia");
@@ -26,6 +27,7 @@ export default function VirginiaPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="VA" stateName="Virginia" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

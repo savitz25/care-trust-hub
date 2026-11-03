@@ -7,6 +7,7 @@ import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deploymen
 import { getTxIntelligence } from "@/server/care/tx-intelligence";
 import Link from "next/link";
 import { txHhscGate } from "@/server/care/tx-hhsc-locations";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,7 @@ export default function TexasPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="TX" stateName="Texas" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

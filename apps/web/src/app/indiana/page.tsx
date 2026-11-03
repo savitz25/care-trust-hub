@@ -3,6 +3,7 @@ import Link from "next/link";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import snapshot from "@/data/indiana-public-snapshot.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const names: Record<string, string> = {
   "comprehensive-care": "Comprehensive Care facility",
@@ -34,6 +35,7 @@ export default async function IndianaPage({ searchParams }: Props) {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="IN" stateName="Indiana" />
       <section className="home-hero" aria-labelledby="in-title">
         <p className="eyebrow">Indiana senior care research</p>
         <h1 id="in-title">Indiana Department of Health Facility Directories</h1>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import snapshot from "@/data/missouri-public-snapshot.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const fmt = (value: number) => value.toLocaleString("en-US");
 
@@ -20,6 +21,7 @@ export default function MissouriSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="MO" stateName="Missouri" />
       <section className="home-hero" aria-labelledby="mo-title">
         <p className="eyebrow">Missouri senior care research</p>
         <h1 id="mo-title">Missouri long-term care licensure</h1>

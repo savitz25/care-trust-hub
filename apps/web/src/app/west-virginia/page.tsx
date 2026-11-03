@@ -3,6 +3,7 @@ import Link from "next/link";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import snapshot from "@/data/west-virginia-public-snapshot.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/west-virginia");
@@ -19,6 +20,7 @@ export default function WestVirginiaSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="WV" stateName="West Virginia" />
       <section className="home-hero" aria-labelledby="wv-title">
         <p className="eyebrow">West Virginia senior care research</p>
         <h1 id="wv-title">West Virginia senior facility limits</h1>

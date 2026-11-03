@@ -4,6 +4,7 @@ import { OhIntelligenceView } from "@/components/oh-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getOhIntelligence } from "@/server/care/oh-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/ohio");
@@ -25,6 +26,7 @@ export default function OhioPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="OH" stateName="Ohio" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

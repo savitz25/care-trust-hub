@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import snapshot from "../../../../../data/kansas-public-snapshot.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const adult = snapshot.sourceSets.adultCare;
 const health = snapshot.sourceSets.healthFacilities;
@@ -39,6 +40,7 @@ export default function KansasSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="KS" stateName="Kansas" />
       <section className="home-hero" aria-labelledby="ks-title">
         <p className="eyebrow">Kansas senior care research</p>
         <h1 id="ks-title">Kansas licensed facility classes</h1>

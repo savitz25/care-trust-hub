@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { StateIndexContent } from "@/components/state-index-content";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 
 const DPHHS = "https://dphhs.mt.gov/oig/licensure/";
@@ -28,6 +29,7 @@ const sourceLink = (href: string, label: string) => (
 export default function MontanaSeniorPage() {
   return (
     <main className="mx-auto w-full max-w-4xl px-5 py-10 text-slate-900 sm:py-14">
+      <StateIndexContent stateCode="MT" stateName="Montana" />
       <nav aria-label="Breadcrumb" className="mb-4 text-sm text-slate-600">
         <Link href="/" className="underline">
           Home
