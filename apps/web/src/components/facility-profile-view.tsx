@@ -11,7 +11,7 @@ export function FacilityProfileView({ model }: { model: FacilityProfileModel }) 
         Facility record
       </h2>
       <p>{model.lead}</p>
-      {model.nearby.length > 0 ? (
+      {model.nearby.length >= 5 && model.nearby.length <= 10 ? (
         <>
           <h2>Nearby facilities</h2>
           <ul>

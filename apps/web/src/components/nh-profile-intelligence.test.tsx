@@ -148,6 +148,37 @@ describe("NhProfileIntelligence", () => {
     expect(screen.queryByText(/\bclosed\b/i)).toBeNull();
   });
 
+  it("hides historical ownership observations when that list is empty", () => {
+    render(<NhProfileIntelligence intel={base} />);
+    expect(screen.queryByText("Historical ownership observations")).toBeNull();
+    expect(screen.getByText("Ownership observations with UNKNOWN status")).toBeTruthy();
+  });
+
+  it("shows historical ownership observations when the list has a party", () => {
+    const party = base.ownership_summary.current_owners[0];
+    const intel = {
+      ...base,
+      ownership_summary: {
+        ...base.ownership_summary,
+        historical_ownership_observations: [
+          {
+            ...party,
+            display_name: "Former Holder LLC",
+            party_id: "p-hist",
+            temporal_status: "HISTORICAL" as const,
+          },
+        ],
+        counts: {
+          ...base.ownership_summary.counts,
+          historical_ownership_observations: 1,
+        },
+      },
+    };
+    render(<NhProfileIntelligence intel={intel} />);
+    expect(screen.getByText("Historical ownership observations")).toBeTruthy();
+    expect(screen.getByText("Former Holder LLC")).toBeTruthy();
+  });
+
   it("does not say never changed ownership when there are no events", () => {
     const intel = {
       ...base,

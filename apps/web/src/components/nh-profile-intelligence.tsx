@@ -174,14 +174,17 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
           parties={intel.ownership_summary.enrollment_organizations}
           total={intel.ownership_summary.counts.enrollment_organizations ?? 0}
         />
-        <details>
-          <summary>Historical ownership observations</summary>
-          <PartyList
-            title="Historical"
-            parties={intel.ownership_summary.historical_ownership_observations}
-            total={intel.ownership_summary.counts.historical_ownership_observations ?? 0}
-          />
-        </details>
+        {intel.ownership_summary.historical_ownership_observations.length > 0 &&
+        (intel.ownership_summary.counts.historical_ownership_observations ?? 0) > 0 ? (
+          <details>
+            <summary>Historical ownership observations</summary>
+            <PartyList
+              title="Historical"
+              parties={intel.ownership_summary.historical_ownership_observations}
+              total={intel.ownership_summary.counts.historical_ownership_observations ?? 0}
+            />
+          </details>
+        ) : null}
         <details>
           <summary>Ownership observations with UNKNOWN status</summary>
           <p>
