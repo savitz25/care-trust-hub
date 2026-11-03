@@ -104,9 +104,9 @@ describe("chain route metadata and 404 behavior", () => {
     const timeout = new Error("database statement timeout");
     getChainIntelligence.mockRejectedValue(timeout);
 
-    await expect(
-      generateMetadata({ params: Promise.resolve({ chainId: "123456" }) }),
-    ).rejects.toBe(timeout);
+    await expect(generateMetadata({ params: Promise.resolve({ chainId: "123456" }) })).rejects.toBe(
+      timeout,
+    );
     await expect(
       ChainPage({ params: Promise.resolve({ chainId: "123456", slug: "example-care-group" }) }),
     ).rejects.toBe(timeout);
