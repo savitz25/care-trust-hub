@@ -14,6 +14,75 @@ const nearby = Array.from({ length: 6 }, (_, index) => ({
   city: "Pensacola",
 }));
 
+const regulatorySource = {
+  sourceOrganization: "Centers for Medicare & Medicaid Services",
+  datasetName: "CMS inspection and penalty files",
+  cmsDatasetIdentifier: "test",
+  officialSourceUrl: "https://data.cms.gov/",
+  releaseIdentifier: "test",
+  sourceModifiedAt: null,
+  retrievedAt: "2026-03-12T00:00:00Z",
+  providerIdentifier: "105678",
+  sourceRecordLocator: "105678",
+} satisfies CareRegulatoryIntelligence["inspections"][number]["source"];
+
+function finding(
+  id: string,
+): CareRegulatoryIntelligence["inspections"][number]["findings"][number] {
+  return {
+    id,
+    tag: "F689",
+    category: null,
+    officialDescription: null,
+    scopeSeverity: {
+      code: "D",
+      scope: "Isolated",
+      severity: "No actual harm",
+      severityLevel: 2,
+      immediateJeopardy: false,
+    },
+    correctionStatus: null,
+    correctionDate: null,
+    underIdr: null,
+    underIidr: null,
+    source: regulatorySource,
+  };
+}
+
+const staffingLatest = {
+  quarter: "2026Q1",
+  coverageStart: "2026-01-01",
+  coverageEnd: "2026-03-31",
+  daysRepresented: 90,
+  positiveCensusDays: 90,
+  missingCensusDays: 0,
+  totalNurseHprd: 3.8,
+  rnHprd: null,
+  lpnHprd: null,
+  cnaHprd: null,
+  weekdayTotalNurseHprd: null,
+  weekendTotalNurseHprd: null,
+  weekdayRnHprd: null,
+  weekendRnHprd: null,
+  contractNurseShare: null,
+  zeroReportedRnDays: 0,
+  formulaVersion: "test",
+  source: {
+    sourceOrganization: "Centers for Medicare & Medicaid Services",
+    datasetName: "Payroll Based Journal",
+    cmsDatasetIdentifier: "test",
+    sourceVersionIdentifier: null,
+    officialSourceUrl: "https://data.cms.gov/",
+    releaseIdentifier: "test",
+    sourceQuarter: "2026Q1",
+    sourceModifiedAt: null,
+    sourcePublishedAt: null,
+    retrievedAt: "2026-03-12T00:00:00Z",
+    providerIdentifier: "105678",
+    sourceRecordLocator: "105678",
+  },
+} satisfies NonNullable<CareStaffingIntelligence["latest"]>;
+
 function profile(homes: typeof nearby) {
   return buildFacilityProfile({
     provider: {
@@ -42,9 +111,9 @@ function profile(homes: typeof nearby) {
           surveyDate: "2026-03-12",
           surveyType: "Health Standard",
           surveyCycle: 1,
-          findings: [{ id: "f1" }, { id: "f2" }],
+          findings: [finding("f1"), finding("f2")],
           highestScopeSeverity: null,
-          source: {} as CareRegulatoryIntelligence["inspections"][number]["source"],
+          source: regulatorySource,
         },
       ],
       penalties: [
@@ -55,14 +124,14 @@ function profile(homes: typeof nearby) {
           fineAmount: "8500",
           paymentDenialStartDate: null,
           paymentDenialDays: null,
-          source: {} as CareRegulatoryIntelligence["penalties"][number]["source"],
+          source: regulatorySource,
         },
       ],
       repeatTags: [],
       timeline: [],
     } as CareRegulatoryIntelligence,
     staffing: {
-      latest: { totalNurseHprd: 3.8, quarter: "2026Q1" },
+      latest: staffingLatest,
       history: [],
     } as CareStaffingIntelligence,
     comparisons: {
