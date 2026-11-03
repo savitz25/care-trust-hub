@@ -5,7 +5,7 @@ import {
   type NursingHomeProviderIntelligence,
   type ProviderIntelParty,
 } from "@care/domain";
-import { CmsStarRating } from "./real-provider";
+import { ratingText } from "@/server/care/facility-profile-model";
 
 function formatDay(value: string | null | undefined): string {
   if (!value) return "Not reported";
@@ -26,29 +26,26 @@ function PartyList({
   total: number;
   currentOnly?: boolean;
 }) {
+  if (parties.length === 0 || total === 0) return null;
   const cap = partyCapCopy(parties.length, total);
   return (
     <section className="nh-intel-parties">
       <h3>{title}</h3>
-      {total === 0 ? (
-        <p>No resolved CMS/PECOS relationships in this category.</p>
-      ) : (
-        <ul>
-          {parties.map((party) => (
-            <li key={`${party.party_id}-${party.relationship_type}-${party.temporal_status}`}>
-              <strong>{party.display_name}</strong>
-              <span>
-                {party.party_kind === "individual" ? "Individual owner" : "Organization"}
-                {currentOnly ? "" : ` · ${party.temporal_status}`}
-              </span>
-              <span>{party.raw_cms_role}</span>
-              {party.ownership_percentage != null ? (
-                <span>{party.ownership_percentage}% ownership interest</span>
-              ) : null}
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul>
+        {parties.map((party) => (
+          <li key={`${party.party_id}-${party.relationship_type}-${party.temporal_status}`}>
+            <strong>{party.display_name}</strong>
+            <span>
+              {party.party_kind === "individual" ? "Individual owner" : "Organization"}
+              {currentOnly ? "" : ` · ${party.temporal_status}`}
+            </span>
+            <span>{party.raw_cms_role}</span>
+            {party.ownership_percentage != null ? (
+              <span>{party.ownership_percentage}% ownership interest</span>
+            ) : null}
+          </li>
+        ))}
+      </ul>
       {cap ? <p className="nh-intel-cap">{cap}</p> : null}
     </section>
   );
@@ -91,12 +88,16 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
           <h2 id="glance-title">CMS research snapshot</h2>
         </div>
         <div className="nh-intel-glance__grid">
-          {glance.map(([label, value]) => (
-            <div key={label}>
-              <h3>{label}</h3>
-              <CmsStarRating value={value} />
-            </div>
-          ))}
+          {glance.map(([label, value]) => {
+            const text = ratingText(value);
+            if (!text) return null;
+            return (
+              <div key={label}>
+                <h3>{label}</h3>
+                <p>{text}</p>
+              </div>
+            );
+          })}
           <div>
             <h3>CMS ownership-change history</h3>
             <p>
@@ -128,12 +129,19 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
           <p className="eyebrow">Quality & care evidence</p>
           <h2 id="quality-title">What CMS reports about quality</h2>
         </div>
-        <ul className="nh-intel-flags">
-          <li>MDS quality observations: {flags?.mds ? "Available" : "Not reported"}</li>
-          <li>PBJ staffing records: {flags?.pbj ? "Available" : "Not reported"}</li>
-          <li>Inspection evidence: {flags?.inspection ? "Available" : "Not reported"}</li>
-          <li>Fire-safety evidence: {flags?.fire ? "Available" : "Not reported"}</li>
-        </ul>
+        {[
+          flags?.mds ? "MDS quality observations are in the CMS extract." : null,
+          flags?.pbj ? "PBJ staffing records are in the CMS extract." : null,
+          flags?.inspection ? "Inspection evidence is in the CMS extract." : null,
+          flags?.fire ? "Fire-safety evidence is in the CMS extract." : null,
+        ].some(Boolean) ? (
+          <ul className="nh-intel-flags">
+            {flags?.mds ? <li>MDS quality observations are in the CMS extract.</li> : null}
+            {flags?.pbj ? <li>PBJ staffing records are in the CMS extract.</li> : null}
+            {flags?.inspection ? <li>Inspection evidence is in the CMS extract.</li> : null}
+            {flags?.fire ? <li>Fire-safety evidence is in the CMS extract.</li> : null}
+          </ul>
+        ) : null}
         <p>Staffing, inspections, and fire safety are separate CMS evidence families below.</p>
       </section>
 
@@ -166,14 +174,17 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
           parties={intel.ownership_summary.enrollment_organizations}
           total={intel.ownership_summary.counts.enrollment_organizations ?? 0}
         />
-        <details>
-          <summary>Historical ownership observations</summary>
-          <PartyList
-            title="Historical"
-            parties={intel.ownership_summary.historical_ownership_observations}
-            total={intel.ownership_summary.counts.historical_ownership_observations ?? 0}
-          />
-        </details>
+        {intel.ownership_summary.historical_ownership_observations.length > 0 &&
+        (intel.ownership_summary.counts.historical_ownership_observations ?? 0) > 0 ? (
+          <details>
+            <summary>Historical ownership observations</summary>
+            <PartyList
+              title="Historical"
+              parties={intel.ownership_summary.historical_ownership_observations}
+              total={intel.ownership_summary.counts.historical_ownership_observations ?? 0}
+            />
+          </details>
+        ) : null}
         <details>
           <summary>Ownership observations with UNKNOWN status</summary>
           <p>
@@ -206,22 +217,30 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
                       `CMS records show a Change of Ownership effective ${formatDay(event.effective_date)}.`}
                   </p>
                   <dl>
-                    <div>
-                      <dt>CMS type</dt>
-                      <dd>{event.cms_raw_type_text ?? event.normalized_type ?? "Not reported"}</dd>
-                    </div>
-                    <div>
-                      <dt>Buyer legal entity</dt>
-                      <dd>{event.buyer_legal_entity ?? "Not reported"}</dd>
-                    </div>
-                    <div>
-                      <dt>Seller legal entity</dt>
-                      <dd>{event.seller_legal_entity ?? "Not reported"}</dd>
-                    </div>
-                    <div>
-                      <dt>Effective date</dt>
-                      <dd>{formatDay(event.effective_date)}</dd>
-                    </div>
+                    {event.cms_raw_type_text || event.normalized_type ? (
+                      <div>
+                        <dt>CMS type</dt>
+                        <dd>{event.cms_raw_type_text ?? event.normalized_type}</dd>
+                      </div>
+                    ) : null}
+                    {event.buyer_legal_entity ? (
+                      <div>
+                        <dt>Buyer legal entity</dt>
+                        <dd>{event.buyer_legal_entity}</dd>
+                      </div>
+                    ) : null}
+                    {event.seller_legal_entity ? (
+                      <div>
+                        <dt>Seller legal entity</dt>
+                        <dd>{event.seller_legal_entity}</dd>
+                      </div>
+                    ) : null}
+                    {event.effective_date ? (
+                      <div>
+                        <dt>Effective date</dt>
+                        <dd>{formatDay(event.effective_date)}</dd>
+                      </div>
+                    ) : null}
                   </dl>
                 </li>
               ))}

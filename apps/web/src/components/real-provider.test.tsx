@@ -210,9 +210,10 @@ describe("real provider presentation", () => {
     expect(container.textContent).not.toContain("Provider Information fields only");
     expect(container.textContent).not.toContain("Detailed staffing trends");
     expect(container.textContent).not.toContain("Evidence layers still being integrated");
-    expect(container.querySelector(".future-source-list")).not.toHaveTextContent(
-      "Facility history",
-    );
+    expect(container.querySelector(".future-source-list")).toBeNull();
+    expect(container.textContent).toContain("5 of 5");
+    expect(container.textContent).not.toContain("★");
+    expect(container.textContent).not.toContain("☆");
     for (const dataset of [
       "Nursing Home Provider Information",
       "Nursing Home Inspection Dates",

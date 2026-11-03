@@ -7,9 +7,6 @@ import type {
   CareStaffingIntelligence,
 } from "@/server/care/types";
 
-const number = (value: number | null, digits = 2) =>
-  value === null ? "Not available in this source" : value.toFixed(digits);
-
 export function WhatToReview({
   provider,
   staffing,
@@ -42,10 +39,12 @@ export function WhatToReview({
               : `${provider.ratings.staffing}-star staffing rating`}{" "}
             for this facility.
           </p>
-          <p>
-            RN staffing was {number(staffing.latest.rnHprd)} hours per resident day in{" "}
-            {staffing.latest.quarter}, calculated from CMS PBJ records.
-          </p>
+          {staffing.latest.rnHprd != null ? (
+            <p>
+              RN staffing was {staffing.latest.rnHprd.toFixed(2)} hours per resident day in{" "}
+              {staffing.latest.quarter}, calculated from CMS PBJ records.
+            </p>
+          ) : null}
         </>
       ),
     },
@@ -93,12 +92,29 @@ export function WhatToReview({
       href: "#chain",
       body: (
         <p>
-          CMS groups this facility with a chain covering {chain.current.facilityCount} facilities
-          across {chain.current.stateCount} states or territories.
+          CMS groups this facility with a chain
+          {chain.current.facilityCount > 0 || chain.current.stateCount > 0
+            ? ` covering ${[
+                chain.current.facilityCount > 0
+                  ? `${chain.current.facilityCount} facilities`
+                  : null,
+                chain.current.stateCount > 0
+                  ? `${chain.current.stateCount} states or territories`
+                  : null,
+              ]
+                .filter(Boolean)
+                .join(" across ")}`
+            : ""}
+          .
         </p>
       ),
     },
   ].filter(Boolean) as Array<{ key: string; title: string; href: string; body: ReactNode }>;
+  const showPenalty = Boolean(
+    penalty &&
+      ((penalty.penaltyType === "Fine" && penalty.fineAmount) || penalty.paymentDenialDays),
+  );
+  if (cards.length === 0 && !showPenalty) return null;
   return (
     <section className="what-to-review" aria-labelledby="what-to-review-title">
       <div className="section-heading">
@@ -126,17 +142,17 @@ export function WhatToReview({
           </article>
         ))}
       </div>
-      {penalty && (
+      {showPenalty && penalty ? (
         <div className="what-to-review__enforcement">
           <strong>Enforcement record</strong>
           <p>
             {penalty.penaltyType === "Fine" && penalty.fineAmount
               ? `CMS records show a $${Number(penalty.fineAmount).toLocaleString("en-US")} fine in the loaded enforcement dataset.`
-              : `CMS records show a ${penalty.paymentDenialDays ?? "reported"}-day payment denial in the loaded enforcement dataset.`}
+              : `CMS records show a ${penalty.paymentDenialDays}-day payment denial in the loaded enforcement dataset.`}
           </p>
           <a href="#penalties">View enforcement evidence →</a>
         </div>
-      )}
+      ) : null}
     </section>
   );
 }

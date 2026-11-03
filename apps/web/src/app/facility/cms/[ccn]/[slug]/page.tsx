@@ -1,7 +1,6 @@
-import Link from "next/link";
-import { seniorRequestHref } from "@/server/care/senior-ask-request";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
+import { FacilityProfileView } from "@/components/facility-profile-view";
 import { RealProviderDetail } from "@/components/real-provider-detail";
 import {
   isCanonicalProviderSlug,
@@ -44,6 +43,8 @@ import { parseNetworkJourney, resolveSeniorJourneyModule } from "@/lib/journey-h
 import { SeniorCustomerLayer } from "@/components/senior-customer-layer";
 import { seniorClaimProfile, claimCtaEnabledFor } from "@/server/customer-integration/eligibility";
 import { fetchCustomerLayer } from "@/server/customer-integration/public";
+import { buildFacilityProfile } from "@/server/care/facility-profile-model";
+import { loadFacilityComparisons } from "@/server/care/facility-profile";
 import { getFacilityRouteProvider } from "@/server/care/facility-route";
 import { notFoundMetadata } from "@/config/metadata";
 
@@ -146,24 +147,11 @@ export default async function RealFacilityPage({
   const customer = customerEnabled
     ? await fetchCustomerLayer(claimProfile.nativeProfileId)
     : { profile: null, replies: null };
+  const comparisons = await loadFacilityComparisons(provider).catch(() => null);
+  const facilityProfile = buildFacilityProfile({ provider, regulatory, staffing, comparisons });
   return (
     <>
-      <section aria-label="Research this facility evidence">
-        <h2>Ask about this facility</h2>
-        <ul>
-          {[
-            `Who owns CMS CCN ${provider.ccn}?`,
-            `Has CMS CCN ${provider.ccn} been fined?`,
-            `Did CMS CCN ${provider.ccn} change owners?`,
-          ].map((q) => (
-            <li key={q}>
-              <Link prefetch={false} href={seniorRequestHref(q, { class: "nursing_home" })}>
-                {q}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <FacilityProfileView model={facilityProfile} />
       <RealProviderDetail
         provider={provider}
         regulatory={regulatory}
