@@ -3,6 +3,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { ChainIntelligence } from "@/components/chain-intelligence";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
+import { notFoundMetadata } from "@/config/metadata";
 import { isChainIntelligenceEnabled } from "@/server/care/feature-flags";
 import { getChainIntelligence } from "@/server/care/chain-repository";
 import { chainHref, isValidCmsChainId, providerSlug } from "@/server/care/consumer";
@@ -13,12 +14,11 @@ export async function generateMetadata({
 }: {
   params: Promise<{ chainId: string }>;
 }): Promise<Metadata> {
-  if (!isChainIntelligenceEnabled())
-    return { title: "Chain not found", robots: publicRobots(false) };
+  if (!isChainIntelligenceEnabled()) return notFoundMetadata("Chain not found");
   const { chainId } = await params;
-  if (!isValidCmsChainId(chainId)) return { title: "Chain not found", robots: publicRobots(false) };
+  if (!isValidCmsChainId(chainId)) return notFoundMetadata("Chain not found");
   const chain = await getChainIntelligence(chainId);
-  if (!chain) return { title: "Chain not found", robots: publicRobots(false) };
+  if (!chain) return notFoundMetadata("Chain not found");
   const href = chainHref({ cmsChainId: chain.cmsChainId, chainName: chain.current.chainName });
   return {
     title: `${chain.current.chainName} Nursing Home Chain Research`,
