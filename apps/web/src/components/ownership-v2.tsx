@@ -2,9 +2,9 @@ import Link from "next/link";
 import { providerHref } from "@/server/care/consumer";
 import type { CareOwnershipOperationSummary } from "@/server/care/types";
 
-function stars(value: number | null): string {
-  if (value == null) return "Not reported";
-  return `${value} of 5 CMS stars`;
+function stars(value: number | null): string | null {
+  if (value == null) return null;
+  return `${value} of 5`;
 }
 
 function money(value: number | null): string {
@@ -43,11 +43,12 @@ export function OwnershipOperation({ summary }: { summary: CareOwnershipOperatio
       value: summary.chainName,
       note: `CMS identifies this facility as part of the ${summary.chainName} chain.`,
     },
-    summary.portfolio && {
-      label: "Related facilities",
-      value: String(summary.portfolio.facilityCount),
-      note: "Current CMS organization identity",
-    },
+    summary.portfolio &&
+      summary.portfolio.facilityCount > 0 && {
+        label: "Related facilities",
+        value: String(summary.portfolio.facilityCount),
+        note: "Current CMS organization identity",
+      },
     summary.ownershipChangeCount > 0 && {
       label: "Ownership changes",
       value: `${summary.ownershipChangeCount} recorded`,
@@ -101,7 +102,7 @@ export function OwnershipOperation({ summary }: { summary: CareOwnershipOperatio
           </ul>
         </div>
       )}
-      {summary.portfolio && (
+      {summary.portfolio && summary.portfolio.facilityCount > 0 ? (
         <>
           <div className="ownership-v2__portfolio">
             <h3>Related facilities</h3>
@@ -110,42 +111,51 @@ export function OwnershipOperation({ summary }: { summary: CareOwnershipOperatio
               organization identity with {summary.portfolio.organizationName}.
             </p>
             <dl className="real-fact-grid">
-              <div>
-                <dt>Average CMS overall rating</dt>
-                <dd>
-                  {summary.portfolio.overallAverage == null
-                    ? "Not enough comparable data"
-                    : `${summary.portfolio.overallAverage} stars across ${summary.portfolio.overallSampleSize} reporting facilities`}
-                </dd>
-              </div>
-              <div>
-                <dt>CMS monetary penalties</dt>
-                <dd>
-                  {summary.portfolio.facilitiesWithPenalty} of {summary.portfolio.facilityCount}{" "}
-                  facilities had a recorded monetary penalty in the available CMS period.
-                </dd>
-              </div>
-              <div>
-                <dt>Recent CMS penalties</dt>
-                <dd>
-                  {summary.portfolio.facilitiesWithRecentCmsPenalty} facilities had a CMS penalty in
-                  the last 18 months.
-                </dd>
-              </div>
-              <div>
-                <dt>Recent high-value CMS enforcement</dt>
-                <dd>
-                  {summary.portfolio.facilitiesWithRecentHighValueEnforcement} facilities had a
-                  high-value CMS fine or payment denial in the last 18 months.
-                </dd>
-              </div>
-              <div>
-                <dt>Recent CMS complaint inspections</dt>
-                <dd>
-                  {summary.portfolio.facilitiesWithRecentComplaintInspection} facilities had a CMS
-                  complaint inspection in the last 18 months.
-                </dd>
-              </div>
+              {summary.portfolio.overallAverage != null ? (
+                <div>
+                  <dt>Average CMS overall rating</dt>
+                  <dd>
+                    {summary.portfolio.overallAverage} stars across{" "}
+                    {summary.portfolio.overallSampleSize} reporting facilities
+                  </dd>
+                </div>
+              ) : null}
+              {summary.portfolio.facilitiesWithPenalty > 0 ? (
+                <div>
+                  <dt>CMS monetary penalties</dt>
+                  <dd>
+                    {summary.portfolio.facilitiesWithPenalty} of {summary.portfolio.facilityCount}{" "}
+                    facilities had a recorded monetary penalty in the available CMS period.
+                  </dd>
+                </div>
+              ) : null}
+              {summary.portfolio.facilitiesWithRecentCmsPenalty > 0 ? (
+                <div>
+                  <dt>Recent CMS penalties</dt>
+                  <dd>
+                    {summary.portfolio.facilitiesWithRecentCmsPenalty} facilities had a CMS penalty
+                    in the last 18 months.
+                  </dd>
+                </div>
+              ) : null}
+              {summary.portfolio.facilitiesWithRecentHighValueEnforcement > 0 ? (
+                <div>
+                  <dt>Recent high-value CMS enforcement</dt>
+                  <dd>
+                    {summary.portfolio.facilitiesWithRecentHighValueEnforcement} facilities had a
+                    high-value CMS fine or payment denial in the last 18 months.
+                  </dd>
+                </div>
+              ) : null}
+              {summary.portfolio.facilitiesWithRecentComplaintInspection > 0 ? (
+                <div>
+                  <dt>Recent CMS complaint inspections</dt>
+                  <dd>
+                    {summary.portfolio.facilitiesWithRecentComplaintInspection} facilities had a CMS
+                    complaint inspection in the last 18 months.
+                  </dd>
+                </div>
+              ) : null}
               {summary.portfolio.facilitiesWithRecentStateEnforcement > 0 && (
                 <div>
                   <dt>Recent state enforcement (CA/NY, labeled separately)</dt>
@@ -156,38 +166,53 @@ export function OwnershipOperation({ summary }: { summary: CareOwnershipOperatio
                   </dd>
                 </div>
               )}
-              <div>
-                <dt>Total recorded CMS fines</dt>
-                <dd>{money(summary.portfolio.totalFineAmount)}</dd>
-              </div>
+              {summary.portfolio.totalFineAmount != null ? (
+                <div>
+                  <dt>Total recorded CMS fines</dt>
+                  <dd>{money(summary.portfolio.totalFineAmount)}</dd>
+                </div>
+              ) : null}
             </dl>
-            <p className="ownership-v2__disclaimer">{summary.portfolio.disclaimer}</p>
+            <p className="ownership-v2__disclaimer">
+              <Link href="/methodology">How connected-facility figures are read</Link>
+            </p>
           </div>
-          <div id="related-facilities" className="ownership-v2__related">
-            <h3>Facilities currently connected to this organization</h3>
-            <ul>
-              {summary.portfolio.relatedFacilities.map((facility) => (
-                <li key={facility.ccn}>
-                  <Link href={providerHref(facility)}>{facility.providerName}</Link>
-                  <span>
-                    {[facility.city, facility.state].filter(Boolean).join(", ")} · CMS overall{" "}
-                    {stars(facility.overallRating)} · staffing {stars(facility.staffingRating)}
-                    {facility.hadPenalty ? " · CMS penalty recorded" : ""}
-                    {` · ${facility.relationshipType}`}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            {summary.portfolio.facilityCount > summary.portfolio.relatedFacilities.length && (
-              <p>
-                <Link href={summary.portfolio.href}>
-                  View all {summary.portfolio.facilityCount} connected facilities
-                </Link>
-              </p>
-            )}
-          </div>
+          {summary.portfolio.relatedFacilities.length > 0 ? (
+            <div id="related-facilities" className="ownership-v2__related">
+              <h3>Facilities currently connected to this organization</h3>
+              <ul>
+                {summary.portfolio.relatedFacilities.map((facility) => (
+                  <li key={facility.ccn}>
+                    <Link href={providerHref(facility)}>{facility.providerName}</Link>
+                    <span>
+                      {[
+                        [facility.city, facility.state].filter(Boolean).join(", "),
+                        stars(facility.overallRating)
+                          ? `CMS overall ${stars(facility.overallRating)}`
+                          : null,
+                        stars(facility.staffingRating)
+                          ? `staffing ${stars(facility.staffingRating)}`
+                          : null,
+                        facility.hadPenalty ? "CMS penalty recorded" : null,
+                        facility.relationshipType,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              {summary.portfolio.facilityCount > summary.portfolio.relatedFacilities.length ? (
+                <p>
+                  <Link href={summary.portfolio.href}>
+                    View all {summary.portfolio.facilityCount} connected facilities
+                  </Link>
+                </p>
+              ) : null}
+            </div>
+          ) : null}
         </>
-      )}
+      ) : null}
     </section>
   );
 }

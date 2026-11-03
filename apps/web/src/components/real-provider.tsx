@@ -171,26 +171,31 @@ export function RealProviderCard({
 }
 
 export function ParticipationFacts({ provider }: { provider: CareProviderDetail }) {
-  const answer = (value: boolean | null) =>
-    value === null ? "Not reported in this CMS release" : value ? "Yes" : "No";
+  const rows = [
+    provider.certifiedBeds != null && provider.certifiedBeds > 0
+      ? { label: "CMS certified beds", value: String(provider.certifiedBeds) }
+      : null,
+    provider.ownershipType
+      ? { label: "Ownership descriptor", value: provider.ownershipType }
+      : null,
+    provider.participatesMedicare == null
+      ? null
+      : { label: "Medicare participation", value: provider.participatesMedicare ? "Yes" : "No" },
+    provider.participatesMedicaid == null
+      ? null
+      : { label: "Medicaid participation", value: provider.participatesMedicaid ? "Yes" : "No" },
+  ].filter((row): row is { label: string; value: string } => row !== null);
+  if (rows.length === 0) return null;
   return (
-    <dl className="ownership-facts real-fact-grid">
-      <div>
-        <dt>CMS certified beds</dt>
-        <dd>{formatMissingCmsValue(provider.certifiedBeds)}</dd>
-      </div>
-      <div>
-        <dt>Ownership descriptor</dt>
-        <dd>{provider.ownershipType ?? "Not reported in this CMS release"}</dd>
-      </div>
-      <div>
-        <dt>Medicare participation</dt>
-        <dd>{answer(provider.participatesMedicare)}</dd>
-      </div>
-      <div>
-        <dt>Medicaid participation</dt>
-        <dd>{answer(provider.participatesMedicaid)}</dd>
-      </div>
-    </dl>
+    <section className="provider-facts-strip" aria-label="Facility facts">
+      <dl className="ownership-facts real-fact-grid">
+        {rows.map((row) => (
+          <div key={row.label}>
+            <dt>{row.label}</dt>
+            <dd>{row.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
   );
 }

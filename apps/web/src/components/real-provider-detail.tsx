@@ -15,9 +15,10 @@ import type { PublishedStateIntelligence } from "@care/domain";
 import { VerifiedPublicContact } from "./verified-public-contact";
 import { StateLicenseOversight } from "./state-license-oversight";
 import { FacilityHistory } from "./facility-history";
-import { CMS_RATING_EXPLANATIONS, factualRatingObservations } from "@/server/care/consumer";
+import { factualRatingObservations } from "@/server/care/consumer";
+import { ratingText } from "@/server/care/facility-profile-model";
 import { formatFreshnessLabels } from "@/server/care/freshness";
-import { CmsStarRating, ParticipationFacts } from "./real-provider";
+import { ParticipationFacts } from "./real-provider";
 import { PrintButton } from "./print-button";
 import { OwnershipIntelligence } from "./ownership-intelligence";
 import { OwnershipOperation } from "./ownership-v2";
@@ -32,8 +33,6 @@ import { SaveFacilityToggle } from "./save-facility-toggle";
 import { NhProfileIntelligence } from "./nh-profile-intelligence";
 import { NjProfileEvidenceModule } from "./nj-profile-evidence";
 import { isProviderIntelV1, type NursingHomeProviderIntelligence } from "@care/domain";
-
-const additionalLayers = ["Home health national spine", "Hospice national spine"];
 
 interface FacilitySourceEntry {
   key: string;
@@ -312,20 +311,17 @@ export function RealProviderDetail({
 }) {
   const intel = nhIntel && isProviderIntelV1(nhIntel) ? nhIntel : null;
   const freshness = formatFreshnessLabels(provider.source.freshness);
-  const ratings = [
-    ["CMS overall rating", provider.ratings.overall, CMS_RATING_EXPLANATIONS.overall],
+  const ratings = (
     [
-      "Health inspection rating",
-      provider.ratings.healthInspection,
-      CMS_RATING_EXPLANATIONS.healthInspection,
-    ],
-    ["Staffing rating", provider.ratings.staffing, CMS_RATING_EXPLANATIONS.staffing],
-    [
-      "Quality-measure rating",
-      provider.ratings.qualityMeasure,
-      CMS_RATING_EXPLANATIONS.qualityMeasure,
-    ],
-  ] as const;
+      ["CMS overall", provider.ratings.overall],
+      ["Health inspection", provider.ratings.healthInspection],
+      ["Staffing", provider.ratings.staffing],
+      ["Quality measures", provider.ratings.qualityMeasure],
+    ] as const
+  ).flatMap(([label, value]) => {
+    const text = ratingText(value);
+    return text ? [{ label, text }] : [];
+  });
 
   return (
     <div className="investigation-page real-investigation-page">
@@ -388,33 +384,23 @@ export function RealProviderDetail({
               CMS rating overview
             </h2>
           </div>
-          <div className="provider-overview__ratings">
-            {ratings.map(([label, value]) => (
-              <div key={label}>
-                <h3>{label.replace(" rating", "")}</h3>
-                <CmsStarRating value={value} />
-              </div>
-            ))}
-          </div>
-          <p className="provider-overview__note">
-            No proprietary TrustHub score. These ratings are published separately by CMS.
-          </p>
-          <details className="provider-overview__explanations">
-            <summary>How CMS describes these ratings</summary>
-            <dl>
-              {ratings.map(([label, , explanation]) => (
-                <div key={label}>
-                  <dt>{label}</dt>
-                  <dd>{explanation}</dd>
+          {ratings.length > 0 ? (
+            <div className="provider-overview__ratings">
+              {ratings.map((rating) => (
+                <div key={rating.label}>
+                  <h3>{rating.label}</h3>
+                  <p>{rating.text}</p>
                 </div>
               ))}
-            </dl>
-          </details>
+            </div>
+          ) : null}
+          <p className="provider-overview__note">
+            No proprietary TrustHub score. These ratings are published separately by CMS.{" "}
+            <Link href="/methodology">How CMS ratings and facility records are read</Link>
+          </p>
         </section>
 
-        <section className="provider-facts-strip" aria-label="Facility facts">
-          <ParticipationFacts provider={provider} />
-        </section>
+        <ParticipationFacts provider={provider} />
 
         {publishedEnrichment ? (
           <VerifiedPublicContact provider={provider} enrichment={publishedEnrichment} />
@@ -489,25 +475,6 @@ export function RealProviderDetail({
           <ul className="factual-observations">
             {factualRatingObservations(provider.ratings).map((observation) => (
               <li key={observation}>{observation}</li>
-            ))}
-          </ul>
-        </section>
-
-        <section
-          className="profile-section profile-section--tint"
-          aria-labelledby="future-sources-title"
-        >
-          <div className="section-heading">
-            <p className="eyebrow">Planned evidence layers</p>
-            <h2 id="future-sources-title">Additional public-source research</h2>
-            <p>
-              These areas require separate authoritative CMS datasets. No findings are shown until
-              those sources are ingested and reviewed.
-            </p>
-          </div>
-          <ul className="future-source-list">
-            {additionalLayers.map((layer) => (
-              <li key={layer}>{layer} remains a separate CMS provider class, not this profile.</li>
             ))}
           </ul>
         </section>
