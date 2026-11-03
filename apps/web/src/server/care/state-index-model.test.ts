@@ -58,6 +58,22 @@ describe("state index model", () => {
     expect(florida.join(" ")).not.toBe(wyoming.join(" "));
   });
 
+  it("adds one fallback fact when homes exist and city and star fields are empty", () => {
+    const facts = buildStateIndexFacts({
+      stateName: "Alaska",
+      facilityCount: 20,
+      ratedCount: 0,
+      averageOverall: null,
+      highOverallCount: 0,
+      staffingRatedCount: 0,
+      topCity: null,
+    });
+    expect(facts).toHaveLength(2);
+    expect(facts[1]).toBe(
+      "City and star fields are empty across the 20 CMS nursing homes in Alaska.",
+    );
+  });
+
   it("links a facility by CCN and slug and a city search by count", () => {
     expect(facilityIndexHref("105402", "Example & Care")).toBe(
       "/facility/cms/105402/example-and-care",

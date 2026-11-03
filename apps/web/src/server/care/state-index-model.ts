@@ -84,6 +84,11 @@ export function buildStateIndexFacts(input: StateIndexFactsInput): string[] {
       `${input.staffingRatedCount.toLocaleString("en-US")} ${input.stateName} homes publish a staffing star.`,
     );
   }
+  if (facts.length < 2 && input.facilityCount > 0) {
+    facts.push(
+      `City and star fields are empty across the ${input.facilityCount.toLocaleString("en-US")} CMS nursing homes in ${input.stateName}.`,
+    );
+  }
   return facts.slice(0, 4);
 }
 
