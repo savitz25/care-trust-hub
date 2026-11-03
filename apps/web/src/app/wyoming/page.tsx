@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const directoryUrl =
   "https://health.wyo.gov/wp-content/uploads/2026/09/2026-2027-Facility-Directory.xlsx";
@@ -25,6 +26,7 @@ export default function WyomingSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="WY" stateName="Wyoming" />
       <section className="home-hero" aria-labelledby="wy-title">
         <p className="eyebrow">Wyoming facility directory evidence</p>
         <h1 id="wy-title">Wyoming senior-care facility classes</h1>

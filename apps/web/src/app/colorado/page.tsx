@@ -4,6 +4,7 @@ import { CoIntelligenceView } from "@/components/co-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getCoIntelligence } from "@/server/care/co-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/colorado");
@@ -26,6 +27,7 @@ export default function ColoradoPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="CO" stateName="Colorado" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

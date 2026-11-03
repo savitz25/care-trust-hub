@@ -4,6 +4,7 @@ import { GaIntelligenceView } from "@/components/ga-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getGaIntelligence } from "@/server/care/ga-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/georgia");
@@ -26,6 +27,7 @@ export default function GeorgiaPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="GA" stateName="Georgia" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

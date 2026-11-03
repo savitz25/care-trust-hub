@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import snapshot from "../../../../../data/nebraska/ne-sen-001/dhhs-roster-snapshot.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const fmt = (value: number) => value.toLocaleString("en-US");
 
@@ -23,6 +24,7 @@ export default function NebraskaSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="NE" stateName="Nebraska" />
       <section className="home-hero" aria-labelledby="ne-title">
         <p className="eyebrow">Nebraska senior care research</p>
         <h1 id="ne-title">Nebraska facility license evidence</h1>

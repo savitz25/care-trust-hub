@@ -4,6 +4,7 @@ import { NcIntelligenceView } from "@/components/nc-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getNcIntelligence } from "@/server/care/nc-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/north-carolina");
@@ -26,6 +27,7 @@ export default function NorthCarolinaPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="NC" stateName="North Carolina" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

@@ -4,6 +4,7 @@ import { NyIntelligenceView } from "@/components/ny-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getNyIntelligence } from "@/server/care/ny-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/new-york");
@@ -25,6 +26,7 @@ export default function NewYorkPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="NY" stateName="New York" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

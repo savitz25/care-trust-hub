@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const sources = [
   ["Maine Licensed Provider Search", "https://gateway.maine.gov/dhhs-apps/aspen/index.asp"],
@@ -41,6 +42,7 @@ export default function MainePage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="ME" stateName="Maine" />
       <section className="home-hero" aria-labelledby="me-title">
         <p className="eyebrow">Maine senior care licensing research</p>
         <h1 id="me-title">Maine DHHS facility licensing sources</h1>

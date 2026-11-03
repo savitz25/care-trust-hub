@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import snapshot from "@/data/rhode-island-senior-snapshot.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const n = (value: number) => value.toLocaleString("en-US");
 
@@ -32,6 +33,7 @@ export default async function RhodeIslandPage({
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="RI" stateName="Rhode Island" />
       <section className="home-hero" aria-labelledby="ri-title">
         <p className="eyebrow">Rhode Island senior care research</p>
         <h1 id="ri-title">Rhode Island Senior Care Facility Licenses</h1>

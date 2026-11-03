@@ -4,6 +4,7 @@ import { IlIntelligenceView } from "@/components/il-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getIlIntelligence } from "@/server/care/il-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/illinois");
@@ -26,6 +27,7 @@ export default function IllinoisPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="IL" stateName="Illinois" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

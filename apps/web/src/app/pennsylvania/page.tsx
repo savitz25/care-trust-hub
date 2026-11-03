@@ -4,6 +4,7 @@ import { PaIntelligenceView } from "@/components/pa-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getPaIntelligence } from "@/server/care/pa-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/pennsylvania");
@@ -26,6 +27,7 @@ export default function PennsylvaniaPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="PA" stateName="Pennsylvania" />
         <StructuredData
           value={{
             "@context": "https://schema.org",

@@ -3,6 +3,7 @@ import { RealDataNotice, TrustStrip } from "@/components/evidence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import snapshot from "@/data/michigan-public-snapshot.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const classes = [
   ["AF", "Adult Foster Care — Family Home"],
@@ -32,6 +33,7 @@ export default function MichiganPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="MI" stateName="Michigan" />
       <StructuredData
         value={{
           "@context": "https://schema.org",

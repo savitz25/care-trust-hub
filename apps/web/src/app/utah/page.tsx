@@ -3,6 +3,7 @@ import Link from "next/link";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import snapshot from "@/data/utah-public-snapshot.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const SOURCE = "https://gis.utah.gov/products/sgid/health/licensed-health-care-facilities/";
 const FACILITY_SEARCH =
@@ -31,6 +32,7 @@ export default function UtahSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="UT" stateName="Utah" />
       <section className="home-hero" aria-labelledby="ut-title">
         <p className="eyebrow">Utah senior care research</p>
         <h1 id="ut-title">Utah licensed health care facilities</h1>

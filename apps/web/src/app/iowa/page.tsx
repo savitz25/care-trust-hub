@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import snapshot from "../../../../../data/iowa/ia-sen-001/assisted-living-snapshot.json";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const fmt = (value: number) => value.toLocaleString("en-US");
 
@@ -20,6 +21,7 @@ export default function IowaSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="IA" stateName="Iowa" />
       <section className="home-hero" aria-labelledby="ia-title">
         <p className="eyebrow">Iowa senior care research</p>
         <h1 id="ia-title">Iowa facility and program evidence</h1>

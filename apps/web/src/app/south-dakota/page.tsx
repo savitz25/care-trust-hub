@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
+import { StateIndexContent } from "@/components/state-index-content";
 
 const sources = [
   [
@@ -41,6 +42,7 @@ export default function SouthDakotaSeniorPage() {
   return (
     <div className="page-shell home-page class-research-page">
       <RealDataNotice compact />
+      <StateIndexContent stateCode="SD" stateName="South Dakota" />
       <section className="home-hero" aria-labelledby="sd-title">
         <p className="eyebrow">South Dakota Department of Health</p>
         <h1 id="sd-title">South Dakota senior-care facility classes</h1>

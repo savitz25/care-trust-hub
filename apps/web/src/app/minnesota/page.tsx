@@ -4,6 +4,7 @@ import { MnIntelligenceView } from "@/components/mn-intelligence";
 import { StructuredData } from "@/components/structured-data";
 import { canonicalUrl, productionOrigin, publicRobots } from "@/config/deployment";
 import { getMnFacilityLists, getMnIntelligence } from "@/server/care/mn-intelligence";
+import { StateIndexContent } from "@/components/state-index-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const canonical = canonicalUrl("/minnesota");
@@ -27,6 +28,7 @@ export default function MinnesotaPage() {
     <>
       <div className="page-shell home-page class-research-page">
         <RealDataNotice compact />
+        <StateIndexContent stateCode="MN" stateName="Minnesota" />
         <StructuredData
           value={{
             "@context": "https://schema.org",
