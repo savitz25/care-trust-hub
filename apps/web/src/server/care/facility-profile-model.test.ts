@@ -26,6 +26,75 @@ const provider = {
   "ccn" | "providerName" | "telephone" | "certifiedBeds" | "ratings" | "location"
 >;
 
+const regulatorySource = {
+  sourceOrganization: "Centers for Medicare & Medicaid Services",
+  datasetName: "CMS inspection and penalty files",
+  cmsDatasetIdentifier: "test",
+  officialSourceUrl: "https://data.cms.gov/",
+  releaseIdentifier: "test",
+  sourceModifiedAt: null,
+  retrievedAt: "2026-03-12T00:00:00Z",
+  providerIdentifier: "105678",
+  sourceRecordLocator: "105678",
+} satisfies CareRegulatoryIntelligence["inspections"][number]["source"];
+
+function finding(
+  id: string,
+): CareRegulatoryIntelligence["inspections"][number]["findings"][number] {
+  return {
+    id,
+    tag: "F689",
+    category: null,
+    officialDescription: null,
+    scopeSeverity: {
+      code: "D",
+      scope: "Isolated",
+      severity: "No actual harm",
+      severityLevel: 2,
+      immediateJeopardy: false,
+    },
+    correctionStatus: null,
+    correctionDate: null,
+    underIdr: null,
+    underIidr: null,
+    source: regulatorySource,
+  };
+}
+
+const staffingLatest = {
+  quarter: "2026Q1",
+  coverageStart: "2026-01-01",
+  coverageEnd: "2026-03-31",
+  daysRepresented: 90,
+  positiveCensusDays: 90,
+  missingCensusDays: 0,
+  totalNurseHprd: 3.8,
+  rnHprd: null,
+  lpnHprd: null,
+  cnaHprd: null,
+  weekdayTotalNurseHprd: null,
+  weekendTotalNurseHprd: null,
+  weekdayRnHprd: null,
+  weekendRnHprd: null,
+  contractNurseShare: null,
+  zeroReportedRnDays: 0,
+  formulaVersion: "test",
+  source: {
+    sourceOrganization: "Centers for Medicare & Medicaid Services",
+    datasetName: "Payroll Based Journal",
+    cmsDatasetIdentifier: "test",
+    sourceVersionIdentifier: null,
+    officialSourceUrl: "https://data.cms.gov/",
+    releaseIdentifier: "test",
+    sourceQuarter: "2026Q1",
+    sourceModifiedAt: null,
+    sourcePublishedAt: null,
+    retrievedAt: "2026-03-12T00:00:00Z",
+    providerIdentifier: "105678",
+    sourceRecordLocator: "105678",
+  },
+} satisfies NonNullable<CareStaffingIntelligence["latest"]>;
+
 const regulatory = {
   inspections: [
     {
@@ -33,9 +102,9 @@ const regulatory = {
       surveyDate: "2026-03-12",
       surveyType: "Health Standard",
       surveyCycle: 1,
-      findings: Array.from({ length: 8 }, (_, index) => ({ id: String(index) })),
+      findings: Array.from({ length: 8 }, (_, index) => finding(String(index))),
       highestScopeSeverity: null,
-      source: {} as CareRegulatoryIntelligence["inspections"][number]["source"],
+      source: regulatorySource,
     },
   ],
   penalties: [
@@ -46,7 +115,7 @@ const regulatory = {
       fineAmount: "8500",
       paymentDenialStartDate: null,
       paymentDenialDays: null,
-      source: {} as CareRegulatoryIntelligence["penalties"][number]["source"],
+      source: regulatorySource,
     },
   ],
   repeatTags: [],
@@ -54,7 +123,7 @@ const regulatory = {
 } as CareRegulatoryIntelligence;
 
 const staffing = {
-  latest: { totalNurseHprd: 3.8, quarter: "2026Q1" },
+  latest: staffingLatest,
   history: [],
 } as CareStaffingIntelligence;
 
