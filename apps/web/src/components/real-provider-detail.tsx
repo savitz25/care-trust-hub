@@ -31,6 +31,7 @@ import { facilityInterviewBuilderHref } from "./interview-builder-bridge";
 import { WorkspaceAddButton } from "./workspace-add-button";
 import { SaveFacilityToggle } from "./save-facility-toggle";
 import { NhProfileIntelligence } from "./nh-profile-intelligence";
+import { CMS_RATINGS_HREF, CORRECTIONS_HREF } from "./repeated-evidence-links";
 import { NjProfileEvidenceModule } from "./nj-profile-evidence";
 import { isProviderIntelV1, type NursingHomeProviderIntelligence } from "@care/domain";
 
@@ -275,7 +276,6 @@ export function RealProviderDetail({
   chain,
   providerContext = [],
   trustParticipation = false,
-  profileManagementEnabled = false,
   publishedEnrichment,
   stateIntelligence,
   facilityHistory,
@@ -395,8 +395,7 @@ export function RealProviderDetail({
             </div>
           ) : null}
           <p className="provider-overview__note">
-            No proprietary TrustHub score. These ratings are published separately by CMS.{" "}
-            <Link href="/methodology">How CMS ratings and facility records are read</Link>
+            <Link href={CMS_RATINGS_HREF}>How CMS star ratings are read</Link>
           </p>
         </section>
 
@@ -511,43 +510,9 @@ export function RealProviderDetail({
         )}
 
         {trustParticipation && (
-          <section
-            className="profile-section trust-participation"
-            aria-labelledby="participation-title"
-          >
-            <div className="section-heading">
-              <p className="eyebrow">Trust participation</p>
-              <h2 id="participation-title">See something that needs correction?</h2>
-              <p>
-                Claims, corrections, and factual context are free. Submissions never replace CMS
-                evidence or affect ranking.
-              </p>
-            </div>
-            <div className="facility-card__actions">
-              <Link
-                className="button button--secondary"
-                href={`/trust/correction?ccn=${provider.ccn}`}
-              >
-                Suggest a correction
-              </Link>
-              <Link
-                className="button button--quiet"
-                href={`/trust/source-concern?ccn=${provider.ccn}`}
-              >
-                Report a source-data concern
-              </Link>
-              <Link className="button button--quiet" href={`/trust/claim?ccn=${provider.ccn}`}>
-                Represent this facility? Submit a representation claim
-              </Link>
-            </div>
-            {!profileManagementEnabled && (
-              <p className="filter-note">
-                Representation claims are reviewed manually. Live profile-management tools are not
-                yet enabled for this facility.
-              </p>
-            )}
-            <Link href="/trust/corrections">How corrections work</Link>
-          </section>
+          <p>
+            <Link href={CORRECTIONS_HREF}>See something that needs correction?</Link>
+          </p>
         )}
 
         <section

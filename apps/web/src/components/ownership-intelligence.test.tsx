@@ -61,7 +61,9 @@ describe("ownership intelligence", () => {
   it("uses source-qualified neutral language and preserves parties, roles, flags, and portfolio facts", () => {
     const { container } = render(<OwnershipIntelligence intelligence={intelligence} />);
     expect(screen.getByRole("heading", { name: /Who CMS records show/ })).toBeVisible();
-    expect(screen.getByText(/self-reported|reported by enrolled providers/i)).toBeVisible();
+    expect(
+      screen.getByRole("link", { name: "How CMS ownership disclosures are read" }),
+    ).toHaveAttribute("href", "/methodology#cms-ownership");
     expect(screen.getByText("EXAMPLE MANAGEMENT LLC")).toBeVisible();
     expect(screen.getByText(/Published ownership percentage: 25%/)).toBeVisible();
     expect(screen.getByText(/Management services company/)).toBeVisible();

@@ -1,4 +1,6 @@
+import Link from "next/link";
 import {
+  NURSING_HOME_REPEATED_LIMITATIONS,
   chowAbsenceCopy,
   directoryBanner,
   partyCapCopy,
@@ -6,6 +8,23 @@ import {
   type ProviderIntelParty,
 } from "@care/domain";
 import { ratingText } from "@/server/care/facility-profile-model";
+import {
+  CMS_OWNERSHIP_HREF,
+  CMS_QUALITY_FAMILIES_HREF,
+  CMS_RATINGS_HREF,
+  CMS_RELEASE_DATES_HREF,
+  CMS_RESEARCH_METHOD_HREF,
+  NATIONAL_CMS_RELEASE_KEYS,
+} from "./repeated-evidence-links";
+
+const REPEATED_LIMITATIONS = new Set<string>(NURSING_HOME_REPEATED_LIMITATIONS);
+const NATIONAL_RELEASE_KEYS = new Set<string>(NATIONAL_CMS_RELEASE_KEYS);
+const MISSING_QUALITY_FAMILY = [
+  ["mds", "MDS quality observations are not in the CMS extract."],
+  ["pbj", "PBJ staffing records are not in the CMS extract."],
+  ["inspection", "Inspection evidence is not in the CMS extract."],
+  ["fire", "Fire-safety evidence is not in the CMS extract."],
+] as const;
 
 function formatDay(value: string | null | undefined): string {
   if (!value) return "Not reported";
@@ -58,6 +77,11 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
   const banner = directoryBanner(intel.directory.projection);
   const chowEvents = intel.chow.events ?? [];
   const freshnessEntries = Object.entries(intel.evidence_as_of_by_family);
+  const facilityFreshness = freshnessEntries.filter(([key]) => !NATIONAL_RELEASE_KEYS.has(key));
+  const facilityLimitations = intel.limitations.filter((item) => !REPEATED_LIMITATIONS.has(item));
+  const missingQualityFamilies = MISSING_QUALITY_FAMILY.filter(([key]) => !flags?.[key]).map(
+    ([, line]) => line,
+  );
   const glance = [
     ["CMS overall rating", stars?.overall ?? null],
     ["CMS health inspection rating", stars?.health_inspection ?? null],
@@ -119,8 +143,7 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
           ) : null}
         </div>
         <p className="provider-overview__note">
-          These are CMS star ratings, not Trust Hub ratings. Missing evidence is shown as not
-          reported, not as zero.
+          <Link href={CMS_RATINGS_HREF}>How CMS star ratings are read</Link>
         </p>
       </section>
 
@@ -129,20 +152,18 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
           <p className="eyebrow">Quality & care evidence</p>
           <h2 id="quality-title">What CMS reports about quality</h2>
         </div>
-        {[
-          flags?.mds ? "MDS quality observations are in the CMS extract." : null,
-          flags?.pbj ? "PBJ staffing records are in the CMS extract." : null,
-          flags?.inspection ? "Inspection evidence is in the CMS extract." : null,
-          flags?.fire ? "Fire-safety evidence is in the CMS extract." : null,
-        ].some(Boolean) ? (
+        {missingQualityFamilies.length > 0 ? (
           <ul className="nh-intel-flags">
-            {flags?.mds ? <li>MDS quality observations are in the CMS extract.</li> : null}
-            {flags?.pbj ? <li>PBJ staffing records are in the CMS extract.</li> : null}
-            {flags?.inspection ? <li>Inspection evidence is in the CMS extract.</li> : null}
-            {flags?.fire ? <li>Fire-safety evidence is in the CMS extract.</li> : null}
+            {missingQualityFamilies.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
           </ul>
         ) : null}
-        <p>Staffing, inspections, and fire safety are separate CMS evidence families below.</p>
+        <p>
+          <Link href={CMS_QUALITY_FAMILIES_HREF}>
+            How CMS quality evidence families are reported
+          </Link>
+        </p>
       </section>
 
       <section className="profile-section" id="ownership-intel" aria-labelledby="own-title">
@@ -188,8 +209,7 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
         <details>
           <summary>Ownership observations with UNKNOWN status</summary>
           <p>
-            These relationships were observed in an older snapshot. UNKNOWN does not mean former
-            owner, previous owner, or that ownership ended.
+            <Link href={CMS_OWNERSHIP_HREF}>How CMS ownership disclosures are read</Link>
           </p>
           <PartyList
             title="UNKNOWN"
@@ -258,11 +278,12 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
           <p className="eyebrow">Source freshness</p>
           <h2 id="fresh-title">How current each evidence family is</h2>
         </div>
-        {freshnessEntries.length === 0 ? (
-          <p>Source-specific freshness is not available for this request.</p>
-        ) : (
+        <p>
+          <Link href={CMS_RELEASE_DATES_HREF}>CMS evidence family release dates</Link>
+        </p>
+        {facilityFreshness.length > 0 ? (
           <dl className="nh-intel-fresh">
-            {freshnessEntries.map(([key, value]) => (
+            {facilityFreshness.map(([key, value]) => (
               <div key={key}>
                 <dt>{key}</dt>
                 <dd>
@@ -274,7 +295,9 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
               </div>
             ))}
           </dl>
-        )}
+        ) : freshnessEntries.length === 0 ? (
+          <p>Source-specific freshness is not available for this request.</p>
+        ) : null}
         <p>
           Profile generated {formatDay(intel.profile_generated_at)}. That timestamp is not CMS
           evidence freshness.
@@ -286,19 +309,16 @@ export function NhProfileIntelligence({ intel }: { intel: NursingHomeProviderInt
           <p className="eyebrow">Methodology</p>
           <h2 id="method-title">How Trust Hub researches this provider</h2>
         </div>
-        <ul>
-          <li>CMS is the source for national nursing-home evidence.</li>
-          <li>Trust Hub does not create the CMS star ratings.</li>
-          <li>Ownership evidence does not measure care quality.</li>
-          <li>CMS CHOW records document reported ownership-change events.</li>
-          <li>Missing evidence is not interpreted as zero.</li>
-          <li>UNKNOWN ownership history is not interpreted as divestiture.</li>
-        </ul>
-        <ul>
-          {intel.limitations.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
+        <p>
+          <Link href={CMS_RESEARCH_METHOD_HREF}>How Trust Hub reads CMS nursing-home records</Link>
+        </p>
+        {facilityLimitations.length > 0 ? (
+          <ul>
+            {facilityLimitations.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        ) : null}
       </section>
     </div>
   );

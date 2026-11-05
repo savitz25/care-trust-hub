@@ -87,6 +87,21 @@ describe("public information page metadata", () => {
     expect(html).toContain(`<h1>${heading}</h1>`);
     expect(html.length).toBeGreaterThan(200);
   });
+
+  it("keeps the nursing-home and assisted-living reading notes on the methodology page", () => {
+    const html = renderToStaticMarkup(createElement(MethodologyPage));
+    expect(html).toContain('id="cms-research-method"');
+    expect(html).toContain('id="cms-ratings"');
+    expect(html).toContain('id="cms-ownership"');
+    expect(html).toContain('id="cms-quality-families"');
+    expect(html).toContain('id="pbj-hours"');
+    expect(html).toContain('id="assisted-living-evidence"');
+    expect(html).toContain("No proprietary TrustHub score");
+    expect(html).toContain("not the CMS quality-measure star rating");
+    expect(html).toContain("UNKNOWN does not mean former owner");
+    expect(html).toContain("not CMS case-mix-adjusted staffing measures");
+    expect(html).toContain("Absence of inspection data is not a clean record.");
+  });
 });
 
 describe("not-found metadata", () => {

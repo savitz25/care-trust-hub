@@ -5,11 +5,7 @@ import {
   type AssistedLivingPublicProvider,
 } from "@care/domain";
 import { RealDataNotice } from "./evidence";
-import {
-  AssistedLivingCard,
-  AssistedLivingCoverageNote,
-  AssistedLivingInspectionGap,
-} from "./assisted-living-provider";
+import { AssistedLivingCard, AssistedLivingEvidenceLink } from "./assisted-living-provider";
 
 const PILOT_STATES = [
   { code: "CA", label: "California" },
@@ -58,8 +54,7 @@ export function AssistedLivingSearch({
           Search state-licensed residential care using official regulator listings. This is not a
           national directory and it does not score providers.
         </p>
-        <AssistedLivingCoverageNote />
-        <AssistedLivingInspectionGap />
+        <AssistedLivingEvidenceLink />
       </header>
       <div className="search-layout real-search-layout">
         <form className="search-panel" method="get" aria-label="Assisted living search">

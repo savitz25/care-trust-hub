@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { providerHref } from "@/server/care/consumer";
 import type { CareOwnershipOperationSummary } from "@/server/care/types";
+import { CMS_OWNERSHIP_HREF } from "./repeated-evidence-links";
 
 function stars(value: number | null): string | null {
   if (value == null) return null;
@@ -66,8 +67,7 @@ export function OwnershipOperation({ summary }: { summary: CareOwnershipOperatio
         <p className="eyebrow">Ownership &amp; operation</p>
         <h2 id="ownership-operation-title">Ownership &amp; Operation</h2>
         <p>
-          Operator, licensee, owner, manager, and chain stay separate. A connected organization is
-          not automatically the party that runs daily operations.
+          <Link href={CMS_OWNERSHIP_HREF}>How CMS ownership disclosures are read</Link>
         </p>
       </div>
       {facts.length > 0 && (

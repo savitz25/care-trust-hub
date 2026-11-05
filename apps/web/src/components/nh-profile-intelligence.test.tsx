@@ -130,7 +130,9 @@ describe("NhProfileIntelligence", () => {
   it("does not call UNKNOWN owners former owners", () => {
     render(<NhProfileIntelligence intel={base} />);
     expect(screen.getByText("Unknown Party")).toBeTruthy();
-    expect(screen.getByText(/UNKNOWN does not mean former owner/i)).toBeTruthy();
+    expect(
+      screen.getByRole("link", { name: "How CMS ownership disclosures are read" }),
+    ).toHaveAttribute("href", "/methodology#cms-ownership");
     expect(screen.queryByRole("link", { name: /Unknown Party/i })).toBeNull();
   });
 
@@ -187,5 +189,39 @@ describe("NhProfileIntelligence", () => {
     render(<NhProfileIntelligence intel={intel} />);
     expect(screen.getByText(/No CMS ownership-change event is currently attached/i)).toBeTruthy();
     expect(screen.queryByText(/never changed ownership/i)).toBeNull();
+  });
+
+  it("names a missing CMS quality family and links the rest", () => {
+    const intel = {
+      ...base,
+      quality_summary: {
+        ...base.quality_summary,
+        nh_evidence_flags: { mds: false, pbj: true, fire: true, inspection: true, sff: false },
+      },
+    };
+    render(<NhProfileIntelligence intel={intel} />);
+    expect(screen.getByText("MDS quality observations are not in the CMS extract.")).toBeTruthy();
+    expect(screen.queryByText(/PBJ staffing records are not in the CMS extract/)).toBeNull();
+    expect(
+      screen.getByRole("link", { name: "How CMS quality evidence families are reported" }),
+    ).toHaveAttribute("href", "/methodology#cms-quality-families");
+  });
+
+  it("keeps a family date that is not a national CMS release", () => {
+    const intel = {
+      ...base,
+      evidence_as_of_by_family: {
+        ...base.evidence_as_of_by_family,
+        "facility-specific-note": {
+          band: "CURRENT",
+          source_modified_at: "2026-09-02",
+          age_days: 1,
+        },
+      },
+    };
+    render(<NhProfileIntelligence intel={intel} />);
+    expect(screen.getByText("facility-specific-note")).toBeTruthy();
+    expect(screen.getByText(/source as of 2026-09-02/)).toBeTruthy();
+    expect(screen.queryByText("nursing-home-provider-information")).toBeNull();
   });
 });
