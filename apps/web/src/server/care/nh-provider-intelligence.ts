@@ -1,6 +1,7 @@
 import "server-only";
 import { createHash } from "node:crypto";
 import {
+  NURSING_HOME_REPEATED_LIMITATIONS,
   PROVIDER_INTEL_VERSION,
   type NursingHomeProviderIntelligence,
   type ProviderIntelParty,
@@ -288,13 +289,7 @@ export async function getNursingHomeProviderIntelligence(
       FIRE: evidence.fire ? "AVAILABLE" : "NOT_REPORTED",
       INSPECTIONS: evidence.inspection ? "AVAILABLE" : "NOT_REPORTED",
     },
-    limitations: [
-      "Ownership evidence is not a quality measure.",
-      "Missing evidence is not a zero score.",
-      "CMS ratings are CMS ratings, not Trust Hub ratings.",
-      "UNKNOWN ownership does not prove an owner left.",
-      "CHOW records are CMS transaction records, not Trust Hub judgments or sales.",
-    ],
+    limitations: [...NURSING_HOME_REPEATED_LIMITATIONS],
     person_publication_policy: PERSON_POLICY,
     organization_public_route: false,
     fingerprint: "",

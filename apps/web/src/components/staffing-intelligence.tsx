@@ -2,7 +2,9 @@
 
 import type { CSSProperties } from "react";
 import { useState } from "react";
+import Link from "next/link";
 import type { CareStaffingIntelligence, CareStaffingQuarterSummary } from "@/server/care/types";
+import { PBJ_HOURS_HREF } from "./repeated-evidence-links";
 
 const hprd = (value: number | null) =>
   value === null ? "Not calculated" : value.toLocaleString("en-US", { maximumFractionDigits: 3 });
@@ -59,10 +61,7 @@ function SourceDisclosure({ summary }: { summary: CareStaffingQuarterSummary }) 
         </div>
       </dl>
       <p>
-        Hours-per-resident-day values are calculated by this platform from CMS-published daily PBJ
-        hours and MDS census. For each displayed period, included hours are summed and divided by
-        the summed census for days with a positive census. They are not CMS case-mix-adjusted
-        staffing measures or a staffing rating.
+        <Link href={PBJ_HOURS_HREF}>How hours per resident day are calculated</Link>
       </p>
       <a href={summary.source.officialSourceUrl} rel="noreferrer">
         View official CMS PBJ source

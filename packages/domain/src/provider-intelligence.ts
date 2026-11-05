@@ -1,5 +1,14 @@
 export const PROVIDER_INTEL_VERSION = "provider-intel-v1";
 
+/** Repeated on every nursing-home profile. The profile links to methodology instead of printing these. */
+export const NURSING_HOME_REPEATED_LIMITATIONS = [
+  "Ownership evidence is not a quality measure.",
+  "Missing evidence is not a zero score.",
+  "CMS ratings are CMS ratings, not Trust Hub ratings.",
+  "UNKNOWN ownership does not prove an owner left.",
+  "CHOW records are CMS transaction records, not Trust Hub judgments or sales.",
+] as const;
+
 export type ProviderIntelType = "nursing_home" | "home_health" | "hospice";
 export type DirectoryProjection = "CURRENT_DIRECTORY" | "KNOWN_NOT_CURRENT" | "EVIDENCE_ONLY";
 export type Availability = "AVAILABLE" | "NOT_REPORTED" | "NOT_APPLICABLE" | "UNSUPPORTED";

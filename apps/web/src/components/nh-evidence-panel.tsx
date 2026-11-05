@@ -1,7 +1,7 @@
+import Link from "next/link";
 import type { CareNhEvidence } from "@/server/care/types";
 import {
   ENROLLMENT_NPI_LABEL,
-  MDS_NOT_STAR_RATING,
   abuseIconConsumerExplanation,
   directoryStatusConsumerExplanation,
   sffConsumerExplanation,
@@ -9,6 +9,7 @@ import {
   type DirectoryStatus,
   type SffStatus,
 } from "@care/domain";
+import { CMS_OWNERSHIP_HREF, CMS_RATINGS_HREF } from "./repeated-evidence-links";
 
 function formatDate(value: string | null): string {
   if (!value) return "Not reported";
@@ -62,8 +63,7 @@ export function NursingHomeEvidencePanel({ evidence }: { evidence: CareNhEvidenc
             <p className="eyebrow">Enrollment identity</p>
             <h2 id="npi-title">{ENROLLMENT_NPI_LABEL}</h2>
             <p>
-              These identifiers come from CMS SNF enrollment records linked to this CCN. They are
-              not a substitute for the CMS Certification Number.
+              <Link href={CMS_OWNERSHIP_HREF}>How CMS ownership disclosures are read</Link>
             </p>
           </div>
           <ul>
@@ -85,7 +85,9 @@ export function NursingHomeEvidencePanel({ evidence }: { evidence: CareNhEvidenc
           <div className="section-heading">
             <p className="eyebrow">MDS quality measures</p>
             <h2 id="mds-title">Individual CMS quality measures</h2>
-            <p>{MDS_NOT_STAR_RATING}</p>
+            <p>
+              <Link href={CMS_RATINGS_HREF}>How CMS star ratings are read</Link>
+            </p>
             {evidence.freshness.mdsRelease ? (
               <p>MDS source release {evidence.freshness.mdsRelease}.</p>
             ) : null}

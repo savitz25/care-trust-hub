@@ -8,10 +8,7 @@ import {
   officialAssistedLivingSourceUrl,
   resolveAssistedLivingLanding,
 } from "@care/domain";
-import {
-  AssistedLivingCoverageNote,
-  AssistedLivingInspectionGap,
-} from "@/components/assisted-living-provider";
+import { AssistedLivingEvidenceLink } from "@/components/assisted-living-provider";
 import { RealDataNotice } from "@/components/evidence";
 import { canonicalUrl, publicRobots } from "@/config/deployment";
 import { isAssistedLivingIntelligenceEnabled } from "@/server/care/feature-flags";
@@ -64,8 +61,7 @@ export default async function AssistedLivingStatePage({
           SeniorTrustHub publishes official {landing.name} licensing identities for residential
           care. This is not national coverage and it is not a rating.
         </p>
-        <AssistedLivingCoverageNote />
-        <AssistedLivingInspectionGap />
+        <AssistedLivingEvidenceLink />
       </header>
       <section className="facility-section">
         <h2>What is published here</h2>

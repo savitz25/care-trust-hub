@@ -1,4 +1,6 @@
+import Link from "next/link";
 import type { CareOwnershipIntelligence, CareOwnershipSourceDisclosure } from "@/server/care/types";
+import { CMS_OWNERSHIP_HREF } from "./repeated-evidence-links";
 
 const formatDate = (value: string) =>
   new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeZone: "UTC" }).format(
@@ -89,9 +91,7 @@ export function OwnershipIntelligence({
         <p className="eyebrow">Ownership</p>
         <h2 id="ownership-title">Who CMS records show is connected to this facility</h2>
         <p>
-          These are CMS-published ownership disclosures. Medicare enrollment ownership and
-          managerial-control information is reported by enrolled providers through CMS forms; it is
-          not an independent determination of beneficial ownership.
+          <Link href={CMS_OWNERSHIP_HREF}>How CMS ownership disclosures are read</Link>
         </p>
       </div>
       <dl className="real-fact-grid">
@@ -170,14 +170,7 @@ export function OwnershipIntelligence({
           </ol>
         </div>
       )}
-      <div className="methodology-note">
-        <h3>What this means</h3>
-        <p>
-          Roles are shown as CMS publishes them. Different CMS sources can describe different
-          enrollment, ownership, and control concepts, so TrustHub keeps each source-specific
-          disclosure distinct.
-        </p>
-      </div>
+
       {questions.length > 0 && (
         <div className="staffing-questions">
           <h3>Questions to ask</h3>

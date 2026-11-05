@@ -69,6 +69,9 @@ describe("NursingHomeEvidencePanel", () => {
 
   it("keeps MDS measures distinct from star ratings", () => {
     render(<NursingHomeEvidencePanel evidence={evidence} />);
-    expect(screen.getByText(/not the CMS quality-measure star rating/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "How CMS star ratings are read" })).toHaveAttribute(
+      "href",
+      "/methodology#cms-ratings",
+    );
   });
 });

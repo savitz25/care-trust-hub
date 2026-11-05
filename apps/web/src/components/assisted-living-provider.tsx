@@ -1,7 +1,5 @@
 import Link from "next/link";
 import {
-  ASSISTED_LIVING_COVERAGE_NOTE,
-  ASSISTED_LIVING_INSPECTION_GAP,
   CONSUMER_CATEGORY_LABELS,
   ORGANIZATION_ROLE_LABELS,
   assistedLivingStatusCopy,
@@ -15,14 +13,15 @@ import {
   type AssistedLivingPublicProvider,
 } from "@care/domain";
 import { RealDataNotice } from "./evidence";
+import { ASSISTED_LIVING_EVIDENCE_HREF } from "./repeated-evidence-links";
 import { WorkspaceAddButton } from "./workspace-add-button";
 
-export function AssistedLivingCoverageNote() {
-  return <p className="al-coverage">{ASSISTED_LIVING_COVERAGE_NOTE}</p>;
-}
-
-export function AssistedLivingInspectionGap() {
-  return <p className="al-gap">{ASSISTED_LIVING_INSPECTION_GAP}</p>;
+export function AssistedLivingEvidenceLink() {
+  return (
+    <p className="al-coverage">
+      <Link href={ASSISTED_LIVING_EVIDENCE_HREF}>How assisted-living evidence is published</Link>
+    </p>
+  );
 }
 
 export function AssistedLivingStatus({ provider }: { provider: AssistedLivingPublicProvider }) {
@@ -121,8 +120,7 @@ export function AssistedLivingProviderDetail({
         </div>
       </header>
       <AssistedLivingStatus provider={provider} />
-      <AssistedLivingCoverageNote />
-      <AssistedLivingInspectionGap />
+      <AssistedLivingEvidenceLink />
 
       <section className="facility-section" aria-labelledby="al-license">
         <h2 id="al-license">License and oversight</h2>

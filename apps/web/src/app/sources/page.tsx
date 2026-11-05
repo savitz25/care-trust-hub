@@ -19,11 +19,14 @@ export default function Page() {
         <li>Nursing home ownership, PECOS enrollment, and change-of-ownership records</li>
         <li>Nursing Home Chain Performance Measures</li>
       </ul>
-      <p>
-        Each facility and chain profile shows dataset-specific release and freshness details.
-        Different datasets do not share a fabricated common freshness date. Operators can query
-        per-source SLA bands and last ingest status at <code>/api/cms-source-freshness</code>.
+      <p id="cms-release-dates">
+        CMS nursing-home evidence family dates are the dataset release, and that release is the same
+        for every certified home. Current release dates, SLA bands, and last ingest status are
+        published once at <a href="/api/cms-source-freshness">/api/cms-source-freshness</a>. A
+        nursing-home profile repeats a family date only when that date is not one of these national
+        CMS releases. Home health and hospice profiles still show their own evidence-family dates.
       </p>
+      <p>Different datasets do not share a fabricated common freshness date.</p>
     </PublicInformationPage>
   );
 }

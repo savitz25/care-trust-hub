@@ -68,7 +68,9 @@ describe("staffing intelligence", () => {
       screen.getByRole("heading", { name: "Reported nursing staffing at a glance" }),
     ).toBeVisible();
     expect(screen.getByText(/CMS staffing rating: 3 of 5 stars/)).toBeVisible();
-    expect(screen.getByText(/not CMS case-mix-adjusted staffing measures/)).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "How hours per resident day are calculated" }),
+    ).toHaveAttribute("href", "/methodology#pbj-hours");
     expect(screen.getByRole("table", { name: /Calculated reported hours/ })).toBeVisible();
     expect(screen.getByText(/lower calculated RN-category hours/)).toBeVisible();
     expect(screen.getByText(/12% of reported nursing hours/)).toBeVisible();

@@ -185,7 +185,10 @@ describe("real provider presentation", () => {
     );
     expect(screen.getByRole("heading", { level: 1, name: "Mapped Provider" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "CMS rating overview" })).toBeInTheDocument();
-    expect(screen.getByText(/No proprietary TrustHub score/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "How CMS star ratings are read" })).toHaveAttribute(
+      "href",
+      "/methodology#cms-ratings",
+    );
     expect(screen.getByRole("link", { name: "Save to shortlist" })).toHaveAttribute(
       "href",
       "/shortlist",
@@ -270,12 +273,8 @@ describe("real provider presentation", () => {
     );
     expect(screen.getByRole("heading", { name: "Provider context" })).toBeInTheDocument();
     expect(screen.getByText(/separate from the CMS evidence above/i)).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Suggest a correction" })).toHaveAttribute(
-      "href",
-      "/trust/correction?ccn=01A193",
-    );
     expect(
-      screen.getByText(/submissions never replace CMS evidence or affect ranking/i),
-    ).toBeVisible();
+      screen.getByRole("link", { name: "See something that needs correction?" }),
+    ).toHaveAttribute("href", "/trust/corrections");
   });
 });
