@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   isFreeTextQueryParam,
+  redactSensitiveParamsInText,
   sanitizeAnalyticsUrl,
   sanitizeCaptureResult,
   sanitizeCapturedNetworkRequest,
@@ -77,6 +78,35 @@ describe("analytics URL sanitizer", () => {
     expect(event.event).toBe("search_submitted");
     expect(event.properties?.token).toBe("phc_test_token");
     expect(event.properties?.surface).toBe("specialist_search");
+  });
+
+  it("strips q and other search text from the autocapture elements chain", () => {
+    const chain =
+      'a:attr__href="/ask?q=memory+care+for+mom&state=FL&diagnosis=dementia":href="/search?q=who+helps&class=nursing_home"';
+    const encoded =
+      "a:attr__href=&quot;/ask?q=secret+question&amp;state=TX&amp;notes=fell+last+week&quot;";
+    const event = sanitizeCaptureResult({
+      event: "$autocapture",
+      properties: {
+        token: "phc_test_token",
+        distinct_id: "anon-1",
+        $elements_chain: chain,
+        $elements: [{ href: "/ask?q=memory+care+for+mom&state=FL" }],
+      },
+    });
+    const properties = event.properties as Record<string, unknown>;
+    const cleaned = properties.$elements_chain as string;
+    expect(cleaned).toContain("q=[redacted]");
+    expect(cleaned).toContain("diagnosis=[redacted]");
+    expect(cleaned).toContain("state=FL");
+    expect(cleaned).toContain("class=nursing_home");
+    expect(cleaned).not.toMatch(/memory|mom|dementia|who\+helps/i);
+    expect(properties.$elements).toEqual([{ href: "/ask?state=FL" }]);
+    expect(redactSensitiveParamsInText(encoded)).toContain("q=[redacted]");
+    expect(redactSensitiveParamsInText(encoded)).toContain("notes=[redacted]");
+    expect(redactSensitiveParamsInText(encoded)).toContain("state=TX");
+    expect(redactSensitiveParamsInText(encoded)).not.toMatch(/secret|fell/i);
+    expect(JSON.stringify(event)).not.toMatch(/memory|mom|dementia/i);
   });
 
   it("redacts recording URLs with the same query rules", () => {

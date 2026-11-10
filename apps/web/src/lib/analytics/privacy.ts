@@ -158,6 +158,31 @@ export function isFreeTextQueryParam(key: string, value: string | null): boolean
   return !STRUCTURED_VALUE.test(decodedValue);
 }
 
+/**
+ * Autocapture serializes link URLs into `$elements_chain`, which is not a URL.
+ * Replace the same free-text query params the URL sanitizer deletes.
+ */
+export function redactSensitiveParamsInText(text: string): string {
+  return text.replace(
+    /([?&]|&amp;)([^=&;"'\s]+)=([^&;"'\s]*)/g,
+    (match, lead: string, key: string, value: string) => {
+      let decodedKey = key;
+      let decodedValue = value;
+      try {
+        decodedKey = decodeURIComponent(key);
+      } catch {
+        /* keep the raw parameter name */
+      }
+      try {
+        decodedValue = decodeURIComponent(value.replace(/\+/g, " "));
+      } catch {
+        /* keep the raw parameter value */
+      }
+      return isFreeTextQueryParam(decodedKey, decodedValue) ? `${lead}${key}=[redacted]` : match;
+    },
+  );
+}
+
 export function sanitizeAnalyticsUrl(raw: string | undefined | null): string | undefined {
   if (!raw) return undefined;
   const trimmed = raw.trim();
@@ -225,6 +250,9 @@ export function sanitizePageviewProperties(
     properties.$external_click_url = sanitizeAnalyticsUrl(properties.$external_click_url) ?? "";
   }
   scrubElements(properties.$elements);
+  if (typeof properties.$elements_chain === "string") {
+    properties.$elements_chain = redactSensitiveParamsInText(properties.$elements_chain);
+  }
   const path = String(properties.$pathname || properties.$current_url || "");
   if (/\/ask(?:\/|$|\?)|\/search(?:\/|$|\?)/.test(path)) {
     properties.$title = RESEARCH_TITLE;
@@ -254,6 +282,7 @@ export function sanitizeCaptureResult<
     if (event.properties) {
       for (const key of PAGE_URL_PROPERTY_KEYS) delete event.properties[key];
       delete event.properties.$input_value;
+      delete event.properties.$elements_chain;
       event.properties.hub = TRUSTHUB_HUB;
     }
     return event;
