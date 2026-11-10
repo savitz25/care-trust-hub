@@ -10,6 +10,7 @@ import {
   isFacilityInterviewBuilderEnabled,
 } from "@/server/care/feature-flags";
 import { getPublishedAssistedLivingProvider } from "@/server/care/assisted-living-publication";
+import { ProfileViewed } from "@/components/analytics/profile-viewed";
 
 export const dynamic = "force-dynamic";
 
@@ -90,6 +91,7 @@ export default async function AssistedLivingProviderPage({
           }}
         />
       ) : null}
+      <ProfileViewed surface="assisted_living" state={provider.stateCode} />
       <AssistedLivingProviderDetail
         provider={provider}
         workspaceEnabled={isFamilyComparisonWorkspaceEnabled()}

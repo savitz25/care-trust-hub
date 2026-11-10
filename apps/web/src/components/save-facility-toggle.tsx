@@ -16,6 +16,7 @@ import {
   saveFacility,
   unsaveFacility,
 } from "@/lib/my-trusthub/saved-store";
+import { captureTrustEvent } from "@/lib/analytics/trusthub";
 
 /** Client half of My TrustHub sync. Bundled at build; OFF unless the master
  * switch is "1". Even when on, the server decides: with the gate closed the
@@ -154,6 +155,7 @@ export function SaveFacilityToggle({ ccn, name }: { ccn: string; name: string })
         setNote("Could not remove from this device. Your saved list was not updated. Try again.");
         return;
       }
+      captureTrustEvent("profile_unsaved", { surface: "facility_save", success: true });
       if (!reachParent) {
         setNote("Removed from your saved facilities on this device");
         return;
@@ -174,8 +176,10 @@ export function SaveFacilityToggle({ ccn, name }: { ccn: string; name: string })
           ? `Your saved list is full (${SAVED_MAX}). Remove one on the shortlist page to save another.`
           : "Could not save on this device",
       );
+      captureTrustEvent("profile_save_failed", { surface: "facility_save", success: false });
       return;
     }
+    captureTrustEvent("profile_saved", { surface: "facility_save", success: true });
     if (!direct) {
       setNote("Saved on this device");
       return;

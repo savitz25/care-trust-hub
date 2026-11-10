@@ -14,6 +14,7 @@ import { isHhProfileIntelEnabled } from "@/server/care/feature-flags";
 import { SeniorCustomerLayer } from "@/components/senior-customer-layer";
 import { seniorClaimProfile, claimCtaEnabledFor } from "@/server/customer-integration/eligibility";
 import { fetchCustomerLayer } from "@/server/customer-integration/public";
+import { ProfileViewed } from "@/components/analytics/profile-viewed";
 
 export const dynamic = "force-dynamic";
 
@@ -74,6 +75,7 @@ export default async function HomeHealthProfileRoute({
     : { profile: null, replies: null };
   return (
     <>
+      <ProfileViewed surface="home_health" state={intel.common.office.state} />
       <AgencyProfilePage intel={intel} />
       <SeniorCustomerLayer
         providerClass="home_health"

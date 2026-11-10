@@ -18,7 +18,11 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
   );
   return (
     <div className="senior-ask">
-      <section className="senior-ask__interpretation" aria-labelledby="ask-interp-title">
+      <section
+        className="senior-ask__interpretation"
+        aria-labelledby="ask-interp-title"
+        data-ph-mask=""
+      >
         <h2 id="ask-interp-title">We interpreted your question as</h2>
         <dl>
           {result.interpretation.map((chip) => {
@@ -69,7 +73,7 @@ export function AskResultView({ result }: { result: SeniorAskResult }) {
       </section>
 
       {result.query.locationRequirement ? (
-        <section aria-label="Recorded location scope">
+        <section aria-label="Recorded location scope" data-ph-mask="">
           <p>
             {result.query.locationRequirement.raw}:{" "}
             {result.query.locationRequirement.outcome === "APPLIED"

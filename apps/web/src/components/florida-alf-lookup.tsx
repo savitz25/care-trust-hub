@@ -5,6 +5,11 @@ import {
   type FloridaAlfLookupQuery,
   type FloridaAlfLookupResult,
 } from "@care/domain";
+import {
+  SearchOutcomeBeacon,
+  SearchResultClicks,
+  SearchSubmitBeacon,
+} from "./analytics/search-events";
 
 export function FloridaAlfLookup({
   query,
@@ -46,6 +51,7 @@ export function FloridaAlfLookup({
 
       <form
         className="search-panel"
+        id="florida-alf-lookup"
         method="get"
         action={FLORIDA_ALF_LOOKUP_PATH}
         aria-label="Published assisted-living lookup"
@@ -105,7 +111,20 @@ export function FloridaAlfLookup({
         </p>
       ) : null}
 
-      <section aria-labelledby="alf-results-title">
+      <SearchSubmitBeacon formId="florida-alf-lookup" surface="florida_alf" state="FL" />
+      <SearchOutcomeBeacon
+        active={result.status === "match" || result.status === "none"}
+        surface="florida_alf"
+        resultCount={result.records.length}
+        success={result.status === "match"}
+        state="FL"
+      />
+      <SearchResultClicks
+        rootSelector="[data-search-results='florida-alf']"
+        surface="florida_alf"
+      />
+
+      <section aria-labelledby="alf-results-title" data-search-results="florida-alf">
         <h2 id="alf-results-title">{countyBlocked ? "Facility county is unavailable" : heading}</h2>
         {countyBlocked ? (
           <p role="status">
@@ -138,7 +157,9 @@ export function FloridaAlfLookup({
                 {result.records.map((record) => (
                   <tr key={record.providerId}>
                     <td>
-                      <Link href={record.path}>{record.officialName}</Link>
+                      <Link data-search-result="profile" href={record.path}>
+                        {record.officialName}
+                      </Link>
                     </td>
                     <td>{record.ahcaFileNumber}</td>
                     <td>

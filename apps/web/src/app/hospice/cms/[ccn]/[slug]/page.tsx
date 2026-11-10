@@ -10,6 +10,7 @@ import { isHospiceProfileIntelEnabled } from "@/server/care/feature-flags";
 import { SeniorCustomerLayer } from "@/components/senior-customer-layer";
 import { seniorClaimProfile, claimCtaEnabledFor } from "@/server/customer-integration/eligibility";
 import { fetchCustomerLayer } from "@/server/customer-integration/public";
+import { ProfileViewed } from "@/components/analytics/profile-viewed";
 
 export const dynamic = "force-dynamic";
 
@@ -70,6 +71,7 @@ export default async function HospiceProfileRoute({
     : { profile: null, replies: null };
   return (
     <>
+      <ProfileViewed surface="hospice" state={intel.common.office.state} />
       <AgencyProfilePage intel={intel} />
       <SeniorCustomerLayer
         providerClass="hospice"
