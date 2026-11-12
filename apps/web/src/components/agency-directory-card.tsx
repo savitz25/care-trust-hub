@@ -17,7 +17,9 @@ export function AgencyDirectoryCard({ provider }: { provider: AgencySearchResult
             {isHomeHealth ? "CMS Home Health agency" : "CMS Hospice provider"}
           </p>
           <h2>
-            <Link href={provider.href}>{provider.providerName}</Link>
+            <Link data-search-result="profile" href={provider.href}>
+              {provider.providerName}
+            </Link>
           </h2>
           <p>
             Office: {location || "Office city and state not reported"}

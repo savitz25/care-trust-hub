@@ -6,6 +6,11 @@ import {
 } from "@care/domain";
 import { RealDataNotice } from "./evidence";
 import { AssistedLivingCard, AssistedLivingEvidenceLink } from "./assisted-living-provider";
+import {
+  SearchOutcomeBeacon,
+  SearchResultClicks,
+  SearchSubmitBeacon,
+} from "./analytics/search-events";
 
 const PILOT_STATES = [
   { code: "CA", label: "California" },
@@ -47,6 +52,18 @@ export function AssistedLivingSearch({
   return (
     <>
       <RealDataNotice />
+      <SearchSubmitBeacon formId="assisted-living-search" surface="assisted_living" />
+      <SearchOutcomeBeacon
+        active={submitted}
+        surface="assisted_living"
+        resultCount={total}
+        success
+        state={current(params, "state")}
+      />
+      <SearchResultClicks
+        rootSelector="[data-search-results='assisted-living']"
+        surface="assisted_living"
+      />
       <header className="page-intro page-intro--compact">
         <p className="eyebrow">Assisted living research</p>
         <h1>Research assisted living in California, New York, and Texas.</h1>
@@ -57,7 +74,12 @@ export function AssistedLivingSearch({
         <AssistedLivingEvidenceLink />
       </header>
       <div className="search-layout real-search-layout">
-        <form className="search-panel" method="get" aria-label="Assisted living search">
+        <form
+          className="search-panel"
+          id="assisted-living-search"
+          method="get"
+          aria-label="Assisted living search"
+        >
           <input type="hidden" name="search" value="1" />
           <div className="field">
             <label htmlFor="al-state">State</label>
@@ -113,7 +135,11 @@ export function AssistedLivingSearch({
             Search assisted living
           </button>
         </form>
-        <section className="results" aria-labelledby="al-results-title">
+        <section
+          className="results"
+          aria-labelledby="al-results-title"
+          data-search-results="assisted-living"
+        >
           <div className="results__header">
             <div>
               <p className="eyebrow">State regulator listings</p>

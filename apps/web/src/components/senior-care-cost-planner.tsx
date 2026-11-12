@@ -256,7 +256,7 @@ export function SeniorCareCostPlanner({
   }
 
   return (
-    <div className="cost-planner">
+    <div className="cost-planner" data-ph-mask="">
       <header className="care-navigator">
         <p className="eyebrow">Senior Care Cost Planner</p>
         <h1 id={headingId}>Senior Care Cost Planner</h1>

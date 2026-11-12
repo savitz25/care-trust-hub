@@ -2,6 +2,7 @@
 
 import type { JourneyCta, JourneyModule } from "@/lib/journey-handoff";
 import { trackJourneyHandoff } from "@/lib/journey-analytics";
+import { captureTrustEvent } from "@/lib/analytics/trusthub";
 
 export function JourneyNextStep({ module }: { module: JourneyModule | null }) {
   if (!module) return null;
@@ -12,6 +13,11 @@ export function JourneyNextStep({ module }: { module: JourneyModule | null }) {
       journey_id: cta.journey_id,
       context_type: cta.context_type,
     });
+    captureTrustEvent(
+      "specialist_handoff_started",
+      { surface: module.surface, specialist_hub: cta.destination_hub, success: true },
+      { sendBeforeUnload: true },
+    );
   };
   return (
     <aside
