@@ -1,6 +1,10 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   isFreeTextQueryParam,
+  isReplayEvent,
+  stripElementsChainText,
   redactSensitiveParamsInText,
   sanitizeAnalyticsUrl,
   sanitizeCaptureResult,
@@ -114,5 +118,70 @@ describe("analytics URL sanitizer", () => {
       name: "https://www.seniortrusthub.com/ask?q=licensed+memory+care",
     });
     expect(request.name).toBe("https://www.seniortrusthub.com/ask");
+  });
+});
+
+describe("autocapture and replay privacy (Vercel Agent findings)", () => {
+  const RAW = "memory care near my mom in boca raton";
+
+  it("drops element text and query-bearing attributes from a refinement or pagination click", () => {
+    const event = sanitizeCaptureResult({
+      event: "$autocapture",
+      properties: {
+        token: "phc_test_token",
+        $current_url: `https://www.seniortrusthub.com/search?q=${encodeURIComponent(RAW)}&state=FL`,
+        $el_text: RAW,
+        $elements_chain: `a.page-link:attr__href="/search?q=${encodeURIComponent(RAW)}&page=2"text="${RAW}"nth-child="1";nav:attr__aria-label="${RAW}"nth-child="2"`,
+        $elements: [
+          {
+            tag_name: "a",
+            $el_text: RAW,
+            text: RAW,
+            attr__href: `/search?q=${encodeURIComponent(RAW)}&page=2`,
+            attr__class: "page-link",
+          },
+          { tag_name: "nav", "attr__aria-label": RAW, attr__title: RAW },
+        ],
+      },
+    });
+    expect(event.properties?.$el_text).toBeUndefined();
+    const serialized = JSON.stringify(event);
+    expect(serialized).not.toMatch(/memory|boca|raton/i);
+    expect(String(event.properties?.$elements_chain)).toContain("page=2");
+    const elements = event.properties?.$elements as Array<Record<string, unknown>>;
+    expect(elements[0].attr__class).toBe("page-link");
+  });
+
+  it("strips chain text with escaped quotes", () => {
+    expect(
+      stripElementsChainText('a.x:attr__href="/s"text="a \\"b\\""nth-child="2";p:text="s"'),
+    ).toBe('a.x:attr__href="/s"nth-child="2";p:');
+  });
+
+  it("custom search events carry no raw search text", () => {
+    const event = sanitizeCaptureResult({
+      event: "search_results_returned",
+      properties: {
+        token: "phc_test_token",
+        surface: "search",
+        result_count: 7,
+        q: RAW,
+        query: RAW,
+        search: RAW,
+      },
+    });
+    expect(JSON.stringify(event)).not.toMatch(/boca/i);
+    expect(event.properties?.result_count).toBe(7);
+  });
+
+  it("recognizes replay payloads and the browser client disables replay and network bodies", () => {
+    expect(isReplayEvent("$snapshot")).toBe(true);
+    expect(isReplayEvent("$pageview")).toBe(false);
+    const source = readFileSync(path.join(__dirname, "posthog-browser.ts"), "utf8");
+    expect(source).toMatch(/disable_session_recording:\s*true/);
+    expect(source).toMatch(/mask_all_text:\s*true/);
+    expect(source).toMatch(/maskAllInputs:\s*true/);
+    expect(source).toMatch(/recordBody:\s*false/);
+    expect(source).toMatch(/isReplayEvent\(event\.event\)\) return null/);
   });
 });

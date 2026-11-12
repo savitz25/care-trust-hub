@@ -234,6 +234,50 @@ function scrubElements(value: unknown): void {
   }
 }
 
+/** Autocapture element fields that can echo user-entered text (labels, values, tooltips). */
+const AUTOCAPTURE_TEXT_KEYS = [
+  "$el_text",
+  "text",
+  "attr__aria-label",
+  "attr__title",
+  "attr__value",
+  "attr__placeholder",
+  "attr__alt",
+] as const;
+
+const ELEMENTS_CHAIN_TEXT_PATTERN =
+  /(?<=[:"])(?:text|attr__aria-label|attr__title|attr__value|attr__placeholder|attr__alt)="(?:[^"\\]|\\.)*"/g;
+
+/** Session replay / heatmap events. Replay is disabled for this hub; before_send drops these. */
+export const REPLAY_EVENT_NAMES = [
+  "$snapshot",
+  "$snapshot_items",
+  "$heatmap",
+  "$$heatmap",
+] as const;
+
+export function isReplayEvent(event: string | undefined | null): boolean {
+  return typeof event === "string" && (REPLAY_EVENT_NAMES as readonly string[]).includes(event);
+}
+
+export function stripElementsChainText(chain: string): string {
+  return chain.replace(ELEMENTS_CHAIN_TEXT_PATTERN, "");
+}
+
+function stripAutocaptureText(properties: Record<string, unknown>): void {
+  delete properties.$el_text;
+  if (typeof properties.$elements_chain === "string") {
+    properties.$elements_chain = stripElementsChainText(properties.$elements_chain);
+  }
+  if (Array.isArray(properties.$elements)) {
+    for (const element of properties.$elements) {
+      if (!element || typeof element !== "object") continue;
+      const record = element as Record<string, unknown>;
+      for (const key of AUTOCAPTURE_TEXT_KEYS) delete record[key];
+    }
+  }
+}
+
 export function sanitizePageviewProperties(
   properties: Record<string, unknown>,
 ): Record<string, unknown> {
@@ -249,6 +293,7 @@ export function sanitizePageviewProperties(
   if (typeof properties.$external_click_url === "string") {
     properties.$external_click_url = sanitizeAnalyticsUrl(properties.$external_click_url) ?? "";
   }
+  stripAutocaptureText(properties);
   scrubElements(properties.$elements);
   if (typeof properties.$elements_chain === "string") {
     properties.$elements_chain = redactSensitiveParamsInText(properties.$elements_chain);
