@@ -9,7 +9,9 @@ import {
   sanitizeAnalyticsUrl,
   sanitizeCaptureResult,
   sanitizeCapturedNetworkRequest,
+  suppressExceptionCapture,
 } from "./privacy";
+import { analyticsBrowserOptOut } from "./environment";
 
 describe("analytics URL sanitizer", () => {
   it("strips q and keeps structured filters", () => {
@@ -183,5 +185,51 @@ describe("autocapture and replay privacy (Vercel Agent findings)", () => {
     expect(source).toMatch(/maskAllInputs:\s*true/);
     expect(source).toMatch(/recordBody:\s*false/);
     expect(source).toMatch(/isReplayEvent\(event\.event\)\) return null/);
+  });
+
+  it("sends no $exception events", () => {
+    const dropped = suppressExceptionCapture({
+      event: "$exception",
+      properties: {
+        $exception_list: [{ type: "Error", value: "memory care for my mother" }],
+        $exception_message: "memory care for my mother",
+      },
+    });
+    expect(dropped).toBeNull();
+
+    const pageview = suppressExceptionCapture({
+      event: "$pageview",
+      properties: { $pathname: "/privacy", $exception_list: [{ type: "Error" }] },
+    });
+    expect(pageview?.event).toBe("$pageview");
+    expect(pageview?.properties && "$exception_list" in pageview.properties).toBe(false);
+
+    const source = readFileSync(path.join(__dirname, "posthog-browser.ts"), "utf8");
+    expect(source).toMatch(/capture_exceptions:\s*false/);
+    expect(source).toMatch(/suppressExceptionCapture\(event\)/);
+    expect(source).toMatch(/respect_dnt:\s*true/);
+  });
+
+  it("opts out for Do Not Track or blocked cookies", () => {
+    const previous = globalThis.navigator;
+    try {
+      Object.defineProperty(globalThis, "navigator", {
+        configurable: true,
+        value: { doNotTrack: "1", cookieEnabled: true, userAgent: "Mozilla/5.0 Chrome" },
+      });
+      expect(analyticsBrowserOptOut()).toBe(true);
+      Object.defineProperty(globalThis, "navigator", {
+        configurable: true,
+        value: { doNotTrack: "0", cookieEnabled: false, userAgent: "Mozilla/5.0 Chrome" },
+      });
+      expect(analyticsBrowserOptOut()).toBe(true);
+      Object.defineProperty(globalThis, "navigator", {
+        configurable: true,
+        value: { doNotTrack: "0", cookieEnabled: true, userAgent: "Mozilla/5.0 Chrome" },
+      });
+      expect(analyticsBrowserOptOut()).toBe(false);
+    } finally {
+      Object.defineProperty(globalThis, "navigator", { configurable: true, value: previous });
+    }
   });
 });

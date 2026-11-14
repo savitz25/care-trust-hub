@@ -18,6 +18,12 @@ export default function Page() {
         Do not submit resident names, diagnoses, medical records, or other private health
         information.
       </p>
+      <h2>Analytics and cookies</h2>
+      <p>
+        We use PostHog for product analytics. It collects pages viewed, clicks, and device and
+        browser info. No email addresses and no search text are sent. You can opt out with the
+        browser Do Not Track setting, or by blocking cookies.
+      </p>
     </PublicInformationPage>
   );
 }

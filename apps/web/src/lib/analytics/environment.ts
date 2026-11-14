@@ -58,9 +58,22 @@ function currentClient(): AnalyticsClient {
  * Preview and production send when the key is present.
  * Automated and headless browsers never send.
  */
+/** Browser Do Not Track, or cookies turned off, opts out of product analytics. */
+export function analyticsBrowserOptOut(): boolean {
+  try {
+    if (typeof navigator === "undefined") return false;
+    const dnt = navigator.doNotTrack;
+    if (dnt === "1" || dnt === "yes") return true;
+    return navigator.cookieEnabled === false;
+  } catch {
+    return false;
+  }
+}
+
 export function shouldEnablePosthog(client: AnalyticsClient = currentClient()): boolean {
   if (!posthogKey()) return false;
   if (analyticsEnvironment() === "development" && !posthogDebug()) return false;
   if (isAutomatedClient(client)) return false;
+  if (analyticsBrowserOptOut()) return false;
   return true;
 }

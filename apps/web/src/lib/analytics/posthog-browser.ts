@@ -9,7 +9,12 @@ import {
   TRUSTHUB_HUB,
 } from "./environment";
 import { createPosthogClientGate } from "./posthog-gate";
-import { isReplayEvent, sanitizeCapturedNetworkRequest, sanitizeCaptureResult } from "./privacy";
+import {
+  isReplayEvent,
+  sanitizeCapturedNetworkRequest,
+  sanitizeCaptureResult,
+  suppressExceptionCapture,
+} from "./privacy";
 
 async function loadPosthog(): Promise<PostHog | null> {
   const key = posthogKey();
@@ -20,6 +25,8 @@ async function loadPosthog(): Promise<PostHog | null> {
     person_profiles: "identified_only",
     capture_pageview: false,
     capture_pageleave: true,
+    capture_exceptions: false,
+    respect_dnt: true,
     persistence: "localStorage+cookie",
     // Privacy: replay DOM snapshots can carry query-bearing hrefs and search text
     // echoed into result pages, and replay network capture can record request
@@ -41,7 +48,9 @@ async function loadPosthog(): Promise<PostHog | null> {
     before_send: (event) => {
       // Replay is disabled; drop any replay payload outright as defense in depth.
       if (!event || isReplayEvent(event.event)) return null;
-      return sanitizeCaptureResult(event);
+      const kept = suppressExceptionCapture(event);
+      if (!kept) return null;
+      return sanitizeCaptureResult(kept);
     },
     session_recording: {
       maskAllInputs: true,
