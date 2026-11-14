@@ -399,6 +399,19 @@ export function suppressExceptionCapture<
   return event;
 }
 
+/** Added by the sanitizer. `$geoip_disable` asks PostHog to skip location enrichment for this event. */
+export type SanitizedCaptureProperties = {
+  $geoip_disable?: boolean;
+};
+
+export type SanitizedCaptureEvent<T> = T extends null
+  ? null
+  : T extends { properties?: infer P }
+    ? Omit<T, "properties"> & {
+        properties: NonNullable<P> & SanitizedCaptureProperties;
+      }
+    : T;
+
 export function sanitizeCaptureResult<
   T extends {
     event?: string;
@@ -406,7 +419,7 @@ export function sanitizeCaptureResult<
     $set?: Record<string, unknown>;
     $set_once?: Record<string, unknown>;
   },
->(event: T): T {
+>(event: T): SanitizedCaptureEvent<T> {
   try {
     if (event.properties) sanitizePageviewProperties(event.properties);
   } catch {
@@ -418,7 +431,7 @@ export function sanitizeCaptureResult<
     }
   }
   finishPrivacyPayload(event);
-  return event;
+  return event as SanitizedCaptureEvent<T>;
 }
 
 export function sanitizeCapturedNetworkRequest<T extends { name?: string }>(request: T): T {
