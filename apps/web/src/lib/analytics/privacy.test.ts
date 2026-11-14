@@ -208,6 +208,9 @@ describe("autocapture and replay privacy (Vercel Agent findings)", () => {
     expect(source).toMatch(/capture_exceptions:\s*false/);
     expect(source).toMatch(/suppressExceptionCapture\(event\)/);
     expect(source).toMatch(/respect_dnt:\s*true/);
+    expect(source).toMatch(/capture_copied_text:\s*false/);
+    expect(source).toMatch(/capture_value_css_selector_allowlist:\s*\[\]/);
+    expect(source).toMatch(/disable_session_recording:\s*true/);
   });
 
   it("opts out for Do Not Track or blocked cookies", () => {
@@ -228,8 +231,86 @@ describe("autocapture and replay privacy (Vercel Agent findings)", () => {
         value: { doNotTrack: "0", cookieEnabled: true, userAgent: "Mozilla/5.0 Chrome" },
       });
       expect(analyticsBrowserOptOut()).toBe(false);
+      Object.defineProperty(globalThis, "navigator", {
+        configurable: true,
+        value: {
+          doNotTrack: "0",
+          cookieEnabled: true,
+          globalPrivacyControl: true,
+          userAgent: "Mozilla/5.0 Chrome",
+        },
+      });
+      expect(analyticsBrowserOptOut()).toBe(true);
     } finally {
       Object.defineProperty(globalThis, "navigator", { configurable: true, value: previous });
     }
+  });
+
+  it("drops email, search, and auth fields from identify, pageview, and custom events", () => {
+    const secret = "memory care for my mother";
+    const email = "person@example.com";
+    const identify = sanitizeCaptureResult({
+      event: "$identify",
+      properties: {
+        distinct_id: email,
+        email,
+        $email: email,
+        password: "hunter2-secret",
+        access_token: "auth-secret-value",
+        otp: "998877",
+        q: secret,
+        search: secret,
+        $ip: "203.0.113.10",
+        $current_url: `https://www.seniortrusthub.com/ask?q=${encodeURIComponent(secret)}&access_token=abc&email=${encodeURIComponent(email)}&state=FL`,
+        $set: { email, name: "Pat Example", search: secret },
+      },
+      $set: { email, password: "hunter2-secret", search: secret },
+    });
+    const identifyJson = JSON.stringify(identify);
+    expect(identifyJson.includes(email)).toBe(false);
+    expect(identifyJson.includes(secret)).toBe(false);
+    expect(identifyJson.includes("hunter2-secret")).toBe(false);
+    expect(identifyJson.includes("auth-secret-value")).toBe(false);
+    expect(identifyJson.includes("998877")).toBe(false);
+    expect(identifyJson.includes("203.0.113.10")).toBe(false);
+    expect(identify?.properties?.$geoip_disable).toBe(true);
+    expect(identify?.properties?.$ip).toBeUndefined();
+    expect(String(identify?.properties?.$current_url)).toMatch(/state=FL/);
+    expect(String(identify?.properties?.$current_url).includes("q=")).toBe(false);
+
+    const pageview = sanitizeCaptureResult(
+      suppressExceptionCapture({
+        event: "$pageview",
+        properties: {
+          $current_url: `https://www.seniortrusthub.com/search?q=${encodeURIComponent(secret)}&email=${encodeURIComponent(email)}&state=FL`,
+          $exception_message: secret,
+          $exception_list: [{ type: "Error", value: secret }],
+        },
+      })!,
+    );
+    const pageJson = JSON.stringify(pageview);
+    expect(pageview?.event).toBe("$pageview");
+    expect(pageJson.includes(secret)).toBe(false);
+    expect(pageJson.includes(email)).toBe(false);
+    expect(pageview?.properties?.$geoip_disable).toBe(true);
+
+    const custom = sanitizeCaptureResult({
+      event: "search_submitted",
+      properties: {
+        surface: "ask_form",
+        success: true,
+        stateCode: "FL",
+        query: secret,
+        email,
+        password: "hunter2-secret",
+      },
+    });
+    expect(custom?.properties?.surface).toBe("ask_form");
+    expect(custom?.properties?.success).toBe(true);
+    expect(custom?.properties?.stateCode).toBe("FL");
+    const customJson = JSON.stringify(custom);
+    expect(customJson.includes(secret)).toBe(false);
+    expect(customJson.includes(email)).toBe(false);
+    expect(customJson.includes("hunter2-secret")).toBe(false);
   });
 });
