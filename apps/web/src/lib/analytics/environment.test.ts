@@ -44,6 +44,10 @@ describe("PostHog enablement", () => {
     expect(shouldEnablePosthog()).toBe(false);
     process.env.NEXT_PUBLIC_POSTHOG_ACTIVATION = "enabled";
     expect(shouldEnablePosthog()).toBe(true);
+    for (const activation of [" enabled", "enabled ", "\tenabled\n", "ENABLED", "Enabled", "1"]) {
+      process.env.NEXT_PUBLIC_POSTHOG_ACTIVATION = activation;
+      expect(shouldEnablePosthog()).toBe(false);
+    }
   });
 
   it("sends from preview and production only when activation is explicit", () => {
