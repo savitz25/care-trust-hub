@@ -314,3 +314,45 @@ describe("autocapture and replay privacy (Vercel Agent findings)", () => {
     expect(customJson.includes("hunter2-secret")).toBe(false);
   });
 });
+
+describe("sdk privacy 002", () => {
+  it("strips auth properties, adversarial urls, and private attributes", () => {
+    const urls = [
+      "https://qa.invalid/?state=qa%40example.invalid",
+      "https://qa.invalid/?state=qa%2540example.invalid",
+      "https://qa.invalid/?custom=%E0%A4%A",
+      "https://qa.invalid/?custom=qa%40example.invalid",
+      "https://qa.invalid/?auth_code=123456",
+      "https://qa.invalid/?redirect_uri=https%3A%2F%2Ftarget.invalid%2F%3Fcode%3D123456",
+      "https://qa.invalid/search/qa%40example.invalid",
+    ];
+    for (const input of urls) {
+      const output = sanitizeAnalyticsUrl(input) || "";
+      expect(decodeURIComponent(output)).not.toContain("qa@example");
+      expect(decodeURIComponent(output)).not.toContain("123456");
+    }
+    const event = sanitizeCaptureResult({
+      event: "$autocapture",
+      properties: {
+        code: "123456",
+        auth_code: "654321",
+        stateCode: "FL",
+        $elements_chain: 'button:attr__data-note="PRIVATE_NOTE"attr__id="safe"attr_id="safe"',
+        $elements: [
+          {
+            tag_name: "button",
+            "attr__data-note": "PRIVATE_NOTE",
+            attr__id: "safe",
+            attr_id: "safe",
+          },
+        ],
+      },
+    });
+    const json = JSON.stringify(event);
+    expect(json).not.toContain("123456");
+    expect(json).not.toContain("654321");
+    expect(json).not.toContain("PRIVATE_");
+    expect(event?.properties?.stateCode).toBe("FL");
+    expect(event?.properties?.$geoip_disable).toBe(true);
+  });
+});

@@ -13,6 +13,7 @@ describe("PostHog enablement", () => {
   const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
   const debug = process.env.NEXT_PUBLIC_POSTHOG_DEBUG;
   const host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
+  const activation = process.env.NEXT_PUBLIC_POSTHOG_ACTIVATION;
 
   afterEach(() => {
     if (key === undefined) delete process.env.NEXT_PUBLIC_POSTHOG_KEY;
@@ -21,6 +22,8 @@ describe("PostHog enablement", () => {
     else process.env.NEXT_PUBLIC_POSTHOG_DEBUG = debug;
     if (host === undefined) delete process.env.NEXT_PUBLIC_POSTHOG_HOST;
     else process.env.NEXT_PUBLIC_POSTHOG_HOST = host;
+    if (activation === undefined) delete process.env.NEXT_PUBLIC_POSTHOG_ACTIVATION;
+    else process.env.NEXT_PUBLIC_POSTHOG_ACTIVATION = activation;
     bindAnalyticsEnvironment("development");
   });
 
@@ -38,12 +41,16 @@ describe("PostHog enablement", () => {
     expect(analyticsEnvironment()).toBe("development");
     expect(shouldEnablePosthog()).toBe(false);
     process.env.NEXT_PUBLIC_POSTHOG_DEBUG = "1";
+    expect(shouldEnablePosthog()).toBe(false);
+    process.env.NEXT_PUBLIC_POSTHOG_ACTIVATION = "enabled";
     expect(shouldEnablePosthog()).toBe(true);
   });
 
-  it("sends from preview and production when the key is present", () => {
+  it("sends from preview and production only when activation is explicit", () => {
     process.env.NEXT_PUBLIC_POSTHOG_KEY = "phc_test";
     bindAnalyticsEnvironment("preview");
+    expect(shouldEnablePosthog({ webdriver: false, userAgent: CHROME })).toBe(false);
+    process.env.NEXT_PUBLIC_POSTHOG_ACTIVATION = "enabled";
     expect(shouldEnablePosthog({ webdriver: false, userAgent: CHROME })).toBe(true);
     bindAnalyticsEnvironment("production");
     expect(analyticsEnvironment()).toBe("production");
@@ -53,6 +60,7 @@ describe("PostHog enablement", () => {
   it("does not initialize or capture for webdriver or bot user agents", () => {
     process.env.NEXT_PUBLIC_POSTHOG_KEY = "phc_test";
     process.env.NEXT_PUBLIC_POSTHOG_DEBUG = "1";
+    process.env.NEXT_PUBLIC_POSTHOG_ACTIVATION = "enabled";
     bindAnalyticsEnvironment("production");
     const automated = [
       { webdriver: true, userAgent: CHROME },

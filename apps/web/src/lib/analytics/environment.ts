@@ -77,5 +77,10 @@ export function shouldEnablePosthog(client: AnalyticsClient = currentClient()): 
   if (analyticsEnvironment() === "development" && !posthogDebug()) return false;
   if (isAutomatedClient(client)) return false;
   if (analyticsBrowserOptOut()) return false;
+  try {
+    if ((process.env.NEXT_PUBLIC_POSTHOG_ACTIVATION || "").trim() !== "enabled") return false;
+  } catch {
+    return false;
+  }
   return true;
 }
