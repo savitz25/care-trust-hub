@@ -7,6 +7,7 @@ import {
   TX_HHSC_CLASSES,
   type TxHhscClass,
 } from "@/server/care/tx-hhsc-locations";
+import { ProfileViewed } from "@/components/analytics/profile-viewed";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default async function TexasLocationProfile({
   const source = txHhscSource(row);
   return (
     <main className="page-shell">
+      <ProfileViewed surface="tx_hhsc_location" state="TX" />
       <header className="page-intro page-intro--compact">
         <p className="eyebrow">Texas HHSC regulated location/provider</p>
         <h1>{row.official_name}</h1>

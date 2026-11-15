@@ -78,7 +78,7 @@ export function CareNeedsNavigator({
 
   if (phase === "start") {
     return (
-      <section className="care-navigator" aria-labelledby={headingId}>
+      <section className="care-navigator" aria-labelledby={headingId} data-ph-mask="">
         <p className="eyebrow">Care Needs Navigator</p>
         <h1 id={headingId} ref={headingRef} tabIndex={-1}>
           What kind of senior care should I look into?
@@ -120,7 +120,11 @@ export function CareNeedsNavigator({
     );
     const lessAligned = result.recommendations.filter((item) => item.alignment === "less_aligned");
     return (
-      <section className="care-navigator care-navigator--results" aria-labelledby={headingId}>
+      <section
+        className="care-navigator care-navigator--results"
+        aria-labelledby={headingId}
+        data-ph-mask=""
+      >
         <p className="eyebrow">Your care-needs summary</p>
         <h1 id={headingId} ref={headingRef} tabIndex={-1}>
           Based on the needs you described, these care settings may be worth investigating.
@@ -291,6 +295,7 @@ export function CareNeedsNavigator({
   return (
     <form
       className="care-navigator"
+      data-ph-mask=""
       onSubmit={(event) => {
         event.preventDefault();
         if (!canContinue) return;

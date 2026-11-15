@@ -377,7 +377,7 @@ export function FamilyComparisonWorkspace({
   }
 
   return (
-    <section className="family-workspace" aria-labelledby={headingId}>
+    <section className="family-workspace" aria-labelledby={headingId} data-ph-mask="">
       <p className="eyebrow">Saved in this browser</p>
       <h1 id={headingId}>Family Comparison Workspace</h1>
       <p>

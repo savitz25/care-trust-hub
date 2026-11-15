@@ -37,6 +37,7 @@ export function SeniorSpecialistSearchShell({
         method="get"
         role="search"
         aria-label="Research senior-care providers"
+        data-ph-mask=""
       >
         {filters.broaden ? <input type="hidden" name="broaden" value={filters.broaden} /> : null}
         <div className="specialist-search__row">

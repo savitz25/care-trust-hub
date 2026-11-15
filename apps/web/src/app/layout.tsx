@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import { Footer } from "@care/ui";
 import { brand } from "@/config/brand";
@@ -13,6 +14,7 @@ import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
 import { TH_CHASSIS_VERSION } from "@/lib/design/trusthub-visual-standard";
 import { StructuredData } from "@/components/structured-data";
 import { PrivacyAnalytics } from "@/components/privacy-analytics";
+import { PosthogRoot } from "@/components/analytics/posthog-root";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
@@ -43,6 +45,9 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         data-network-standard={ASK_NETWORK_STANDARD_VERSION}
         data-th-chassis={TH_CHASSIS_VERSION}
       >
+        <Suspense fallback={null}>
+          <PosthogRoot environment={process.env.VERCEL_ENV || "development"} />
+        </Suspense>
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>

@@ -291,7 +291,11 @@ export function FacilityInterviewBuilder({
 
   if (phase === "setup") {
     return (
-      <section className="care-navigator interview-builder" aria-labelledby={headingId}>
+      <section
+        className="care-navigator interview-builder"
+        aria-labelledby={headingId}
+        data-ph-mask=""
+      >
         <p className="eyebrow">Facility Tour &amp; Interview Builder</p>
         <h1 id={headingId} ref={headingRef} tabIndex={-1}>
           {facilityMode ? `Questions for ${facilityName}` : heading}
@@ -373,6 +377,7 @@ export function FacilityInterviewBuilder({
     <section
       className="care-navigator interview-builder interview-builder--results"
       aria-labelledby={headingId}
+      data-ph-mask=""
     >
       <p className="eyebrow">Your interview checklist</p>
       <h1 id={headingId} ref={headingRef} tabIndex={-1}>

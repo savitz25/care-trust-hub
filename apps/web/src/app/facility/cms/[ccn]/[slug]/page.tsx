@@ -47,6 +47,7 @@ import { buildFacilityProfile } from "@/server/care/facility-profile-model";
 import { loadFacilityComparisons } from "@/server/care/facility-profile";
 import { getFacilityRouteProvider } from "@/server/care/facility-route";
 import { notFoundMetadata } from "@/config/metadata";
+import { ProfileViewed } from "@/components/analytics/profile-viewed";
 
 export const dynamic = "force-dynamic";
 
@@ -151,6 +152,7 @@ export default async function RealFacilityPage({
   const facilityProfile = buildFacilityProfile({ provider, regulatory, staffing, comparisons });
   return (
     <>
+      <ProfileViewed surface="nursing_home" state={provider.location.state} />
       <FacilityProfileView model={facilityProfile} />
       <RealProviderDetail
         provider={provider}

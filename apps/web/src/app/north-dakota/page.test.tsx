@@ -1,5 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+// StateIndexContent is an async Server Component that loads the CMS state index
+// from Postgres through a "server-only" module (added to this page in #113). The
+// static publication copy under test does not depend on it, so stub it here.
+vi.mock("@/components/state-index-content", () => ({ StateIndexContent: () => null }));
 import NorthDakotaSeniorPage from "./page";
 
 describe("North Dakota senior-care evidence publication", () => {

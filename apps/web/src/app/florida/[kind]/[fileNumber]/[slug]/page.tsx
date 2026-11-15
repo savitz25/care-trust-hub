@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { TrustStrip } from "@/components/evidence";
 import { FloridaProviderProfileView } from "@/components/florida-provider-profile";
+import { ProfileViewed } from "@/components/analytics/profile-viewed";
 import { StructuredData } from "@/components/structured-data";
 import {
   canonicalUrl,
@@ -104,6 +105,7 @@ export default async function FloridaPublishedProviderPage({ params }: Props) {
             }}
           />
         ) : null}
+        <ProfileViewed surface="florida_provider" state="FL" />
         <FloridaProviderProfileView path={result.path} payload={payload} />
       </div>
       <TrustStrip />

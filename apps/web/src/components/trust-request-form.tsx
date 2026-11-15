@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { captureTrustEvent } from "@/lib/analytics/trusthub";
 
 const copy = {
   claim: {
@@ -33,6 +34,10 @@ export function TrustRequestForm({ kind, ccn = "" }: { kind: keyof typeof copy; 
     kind: "idle" | "sending" | "success" | "error";
     message?: string;
   }>({ kind: "idle" });
+  useEffect(() => {
+    if (kind !== "claim") return;
+    captureTrustEvent("claim_started", { surface: "profile_claim", success: true });
+  }, [kind]);
   return (
     <>
       <header className="page-intro">
@@ -42,6 +47,7 @@ export function TrustRequestForm({ kind, ccn = "" }: { kind: keyof typeof copy; 
       </header>
       <form
         className="trust-form"
+        data-ph-mask=""
         onSubmit={async (event) => {
           event.preventDefault();
           setStatus({ kind: "sending" });
@@ -66,6 +72,9 @@ export function TrustRequestForm({ kind, ccn = "" }: { kind: keyof typeof copy; 
             body: JSON.stringify(body),
           });
           const data = await response.json();
+          if (kind === "claim" && response.ok) {
+            captureTrustEvent("claim_submitted", { surface: "profile_claim", success: true });
+          }
           setStatus(
             response.ok
               ? { kind: "success", message: `Request received. Reference ${data.requestId}.` }

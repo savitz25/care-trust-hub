@@ -104,7 +104,9 @@ export function RealProviderCard({
         <div>
           <p className="kicker">CMS-certified nursing home</p>
           <h2>
-            <Link href={providerHref(provider)}>{provider.providerName}</Link>
+            <Link data-search-result="profile" href={providerHref(provider)}>
+              {provider.providerName}
+            </Link>
           </h2>
           <p>
             {[provider.location.city, provider.location.state, provider.location.zipCode]
@@ -154,7 +156,11 @@ export function RealProviderCard({
         </div>
       </dl>
       <div className="facility-card__actions">
-        <Link className="button button--primary" href={providerHref(provider)}>
+        <Link
+          className="button button--primary"
+          data-search-result="profile"
+          href={providerHref(provider)}
+        >
           View research
         </Link>
         <ShortlistButton ccn={provider.ccn} />

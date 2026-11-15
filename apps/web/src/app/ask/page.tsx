@@ -4,7 +4,10 @@ import { RealDataNotice } from "@/components/evidence";
 import { executeSeniorRequest } from "@/server/care/senior-ask-execute";
 import { AskResultView } from "./ask-result-view";
 import { SeniorSpecialistSearchShell } from "@/components/specialist-search/senior-specialist-search-shell";
-import { SearchAnalytics } from "@/components/specialist-search/search-analytics";
+import {
+  SearchAnalytics,
+  TxHhscSearchAnalytics,
+} from "@/components/specialist-search/search-analytics";
 import Link from "next/link";
 import {
   isTxHhscAskQuery,
@@ -69,7 +72,9 @@ export default async function SeniorAskPage({
         <section
           aria-label="Texas HHSC regulated location research"
           className="senior-ask__results"
+          data-tx-hhsc-results="true"
         >
+          <TxHhscSearchAnalytics resultCount={txResult.count} />
           <h2>Texas HHSC regulated locations/providers</h2>
           {otherMatches.length ? (
             <p role="status">
@@ -92,8 +97,10 @@ export default async function SeniorAskPage({
           <ul>
             {txResult.rows.map((row) => (
               <li key={row.namespaced_key}>
-                <Link href={txHhscHref(row)}>{row.official_name}</Link> ·{" "}
-                {TX_HHSC_CLASSES[row.provider_class]} · Texas HHSC Facility ID {row.facility_id} ·
+                <Link data-specialist-event="profile_open" href={txHhscHref(row)}>
+                  {row.official_name}
+                </Link>{" "}
+                · {TX_HHSC_CLASSES[row.provider_class]} · Texas HHSC Facility ID {row.facility_id} ·
                 Facility Licensed: {row.facility_licensed_raw}
               </li>
             ))}
@@ -102,8 +109,10 @@ export default async function SeniorAskPage({
             <ul>
               {otherMatches.map((row) => (
                 <li key={`${row.providerClass}:${row.ccn}`}>
-                  <Link href={row.href}>{row.providerName}</Link> · {row.providerClass} ·{" "}
-                  {row.recordedLocation?.state}
+                  <Link data-specialist-event="profile_open" href={row.href}>
+                    {row.providerName}
+                  </Link>{" "}
+                  · {row.providerClass} · {row.recordedLocation?.state}
                 </li>
               ))}
             </ul>
@@ -129,6 +138,7 @@ export default async function SeniorAskPage({
               coverageState: result.query.coverageState,
             }}
             resultCount={result.entities.length}
+            success={!result.failClosed}
           />
           <AskResultView result={result} />
         </>

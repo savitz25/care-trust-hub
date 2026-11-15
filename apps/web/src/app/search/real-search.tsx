@@ -6,6 +6,11 @@ import { parseConsumerSearch } from "@/server/care/search-contract";
 import { searchCurrentAgencies } from "@/server/care/agency-search";
 import { resolveZipLocation, searchProvidersConsumer } from "@/server/care/repository";
 import { isFamilyComparisonWorkspaceEnabled } from "@/server/care/feature-flags";
+import {
+  SearchOutcomeBeacon,
+  SearchResultClicks,
+  SearchSubmitBeacon,
+} from "@/components/analytics/search-events";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 const states = [
@@ -117,6 +122,18 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
   return (
     <>
       <RealDataNotice />
+      <SearchSubmitBeacon formId="cms-directory-search" surface="cms_directory" />
+      <SearchOutcomeBeacon
+        active={parsed.submitted}
+        surface="cms_directory"
+        resultCount={isAgency ? agencyFound.length : found.length}
+        success={parsed.submitted && parsed.errors.length === 0}
+        state={parsed.criteria.state}
+      />
+      <SearchResultClicks
+        rootSelector="[data-search-results='cms-directory']"
+        surface="cms_directory"
+      />
       <header className="page-intro page-intro--compact">
         <p className="eyebrow">Find care</p>
         <h1>
@@ -132,7 +149,12 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
         </p>
       </header>
       <div className="search-layout real-search-layout">
-        <form className="search-panel" method="get" aria-label={`${classLabel} search`}>
+        <form
+          className="search-panel"
+          id="cms-directory-search"
+          method="get"
+          aria-label={`${classLabel} search`}
+        >
           <input type="hidden" name="search" value="1" />
           <fieldset className="hub-class-fieldset">
             <legend>Provider class</legend>
@@ -336,7 +358,11 @@ export async function RealSearch({ searchParams }: { searchParams: SearchParams 
                 : "Search nursing homes"}
           </button>
         </form>
-        <section className="results" aria-labelledby="real-results-title">
+        <section
+          className="results"
+          aria-labelledby="real-results-title"
+          data-search-results="cms-directory"
+        >
           <div className="results__header">
             <div>
               <p className="eyebrow">

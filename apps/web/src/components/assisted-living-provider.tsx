@@ -56,7 +56,9 @@ export function AssistedLivingCard({
       <div>
         <p className="eyebrow">{CONSUMER_CATEGORY_LABELS[provider.consumerCategory]}</p>
         <h3>
-          <Link href={href}>{provider.officialName}</Link>
+          <Link data-search-result="profile" href={href}>
+            {provider.officialName}
+          </Link>
         </h3>
         <p>{place}</p>
         <p>{provider.officialType}</p>
@@ -65,7 +67,7 @@ export function AssistedLivingCard({
         {status.headline ? <p>{status.headline}</p> : <p>{status.detail}</p>}
       </div>
       <p>
-        <Link className="text-link" href={href}>
+        <Link className="text-link" data-search-result="profile" href={href}>
           View provider →
         </Link>
       </p>
