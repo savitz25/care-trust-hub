@@ -1,7 +1,5 @@
 /** Network V2.1.1 — journey_handoff_click (Senior). No health or facility fields. */
 
-import { track } from "@vercel/analytics";
-
 const HUBS = new Set(["ask", "move", "lender", "insurance", "contractor", "senior", "investor"]);
 
 const FORBIDDEN = new Set([
@@ -41,11 +39,6 @@ export function trackJourneyHandoff(params: SeniorJourneyHandoff): void {
   };
   for (const key of Object.keys(payload)) {
     if (FORBIDDEN.has(key)) return;
-  }
-  try {
-    track("journey_handoff_click", payload);
-  } catch {
-    /* non-fatal */
   }
 }
 

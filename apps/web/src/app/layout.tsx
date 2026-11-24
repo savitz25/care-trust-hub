@@ -13,7 +13,6 @@ import { siteMetadata } from "@/config/metadata";
 import { isPublicLaunchEnabled, productionOrigin } from "@/config/deployment";
 import { TH_CHASSIS_VERSION } from "@/lib/design/trusthub-visual-standard";
 import { StructuredData } from "@/components/structured-data";
-import { PrivacyAnalytics } from "@/components/privacy-analytics";
 import { PosthogRoot } from "@/components/analytics/posthog-root";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
@@ -94,7 +93,6 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           ownershipLine={ASK_NETWORK_OWNERSHIP_SHORT}
           contactEmail={brand.publicContactEmail}
         />
-        <PrivacyAnalytics />
       </body>
     </html>
   );
